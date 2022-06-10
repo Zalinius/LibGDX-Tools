@@ -1,56 +1,28 @@
+@Library('zalinius-shared-library') _
 
-void setBuildStatus(String message, String state) {
-  step([
-      $class: "GitHubCommitStatusSetter",
-      reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.GIT_URL],
-      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
-      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
-  ]);
-}
-
-
-//ZJE Jenkinsfile
 pipeline {
     agent any
+    tools {
+        maven 'maven3'
+    }
     stages {
-   		// Note that the agent automatically checks out the source code from Github	
-        stage('Compile') { 
+        // Note that the agent automatically checks out the source code from Github	
+        stage('Build') { 
             steps {
-            	sh 'mvn --batch-mode compile'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn --batch-mode test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        stage('Package Jar') {
-            steps {
-                sh 'mvn --batch-mode -DskipTests clean package'
-            }
-        }
+                buildLibrary()
+            }}
         stage('Deploy') {
-        	when {
- 				branch 'main'
-        	}
-			steps {
-                sh 'mvn --batch-mode -DskipTests clean install'  //Install publishes to the local jenkins Maven repo
-	        }
-	    }
-    }
-    
+            when { branch 'main'}
+            environment {
+                SONAR_CREDS = credentials('sonar')
+            }
+            steps {
+                sonarScan()
+                deployLibrary()
+    }}}
     post {
-    success {
-        setBuildStatus("Build succeeded", "SUCCESS");
+        always  { testReport() }    
+        success { githubSuccess() }    
+        failure { githubFailure() }    
     }
-    failure {
-        setBuildStatus("Build failed", "FAILURE");
-    }
-  }
 }

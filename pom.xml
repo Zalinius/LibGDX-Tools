@@ -5,7 +5,7 @@
 
 	<groupId>com.zalinius</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<name>libGDX Tools</name>
 
 	<properties>
@@ -40,8 +40,8 @@
 			<type>pom.sha512</type>
 			<scope>test</scope>
 		</dependency>
-		
-				<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-lwjgl -->
+
+		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-lwjgl -->
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-backend-lwjgl3</artifactId>
@@ -62,7 +62,14 @@
 			<artifactId>gdx</artifactId>
 			<version>1.11.0</version>
 		</dependency>
-		
+
+
+		<dependency>
+			<groupId>com.zalinius</groupId>
+			<artifactId>darzal-common</artifactId>
+			<version>0.1.6</version>
+		</dependency>
+
 	</dependencies>
 
 </project>

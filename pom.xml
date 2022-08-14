@@ -62,6 +62,19 @@
 			<artifactId>gdx</artifactId>
 			<version>1.11.0</version>
 		</dependency>
+		
+		<!-- freetype-specific dependencies -->
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-freetype</artifactId>
+			<version>1.11.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-freetype-platform</artifactId>
+			<version>1.11.0</version>
+			<classifier>natives-desktop</classifier>
+		</dependency>
 
 
 		<dependency>

@@ -88,8 +88,8 @@ public class Assets {
 
 	public static final FileHandle exampleFontPath = Gdx.files.internal("fonts/example.ttf");
 	public static final AssetDescriptor<Texture> exampleTexture = new AssetDescriptor<>("gfx/textures/example.png", Texture.class);
-	//public static final AssetDescriptor<TextureAtlas> exampleTextureAtlas = new AssetDescriptor<>("gfx/atlases/example.atlas", TextureAtlas.class);
-	// public static final AssetDescriptor<Music> exampleMusic = new AssetDescriptor<>("music/example.mp3", Music.class);
+	public static final AssetDescriptor<TextureAtlas> exampleTextureAtlas = new AssetDescriptor<>("gfx/atlases/example.atlas", TextureAtlas.class);
+	public static final AssetDescriptor<Music> exampleMusic = new AssetDescriptor<>("music/example.mp3", Music.class);
 
 	public static void dispose() {
 		assetManager.dispose();

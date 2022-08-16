@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.zalinius.libgdxtools.graphics.StyleManager;
 import com.zalinius.libgdxtools.tools.Assets;
-import com.zalinius.libgdxtools.tools.StyleManager;
 
 public class ScreenElementFactory {
 
@@ -27,7 +27,7 @@ public class ScreenElementFactory {
 	}
 
 	private static TextButton makeButton(final String text, final Runnable runnable, final float fontScale) {
-		TextButton button = new TextButton(text, StyleManager.textButtonStyle);
+		TextButton button = new TextButton(text, StyleManager.skin);
 		button.getLabel().setFontScale(fontScale);
 		button.addListener(new ChangeListener() {
 			@Override

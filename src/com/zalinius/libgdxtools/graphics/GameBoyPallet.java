@@ -1,7 +1,6 @@
 package com.zalinius.libgdxtools.graphics;
 
 import com.badlogic.gdx.graphics.Color;
-import com.zalinius.libgdxtools.tools.ColorTools;
 
 public class GameBoyPallet {
 

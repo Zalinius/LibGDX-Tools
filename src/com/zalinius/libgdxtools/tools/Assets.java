@@ -31,7 +31,7 @@ public class Assets {
 		assetManager = new AssetManager();
 
 		//Put all resources into AssetManager
-		Class<Assets> assetsClass = Assets.class; // Can we rewrite this to read in from files?
+		Class<Assets> assetsClass = Assets.class; // Can we rewrite this to read in from files? (or an inherited class?)
 		Field[] fields = assetsClass.getFields();
 		for (Field field : fields) {
 			if(field.getType().equals(AssetDescriptor.class)) {
@@ -86,6 +86,7 @@ public class Assets {
 	public static final FileHandle outlineDottedVertexShader = Gdx.files.internal("shader/outlineDotted.vertex.glsl");
 	public static final FileHandle outlineDottedFragmentShader = Gdx.files.internal("shader/outlineDotted.fragment.glsl");
 
+	public static final FileHandle skinPath = Gdx.files.internal("defaultSkin/uiskin.json");
 	public static final FileHandle exampleFontPath = Gdx.files.internal("fonts/example.ttf");
 	public static final AssetDescriptor<Texture> exampleTexture = new AssetDescriptor<>("gfx/textures/example.png", Texture.class);
 	public static final AssetDescriptor<TextureAtlas> exampleTextureAtlas = new AssetDescriptor<>("gfx/atlases/example.atlas", TextureAtlas.class);

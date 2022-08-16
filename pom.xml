@@ -76,6 +76,11 @@
 			<classifier>natives-desktop</classifier>
 		</dependency>
 
+		<dependency>
+		    <groupId>com.github.lowercase1024</groupId>
+		    <artifactId>freetype-skin</artifactId>
+		    <version>0.4</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.zalinius</groupId>
@@ -84,5 +89,12 @@
 		</dependency>
 
 	</dependencies>
+	
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
 </project>

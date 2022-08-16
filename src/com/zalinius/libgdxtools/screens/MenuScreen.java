@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.zalinius.libgdxtools.DarzalGame;
+import com.zalinius.libgdxtools.graphics.StyleManager;
 import com.zalinius.libgdxtools.tools.Assets;
-import com.zalinius.libgdxtools.tools.StyleManager;
 
 public class MenuScreen extends StagedScreen {
 
@@ -28,7 +28,7 @@ public class MenuScreen extends StagedScreen {
 		TextButton newGameButton = ScreenElementFactory.makeTitleButton("New Game", () -> {});
 		TextButton quitButton = ScreenElementFactory.makeTitleButton("Quit", darzalGame::quit);
 
-		Label gameName = new Label(DarzalGame.getGameName().toUpperCase(), StyleManager.titleStyle);
+		Label gameName = new Label(DarzalGame.getGameName().toUpperCase(), StyleManager.skin);
 		gameName.setAlignment(Align.center);
 		menuTable.add(gameName);
 
@@ -53,13 +53,13 @@ public class MenuScreen extends StagedScreen {
 		headerTable.setFillParent(true);
 		headerTable.top();
 
-		Label credits = new Label("By Zalinius and Darzington", StyleManager.style);
+		Label credits = new Label("By Zalinius and Darzington", StyleManager.skin);
 		credits.setFontScale(StyleManager.MINI_FONT_SCALE);
 		headerTable.add(credits).left();
 
 		headerTable.add().expand(true, false);
 
-		Label gameVersion = new Label(DarzalGame.getGameVersion(), StyleManager.style);
+		Label gameVersion = new Label(DarzalGame.getGameVersion(), StyleManager.skin);
 		gameVersion.setFontScale(StyleManager.MINI_FONT_SCALE);
 		headerTable.add(gameVersion).right();
 

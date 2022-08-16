@@ -11,13 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.zalinius.libgdxtools.errorhandling.LibGDXFileLoggingUncaughtExceptionHandler;
+import com.zalinius.libgdxtools.graphics.StyleManager;
 import com.zalinius.libgdxtools.preferencemanagers.SoundPreferenceManager;
 import com.zalinius.libgdxtools.screens.MenuScreen;
 import com.zalinius.libgdxtools.screens.StagedScreen;
 import com.zalinius.libgdxtools.shader.ShaderFactory;
 import com.zalinius.libgdxtools.sound.ControlledMusic;
 import com.zalinius.libgdxtools.tools.Assets;
-import com.zalinius.libgdxtools.tools.StyleManager;
 
 public class DarzalGame implements ApplicationListener {
 	private StagedScreen gameScreen;
@@ -43,7 +43,7 @@ public class DarzalGame implements ApplicationListener {
 
 		stage = new Stage();
 		music = new ControlledMusic();
-		CheckBox musicToggle = new CheckBox("", StyleManager.musicButtonStyle);
+		CheckBox musicToggle = new CheckBox("", StyleManager.skin);
 		musicToggle.addListener(new ChangeListener() {
 
 			@Override
@@ -170,7 +170,6 @@ public class DarzalGame implements ApplicationListener {
 			scenarioScreen.dispose();
 		}
 		Assets.dispose();
-		StyleManager.dispose();
 		ShaderFactory.dispose();
 		stage.dispose();
 	}

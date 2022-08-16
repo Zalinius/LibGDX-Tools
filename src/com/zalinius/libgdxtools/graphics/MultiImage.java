@@ -1,4 +1,4 @@
-package com.zalinius.libgdxtools.tools;
+package com.zalinius.libgdxtools.graphics;
 
 import java.util.List;
 

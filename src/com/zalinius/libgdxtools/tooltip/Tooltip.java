@@ -7,23 +7,19 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.actions.VisibleAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.zalinius.libgdxtools.tools.StyleManager;
+import com.zalinius.libgdxtools.graphics.StyleManager;
 
 public class Tooltip extends Group {
 	protected static Table tableToDisplay;
 	protected static final int width = 425, height = 350, x = 750, y = 50;
-	protected static LabelStyle style;
 
 	private static boolean isEnabled;
 
 	public Tooltip() {
 		isEnabled = true;
 
-		style = StyleManager.style;
-		tableToDisplay = new Table();
-		//tableToDisplay.background(new DrawableNinePatch(Assets.get(Assets.gray)));
+		tableToDisplay = new Table(StyleManager.skin);
 
 		resetDisplay();
 		hideMenu();

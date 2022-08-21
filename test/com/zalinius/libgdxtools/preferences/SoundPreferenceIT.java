@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
-import com.zalinius.libgdxtools.DarzalGame;
+import com.zalinius.libgdxtools.HeadlessDarzalGame;
 import com.zalinius.libgdxtools.preferencemanagers.SoundPreferenceManager;
 
 public class SoundPreferenceIT {
@@ -16,7 +16,7 @@ public class SoundPreferenceIT {
 	@BeforeAll
 	public static void setUp() throws Exception {
 		HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
-		application = new HeadlessApplication(new DarzalGame(), config);
+		application = new HeadlessApplication(new HeadlessDarzalGame(), config);
 	}
 
 	@Test

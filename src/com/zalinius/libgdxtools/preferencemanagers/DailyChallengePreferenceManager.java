@@ -43,7 +43,7 @@ public class DailyChallengePreferenceManager extends PreferenceManager {
 		int highScore = Integer.MIN_VALUE;
 
 		if(hasFinishedAGameForDay(referenceDay)) {
-			highScore = getIntegerPrefValue(DAILY_DAY_KEY);
+			highScore = getIntegerPrefValue(DAILY_SCORE_KEY);
 		}
 
 		return highScore;

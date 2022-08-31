@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
-public abstract class BounceAction {
+public class BounceActionFactory {
 
-	private BounceAction() {
+	private BounceActionFactory() {
 		throw new IllegalStateException("Utility class");
 	}
 
@@ -19,7 +19,7 @@ public abstract class BounceAction {
 	 * @param duration The time each part of the bounce takes (scales up for duration, then down for duration)
 	 * @return A single bounce action that takes 2*duration to complete
 	 */
-	public static Action getSingleBounceAction(final float scaleTo, final float duration) {
+	public static Action makeSingleBounceAction(final float scaleTo, final float duration) {
 		float originalScale = 1 / scaleTo;
 		return Actions.sequence(
 				Actions.scaleTo(scaleTo, scaleTo, duration, Interpolation.sine),
@@ -33,8 +33,8 @@ public abstract class BounceAction {
 			table.setOrigin(Align.center);
 	 * @return A single bounce action that takes 2*duration to complete
 	 */
-	public static Action getSingleBounceAction() {
-		return getSingleBounceAction(1.2f, 0.5f);
+	public static Action makeSingleBounceAction() {
+		return makeSingleBounceAction(1.2f, 0.5f);
 	}
 
 	/**
@@ -44,8 +44,8 @@ public abstract class BounceAction {
 			table.setOrigin(Align.center);
 	 * @return A single bounce action that takes 2*duration to complete
 	 */
-	public static Action getForeverBounceAction() {
-		return Actions.forever(getSingleBounceAction());
+	public static Action makeForeverBounceAction() {
+		return Actions.forever(makeSingleBounceAction());
 	}
 
 	/**
@@ -57,7 +57,7 @@ public abstract class BounceAction {
 	 * @param duration The time each part of the bounce takes (scales up for duration, then down for duration)
 	 * @return A FOREVER bounce action that takes 2*duration to complete
 	 */
-	public static Action getForeverBounceAction(final float scaleTo, final float duration) {
-		return Actions.forever(getSingleBounceAction(scaleTo, duration));
+	public static Action makeForeverBounceAction(final float scaleTo, final float duration) {
+		return Actions.forever(makeSingleBounceAction(scaleTo, duration));
 	}
 }

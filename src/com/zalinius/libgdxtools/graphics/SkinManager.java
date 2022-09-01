@@ -6,6 +6,9 @@ import com.zalinius.libgdxtools.tools.Assets;
 // Investigate this tool for making custom skins easily
 // https://ray3k.wordpress.com/software/skin-composer-for-libgdx/
 
+//the main application (in this case cultivar for now) must provide the skin path,
+//or I'll have to figure out how to use assets from this libgdxTools project for a default
+
 public class SkinManager {
 	public static Skin skin;
 	public static float DEFAULT_FONT_SCALE, TITLE_FONT_SCALE, COMPACT_FONT_SCALE, MINI_FONT_SCALE, TEEENSY_FONT_SCALE;

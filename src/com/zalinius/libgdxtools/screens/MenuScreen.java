@@ -7,18 +7,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.zalinius.libgdxtools.DarzalGame;
 import com.zalinius.libgdxtools.HeadlessDarzalGame;
 import com.zalinius.libgdxtools.graphics.SkinManager;
 import com.zalinius.libgdxtools.tools.Assets;
 
 public class MenuScreen extends StagedScreen {
 
-	public MenuScreen(final Viewport viewport, final HeadlessDarzalGame game) {
+	public MenuScreen(final Viewport viewport, final DarzalGame game) {
 		super(viewport);
 		setUpStageAndTable(game);
 	}
 
-	private void setUpStageAndTable(final HeadlessDarzalGame darzalGame) {
+	private void setUpStageAndTable(final DarzalGame darzalGame) {
 		Table menuTable = new Table();
 		menuTable.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		menuTable.pad(100);
@@ -28,7 +29,7 @@ public class MenuScreen extends StagedScreen {
 		TextButton newGameButton = ScreenElementFactory.makeTitleButton("New Game", () -> {});
 		TextButton quitButton = ScreenElementFactory.makeTitleButton("Quit", darzalGame::quit);
 
-		Label gameName = new Label(HeadlessDarzalGame.getGameName().toUpperCase(), SkinManager.skin);
+		Label gameName = new Label(DarzalGame.getGameName().toUpperCase(), SkinManager.skin);
 		gameName.setAlignment(Align.center);
 		menuTable.add(gameName);
 

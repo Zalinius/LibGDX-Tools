@@ -86,7 +86,7 @@ public class Assets {
 	public static final FileHandle outlineDottedVertexShader = Gdx.files.internal("shader/outlineDotted.vertex.glsl");
 	public static final FileHandle outlineDottedFragmentShader = Gdx.files.internal("shader/outlineDotted.fragment.glsl");
 
-	public static final FileHandle skinPath = Gdx.files.internal("defaultSkin/uiskin.json");
+	public static final FileHandle skinPath = Gdx.files.internal("defaultSkin/skin/uiskin.json");
 	public static final FileHandle exampleFontPath = Gdx.files.internal("fonts/example.ttf");
 	public static final AssetDescriptor<Texture> exampleTexture = new AssetDescriptor<>("gfx/textures/example.png", Texture.class);
 	public static final AssetDescriptor<TextureAtlas> exampleTextureAtlas = new AssetDescriptor<>("gfx/atlases/example.atlas", TextureAtlas.class);

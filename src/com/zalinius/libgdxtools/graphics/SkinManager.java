@@ -8,6 +8,7 @@ import com.zalinius.libgdxtools.tools.Assets;
 
 //the main application (in this case cultivar for now) must provide the skin path,
 //or I'll have to figure out how to use assets from this libgdxTools project for a default
+//note to self:remember to delete the screen element factory in cultivar
 
 public class SkinManager {
 	public static Skin skin;

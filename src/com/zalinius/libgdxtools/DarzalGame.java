@@ -2,21 +2,24 @@ package com.zalinius.libgdxtools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.zalinius.libgdxtools.errorhandling.LibGDXFileLoggingUncaughtExceptionHandler;
+import com.zalinius.libgdxtools.graphics.ScreenElementFactory;
+import com.zalinius.libgdxtools.graphics.SkinManager;
+import com.zalinius.libgdxtools.preferencemanagers.PreferenceManager;
 import com.zalinius.libgdxtools.preferencemanagers.SoundPreferenceManager;
 import com.zalinius.libgdxtools.screens.MenuScreen;
 import com.zalinius.libgdxtools.screens.StagedScreen;
-import com.zalinius.libgdxtools.shader.ShaderFactory;
 import com.zalinius.libgdxtools.sound.ControlledMusic;
-import com.zalinius.libgdxtools.tools.Assets;
 
 public abstract class DarzalGame extends HeadlessDarzalGame {
 	private StagedScreen gameScreen;
@@ -31,10 +34,19 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 	private OrthographicCamera camera;
 	private InputMultiplexer multiplexer;
 
+	public abstract String getGameName();
+	public abstract String getGameVersion();
+	protected abstract FileHandle getSkinFilePath();
+	protected abstract Preferences getPreferencesFile();
+	public abstract Texture getMenuBackgroundTexture();
+	public abstract Runnable getPlayButtonRunnable();
+
 	@Override
 	public void create() {
 		loadAssets();
-		ShaderFactory.create();
+		SkinManager.create(getSkinFilePath());
+		PreferenceManager.create(getPreferencesFile());
+		//ShaderFactory.create();
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 		Thread.setDefaultUncaughtExceptionHandler(new LibGDXFileLoggingUncaughtExceptionHandler("err"));
@@ -42,7 +54,7 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		stage = new Stage();
 		music = new ControlledMusic();
 		setMenuMusic();
-		CheckBox musicToggle = new CheckBox("", getMusicCheckboxStyle());
+		CheckBox musicToggle = ScreenElementFactory.makeCheckBox(SoundPreferenceManager.isMusicMuted());
 		musicToggle.addListener(new ChangeListener() {
 
 			@Override
@@ -51,15 +63,9 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 			}
 		});
 		musicToggle.setBounds(10, 10, 75, 75);
-
 		musicToggle.getImage().setScaling(Scaling.fill);
 		musicToggle.getImageCell().size(75);
 		stage.addActor(musicToggle);
-		if (SoundPreferenceManager.isMusicMuted()) {
-			musicToggle.setProgrammaticChangeEvents(false);
-			musicToggle.toggle();
-			musicToggle.setProgrammaticChangeEvents(true);
-		}
 		stage.addActor(music);
 
 		multiplexer = new InputMultiplexer();
@@ -68,8 +74,6 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 
 		openMainMenu();
 	}
-
-	protected abstract CheckBoxStyle getMusicCheckboxStyle();
 
 	public void goToGameScreen(final StagedScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -96,23 +100,11 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 
 	protected abstract void setMenuMusic();
 
-	public void openSpecificMenu(final StagedScreen screen) {
-		specificScreen = screen;
-		changeScreens(specificScreen);
-		if (gameScreen != null) {
-			gameScreen.dispose();
-			gameScreen = null;
-		}
-		if (menuScreen != null) {
-			menuScreen.dispose();
-			menuScreen = null;
-		}
-	}
-
-	private void changeScreens(final StagedScreen nextScreen) {
+	protected void changeScreens(final StagedScreen nextScreen) {
 		if (currentScreen != null) {
 			currentScreen.hide();
 			currentScreen.removeScreenAsInputProcessor(multiplexer);
+			currentScreen.dispose();
 		}
 
 		currentScreen = nextScreen;
@@ -137,14 +129,6 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 
 	protected abstract boolean areAssetsValid();
 	protected abstract void initializeAssets() throws IllegalArgumentException, IllegalAccessException;
-
-	public static String getGameName() {
-		return Assets.getGameName();
-	}
-
-	public static String getGameVersion() {
-		return Assets.getGameVersion();
-	}
 
 	@Override
 	public void resize(final int width, final int height) {
@@ -171,17 +155,18 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 	}
 
 	@Override
-	public void dispose() {	if (gameScreen != null) {
-		gameScreen.dispose();
-	}
-	if (menuScreen != null) {
-		menuScreen.dispose();
-	}
-	if (specificScreen != null) {
-		specificScreen.dispose();
-	}
-	Assets.dispose();
-	ShaderFactory.dispose();
-	stage.dispose();
+	public void dispose() {
+		if (gameScreen != null) {
+			gameScreen.dispose();
+		}
+		if (menuScreen != null) {
+			menuScreen.dispose();
+		}
+		if (specificScreen != null) {
+			specificScreen.dispose();
+		}
+		//ShaderFactory.dispose();
+		SkinManager.dispose();
+		stage.dispose();
 	}
 }

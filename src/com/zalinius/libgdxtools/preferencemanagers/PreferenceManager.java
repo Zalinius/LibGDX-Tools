@@ -1,12 +1,14 @@
 package com.zalinius.libgdxtools.preferencemanagers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.zalinius.libgdxtools.tools.Assets;
 
-public abstract class PreferenceManager {
+public class PreferenceManager {
 
 	private static Preferences prefs;
+
+	public static void create(final Preferences preferencesFile) {
+		prefs = preferencesFile;
+	}
 
 	protected static boolean prefHasSavedKey(final String key) {
 		Preferences preferences = getPreferences();
@@ -67,11 +69,7 @@ public abstract class PreferenceManager {
 	}
 
 	private static Preferences getPreferences() {
-		if (prefs == null) {
-			prefs = Gdx.app.getPreferences(Assets.getPreferenceFile());
-		}
 		return prefs;
 	}
-
 
 }

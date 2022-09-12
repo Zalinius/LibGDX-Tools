@@ -1,13 +1,11 @@
 package com.zalinius.libgdxtools.sound;
 
-import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.zalinius.libgdxtools.preferencemanagers.SoundPreferenceManager;
-import com.zalinius.libgdxtools.tools.Assets;
 
 public class ControlledMusic extends Actor {
 
@@ -16,7 +14,7 @@ public class ControlledMusic extends Actor {
 	public ControlledMusic() {
 	}
 
-	public void setMusic(final AssetDescriptor<Music> ad) {
+	public void setMusic(final Music musicToUse) {
 		TemporalAction fadeIn = new TemporalAction(1f) {
 			@Override
 			protected void update(final float percent) {
@@ -27,7 +25,7 @@ public class ControlledMusic extends Actor {
 		Action createMusic = new Action() {
 			@Override
 			public boolean act(final float delta) {
-				music = Assets.getMusic(ad);
+				music = musicToUse;
 				music.setLooping(true);
 				music.play();
 				return true;

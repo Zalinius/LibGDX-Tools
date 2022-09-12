@@ -8,9 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.zalinius.libgdxtools.DarzalGame;
-import com.zalinius.libgdxtools.HeadlessDarzalGame;
+import com.zalinius.libgdxtools.graphics.ScreenElementFactory;
 import com.zalinius.libgdxtools.graphics.SkinManager;
-import com.zalinius.libgdxtools.tools.Assets;
 
 public class MenuScreen extends StagedScreen {
 
@@ -26,10 +25,10 @@ public class MenuScreen extends StagedScreen {
 		menuTable.defaults().width(400).height(150).center();
 		menuTable.setFillParent(true);
 
-		TextButton newGameButton = ScreenElementFactory.makeTitleButton("New Game", () -> {});
-		TextButton quitButton = ScreenElementFactory.makeTitleButton("Quit", darzalGame::quit);
+		TextButton newGameButton = ScreenElementFactory.makeRegularButton("New Game", darzalGame::getPlayButtonRunnable);
+		TextButton quitButton = ScreenElementFactory.makeRegularButton("Quit", darzalGame::quit);
 
-		Label gameName = new Label(DarzalGame.getGameName().toUpperCase(), SkinManager.skin);
+		Label gameName = ScreenElementFactory.makeTitleLabel(darzalGame.getGameName().toUpperCase());
 		gameName.setAlignment(Align.center);
 		menuTable.add(gameName);
 
@@ -44,7 +43,7 @@ public class MenuScreen extends StagedScreen {
 
 		stage.addActor(menuTable);
 
-		Actor backgroundActor = ScreenElementFactory.makeBackground(Assets.exampleTexture);
+		Actor backgroundActor = ScreenElementFactory.makeBackground(darzalGame.getMenuBackgroundTexture());
 		stage.addActor(backgroundActor);
 		backgroundActor.toBack();
 
@@ -60,7 +59,7 @@ public class MenuScreen extends StagedScreen {
 
 		headerTable.add().expand(true, false);
 
-		Label gameVersion = new Label(HeadlessDarzalGame.getGameVersion(), SkinManager.skin);
+		Label gameVersion = new Label(darzalGame.getGameVersion(), SkinManager.skin);
 		gameVersion.setFontScale(SkinManager.MINI_FONT_SCALE);
 		headerTable.add(gameVersion).right();
 

@@ -22,9 +22,6 @@ import com.zalinius.libgdxtools.screens.StagedScreen;
 import com.zalinius.libgdxtools.sound.ControlledMusic;
 
 public abstract class DarzalGame extends HeadlessDarzalGame {
-	private StagedScreen gameScreen;
-	private StagedScreen menuScreen;
-	private StagedScreen specificScreen;
 	private StagedScreen currentScreen;
 
 	protected ControlledMusic music;
@@ -36,7 +33,10 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 
 	public abstract String getGameName();
 	public abstract String getGameVersion();
+	protected abstract FileHandle getMainFontFilePath();
+	protected abstract FileHandle getTitleFontFilePath();
 	protected abstract FileHandle getSkinFilePath();
+	protected abstract FileHandle getSkinAtlasFilePath();
 	protected abstract Preferences getPreferencesFile();
 	public abstract Texture getMenuBackgroundTexture();
 	public abstract Runnable getPlayButtonRunnable();
@@ -44,7 +44,7 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 	@Override
 	public void create() {
 		loadAssets();
-		SkinManager.create(getSkinFilePath());
+		SkinManager.create(getSkinFilePath(), getSkinAtlasFilePath(), getMainFontFilePath(), getTitleFontFilePath());
 		PreferenceManager.create(getPreferencesFile());
 		//ShaderFactory.create();
 		camera = new OrthographicCamera();
@@ -76,26 +76,12 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 	}
 
 	public void goToGameScreen(final StagedScreen gameScreen) {
-		this.gameScreen = gameScreen;
 		changeScreens(gameScreen);
-		if (menuScreen != null) {
-			menuScreen.dispose();
-			menuScreen = null;
-		}
 	}
 
 	public void openMainMenu() {
-		menuScreen = new MenuScreen(viewport, this);
-		changeScreens(menuScreen);
-		if (gameScreen != null) {
-			setMenuMusic();
-			gameScreen.dispose();
-			gameScreen = null;
-		}
-		if (specificScreen != null) {
-			specificScreen.dispose();
-			specificScreen = null;
-		}
+		changeScreens(new MenuScreen(viewport, this));
+		setMenuMusic();
 	}
 
 	protected abstract void setMenuMusic();
@@ -156,14 +142,8 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 
 	@Override
 	public void dispose() {
-		if (gameScreen != null) {
-			gameScreen.dispose();
-		}
-		if (menuScreen != null) {
-			menuScreen.dispose();
-		}
-		if (specificScreen != null) {
-			specificScreen.dispose();
+		if (currentScreen != null) {
+			currentScreen.dispose();
 		}
 		//ShaderFactory.dispose();
 		SkinManager.dispose();

@@ -25,7 +25,7 @@ public class MenuScreen extends StagedScreen {
 		menuTable.defaults().width(400).height(150).center();
 		menuTable.setFillParent(true);
 
-		TextButton newGameButton = ScreenElementFactory.makeRegularButton("New Game", darzalGame::getPlayButtonRunnable);
+		TextButton newGameButton = ScreenElementFactory.makeRegularButton("New Game", darzalGame.getPlayButtonRunnable());
 		TextButton quitButton = ScreenElementFactory.makeRegularButton("Quit", darzalGame::quit);
 
 		Label gameName = ScreenElementFactory.makeTitleLabel(darzalGame.getGameName().toUpperCase());

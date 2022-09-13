@@ -40,13 +40,15 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 	protected abstract Preferences getPreferencesFile();
 	public abstract Texture getMenuBackgroundTexture();
 	public abstract Runnable getPlayButtonRunnable();
+	public abstract void initialize();
+	public abstract void cleanUp();
 
 	@Override
 	public void create() {
 		loadAssets();
+		initialize();
 		SkinManager.create(getSkinFilePath(), getSkinAtlasFilePath(), getMainFontFilePath(), getTitleFontFilePath());
 		PreferenceManager.create(getPreferencesFile());
-		//ShaderFactory.create();
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 		Thread.setDefaultUncaughtExceptionHandler(new LibGDXFileLoggingUncaughtExceptionHandler("err"));
@@ -145,7 +147,7 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		if (currentScreen != null) {
 			currentScreen.dispose();
 		}
-		//ShaderFactory.dispose();
+		cleanUp();
 		SkinManager.dispose();
 		stage.dispose();
 	}

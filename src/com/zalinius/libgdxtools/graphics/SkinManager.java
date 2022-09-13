@@ -26,7 +26,7 @@ public class SkinManager {
 
 	public static void create(final FileHandle skinPath, final FileHandle atlasPath, final FileHandle fontPath, final FileHandle titleFontPath) {
 		DEFAULT_FONT_SCALE = 5/16f;
-		TITLE_FONT_SCALE = DEFAULT_FONT_SCALE * 3f;
+		TITLE_FONT_SCALE = DEFAULT_FONT_SCALE * 1.5f;
 		COMPACT_FONT_SCALE = DEFAULT_FONT_SCALE * 0.76f;
 		MINI_FONT_SCALE = DEFAULT_FONT_SCALE * 0.66f;
 		TEEENSY_FONT_SCALE = DEFAULT_FONT_SCALE * 0.55f;
@@ -46,7 +46,7 @@ public class SkinManager {
 		// title font
 		titleGenerator = new FreeTypeFontGenerator(titleFontPath);
 		FreeTypeFontParameter titleParameter = new FreeTypeFontParameter();
-		titleParameter.size = 500;
+		titleParameter.size = 150;
 		titleParameter.color = Color.WHITE;
 		titleParameter.mono = false;
 		titleParameter.incremental = true;

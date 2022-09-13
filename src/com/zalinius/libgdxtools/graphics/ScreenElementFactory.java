@@ -18,7 +18,7 @@ public class ScreenElementFactory {
 	}
 	public static Label makeTitleLabel(final String text) {
 		Label label = makeLabel(text, SkinManager.titleLabelStyle);
-		label.setFontScale(SkinManager.TITLE_FONT_SCALE);
+		label.setFontScale(SkinManager.TITLE_FONT_SCALE*2);
 		return label;
 	}
 

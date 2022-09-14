@@ -11,21 +11,24 @@ public class ControlledMusic extends Actor {
 
 	private Music music;
 	private final float fadeTime;
+	private final SoundPreferenceManager soundPreferenceManager;
 
 	//Since music is game specific, we don't set it in the constructor
-	public ControlledMusic(final float fadeTime) {
+	public ControlledMusic(final float fadeTime, final SoundPreferenceManager soundPreferenceManager) {
 		this.fadeTime = fadeTime;
+		this.soundPreferenceManager = soundPreferenceManager;
 	}
 
-	public ControlledMusic() {
+	public ControlledMusic(final SoundPreferenceManager soundPreferenceManager) {
 		this.fadeTime = 0.75f;
+		this.soundPreferenceManager = soundPreferenceManager;
 	}
 
 	public void setMusic(final Music musicToUse) {
 		TemporalAction fadeIn = new TemporalAction(fadeTime) {
 			@Override
 			protected void update(final float percent) {
-				music.setVolume(percent * SoundPreferenceManager.getMaxMusicVol());
+				music.setVolume(percent * soundPreferenceManager.getMaxMusicVol());
 			}
 		};
 
@@ -46,7 +49,7 @@ public class ControlledMusic extends Actor {
 			TemporalAction fadeOut = new TemporalAction(fadeTime) {
 				@Override
 				protected void update(final float percent) {
-					music.setVolume((1 - percent) * SoundPreferenceManager.getMaxMusicVol());
+					music.setVolume((1 - percent) * soundPreferenceManager.getMaxMusicVol());
 				}
 			};
 
@@ -65,8 +68,8 @@ public class ControlledMusic extends Actor {
 	}
 
 	public void setMuted(final boolean isMuted) {
-		SoundPreferenceManager.setMusicMuted(isMuted);
-		music.setVolume(SoundPreferenceManager.getMaxMusicVol());
+		soundPreferenceManager.setMusicMuted(isMuted);
+		music.setVolume(soundPreferenceManager.getMaxMusicVol());
 	}
 
 	public void dispose() {

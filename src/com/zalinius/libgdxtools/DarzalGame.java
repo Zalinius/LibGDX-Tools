@@ -48,15 +48,16 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		loadAssets();
 		initialize();
 		SkinManager.create(getSkinFilePath(), getSkinAtlasFilePath(), getMainFontFilePath(), getTitleFontFilePath());
-		PreferenceManager.create(getPreferencesFile());
+		new PreferenceManager(getPreferencesFile());
+		SoundPreferenceManager soundPreferenceManager = new SoundPreferenceManager(getPreferencesFile());
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 		Thread.setDefaultUncaughtExceptionHandler(new LibGDXFileLoggingUncaughtExceptionHandler("err"));
 
 		stage = new Stage();
-		music = new ControlledMusic();
+		music = new ControlledMusic(soundPreferenceManager);
 		setMenuMusic();
-		CheckBox musicToggle = ScreenElementFactory.makeCheckBox(SoundPreferenceManager.isMusicMuted());
+		CheckBox musicToggle = ScreenElementFactory.makeCheckBox(soundPreferenceManager.isMusicMuted());
 		musicToggle.addListener(new ChangeListener() {
 
 			@Override

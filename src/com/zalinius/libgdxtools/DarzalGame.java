@@ -77,10 +77,6 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		openMainMenu();
 	}
 
-	public void goToGameScreen(final StagedScreen gameScreen) {
-		changeScreens(gameScreen);
-	}
-
 	public void openMainMenu() {
 		changeScreens(new MenuScreen(viewport, this));
 		setMenuMusic();

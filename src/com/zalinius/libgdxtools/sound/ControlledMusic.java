@@ -9,13 +9,20 @@ import com.zalinius.libgdxtools.preferencemanagers.SoundPreferenceManager;
 
 public class ControlledMusic extends Actor {
 
-	protected Music music;
+	private Music music;
+	private final float fadeTime;
+
+	//Since music is game specific, we don't set it in the constructor
+	public ControlledMusic(final float fadeTime) {
+		this.fadeTime = fadeTime;
+	}
 
 	public ControlledMusic() {
+		this.fadeTime = 0.75f;
 	}
 
 	public void setMusic(final Music musicToUse) {
-		TemporalAction fadeIn = new TemporalAction(1f) {
+		TemporalAction fadeIn = new TemporalAction(fadeTime) {
 			@Override
 			protected void update(final float percent) {
 				music.setVolume(percent * SoundPreferenceManager.getMaxMusicVol());
@@ -36,7 +43,7 @@ public class ControlledMusic extends Actor {
 
 		if (music != null ) {
 
-			TemporalAction fadeOut = new TemporalAction(0.75f) {
+			TemporalAction fadeOut = new TemporalAction(fadeTime) {
 				@Override
 				protected void update(final float percent) {
 					music.setVolume((1 - percent) * SoundPreferenceManager.getMaxMusicVol());
@@ -61,11 +68,6 @@ public class ControlledMusic extends Actor {
 		SoundPreferenceManager.setMusicMuted(isMuted);
 		music.setVolume(SoundPreferenceManager.getMaxMusicVol());
 	}
-
-	public void play() {
-		music.play();
-	}
-
 
 	public void dispose() {
 		music.dispose();

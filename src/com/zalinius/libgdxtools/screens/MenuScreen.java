@@ -9,26 +9,21 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.zalinius.libgdxtools.DarzalGame;
 import com.zalinius.libgdxtools.graphics.ScreenElementFactory;
-import com.zalinius.libgdxtools.graphics.SkinManager;
 
 public class MenuScreen extends StagedScreen {
 
-	public MenuScreen(final Viewport viewport, final DarzalGame game) {
+	public MenuScreen(final Viewport viewport, final DarzalGame darzalGame, final ScreenElementFactory screenElementFactory) {
 		super(viewport);
-		setUpStageAndTable(game);
-	}
-
-	private void setUpStageAndTable(final DarzalGame darzalGame) {
 		Table menuTable = new Table();
 		menuTable.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		menuTable.pad(100);
 		menuTable.defaults().width(400).height(150).center();
 		menuTable.setFillParent(true);
 
-		TextButton newGameButton = ScreenElementFactory.makeRegularButton("New Game", darzalGame.getPlayButtonRunnable());
-		TextButton quitButton = ScreenElementFactory.makeRegularButton("Quit", darzalGame::quit);
+		TextButton newGameButton = screenElementFactory.makeRegularButton("New Game", darzalGame.getPlayButtonRunnable());
+		TextButton quitButton = screenElementFactory.makeRegularButton("Quit", darzalGame::quit);
 
-		Label gameName = ScreenElementFactory.makeTitleLabel(darzalGame.getGameName().toUpperCase());
+		Label gameName = screenElementFactory.makeTitleLabel(darzalGame.getGameName().toUpperCase());
 		gameName.setAlignment(Align.center);
 		menuTable.add(gameName);
 
@@ -43,7 +38,7 @@ public class MenuScreen extends StagedScreen {
 
 		stage.addActor(menuTable);
 
-		Actor backgroundActor = ScreenElementFactory.makeBackground(darzalGame.getMenuBackgroundTexture());
+		Actor backgroundActor = screenElementFactory.makeBackground(darzalGame.getMenuBackgroundTexture());
 		stage.addActor(backgroundActor);
 		backgroundActor.toBack();
 
@@ -53,14 +48,14 @@ public class MenuScreen extends StagedScreen {
 		headerTable.setFillParent(true);
 		headerTable.top();
 
-		Label credits = new Label("By Zalinius and Darzington", SkinManager.skin);
-		credits.setFontScale(SkinManager.MINI_FONT_SCALE);
+		Label credits = screenElementFactory.makeRegularLabel("By Zalinius and Darzington");
+		credits.setFontScale(screenElementFactory.MINI_FONT_SCALE);
 		headerTable.add(credits).left();
 
 		headerTable.add().expand(true, false);
 
-		Label gameVersion = new Label(darzalGame.getGameVersion(), SkinManager.skin);
-		gameVersion.setFontScale(SkinManager.MINI_FONT_SCALE);
+		Label gameVersion = screenElementFactory.makeRegularLabel(darzalGame.getGameVersion());
+		gameVersion.setFontScale(screenElementFactory.MINI_FONT_SCALE);
 		headerTable.add(gameVersion).right();
 
 		headerTable.row();

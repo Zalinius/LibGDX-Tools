@@ -30,6 +30,8 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 	protected FitViewport viewport;
 	private OrthographicCamera camera;
 	private InputMultiplexer multiplexer;
+	protected SkinManager skinManager;
+	protected ScreenElementFactory screenElementFactory;
 
 	public abstract String getGameName();
 	public abstract String getGameVersion();
@@ -46,8 +48,8 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 	@Override
 	public void create() {
 		loadAssets();
-		initialize();
-		SkinManager.create(getSkinFilePath(), getSkinAtlasFilePath(), getMainFontFilePath(), getTitleFontFilePath());
+		skinManager = new SkinManager(getSkinFilePath(), getSkinAtlasFilePath(), getMainFontFilePath(), getTitleFontFilePath());
+		screenElementFactory = new ScreenElementFactory(skinManager);
 		new PreferenceManager(getPreferencesFile());
 		SoundPreferenceManager soundPreferenceManager = new SoundPreferenceManager(getPreferencesFile());
 		camera = new OrthographicCamera();
@@ -57,7 +59,7 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		stage = new Stage();
 		music = new ControlledMusic(soundPreferenceManager);
 		setMenuMusic();
-		CheckBox musicToggle = ScreenElementFactory.makeCheckBox(soundPreferenceManager.isMusicMuted());
+		CheckBox musicToggle = screenElementFactory.makeCheckBox(soundPreferenceManager.isMusicMuted());
 		musicToggle.addListener(new ChangeListener() {
 
 			@Override
@@ -75,11 +77,12 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		Gdx.input.setInputProcessor(multiplexer);
 		multiplexer.addProcessor(stage);
 
+		initialize();
 		openMainMenu();
 	}
 
 	public void openMainMenu() {
-		changeScreens(new MenuScreen(viewport, this));
+		changeScreens(new MenuScreen(viewport, this, screenElementFactory));
 		setMenuMusic();
 	}
 
@@ -139,13 +142,17 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		currentScreen.resume();
 	}
 
+	public SkinManager getSkinManager() {
+		return skinManager;
+	}
+
 	@Override
 	public void dispose() {
 		if (currentScreen != null) {
 			currentScreen.dispose();
 		}
 		cleanUp();
-		SkinManager.dispose();
+		skinManager.dispose();
 		stage.dispose();
 	}
 }

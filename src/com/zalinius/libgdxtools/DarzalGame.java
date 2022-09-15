@@ -5,7 +5,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -15,24 +14,24 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.zalinius.libgdxtools.errorhandling.LibGDXFileLoggingUncaughtExceptionHandler;
 import com.zalinius.libgdxtools.graphics.ScreenElementFactory;
 import com.zalinius.libgdxtools.graphics.SkinManager;
-import com.zalinius.libgdxtools.preferencemanagers.PreferenceManager;
 import com.zalinius.libgdxtools.preferencemanagers.SoundPreferenceManager;
 import com.zalinius.libgdxtools.screens.MenuScreen;
 import com.zalinius.libgdxtools.screens.StagedScreen;
 import com.zalinius.libgdxtools.sound.ControlledMusic;
 
 public abstract class DarzalGame extends HeadlessDarzalGame {
-	private StagedScreen currentScreen;
 
 	protected ControlledMusic music;
-	private Stage stage;
-
 	protected FitViewport viewport;
+
+	private StagedScreen currentScreen;
+	private Stage stage;
 	private OrthographicCamera camera;
 	private InputMultiplexer multiplexer;
-	protected SkinManager skinManager;
-	protected ScreenElementFactory screenElementFactory;
+	private SkinManager skinManager;
+	private ScreenElementFactory screenElementFactory;
 
+	//TODO find a way to replace abstract function these with Assets class or something like that 
 	public abstract String getGameName();
 	public abstract String getGameVersion();
 	protected abstract FileHandle getMainFontFilePath();
@@ -40,7 +39,9 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 	protected abstract FileHandle getSkinFilePath();
 	protected abstract FileHandle getSkinAtlasFilePath();
 	protected abstract Preferences getPreferencesFile();
-	public abstract Texture getMenuBackgroundTexture();
+
+
+	public abstract ScreenElementFactory makeScreenElementFactory(final SkinManager skinManager);
 	public abstract Runnable getPlayButtonRunnable();
 	public abstract void initialize();
 	public abstract void cleanUp();
@@ -49,8 +50,7 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 	public void create() {
 		loadAssets();
 		skinManager = new SkinManager(getSkinFilePath(), getSkinAtlasFilePath(), getMainFontFilePath(), getTitleFontFilePath());
-		screenElementFactory = new ScreenElementFactory(skinManager);
-		new PreferenceManager(getPreferencesFile());
+		screenElementFactory = makeScreenElementFactory(skinManager);
 		SoundPreferenceManager soundPreferenceManager = new SoundPreferenceManager(getPreferencesFile());
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);

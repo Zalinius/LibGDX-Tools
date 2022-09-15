@@ -2,11 +2,11 @@ package com.zalinius.libgdxtools.preferencemanagers;
 
 import com.badlogic.gdx.Preferences;
 
-public class PreferenceManager {
+public abstract class PreferenceManager {
 
 	private Preferences prefs;
 
-	public PreferenceManager(final Preferences preferencesFile) {
+	protected PreferenceManager(final Preferences preferencesFile) {
 		prefs = preferencesFile;
 	}
 

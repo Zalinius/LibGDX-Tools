@@ -1,5 +1,4 @@
 package com.zalinius.libgdxtools.graphics;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,17 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-public class ScreenElementFactory {
+public abstract class ScreenElementFactory {
 	protected SkinManager skinManager;
-	public float DEFAULT_FONT_SCALE, TITLE_FONT_SCALE, COMPACT_FONT_SCALE, MINI_FONT_SCALE, TEEENSY_FONT_SCALE;
+	public static final float DEFAULT_FONT_SCALE = 5/16f; 
+	public static final float TITLE_FONT_SCALE = DEFAULT_FONT_SCALE * 1.5f; 
+	public static final float COMPACT_FONT_SCALE = DEFAULT_FONT_SCALE * 0.76f; 
+	public static final float MINI_FONT_SCALE = DEFAULT_FONT_SCALE * 0.66f; 
+	public static final float TEEENSY_FONT_SCALE = DEFAULT_FONT_SCALE * 0.55f;
 
 	public ScreenElementFactory(final SkinManager skinManager) {
-		super();
-		DEFAULT_FONT_SCALE = 5/16f;
-		TITLE_FONT_SCALE = DEFAULT_FONT_SCALE * 1.5f;
-		COMPACT_FONT_SCALE = DEFAULT_FONT_SCALE * 0.76f;
-		MINI_FONT_SCALE = DEFAULT_FONT_SCALE * 0.66f;
-		TEEENSY_FONT_SCALE = DEFAULT_FONT_SCALE * 0.55f;
 		this.skinManager = skinManager;
 	}
 
@@ -37,11 +34,8 @@ public class ScreenElementFactory {
 	public Label makeRegularLabel(final String text) {
 		return makeLabel(text, skinManager.defaultStyle);
 	}
-	public Label makeBackgroundLabel(final String text) {
-		return makeLabel(text, skinManager.greenBackgroundLabelStyle);
-	}
 
-	private Label makeLabel(final String text, final String style) {
+	protected Label makeLabel(final String text, final String style) {
 		Label label = new Label(text, skinManager.skin, style);
 		label.setFontScale(DEFAULT_FONT_SCALE);
 		return label;
@@ -86,14 +80,13 @@ public class ScreenElementFactory {
 		});
 	}
 
-	public Actor makeBackground(final Texture backgroundTex) {
+	protected Image makeRepeatingBackground(final Texture backgroundTex, final float widthMultiplier, final float heightMultiplier) {
 		backgroundTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 		TextureRegion imgTextureRegion = new TextureRegion(backgroundTex);
-		imgTextureRegion.setRegion(0, 0, backgroundTex.getWidth() * 10, backgroundTex.getHeight() * 10);
-		Image backgroundActor = new Image(imgTextureRegion);
-		backgroundActor.scaleBy(-0.75f);
-		backgroundActor.setColor(Color.LIGHT_GRAY);
-		return backgroundActor;
+		imgTextureRegion.setRegion(0, 0, backgroundTex.getWidth() * widthMultiplier, backgroundTex.getHeight() * heightMultiplier);
+		return new Image(imgTextureRegion);
 	}
+
+	public abstract Actor makeBackground();
 
 }

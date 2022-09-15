@@ -38,7 +38,7 @@ public class MenuScreen extends StagedScreen {
 
 		stage.addActor(menuTable);
 
-		Actor backgroundActor = screenElementFactory.makeBackground(darzalGame.getMenuBackgroundTexture());
+		Actor backgroundActor = screenElementFactory.makeBackground();
 		stage.addActor(backgroundActor);
 		backgroundActor.toBack();
 

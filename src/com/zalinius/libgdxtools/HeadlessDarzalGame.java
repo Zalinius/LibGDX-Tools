@@ -3,7 +3,6 @@ package com.zalinius.libgdxtools;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.zalinius.libgdxtools.errorhandling.LibGDXFileLoggingUncaughtExceptionHandler;
-import com.zalinius.libgdxtools.tools.Assets;
 
 public class HeadlessDarzalGame implements ApplicationListener {
 
@@ -14,14 +13,6 @@ public class HeadlessDarzalGame implements ApplicationListener {
 
 	public void quit() {
 		Gdx.app.exit();
-	}
-
-	public static String getGameName() {
-		return Assets.getGameName();
-	}
-
-	public static String getGameVersion() {
-		return Assets.getGameVersion();
 	}
 
 	@Override
@@ -42,6 +33,7 @@ public class HeadlessDarzalGame implements ApplicationListener {
 
 	@Override
 	public void dispose() {
-		Assets.dispose();
+
 	}
+
 }

@@ -1,18 +1,24 @@
 package com.zalinius.libgdxtools.preferencemanagers;
 
+import com.badlogic.gdx.Preferences;
+
 public class SoundPreferenceManager extends PreferenceManager {
 
 	private static final String MUSIC_KEY = "musicSetting";
 
-	public static void setMusicMuted(final boolean isMuted) {
+	public SoundPreferenceManager(final Preferences preferencesFile) {
+		super(preferencesFile);
+	}
+
+	public void setMusicMuted(final boolean isMuted) {
 		savePrefValue(MUSIC_KEY, isMuted);
 	}
 
-	public static int getMaxMusicVol() {
+	public int getMaxMusicVol() {
 		return isMusicMuted() ? 0 : 1;
 	}
 
-	public static boolean isMusicMuted() {
+	public boolean isMusicMuted() {
 		return getBooleanPrefValue(MUSIC_KEY, false);
 	}
 }

@@ -5,11 +5,12 @@
 
 	<groupId>com.zalinius</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.0.8</version>
+	<version>0.0.9</version>
 	<name>libGDX Tools</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.release>17</maven.compiler.release>
 	</properties>
 
 	<build>
@@ -19,9 +20,6 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
-				<configuration>
-					<release>8</release>
-				</configuration>
 			</plugin>
 
 			<plugin>
@@ -87,7 +85,7 @@
 		<dependency>
 			<groupId>com.zalinius</groupId>
 			<artifactId>darzal-common</artifactId>
-			<version>0.1.6</version>
+			<version>0.2.0</version>
 		</dependency>
 
 

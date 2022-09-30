@@ -36,10 +36,10 @@ public class MenuScreen extends StagedScreen {
 		menuTable.row();
 		menuTable.add(quitButton);
 
-		stage.addActor(menuTable);
+		addActor(menuTable);
 
 		Actor backgroundActor = screenElementFactory.makeBackground();
-		stage.addActor(backgroundActor);
+		addActor(backgroundActor);
 		backgroundActor.toBack();
 
 
@@ -60,7 +60,7 @@ public class MenuScreen extends StagedScreen {
 
 		headerTable.row();
 
-		stage.addActor(headerTable);
+		addActor(headerTable);
 	}
 
 

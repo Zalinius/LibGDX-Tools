@@ -59,12 +59,12 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		stage = new Stage();
 		music = new ControlledMusic(soundPreferenceManager);
 		setMenuMusic();
-		CheckBox musicToggle = screenElementFactory.makeCheckBox(soundPreferenceManager.isMusicMuted());
+		CheckBox musicToggle = screenElementFactory.makeCheckBox(!soundPreferenceManager.isMusicMuted());
 		musicToggle.addListener(new ChangeListener() {
 
 			@Override
 			public void changed(final ChangeEvent event, final Actor actor) {
-				music.setMuted(musicToggle.isChecked());
+				music.setMuted(!musicToggle.isChecked());
 			}
 		});
 		musicToggle.setBounds(10, 10, 75, 75);

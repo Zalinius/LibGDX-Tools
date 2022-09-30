@@ -3,8 +3,12 @@ package com.zalinius.libgdxtools;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -21,15 +25,17 @@ import com.zalinius.libgdxtools.sound.ControlledMusic;
 
 public abstract class DarzalGame extends HeadlessDarzalGame {
 
-	protected ControlledMusic music;
-	protected FitViewport viewport;
-
+	private FitViewport viewport;
+	private ControlledMusic music;
 	private StagedScreen currentScreen;
 	private Stage stage;
-	private OrthographicCamera camera;
+	private OrthographicCamera allScreensUIcamera;
 	private InputMultiplexer multiplexer;
 	private SkinManager skinManager;
 	private ScreenElementFactory screenElementFactory;
+
+	private ModelBatch modelBatch;
+
 
 	//TODO find a way to replace abstract function these with Assets class or something like that 
 	public abstract String getGameName();
@@ -52,13 +58,13 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		skinManager = new SkinManager(getSkinFilePath(), getSkinAtlasFilePath(), getMainFontFilePath(), getTitleFontFilePath());
 		screenElementFactory = makeScreenElementFactory(skinManager);
 		SoundPreferenceManager soundPreferenceManager = new SoundPreferenceManager(getPreferencesFile());
-		camera = new OrthographicCamera();
-		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+		allScreensUIcamera = new OrthographicCamera();
+		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), allScreensUIcamera);
 		Thread.setDefaultUncaughtExceptionHandler(new LibGDXFileLoggingUncaughtExceptionHandler("err"));
 
 		stage = new Stage();
 		music = new ControlledMusic(soundPreferenceManager);
-		setMenuMusic();
+		music.setMusic(getMenuMusic());
 		CheckBox musicToggle = screenElementFactory.makeCheckBox(!soundPreferenceManager.isMusicMuted());
 		musicToggle.addListener(new ChangeListener() {
 
@@ -77,16 +83,20 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		Gdx.input.setInputProcessor(multiplexer);
 		multiplexer.addProcessor(stage);
 
+		modelBatch = new ModelBatch();
+
 		initialize();
 		openMainMenu();
 	}
 
+	protected abstract Environment getEnvironment();
+
 	public void openMainMenu() {
 		changeScreens(new MenuScreen(viewport, this, screenElementFactory));
-		setMenuMusic();
+		music.setMusic(getMenuMusic());
 	}
 
-	protected abstract void setMenuMusic();
+	protected abstract Music getMenuMusic();
 
 	protected void changeScreens(final StagedScreen nextScreen) {
 		if (currentScreen != null) {
@@ -126,9 +136,16 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 
 	@Override
 	public void render() {
+		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+		float delta = Gdx.graphics.getDeltaTime();
+		currentScreen.act3D(delta);
 		stage.act();
-		camera.update();
-		currentScreen.render(Gdx.graphics.getDeltaTime());
+		allScreensUIcamera.update();
+
+		currentScreen.render3D(modelBatch, getEnvironment());
+		currentScreen.render(delta);
 		stage.draw();
 	}
 
@@ -144,6 +161,10 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 
 	public SkinManager getSkinManager() {
 		return skinManager;
+	}
+
+	protected FitViewport getViewport() {
+		return viewport;
 	}
 
 	@Override

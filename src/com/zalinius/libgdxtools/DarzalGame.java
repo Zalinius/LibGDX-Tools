@@ -85,8 +85,8 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 
 		modelBatch = new ModelBatch();
 
-		initialize();
 		openMainMenu();
+		initialize();
 	}
 
 	protected abstract Environment getEnvironment();

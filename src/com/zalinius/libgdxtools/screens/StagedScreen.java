@@ -1,5 +1,8 @@
 package com.zalinius.libgdxtools.screens;
 
+import java.util.Iterator;
+import java.util.List;
+
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -7,6 +10,7 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import java.util.Collections;
 
 public abstract class StagedScreen extends Stage implements Screen {
 
@@ -16,22 +20,22 @@ public abstract class StagedScreen extends Stage implements Screen {
 
 	public void addScreenAsInputProcessor(final InputMultiplexer inputMultiplexer) {
 		inputMultiplexer.addProcessor(this);
-		InputProcessor optionalInputProcessor = getOptionalInputProcessor();
-		if(optionalInputProcessor != null) {
-			inputMultiplexer.addProcessor(optionalInputProcessor);
+		for (Iterator<InputProcessor> it = getInputProcessors().iterator(); it.hasNext();) {
+			InputProcessor inputProcessor = it.next();
+			inputMultiplexer.addProcessor(inputProcessor);
 		}
 	}
 
 	public void removeScreenAsInputProcessor(final InputMultiplexer inputMultiplexer) {
 		inputMultiplexer.removeProcessor(this);
-		InputProcessor optionalInputProcessor = getOptionalInputProcessor();
-		if(optionalInputProcessor != null) {
-			inputMultiplexer.addProcessor(optionalInputProcessor);
+		for (Iterator<InputProcessor> it = getInputProcessors().iterator(); it.hasNext();) {
+			InputProcessor inputProcessor = it.next();
+			inputMultiplexer.removeProcessor(inputProcessor);
 		}
 	}
 
-	protected InputProcessor getOptionalInputProcessor() {
-		return null;
+	protected List<InputProcessor> getInputProcessors() {
+		return Collections.emptyList();
 	}
 
 	@Override

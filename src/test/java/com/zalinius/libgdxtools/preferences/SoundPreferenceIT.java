@@ -5,11 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.zalinius.libgdxtools.HeadlessDarzalGame;
-import com.zalinius.libgdxtools.preferencemanagers.SoundPreferenceManager;
+import com.zalinius.libgdxtools.preferencemanagers.PreferenceManager;
+import com.zalinius.libgdxtools.preferencemanagers.SoundPreference;
 
 public class SoundPreferenceIT {
 	private static HeadlessApplication application;
@@ -23,7 +23,7 @@ public class SoundPreferenceIT {
 	@Test
 	void setMusicMuted_whenTrue_isSavedToPreferenceFile() throws Exception {
 		boolean shouldBeMuted = true;
-		SoundPreferenceManager soundPreferenceManager = new SoundPreferenceManager(Gdx.app.getPreferences("com.zalinius.LibGDXTools.preferences"));
+		SoundPreference soundPreferenceManager = new PreferenceManager("com.zalinius.LibGDXTools.preferences").sound();
 		soundPreferenceManager.setMusicMuted(shouldBeMuted);
 		boolean isMuted = soundPreferenceManager.isMusicMuted();
 

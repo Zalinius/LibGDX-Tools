@@ -5,21 +5,21 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
-import com.zalinius.libgdxtools.preferencemanagers.SoundPreferenceManager;
+import com.zalinius.libgdxtools.preferencemanagers.SoundPreference;
 
 public class ControlledMusic extends Actor {
 
 	private Music music;
 	private final float fadeTime;
-	private final SoundPreferenceManager soundPreferenceManager;
+	private final SoundPreference soundPreferenceManager;
 
 	//Since music is game specific, we don't set it in the constructor
-	public ControlledMusic(final float fadeTime, final SoundPreferenceManager soundPreferenceManager) {
+	public ControlledMusic(final float fadeTime, final SoundPreference soundPreferenceManager) {
 		this.fadeTime = fadeTime;
 		this.soundPreferenceManager = soundPreferenceManager;
 	}
 
-	public ControlledMusic(final SoundPreferenceManager soundPreferenceManager) {
+	public ControlledMusic(final SoundPreference soundPreferenceManager) {
 		this.fadeTime = 0.75f;
 		this.soundPreferenceManager = soundPreferenceManager;
 	}

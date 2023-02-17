@@ -1,18 +1,48 @@
 package com.zalinius.libgdxtools.preferencemanagers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
-public abstract class PreferenceManager {
+public class PreferenceManager {
 
 	private Preferences prefs;
 
-	protected PreferenceManager(final Preferences preferencesFile) {
+	/**
+	 * @param preferencePrefix A name for the preferences file, which should be in a package format corresponding to the game, e.g. com.zalinius.cultivar
+	 */
+	public PreferenceManager(final String preferencePrefix) {
+		this(Gdx.app.getPreferences(preferencePrefix));
+	}	
+	public PreferenceManager(final Preferences preferencesFile) {
 		prefs = preferencesFile;
+	}
+	
+	public SoundPreference sound() {
+		return new SoundPreference(this);
+	}
+	public MandatoryTutorialPreference mandatoryTutorial() {
+		return new MandatoryTutorialPreference(this);
+	}
+	public I18NPreference i18n() {
+		return new I18NPreference(this);
+	}
+	
+	public OtherPreferences other() {
+		return new OtherPreferences(this);
 	}
 
 	protected boolean prefHasSavedKey(final String key) {
 		Preferences preferences = getPreferences();
 		return preferences.contains(key);
+	}
+	
+	protected String getStringPrefValue(final String key) {
+		Preferences preferences = getPreferences();
+		return preferences.getString(key);		
+	}
+	protected String getStringPrefValue(final String key, final String defaultValue) {
+		Preferences preferences = getPreferences();
+		return preferences.getString(key, defaultValue);		
 	}
 
 	protected int getIntegerPrefValue(final String key) {
@@ -46,6 +76,12 @@ public abstract class PreferenceManager {
 	}
 
 
+	protected void savePrefValue(final String key, final String value) {
+		Preferences preferences = getPreferences();
+		preferences.putString(key, value);
+		preferences.flush();
+	}
+
 	protected void savePrefValue(final String key, final long value) {
 		Preferences preferences = getPreferences();
 		preferences.putLong(key, value);
@@ -62,10 +98,6 @@ public abstract class PreferenceManager {
 		Preferences preferences = getPreferences();
 		preferences.putBoolean(key, value);
 		preferences.flush();
-	}
-
-	protected PreferenceManager() {
-		throw new IllegalStateException("Utility class");
 	}
 
 	private Preferences getPreferences() {

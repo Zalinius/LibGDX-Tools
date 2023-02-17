@@ -3,7 +3,7 @@
 
 	<groupId>com.zalinius</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<name>libGDX Tools</name>
 
 	<properties>

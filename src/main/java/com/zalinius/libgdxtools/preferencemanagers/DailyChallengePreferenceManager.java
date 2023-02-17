@@ -10,6 +10,12 @@ public class DailyChallengePreferenceManager extends PreferenceManager {
 	private static final String DAILY_DAY_KEY =   "dailyChallengeDay";
 	private static final String DAILY_SCORE_KEY = "dailyChallengeScore";
 
+	/**
+	 * @param preferencePrefix A name for the preferences file, which should be in a package format corresponding to the game, e.g. com.zalinius.cultivar
+	 */
+	protected DailyChallengePreferenceManager(final String preferencePrefix) {
+		super(preferencePrefix);
+	}	
 	public DailyChallengePreferenceManager(final Preferences preferencesFile) {
 		super(preferencesFile);
 	}

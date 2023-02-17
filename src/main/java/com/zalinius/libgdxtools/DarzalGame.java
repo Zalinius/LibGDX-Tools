@@ -2,7 +2,6 @@ package com.zalinius.libgdxtools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
@@ -18,7 +17,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.zalinius.libgdxtools.errorhandling.LibGDXFileLoggingUncaughtExceptionHandler;
 import com.zalinius.libgdxtools.graphics.ScreenElementFactory;
 import com.zalinius.libgdxtools.graphics.SkinManager;
-import com.zalinius.libgdxtools.preferencemanagers.SoundPreferenceManager;
+import com.zalinius.libgdxtools.preferencemanagers.PreferenceManager;
+import com.zalinius.libgdxtools.preferencemanagers.SoundPreference;
 import com.zalinius.libgdxtools.screens.MenuScreen;
 import com.zalinius.libgdxtools.screens.StagedScreen;
 import com.zalinius.libgdxtools.sound.ControlledMusic;
@@ -44,7 +44,7 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 	protected abstract FileHandle getTitleFontFilePath();
 	protected abstract FileHandle getSkinFilePath();
 	protected abstract FileHandle getSkinAtlasFilePath();
-	protected abstract Preferences getPreferencesFile();
+	protected abstract String getPreferencesName();
 
 
 	public abstract ScreenElementFactory makeScreenElementFactory(final SkinManager skinManager);
@@ -57,7 +57,7 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		loadAssets();
 		skinManager = new SkinManager(getSkinFilePath(), getSkinAtlasFilePath(), getMainFontFilePath(), getTitleFontFilePath());
 		screenElementFactory = makeScreenElementFactory(skinManager);
-		SoundPreferenceManager soundPreferenceManager = new SoundPreferenceManager(getPreferencesFile());
+		SoundPreference soundPreferenceManager = new PreferenceManager(getPreferencesName()).sound();
 		allScreensUIcamera = new OrthographicCamera();
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), allScreensUIcamera);
 		Thread.setDefaultUncaughtExceptionHandler(new LibGDXFileLoggingUncaughtExceptionHandler("err"));

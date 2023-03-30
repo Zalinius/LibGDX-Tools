@@ -26,7 +26,7 @@ import com.zalinius.libgdxtools.sound.ControlledMusic;
 public abstract class DarzalGame extends HeadlessDarzalGame {
 
 	private FitViewport viewport;
-	private ControlledMusic music;
+	protected ControlledMusic music;
 	private StagedScreen currentScreen;
 	private Stage stage;
 	private OrthographicCamera allScreensUIcamera;
@@ -64,7 +64,6 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 
 		stage = new Stage();
 		music = new ControlledMusic(soundPreferenceManager);
-		music.setMusic(getMenuMusic());
 		CheckBox musicToggle = screenElementFactory.makeCheckBox(!soundPreferenceManager.isMusicMuted());
 		musicToggle.addListener(new ChangeListener() {
 

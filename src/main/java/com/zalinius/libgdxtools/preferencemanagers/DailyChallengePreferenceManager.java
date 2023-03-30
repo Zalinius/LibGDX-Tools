@@ -13,7 +13,7 @@ public class DailyChallengePreferenceManager extends PreferenceManager {
 	/**
 	 * @param preferencePrefix A name for the preferences file, which should be in a package format corresponding to the game, e.g. com.zalinius.cultivar
 	 */
-	protected DailyChallengePreferenceManager(final String preferencePrefix) {
+	public DailyChallengePreferenceManager(final String preferencePrefix) {
 		super(preferencePrefix);
 	}	
 	public DailyChallengePreferenceManager(final Preferences preferencesFile) {

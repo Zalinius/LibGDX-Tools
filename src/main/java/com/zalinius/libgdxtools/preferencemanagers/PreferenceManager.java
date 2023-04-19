@@ -75,6 +75,16 @@ public class PreferenceManager {
 		return preferences.getBoolean(key, defaultValue);
 	}
 
+	protected float getFloatPrefValue(final String key) {
+		Preferences preferences = getPreferences();
+		return preferences.getFloat(key);
+	}
+
+	protected float getFloatPrefValue(final String key, final float defaultValue) {
+		Preferences preferences = getPreferences();
+		return preferences.getFloat(key, defaultValue);
+	}
+
 
 	protected void savePrefValue(final String key, final String value) {
 		Preferences preferences = getPreferences();
@@ -91,6 +101,12 @@ public class PreferenceManager {
 	protected void savePrefValue(final String key, final int value) {
 		Preferences preferences = getPreferences();
 		preferences.putInteger(key, value);
+		preferences.flush();
+	}
+
+	protected void savePrefValue(final String key, final float value) {
+		Preferences preferences = getPreferences();
+		preferences.putFloat(key, value);
 		preferences.flush();
 	}
 

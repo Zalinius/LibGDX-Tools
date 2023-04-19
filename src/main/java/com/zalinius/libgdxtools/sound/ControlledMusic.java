@@ -1,15 +1,15 @@
 package com.zalinius.libgdxtools.sound;
 
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.zalinius.libgdxtools.preferencemanagers.SoundPreference;
+import com.zalinius.libgdxtools.scenes.scene2d.actions.RunnableAction;
 
 public class ControlledMusic extends Actor {
 
-	private Music music;
+	private Music currentMusic;
 	private final float fadeTime;
 	private final SoundPreference soundPreferenceManager;
 
@@ -24,55 +24,63 @@ public class ControlledMusic extends Actor {
 		this.soundPreferenceManager = soundPreferenceManager;
 	}
 
+
+	public float getMusicVolume() {
+		return soundPreferenceManager.getMusicVolume();
+	}
+
+	public void setMusicVolume(float newVolume) {
+		soundPreferenceManager.setMusicVolume(newVolume);
+		currentMusic.setVolume(newVolume);
+	}
+
 	public void setMusic(final Music musicToUse) {
+		setMusic(musicToUse, true);
+	}
+
+	public void setMusic(final Music musicToUse, boolean shouldFade) {
 		TemporalAction fadeIn = new TemporalAction(fadeTime) {
 			@Override
 			protected void update(final float percent) {
-				music.setVolume(percent * soundPreferenceManager.getMaxMusicVol());
+				currentMusic.setVolume(percent * getMusicVolume());
 			}
 		};
 
-		Action createMusic = new Action() {
-			@Override
-			public boolean act(final float delta) {
-				music = musicToUse;
-				music.setLooping(true);
-				music.play();
-				return true;
-			}
-		};
+		RunnableAction createMusic = new RunnableAction(() -> {createAndStartMusic(musicToUse);});
+		
 
 		SequenceAction createAndFadeIn = new SequenceAction(createMusic, fadeIn);
 
-		if (music != null ) {
+		TemporalAction fadeOut = new TemporalAction(fadeTime) {
+			@Override
+			protected void update(final float percent) {
+				currentMusic.setVolume((1 - percent) * getMusicVolume());
+			}
+		};
 
-			TemporalAction fadeOut = new TemporalAction(fadeTime) {
-				@Override
-				protected void update(final float percent) {
-					music.setVolume((1 - percent) * soundPreferenceManager.getMaxMusicVol());
-				}
-			};
+		RunnableAction disposeOldMusic = new RunnableAction(this::dispose);
 
-			Action disposeOldMusic = new Action() {
-				@Override
-				public boolean act(final float delta) {
-					ControlledMusic.this.dispose();
-					return true;
-				}
-			};
-
-			this.addAction(new SequenceAction(fadeOut, disposeOldMusic, createAndFadeIn));
+		if (shouldFade) {
+			if (currentMusic != null) {
+				this.addAction(new SequenceAction(fadeOut, disposeOldMusic, createAndFadeIn));
+			} else {
+				this.addAction(new SequenceAction(disposeOldMusic, createAndFadeIn));
+			}
 		} else {
-			this.addAction(createAndFadeIn);
+			if (currentMusic != null) {
+				this.dispose();
+			}
+			createAndStartMusic(musicToUse);
+			currentMusic.setVolume(getMusicVolume());
 		}
 	}
-
-	public void setMuted(final boolean isMuted) {
-		soundPreferenceManager.setMusicMuted(isMuted);
-		music.setVolume(soundPreferenceManager.getMaxMusicVol());
+	
+	private void createAndStartMusic(Music musicToUse) {
+		currentMusic = musicToUse;
+		currentMusic.play();
 	}
 
 	public void dispose() {
-		music.dispose();
+		currentMusic.dispose();
 	}
 }

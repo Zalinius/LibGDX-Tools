@@ -2,7 +2,7 @@ package com.zalinius.libgdxtools.preferencemanagers;
 
 public class SoundPreference {
 
-	private static final String MUSIC_KEY = "musicSetting";
+	private static final String MUSIC_KEY = "musicVolume";
 	
 	private final PreferenceManager preferenceManager;
 	
@@ -10,15 +10,11 @@ public class SoundPreference {
 		this.preferenceManager = preferenceManager;
 	}
 
-	public void setMusicMuted(final boolean isMuted) {
-		preferenceManager.savePrefValue(MUSIC_KEY, isMuted);
+	public float getMusicVolume() {
+		return preferenceManager.getFloatPrefValue(MUSIC_KEY, 1);
 	}
 
-	public int getMaxMusicVol() {
-		return isMusicMuted() ? 0 : 1;
-	}
-
-	public boolean isMusicMuted() {
-		return preferenceManager.getBooleanPrefValue(MUSIC_KEY, false);
+	public void setMusicVolume(float newVolume) {
+		preferenceManager.savePrefValue(MUSIC_KEY, newVolume);
 	}
 }

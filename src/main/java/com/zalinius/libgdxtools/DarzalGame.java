@@ -8,11 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.zalinius.libgdxtools.errorhandling.LibGDXFileLoggingUncaughtExceptionHandler;
 import com.zalinius.libgdxtools.graphics.ScreenElementFactory;
@@ -65,18 +61,7 @@ public abstract class DarzalGame extends HeadlessDarzalGame {
 		stage = new Stage();
 		music = new ControlledMusic(soundPreferenceManager);
 		music.setMusic(getMenuMusic());
-		CheckBox musicToggle = screenElementFactory.makeCheckBox(!soundPreferenceManager.isMusicMuted());
-		musicToggle.addListener(new ChangeListener() {
-
-			@Override
-			public void changed(final ChangeEvent event, final Actor actor) {
-				music.setMuted(!musicToggle.isChecked());
-			}
-		});
-		musicToggle.setBounds(10, 10, 75, 75);
-		musicToggle.getImage().setScaling(Scaling.fill);
-		musicToggle.getImageCell().size(75);
-		stage.addActor(musicToggle);
+		// TODO Add the music slider and generally options menus from quest giver to this
 		stage.addActor(music);
 
 		multiplexer = new InputMultiplexer();

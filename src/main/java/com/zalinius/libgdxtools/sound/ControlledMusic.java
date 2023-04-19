@@ -1,11 +1,11 @@
 package com.zalinius.libgdxtools.sound;
 
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.zalinius.libgdxtools.preferencemanagers.SoundPreference;
+import com.zalinius.libgdxtools.scenes.scene2d.actions.RunnableAction;
 
 public class ControlledMusic extends Actor {
 
@@ -46,13 +46,8 @@ public class ControlledMusic extends Actor {
 			}
 		};
 
-		Action createMusic = new Action() {
-			@Override
-			public boolean act(final float delta) {
-				createAndStartMusic(musicToUse);
-				return true;
-			}
-		};
+		RunnableAction createMusic = new RunnableAction(() -> {createAndStartMusic(musicToUse);});
+		
 
 		SequenceAction createAndFadeIn = new SequenceAction(createMusic, fadeIn);
 
@@ -63,13 +58,7 @@ public class ControlledMusic extends Actor {
 			}
 		};
 
-		Action disposeOldMusic = new Action() {
-			@Override
-			public boolean act(final float delta) {
-				ControlledMusic.this.dispose();
-				return true;
-			}
-		};
+		RunnableAction disposeOldMusic = new RunnableAction(this::dispose);
 
 		if (shouldFade) {
 			if (currentMusic != null) {

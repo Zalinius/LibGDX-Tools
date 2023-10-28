@@ -3,12 +3,13 @@
 
 	<groupId>com.zalinius</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.1.3</version>
+	<version>0.1.4</version>
 	<name>libGDX Tools</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>17</maven.compiler.release>
+		<libgdxVersion>1.12.0</libgdxVersion>
 	</properties>
 
 	<build>
@@ -78,14 +79,14 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-backend-lwjgl3</artifactId>
-			<version>1.11.0</version>
+			<version>${libgdxVersion}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-platform -->
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-platform</artifactId>
-			<version>1.11.0</version>
+			<version>${libgdxVersion}</version>
 			<classifier>natives-desktop</classifier>
 
 		</dependency>
@@ -93,14 +94,14 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx</artifactId>
-			<version>1.11.0</version>
+			<version>${libgdxVersion}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-headless -->
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-backend-headless</artifactId>
-			<version>1.11.0</version>
+			<version>${libgdxVersion}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -115,12 +116,12 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-freetype</artifactId>
-			<version>1.11.0</version>
+			<version>${libgdxVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-freetype-platform</artifactId>
-			<version>1.11.0</version>
+			<version>${libgdxVersion}</version>
 			<classifier>natives-desktop</classifier>
 		</dependency>
 

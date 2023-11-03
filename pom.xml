@@ -3,13 +3,13 @@
 
 	<groupId>com.zalinius</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.1.4</version>
+	<version>0.1.5</version>
 	<name>libGDX Tools</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>17</maven.compiler.release>
-		<libgdxVersion>1.12.0</libgdxVersion>
+		<libgdxVersion>1.12.1</libgdxVersion>
 	</properties>
 
 	<build>

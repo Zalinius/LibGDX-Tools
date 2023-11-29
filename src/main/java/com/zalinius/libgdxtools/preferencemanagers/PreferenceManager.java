@@ -20,12 +20,6 @@ public class PreferenceManager {
 	public SoundPreference sound() {
 		return new SoundPreference(this);
 	}
-	public MandatoryTutorialPreference mandatoryTutorial() {
-		return new MandatoryTutorialPreference(this);
-	}
-	public I18NPreference i18n() {
-		return new I18NPreference(this);
-	}
 	
 	public OtherPreferences other() {
 		return new OtherPreferences(this);

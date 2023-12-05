@@ -1,15 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.zalinius</groupId>
+	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.1.6</version>
+	<version>0.2.0</version>
 	<name>libGDX Tools</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>17</maven.compiler.release>
-		<libgdxVersion>1.12.1</libgdxVersion>
+		<libgdx.version>1.12.1</libgdx.version>
+		<darzalcommon.version>0.4.0</darzalcommon.version>
 	</properties>
 
 	<build>
@@ -79,14 +80,14 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-backend-lwjgl3</artifactId>
-			<version>${libgdxVersion}</version>
+			<version>${libgdx.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-platform -->
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-platform</artifactId>
-			<version>${libgdxVersion}</version>
+			<version>${libgdx.version}</version>
 			<classifier>natives-desktop</classifier>
 
 		</dependency>
@@ -94,21 +95,21 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx</artifactId>
-			<version>${libgdxVersion}</version>
+			<version>${libgdx.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-headless -->
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-backend-headless</artifactId>
-			<version>${libgdxVersion}</version>
+			<version>${libgdx.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>com.zalinius</groupId>
+			<groupId>com.darzalgames</groupId>
 			<artifactId>darzal-common</artifactId>
-			<version>0.3.2</version>
+			<version>${darzalcommon.version}</version>
 		</dependency>
 
 
@@ -116,12 +117,12 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-freetype</artifactId>
-			<version>${libgdxVersion}</version>
+			<version>${libgdx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-freetype-platform</artifactId>
-			<version>${libgdxVersion}</version>
+			<version>${libgdx.version}</version>
 			<classifier>natives-desktop</classifier>
 		</dependency>
 

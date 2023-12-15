@@ -112,18 +112,25 @@
 			<version>${darzalcommon.version}</version>
 		</dependency>
 
-
-		<!-- freetype-specific dependencies -->
 		<dependency>
-			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx-freetype</artifactId>
-			<version>${libgdx.version}</version>
+			<groupId>com.code-disaster.steamworks4j</groupId>
+			<artifactId>steamworks4j</artifactId>
+			<version>1.9.0</version>
 		</dependency>
+		
+		<!--
+		https://mvnrepository.com/artifact/com.badlogicgames.gdx-controllers/gdx-controllers-core -->
 		<dependency>
-			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx-freetype-platform</artifactId>
-			<version>${libgdx.version}</version>
-			<classifier>natives-desktop</classifier>
+			<groupId>com.badlogicgames.gdx-controllers</groupId>
+			<artifactId>gdx-controllers-core</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/com.badlogicgames.gdx-controllers/gdx-controllers-desktop -->
+		<dependency>
+			<groupId>com.badlogicgames.gdx-controllers</groupId>
+			<artifactId>gdx-controllers-desktop</artifactId>
+			<version>2.2.2</version>
 		</dependency>
 
 	</dependencies>

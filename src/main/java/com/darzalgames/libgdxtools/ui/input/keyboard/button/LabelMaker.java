@@ -1,0 +1,224 @@
+package com.darzalgames.libgdxtools.ui.input.keyboard.button;
+
+import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.darzalcommon.functional.TriFunction;
+import com.darzalgames.libgdxtools.MainGame;
+import com.darzalgames.libgdxtools.i18n.TextSupplier;
+import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
+import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
+import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
+import com.darzalgames.libgdxtools.ui.input.keyboard.InputSensitiveLabel;
+import com.darzalgames.libgdxtools.ui.input.keyboard.stage.StageWithBackground;
+
+public class LabelMaker {
+
+	private static Runnable quitGameRunnable;
+	private static StyleManager styleManager;
+	private static TriFunction<TextButton, Image, Runnable, KeyboardButton> privateKeyboardButtonConstructor;
+	
+	public static void setPrivateKeyboardButtonConstructor(
+			TriFunction<TextButton, Image, Runnable, KeyboardButton> privateKeyboardButtonConstructor) {
+		LabelMaker.privateKeyboardButtonConstructor = privateKeyboardButtonConstructor;
+	}
+
+	public static void initialize(StyleManager styleManager) {
+		LabelMaker.styleManager = styleManager;
+		quitGameRunnable = Gdx.app::exit;
+		KeyboardButton.setUpForLabelMaker();
+	}
+
+	public static Label getLabel(final String text) {
+		return getLabel(text, styleManager.labelStyle);
+	}
+
+	public static Label getFlavorTextLabel(final String text) {
+		return getLabel(text, styleManager.flavorTextLabelStyle);
+	}
+
+	public static Label getWarningLabel(final String text) {
+		return getLabel(text, styleManager.warningLabelStyle);
+	}
+
+	public static Label getLabelWithBackground(final String text) {
+		return getLabel(text, styleManager.labelWithBackgroundStyle);
+	}
+
+	public static Label getLabelWithLightBackground(final String text) {
+		return getLabel(text, styleManager.labelWithLightBackgroundStyle);
+	}
+
+	public static Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
+		Label label = new InputSensitiveLabel(textSupplier, styleManager.labelWithBackgroundStyle);
+		label.setWrap(true);
+		return label;
+	}
+
+	public static Label getLabel(final String text, LabelStyle labelStyle) {
+		Label label = new Label(text, labelStyle);
+		label.setWrap(true);
+		return label;
+	}
+
+	public static KeyboardButton getListableLabel(final String text) {
+		// a bit of hack so that a label-like button can be stored in a list of buttons but not be touchable
+		TextButton textButton = new TextButton(text, styleManager.sneakyLabelButtonStyle);
+		textButton.setName(text);
+		KeyboardButton listableButton = new KeyboardButton(textButton, null, Runnables.nullRunnable());
+		listableButton.setTouchable(Touchable.disabled);
+		return listableButton;
+	}
+
+	public static KeyboardButton getSpacer() {
+		KeyboardButton spacer = getListableLabel("");
+		spacer.getView().setName("spacer");
+		return spacer;
+	}
+
+	public static boolean isSpacer(KeyboardButton button) {
+		return !button.getView().isTouchable() && button.getButtonText().isBlank();
+	}
+
+	public static KeyboardButton getButton(final String text, final Runnable runnable) {
+		return makeButton(text, null, runnable);
+	}
+	
+	public static KeyboardButton getButton(final String text, Image image, final Runnable runnable) {
+		return makeButton(text, image, runnable);
+	}
+	
+	private static KeyboardButton makeButton(final String text, Image image, final Runnable runnable) {
+		TextButton textButton = new TextButton(text, styleManager.textButtonStyle); 
+		makeBackgroundFlashing(textButton, styleManager.textButtonStyle, styleManager.flashedTextButtonStyle);
+		return privateKeyboardButtonConstructor.apply(textButton, image, runnable);
+	}
+
+
+	public static KeyboardButton getBlankButton(Drawable closed, Drawable hovered, Drawable open, final Runnable runnable) {
+		TextButtonStyle textButtonStyle = new TextButtonStyle(closed, hovered, open, styleManager.currentFont);
+		textButtonStyle.over = hovered;
+		TextButton textButton = new TextButton("", textButtonStyle);
+		return new KeyboardButton(textButton, runnable);
+	}
+
+	/*
+	 * If ever this isn't behaving as you'd expect, make sure your actor is in a group the size of the
+	 * screen or straight on the stage, not nested in some container that's smaller than the screen
+	 * since it will be drawn in the parent's coordinate system.
+	 */
+	public static void makeActorCentered(final Actor actor) {
+		actor.setPosition(MainGame.getWidth() / 2f - actor.getWidth() / 2f,
+				MainGame.getHeight() / 2f - actor.getHeight() / 2f);
+	}
+
+	public static KeyboardSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
+		TextButton textButton = new TextButton(boxLabel + ":  ", styleManager.textButtonStyle); 
+		makeBackgroundFlashing(textButton, styleManager.textButtonStyle, styleManager.flashedTextButtonStyle);
+		return new KeyboardSelectBox(entries, textButton, consumer);
+	}
+
+	public static NinePatchDrawable getUIBorderedNine() {
+		return styleManager.getUIBorderedNine();
+	}
+
+	public static KeyboardSlider getSlider(String sliderLabel, Consumer<Float> consumer) {
+		KeyboardButton textButton = getButton(sliderLabel, Runnables.nullRunnable());
+		return new KeyboardSlider(textButton.getView(), styleManager.sliderStyle, consumer);
+	}
+	
+	public static KeyboardCheckbox getCheckbox(String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer) {
+		KeyboardButton textButton = getButton("", Runnables.nullRunnable());
+		return new KeyboardCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, styleManager.checkboxStyle);
+	}
+
+	public static KeyboardButton getInGamesSettingsButton(Runnable onclick) {
+		TextButton textButton = new TextButton("", styleManager.settingsButtonStyle); 
+		return new MouseOnlyButton(textButton, onclick);
+	}
+
+	public static KeyboardButton getFastForwardButton(Runnable onclick) {
+		TextButton textButton = new TextButton("", styleManager.fastForwardButtonStyle); 
+		return new MouseOnlyButton(textButton, onclick);
+	}
+	
+	private static final String QUIT_GAME_KEY = "quit_game";
+
+	public static KeyboardButton getQuitGameButton() {
+		return getButton(TextSupplier.getLine(QUIT_GAME_KEY), quitGameRunnable);
+	}
+
+	public static KeyboardButton getQuitGameButtonWithWarning(Runnable runnable) {
+		Runnable quitWithConfirmation = () -> {
+			runnable.run();
+			new ConfirmationMenu("menu_warning", 
+					QUIT_GAME_KEY, 
+					quitGameRunnable::run);
+		};
+		return getButton(TextSupplier.getLine(QUIT_GAME_KEY), quitWithConfirmation);
+	}
+	
+	private static void makeBackgroundFlashing(Button button, ButtonStyle mainButtonStyle, ButtonStyle flashedButtonStyle) {
+		Function<Button, Boolean> shouldFlash = b -> (StageWithBackground.isInTouchableBranch(b)
+				&& !b.isDisabled()
+				&& MainGame.getInputStrategyManager().shouldFlashButtons());
+
+		button.addListener(new ClickListener() {
+			@Override
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+				super.enter(event, x, y, pointer, fromActor);
+				float flashTime = 1f / 2.5f;
+				if (StageWithBackground.isHoverEvent(pointer) && button.isTouchable()) {
+					button.setStyle(mainButtonStyle);
+					if (shouldFlash.apply(button)) {
+						button.clearActions();
+						RunnableAction flash = Actions.run(() -> {
+							if (shouldFlash.apply(button)) {
+								button.setStyle(flashedButtonStyle);
+							}
+						});
+						RunnableAction show = Actions.run(() -> {
+							if (shouldFlash.apply(button)) {
+								button.setStyle(mainButtonStyle);
+							}
+						});
+						DelayAction flashAfterDelay = Actions.delay(flashTime);
+						flashAfterDelay.setAction(flash);
+						DelayAction showAfterDelay = Actions.delay(flashTime);
+						showAfterDelay.setAction(show);
+						button.addAction(new InstantForeverAction(new InstantSequenceAction(
+								flashAfterDelay,
+								showAfterDelay
+								)));
+
+					}
+				}
+			}
+
+			@Override
+			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+				super.exit(event, x, y, pointer, toActor);
+				if (StageWithBackground.isHoverEvent(pointer)) {
+					button.clearActions();
+				}
+			}
+		});
+	}
+}

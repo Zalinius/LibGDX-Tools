@@ -28,8 +28,8 @@ public class OptionalSequenceAction extends Action{
 		if (index >= optionalActions.size()) {
 			return true;
 		}
-		Pool pool = getPool();
-		setPool(null); // Ensure this action can't be returned to the pool while executings.
+		Pool<?> pool = getPool();
+		setPool(null); // Ensure this action can't be returned to the pool while executing.
 		try {
 			while (index < optionalActions.size()) {
 				OptionalAction action = optionalActions.get(index);

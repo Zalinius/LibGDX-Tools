@@ -5,7 +5,8 @@ import java.time.temporal.ChronoUnit;
 
 import com.badlogic.gdx.Preferences;
 
-public class DailyChallengePreferenceManager extends PreferenceManager {
+// TODO Next time you want to have a daily challenge, salvage this code to be used as safe file data, not as a preference!
+public class DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA extends PreferenceManager {
 
 	private static final String DAILY_DAY_KEY =   "dailyChallengeDay";
 	private static final String DAILY_SCORE_KEY = "dailyChallengeScore";
@@ -13,10 +14,10 @@ public class DailyChallengePreferenceManager extends PreferenceManager {
 	/**
 	 * @param preferencePrefix A name for the preferences file, which should be in a package format corresponding to the game, e.g. com.darzalgames.cultivar
 	 */
-	protected DailyChallengePreferenceManager(final String preferencePrefix) {
+	protected DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA(final String preferencePrefix) {
 		super(preferencePrefix);
 	}	
-	public DailyChallengePreferenceManager(final Preferences preferencesFile) {
+	public DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA(final Preferences preferencesFile) {
 		super(preferencesFile);
 	}
 

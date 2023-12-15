@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.darzalgames.libgdxtools.preferencemanagers.SoundPreference;
-import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableAction;
+import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 
 public class ControlledMusic extends Actor {
 
@@ -46,7 +46,7 @@ public class ControlledMusic extends Actor {
 			}
 		};
 
-		RunnableAction createMusic = new RunnableAction(() -> {createAndStartMusic(musicToUse);});
+		RunnableActionBest createMusic = new RunnableActionBest(() -> createAndStartMusic(musicToUse));
 		
 
 		SequenceAction createAndFadeIn = new SequenceAction(createMusic, fadeIn);
@@ -58,7 +58,7 @@ public class ControlledMusic extends Actor {
 			}
 		};
 
-		RunnableAction disposeOldMusic = new RunnableAction(this::dispose);
+		RunnableActionBest disposeOldMusic = new RunnableActionBest(this::dispose);
 
 		if (shouldFade) {
 			if (currentMusic != null) {

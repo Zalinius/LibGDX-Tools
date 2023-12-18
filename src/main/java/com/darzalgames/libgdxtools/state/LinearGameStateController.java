@@ -8,18 +8,18 @@ package com.darzalgames.libgdxtools.state;
  */
 public abstract class LinearGameStateController extends GameStateController {
 
-	public LinearGameStateController(GameState state) {
+	protected LinearGameStateController(GameState state) {
 		this(state, false);
 	}
 
-	public LinearGameStateController(GameState state, boolean allowsEndingsAfter) {
+	protected LinearGameStateController(GameState state, boolean allowsEndingsAfter) {
 		super(state, allowsEndingsAfter);
 	}
 	
 	@Override
-	final public void focusCurrent() {}
+	public final void focusCurrent() {}
 	@Override
-	final public void clearSelected() {}
+	public final void clearSelected() {}
 	@Override
 	public void selectDefault() {}
 

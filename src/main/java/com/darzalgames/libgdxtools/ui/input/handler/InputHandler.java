@@ -11,14 +11,14 @@ public abstract class InputHandler extends Table implements DoesNotPause {
 		GAMEPAD,
 	}
 	
-	protected static InputMethod latestInputMethod = InputMethod.MOUSE; 
+	protected InputMethod latestInputMethod = InputMethod.MOUSE; 
 	
 	@Override
 	public void actWhilePaused(float delta) {
 		act(delta);
 	}
 
-	public static InputMethod getLatestInputMethod() {
+	public InputMethod getLatestInputMethod() {
 		return latestInputMethod;
 	}
 

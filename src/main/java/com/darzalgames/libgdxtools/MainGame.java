@@ -13,8 +13,8 @@ import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 
 public abstract class MainGame extends ApplicationAdapter {
 
-	private final int WIDTH;
-	private final int HEIGHT;
+	private final int width;
+	private final int height;
 
 	private InputStrategyManager inputStrategyManager;
 	
@@ -39,8 +39,8 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected MainGame(int width, int height) {
 		super();
 		setInstance(this);
-		WIDTH = width;
-		HEIGHT = height;
+		this.width = width;
+		this.height = height;
 	}
 	
 	private static void setInstance(MainGame mainGame) {
@@ -48,15 +48,21 @@ public abstract class MainGame extends ApplicationAdapter {
 	}
 
 	public static int getWidth() {
-		return instance.WIDTH;
+		return instance.width;
 	}
 
 	public static int getHeight() {
-		return instance.HEIGHT;
+		return instance.height;
 	}
 
 	public static InputStrategyManager getInputStrategyManager() {
 		return instance.inputStrategyManager;
+	}
+
+	protected abstract PreferenceManager getPreferenceManagerInternal();
+
+	public static PreferenceManager getPreferenceManager() {
+		return instance.getPreferenceManagerInternal();
 	}
 	
 	

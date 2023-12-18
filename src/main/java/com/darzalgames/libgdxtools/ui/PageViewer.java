@@ -20,11 +20,12 @@ public abstract class PageViewer extends Group implements InputConsumer {
 
 	private int viewingIndex = 0;
 	private List<Table> pageList;
-	private KeyboardButton leftArrow, rightArrow;
+	private KeyboardButton leftArrow;
+	private KeyboardButton rightArrow;
 	private KeyboardButton lastButton;
 	private Table lastButtonTable;
 
-	public PageViewer(Supplier<String> lastButtonText) {
+	protected PageViewer(Supplier<String> lastButtonText) {
 		lastButton = LabelMaker.getButton(lastButtonText.get(), this::finish);
 		makeArrows();
 	}
@@ -38,11 +39,11 @@ public abstract class PageViewer extends Group implements InputConsumer {
 		int arrowPadding = 6;
 		TextureRegionDrawable arrowDrawable = new TextureRegionDrawable(getArrowTexture());
 		TextureRegionDrawable arrowHoveredDrawable = new TextureRegionDrawable(getArrowHoveredTexture());
-		rightArrow = LabelMaker.getBlankButton(arrowDrawable, arrowHoveredDrawable, arrowDrawable, () -> {turnPage(true);});
+		rightArrow = LabelMaker.getBlankButton(arrowDrawable, arrowHoveredDrawable, arrowDrawable, () -> turnPage(true));
 		LabelMaker.makeActorCentered(rightArrow.getView());
 		rightArrow.getView().setX(MainGame.getWidth() - rightArrow.getView().getWidth() - arrowPadding);
 
-		leftArrow = LabelMaker.getBlankButton(arrowDrawable, arrowHoveredDrawable, arrowDrawable, () -> {turnPage(false);});
+		leftArrow = LabelMaker.getBlankButton(arrowDrawable, arrowHoveredDrawable, arrowDrawable, () -> turnPage(false));
 		leftArrow.getView().setTransform(true);
 		leftArrow.getView().setScaleX(-1);
 		LabelMaker.makeActorCentered(leftArrow.getView());
@@ -92,7 +93,7 @@ public abstract class PageViewer extends Group implements InputConsumer {
 
 			Table toBringIn = pageList.get(viewingIndex);
 			float startY = toBringIn.getY();
-			float finalX = MainGame.getWidth() / 2 - toBringIn.getWidth() / 2;
+			float finalX = MainGame.getWidth() / 2f - toBringIn.getWidth() / 2f;
 			toBringIn.addAction(Actions.sequence(Actions.moveTo(finalX, startY, 0.25f, Interpolation.circle), new RunnableActionBest(this::updateArrows)));
 			selectDefault();
 		} 
@@ -113,7 +114,7 @@ public abstract class PageViewer extends Group implements InputConsumer {
 		pageList = makePageTables();
 		lastButtonTable = new Table();
 		lastButtonTable.setSize(150, 60);
-		lastButtonTable.setBackground(LabelMaker.getBorderedNine());
+		lastButtonTable.setBackground(LabelMaker.getUIBorderedNine());
 		lastButtonTable.add(lastButton.getView()).prefWidth(lastButton.getView().getWidth());
 		pageList.add(lastButtonTable);
 		pageList.forEach(table -> {

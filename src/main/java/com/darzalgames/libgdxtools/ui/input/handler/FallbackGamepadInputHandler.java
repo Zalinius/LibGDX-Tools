@@ -30,15 +30,9 @@ public class FallbackGamepadInputHandler extends GamepadInputHandler implements 
 		buttonMappings.put(controller -> controller.getMapping().buttonDpadRight, Input.RIGHT);
 		buttonMappings.put(controller -> controller.getMapping().buttonDpadUp, Input.UP);
 		buttonMappings.put(controller -> controller.getMapping().buttonDpadDown, Input.DOWN);
-		
+
 
 		Gdx.app.log("GamepadInputHandler", "Using FALLBACK gamepad input handling.");
-	}
-
-	@Override
-	public void act(float delta) {
-		super.act(delta);
-
 	}
 
 	@Override
@@ -73,37 +67,34 @@ public class FallbackGamepadInputHandler extends GamepadInputHandler implements 
 
 	@Override
 	public boolean axisMoved(Controller controller, int axisCode, float value) {
-		if (Math.abs(value) <= .1f) { // TODO use a deadzone setting instead
-			if (axisCode == controller.getMapping().axisLeftX
-					|| axisCode == controller.getMapping().axisRightX) {
-				Input inputKey = (value > 0 ? Input.RIGHT : Input.LEFT);
-				justReleased(inputKey);
-			}
-			if (axisCode == controller.getMapping().axisLeftY
-					|| axisCode == controller.getMapping().axisRightY) {
-				Input inputKey = (value > 0 ? Input.DOWN : Input.UP);
-				justReleased(inputKey);
-			}
-		} else {
+		Input inputKey = Input.NONE;			
+		if (isXAxis(axisCode, controller)) {
+			inputKey = (value > 0 ? Input.RIGHT : Input.LEFT);
+		}
+
+		if (isYAxis(axisCode, controller)) {
+			inputKey = (value > 0 ? Input.DOWN : Input.UP);
+		}
+
+		if (inputKey != Input.NONE) {
 			if (Math.abs(value) >= 1.0f) {
-				Input inputKey = Input.NONE;			
-				if (axisCode == controller.getMapping().axisLeftX
-						|| axisCode == controller.getMapping().axisRightX) {
-					inputKey = (value > 0 ? Input.RIGHT : Input.LEFT);
-				}
-
-				if (axisCode == controller.getMapping().axisLeftY
-						|| axisCode == controller.getMapping().axisRightY) {
-					inputKey = (value > 0 ? Input.DOWN : Input.UP);
-				}
-
-				if (inputKey != Input.NONE) {
-					justPressed(inputKey);
-				}
+				justPressed(inputKey);
+			} else if (Math.abs(value) <= .1f) { // A homemade deadzone, as long as the implementation works for us developers (and the itch demo?) it's okay
+				justReleased(inputKey);
 			}
 		}
 
 		return false;
+	}
+
+	private static boolean isYAxis(int axisCode, Controller controller) {
+		return axisCode == controller.getMapping().axisLeftY
+				|| axisCode == controller.getMapping().axisRightY;
+	}
+
+	private static boolean isXAxis(int axisCode, Controller controller) {
+		return axisCode == controller.getMapping().axisLeftX
+				|| axisCode == controller.getMapping().axisRightX;
 	}
 
 }

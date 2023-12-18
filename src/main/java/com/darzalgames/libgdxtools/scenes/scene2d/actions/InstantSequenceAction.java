@@ -1,7 +1,8 @@
 package com.darzalgames.libgdxtools.scenes.scene2d.actions;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.utils.Pool;
 
 /**
@@ -10,34 +11,25 @@ import com.badlogic.gdx.utils.Pool;
  * @author DarZal
  *
  */
-public class InstantSequenceAction extends ParallelAction {
+public class InstantSequenceAction extends ParallelActionBest {
 
 	private int index;
-	
-	// TODO divorce myself from these terrible limited LibGDX SeqActions that have max 5 actions and these awful constructors
-	public InstantSequenceAction(Action action1, Action action2) {
-		super(action1, action2);
-	}
-	
-	public InstantSequenceAction(Action action1, Action action2, Action action3) {
-		super(action1, action2, action3);
-	}
-	
-	public InstantSequenceAction(Action action1, Action action2, Action action3, Action action4) {
-		super(action1, action2, action3, action4);
+
+	public InstantSequenceAction (Action... allActions) {
+		actions.addAll(Arrays.asList(allActions));
 	}
 	
 	@Override
 	public boolean act(float delta) {
-		if (index >= getActions().size) return true;
+		if (index >= actions.size()) return true;
 		@SuppressWarnings("rawtypes")
 		Pool pool = getPool();
-		setPool(null); // Ensure this action can't be returned to the pool while executings.
+		setPool(null); // Ensure this action can't be returned to the pool while executing.
 		try {
-			if (getActions().get(index).act(delta)) {
+			if (actions.get(index).act(delta)) {
 				if (actor == null) return true; // This action was removed.
 				index++;
-				if (index >= getActions().size) return true;
+				if (index >= actions.size()) return true;
 				act(delta); // THIS is the change.
 			}
 			return false;

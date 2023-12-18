@@ -23,44 +23,43 @@ import com.darzalgames.libgdxtools.ui.optionsmenu.OptionsMenu;
 
 public class InputPrioritizer extends Actor implements InputConsumer, InputObserver, DoesNotPause {
 
-	private static Stack<InputConsumer> inputConsumerStack;
-	private static Image darkScreen;
+	private Deque<InputConsumer> inputConsumerStack;
+	private Image darkScreen;
 	
 	private static KeyboardButton pauseButton;
 	private static OptionsMenu optionsMenu;
 	
 	private static Stage popUpStage;
 	
-	private static GamepadInputHandler gamepadInputHandler;
-	private static KeyboardInputHandler keyboardInputHandler;
-	
 	private final Group group;
 	private static Runnable toggleFullscreenRunnable;
 
 	public static final InputPrioritizer instance = new InputPrioritizer();
+	
+	private static GamepadInputHandler gamepadInputHandler;
+	private static KeyboardInputHandler keyboardInputHandler = new KeyboardInputHandler(instance);
 
 
 	private InputPrioritizer() {
-		inputConsumerStack = new Stack<>();
+		instance.inputConsumerStack = new ArrayDeque<>();
 		Pixmap background = new Pixmap(MainGame.getWidth(), MainGame.getHeight(), Format.RGBA8888);
 		Color color = Color.BLACK;
 		background.setColor(color.r, color.g, color.b, 0.5f);
 		background.fillRectangle(0, 0, background.getWidth(), background.getHeight());
-		darkScreen = new Image(new Texture(background));
-		darkScreen.setBounds(0, 0, background.getWidth(), background.getHeight());
+		instance.darkScreen = new Image(new Texture(background));
+		instance.darkScreen.setBounds(0, 0, background.getWidth(), background.getHeight());
 		background.dispose();
-		darkScreen.addListener(new InputListener() {
+		instance.darkScreen.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer, final int button) {
-				darkScreen.remove();
-				if (!inputConsumerStack.isEmpty()) {
-					inputConsumerStack.peek().consumeKeyInput(Input.BACK); 
+				instance.darkScreen.remove();
+				if (!instance.inputConsumerStack.isEmpty()) {
+					instance.inputConsumerStack.peek().consumeKeyInput(Input.BACK); 
 				}
 				return true;
 			}
 		});
 
-		keyboardInputHandler = new KeyboardInputHandler(this);
 		group = new Group();
 	}
 
@@ -75,10 +74,10 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 
 	public void clearChildren() {
 		group.clearChildren(false);
-		inputConsumerStack.clear();
+		instance.inputConsumerStack.clear();
 		group.addActor(gamepadInputHandler);
 		group.addActor(keyboardInputHandler);
-		darkScreen.remove();
+		instance.darkScreen.remove();
 	}
 
 	public static void enterMouseMode() {
@@ -98,27 +97,27 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 					(!isPaused() // if we're not paused, then we're in game and should open the pause menu
 							|| !checkIfLandingOnPopup())) { // we're on the pause menu (and not in a nested pop up, like the quit warning)
 				pauseButton.consumeKeyInput(Input.ACCEPT);
-			} else if (!inputConsumerStack.isEmpty()) { // Don't try to enter keyboard mode when someone is just pressing escape
-				inputConsumerStack.peek().consumeKeyInput(input);
+			} else if (!instance.inputConsumerStack.isEmpty()) { // Don't try to enter keyboard mode when someone is just pressing escape
+				instance.inputConsumerStack.peek().consumeKeyInput(input);
 			}	
-		} else if (!enterKeyboardMode() && !inputConsumerStack.isEmpty()) {
-			inputConsumerStack.peek().consumeKeyInput(input);
+		} else if (!enterKeyboardMode() && !instance.inputConsumerStack.isEmpty()) {
+			instance.inputConsumerStack.peek().consumeKeyInput(input);
 		}		
 	}
 
 	private static void showDarkScreen(int actorIndex, boolean isTouchable) {
-		popUpStage.addActor(darkScreen);
-		darkScreen.setZIndex(actorIndex);
-		darkScreen.setTouchable(Touchable.disabled);
+		popUpStage.addActor(instance.darkScreen);
+		instance.darkScreen.setZIndex(actorIndex);
+		instance.darkScreen.setTouchable(Touchable.disabled);
 		DelayAction delayThenTouchable = new DelayAction(1f);
-		delayThenTouchable.setAction(new RunnableActionBest(() -> {
-			darkScreen.setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled);
-		}));
-		darkScreen.addAction(delayThenTouchable);
+		delayThenTouchable.setAction(new RunnableActionBest(() -> 
+			instance.darkScreen.setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled)
+		));
+		instance.darkScreen.addAction(delayThenTouchable);
 	}
 
 	public static <A extends Actor & PopUp> void showPopup(A popup) {
-		darkScreen.remove();
+		instance.darkScreen.remove();
 		popUpStage.addActor(popup);
 		popup.toFront();
 		if (pauseButton != null) {
@@ -144,20 +143,20 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 	}
 
 	public static void claimPriority(InputConsumer inputConsumer) {
-		if (inputConsumerStack.isEmpty() || !inputConsumer.equals(inputConsumerStack.peek())) {
+		if (instance.inputConsumerStack.isEmpty() || !inputConsumer.equals(instance.inputConsumerStack.peek())) {
 			unFocusTop();
-			inputConsumerStack.push(inputConsumer);
+			instance.inputConsumerStack.push(inputConsumer);
 			focusTop(true);
 		}
 	}
 
 	public static void releasePriority(InputConsumer inputConsumer) {
-		if (!inputConsumerStack.isEmpty() && inputConsumer.equals(inputConsumerStack.peek())) {
-			darkScreen.remove();
-			boolean isClosingPauseMenu = inputConsumerStack.peek() == optionsMenu; 
+		if (!instance.inputConsumerStack.isEmpty() && inputConsumer.equals(instance.inputConsumerStack.peek())) {
+			instance.darkScreen.remove();
+			boolean isClosingPauseMenu = instance.inputConsumerStack.peek() == optionsMenu; 
 			removeTop();
 			if (isClosingPauseMenu) {
-				inputConsumerStack.peek().setTouchable(Touchable.enabled);
+				instance.inputConsumerStack.peek().setTouchable(Touchable.enabled);
 				instance.focusCurrent();
 			} else {
 				focusTop(false);
@@ -167,17 +166,17 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 	}
 
 	private static void unFocusTop() {
-		if (!inputConsumerStack.isEmpty()) {
-			inputConsumerStack.peek().setTouchable(Touchable.disabled);
-			inputConsumerStack.peek().loseFocus();
+		if (!instance.inputConsumerStack.isEmpty()) {
+			instance.inputConsumerStack.peek().setTouchable(Touchable.disabled);
+			instance.inputConsumerStack.peek().loseFocus();
 		}
 	}
 
 	private static void removeTop() {
-		if (!inputConsumerStack.isEmpty()) {
+		if (!instance.inputConsumerStack.isEmpty()) {
 			unFocusTop();
-			inputConsumerStack.pop();
-			darkScreen.remove();
+			instance.inputConsumerStack.pop();
+			instance.darkScreen.remove();
 			checkIfLandingOnPopup();	
 		}
 	}
@@ -191,7 +190,7 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 			for (int i = 0; i < inferiorArray.size; i++) {
 				popups.add(inferiorArray.get(i));
 			}
-			Optional<Actor> popupMatch = popups.stream().filter(a -> a.equals(inputConsumerStack.peek())).findFirst(); 
+			Optional<Actor> popupMatch = popups.stream().filter(a -> a.equals(instance.inputConsumerStack.peek())).findFirst(); 
 			if (popupMatch.isPresent()) {
 				// We are landing back on to a popup
 				Actor actor = popupMatch.get();
@@ -204,12 +203,12 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 	}
 
 	private static void focusTop(boolean isFirstFocus) {
-		if (!inputConsumerStack.isEmpty()) {
-			inputConsumerStack.peek().setTouchable(Touchable.enabled);
+		if (!instance.inputConsumerStack.isEmpty()) {
+			instance.inputConsumerStack.peek().setTouchable(Touchable.enabled);
 			if (isFirstFocus) {
-				inputConsumerStack.peek().gainFocus();				
+				instance.inputConsumerStack.peek().gainFocus();				
 			} else {
-				inputConsumerStack.peek().regainFocus();
+				instance.inputConsumerStack.peek().regainFocus();
 			}
 			instance.focusCurrent();
 		}
@@ -236,7 +235,7 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 
 	@Override
 	public void inputStrategyChanged() {
-		if (!inputConsumerStack.isEmpty()) {
+		if (!instance.inputConsumerStack.isEmpty()) {
 			if (MainGame.getInputStrategyManager().shouldFocusFirstButton()) {
 				selectDefault();
 			}  else { // Mouse mode
@@ -247,8 +246,8 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 
 	@Override
 	public void selectDefault() {
-		if (!inputConsumerStack.isEmpty()) {
-			inputConsumerStack.peek().selectDefault();
+		if (!instance.inputConsumerStack.isEmpty()) {
+			instance.inputConsumerStack.peek().selectDefault();
 		}
 	}
 
@@ -259,15 +258,15 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 
 	@Override
 	public void clearSelected() {
-		if (!inputConsumerStack.isEmpty()) {
-			inputConsumerStack.peek().clearSelected();
+		if (!instance.inputConsumerStack.isEmpty()) {
+			instance.inputConsumerStack.peek().clearSelected();
 		}
 	}
 
 	@Override
 	public void focusCurrent() {
-		if (!inputConsumerStack.isEmpty()) {
-			inputConsumerStack.peek().focusCurrent();
+		if (!instance.inputConsumerStack.isEmpty()) {
+			instance.inputConsumerStack.peek().focusCurrent();
 		}
 	}
 
@@ -307,7 +306,7 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 	 * mouse users can't remove popups
 	 */
 	public static void hideDarkScreenForVeryExceptionalCircumstances() {
-		darkScreen.remove();
+		instance.darkScreen.remove();
 	}
 
 }

@@ -38,7 +38,7 @@ public class KeyboardInputHandler extends InputHandler {
 					input = Input.DOWN;
 				} else if (keycode == Keys.D) {
 					input = Input.RIGHT;
-				} else if (keycode == Keys.E || keycode == Keys.CONTROL_RIGHT || keycode == Keys.CONTROL_RIGHT) {
+				} else if (keycode == Keys.E || keycode == Keys.CONTROL_RIGHT || keycode == Keys.CONTROL_LEFT) {
 					input = Input.ACCEPT;
 				} else if (keycode == Keys.Q || keycode == Keys.SHIFT_RIGHT || keycode == Keys.SHIFT_LEFT) {
 					input = Input.BACK;

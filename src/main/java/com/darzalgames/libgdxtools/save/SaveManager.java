@@ -11,12 +11,12 @@ import com.badlogic.gdx.utils.SerializationException;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
 import com.darzalgames.libgdxtools.steam.SteamConnection;
 
-abstract class SaveManager {
+public abstract class SaveManager {
 
 	private String language;
 	private boolean textShouldBeInstant;
 
-	public static SaveManager instance;
+	private static SaveManager instance;
 	
 	protected abstract void saveInternal();
 	protected abstract void loadInternal(SaveManager loadedSave);
@@ -34,19 +34,24 @@ abstract class SaveManager {
 
 		// write old data to a backup
 		FileHandle backup = getBackupSaveFile();
-		backup.writeString(json.toJson(instance), false);
+		if (backup != null) {
+			backup.writeString(json.toJson(instance), false);	
+		}
+		
 
 		instance.saveInternal();
 		
 		instance.language = TextSupplier.getLocale().getLanguage();
 
 		FileHandle file = getSaveFile();
-		file.writeString(json.toJson(instance), false);
+		if (file != null) {
+			file.writeString(json.toJson(instance), false);	
+		}
 	}
 
 	public static boolean load() {
 		FileHandle file = getSaveFile();
-		if (file.exists()) {
+		if (file != null && file.exists()) {
 			Json json = new Json();
 
 			// good since I'll be adding/removing various values in the future, a deleted
@@ -55,13 +60,17 @@ abstract class SaveManager {
 
 			try {
 				SaveManager loadedSave = json.fromJson(SaveManager.class, file);
+				instance.language = loadedSave.language;
+				TextSupplier.useLanguage(loadedSave.language);
 				instance.loadInternal(loadedSave);
 				return true;
 
 			} catch (SerializationException|NullPointerException e) {
 				json.setUsePrototypes(false);
-				FileHandle corruptedfile = getBackupSaveFile();
-				corruptedfile.writeString(file.readString(), false);
+				FileHandle corruptedFile = getBackupSaveFile();
+				if (corruptedFile != null) {
+					corruptedFile.writeString(file.readString(), false);
+				}
 				Gdx.app.log("SaveManager", "Failed to load save (" + e.getClass() + "), creating new save instead");
 				e.printStackTrace();
 				instance.respondToFailedLoad();
@@ -83,12 +92,12 @@ abstract class SaveManager {
 	}
 
 	public enum OSType { 
-		Windows,
-		Linux,
+		WINDOWS,
+		LINUX,
 		;
 
-		private transient final static String saveName = "QuestGiverSave.json";
-		private transient final String backupSaveName = "QuestGiverSave-backup.json";
+		private final transient String saveName = "QuestGiverSave.json";
+		private final transient String backupSaveName = "QuestGiverSave-backup.json";
 
 		public FileHandle getBackupSave() {
 			return getSave(backupSaveName);
@@ -100,9 +109,9 @@ abstract class SaveManager {
 
 		private FileHandle getSave(String name) {
 			switch (this) {
-			case Windows:
+			case WINDOWS:
 				return Gdx.files.absolute(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/My Games/Quest Giver/" + SteamConnection.getSteamID() + "/" + name);
-			case Linux:
+			case LINUX:
 				return Gdx.files.external(".local/share/Quest Giver/" + SteamConnection.getSteamID() + "/" + name);
 			default:
 				return null;
@@ -119,14 +128,14 @@ abstract class SaveManager {
 	 * @returns - the operating system detected
 	 */
 	public static OSType getOperatingSystemType() {
-		OSType detectedOS = OSType.Windows;
-		String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
-		if ((OS.indexOf("mac") >= 0) || (OS.indexOf("darwin") >= 0)) {
-			// detectedOS = OSType.MacOS;
-		} else if (OS.indexOf("win") >= 0) {
-			detectedOS = OSType.Windows;
-		} else if (OS.indexOf("nux") >= 0) {
-			detectedOS = OSType.Linux;
+		OSType detectedOS = OSType.WINDOWS;
+		String os = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
+		if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0)) {
+			// This is Mac, which we don't support
+		} else if (os.indexOf("win") >= 0) {
+			// This was our default assumption
+		} else if (os.indexOf("nux") >= 0) {
+			detectedOS = OSType.LINUX;
 		}
 		return detectedOS;
 	}

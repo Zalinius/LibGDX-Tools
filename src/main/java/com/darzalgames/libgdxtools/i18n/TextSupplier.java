@@ -7,10 +7,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.darzalgames.darzalcommon.data.BiMap;
+import com.darzalgames.libgdxtools.save.SaveManager;
 
 public abstract class TextSupplier {
 
-	private static I18NBundle baseBundle, topBundle;
+	private static I18NBundle baseBundle;
+	private static I18NBundle topBundle;
 	private static Locale locale;
 
 	private static BiMap<String, Locale> displayNames;
@@ -118,7 +120,7 @@ public abstract class TextSupplier {
 	public static Consumer<String> getLanguageChoiceResponder() {
 		return selectedNewLanguage -> {
 			useLanguageFromDisplayName(selectedNewLanguage);
-			//SaveManager.save();
+			SaveManager.save();
 		}; 
 	}
 	

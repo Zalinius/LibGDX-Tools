@@ -10,8 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
 
 public class KeyboardCheckbox extends KeyboardButton {
+	
 	private final CheckBox box;
-	private final String uncheckedLabel, checkedLabel;
+	private final String uncheckedLabel;
+	private final String checkedLabel;
+	
 	public KeyboardCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style) {
 		super(textButton, Runnables.nullRunnable());
 		this.uncheckedLabel = uncheckedLabel;

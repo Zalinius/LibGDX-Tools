@@ -11,8 +11,8 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 
 public class InputStrategyManager extends InputStrategy implements InputSubject, DoesNotPause {
 
-	public InputStrategy currentInputStrategy;
-	public InputStrategy previousInputStrategy;
+	private InputStrategy currentInputStrategy;
+	private InputStrategy previousInputStrategy;
 	private final MouseInputStrategy mouseInputStrategy;
 	private final KeyboardInputStrategy keyboardInputStrategy;
 	private final PixelCursor pixelCursor;

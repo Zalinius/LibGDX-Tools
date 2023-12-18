@@ -10,9 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
  *
  */
 public class InstantForeverAction extends RepeatAction {
-	static public final int FOREVER = -1;
+	public static final int FOREVER = -1;
 
-	private int repeatCount, executedCount;
+	private int repeatCount;
+	private int executedCount;
 	private boolean finished;
 
 	public InstantForeverAction(Action action) {
@@ -24,13 +25,17 @@ public class InstantForeverAction extends RepeatAction {
 	protected boolean delegate (float delta) {
 		if (executedCount == repeatCount) return true;
 		if (action.act(delta)) {
-			if (finished) return true;
-			if (repeatCount > 0) executedCount++;
-			if (executedCount == repeatCount) return true;
-			if (action != null) {
-				action.restart();
-				action.act(delta); // THIS is the change
+			if (finished) {
+				return true;
 			}
+			if (repeatCount > 0) {
+				executedCount++;
+			}
+			if (executedCount == repeatCount) {
+				return true;
+			}
+			action.restart();
+			action.act(delta); // THIS is the change
 		}
 		return false;
 	}

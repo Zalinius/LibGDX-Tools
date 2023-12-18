@@ -1,8 +1,9 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
@@ -18,9 +19,9 @@ public abstract class GamepadInputHandler extends InputHandler {
 	private final InputConsumer inputConsumer;
 	protected final Map<Input, ButtonState> buttonStates;
 
-	public GamepadInputHandler() {
+	protected GamepadInputHandler() {
 		inputConsumer = InputPrioritizer.instance;
-		buttonStates = new HashMap<>();
+		buttonStates = new EnumMap<>(Input.class);
 
 		buttonStates.put(Input.ACCEPT, ButtonState.NOT_HELD_DOWN);
 		buttonStates.put(Input.BACK, ButtonState.NOT_HELD_DOWN);
@@ -34,11 +35,13 @@ public abstract class GamepadInputHandler extends InputHandler {
 	}
 
 	protected final void justPressed(Input buttonKey) {
+		Gdx.app.log("[GamepadInputHandler]", "Just pressed:" + buttonKey);
 		latestInputMethod = InputMethod.GAMEPAD;
 		inputConsumer.consumeKeyInput(buttonKey);
 	}
 
 	protected final void justReleased(Input buttonKey) {
+		Gdx.app.log("[GamepadInputHandler]", "Just released:" + buttonKey);
 		latestInputMethod = InputMethod.GAMEPAD;
 	}
 	

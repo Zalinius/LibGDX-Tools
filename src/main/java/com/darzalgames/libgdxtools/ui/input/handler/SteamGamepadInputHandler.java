@@ -1,8 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
@@ -11,8 +9,8 @@ import com.darzalgames.libgdxtools.ui.input.Input;
 
 public class SteamGamepadInputHandler extends GamepadInputHandler {
 
-	private static SteamController steamController;
-	private static SteamControllerHandle activeController;
+	private SteamController steamController;
+	private SteamControllerHandle activeController;
 
 	private SteamControllerActionSetHandle actionsSetHandle;
 	private final Map<SteamControllerDigitalActionHandle, Input> buttonMappings;
@@ -22,7 +20,7 @@ public class SteamGamepadInputHandler extends GamepadInputHandler {
 
 	public SteamGamepadInputHandler(SteamController steamController) {
 		buttonMappings = new HashMap<>();
-		SteamGamepadInputHandler.steamController = steamController;
+		this.steamController = steamController;
 		justDisconnected = false;
 
 		actionsSetHandle = steamController.getActionSetHandle("MenuControls");
@@ -53,13 +51,23 @@ public class SteamGamepadInputHandler extends GamepadInputHandler {
 		SteamControllerHandle[] handlesOut = new SteamControllerHandle[SteamController.STEAM_CONTROLLER_MAX_COUNT];
 		steamController.getConnectedControllers(handlesOut);
 
+		updateActionSets(handlesOut);
+
+		checkForControllerJustDisconnected(handlesOut);
+
+		checkForActiveController(handlesOut);
+	}
+
+	private void updateActionSets(SteamControllerHandle[] handlesOut) {
 		for (int i = 0; i < handlesOut.length; i++) {
 			SteamControllerHandle steamControllerHandle = handlesOut[i];
 			if (steamControllerHandle != null) {
-				steamController.activateActionSet(steamControllerHandle, actionsSetHandle); // TODO do this on controller connect instead of in act()
+				steamController.activateActionSet(steamControllerHandle, actionsSetHandle);
 			}
 		}
+	}
 
+	private void checkForControllerJustDisconnected(SteamControllerHandle[] handlesOut) {
 		if (activeController != null 
 				&& !Arrays.asList(handlesOut).contains(activeController)
 				&& !justDisconnected) {
@@ -69,8 +77,10 @@ public class SteamGamepadInputHandler extends GamepadInputHandler {
 		} else {
 			justDisconnected = false;
 		}
-
-		if (Arrays.asList(handlesOut).stream().anyMatch(handle -> handle != null)) {
+	}
+	
+	private void checkForActiveController(SteamControllerHandle[] handlesOut) {
+		if (Arrays.asList(handlesOut).stream().anyMatch(Objects::nonNull)) {
 			for (int i = 0; i < handlesOut.length; i++) {
 				SteamControllerHandle steamControllerHandle = handlesOut[i];
 				for(Entry<SteamControllerDigitalActionHandle, Input> entry : buttonMappings.entrySet()) {
@@ -118,16 +128,16 @@ public class SteamGamepadInputHandler extends GamepadInputHandler {
 		buttonStates.put(buttonMappings.get(handle), buttonState);
 	}
 
-	public static boolean isAControllerConnected() {
+	public boolean isAControllerConnected() {
 		if (steamController != null) {
 			SteamControllerHandle[] handlesOut = new SteamControllerHandle[SteamController.STEAM_CONTROLLER_MAX_COUNT];
 			steamController.getConnectedControllers(handlesOut);
-			return Arrays.asList(handlesOut).stream().anyMatch(handle -> handle != null);
+			return Arrays.asList(handlesOut).stream().anyMatch(Objects::nonNull);
 		}
 		return false;
 	}
 
-	public static void openControlsOverlay() {
+	public void openControlsOverlay() {
 		if (steamController != null && isAControllerConnected() && activeController != null) {
 			steamController.showBindingPanel(activeController);
 		}

@@ -9,22 +9,27 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelegateAction;
  *
  */
 public class InstantRepeatAction extends DelegateAction {
-	static public final int FOREVER = -1;
+	public static final int FOREVER = -1;
 
-	private int repeatCount, executedCount;
+	private int repeatCount;
+	private int executedCount;
 	private boolean finished;
 
 	@Override
 	protected boolean delegate (float delta) {
 		if (executedCount == repeatCount) return true;
 		if (action.act(delta)) {
-			if (finished) return true;
-			if (repeatCount > 0) executedCount++;
-			if (executedCount == repeatCount) return true;
-			if (action != null) { 
-				action.restart();
-				delegate(delta); // THIS IS THE MAIN CHANGE TO MAKE IT INSTANT
+			if (finished) {
+				return true;
 			}
+			if (repeatCount > 0) {
+				executedCount++;
+			}
+			if (executedCount == repeatCount) {
+				return true;
+			}
+			action.restart();
+			delegate(delta); // THIS IS THE MAIN CHANGE TO MAKE IT INSTANT
 		}
 		return false;
 	}
@@ -53,7 +58,7 @@ public class InstantRepeatAction extends DelegateAction {
 	public int getExecutedCount() {
 		return executedCount;
 	}
-	
+
 	public int getRemainingCount() {
 		return repeatCount - executedCount;
 	}

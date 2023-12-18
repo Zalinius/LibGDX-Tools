@@ -15,16 +15,17 @@ import com.darzalgames.libgdxtools.ui.input.scrollablemenu.PopUpMenu;
 public abstract class ChoicePopUp extends PopUpMenu {
 
 	protected final String messageKey;
-	private final String firstChoiceKey, secondChoiceKey;
+	private final String firstChoiceKey;
+	private final String secondChoiceKey;
 	protected final Runnable firstChoiceRunnable;
 	private final boolean isSecondButtonBack;
 	protected final boolean isWarning;
 
-	public ChoicePopUp(String messageKey, String firstChoiceKey, String secondChoiceKey, Runnable firstChoiceRunnable) {
+	protected ChoicePopUp(String messageKey, String firstChoiceKey, String secondChoiceKey, Runnable firstChoiceRunnable) {
 		this(messageKey, firstChoiceKey, secondChoiceKey, firstChoiceRunnable, false, false, false);
 	}
 
-	public ChoicePopUp(String messageKey, String firstChoiceKey, String secondChoiceKey, Runnable firstChoiceRunnable,
+	protected ChoicePopUp(String messageKey, String firstChoiceKey, String secondChoiceKey, Runnable firstChoiceRunnable,
 			boolean isVertical, boolean isSecondButtonBack, boolean isWarning) {
 		super(isVertical);
 		this.messageKey = messageKey;
@@ -39,7 +40,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 
 	protected abstract Table getMessage(Function<String, Label> labelFunction);
 	protected abstract Runnable getSecondChoiceRunnable();
-	protected void setChosenKey(String chosenKey) {};
+	protected void setChosenKey(String chosenKey) {}
 
 	protected void setSizeAndBackground() {
 		setSize(200, 106);

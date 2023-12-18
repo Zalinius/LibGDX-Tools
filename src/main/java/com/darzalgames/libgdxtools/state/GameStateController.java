@@ -2,8 +2,8 @@ package com.darzalgames.libgdxtools.state;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.zalinius.questgiver.core.ui.GameObjectView;
-import com.zalinius.questgiver.core.ui.input.InputConsumer;
+import com.darzalgames.libgdxtools.ui.GameObjectView;
+import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 
 public abstract class GameStateController implements GameObjectView, InputConsumer {
 	
@@ -11,11 +11,11 @@ public abstract class GameStateController implements GameObjectView, InputConsum
 	private Group group;
 	private boolean allowsEndingsAfter;
 	
-	public GameStateController(final GameState state) {
+	protected GameStateController(final GameState state) {
 		this(state, false);
 	}
 
-	public GameStateController(GameState state, boolean allowsEndingsAfter) {
+	protected GameStateController(GameState state, boolean allowsEndingsAfter) {
 		super();
 		this.state = state;
 		this.allowsEndingsAfter = allowsEndingsAfter;

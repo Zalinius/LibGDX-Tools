@@ -14,11 +14,11 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.button.LabelMaker;
 
 public abstract class PopUpMenu extends ScrollableMenu implements PopUp {
 
-	public PopUpMenu(boolean isVertical) {
+	protected PopUpMenu(boolean isVertical) {
 		super(isVertical);
 	}
 
-	public PopUpMenu(boolean isVertical, List<KeyboardButton> entries, String finalButtonMessageKey) {
+	protected PopUpMenu(boolean isVertical, List<KeyboardButton> entries, String finalButtonMessageKey) {
 		super(isVertical, entries);
 		menu.setFinalButton(LabelMaker.getButton(TextSupplier.getLine(finalButtonMessageKey), this::hideThis));
 	}

@@ -16,7 +16,7 @@ public abstract class GameScreen extends Group implements Screen, Endable, Input
 
 	private final Runnable leaveScreenRunnable;
 
-	public GameScreen(Runnable leaveScreenRunnable) {
+	protected GameScreen(Runnable leaveScreenRunnable) {
 		this.leaveScreenRunnable = leaveScreenRunnable;
 	}
 	

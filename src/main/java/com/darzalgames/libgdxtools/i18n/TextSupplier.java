@@ -13,7 +13,7 @@ public abstract class TextSupplier {
 
 	private static I18NBundle baseBundle;
 	private static I18NBundle topBundle;
-	private static Locale locale;
+	protected static Locale locale;
 
 	private static BiMap<String, Locale> displayNames;
 	
@@ -102,7 +102,7 @@ public abstract class TextSupplier {
 		baseBundle = I18NBundle.createBundle(instance.getBaseBundleFileHandle(), locale);
 	}
 
-	public static void useScenario(FileHandle fileHandle) {
+	public static void useTopBundle(FileHandle fileHandle) {
 		topBundle = I18NBundle.createBundle(fileHandle, locale);
 	}
 

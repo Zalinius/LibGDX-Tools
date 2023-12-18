@@ -36,11 +36,12 @@ public abstract class MainGame extends ApplicationAdapter {
 	
 	private static MainGame instance;
 	
-	protected MainGame(int width, int height) {
+	protected MainGame(int width, int height, WindowResizer windowResizer) {
 		super();
 		setInstance(this);
 		this.width = width;
 		this.height = height;
+		this.windowResizer = windowResizer;
 	}
 	
 	private static void setInstance(MainGame mainGame) {

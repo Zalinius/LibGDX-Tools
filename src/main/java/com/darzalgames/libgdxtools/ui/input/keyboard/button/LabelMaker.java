@@ -153,11 +153,6 @@ public class LabelMaker {
 		return new MouseOnlyButton(textButton, onclick);
 	}
 
-	public static KeyboardButton getFastForwardButton(Runnable onclick) {
-		TextButton textButton = new TextButton("", styleManager.fastForwardButtonStyle); 
-		return new MouseOnlyButton(textButton, onclick);
-	}
-
 	private static final String QUIT_GAME_KEY = "quit_game";
 
 	public static KeyboardButton getQuitGameButton() {

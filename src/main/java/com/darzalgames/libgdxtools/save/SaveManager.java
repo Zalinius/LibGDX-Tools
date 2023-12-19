@@ -19,7 +19,7 @@ public abstract class SaveManager {
 	private static SaveManager instance;
 	
 	protected abstract void saveInternal();
-	protected abstract void loadInternal(SaveManager loadedSave);
+	protected abstract <T extends SaveManager> void loadInternal(T loadedSave);
 	protected abstract void respondToFailedLoad();
 
 	protected SaveManager() {	}

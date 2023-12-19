@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
@@ -24,6 +25,7 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.keyboard.InputSensitiveLabel;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.stylemanager.StyleManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
 
 public class LabelMaker {
@@ -31,47 +33,41 @@ public class LabelMaker {
 	private static Runnable quitGameRunnable;
 	private static StyleManager styleManager;
 	private static TriFunction<TextButton, Image, Runnable, KeyboardButton> privateKeyboardButtonConstructor;
-
-	private LabelMaker() {}
+	private static NinePatchDrawable UIBorderedNine;
+	
+	protected LabelMaker() {}
 	
 	public static void setPrivateKeyboardButtonConstructor(
 			TriFunction<TextButton, Image, Runnable, KeyboardButton> privateKeyboardButtonConstructor) {
 		LabelMaker.privateKeyboardButtonConstructor = privateKeyboardButtonConstructor;
 	}
 
-	public static void initialize(StyleManager styleManager) {
+	public static void initialize(StyleManager styleManager, NinePatchDrawable UIBorderedNine) {
 		LabelMaker.styleManager = styleManager;
+		LabelMaker.UIBorderedNine = UIBorderedNine;
 		quitGameRunnable = Gdx.app::exit;
 		KeyboardButton.setUpForLabelMaker();
 	}
 
 	public static Label getLabel(final String text) {
-		return getLabel(text, styleManager.labelStyle);
+		return getLabel(text, styleManager.getDefaultLableStyle());
 	}
 
 	public static Label getFlavorTextLabel(final String text) {
-		return getLabel(text, styleManager.flavorTextLabelStyle);
+		return getLabel(text, styleManager.getFlavorTextLableStyle());
 	}
 
 	public static Label getWarningLabel(final String text) {
-		return getLabel(text, styleManager.warningLabelStyle);
-	}
-
-	public static Label getLabelWithBackground(final String text) {
-		return getLabel(text, styleManager.labelWithBackgroundStyle);
-	}
-
-	public static Label getLabelWithLightBackground(final String text) {
-		return getLabel(text, styleManager.labelWithLightBackgroundStyle);
+		return getLabel(text, styleManager.getWarningLableStyle());
 	}
 
 	public static Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
-		Label label = new InputSensitiveLabel(textSupplier, styleManager.labelWithBackgroundStyle);
+		Label label = new InputSensitiveLabel(textSupplier, styleManager.getDefaultLableStyle());
 		label.setWrap(true);
 		return label;
 	}
 
-	public static Label getLabel(final String text, LabelStyle labelStyle) {
+	protected static Label getLabel(final String text, LabelStyle labelStyle) {
 		Label label = new Label(text, labelStyle);
 		label.setWrap(true);
 		return label;
@@ -79,7 +75,7 @@ public class LabelMaker {
 
 	public static KeyboardButton getListableLabel(final String text) {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be touchable
-		TextButton textButton = new TextButton(text, styleManager.sneakyLabelButtonStyle);
+		TextButton textButton = new TextButton(text, styleManager.getSneakyLableButtonStyle());
 		textButton.setName(text);
 		KeyboardButton listableButton = new KeyboardButton(textButton, null, Runnables.nullRunnable());
 		listableButton.setTouchable(Touchable.disabled);
@@ -105,14 +101,21 @@ public class LabelMaker {
 	}
 
 	private static KeyboardButton makeButton(final String text, Image image, final Runnable runnable) {
-		TextButton textButton = new TextButton(text, styleManager.textButtonStyle); 
-		makeBackgroundFlashing(textButton, styleManager.textButtonStyle, styleManager.flashedTextButtonStyle);
+		return makeButton(text, image, runnable, styleManager.getTextButtonStyle());
+	}
+	private static KeyboardButton makeButton(final String text, Image image, final Runnable runnable, TextButtonStyle style) {
+		TextButton textButton = new TextButton(text, style);
+		makeBackgroundFlashing(textButton, styleManager.getTextButtonStyle(), styleManager.getFlashedTextButtonStyle());
 		return privateKeyboardButtonConstructor.apply(textButton, image, runnable);
+	}
+
+	protected static KeyboardButton getButton(final String text, final Runnable runnable, TextButtonStyle style) {
+		return makeButton(text, null, runnable, style);
 	}
 
 
 	public static KeyboardButton getBlankButton(Drawable closed, Drawable hovered, Drawable open, final Runnable runnable) {
-		TextButtonStyle textButtonStyle = new TextButtonStyle(closed, hovered, open, styleManager.currentFont);
+		TextButtonStyle textButtonStyle = new TextButtonStyle(closed, hovered, open, new BitmapFont());
 		textButtonStyle.over = hovered;
 		TextButton textButton = new TextButton("", textButtonStyle);
 		return new KeyboardButton(textButton, runnable);
@@ -129,27 +132,27 @@ public class LabelMaker {
 	}
 
 	public static KeyboardSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
-		TextButton textButton = new TextButton(boxLabel + ":  ", styleManager.textButtonStyle); 
-		makeBackgroundFlashing(textButton, styleManager.textButtonStyle, styleManager.flashedTextButtonStyle);
+		TextButton textButton = new TextButton(boxLabel + ":  ", styleManager.getTextButtonStyle()); 
+		makeBackgroundFlashing(textButton, styleManager.getTextButtonStyle(), styleManager.getFlashedTextButtonStyle());
 		return new KeyboardSelectBox(entries, textButton, consumer);
 	}
 
 	public static NinePatchDrawable getUIBorderedNine() {
-		return styleManager.getUIBorderedNine();
+		return UIBorderedNine;
 	}
 
 	public static KeyboardSlider getSlider(String sliderLabel, Consumer<Float> consumer) {
 		KeyboardButton textButton = getButton(sliderLabel, Runnables.nullRunnable());
-		return new KeyboardSlider(textButton.getView(), styleManager.sliderStyle, consumer);
+		return new KeyboardSlider(textButton.getView(), styleManager.getSliderStyle(), consumer);
 	}
 
 	public static KeyboardCheckbox getCheckbox(String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer) {
 		KeyboardButton textButton = getButton("", Runnables.nullRunnable());
-		return new KeyboardCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, styleManager.checkboxStyle);
+		return new KeyboardCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, styleManager.getCheckboxStyle());
 	}
 
 	public static KeyboardButton getInGamesSettingsButton(Runnable onclick) {
-		TextButton textButton = new TextButton("", styleManager.settingsButtonStyle); 
+		TextButton textButton = new TextButton("", styleManager.getSettingsButtonStyle()); 
 		return new MouseOnlyButton(textButton, onclick);
 	}
 
@@ -169,7 +172,7 @@ public class LabelMaker {
 		return getButton(TextSupplier.getLine(QUIT_GAME_KEY), quitWithConfirmation);
 	}
 
-	private static void makeBackgroundFlashing(Button button, ButtonStyle mainButtonStyle, ButtonStyle flashedButtonStyle) {
+	protected static void makeBackgroundFlashing(Button button, ButtonStyle mainButtonStyle, ButtonStyle flashedButtonStyle) {
 		button.addListener(new ClickListener() {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {

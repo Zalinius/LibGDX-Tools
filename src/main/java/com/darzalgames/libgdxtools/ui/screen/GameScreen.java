@@ -3,7 +3,7 @@ package com.darzalgames.libgdxtools.ui.screen;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.darzalgames.darzalcommon.misc.Endable;
+import com.darzalgames.darzalcommon.state.Endable;
 import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
 import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
 

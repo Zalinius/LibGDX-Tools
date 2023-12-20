@@ -42,7 +42,7 @@ public class LabelMaker {
 		LabelMaker.privateKeyboardButtonConstructor = privateKeyboardButtonConstructor;
 	}
 
-	public static void initialize(StyleManager styleManager, NinePatchDrawable UIBorderedNine) {
+	protected static void initialize(StyleManager styleManager, NinePatchDrawable UIBorderedNine) {
 		LabelMaker.styleManager = styleManager;
 		LabelMaker.UIBorderedNine = UIBorderedNine;
 		quitGameRunnable = Gdx.app::exit;

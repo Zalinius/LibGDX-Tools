@@ -5,15 +5,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.darzalgames.darzalcommon.misc.DoesNotPause;
+import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.WindowResizer;
 
-public class PixelCursor extends Image implements DoesNotPause {
+public class CustomCursorImage extends Image implements DoesNotPause {
 	
 	private final WindowResizer windowResizer;
 	
-	public PixelCursor(WindowResizer windowResizer, Texture pixelCursorImage) {
-		super(pixelCursorImage);
+	public CustomCursorImage(WindowResizer windowResizer, Texture cursorImage) {
+		super(cursorImage);
 		setTouchable(Touchable.disabled);
 		this.windowResizer = windowResizer;
 	}

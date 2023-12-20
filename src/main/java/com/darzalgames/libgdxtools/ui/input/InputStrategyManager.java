@@ -6,7 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
-import com.darzalgames.darzalcommon.misc.DoesNotPause;
+import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 
 public class InputStrategyManager extends InputStrategy implements InputSubject, DoesNotPause {
@@ -15,9 +15,9 @@ public class InputStrategyManager extends InputStrategy implements InputSubject,
 	private InputStrategy previousInputStrategy;
 	private final MouseInputStrategy mouseInputStrategy;
 	private final KeyboardInputStrategy keyboardInputStrategy;
-	private final PixelCursor pixelCursor;
+	private final CustomCursorImage pixelCursor;
 
-	public InputStrategyManager(PixelCursor pixelCursor) {
+	public InputStrategyManager(CustomCursorImage pixelCursor) {
 		mouseInputStrategy = new MouseInputStrategy();
 		keyboardInputStrategy = new KeyboardInputStrategy();
 		this.pixelCursor = pixelCursor;

@@ -3,7 +3,6 @@ package com.darzalgames.libgdxtools.ui.optionsmenu;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
@@ -12,15 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.darzalgames.darzalcommon.misc.DoesNotPause;
+import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
-import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.ui.PopUp;
 import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
 import com.darzalgames.libgdxtools.ui.input.handler.SteamControllerManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSelectBox;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.LabelMaker;
 import com.darzalgames.libgdxtools.ui.input.scrollablemenu.PopUpMenu;
 
@@ -126,23 +123,6 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	private KeyboardButton makeInnerTextButtonMenu() {
 		InnerMenu innerMenu = new InnerMenu();
 		List<KeyboardButton> options = new ArrayList<>();
-
-		// the textSpeed selectbox
-		String instant = TextSupplier.getLine("instant_label");
-		String fast = TextSupplier.getLine("fast_label");
-		Supplier<String> textSpeedLabelSupplier = () -> (TextSupplier.getLine("textSpeed_label")); 
-		Consumer<String> choiceResponder = selectedNewtextSpeed -> {
-			SaveManager.setTextSpeed(selectedNewtextSpeed.equalsIgnoreCase(instant));
-			innerMenu.hideThis();
-		};
-		KeyboardSelectBox textSpeedSelectBox = LabelMaker.getSelectBox( 
-				textSpeedLabelSupplier.get(),
-				List.of(instant, fast),
-				choiceResponder
-				);
-		String textSpeedStringToSelect = SaveManager.doInstantText() ? instant : fast; 
-		textSpeedSelectBox.setSelected(textSpeedStringToSelect);
-		options.add(textSpeedSelectBox);
 		
 		options.addAll(makeTextOptionButtons(innerMenu));
 		

@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.darzalgames.darzalcommon.misc.DoesNotPause;
+import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.PopUp;
@@ -41,20 +41,20 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 
 
 	private InputPrioritizer() {
-		instance.inputConsumerStack = new ArrayDeque<>();
+		inputConsumerStack = new ArrayDeque<>();
 		Pixmap background = new Pixmap(MainGame.getWidth(), MainGame.getHeight(), Format.RGBA8888);
 		Color color = Color.BLACK;
 		background.setColor(color.r, color.g, color.b, 0.5f);
 		background.fillRectangle(0, 0, background.getWidth(), background.getHeight());
-		instance.darkScreen = new Image(new Texture(background));
-		instance.darkScreen.setBounds(0, 0, background.getWidth(), background.getHeight());
+		darkScreen = new Image(new Texture(background));
+		darkScreen.setBounds(0, 0, background.getWidth(), background.getHeight());
 		background.dispose();
-		instance.darkScreen.addListener(new InputListener() {
+		darkScreen.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer, final int button) {
-				instance.darkScreen.remove();
-				if (!instance.inputConsumerStack.isEmpty()) {
-					instance.inputConsumerStack.peek().consumeKeyInput(Input.BACK); 
+				darkScreen.remove();
+				if (!inputConsumerStack.isEmpty()) {
+					inputConsumerStack.peek().consumeKeyInput(Input.BACK); 
 				}
 				return true;
 			}

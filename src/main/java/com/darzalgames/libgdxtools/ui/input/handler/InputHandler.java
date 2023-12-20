@@ -1,7 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.darzalgames.darzalcommon.misc.DoesNotPause;
+import com.darzalgames.darzalcommon.state.DoesNotPause;
 
 public abstract class InputHandler extends Table implements DoesNotPause {
 	

@@ -61,6 +61,10 @@ public class LabelMaker {
 		return getLabel(text, styleManager.getWarningLableStyle());
 	}
 
+	public static Label getLabelWithBackground(final String text) {
+		return getLabel(text, styleManager.getLabelWithBackgroundStyle());
+	}
+
 	public static Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
 		Label label = new InputSensitiveLabel(textSupplier, styleManager.getDefaultLableStyle());
 		label.setWrap(true);

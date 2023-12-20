@@ -16,7 +16,7 @@ public abstract class SaveManager {
 	private String language;
 	private boolean textShouldBeInstant;
 
-	private static SaveManager instance;
+	protected static SaveManager instance;
 	
 	protected abstract void saveInternal();
 	protected abstract <T extends SaveManager> void loadInternal(T loadedSave);

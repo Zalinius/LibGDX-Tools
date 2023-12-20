@@ -13,6 +13,7 @@ public abstract class StyleManager {
 	protected static final String defaultLabel = "defaultLabelStyle";
 	protected static final String flavorTextLabel = "flavorTextLabelStyle";
 	protected static final String warningLabel = "warningLabelStyle";
+	protected static final String labelWithBackground = "labelWithBackgroundStyle";
 	
 	protected static final String slider = "sliderStyle";
 	
@@ -50,6 +51,9 @@ public abstract class StyleManager {
 	}
 	public LabelStyle getWarningLableStyle() {
 		return getLabelStyle(warningLabel);
+	}
+	public LabelStyle getLabelWithBackgroundStyle() {
+		return getLabelStyle(labelWithBackground);
 	}
 	public SliderStyle getSliderStyle() {
 		return getSliderStyle(slider);

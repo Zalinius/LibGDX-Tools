@@ -3,7 +3,7 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.2.0</version>
+	<version>0.2.1</version>
 	<name>libGDX Tools</name>
 
 	<properties>

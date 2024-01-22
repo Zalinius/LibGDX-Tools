@@ -13,7 +13,7 @@ public class SoundPreference {
 	}
 
 	public float getMusicVolume() {
-		return preferenceManager.getFloatPrefValue(MUSIC_KEY, 1);
+		return preferenceManager.getFloatPrefValue(MUSIC_KEY, 0.5f);
 	}
 
 	public void setMusicVolume(float newVolume) {
@@ -21,7 +21,7 @@ public class SoundPreference {
 	}
 	
 	public float getSoundEffectVolume() {
-		return preferenceManager.getFloatPrefValue(SOUND_EFFECT_KEY, 1);
+		return preferenceManager.getFloatPrefValue(SOUND_EFFECT_KEY, 0.5f);
 	}
 
 	public void setSoundEffectVolume(float newVolume) {

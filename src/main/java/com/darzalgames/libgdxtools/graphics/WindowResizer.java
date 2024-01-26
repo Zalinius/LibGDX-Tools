@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
-import com.darzalgames.darzalcommon.data.Coord;
+import com.darzalgames.darzalcommon.data.Coordinate;
 import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
 import com.darzalgames.libgdxtools.save.SaveManager;
@@ -38,7 +38,7 @@ public abstract class WindowResizer {
 	protected abstract void switchToWindowed();
 	protected abstract void switchToBorderless();
 	protected abstract void switchToFullScreen();
-	public abstract void setScreenSize(Coord size);
+	public abstract void setScreenSize(Coordinate size);
 
 	private KeyboardSelectBox modeSelectBox;
 	private Label revertCountdown;

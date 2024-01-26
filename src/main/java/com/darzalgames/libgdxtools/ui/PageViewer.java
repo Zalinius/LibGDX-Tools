@@ -30,7 +30,7 @@ public abstract class PageViewer extends Group implements InputConsumer {
 		makeArrows();
 	}
 	
-	protected abstract List<Table> makePageTables();
+	protected abstract <E extends Table> List<E> makePageTables();
 	protected abstract void finish();
 	protected abstract Texture getArrowTexture();
 	protected abstract Texture getArrowHoveredTexture();

@@ -11,6 +11,9 @@ public enum Input {
 	DOWN(Keys.DOWN),
 	LEFT(Keys.LEFT),
 	RIGHT(Keys.RIGHT),
+	
+	SCROLL_UP(Keys.PAGE_UP),
+	SCROLL_DOWN(Keys.PAGE_DOWN),
 
 	PAUSE(Keys.ESCAPE),
 	SKIP(Keys.ENTER),

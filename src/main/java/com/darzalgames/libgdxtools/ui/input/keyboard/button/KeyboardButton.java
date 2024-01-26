@@ -23,6 +23,7 @@ public class KeyboardButton implements GameObjectView, InputConsumerWrapper, Lis
 	private Image image;
 	private int alignment;
 	private boolean wrap;
+	private boolean doesSoundOnInteract = true;
 	
 	static void setUpForLabelMaker() {
 		LabelMaker.setPrivateKeyboardButtonConstructor(KeyboardButton::new);
@@ -69,6 +70,16 @@ public class KeyboardButton implements GameObjectView, InputConsumerWrapper, Lis
 		});
 	}
 
+	/**
+	 * This will play the interaction sound immediately if this button has {@link KeyboardButton#doesSoundOnInteract} set to true (generally the default)
+	 */
+	protected void requestInteractSound() {
+		if (doesSoundOnInteract) {
+			// TODO uncomment this once the audio bits are in this library (libgdx tools) 
+//			QuestGiverGame.music.playSound(SoundEffects.inputSoundEffect());
+		}
+	}
+	
 	@Override
 	public TextButton getView() {
 		labelSupplier.get().setWrap(wrap);
@@ -152,4 +163,7 @@ public class KeyboardButton implements GameObjectView, InputConsumerWrapper, Lis
 		return this;
 	}
 
+	public void setDoesSoundOnInteract(boolean doesSoundOnInteract) {
+		this.doesSoundOnInteract = doesSoundOnInteract;
+	}
 }

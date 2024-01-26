@@ -88,7 +88,8 @@ public abstract class MainGame extends ApplicationAdapter {
 		makeMainStageAndMouseStages();
 		setUpInputForAllStages();
 
-		setUpInputPrioritizer();		actorsThatDoNotPause.add(inputStrategyManager);
+		setUpInputPrioritizer();
+		actorsThatDoNotPause.add(inputStrategyManager);
 		actorsThatDoNotPause.add(InputPrioritizer.instance);
 
 		saveManager = makeSaveManager();

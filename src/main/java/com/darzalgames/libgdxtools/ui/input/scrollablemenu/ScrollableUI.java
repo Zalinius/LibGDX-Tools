@@ -227,6 +227,14 @@ public class ScrollableUI implements InputConsumerWrapper {
 		this.pressButtonOnEntryChanged = pressButtonOnEntryChanged;
 	}
 
+	/**
+	 * Adjust the vertical spacing between entries as needed (default is 2)
+	 * @param spacing new spacing
+	 */
+	public void setSpacing(int spacing) {
+		this.spacing = spacing;
+	}
+	
 	public void setAlignment(int entryAlignment, int tableAlignment) {
 		this.entryAlignment = entryAlignment;
 		this.tableAlignment = tableAlignment;

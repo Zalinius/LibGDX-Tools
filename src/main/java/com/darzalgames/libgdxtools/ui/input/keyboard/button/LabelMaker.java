@@ -96,25 +96,40 @@ public class LabelMaker {
 		return !button.getView().isTouchable() && button.getButtonText().isBlank();
 	}
 
+
 	public static KeyboardButton getButton(final String text, final Runnable runnable) {
 		return makeButton(text, null, runnable);
 	}
-
+	
+	public static KeyboardButton getButton(final Image image, final Runnable runnable) {
+		return makeButton("", image, runnable);
+	}
+	
 	public static KeyboardButton getButton(final String text, Image image, final Runnable runnable) {
 		return makeButton(text, image, runnable);
 	}
-
+	
 	private static KeyboardButton makeButton(final String text, Image image, final Runnable runnable) {
-		return makeButton(text, image, runnable, styleManager.getTextButtonStyle());
-	}
-	private static KeyboardButton makeButton(final String text, Image image, final Runnable runnable, TextButtonStyle style) {
-		TextButton textButton = new TextButton(text, style);
+		TextButton textButton = makeLibGDXTextButton(text);
 		makeBackgroundFlashing(textButton, styleManager.getTextButtonStyle(), styleManager.getFlashedTextButtonStyle());
-		return privateKeyboardButtonConstructor.apply(textButton, image, runnable);
+		return new KeyboardButton(textButton, image, runnable);
+	}
+	
+	/**
+	 * Make a button in a particular style, these are generally exceptional buttons (in Quest Giver this includes the play button, scenario map pips, etc)
+	 */
+	protected static KeyboardButton makeButton(final String text, final Runnable runnable, TextButtonStyle textButtonStyle) {
+		TextButton textButton = new TextButton(text, textButtonStyle);
+		return new KeyboardButton(textButton, null, runnable);
 	}
 
-	protected static KeyboardButton getButton(final String text, final Runnable runnable, TextButtonStyle style) {
-		return makeButton(text, null, runnable, style);
+	/**
+	 * Make a LIBGDX textbutton, only to be used inside nested buttons (e.g. checkboxes & sliders)
+	 * @param text
+	 * @return
+	 */
+	private static TextButton makeLibGDXTextButton(final String text) {
+		return new TextButton(text, styleManager.getTextButtonStyle());
 	}
 
 

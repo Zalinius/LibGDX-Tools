@@ -32,7 +32,8 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected abstract PopUp makeControlsPopUp();
 	protected abstract String getGameVersion();
 	protected abstract Collection<KeyboardButton> makeMiddleButtons();
-	protected abstract List<KeyboardButton> makeTextOptionButtons(PopUpMenu innerMenu);
+	protected abstract int getEntryAlignment();
+	protected abstract int getMenuAlignment();
 	
 	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox) {
 		super(true);
@@ -69,16 +70,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		// ALL SELECTABLE MENU BUTTONS
 		List<KeyboardButton> menuButtons = new ArrayList<>();
 
-//		KeyboardSlider musicVolume = LabelMaker.getSlider(TextSupplier.getLine("music_option") + " ", newVolume -> { QuestGiverGame.music.setMusicVolume(newVolume); });
-//		musicVolume.setSliderPosition(QuestGiverGame.music.getMusicVolume());
-//		menuButtons.add(musicVolume);
-//
-//		KeyboardCheckbox focusMute = LabelMaker.getCheckbox(
-//				TextSupplier.getLine("focus_sounds_setting", TextSupplier.getLine("focus_dont_mute")),
-//				TextSupplier.getLine("focus_sounds_setting", TextSupplier.getLine("focus_do_mute")),
-//				isChecked -> { QuestGiverGame.music.setShouldTemporarilyMute(isChecked); });
-//		focusMute.initializeAsChecked(QuestGiverGame.music.getShouldTemporarilyMute());
-//		menuButtons.add(focusMute);
+		menuButtons.addAll(makeMiddleButtons());
 
 		KeyboardButton reportBugButton = UserInterfaceFactory.getButton(
 				TextSupplier.getLine("report_bug_message"),
@@ -94,19 +86,18 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		});
 		menuButtons.add(controlsButton);
 
-		menuButtons.add(makeInnerTextButtonMenu());
-
 		// Window mode select box
 		KeyboardButton windowModeSelectBox = makeWindowModeSelectBox.get();
 		menuButtons.add(windowModeSelectBox);
-		
-		menuButtons.addAll(makeMiddleButtons());
+
+		// Quit game button
+		menuButtons.add(UserInterfaceFactory.getQuitGameButtonWithWarning(() -> optionsButton.setTouchable(Touchable.disabled)));
 
 		// Back button
-		KeyboardButton backButton = UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> {toggleScreenVisibility(false);});
+		KeyboardButton backButton = UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
 		menuButtons.add(backButton);
 
-		menu.setAlignment(Align.center, Align.top);
+		menu.setAlignment(getEntryAlignment(), getMenuAlignment());
 		menu.replaceContents(menuButtons, backButton);
 		add(menu.getView()).grow().top();
 
@@ -120,27 +111,24 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom() + 4).padRight(getPadRight());
 	}
 	
-	private KeyboardButton makeInnerTextButtonMenu() {
-		InnerMenu innerMenu = new InnerMenu();
-		List<KeyboardButton> options = new ArrayList<>();
-		
-		options.addAll(makeTextOptionButtons(innerMenu));
-		
-		innerMenu.replaceContents(options);
-		return UserInterfaceFactory.getButton(TextSupplier.getLine(accessibilityOptionsKey), () -> { InputPrioritizer.claimPriority(innerMenu);});
-	}
-	
 	protected final String accessibilityOptionsKey = "accessibility_options";
 
 	@Override
 	public void actWhilePaused(float delta) {
 		act(delta);
 	}
-	
-	private class InnerMenu extends PopUpMenu implements DoesNotPause {
+
+	protected class NestedMenu extends PopUpMenu implements DoesNotPause {
 		
-		public InnerMenu() {
-			super(true);
+		private final String buttonKey;
+		
+		public NestedMenu(final List<KeyboardButton> entries, String buttonKey) {
+			super(true, entries, "back_message");
+			this.buttonKey = buttonKey;
+		}
+		
+		public KeyboardButton getButton() {
+			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> InputPrioritizer.claimPriority(this));
 		}
 
 		@Override
@@ -158,10 +146,6 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 			menu.setAlignment(Align.center, Align.top);
 			add(menu.getView()).growX().top();
 		}
-		
-		private void replaceContents(final List<KeyboardButton> newEntries) {
-			menu.replaceContents(newEntries, UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> { hideThis();}));
-		}
-	};
+	}
 }
 

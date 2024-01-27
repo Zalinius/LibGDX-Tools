@@ -12,6 +12,7 @@ import com.darzalgames.libgdxtools.ui.input.Input;
 public class KeyboardSlider extends KeyboardButton {
 
 	private final Slider slider;
+	private float previousValue;
 
 	public KeyboardSlider(TextButton textButton, SliderStyle sliderStyle, Consumer<Float> consumer) {
 		super(textButton);
@@ -29,6 +30,11 @@ public class KeyboardSlider extends KeyboardButton {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				KeyboardSlider.this.setFocused(true);
+				float currentValue = slider.getValue();
+				if (currentValue != previousValue) { //The slider fires a ChangeEvent on touchUp (mouse mode) which we want to ignore
+					requestInteractSound();
+				}
+				previousValue = currentValue;
 			}
 		});
 	}
@@ -42,8 +48,16 @@ public class KeyboardSlider extends KeyboardButton {
 		}
 	}
 	
-	public void setSliderPosition(float newPosition) {
+	/**
+	 * Set the position of the slider, optionally triggering the sound effect for doing so
+	 * @param newPosition A value within the bar's min/max range, it's clamped regardless
+	 * @param withSoundEffect Whether or not to play the interaction sound
+	 */
+	public void setSliderPosition(float newPosition, boolean withSoundEffect) {
+		previousValue = slider.getValue();
+		this.setDoesSoundOnInteract(withSoundEffect);
 		slider.setValue(newPosition);
+		this.setDoesSoundOnInteract(true);
 	}
 
 }

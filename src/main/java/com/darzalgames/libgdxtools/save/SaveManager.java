@@ -11,39 +11,41 @@ import com.darzalgames.libgdxtools.steam.SteamConnection;
 public interface SaveManager {
 
 	public void save();
-
 	public boolean load();
 
-	default FileHandle getSaveFile() {
-		return getOperatingSystemType().getSave();
+	
+	default FileHandle getSaveFile(String gameName) {
+		return getOperatingSystemType().getSave(gameName);
 	}
 
-	default FileHandle getBackupSaveFile() {
-		return getOperatingSystemType().getBackupSave();
+	default FileHandle getBackupSaveFile(String gameName) {
+		return getOperatingSystemType().getBackupSave(gameName);
 	}
 
 	public enum OSType { 
 		WINDOWS,
 		LINUX,
 		;
-
-		private final transient String saveName = "QuestGiverSave.json";
-		private final transient String backupSaveName = "QuestGiverSave-backup.json";
-
-		public FileHandle getBackupSave() {
-			return getSave(backupSaveName);
+		
+		private String getSaveName(boolean isBackup, String gameName) {
+			String suffix = isBackup ? "-backup" : "";
+			return gameName.replace(" ", "") + "Save" + suffix + ".json";
 		}
 
-		public FileHandle getSave() {
-			return getSave(saveName);
+		public FileHandle getBackupSave(String gameName) {
+			return getSaveFile(getSaveName(true, gameName), gameName);
 		}
 
-		private FileHandle getSave(String name) {
+		public FileHandle getSave(String gameName) {
+			return getSaveFile(getSaveName(false, gameName), gameName);
+		}
+
+		private FileHandle getSaveFile(String saveFileName, String gameName) {
 			switch (this) {
 			case WINDOWS:
-				return Gdx.files.absolute(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/My Games/Quest Giver/" + SteamConnection.getSteamID() + "/" + name);
+				return Gdx.files.absolute(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/My Games/"+ gameName + "/" + SteamConnection.getSteamID() + "/" + saveFileName);
 			case LINUX:
-				return Gdx.files.external(".local/share/Quest Giver/" + SteamConnection.getSteamID() + "/" + name);
+				return Gdx.files.external(".local/share/Quest Giver/" + SteamConnection.getSteamID() + "/" + saveFileName);
 			default:
 				return null;
 			}

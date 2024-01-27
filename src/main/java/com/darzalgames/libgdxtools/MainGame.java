@@ -47,13 +47,15 @@ public abstract class MainGame extends ApplicationAdapter {
 
 	protected abstract void initializeAssets();
 	protected abstract SaveManager makeSaveManager();
-	protected abstract String getPreferenceManagerName();
 	protected abstract Texture getBackgroundStageTexture();
 	protected abstract Texture getMainStageBackgroundTexture();
 	protected abstract Texture getCursorTexture();
 	protected abstract void setUpBeforeLoadingSave();
 	protected abstract void launchGame(boolean isNewSave);
 	protected abstract void quitGame();
+	
+	// TODO this can be removed once we figure out our long-standing goal of making Assets extendable
+	protected abstract String getPreferenceManagerName();
 
 	protected GameScreen currentScreen;
 

@@ -13,7 +13,7 @@ import com.darzalgames.libgdxtools.i18n.TextSupplier;
 
 public class ConfirmationMenu extends ChoicePopUp {
 	
-	protected Texture confirmationBackground;
+	private static Texture confirmationBackground;
 
 	public ConfirmationMenu(String messageKey, String confirmButtonTextKey, Runnable confirmButtonRunnable) {
 		this(messageKey, confirmButtonTextKey, "back_message", confirmButtonRunnable);
@@ -23,6 +23,10 @@ public class ConfirmationMenu extends ChoicePopUp {
 		super(messageKey, confirmButtonTextKey, backButtonTextKey, confirmButtonRunnable, false, true, true);
 	}
 	
+	public static void setConfirmationBackground(Texture confirmationBackground) {
+		ConfirmationMenu.confirmationBackground = confirmationBackground;
+	}
+
 	@Override
 	protected Runnable getSecondChoiceRunnable() {
 		return Runnables.nullRunnable();

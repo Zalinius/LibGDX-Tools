@@ -51,6 +51,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected abstract Texture getBackgroundStageTexture();
 	protected abstract Texture getMainStageBackgroundTexture();
 	protected abstract Texture getCursorTexture();
+	protected abstract void setUpBeforeLoadingSave();
 	protected abstract void launchGame(boolean isNewSave);
 	protected abstract void quitGame();
 
@@ -92,6 +93,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		actorsThatDoNotPause.add(inputStrategyManager);
 		actorsThatDoNotPause.add(InputPrioritizer.instance);
 
+		setUpBeforeLoadingSave();
 		saveManager = makeSaveManager();
 		boolean isNewSave = !saveManager.load();
 		windowResizer.initialize();

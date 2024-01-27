@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -42,9 +43,10 @@ public class LabelMaker {
 		LabelMaker.privateKeyboardButtonConstructor = privateKeyboardButtonConstructor;
 	}
 
-	protected static void initialize(StyleManager styleManager, NinePatchDrawable UIBorderedNine) {
+	protected static void initialize(StyleManager styleManager, NinePatchDrawable UIBorderedNine, Texture confirmationMenuBackground) {
 		LabelMaker.styleManager = styleManager;
 		LabelMaker.UIBorderedNine = UIBorderedNine;
+		ConfirmationMenu.setConfirmationBackground(confirmationMenuBackground); // TODO incorporate this into the StyleManager skin
 		quitGameRunnable = Gdx.app::exit;
 		KeyboardButton.setUpForLabelMaker();
 	}

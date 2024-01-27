@@ -92,46 +92,7 @@ public abstract class WindowResizer {
 		MainGame.getInputStrategyManager().revertToPreviousStrategy();
 		setCurrentlySelectedInBox();
 		if (offerToRevert) {
-
-			ConfirmationMenu reverter = new ConfirmationMenu("screen_mode_accept", 
-					"accept_control",
-					"revert_message",
-					() -> revertCountdown.clearActions()) {
-
-				@Override
-				public boolean canDismiss() {
-					return false;
-				}
-
-				@Override
-				protected void setUpTable() {
-					super.setUpTable();
-					IntFunction<String> makeCountdownString = count -> TextSupplier.getLine("screen_mode_revert", count);
-					revertCountdown = LabelMaker.getFlavorTextLabel(makeCountdownString.apply(10));
-					revertCountdown.setAlignment(Align.center);
-					row();
-					add(revertCountdown).growX();
-
-					InstantRepeatAction repeatAction = new InstantRepeatAction();
-					repeatAction.setTotalCount(10);
-					DelayAction delayAction = new DelayAction(1);
-					delayAction.setAction(new RunnableActionBest(() -> revertCountdown.setText(makeCountdownString.apply(repeatAction.getRemainingCount() -1))));
-					repeatAction.setAction(delayAction);
-
-					SequenceAction sequenceAction = new SequenceAction(repeatAction, new RunnableActionBest(getSecondChoiceRunnable()));
-
-					revertCountdown.addAction(sequenceAction);
-				}
-
-				@Override
-				protected Runnable getSecondChoiceRunnable() {
-					return () -> { 
-						WindowResizer.this.revertMode(); 
-						hideThis();
-					};
-				}
-			};
-
+			ConfirmationMenu reverter = new WindowRevertCountdownConfirmationMenu(() -> revertCountdown.clearActions());
 			InputPrioritizer.claimPriority(reverter);
 		}
 	}
@@ -169,6 +130,49 @@ public abstract class WindowResizer {
 	private void setCurrentlySelectedInBox() {
 		if (modeSelectBox != null) {
 			modeSelectBox.setSelected(windowModeOptionTranslator.apply(currentScreenMode));			
+		}
+	}
+
+	private class WindowRevertCountdownConfirmationMenu extends ConfirmationMenu {
+
+		private WindowRevertCountdownConfirmationMenu(Runnable confirmButtonRunnable) {
+			super("screen_mode_accept", 
+					"accept_control",
+					"revert_message",
+					confirmButtonRunnable);
+		}
+
+		@Override
+		public boolean canDismiss() {
+			return false;
+		}
+
+		@Override
+		protected void setUpTable() {
+			super.setUpTable();
+			IntFunction<String> makeCountdownString = count -> TextSupplier.getLine("screen_mode_revert", count);
+			revertCountdown = LabelMaker.getFlavorTextLabel(makeCountdownString.apply(10));
+			revertCountdown.setAlignment(Align.center);
+			row();
+			add(revertCountdown).growX();
+
+			InstantRepeatAction repeatAction = new InstantRepeatAction();
+			repeatAction.setTotalCount(10);
+			DelayAction delayAction = new DelayAction(1);
+			delayAction.setAction(new RunnableActionBest(() -> revertCountdown.setText(makeCountdownString.apply(repeatAction.getRemainingCount() -1))));
+			repeatAction.setAction(delayAction);
+
+			SequenceAction sequenceAction = new SequenceAction(repeatAction, new RunnableActionBest(getSecondChoiceRunnable()));
+
+			revertCountdown.addAction(sequenceAction);
+		}
+
+		@Override
+		protected Runnable getSecondChoiceRunnable() {
+			return () -> { 
+				WindowResizer.this.revertMode(); 
+				hideThis();
+			};
 		}
 	}
 }

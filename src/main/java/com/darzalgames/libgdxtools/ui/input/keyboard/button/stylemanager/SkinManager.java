@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
-public abstract class StyleManager {
+public abstract class SkinManager {
 	
 	protected final Skin skin;
 
@@ -25,7 +25,7 @@ public abstract class StyleManager {
 	protected static final String blankButton = "blankButtonStyle";
 	protected static final String settingsButton = "settingsButtonStyle";
 	
-	protected StyleManager(Skin skin) {
+	protected SkinManager(Skin skin) {
 		super();
 		this.skin = skin;
 	}

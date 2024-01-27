@@ -18,7 +18,7 @@ import com.darzalgames.libgdxtools.ui.PopUp;
 import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
 import com.darzalgames.libgdxtools.ui.input.handler.SteamControllerManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.LabelMaker;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.input.scrollablemenu.PopUpMenu;
 
 
@@ -80,7 +80,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 //		focusMute.initializeAsChecked(QuestGiverGame.music.getShouldTemporarilyMute());
 //		menuButtons.add(focusMute);
 
-		KeyboardButton reportBugButton = LabelMaker.getButton(
+		KeyboardButton reportBugButton = UserInterfaceFactory.getButton(
 				TextSupplier.getLine("report_bug_message"),
 				() -> {
 					String form = "https://forms.gle/j1CjPH8xdJskiYe19";
@@ -88,7 +88,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 				});
 		menuButtons.add(reportBugButton);
 		
-		KeyboardButton controlsButton = LabelMaker.getButton(TextSupplier.getLine("controls_message"), () -> {
+		KeyboardButton controlsButton = UserInterfaceFactory.getButton(TextSupplier.getLine("controls_message"), () -> {
 			InputPrioritizer.claimPriority(makeControlsPopUp());
 			SteamControllerManager.openControlsOverlay();
 		});
@@ -103,7 +103,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		menuButtons.addAll(makeMiddleButtons());
 
 		// Back button
-		KeyboardButton backButton = LabelMaker.getButton(TextSupplier.getLine("back_message"), () -> {toggleScreenVisibility(false);});
+		KeyboardButton backButton = UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> {toggleScreenVisibility(false);});
 		menuButtons.add(backButton);
 
 		menu.setAlignment(Align.center, Align.top);
@@ -113,7 +113,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		// Set up the version tag to be in its own inner table, so that the actual buttons can still reach the bottom of the main table
 		Table versionTable = new Table();
 		versionTable.setFillParent(true);
-		Label versionLabel = LabelMaker.getFlavorTextLabel(getGameVersion());
+		Label versionLabel = UserInterfaceFactory.getFlavorTextLabel(getGameVersion());
 		versionLabel.setAlignment(Align.bottomRight);
 		versionTable.setTouchable(Touchable.disabled);
 		addActor(versionTable);
@@ -127,7 +127,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		options.addAll(makeTextOptionButtons(innerMenu));
 		
 		innerMenu.replaceContents(options);
-		return LabelMaker.getButton(TextSupplier.getLine(accessibilityOptionsKey), () -> { InputPrioritizer.claimPriority(innerMenu);});
+		return UserInterfaceFactory.getButton(TextSupplier.getLine(accessibilityOptionsKey), () -> { InputPrioritizer.claimPriority(innerMenu);});
 	}
 	
 	protected final String accessibilityOptionsKey = "accessibility_options";
@@ -151,16 +151,16 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		@Override
 		protected void setUpTable() {
 			setSize(250, 125);
-	        NinePatchDrawable back = LabelMaker.getUIBorderedNine();
+	        NinePatchDrawable back = UserInterfaceFactory.getUIBorderedNine();
 	        background(back);
-	        LabelMaker.makeActorCentered(this);
+	        UserInterfaceFactory.makeActorCentered(this);
 
 			menu.setAlignment(Align.center, Align.top);
 			add(menu.getView()).growX().top();
 		}
 		
 		private void replaceContents(final List<KeyboardButton> newEntries) {
-			menu.replaceContents(newEntries, LabelMaker.getButton(TextSupplier.getLine("back_message"), () -> { hideThis();}));
+			menu.replaceContents(newEntries, UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> { hideThis();}));
 		}
 	};
 }

@@ -14,7 +14,7 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.LabelMaker;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 
 public abstract class PageViewer extends Group implements InputConsumer {
 
@@ -26,7 +26,7 @@ public abstract class PageViewer extends Group implements InputConsumer {
 	private Table lastButtonTable;
 
 	protected PageViewer(Supplier<String> lastButtonText) {
-		lastButton = LabelMaker.getButton(lastButtonText.get(), this::finish);
+		lastButton = UserInterfaceFactory.getButton(lastButtonText.get(), this::finish);
 		makeArrows();
 	}
 	
@@ -39,14 +39,14 @@ public abstract class PageViewer extends Group implements InputConsumer {
 		int arrowPadding = 6;
 		TextureRegionDrawable arrowDrawable = new TextureRegionDrawable(getArrowTexture());
 		TextureRegionDrawable arrowHoveredDrawable = new TextureRegionDrawable(getArrowHoveredTexture());
-		rightArrow = LabelMaker.getBlankButton(arrowDrawable, arrowHoveredDrawable, arrowDrawable, () -> turnPage(true));
-		LabelMaker.makeActorCentered(rightArrow.getView());
+		rightArrow = UserInterfaceFactory.getBlankButton(arrowDrawable, arrowHoveredDrawable, arrowDrawable, () -> turnPage(true));
+		UserInterfaceFactory.makeActorCentered(rightArrow.getView());
 		rightArrow.getView().setX(MainGame.getWidth() - rightArrow.getView().getWidth() - arrowPadding);
 
-		leftArrow = LabelMaker.getBlankButton(arrowDrawable, arrowHoveredDrawable, arrowDrawable, () -> turnPage(false));
+		leftArrow = UserInterfaceFactory.getBlankButton(arrowDrawable, arrowHoveredDrawable, arrowDrawable, () -> turnPage(false));
 		leftArrow.getView().setTransform(true);
 		leftArrow.getView().setScaleX(-1);
-		LabelMaker.makeActorCentered(leftArrow.getView());
+		UserInterfaceFactory.makeActorCentered(leftArrow.getView());
 		leftArrow.getView().setX(leftArrow.getView().getWidth() + arrowPadding);	
 	}
 
@@ -114,11 +114,11 @@ public abstract class PageViewer extends Group implements InputConsumer {
 		pageList = makePageTables();
 		lastButtonTable = new Table();
 		lastButtonTable.setSize(150, 60);
-		lastButtonTable.setBackground(LabelMaker.getUIBorderedNine());
+		lastButtonTable.setBackground(UserInterfaceFactory.getUIBorderedNine());
 		lastButtonTable.add(lastButton.getView()).prefWidth(lastButton.getView().getWidth());
 		pageList.add(lastButtonTable);
 		pageList.forEach(table -> {
-			LabelMaker.makeActorCentered(table);
+			UserInterfaceFactory.makeActorCentered(table);
 			table.setX(MainGame.getWidth());
 			this.addActor(table);
 		});
@@ -150,7 +150,7 @@ public abstract class PageViewer extends Group implements InputConsumer {
 	
 	public void skipFirstSlideIn() {
 		viewingIndex = 0;
-		LabelMaker.makeActorCentered(pageList.get(viewingIndex));
+		UserInterfaceFactory.makeActorCentered(pageList.get(viewingIndex));
 		this.leftArrow.getView().setVisible(false);
 		this.lastButtonTable.setVisible(false);
 	}

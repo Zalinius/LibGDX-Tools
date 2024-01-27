@@ -10,7 +10,7 @@ import com.darzalgames.libgdxtools.ui.PopUp;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.LabelMaker;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 
 public abstract class PopUpMenu extends ScrollableMenu implements PopUp {
 
@@ -20,7 +20,7 @@ public abstract class PopUpMenu extends ScrollableMenu implements PopUp {
 
 	protected PopUpMenu(boolean isVertical, List<KeyboardButton> entries, String finalButtonMessageKey) {
 		super(isVertical, entries);
-		menu.setFinalButton(LabelMaker.getButton(TextSupplier.getLine(finalButtonMessageKey), this::hideThis));
+		menu.setFinalButton(UserInterfaceFactory.getButton(TextSupplier.getLine(finalButtonMessageKey), this::hideThis));
 	}
 
 	@Override

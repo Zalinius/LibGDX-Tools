@@ -23,7 +23,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the scrollable selectable portion of this select box,
 		// sets that as the text in our display label (e.g. English), and calls the Consumer (which responds to the new entry, e.g. changing the game language and refreshing the main menu)
-		List<KeyboardButton> entryButtons = entries.stream().map(entry -> LabelMaker.getButton(entry.toUpperCase(),
+		List<KeyboardButton> entryButtons = entries.stream().map(entry -> UserInterfaceFactory.getButton(entry.toUpperCase(),
 				() -> {
 					options.hideThis();
 					displayLabel.setText(entry);
@@ -36,7 +36,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 			@Override
 			protected void setUpTable() {
 				menu.setAlignment(Align.left, Align.left);
-				NinePatchDrawable background = LabelMaker.getUIBorderedNine(); 
+				NinePatchDrawable background = UserInterfaceFactory.getUIBorderedNine(); 
 				this.setBackground(background);
 				add(menu.getView()).left();
 				
@@ -56,7 +56,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 			}
 		};
 
-		displayLabel = LabelMaker.getLabel("");
+		displayLabel = UserInterfaceFactory.getLabel("");
 		displayLabel.setWrap(false);
 		textButton.add(displayLabel);
 		this.setButtonRunnable(this::showScrollPane);

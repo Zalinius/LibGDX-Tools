@@ -20,7 +20,7 @@ import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSelectBox;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.LabelMaker;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 
 public abstract class WindowResizer {
 
@@ -112,7 +112,7 @@ public abstract class WindowResizer {
 			availableModes = Arrays.asList(ScreenMode.values()).stream().filter(mode -> !mode.equals(ScreenMode.BORDERLESS)).map(mode -> windowModeOptionTranslator.apply(mode)).toList();
 		}
 		Supplier<String> windowModeLabelSupplier = () -> (TextSupplier.getLine("window_mode_label"));
-		modeSelectBox = LabelMaker.getSelectBox(
+		modeSelectBox = UserInterfaceFactory.getSelectBox(
 				windowModeLabelSupplier.get(),
 				availableModes,
 				selectedNewMode -> {
@@ -151,7 +151,7 @@ public abstract class WindowResizer {
 		protected void setUpTable() {
 			super.setUpTable();
 			IntFunction<String> makeCountdownString = count -> TextSupplier.getLine("screen_mode_revert", count);
-			revertCountdown = LabelMaker.getFlavorTextLabel(makeCountdownString.apply(10));
+			revertCountdown = UserInterfaceFactory.getFlavorTextLabel(makeCountdownString.apply(10));
 			revertCountdown.setAlignment(Align.center);
 			row();
 			add(revertCountdown).growX();

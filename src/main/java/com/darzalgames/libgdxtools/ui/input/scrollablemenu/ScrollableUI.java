@@ -13,7 +13,7 @@ import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.LabelMaker;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 
 /**
  * This class is not an Actor, it's mainly the logical list of scrollable buttons held in a Table
@@ -113,7 +113,7 @@ public class ScrollableUI implements InputConsumerWrapper {
 			entry.setAlignment(entryAlignment);
 			Button button = entry.getView();
 			table.add(button).prefWidth(button.getWidth());
-			if (LabelMaker.isSpacer(entry)) {
+			if (UserInterfaceFactory.isSpacer(entry)) {
 				interactableEntries.remove(entry);
 				if (isVertical) {
 					table.getCell(button).expandY();

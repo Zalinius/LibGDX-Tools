@@ -19,56 +19,48 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.darzalcommon.functional.TriFunction;
 import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.keyboard.InputSensitiveLabel;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.stylemanager.StyleManager;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.stylemanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
 
-public class LabelMaker {
+public class UserInterfaceFactory {
 
 	private static Runnable quitGameRunnable;
-	private static StyleManager styleManager;
-	private static TriFunction<TextButton, Image, Runnable, KeyboardButton> privateKeyboardButtonConstructor;
+	private static SkinManager skinManager;
 	private static NinePatchDrawable UIBorderedNine;
 	
-	protected LabelMaker() {}
-	
-	public static void setPrivateKeyboardButtonConstructor(
-			TriFunction<TextButton, Image, Runnable, KeyboardButton> privateKeyboardButtonConstructor) {
-		LabelMaker.privateKeyboardButtonConstructor = privateKeyboardButtonConstructor;
-	}
+	protected UserInterfaceFactory() {}
 
-	protected static void initialize(StyleManager styleManager, NinePatchDrawable UIBorderedNine, Texture confirmationMenuBackground) {
-		LabelMaker.styleManager = styleManager;
-		LabelMaker.UIBorderedNine = UIBorderedNine;
-		ConfirmationMenu.setConfirmationBackground(confirmationMenuBackground); // TODO incorporate this into the StyleManager skin
+	protected static void initialize(SkinManager skinManager, NinePatchDrawable UIBorderedNine, Texture confirmationMenuBackground) {
+		UserInterfaceFactory.skinManager = skinManager;
+		UserInterfaceFactory.UIBorderedNine = UIBorderedNine;
+		ConfirmationMenu.setConfirmationBackground(confirmationMenuBackground); // TODO incorporate this into the SkinManager
 		quitGameRunnable = Gdx.app::exit;
-		KeyboardButton.setUpForLabelMaker();
 	}
 
 	public static Label getLabel(final String text) {
-		return getLabel(text, styleManager.getDefaultLableStyle());
+		return getLabel(text, skinManager.getDefaultLableStyle());
 	}
 
 	public static Label getFlavorTextLabel(final String text) {
-		return getLabel(text, styleManager.getFlavorTextLableStyle());
+		return getLabel(text, skinManager.getFlavorTextLableStyle());
 	}
 
 	public static Label getWarningLabel(final String text) {
-		return getLabel(text, styleManager.getWarningLableStyle());
+		return getLabel(text, skinManager.getWarningLableStyle());
 	}
 
 	public static Label getLabelWithBackground(final String text) {
-		return getLabel(text, styleManager.getLabelWithBackgroundStyle());
+		return getLabel(text, skinManager.getLabelWithBackgroundStyle());
 	}
 
 	public static Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
-		Label label = new InputSensitiveLabel(textSupplier, styleManager.getDefaultLableStyle());
+		Label label = new InputSensitiveLabel(textSupplier, skinManager.getDefaultLableStyle());
 		label.setWrap(true);
 		return label;
 	}
@@ -81,7 +73,7 @@ public class LabelMaker {
 
 	public static KeyboardButton getListableLabel(final String text) {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be touchable
-		TextButton textButton = new TextButton(text, styleManager.getSneakyLableButtonStyle());
+		TextButton textButton = new TextButton(text, skinManager.getSneakyLableButtonStyle());
 		textButton.setName(text);
 		KeyboardButton listableButton = new KeyboardButton(textButton, null, Runnables.nullRunnable());
 		listableButton.setTouchable(Touchable.disabled);
@@ -113,7 +105,7 @@ public class LabelMaker {
 	
 	private static KeyboardButton makeButton(final String text, Image image, final Runnable runnable) {
 		TextButton textButton = makeLibGDXTextButton(text);
-		makeBackgroundFlashing(textButton, styleManager.getTextButtonStyle(), styleManager.getFlashedTextButtonStyle());
+		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 		return new KeyboardButton(textButton, image, runnable);
 	}
 	
@@ -131,7 +123,7 @@ public class LabelMaker {
 	 * @return
 	 */
 	private static TextButton makeLibGDXTextButton(final String text) {
-		return new TextButton(text, styleManager.getTextButtonStyle());
+		return new TextButton(text, skinManager.getTextButtonStyle());
 	}
 
 
@@ -153,8 +145,8 @@ public class LabelMaker {
 	}
 
 	public static KeyboardSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
-		TextButton textButton = new TextButton(boxLabel + ":  ", styleManager.getTextButtonStyle()); 
-		makeBackgroundFlashing(textButton, styleManager.getTextButtonStyle(), styleManager.getFlashedTextButtonStyle());
+		TextButton textButton = new TextButton(boxLabel + ":  ", skinManager.getTextButtonStyle()); 
+		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 		return new KeyboardSelectBox(entries, textButton, consumer);
 	}
 
@@ -164,16 +156,16 @@ public class LabelMaker {
 
 	public static KeyboardSlider getSlider(String sliderLabel, Consumer<Float> consumer) {
 		KeyboardButton textButton = getButton(sliderLabel, Runnables.nullRunnable());
-		return new KeyboardSlider(textButton.getView(), styleManager.getSliderStyle(), consumer);
+		return new KeyboardSlider(textButton.getView(), skinManager.getSliderStyle(), consumer);
 	}
 
 	public static KeyboardCheckbox getCheckbox(String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer) {
 		KeyboardButton textButton = getButton("", Runnables.nullRunnable());
-		return new KeyboardCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, styleManager.getCheckboxStyle());
+		return new KeyboardCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle());
 	}
 
 	public static KeyboardButton getInGamesSettingsButton(Runnable onclick) {
-		TextButton textButton = new TextButton("", styleManager.getSettingsButtonStyle()); 
+		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()); 
 		return new MouseOnlyButton(textButton, onclick);
 	}
 

@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
 import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.LabelMaker;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.input.scrollablemenu.PopUpMenu;
 
 public abstract class ChoicePopUp extends PopUpMenu {
@@ -44,15 +44,15 @@ public abstract class ChoicePopUp extends PopUpMenu {
 
 	protected void setSizeAndBackground() {
 		setSize(200, 106);
-		background(LabelMaker.getUIBorderedNine());
+		background(UserInterfaceFactory.getUIBorderedNine());
 	}
 
 	@Override
 	protected void setUpTable() {
 		setSizeAndBackground();
-		LabelMaker.makeActorCentered(this);
+		UserInterfaceFactory.makeActorCentered(this);
 
-		Function<String, Label> labelFunction = isWarning ? LabelMaker::getWarningLabel : LabelMaker::getLabelWithBackground;
+		Function<String, Label> labelFunction = isWarning ? UserInterfaceFactory::getWarningLabel : UserInterfaceFactory::getLabelWithBackground;
 		add(getMessage(labelFunction)).grow();
 		row();
 
@@ -67,8 +67,8 @@ public abstract class ChoicePopUp extends PopUpMenu {
 			hideThis();
 			getSecondChoiceRunnable().run();
 		};
-		KeyboardButton firstButton = LabelMaker.getButton(TextSupplier.getLine(firstChoiceKey), firstAndHideRunnable); 
-		KeyboardButton secondButton = LabelMaker.getButton(TextSupplier.getLine(secondChoiceKey), secondAndHideRunnable);
+		KeyboardButton firstButton = UserInterfaceFactory.getButton(TextSupplier.getLine(firstChoiceKey), firstAndHideRunnable); 
+		KeyboardButton secondButton = UserInterfaceFactory.getButton(TextSupplier.getLine(secondChoiceKey), secondAndHideRunnable);
 		if (isSecondButtonBack) {
 			menu.replaceContents(List.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
 		} else {

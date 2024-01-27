@@ -24,10 +24,6 @@ public class KeyboardButton implements GameObjectView, InputConsumerWrapper, Lis
 	private int alignment;
 	private boolean wrap;
 	private boolean doesSoundOnInteract = true;
-	
-	static void setUpForLabelMaker() {
-		LabelMaker.setPrivateKeyboardButtonConstructor(KeyboardButton::new);
-	}
 
 	KeyboardButton(TextButton button) {
 		this(button, Runnables.nullRunnable());

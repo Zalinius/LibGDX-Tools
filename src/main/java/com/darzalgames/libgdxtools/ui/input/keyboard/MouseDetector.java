@@ -12,7 +12,7 @@ public class MouseDetector extends InputHandler {
 		addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				latestInputMethod = InputMethod.MOUSE;
+				setLatestInputMethod(InputMethod.MOUSE);
 				InputPrioritizer.enterMouseMode();
 				return false;
 			}

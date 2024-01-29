@@ -18,6 +18,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 
 	private final InputConsumer inputConsumer;
 	protected final Map<Input, ButtonState> buttonStates;
+	private final static boolean LOG_INPUT = false;
 
 	protected GamepadInputHandler() {
 		inputConsumer = InputPrioritizer.instance;
@@ -35,14 +36,18 @@ public abstract class GamepadInputHandler extends InputHandler {
 	}
 
 	protected final void justPressed(Input buttonKey) {
-		Gdx.app.log("[GamepadInputHandler]", "Just pressed:" + buttonKey);
-		latestInputMethod = InputMethod.GAMEPAD;
+		if (LOG_INPUT) {
+			Gdx.app.log("GamepadInputHandler", "Just pressed:" + buttonKey);
+		}
+		setLatestInputMethod(InputMethod.GAMEPAD);
 		inputConsumer.consumeKeyInput(buttonKey);
 	}
 
 	protected final void justReleased(Input buttonKey) {
-		Gdx.app.log("[GamepadInputHandler]", "Just released:" + buttonKey);
-		latestInputMethod = InputMethod.GAMEPAD;
+		if (LOG_INPUT) {
+			Gdx.app.log("GamepadInputHandler", "Just released:" + buttonKey);
+		}
+		setLatestInputMethod(InputMethod.GAMEPAD);
 	}
 	
 	protected final void controllerDisconnected() {

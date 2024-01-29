@@ -45,7 +45,7 @@ public class KeyboardInputHandler extends InputHandler {
 				}
 				
 				if (keysToAllow.contains(input)) {
-					latestInputMethod = InputMethod.KEYBOARD;
+					setLatestInputMethod(InputMethod.KEYBOARD);
 					inputPrioritizer.consumeKeyInput(input);	
 					return true;
 				}

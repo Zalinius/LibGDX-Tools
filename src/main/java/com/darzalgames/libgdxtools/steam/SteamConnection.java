@@ -134,7 +134,7 @@ public class SteamConnection {
 			@Override
 			public void onGlobalStatsReceived(long gameId, SteamResult result) {
 				if (result.equals(SteamResult.OK))
-					System.out.println("Global stats received");
+					Gdx.app.log("[SteamConnection]", "Global stats received");
 			}
 		};
 	}

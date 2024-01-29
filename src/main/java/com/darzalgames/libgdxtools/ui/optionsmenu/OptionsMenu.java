@@ -32,6 +32,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected abstract PopUp makeControlsPopUp();
 	protected abstract String getGameVersion();
 	protected abstract Collection<KeyboardButton> makeMiddleButtons();
+	protected abstract KeyboardButton makeButtonAboveQuitButton();
 	protected abstract int getEntryAlignment();
 	protected abstract int getMenuAlignment();
 	
@@ -90,6 +91,11 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		KeyboardButton windowModeSelectBox = makeWindowModeSelectBox.get();
 		menuButtons.add(windowModeSelectBox);
 
+		KeyboardButton optionalButtonAboveQuit = makeButtonAboveQuitButton();
+		if (optionalButtonAboveQuit != null) {
+			menuButtons.add(optionalButtonAboveQuit);
+		}
+		
 		// Quit game button
 		menuButtons.add(UserInterfaceFactory.getQuitGameButtonWithWarning(() -> optionsButton.setTouchable(Touchable.disabled)));
 
@@ -111,7 +117,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom() + 4).padRight(getPadRight());
 	}
 	
-	protected final String accessibilityOptionsKey = "accessibility_options";
+	protected static final String ACCESSIBILITY_OPTIONS_KEY = "accessibility_options";
 
 	@Override
 	public void actWhilePaused(float delta) {

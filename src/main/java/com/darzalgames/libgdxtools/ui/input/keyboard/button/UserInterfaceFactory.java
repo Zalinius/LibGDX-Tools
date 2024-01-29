@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -25,21 +24,18 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.keyboard.InputSensitiveLabel;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.stylemanager.SkinManager;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
 
 public class UserInterfaceFactory {
 
 	private static Runnable quitGameRunnable;
 	private static SkinManager skinManager;
-	private static NinePatchDrawable UIBorderedNine;
 	
 	protected UserInterfaceFactory() {}
 
-	protected static void initialize(SkinManager skinManager, NinePatchDrawable UIBorderedNine, Texture confirmationMenuBackground) {
+	protected static void initialize(SkinManager skinManager) {
 		UserInterfaceFactory.skinManager = skinManager;
-		UserInterfaceFactory.UIBorderedNine = UIBorderedNine;
-		ConfirmationMenu.setConfirmationBackground(confirmationMenuBackground); // TODO incorporate this into the SkinManager
 		quitGameRunnable = Gdx.app::exit;
 	}
 
@@ -151,7 +147,7 @@ public class UserInterfaceFactory {
 	}
 
 	public static NinePatchDrawable getUIBorderedNine() {
-		return UIBorderedNine;
+		return skinManager.getUINinePatch();
 	}
 
 	public static KeyboardSlider getSlider(String sliderLabel, Consumer<Float> consumer) {

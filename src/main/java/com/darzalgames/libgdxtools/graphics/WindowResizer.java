@@ -97,11 +97,6 @@ public abstract class WindowResizer {
 		}
 	}
 
-	private void revertMode() {
-		setMode(previousScreenMode, false);
-		previousScreenMode = currentScreenMode;
-	}
-
 	public boolean isWindowed() {
 		return currentScreenMode.equals(ScreenMode.WINDOWED);
 	}
@@ -170,9 +165,14 @@ public abstract class WindowResizer {
 		@Override
 		protected Runnable getSecondChoiceRunnable() {
 			return () -> { 
-				WindowResizer.this.revertMode(); 
+				revertMode(); 
 				hideThis();
 			};
+		}
+
+		private void revertMode() {
+			setMode(previousScreenMode, false);
+			previousScreenMode = currentScreenMode;
 		}
 	}
 }

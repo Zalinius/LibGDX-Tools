@@ -16,6 +16,11 @@ public class InstantForeverAction extends RepeatAction {
 	private int executedCount;
 	private boolean finished;
 
+	/**
+	 * An action which will repeat the supplier action until {@link #finish()} is called. On the frame
+	 * the action is completed, it will be restarted instantly.
+	 * @param action The action to repeat indefinitely
+	 */
 	public InstantForeverAction(Action action) {
 		setCount(RepeatAction.FOREVER);
 		setAction(action);
@@ -42,12 +47,12 @@ public class InstantForeverAction extends RepeatAction {
 
 	/** Causes the action to not repeat again. */
 	@Override
-	public void finish () {
+	public void finish() {
 		finished = true;
 	}
 
 	@Override
-	public void restart () {
+	public void restart() {
 		super.restart();
 		executedCount = 0;
 		finished = false;
@@ -55,12 +60,12 @@ public class InstantForeverAction extends RepeatAction {
 
 	/** Sets the number of times to repeat. Can be set to {@link #FOREVER}. */
 	@Override
-	public void setCount (int count) {
+	public void setCount(int count) {
 		this.repeatCount = count;
 	}
 
 	@Override
-	public int getCount () {
+	public int getCount() {
 		return repeatCount;
 	}
 

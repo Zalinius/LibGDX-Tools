@@ -70,7 +70,8 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 		// ALL SELECTABLE MENU BUTTONS
 		List<KeyboardButton> menuButtons = new ArrayList<>();
-
+		menuButtons.add(UserInterfaceFactory.getSpacer());
+		
 		menuButtons.addAll(makeMiddleButtons());
 
 		KeyboardButton reportBugButton = UserInterfaceFactory.getButton(
@@ -101,7 +102,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 		// Back button
 		KeyboardButton backButton = UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
-		menuButtons.add(backButton);
+		menuButtons.add(UserInterfaceFactory.getSpacer());
 
 		menu.setAlignment(getEntryAlignment(), getMenuAlignment());
 		menu.replaceContents(menuButtons, backButton);

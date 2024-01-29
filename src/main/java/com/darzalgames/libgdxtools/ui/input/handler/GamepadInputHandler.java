@@ -18,7 +18,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 
 	private final InputConsumer inputConsumer;
 	protected final Map<Input, ButtonState> buttonStates;
-	private final static boolean LOG_INPUT = false;
+	private static final boolean LOG_INPUT = false;
 
 	protected GamepadInputHandler() {
 		inputConsumer = InputPrioritizer.instance;

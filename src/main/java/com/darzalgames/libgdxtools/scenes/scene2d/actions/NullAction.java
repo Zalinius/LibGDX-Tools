@@ -2,6 +2,10 @@ package com.darzalgames.libgdxtools.scenes.scene2d.actions;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 
+/**
+ * @author DarZal
+ * An action that does nothing, and ends the first frame is called
+ */
 public class NullAction extends Action {
 
 	@Override

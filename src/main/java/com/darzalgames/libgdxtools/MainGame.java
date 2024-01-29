@@ -47,12 +47,19 @@ public abstract class MainGame extends ApplicationAdapter {
 
 	protected abstract void initializeAssets();
 	protected abstract SaveManager makeSaveManager();
-	protected abstract Texture getBackgroundStageTexture();
-	protected abstract Texture getMainStageBackgroundTexture();
 	protected abstract Texture getCursorTexture();
 	protected abstract void setUpBeforeLoadingSave();
 	protected abstract void launchGame(boolean isNewSave);
 	protected abstract void quitGame();
+	
+	/**
+	 * @return The background texture to be used in the "gutters" around the game, visible when the window size doesn't match the game's fixed resolution
+	 */
+	protected abstract Texture getBackgroundStageTexture();
+	/**
+	 * @return The fallback background texture to be used in the game area, visible when nothing else is covering it
+	 */
+	protected abstract Texture getMainStageBackgroundTexture();
 	
 	// TODO this can be removed once we figure out our long-standing goal of making Assets extendable
 	protected abstract String getPreferenceManagerName();
@@ -164,22 +171,37 @@ public abstract class MainGame extends ApplicationAdapter {
 		MainGame.instance = mainGame;
 	}
 
+	/**
+	 * @return The width (in art "pixels") of the logical game window
+	 */
 	public static int getWidth() {
 		return instance.width;
 	}
-
+	/**
+	 * @return The height (in art "pixels") of the logical game window
+	 */
 	public static int getHeight() {
 		return instance.height;
 	}
 
+	/**
+	 * @return Gets the {@link InputStrategyManager}, useful to do things like un/registering input-sensitive labels,
+	 * checking what the current input method is, changing input modes, etc.
+	 */
 	public static InputStrategyManager getInputStrategyManager() {
 		return instance.inputStrategyManager;
 	}
 
+	/**
+	 * @return Gets the {@link PreferenceManager}, useful to access the more specific preference managers (such as sound, or more temporary "other" managers)
+	 */
 	public static PreferenceManager getPreferenceManager() {
 		return instance.preferenceManager;
 	}
 	
+	/**
+	 * @return Gets the {@link SaveManager}, which is a concrete class in a full game
+	 */
 	public static SaveManager getSaveManager() {
 		return instance.saveManager;
 	}

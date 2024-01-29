@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.data.Coordinate;
 import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
-import com.darzalgames.libgdxtools.save.SaveManager;
+import com.darzalgames.libgdxtools.save.OSType;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
@@ -45,12 +45,20 @@ public abstract class WindowResizer {
 
 	Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase()); 
 
+	/**
+	 * Initialized the WindowResizer, setting the window to the preferred mode based on the user's history
+	 * We do this in initialize() rather than a constructor because this object is created at the same time as the entire game,
+	 * and so LibGDX isn't ready to do any resizing yet
+	 */
 	public void initialize() {
 		String preferredModeString = MainGame.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY, ScreenMode.BORDERLESS.name());
 		setMode(preferredModeString, false);
 		previousScreenMode = currentScreenMode;
 	}
 
+	/**
+	 * Toggle between windowed mode and true full screen mode
+	 */
 	public void toggleWindow() {
 		if (isWindowed()) {
 			setMode(ScreenMode.FULLSCREEN, false);
@@ -97,13 +105,19 @@ public abstract class WindowResizer {
 		}
 	}
 
+	/**
+	 * @return Whether or not the game is currently in windowed mode ("borderless windowed" returns false for this)
+	 */
 	public boolean isWindowed() {
 		return currentScreenMode.equals(ScreenMode.WINDOWED);
 	}
 
+	/**
+	 * @return A {@link KeyboardButton} which, when pressed, opens a {@link KeyboardSelectBox select box} for changing the window mode
+	 */
 	public KeyboardButton getModeSelectBox() {
 		List<String> availableModes = Arrays.asList(ScreenMode.values()).stream().map(mode -> windowModeOptionTranslator.apply(mode)).toList();
-		if (SaveManager.getOperatingSystemType().equals(SaveManager.OSType.LINUX)) {
+		if (OSType.getOperatingSystemType().equals(OSType.LINUX)) {
 			availableModes = Arrays.asList(ScreenMode.values()).stream().filter(mode -> !mode.equals(ScreenMode.BORDERLESS)).map(mode -> windowModeOptionTranslator.apply(mode)).toList();
 		}
 		Supplier<String> windowModeLabelSupplier = () -> (TextSupplier.getLine("window_mode_label"));

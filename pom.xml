@@ -10,7 +10,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>17</maven.compiler.release>
 		<libgdx.version>1.12.1</libgdx.version>
-		<darzalcommon.version>0.5.0</darzalcommon.version>
+		<darzalcommon.version>0.5.2</darzalcommon.version>
 	</properties>
 
 	<build>
@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>com.darzalgames</groupId>
 			<artifactId>darzal-common</artifactId>
-			<version>0.5.2</version>
+			<version>${darzalcommon.version}</version>
 		</dependency>
 
 		<dependency>

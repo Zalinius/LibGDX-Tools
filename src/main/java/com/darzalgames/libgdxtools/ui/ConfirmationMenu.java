@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
 
@@ -42,7 +41,7 @@ public class ConfirmationMenu extends ChoicePopUp {
 	@Override
 	protected Table getMessage(Function<String, Label> labelFunction) {
 		Label label = labelFunction.apply(TextSupplier.getLine(messageKey));
-		label.setAlignment(Align.center);
+		label.setAlignment(Alignment.CENTER.getAlignment());
 		Table table = new Table();
 		table.add(label).growX();
 		return table;

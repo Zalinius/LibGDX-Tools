@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.MainGame;
@@ -27,6 +25,10 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.InputSensitiveLabel;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
 
+/**
+ * @author DarZal
+ * The ONLY place where one should be making UI elements (buttons, labels, etc)
+ */
 public class UserInterfaceFactory {
 
 	private static Runnable quitGameRunnable;
@@ -55,6 +57,11 @@ public class UserInterfaceFactory {
 		return getLabel(text, skinManager.getLabelWithBackgroundStyle());
 	}
 
+	/**
+	 * Makes a label which changes its text based on the current input mode
+	 * @param textSupplier
+	 * @return
+	 */
 	public static Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
 		Label label = new InputSensitiveLabel(textSupplier, skinManager.getDefaultLableStyle());
 		label.setWrap(true);
@@ -67,6 +74,11 @@ public class UserInterfaceFactory {
 		return label;
 	}
 
+	/**
+	 * Makes a label which can be listed among other buttons, but isn't intractable
+	 * @param text
+	 * @return
+	 */
 	public static KeyboardButton getListableLabel(final String text) {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be touchable
 		TextButton textButton = new TextButton(text, skinManager.getSneakyLableButtonStyle());
@@ -76,6 +88,11 @@ public class UserInterfaceFactory {
 		return listableButton;
 	}
 
+	/**
+	 * Makes a spacer which can be listed among other buttons, but isn't intractable and which will
+	 * expand out to fill any available space in the menu
+	 * @return
+	 */
 	public static KeyboardButton getSpacer() {
 		KeyboardButton spacer = getListableLabel("");
 		spacer.getView().setName("spacer");
@@ -83,7 +100,7 @@ public class UserInterfaceFactory {
 	}
 
 	public static boolean isSpacer(KeyboardButton button) {
-		return !button.getView().isTouchable() && button.getButtonText().isBlank();
+		return !button.getView().isTouchable() && button.isBlank();
 	}
 
 
@@ -120,14 +137,6 @@ public class UserInterfaceFactory {
 	 */
 	private static TextButton makeLibGDXTextButton(final String text) {
 		return new TextButton(text, skinManager.getTextButtonStyle());
-	}
-
-
-	public static KeyboardButton getBlankButton(Drawable closed, Drawable hovered, Drawable open, final Runnable runnable) {
-		TextButtonStyle textButtonStyle = new TextButtonStyle(closed, hovered, open, new BitmapFont());
-		textButtonStyle.over = hovered;
-		TextButton textButton = new TextButton("", textButtonStyle);
-		return new KeyboardButton(textButton, runnable);
 	}
 
 	/*

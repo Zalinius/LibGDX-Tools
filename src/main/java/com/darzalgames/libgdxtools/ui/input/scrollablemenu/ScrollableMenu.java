@@ -32,7 +32,7 @@ public abstract class ScrollableMenu extends Table implements InputConsumer {
 	 * with whatever modifiers you want (grow, colspan, etc...)
 	 * 
 	 * Consider calling things like:
-	 * 		menu.setAlignment(Align.topLeft);
+	 * 		menu.setAlignment(Alignment.TOP_LEFT);
 	 * 		menu.replaceContents(menuButtons, backButton);
 	 * 
 	 * No need to call clear() first or anything.
@@ -49,6 +49,10 @@ public abstract class ScrollableMenu extends Table implements InputConsumer {
 	public void hideThis() {
 		remove();
 		InputPrioritizer.releasePriority(this);
+	}
+
+	public void goTo(KeyboardButton keyboardButton) {
+		menu.goTo(keyboardButton);
 	}
 
 	public void goTo(final int index) {
@@ -99,7 +103,7 @@ public abstract class ScrollableMenu extends Table implements InputConsumer {
 	 */
 	public void goTo(String entry) {
 		for (int i = 0; i < menu.allEntries.size(); i++) {
-			if (menu.allEntries.get(i).getButtonText().equalsIgnoreCase(entry)) {
+			if (menu.allEntries.get(i).doesTextMatch(entry)) {
 				menu.goTo(i);
 				return;
 			}

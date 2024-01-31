@@ -5,6 +5,10 @@ import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.ui.input.InputObserver;
 
 
+/**
+ * @author DarZal
+ * A {@link KeyboardButton} which will only be visible and intractable in mouse mode
+ */
 public class MouseOnlyButton extends KeyboardButton implements InputObserver {
 
 	public MouseOnlyButton(TextButton textButton, Runnable runnable) {

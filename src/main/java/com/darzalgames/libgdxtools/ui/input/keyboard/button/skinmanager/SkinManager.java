@@ -1,17 +1,31 @@
 package com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 
-public abstract class SkinManager {
+/**
+ * @author DarZal
+ * A class which holds a LibGDX {@link Skin} and provides convenient named accessors.
+ *  
+ */
+public class SkinManager {
 
 	protected final Skin skin;
+	
+	protected static final String UI_BORDERED_NINE = "uiBorderedNine";
+	protected static final String CONFIRMATION_MENU_BACKGROUND = "confirmationMenuBackground";
 
 	protected static final String DEFAULT_LABEL = "defaultLabelStyle";
 	protected static final String FLAVOR_TEXT_LABEL = "flavorTextLabelStyle";
@@ -28,14 +42,103 @@ public abstract class SkinManager {
 	protected static final String BLANK_BUTTON = "blankButtonStyle";
 	protected static final String SETTINGS_BUTTON = "settingsButtonStyle";
 
-	protected static final String UI_BORDERED_NINE = "uiBorderedNine";
-	protected static final String CONFIRMATION_MENU_BACKGROUND = "confirmationMenuBackground";
-
+	/**
+	 * @param skin The skin set up by the base class
+	 */
 	protected SkinManager(Skin skin) {
 		super();
 		this.skin = skin;
 		ConfirmationMenu.setConfirmationBackground(skin.get(CONFIRMATION_MENU_BACKGROUND, Texture.class));
 	}
+	
+	/**
+	 * Start with the default (very basic) skin
+	 */
+	public SkinManager() {
+		this(getDefaultSkin());
+	}
+
+	private static Skin getDefaultSkin() {
+		Skin skin = new Skin();
+		
+		NinePatchDrawable darkGrayNinePatch = new NinePatchDrawable(new NinePatch(getColoredTexture(Color.DARK_GRAY), 1, 1, 1, 1));
+		skin.add(UI_BORDERED_NINE, darkGrayNinePatch);
+		skin.add(CONFIRMATION_MENU_BACKGROUND, getColoredTexture(Color.PINK));
+
+		BitmapFont defaultFont = new BitmapFont();
+		skin.add("default", defaultFont);
+		
+		skin.add(DEFAULT_LABEL, new LabelStyle(defaultFont, Color.BLACK));
+		skin.add(FLAVOR_TEXT_LABEL, new LabelStyle(defaultFont, Color.DARK_GRAY));
+		skin.add(WARNING_LABEL, new LabelStyle(defaultFont, Color.FIREBRICK));
+		LabelStyle labelWithBackgroundStyle = new LabelStyle(defaultFont, Color.BLACK);
+		labelWithBackgroundStyle.background = skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
+		skin.add(LABEL_WITH_BACKGROUND, labelWithBackgroundStyle);
+
+		SliderStyle sliderStyle = new SliderStyle(new Image(getColoredTexture(Color.GOLDENROD)).getDrawable(), skin.get(UI_BORDERED_NINE, NinePatchDrawable.class));
+		sliderStyle.knobDown = darkGrayNinePatch;
+		skin.add(SLIDER, sliderStyle);
+
+		CheckBoxStyle checkboxStyle = new CheckBoxStyle();
+		checkboxStyle.font = defaultFont;
+		checkboxStyle.fontColor = Color.BLACK;
+		checkboxStyle.checkboxOn = skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
+		checkboxStyle.checkboxOff = darkGrayNinePatch;
+		skin.add(CHECKBOX, checkboxStyle);
+		
+		TextButtonStyle textButtonStyle = new TextButtonStyle(new Image(getColoredTexture(Color.LIGHT_GRAY)).getDrawable(), null, null, defaultFont);
+//		textButtonStyle.fontColor = fontColor;
+//		textButtonStyle.over = buttonHighlight;
+//		textButtonStyle.focused = buttonHighlight;
+		textButtonStyle.disabledFontColor = Color.DARK_GRAY;
+		skin.add(TEXT_BUTTON, textButtonStyle);
+		TextButtonStyle flashedTextButtonStyle = new TextButtonStyle(new Image(getColoredTexture(Color.GRAY)).getDrawable(), null, null, defaultFont);
+//		flashedTextButtonStyle.over = buttonNOTHighlighted;
+//		flashedTextButtonStyle.focused = buttonNOTHighlighted;
+		skin.add(FLASHED_TEXT_BUTTON, flashedTextButtonStyle);
+		TextButtonStyle sneakyLabelButtonStyle = textButtonStyle;
+//		sneakyLabelButtonStyle.fontColor = fontColor;
+		skin.add(SNEAKY_LABEL_BUTTON, sneakyLabelButtonStyle);
+		TextButtonStyle blankButtonStyle = new TextButtonStyle(null, null, null, defaultFont);
+		blankButtonStyle.focused = null;
+		skin.add(BLANK_BUTTON, blankButtonStyle);
+		TextButtonStyle settingsButtonStyle = new TextButtonStyle(new Image(getColoredTexture(Color.PURPLE)).getDrawable(), null, null, defaultFont);
+//		settingsButtonStyle.over = new TextureRegionDrawable(Assets.get(Assets.settingsHighlightedIcon));
+//		settingsButtonStyle.focused = new TextureRegionDrawable(Assets.get(Assets.settingsHighlightedIcon));
+		skin.add(SETTINGS_BUTTON, settingsButtonStyle);
+		
+		return skin;
+	}
+	
+	private static Texture getColoredTexture(Color color) {
+		Pixmap coloredMap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
+		int finalColor = Color.rgba8888(color.r, color.g, color.b, color.a);
+		for (int x = 0; x < coloredMap.getWidth(); x++) {
+			for (int y = 0; y < coloredMap.getHeight(); y++) {
+				coloredMap.drawPixel(x, y, finalColor);
+			}
+		}
+		Texture coloredTexture = new Texture(coloredMap);
+		coloredMap.dispose();
+		return coloredTexture;
+	}
+
+	/**
+	 * NOTE: the subclass must make a specific get'x'ButtonStyle() method for any styles added this way using the same styleName string!
+	 * <p>
+	 * Makes a style for a more variable image button which changes drawable based on interaction.
+	 * This is great for more one-off type buttons (e.g. the work station tabs in Quest Giver)
+	 * @param styleName The key to be used for the style name
+	 * @param notHovered The usual state of the button
+	 * @param hovered When the button is in focus
+	 * @param beingPressed While the button is being pressed
+	 */
+	protected void addSpecialImageButtonStyle(String styleName, Drawable notHovered, Drawable hovered, Drawable beingPressed) {
+		TextButtonStyle textButtonStyle = new TextButtonStyle(notHovered, hovered, beingPressed, new BitmapFont());
+		textButtonStyle.over = hovered;
+		skin.add(styleName, textButtonStyle);
+	}
+	
 	protected LabelStyle getLabelStyle(String style) {
 		return skin.get(style, LabelStyle.class);
 	}

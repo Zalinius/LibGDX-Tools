@@ -15,7 +15,7 @@ public class KeyboardCheckbox extends KeyboardButton {
 	private final String uncheckedLabel;
 	private final String checkedLabel;
 	
-	public KeyboardCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style) {
+	protected KeyboardCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style) {
 		super(textButton, Runnables.nullRunnable());
 		this.uncheckedLabel = uncheckedLabel;
 		this.checkedLabel = checkedLabel;
@@ -36,6 +36,10 @@ public class KeyboardCheckbox extends KeyboardButton {
 		});
 	}
 	
+	/**
+	 * To be used when setting up a menu: this sets the box as checked (or not) without firing an interaction event
+	 * @param shouldBeChecked
+	 */
 	public void initializeAsChecked(boolean shouldBeChecked) {
 		box.setProgrammaticChangeEvents(false);
 		box.setChecked(shouldBeChecked);

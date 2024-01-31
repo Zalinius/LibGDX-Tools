@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.utils.Align;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
 import com.darzalgames.libgdxtools.ui.input.scrollablemenu.PopUpMenu;
 
@@ -18,7 +18,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 	private Label displayLabel;
 	private String defaultEntry;
 
-	public KeyboardSelectBox(Collection<String> entries, TextButton textButton, Consumer<String> action) {
+	protected KeyboardSelectBox(Collection<String> entries, TextButton textButton, Consumer<String> action) {
 		super(textButton);
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the scrollable selectable portion of this select box,
@@ -35,7 +35,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 		this.options = new PopUpMenu(true, entryButtons, "back_message") {
 			@Override
 			protected void setUpTable() {
-				menu.setAlignment(Align.left, Align.left);
+				menu.setAlignment(Alignment.LEFT, Alignment.LEFT);
 				NinePatchDrawable background = UserInterfaceFactory.getUIBorderedNine(); 
 				this.setBackground(background);
 				add(menu.getView()).left();
@@ -63,6 +63,11 @@ public class KeyboardSelectBox extends KeyboardButton {
 		this.setWrap(false);
 	}
 
+	/**
+	 * Select a button based on the string of the entry, generally used after a choice has been made
+	 * or when first setting up the select box to make sure that the currently used value is highlighted (e.g. current language/font/window setting)
+	 * @param entry
+	 */
 	public void setSelected(String entry) {
 		defaultEntry = entry;
 		displayLabel.setText(entry);
@@ -73,7 +78,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 		view.setWidth(view.getLabelCell().getPadRight() + label.getWidth() + displayLabel.getPrefWidth());
 	}
 
-	public void showScrollPane() {
+	private void showScrollPane() {
 		InputPrioritizer.claimPriority(options);
 		options.goTo(defaultEntry);
 	}

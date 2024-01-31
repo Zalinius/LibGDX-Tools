@@ -10,10 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.PopUp;
 import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
 import com.darzalgames.libgdxtools.ui.input.handler.SteamControllerManager;
@@ -33,8 +33,8 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected abstract String getGameVersion();
 	protected abstract Collection<KeyboardButton> makeMiddleButtons();
 	protected abstract KeyboardButton makeButtonAboveQuitButton();
-	protected abstract int getEntryAlignment();
-	protected abstract int getMenuAlignment();
+	protected abstract Alignment getEntryAlignment();
+	protected abstract Alignment getMenuAlignment();
 	
 	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox) {
 		super(true);
@@ -112,7 +112,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		Table versionTable = new Table();
 		versionTable.setFillParent(true);
 		Label versionLabel = UserInterfaceFactory.getFlavorTextLabel(getGameVersion());
-		versionLabel.setAlignment(Align.bottomRight);
+		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT.getAlignment());
 		versionTable.setTouchable(Touchable.disabled);
 		addActor(versionTable);
 		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom() + 4).padRight(getPadRight());
@@ -150,7 +150,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	        background(back);
 	        UserInterfaceFactory.makeActorCentered(this);
 
-			menu.setAlignment(Align.center, Align.top);
+			menu.setAlignment(Alignment.CENTER, Alignment.TOP);
 			add(menu.getView()).growX().top();
 		}
 	}

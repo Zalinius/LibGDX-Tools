@@ -5,7 +5,6 @@ import java.util.function.Function;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
 import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
@@ -75,7 +74,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 			menu.replaceContents(List.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button			
 		}
 
-		menu.setAlignment(Align.center, Align.center);
+		menu.setAlignment(Alignment.CENTER, Alignment.CENTER);
 		Table table = menu.getView();
 		add(table).center().grow();
 	}

@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 
@@ -121,22 +120,6 @@ public class SkinManager {
 		Texture coloredTexture = new Texture(coloredMap);
 		coloredMap.dispose();
 		return coloredTexture;
-	}
-
-	/**
-	 * NOTE: the subclass must make a specific get'x'ButtonStyle() method for any styles added this way using the same styleName string!
-	 * <p>
-	 * Makes a style for a more variable image button which changes drawable based on interaction.
-	 * This is great for more one-off type buttons (e.g. the work station tabs in Quest Giver)
-	 * @param styleName The key to be used for the style name
-	 * @param notHovered The usual state of the button
-	 * @param hovered When the button is in focus
-	 * @param beingPressed While the button is being pressed
-	 */
-	protected void addSpecialImageButtonStyle(String styleName, Drawable notHovered, Drawable hovered, Drawable beingPressed) {
-		TextButtonStyle textButtonStyle = new TextButtonStyle(notHovered, hovered, beingPressed, new BitmapFont());
-		textButtonStyle.over = hovered;
-		skin.add(styleName, textButtonStyle);
 	}
 	
 	protected LabelStyle getLabelStyle(String style) {

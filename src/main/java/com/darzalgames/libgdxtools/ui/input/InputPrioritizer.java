@@ -37,7 +37,7 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 	public static final InputPrioritizer instance = new InputPrioritizer();
 	
 	private static GamepadInputHandler gamepadInputHandler;
-	private static KeyboardInputHandler keyboardInputHandler = new KeyboardInputHandler(instance);
+	private static KeyboardInputHandler keyboardInputHandler;
 
 
 	private InputPrioritizer() {
@@ -221,6 +221,10 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 		InputPrioritizer.optionsMenu = optionsMenu;
 	}
 
+	public static void setKeyboardInputHandler(KeyboardInputHandler keyboardInputHandler) {
+		InputPrioritizer.keyboardInputHandler = keyboardInputHandler;
+	}
+
 	public static void setPopUpStage(Stage stage) {
 		InputPrioritizer.popUpStage = stage;
 	}
@@ -302,8 +306,7 @@ public class InputPrioritizer extends Actor implements InputConsumer, InputObser
 
 
 	/**
-	 * To be used in exceptional circumstances only (e.g. the trailer) since without it,
-	 * mouse users can't remove popups
+	 * To be used in exceptional circumstances only (e.g. better visuals for the trailer)
 	 */
 	public static void hideDarkScreenForVeryExceptionalCircumstances() {
 		instance.darkScreen.remove();

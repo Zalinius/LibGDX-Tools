@@ -1,40 +1,31 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.codedisaster.steamworks.*;
 import com.darzalgames.libgdxtools.ui.input.Input;
 
-public class SteamGamepadInputHandler extends GamepadInputHandler {
+public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 	private SteamController steamController;
 	private SteamControllerHandle activeController;
 
 	private SteamControllerActionSetHandle actionsSetHandle;
 	private final Map<SteamControllerDigitalActionHandle, Input> buttonMappings;
+	protected abstract Map<SteamControllerDigitalActionHandle, Input> makeButtonMappings(SteamController steamController);
 
 	private boolean justDisconnected;
 
-
-	public SteamGamepadInputHandler(SteamController steamController) {
-		buttonMappings = new HashMap<>();
+	protected SteamGamepadInputHandler(SteamController steamController) {
 		this.steamController = steamController;
 		justDisconnected = false;
 
 		actionsSetHandle = steamController.getActionSetHandle("MenuControls");
-
-		buttonMappings.put(steamController.getDigitalActionHandle("menu_select"), Input.ACCEPT);
-		buttonMappings.put(steamController.getDigitalActionHandle("menu_cancel"), Input.BACK);
-		buttonMappings.put(steamController.getDigitalActionHandle("menu_pause"), Input.PAUSE);
-		buttonMappings.put(steamController.getDigitalActionHandle("menu_skip"), Input.SKIP);
-
-
-		buttonMappings.put(steamController.getDigitalActionHandle("menu_up"), Input.UP);
-		buttonMappings.put(steamController.getDigitalActionHandle("menu_down"), Input.DOWN);
-		buttonMappings.put(steamController.getDigitalActionHandle("menu_left"), Input.LEFT);
-		buttonMappings.put(steamController.getDigitalActionHandle("menu_right"), Input.RIGHT);
+		buttonMappings = makeButtonMappings(steamController);
 
 		Gdx.app.log("GamepadInputHandler", "Using STEAM gamepad input handling.");
 	}

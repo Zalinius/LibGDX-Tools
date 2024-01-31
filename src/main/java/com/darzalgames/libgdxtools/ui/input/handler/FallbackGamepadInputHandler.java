@@ -1,6 +1,5 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
@@ -12,25 +11,14 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
 
-public class FallbackGamepadInputHandler extends GamepadInputHandler implements ControllerListener {
+public abstract class FallbackGamepadInputHandler extends GamepadInputHandler implements ControllerListener {
 
 	private final Map<Function<Controller, Integer>, Input> buttonMappings;
+	protected abstract Map<Function<Controller, Integer>, Input> makeButtonMappings();
 
-	public FallbackGamepadInputHandler() {
+	protected FallbackGamepadInputHandler() {
 		Controllers.addListener(this); // receives events from all controllers
-		buttonMappings = new HashMap<>();
-		buttonMappings.put(controller -> controller.getMapping().buttonA, Input.ACCEPT);
-		buttonMappings.put(controller -> controller.getMapping().buttonB, Input.BACK);
-		buttonMappings.put(controller -> controller.getMapping().buttonStart, Input.PAUSE);
-		buttonMappings.put(controller -> controller.getMapping().buttonBack, Input.SKIP);
-
-		buttonMappings.put(controller -> controller.getMapping().buttonL1, Input.LEFT);
-		buttonMappings.put(controller -> controller.getMapping().buttonR1, Input.RIGHT);
-		buttonMappings.put(controller -> controller.getMapping().buttonDpadLeft, Input.LEFT);
-		buttonMappings.put(controller -> controller.getMapping().buttonDpadRight, Input.RIGHT);
-		buttonMappings.put(controller -> controller.getMapping().buttonDpadUp, Input.UP);
-		buttonMappings.put(controller -> controller.getMapping().buttonDpadDown, Input.DOWN);
-
+		buttonMappings = makeButtonMappings();
 
 		Gdx.app.log("GamepadInputHandler", "Using FALLBACK gamepad input handling.");
 	}
@@ -67,6 +55,7 @@ public class FallbackGamepadInputHandler extends GamepadInputHandler implements 
 
 	@Override
 	public boolean axisMoved(Controller controller, int axisCode, float value) {
+		// TODO Set this up to handle diagonal axis input, and maybe even ignore certain directions in particular games? (e.g. ignore horizontal movement in hexagon grid navigation?)
 		Input inputKey = Input.NONE;			
 		if (isXAxis(axisCode, controller)) {
 			inputKey = (value > 0 ? Input.RIGHT : Input.LEFT);
@@ -79,7 +68,7 @@ public class FallbackGamepadInputHandler extends GamepadInputHandler implements 
 		if (inputKey != Input.NONE) {
 			if (Math.abs(value) >= 1.0f) {
 				justPressed(inputKey);
-			} else if (Math.abs(value) <= .1f) { // A homemade deadzone, as long as the implementation works for us developers (and the itch demo?) it's okay
+			} else if (Math.abs(value) <= .1f) { // A homemade deadzone, as long as the implementation works for us developers (and the itch demo?) I suppose it's okay
 				justReleased(inputKey);
 			}
 		}

@@ -3,8 +3,18 @@ package com.darzalgames.libgdxtools.ui.input.handler;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 
+/**
+ * @author DarZal
+ * The base class for all kinds of input handlers (mouse, keyboard, gamepad),
+ * wich also tracks the latest input method used
+ */
 public abstract class InputHandler extends Table implements DoesNotPause {
 	
+	/**
+	 * @author DarZal
+	 * The various input methods that we support.
+	 * Some strategies will share an input method, e.g. the Steam gamepad verse is the LibGDX gamepad 
+	 */
 	public enum InputMethod {
 		MOUSE,
 		KEYBOARD,
@@ -12,6 +22,11 @@ public abstract class InputHandler extends Table implements DoesNotPause {
 	}
 	
 	private static InputMethod latestInputMethod = InputMethod.MOUSE;
+	
+	/**
+	 * Used by a child class to set the latest input method
+	 * @param inputMethod
+	 */
 	protected static void setLatestInputMethod(InputMethod inputMethod) {
 		latestInputMethod = inputMethod;
 	}

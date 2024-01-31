@@ -4,6 +4,8 @@ import com.badlogic.gdx.Input.Keys;
 
 public enum Input {
 
+	// TODO This input class is a bit of a pickle because each game might have input specific only to itself (e.g. SKIP in Quest Giver) and may NOT use all of these inputs,
+	// but all of our generalized input handling needs to know about this class.
 	ACCEPT(Keys.Z),
 	BACK(Keys.X),
 

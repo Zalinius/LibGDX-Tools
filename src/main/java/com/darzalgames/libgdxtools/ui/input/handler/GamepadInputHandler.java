@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -19,20 +20,13 @@ public abstract class GamepadInputHandler extends InputHandler {
 	private final InputConsumer inputConsumer;
 	protected final Map<Input, ButtonState> buttonStates;
 	private static final boolean LOG_INPUT = false;
+	
+	protected abstract List<Input> getTrackedInputs();
 
 	protected GamepadInputHandler() {
 		inputConsumer = InputPrioritizer.instance;
 		buttonStates = new EnumMap<>(Input.class);
-
-		buttonStates.put(Input.ACCEPT, ButtonState.NOT_HELD_DOWN);
-		buttonStates.put(Input.BACK, ButtonState.NOT_HELD_DOWN);
-		buttonStates.put(Input.PAUSE, ButtonState.NOT_HELD_DOWN);
-		buttonStates.put(Input.SKIP, ButtonState.NOT_HELD_DOWN);
-
-		buttonStates.put(Input.UP, ButtonState.NOT_HELD_DOWN);
-		buttonStates.put(Input.DOWN, ButtonState.NOT_HELD_DOWN);
-		buttonStates.put(Input.LEFT, ButtonState.NOT_HELD_DOWN);
-		buttonStates.put(Input.RIGHT, ButtonState.NOT_HELD_DOWN);
+		getTrackedInputs().forEach(input -> buttonStates.put(input, ButtonState.NOT_HELD_DOWN));
 	}
 
 	protected final void justPressed(Input buttonKey) {

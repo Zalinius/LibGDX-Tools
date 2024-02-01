@@ -1,6 +1,6 @@
-package com.darzalgames.libgdxtools.ui.input;
+package com.darzalgames.libgdxtools.ui.input.strategy;
 
-import com.darzalgames.libgdxtools.i18n.TextSupplier;
+import java.util.Map;
 
 /**
  * For the purposes of Quest Giver, this is also the gamepad input strategy.
@@ -9,21 +9,15 @@ import com.darzalgames.libgdxtools.i18n.TextSupplier;
  * @author DarZal
  *
  */
-public class KeyboardInputStrategy extends InputStrategy {
+public class KeyboardInputStrategy extends InputStrategyConcrete {
+	
+	public KeyboardInputStrategy(Map<String, String> buttonHints) {
+		super(buttonHints);
+	}
 
 	@Override
 	public boolean shouldFocusFirstButton() {
 		return true;
-	}
-
-	@Override
-	public String getRosterButtonInputHint() {
-		return TextSupplier.getLine("press_button", "→");
-	}
-
-	@Override  
-	public String getContractButtonInputHint() {
-		return TextSupplier.getLine("press_button", "←") + " " + TextSupplier.getLine("twice_prompt");
 	}
 	
 	@Override

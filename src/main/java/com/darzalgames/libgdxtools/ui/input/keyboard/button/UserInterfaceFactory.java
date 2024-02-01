@@ -62,7 +62,7 @@ public class UserInterfaceFactory {
 	 * @return
 	 */
 	public static Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
-		Label label = new InputSensitiveLabel(textSupplier, skinManager.getDefaultLableStyle());
+		Label label = new InputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle());
 		label.setWrap(true);
 		return label;
 	}

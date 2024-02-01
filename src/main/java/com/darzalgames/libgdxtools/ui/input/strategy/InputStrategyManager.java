@@ -1,25 +1,27 @@
-package com.darzalgames.libgdxtools.ui.input;
+package com.darzalgames.libgdxtools.ui.input.strategy;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
+import com.darzalgames.libgdxtools.ui.input.*;
 
-public class InputStrategyManager extends InputStrategy implements InputSubject, DoesNotPause {
+public class InputStrategyManager extends Actor implements InputStrategy, InputSubject, DoesNotPause {
 
 	private InputStrategy currentInputStrategy;
 	private InputStrategy previousInputStrategy;
-	private final MouseInputStrategy mouseInputStrategy;
-	private final KeyboardInputStrategy keyboardInputStrategy;
+	private final InputStrategy mouseInputStrategy;
+	private final InputStrategy keyboardInputStrategy;
 	private final CustomCursorImage pixelCursor;
 
-	public InputStrategyManager(CustomCursorImage pixelCursor) {
-		mouseInputStrategy = new MouseInputStrategy();
-		keyboardInputStrategy = new KeyboardInputStrategy();
+	public InputStrategyManager(CustomCursorImage pixelCursor, InputStrategy mouseInputStrategy, InputStrategy keyboardInputStrategy) {
+		this.mouseInputStrategy = mouseInputStrategy;
+		this.keyboardInputStrategy = keyboardInputStrategy;
 		this.pixelCursor = pixelCursor;
 
 		observers = new ArrayList<>();
@@ -82,15 +84,10 @@ public class InputStrategyManager extends InputStrategy implements InputSubject,
 	public boolean showMouseExclusiveButtons() {
 		return currentInputStrategy.showMouseExclusiveButtons();
 	}
-
+	
 	@Override
-	public String getRosterButtonInputHint() {
-		return currentInputStrategy.getRosterButtonInputHint();
-	}
-
-	@Override
-	public String getContractButtonInputHint() {
-		return currentInputStrategy.getContractButtonInputHint();
+	public String getButtonInputHint(String hintKey) {
+		return currentInputStrategy.getButtonInputHint(hintKey);
 	}
 
 	public void saveCurrentStrategy() {
@@ -122,4 +119,5 @@ public class InputStrategyManager extends InputStrategy implements InputSubject,
 	public void actWhilePaused(float delta) {
 		act(delta);
 	}
+
 }

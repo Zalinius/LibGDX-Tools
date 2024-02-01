@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
@@ -31,23 +30,38 @@ public class InputPriorityManager {
 
 	private static Deque<InputConsumer> inputConsumerStack;
 	private static Image darkScreen;
-	
+
 	private static KeyboardButton pauseButton;
 	private static OptionsMenu optionsMenu;
-	
+
 	private static Stage popUpStage;
-	
+
 	private static final Group group = new Group();
 	private static Runnable toggleFullscreenRunnable;
 
 	private static GamepadInputHandler gamepadInputHandler;
 	private static KeyboardInputHandler keyboardInputHandler;
 
+	private InputPriorityManager() {}
+
 	/**
 	 * Is essential to do this, there'll probably be a crash if you don't \_( ͡⟃ ͜ʖ ⟄)_/
+	 * @param mainStage The stage where the game is  
+	 * @param popUpStage The stage where pop ups are held, ensuring that they are in front of the rest of the game
+	 * @param toggleFullscreenRunnable A runnable that toggles between full screen and windowed mode
+	 * @param gamepadInputHandler The gamepad input handler to use (fallback versus Steam)
+	 * @param keyboardInputHandler The keyboard input handler to use
 	 */
-	public static void initialize() {
+	public static void initialize(Stage mainStage, Stage popUpStage, Runnable toggleFullscreenRunnable,
+			GamepadInputHandler gamepadInputHandler, KeyboardInputHandler keyboardInputHandler) {
 		inputConsumerStack = new ArrayDeque<>();
+		InputPriorityManager.popUpStage = popUpStage;
+		InputPriorityManager.toggleFullscreenRunnable = toggleFullscreenRunnable;
+		InputPriorityManager.gamepadInputHandler = gamepadInputHandler;
+		InputPriorityManager.keyboardInputHandler = keyboardInputHandler;
+
+		// Set up the dark background screen that goes behind popups
+		// TODO Make a color tools think for this
 		Pixmap background = new Pixmap(MainGame.getWidth(), MainGame.getHeight(), Format.RGBA8888);
 		Color color = Color.BLACK;
 		background.setColor(color.r, color.g, color.b, 0.5f);
@@ -65,15 +79,14 @@ public class InputPriorityManager {
 				return true;
 			}
 		});
-	}
 
-	/**
-	 * @param gamepadInputHandler The gamepad input handler to use (fallback versus Steam)
-	 */
-	public static void setGamepadInputHandler(GamepadInputHandler gamepadInputHandler, List<DoesNotPause> actorsThatDoNotPause) {
-		InputPriorityManager.gamepadInputHandler = gamepadInputHandler;
-		group.addActor(gamepadInputHandler);
-		actorsThatDoNotPause.add(gamepadInputHandler);
+		// Add the inner group to the stage
+		mainStage.addActor(group);
+		mainStage.setKeyboardFocus(keyboardInputHandler);
+
+
+		// Enter the default strategy (mouse) during this initialization
+		MainGame.getInputStrategyManager().setToMouseStrategy();
 	}
 
 	/**
@@ -86,14 +99,6 @@ public class InputPriorityManager {
 		group.addActor(gamepadInputHandler);
 		group.addActor(keyboardInputHandler);
 		darkScreen.remove();
-	}
-
-	public static void enterMouseMode() {
-		MainGame.getInputStrategyManager().setToMouseStrategy();
-	}
-
-	public static boolean enterKeyboardMode() {
-		return MainGame.getInputStrategyManager().setToKeyboardStrategy();
 	}
 
 	/**
@@ -110,20 +115,9 @@ public class InputPriorityManager {
 			} else if (!inputConsumerStack.isEmpty()) { // Don't try to enter keyboard mode when someone is just pressing escape
 				inputConsumerStack.peek().consumeKeyInput(input);
 			}	
-		} else if (!enterKeyboardMode() && !inputConsumerStack.isEmpty()) {
+		} else if (!inputConsumerStack.isEmpty() && !MainGame.getInputStrategyManager().setToKeyboardStrategy()) {
 			inputConsumerStack.peek().consumeKeyInput(input);
 		}		
-	}
-
-	private static void showDarkScreen(int actorIndex, boolean isTouchable) {
-		popUpStage.addActor(darkScreen);
-		darkScreen.setZIndex(actorIndex);
-		darkScreen.setTouchable(Touchable.disabled);
-		DelayAction delayThenTouchable = new DelayAction(1f);
-		delayThenTouchable.setAction(new RunnableActionBest(() -> 
-			darkScreen.setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled)
-		));
-		darkScreen.addAction(delayThenTouchable);
 	}
 
 	/**
@@ -152,10 +146,6 @@ public class InputPriorityManager {
 		InputPriorityManager.showDarkScreen(popup.getZIndex(), popup.canDismiss());
 	}
 
-	private static void showPauseMenu() {
-		showPopup(optionsMenu);
-		claimPriority(optionsMenu);
-	}
 
 	/**
 	 * @param inputConsumer The thing to be put at the top of the input stack
@@ -186,6 +176,63 @@ public class InputPriorityManager {
 		}
 	}
 
+	/**
+	 * @param optionsMenu The menu to show when the pause button is pressed.
+	 * This might be different depending on if you're on the main menu or in the game.
+	 */
+	public static void setPauseUI(OptionsMenu optionsMenu) {
+		clearPauseButtonUI();
+		pauseButton = optionsMenu.getButton();
+		popUpStage.addActor(pauseButton.getView());
+		InputPriorityManager.optionsMenu = optionsMenu;
+	}
+
+	public static void inputStrategyChanged() {
+		if (!inputConsumerStack.isEmpty()) {
+			if (MainGame.getInputStrategyManager().shouldFocusFirstButton()) {
+				if (!inputConsumerStack.isEmpty()) {
+					inputConsumerStack.peek().selectDefault();
+				}
+			}  else { // Mouse mode
+				clearSelected();
+			}
+		}
+	}
+
+	public static boolean isPaused() {
+		return optionsMenu != null && optionsMenu.getStage() != null;
+	}
+
+	/**
+	 * Will show the pause menu if the game is not already paused
+	 */
+	public static void pauseIfNeeded() {
+		if (!isPaused()) {
+			showPauseMenu();
+		}
+	}
+
+	/**
+	 * To be used in exceptional circumstances only (e.g. better visuals for the trailer)
+	 */
+	public static void hideDarkScreenForVeryExceptionalCircumstances() {
+		darkScreen.remove();
+	}
+	
+	//-----------------------------------------------------------
+
+	private static void focusTop(boolean isFirstFocus) {
+		if (!inputConsumerStack.isEmpty()) {
+			inputConsumerStack.peek().setTouchable(Touchable.enabled);
+			if (isFirstFocus) {
+				inputConsumerStack.peek().gainFocus();				
+			} else {
+				inputConsumerStack.peek().regainFocus();
+			}
+			focusCurrent();
+		}
+	}
+	
 	private static void unFocusTop() {
 		if (!inputConsumerStack.isEmpty()) {
 			inputConsumerStack.peek().setTouchable(Touchable.disabled);
@@ -223,64 +270,21 @@ public class InputPriorityManager {
 		}
 		return false;
 	}
-
-	private static void focusTop(boolean isFirstFocus) {
-		if (!inputConsumerStack.isEmpty()) {
-			inputConsumerStack.peek().setTouchable(Touchable.enabled);
-			if (isFirstFocus) {
-				inputConsumerStack.peek().gainFocus();				
-			} else {
-				inputConsumerStack.peek().regainFocus();
-			}
-			focusCurrent();
-		}
+	
+	private static void showPauseMenu() {
+		showPopup(optionsMenu);
+		claimPriority(optionsMenu);
 	}
-
-	/**
-	 * @param optionsMenu The menu to show when the pause button is pressed
-	 */
-	public static void setPauseUI(OptionsMenu optionsMenu) {
-		clearPauseButtonUI();
-		pauseButton = optionsMenu.getButton();
-		popUpStage.addActor(pauseButton.getView());
-		InputPriorityManager.optionsMenu = optionsMenu;
-	}
-
-	public static void setKeyboardInputHandler(KeyboardInputHandler keyboardInputHandler) {
-		InputPriorityManager.keyboardInputHandler = keyboardInputHandler;
-	}
-
-	/**
-	 * @param stage The stage where pop ups are held, insuring that they are in front of the rest of the game
-	 */
-	public static void setPopUpStage(Stage stage) {
-		InputPriorityManager.popUpStage = stage;
-	}
-
-	private static void clearPauseButtonUI() {
-		if (pauseButton != null) {
-			pauseButton.getView().remove();
-			pauseButton = null;
-			optionsMenu = null;
-		}
-	}
-
-	public static void inputStrategyChanged() {
-		if (!inputConsumerStack.isEmpty()) {
-			if (MainGame.getInputStrategyManager().shouldFocusFirstButton()) {
-				if (!inputConsumerStack.isEmpty()) {
-					inputConsumerStack.peek().selectDefault();
-				}
-			}  else { // Mouse mode
-				clearSelected();
-			}
-		}
-	}
-
-	private static void clearSelected() {
-		if (!inputConsumerStack.isEmpty()) {
-			inputConsumerStack.peek().clearSelected();
-		}
+	
+	private static void showDarkScreen(int actorIndex, boolean isTouchable) {
+		popUpStage.addActor(darkScreen);
+		darkScreen.setZIndex(actorIndex);
+		darkScreen.setTouchable(Touchable.disabled);
+		DelayAction delayThenTouchable = new DelayAction(1f);
+		delayThenTouchable.setAction(new RunnableActionBest(() -> 
+		darkScreen.setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled)
+				));
+		darkScreen.addAction(delayThenTouchable);
 	}
 
 	private static void focusCurrent() {
@@ -289,41 +293,18 @@ public class InputPriorityManager {
 		}
 	}
 
-	public static boolean isPaused() {
-		return optionsMenu != null && optionsMenu.getStage() != null;
-	}
-	
-	/**
-	 * Will show the pause menu if the game is not already paused
-	 */
-	public static void pauseIfNeeded() {
-		if (!isPaused()) {
-			showPauseMenu();
+	private static void clearSelected() {
+		if (!inputConsumerStack.isEmpty()) {
+			inputConsumerStack.peek().clearSelected();
 		}
 	}
-
-	public static void addInputActor(Actor actor) {
-		group.addActor(actor);
-	}
-
-	public static void addInnerActorToStage(Stage stage) {
-		stage.addActor(group);
-		stage.setKeyboardFocus(keyboardInputHandler);
-		
-		// Also enter the default strategy (mouse) during this initialization
-		enterMouseMode();
-	}
-
-	public static void setToggleFullscreenRunnable(Runnable toggleFullscreenRunnable) {
-		InputPriorityManager.toggleFullscreenRunnable = toggleFullscreenRunnable;
-	}
-
-
-	/**
-	 * To be used in exceptional circumstances only (e.g. better visuals for the trailer)
-	 */
-	public static void hideDarkScreenForVeryExceptionalCircumstances() {
-		darkScreen.remove();
+	
+	private static void clearPauseButtonUI() {
+		if (pauseButton != null) {
+			pauseButton.getView().remove();
+			pauseButton = null;
+			optionsMenu = null;
+		}
 	}
 
 }

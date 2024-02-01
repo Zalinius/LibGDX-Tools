@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -22,11 +23,14 @@ import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.SteamConnection;
 import com.darzalgames.libgdxtools.ui.input.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.InputStrategyManager;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
+import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.keyboard.MouseDetector;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.StageWithBackground;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardInputStrategy;
+import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 import com.darzalgames.libgdxtools.ui.screen.PixelPerfectViewport;
 
@@ -48,7 +52,10 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected abstract Texture getCursorTexture();
 	protected abstract void setUpBeforeLoadingSave();
 	protected abstract void launchGame(boolean isNewSave);
-	protected abstract GamepadInputHandler setUpInputHandlers(SteamController steamController);
+	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
+	protected abstract GamepadInputHandler makeGamepadInputHandler(SteamController steamController);
+	protected abstract Map<String, String> makeKeyboardButtonHints();
+	protected abstract Map<String, String> makeMouseButtonHints();
 	protected abstract void quitGame();
 	
 	/**
@@ -140,7 +147,9 @@ public abstract class MainGame extends ApplicationAdapter {
 		inputMultiplexer.addProcessor(popUpStage);
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		inputStrategyManager = new InputStrategyManager(customCursor);
+		inputStrategyManager = new InputStrategyManager(customCursor,
+				new MouseInputStrategy(makeMouseButtonHints()),
+				new KeyboardInputStrategy(makeKeyboardButtonHints()));
 	}
 	
 	private void setUpInputPrioritizer() {
@@ -152,12 +161,11 @@ public abstract class MainGame extends ApplicationAdapter {
 			steamController.init();
 		}
 		stage.addActor(inputStrategyManager);
-		InputPriorityManager.initialize();
-		GamepadInputHandler gamepadInputHandler = setUpInputHandlers(steamController);
-		InputPriorityManager.setGamepadInputHandler(gamepadInputHandler, actorsThatDoNotPause);
-		InputPriorityManager.addInnerActorToStage(stage);
-		InputPriorityManager.setPopUpStage(popUpStage);
-		InputPriorityManager.setToggleFullscreenRunnable(windowResizer::toggleWindow);
+		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
+		GamepadInputHandler gamepadInputHandler = makeGamepadInputHandler(steamController);
+		actorsThatDoNotPause.add(keyboardInputHandler);
+		actorsThatDoNotPause.add(gamepadInputHandler);
+		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler);
 	}
 
 	private static void setInstance(MainGame mainGame) {

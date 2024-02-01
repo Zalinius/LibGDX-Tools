@@ -22,7 +22,6 @@ public abstract class GameScreen extends Group implements Screen, Endable, Input
 	
 	@Override
 	public void show() {
-		InputPriorityManager.addInputActor(this);
 		InputPriorityManager.claimPriority(this);
 	}
 	

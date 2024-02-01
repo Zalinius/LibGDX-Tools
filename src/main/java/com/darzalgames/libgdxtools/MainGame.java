@@ -21,7 +21,7 @@ import com.darzalgames.libgdxtools.preferencemanagers.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.SteamConnection;
 import com.darzalgames.libgdxtools.ui.input.CustomCursorImage;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.InputStrategyManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.MouseDetector;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
@@ -98,7 +98,7 @@ public abstract class MainGame extends ApplicationAdapter {
 
 		setUpInputPrioritizer();
 		actorsThatDoNotPause.add(inputStrategyManager);
-		actorsThatDoNotPause.add(InputPrioritizer.instance);
+		actorsThatDoNotPause.add(InputPriorityManager.instance);
 
 		setUpBeforeLoadingSave();
 		saveManager = makeSaveManager();
@@ -132,15 +132,15 @@ public abstract class MainGame extends ApplicationAdapter {
 	}
 
 	private void setUpInputForAllStages() {
-		CustomCursorImage pixelCursor = new CustomCursorImage(windowResizer, getCursorTexture());
-		cursorStage.addActor(pixelCursor);
+		CustomCursorImage customCursor = new CustomCursorImage(windowResizer::isWindowed, getCursorTexture());
+		cursorStage.addActor(customCursor);
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(mouseDetectorStage);
 		inputMultiplexer.addProcessor(cursorStage);
 		inputMultiplexer.addProcessor(popUpStage);
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		inputStrategyManager = new InputStrategyManager(pixelCursor);
+		inputStrategyManager = new InputStrategyManager(customCursor);
 	}
 	
 	private void setUpInputPrioritizer() {
@@ -152,13 +152,12 @@ public abstract class MainGame extends ApplicationAdapter {
 			steamController.init();
 		}
 		stage.addActor(inputStrategyManager);
-		stage.addActor(InputPrioritizer.instance);
-		inputStrategyManager.register(InputPrioritizer.instance);
+		InputPriorityManager.initialize();
+		inputStrategyManager.register(InputPriorityManager.instance);
 		setUpInputHandlers(steamController);
-		InputPrioritizer.addInnerActorToStage(stage);
-		InputPrioritizer.setDefaultStrategy();
-		InputPrioritizer.setPopUpStage(popUpStage);
-		InputPrioritizer.setToggleFullscreenRunnable(windowResizer::toggleWindow);
+		InputPriorityManager.addInnerActorToStage(stage);
+		InputPriorityManager.setPopUpStage(popUpStage);
+		InputPriorityManager.setToggleFullscreenRunnable(windowResizer::toggleWindow);
 	}
 
 	private static void setInstance(MainGame mainGame) {
@@ -208,7 +207,7 @@ public abstract class MainGame extends ApplicationAdapter {
 			backgroundStage.draw();
 
 			stage.getViewport().apply();
-			if (InputPrioritizer.isPaused()) {
+			if (InputPriorityManager.isPaused()) {
 				stage.draw();
 				float delta = Gdx.graphics.getDeltaTime();
 				actorsThatDoNotPause.forEach(actor -> actor.actWhilePaused(delta));

@@ -17,7 +17,7 @@ import com.darzalgames.libgdxtools.save.OSType;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSelectBox;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
@@ -101,7 +101,7 @@ public abstract class WindowResizer {
 		setCurrentlySelectedInBox();
 		if (offerToRevert) {
 			ConfirmationMenu reverter = new WindowRevertCountdownConfirmationMenu(() -> revertCountdown.clearActions());
-			InputPrioritizer.claimPriority(reverter);
+			InputPriorityManager.claimPriority(reverter);
 		}
 	}
 

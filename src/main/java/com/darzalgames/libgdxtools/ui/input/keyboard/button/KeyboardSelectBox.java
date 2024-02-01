@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.libgdxtools.ui.Alignment;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
-import com.darzalgames.libgdxtools.ui.input.scrollablemenu.PopUpMenu;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
+import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 
 public class KeyboardSelectBox extends KeyboardButton {
 
@@ -79,7 +79,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 	}
 
 	private void showScrollPane() {
-		InputPrioritizer.claimPriority(options);
+		InputPriorityManager.claimPriority(options);
 		options.goTo(defaultEntry);
 	}
 }

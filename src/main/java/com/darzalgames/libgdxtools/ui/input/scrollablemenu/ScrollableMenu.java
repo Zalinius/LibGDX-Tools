@@ -7,9 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 
+/**
+ * The actor that holds a {@link ScrollableUI} and handles how it looks and is interacted with.
+ * @author DarZal
+ *
+ */
 public abstract class ScrollableMenu extends Table implements InputConsumer {
 	protected ScrollableUI menu;
 
@@ -46,19 +50,27 @@ public abstract class ScrollableMenu extends Table implements InputConsumer {
 		}
 	}
 
-	public void hideThis() {
-		remove();
-		InputPrioritizer.releasePriority(this);
-	}
-
+	/**
+	 * Set the focus to a particular {@link KeyboardButton}
+	 * @param keyboardButton
+	 */
 	public void goTo(KeyboardButton keyboardButton) {
 		menu.goTo(keyboardButton);
 	}
 
+	/**
+	 * Set the focus to a particular button index (often first or last, but there can be more specialized applications)
+	 * @param index
+	 */
 	public void goTo(final int index) {
 		menu.goTo(index);
 	}
 
+	/**
+	 * Sets whether or not to press a button immediately when an entry is changed.
+	 * This is generally false, but will be true for menu tabs navigated with the bumpers, for example.
+	 * @param pressButtonOnEntryChanged
+	 */
 	public void setPressButtonOnEntryChanged(boolean pressButtonOnEntryChanged) {
 		menu.setPressButtonOnEntryChanged(pressButtonOnEntryChanged);
 	}

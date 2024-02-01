@@ -5,9 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.darzalgames.libgdxtools.MainGame;
+import com.darzalgames.libgdxtools.ui.input.InputStrategyManager;
 
 public class KeyboardStage extends Stage {
 
+	/**
+	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategyManager} input mode
+	 * @param viewport
+	 */
 	public KeyboardStage(Viewport viewport) {
 		super(viewport);
 	}

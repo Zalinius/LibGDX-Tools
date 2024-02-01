@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard;
+package com.darzalgames.libgdxtools.ui.input.keyboard.button;
 
 import java.util.function.Supplier;
 
@@ -11,7 +11,12 @@ public class InputSensitiveLabel extends Label implements InputObserver {
 	
 	private final Supplier<String> textSupplier;
 
-	public InputSensitiveLabel(Supplier<String> textSupplier, LabelStyle style) {
+	/**
+	 * Creates a label that changes it's text when the input strategy changes
+	 * @param textSupplier supplies a string for what the lebel should say based on the current input method (e.g. using an argument like inputStrategyManager.getRosterButtonInputHint()))
+	 * @param style
+	 */
+	protected InputSensitiveLabel(Supplier<String> textSupplier, LabelStyle style) {
 		super(textSupplier.get(), style);
 		this.textSupplier = textSupplier;
 		MainGame.getInputStrategyManager().register(this);

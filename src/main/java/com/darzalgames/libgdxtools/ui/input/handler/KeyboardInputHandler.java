@@ -5,7 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 
 /**
  * @author DarZal
@@ -17,9 +17,9 @@ public abstract class KeyboardInputHandler extends InputHandler {
 
 	/**
 	 * Sets up the listener for keyboard input, and maps various keybindings to others
-	 * @param inputPrioritizer The game's {@link InputPrioritizer}, which this class will forward keyboard input to
+	 * @param inputPrioritizer The game's {@link InputPriorityManager}, which this class will forward keyboard input to
 	 */
-	protected KeyboardInputHandler(InputPrioritizer inputPrioritizer) {
+	protected KeyboardInputHandler(InputPriorityManager inputPrioritizer) {
 		super();
 		
 		keysToAllow = getKeyWhitelist();

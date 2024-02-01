@@ -30,11 +30,12 @@ public enum Input {
 	private Input(int key) {
 		this.key = key;
 	}
-
-	public int getKey() {
-		return key;
-	}
 	
+	/**
+	 * Go from a keyboard key to our custom {@link Input}
+	 * @param key
+	 * @return
+	 */
 	public static Input getInputFromKey(int key) {
 		for (int i = 0; i < Input.values().length; i++) {
 			Input input = Input.values()[i];

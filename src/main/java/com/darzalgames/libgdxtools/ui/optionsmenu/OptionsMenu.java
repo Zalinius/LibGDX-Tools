@@ -14,12 +14,12 @@ import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
 import com.darzalgames.libgdxtools.ui.Alignment;
-import com.darzalgames.libgdxtools.ui.PopUp;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.handler.SteamControllerManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
-import com.darzalgames.libgdxtools.ui.input.scrollablemenu.PopUpMenu;
+import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
+import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 
 
 public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
@@ -49,7 +49,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 	protected void toggleScreenVisibility(boolean show) {
 		if (show) {
-			InputPrioritizer.pauseIfNeeded();
+			InputPriorityManager.pauseIfNeeded();
 		} else {
 			hideThis();
 		}
@@ -83,7 +83,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		menuButtons.add(reportBugButton);
 		
 		KeyboardButton controlsButton = UserInterfaceFactory.getButton(TextSupplier.getLine("controls_message"), () -> {
-			InputPrioritizer.claimPriority(makeControlsPopUp());
+			InputPriorityManager.claimPriority(makeControlsPopUp());
 			SteamControllerManager.openControlsOverlay();
 		});
 		menuButtons.add(controlsButton);
@@ -135,7 +135,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		}
 		
 		public KeyboardButton getButton() {
-			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> InputPrioritizer.claimPriority(this));
+			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> InputPriorityManager.claimPriority(this));
 		}
 
 		@Override

@@ -110,13 +110,10 @@ public class SkinManager {
 	}
 	
 	private static Texture getColoredTexture(Color color) {
-		Pixmap coloredMap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
-		int finalColor = Color.rgba8888(color.r, color.g, color.b, color.a);
-		for (int x = 0; x < coloredMap.getWidth(); x++) {
-			for (int y = 0; y < coloredMap.getHeight(); y++) {
-				coloredMap.drawPixel(x, y, finalColor);
-			}
-		}
+		int size = 10;
+		Pixmap coloredMap = new Pixmap(size, size, Pixmap.Format.RGBA8888);
+		coloredMap.setColor(color);
+		coloredMap.fillRectangle(0, 0, size, size);
 		Texture coloredTexture = new Texture(coloredMap);
 		coloredMap.dispose();
 		return coloredTexture;

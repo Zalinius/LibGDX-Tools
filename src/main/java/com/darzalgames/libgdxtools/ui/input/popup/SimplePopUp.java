@@ -1,13 +1,12 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard;
+package com.darzalgames.libgdxtools.ui.input.popup;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
-import com.darzalgames.libgdxtools.ui.PopUp;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 
 public abstract class SimplePopUp extends Table implements InputConsumerWrapper, PopUp {
 	
@@ -20,10 +19,14 @@ public abstract class SimplePopUp extends Table implements InputConsumerWrapper,
 		}
 	}
 
+	/**
+	 * Make the pop up visible and have it claim input priority
+	 */
 	public void showThis() {
-		InputPrioritizer.claimPriority(this);
+		InputPriorityManager.claimPriority(this);
 	}
 
+	// TODO These next two methods should only be called by the InputPrioritizer (or within this class), is there anyway to enforce that?
 	@Override
 	public void gainFocus() {
 		clear();
@@ -32,7 +35,7 @@ public abstract class SimplePopUp extends Table implements InputConsumerWrapper,
 		float startY = this.getY();
 		this.setPosition(-getWidth(), -getHeight());
 		this.addAction(Actions.moveTo(startX, startY, 0.25f, Interpolation.circle));
-		InputPrioritizer.showPopup(this);
+		InputPriorityManager.showPopup(this);
 	}
 	
 	@Override
@@ -42,7 +45,7 @@ public abstract class SimplePopUp extends Table implements InputConsumerWrapper,
 	
 	@Override
 	public void hideThis() {
-		InputPrioritizer.releasePriority(this);
+		InputPriorityManager.releasePriority(this);
 		this.toFront();
 		this.addAction(Actions.sequence(
 				Actions.moveTo(-getWidth(), -getHeight(), 0.25f, Interpolation.circle),

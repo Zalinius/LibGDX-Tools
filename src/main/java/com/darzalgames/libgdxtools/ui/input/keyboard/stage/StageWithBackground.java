@@ -9,6 +9,11 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory
 public class StageWithBackground extends KeyboardStage {
 	private Image background;
 
+	/**
+	 * Creates a stage that will ensure that the supplied background texture is always present
+	 * @param viewport
+	 * @param backgroundTex
+	 */
 	public StageWithBackground(final Viewport viewport, Texture backgroundTex) {
 		super(viewport);
 

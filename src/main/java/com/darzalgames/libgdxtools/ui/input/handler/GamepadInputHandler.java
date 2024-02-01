@@ -6,8 +6,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumer;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 
 /**
  * This is the entry point for gamepad input, and where we define all button mappings to game actions.
@@ -17,14 +16,14 @@ public abstract class GamepadInputHandler extends InputHandler {
 
 	protected enum ButtonState { HELD_DOWN, NOT_HELD_DOWN }
 
-	private final InputConsumer inputConsumer;
+	private final InputPriorityManager inputConsumer;
 	protected final Map<Input, ButtonState> buttonStates;
 	private static final boolean LOG_INPUT = false;
 	
 	protected abstract List<Input> getTrackedInputs();
 
 	protected GamepadInputHandler() {
-		inputConsumer = InputPrioritizer.instance;
+		inputConsumer = InputPriorityManager.instance;
 		buttonStates = new EnumMap<>(Input.class);
 		getTrackedInputs().forEach(input -> buttonStates.put(input, ButtonState.NOT_HELD_DOWN));
 	}
@@ -45,8 +44,8 @@ public abstract class GamepadInputHandler extends InputHandler {
 	}
 	
 	protected final void controllerDisconnected() {
-		InputPrioritizer.enterMouseMode();
-		InputPrioritizer.pauseIfNeeded();
+		InputPriorityManager.enterMouseMode();
+		InputPriorityManager.pauseIfNeeded();
 	}
 
 }

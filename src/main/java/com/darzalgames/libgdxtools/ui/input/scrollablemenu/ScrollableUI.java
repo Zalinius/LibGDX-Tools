@@ -16,9 +16,9 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 
 /**
- * This class is not an Actor, it's mainly the logical list of scrollable buttons held in a Table
- * One of these is owned by a ScrollableMenu, which defines whether we're using text buttons or image buttons
- * and which is also responsible for any decorative elements around this ScrollableUI
+ * This class is not an Actor, it's the logical list of scrollable buttons held in a Table.
+ * One of these is owned by a {@link ScrollableMenu}, which is responsible for any decorative elements around this,
+ * and any interactions with it.
  * @author DarZal
  */
 public class ScrollableUI implements InputConsumerWrapper {
@@ -60,6 +60,10 @@ public class ScrollableUI implements InputConsumerWrapper {
 		replaceContents(newEntries, null);
 	}
 
+	/**
+	 * @param newEntries The new entries to be held in this list, excluding a special finalButton (see next line). This can include spacers, which will not be interactable
+	 * @param finalButton The button that will be pressed when the player presses *back*
+	 */
 	public void replaceContents(final List<KeyboardButton> newEntries, KeyboardButton finalButton) {
 		allEntries.clear();
 		allEntries.addAll(newEntries);

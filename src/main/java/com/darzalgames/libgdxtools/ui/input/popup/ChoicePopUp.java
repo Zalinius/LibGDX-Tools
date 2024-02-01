@@ -1,16 +1,22 @@
-package com.darzalgames.libgdxtools.ui;
+package com.darzalgames.libgdxtools.ui.input.popup;
 
 import java.util.List;
 import java.util.function.Function;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
+import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
-import com.darzalgames.libgdxtools.ui.input.scrollablemenu.PopUpMenu;
 
+/**
+ * @author DarZal
+ * A pop up that offers two choices, and can respond differently based on which choice is made.
+ * This is versatile: it can be used for dialog choices, menus, warnings, etc.
+ */
 public abstract class ChoicePopUp extends PopUpMenu {
 
 	protected final String messageKey;
@@ -34,11 +40,27 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		this.isSecondButtonBack = isSecondButtonBack;
 		this.isWarning = isWarning;
 
-		InputPrioritizer.claimPriority(this);
+		InputPriorityManager.claimPriority(this);
 	}
 
-	protected abstract Table getMessage(Function<String, Label> labelFunction);
+	/**
+	 * What to do when the second choice is chosen. Sometimes this will be the same as the firstChoiceRunnable,
+	 * sometimes it'll be {@link Runnables#nullRunnable()} when the second button is a back button.
+	 * @return
+	 */
 	protected abstract Runnable getSecondChoiceRunnable();
+	
+	/**
+	 * Lets the child class set up the message at the top of the choice pop up in anyway they want (in a {@link Table})
+	 * @param labelFunction Creates a label in a different style depending on whether or not the popup is a warning
+	 * @return
+	 */
+	protected abstract Table getMessage(Function<String, Label> labelFunction);
+	
+	/**
+	 * Lets the child class optionally respond depending on which key is chosen
+	 * @param chosenKey The key that was chosen
+	 */
 	protected void setChosenKey(String chosenKey) {}
 
 	protected void setSizeAndBackground() {

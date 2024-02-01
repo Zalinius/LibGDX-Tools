@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.darzalcommon.state.Endable;
 import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 
 /**
  * @author DarZal
@@ -22,8 +22,8 @@ public abstract class GameScreen extends Group implements Screen, Endable, Input
 	
 	@Override
 	public void show() {
-		InputPrioritizer.addInputActor(this);
-		InputPrioritizer.claimPriority(this);
+		InputPriorityManager.addInputActor(this);
+		InputPriorityManager.claimPriority(this);
 	}
 	
 	@Override
@@ -45,8 +45,8 @@ public abstract class GameScreen extends Group implements Screen, Endable, Input
 
 	@Override
 	public void hide() {
-		InputPrioritizer.instance.clearChildren();
-		InputPrioritizer.releasePriority(this);
+		InputPriorityManager.instance.clearChildren();
+		InputPriorityManager.releasePriority(this);
 	}
 	
 	@Override

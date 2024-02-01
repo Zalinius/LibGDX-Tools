@@ -4,7 +4,7 @@ import com.codedisaster.steamworks.SteamFriends.PersonaChange;
 import com.codedisaster.steamworks.SteamFriendsCallback;
 import com.codedisaster.steamworks.SteamID;
 import com.codedisaster.steamworks.SteamResult;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 
 public class FriendsCallback implements SteamFriendsCallback {
 
@@ -17,7 +17,7 @@ public class FriendsCallback implements SteamFriendsCallback {
 	@Override
 	public void onGameOverlayActivated(boolean active) {
 		if (active) {
-			InputPrioritizer.pauseIfNeeded();
+			InputPriorityManager.pauseIfNeeded();
 		}
 	}
 

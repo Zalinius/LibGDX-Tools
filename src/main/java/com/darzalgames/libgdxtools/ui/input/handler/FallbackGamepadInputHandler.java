@@ -9,7 +9,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 
 public abstract class FallbackGamepadInputHandler extends GamepadInputHandler implements ControllerListener {
 
@@ -25,7 +25,7 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 
 	@Override
 	public void connected(Controller controller) {
-		InputPrioritizer.enterKeyboardMode();
+		InputPriorityManager.enterKeyboardMode();
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.scrollablemenu;
+package com.darzalgames.libgdxtools.ui.input.popup;
 
 import java.util.List;
 
@@ -6,12 +6,16 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
-import com.darzalgames.libgdxtools.ui.PopUp;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputPrioritizer;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.scrollablemenu.ScrollableMenu;
 
+/**
+ * It's a scrollable menu, and it's a pop up!
+ * @author DarZal
+ */
 public abstract class PopUpMenu extends ScrollableMenu implements PopUp {
 
 	protected PopUpMenu(boolean isVertical) {
@@ -20,13 +24,17 @@ public abstract class PopUpMenu extends ScrollableMenu implements PopUp {
 
 	protected PopUpMenu(boolean isVertical, List<KeyboardButton> entries, String finalButtonMessageKey) {
 		super(isVertical, entries);
-		menu.setFinalButton(UserInterfaceFactory.getButton(TextSupplier.getLine(finalButtonMessageKey), this::hideThis));
+		menu.replaceContents(entries, makeFinalButton(finalButtonMessageKey)); // Because the final button calls this::hideThis, we make it after the call to super()
+	}
+	
+	private KeyboardButton makeFinalButton(String finalButtonMessageKey) {
+		return UserInterfaceFactory.getButton(TextSupplier.getLine(finalButtonMessageKey), this::hideThis);
 	}
 
 	@Override
 	public void gainFocus() {
 		super.gainFocus();
-		InputPrioritizer.showPopup(this);
+		InputPriorityManager.showPopup(this);
 		float startX = this.getX();
 		float startY = this.getY();
 		this.setY(getStage().getHeight());
@@ -36,13 +44,13 @@ public abstract class PopUpMenu extends ScrollableMenu implements PopUp {
 	@Override
 	public void regainFocus() {
 		super.gainFocus();
-		InputPrioritizer.showPopup(this);
+		InputPriorityManager.showPopup(this);
 	}
 	
 	
 	@Override
 	public void hideThis() {
-		InputPrioritizer.releasePriority(this);
+		InputPriorityManager.releasePriority(this);
 		this.toFront();
 		this.addAction(Actions.sequence(
 				Actions.moveTo(getX(), getStage().getHeight(), 0.25f, Interpolation.circle),

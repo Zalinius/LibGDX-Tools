@@ -16,14 +16,12 @@ public abstract class GamepadInputHandler extends InputHandler {
 
 	protected enum ButtonState { HELD_DOWN, NOT_HELD_DOWN }
 
-	private final InputPriorityManager inputConsumer;
 	protected final Map<Input, ButtonState> buttonStates;
 	private static final boolean LOG_INPUT = false;
 	
 	protected abstract List<Input> getTrackedInputs();
 
 	protected GamepadInputHandler() {
-		inputConsumer = InputPriorityManager.instance;
 		buttonStates = new EnumMap<>(Input.class);
 		getTrackedInputs().forEach(input -> buttonStates.put(input, ButtonState.NOT_HELD_DOWN));
 	}
@@ -33,7 +31,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 			Gdx.app.log("GamepadInputHandler", "Just pressed:" + buttonKey);
 		}
 		setLatestInputMethod(InputMethod.GAMEPAD);
-		inputConsumer.consumeKeyInput(buttonKey);
+		InputPriorityManager.processKeyInput(buttonKey);
 	}
 
 	protected final void justReleased(Input buttonKey) {

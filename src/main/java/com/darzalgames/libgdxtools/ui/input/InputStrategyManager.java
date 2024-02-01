@@ -64,6 +64,7 @@ public class InputStrategyManager extends InputStrategy implements InputSubject,
 		List<InputObserver> toRemove = observers.stream().filter(o -> o == null || o.shouldBeUnregistered()).toList();
 		observers.removeAll(toRemove);
 		observers.stream().forEach(InputObserver::inputStrategyChanged);
+		InputPriorityManager.inputStrategyChanged();
 	}
 
 

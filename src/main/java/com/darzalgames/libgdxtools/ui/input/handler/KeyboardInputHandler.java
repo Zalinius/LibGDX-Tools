@@ -19,7 +19,7 @@ public abstract class KeyboardInputHandler extends InputHandler {
 	 * Sets up the listener for keyboard input, and maps various keybindings to others
 	 * @param inputPrioritizer The game's {@link InputPriorityManager}, which this class will forward keyboard input to
 	 */
-	protected KeyboardInputHandler(InputPriorityManager inputPrioritizer) {
+	protected KeyboardInputHandler() {
 		super();
 		
 		keysToAllow = getKeyWhitelist();
@@ -32,7 +32,7 @@ public abstract class KeyboardInputHandler extends InputHandler {
 				
 				if (keysToAllow.contains(input)) {
 					setLatestInputMethod(InputMethod.KEYBOARD);
-					inputPrioritizer.consumeKeyInput(input);	
+					InputPriorityManager.processKeyInput(input);	
 					return true;
 				}
 				

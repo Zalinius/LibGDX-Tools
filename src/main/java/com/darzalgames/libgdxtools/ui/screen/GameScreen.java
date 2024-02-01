@@ -45,7 +45,7 @@ public abstract class GameScreen extends Group implements Screen, Endable, Input
 
 	@Override
 	public void hide() {
-		InputPriorityManager.instance.clearChildren();
+		InputPriorityManager.clearChildren();
 		InputPriorityManager.releasePriority(this);
 	}
 	

@@ -23,6 +23,7 @@ import com.darzalgames.libgdxtools.steam.SteamConnection;
 import com.darzalgames.libgdxtools.ui.input.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.keyboard.MouseDetector;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.StageWithBackground;
@@ -47,7 +48,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected abstract Texture getCursorTexture();
 	protected abstract void setUpBeforeLoadingSave();
 	protected abstract void launchGame(boolean isNewSave);
-	protected abstract void setUpInputHandlers(SteamController steamController);
+	protected abstract GamepadInputHandler setUpInputHandlers(SteamController steamController);
 	protected abstract void quitGame();
 	
 	/**
@@ -98,7 +99,6 @@ public abstract class MainGame extends ApplicationAdapter {
 
 		setUpInputPrioritizer();
 		actorsThatDoNotPause.add(inputStrategyManager);
-		actorsThatDoNotPause.add(InputPriorityManager.instance);
 
 		setUpBeforeLoadingSave();
 		saveManager = makeSaveManager();
@@ -153,8 +153,8 @@ public abstract class MainGame extends ApplicationAdapter {
 		}
 		stage.addActor(inputStrategyManager);
 		InputPriorityManager.initialize();
-		inputStrategyManager.register(InputPriorityManager.instance);
-		setUpInputHandlers(steamController);
+		GamepadInputHandler gamepadInputHandler = setUpInputHandlers(steamController);
+		InputPriorityManager.setGamepadInputHandler(gamepadInputHandler, actorsThatDoNotPause);
 		InputPriorityManager.addInnerActorToStage(stage);
 		InputPriorityManager.setPopUpStage(popUpStage);
 		InputPriorityManager.setToggleFullscreenRunnable(windowResizer::toggleWindow);

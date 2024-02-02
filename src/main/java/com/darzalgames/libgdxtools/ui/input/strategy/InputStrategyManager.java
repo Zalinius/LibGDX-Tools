@@ -9,27 +9,26 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
-import com.darzalgames.libgdxtools.ui.input.*;
+import com.darzalgames.libgdxtools.ui.input.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
+import com.darzalgames.libgdxtools.ui.input.InputSubject;
 
 public class InputStrategyManager extends Actor implements InputStrategy, InputSubject, DoesNotPause {
 
-	private InputStrategy currentInputStrategy;
-	private InputStrategy previousInputStrategy;
-	private final InputStrategy mouseInputStrategy;
-	private final InputStrategy keyboardInputStrategy;
-	private final CustomCursorImage pixelCursor;
+	protected InputStrategy currentInputStrategy;
+	protected InputStrategy previousInputStrategy;
+	protected final InputStrategy mouseInputStrategy;
+	protected final InputStrategy keyboardInputStrategy;
 
-	public InputStrategyManager(CustomCursorImage pixelCursor, InputStrategy mouseInputStrategy, InputStrategy keyboardInputStrategy) {
+	public InputStrategyManager(InputStrategy mouseInputStrategy, InputStrategy keyboardInputStrategy) {
 		this.mouseInputStrategy = mouseInputStrategy;
 		this.keyboardInputStrategy = keyboardInputStrategy;
-		this.pixelCursor = pixelCursor;
 
 		observers = new ArrayList<>();
 		Gdx.graphics.setSystemCursor(SystemCursor.None);
 	}
 
 	public boolean setToKeyboardStrategy() {
-		pixelCursor.hide();
 		if (currentInputStrategy != keyboardInputStrategy) {
 			changeStrategy(keyboardInputStrategy);
 			return true;
@@ -38,7 +37,6 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 	}
 
 	public boolean setToMouseStrategy() {
-		pixelCursor.show();
 		if (currentInputStrategy != mouseInputStrategy) {
 			changeStrategy(mouseInputStrategy);
 			return true;
@@ -81,15 +79,10 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 	}
 
 	@Override
-	public boolean showMouseExclusiveButtons() {
-		return currentInputStrategy.showMouseExclusiveButtons();
+	public boolean showMouseExclusiveUI() {
+		return currentInputStrategy.showMouseExclusiveUI();
 	}
 	
-	@Override
-	public String getButtonInputHint(String hintKey) {
-		return currentInputStrategy.getButtonInputHint(hintKey);
-	}
-
 	public void saveCurrentStrategy() {
 		previousInputStrategy = currentInputStrategy;
 	}

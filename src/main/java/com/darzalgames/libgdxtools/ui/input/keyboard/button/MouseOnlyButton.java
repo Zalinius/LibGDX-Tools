@@ -23,7 +23,7 @@ public class MouseOnlyButton extends KeyboardButton implements InputObserver {
 	}
 	
 	private void setVisibilityBasedOnCurrentInputStrategy() {
-		this.getView().setVisible(MainGame.getInputStrategyManager().showMouseExclusiveButtons());
+		this.getView().setVisible(MainGame.getInputStrategyManager().showMouseExclusiveUI());
 	}
 
 	@Override

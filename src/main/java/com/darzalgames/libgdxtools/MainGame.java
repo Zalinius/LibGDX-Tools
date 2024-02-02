@@ -2,7 +2,6 @@ package com.darzalgames.libgdxtools;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -21,7 +20,6 @@ import com.darzalgames.libgdxtools.graphics.WindowResizer;
 import com.darzalgames.libgdxtools.preferencemanagers.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.SteamConnection;
-import com.darzalgames.libgdxtools.ui.input.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
@@ -44,19 +42,23 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected Stage stage;
 	protected Stage popUpStage;
 	private Stage backgroundStage;
-	private Stage cursorStage;
 	private Stage mouseDetectorStage;
+	private List<Stage> otherStages;
 
 	protected abstract void initializeAssets();
 	protected abstract SaveManager makeSaveManager();
-	protected abstract Texture getCursorTexture();
 	protected abstract void setUpBeforeLoadingSave();
 	protected abstract void launchGame(boolean isNewSave);
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 	protected abstract GamepadInputHandler makeGamepadInputHandler(SteamController steamController);
-	protected abstract Map<String, String> makeKeyboardButtonHints();
-	protected abstract Map<String, String> makeMouseButtonHints();
 	protected abstract void quitGame();
+
+	/**
+	 * @return Any other stages that the game needs (e.g. a custom stage for the cursor)
+	 */
+	protected List<Stage> makeOtherStages() {
+		return new ArrayList<>();
+	}
 	
 	/**
 	 * @return The background texture to be used in the "gutters" around the game, visible when the window size doesn't match the game's fixed resolution
@@ -66,7 +68,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	 * @return The fallback background texture to be used in the game area, visible when nothing else is covering it
 	 */
 	protected abstract Texture getMainStageBackgroundTexture();
-	
+
 	// TODO this can be removed once we figure out our long-standing goal of making Assets extendable
 	protected abstract String getPreferenceManagerName();
 
@@ -77,7 +79,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected PreferenceManager preferenceManager;
 
 	private SteamController steamController;
-	
+
 	private SaveManager saveManager;
 
 	private List<DoesNotPause> actorsThatDoNotPause;
@@ -102,9 +104,10 @@ public abstract class MainGame extends ApplicationAdapter {
 		makeBackgroundStage();
 		makePopUpStage();
 		makeMainStageAndMouseStages();
-		setUpInputForAllStages();
 
 		setUpInputPrioritizer();
+		otherStages = makeOtherStages();
+		setUpInputForAllStages();
 		actorsThatDoNotPause.add(inputStrategyManager);
 
 		setUpBeforeLoadingSave();
@@ -126,32 +129,31 @@ public abstract class MainGame extends ApplicationAdapter {
 	}
 
 	private void makePopUpStage() {
-		popUpStage = new KeyboardStage(new PixelPerfectViewport(width, height));
 		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
+		popUpStage = new KeyboardStage(new PixelPerfectViewport(width, height));
 	}
 
 	private void makeMainStageAndMouseStages() {
-		// Set up main game stage
 		mouseDetectorStage = new Stage(new ScreenViewport());
 		mouseDetectorStage.addActor(new MouseDetector());
+
+		// Set up main game stage
 		stage = new StageWithBackground(new PixelPerfectViewport(width, height), getMainStageBackgroundTexture());
-		cursorStage = new Stage(new ExtendViewport(width, height));
 	}
 
 	private void setUpInputForAllStages() {
-		CustomCursorImage customCursor = new CustomCursorImage(windowResizer::isWindowed, getCursorTexture());
-		cursorStage.addActor(customCursor);
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(mouseDetectorStage);
-		inputMultiplexer.addProcessor(cursorStage);
+		otherStages.forEach(inputMultiplexer::addProcessor);
 		inputMultiplexer.addProcessor(popUpStage);
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		inputStrategyManager = new InputStrategyManager(customCursor,
-				new MouseInputStrategy(makeMouseButtonHints()),
-				new KeyboardInputStrategy(makeKeyboardButtonHints()));
 	}
-	
+
+	protected InputStrategyManager makeInputStrategyManager() {
+		return new InputStrategyManager(new MouseInputStrategy(), new KeyboardInputStrategy());
+	}
+
 	private void setUpInputPrioritizer() {
 		SteamConnection.initialize();
 
@@ -160,6 +162,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		if (SteamAPI.isSteamRunning()) {
 			steamController.init();
 		}
+		inputStrategyManager = makeInputStrategyManager();
 		stage.addActor(inputStrategyManager);
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
 		GamepadInputHandler gamepadInputHandler = makeGamepadInputHandler(steamController);
@@ -199,7 +202,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	public static PreferenceManager getPreferenceManager() {
 		return instance.preferenceManager;
 	}
-	
+
 	/**
 	 * @return Gets the {@link SaveManager}, which is a concrete class in a full game
 	 */
@@ -222,15 +225,17 @@ public abstract class MainGame extends ApplicationAdapter {
 			} else {
 				stage.act();
 				stage.draw();
-			}	
+			}
 
 			popUpStage.getViewport().apply();
 			popUpStage.act();
 			popUpStage.draw();
 
-			cursorStage.getViewport().apply();
-			cursorStage.act();
-			cursorStage.draw();
+			otherStages.forEach(otherStage -> {
+				otherStage.getViewport().apply();
+				otherStage.act();
+				otherStage.draw();
+			});
 
 			mouseDetectorStage.getViewport().apply();
 			mouseDetectorStage.act();
@@ -253,7 +258,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		SteamConnection.dispose();
 
 		quitGame();
-		
+
 		super.dispose();
 	}
 
@@ -267,8 +272,10 @@ public abstract class MainGame extends ApplicationAdapter {
 		mouseDetectorStage.getCamera().update();
 		popUpStage.getViewport().update(width, height, true);
 		popUpStage.getCamera().update();
-		cursorStage.getViewport().update(width, height, true);
-		cursorStage.getCamera().update();
+		otherStages.forEach(otherStage -> {
+			otherStage.getViewport().update(width, height, true);
+			otherStage.getCamera().update();
+		});
 	}
 
 }

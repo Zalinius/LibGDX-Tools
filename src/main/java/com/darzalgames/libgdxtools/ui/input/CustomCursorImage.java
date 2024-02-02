@@ -8,9 +8,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
+import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.graphics.WindowResizer;
 
-public class CustomCursorImage extends Image implements DoesNotPause {
+public class CustomCursorImage extends Image implements DoesNotPause, InputObserver {
 	
 	private final Supplier<Boolean> checkIsWindowed;
 	
@@ -23,6 +24,7 @@ public class CustomCursorImage extends Image implements DoesNotPause {
 		super(cursorImage);
 		setTouchable(Touchable.disabled);
 		this.checkIsWindowed = checkIsWindowed;
+		MainGame.getInputStrategyManager().register(this);
 	}
 	
 	@Override
@@ -45,20 +47,18 @@ public class CustomCursorImage extends Image implements DoesNotPause {
 		setPosition(position.x, position.y - getHeight());
 	}
 
-	public void show() {
-		this.setVisibility(true);
-	}
-
-	public void hide() {
-		this.setVisibility(false);
-	}
-
-	private void setVisibility(boolean shouldBeVisible) {
-		setVisible(shouldBeVisible);
-	}
-
 	@Override
 	public void actWhilePaused(float delta) {
 		act(delta);
+	}
+
+	@Override
+	public void inputStrategyChanged() {
+		setVisible(MainGame.getInputStrategyManager().showMouseExclusiveUI());
+	}
+
+	@Override
+	public boolean shouldBeUnregistered() {
+		return false;
 	}
 }

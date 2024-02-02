@@ -13,6 +13,10 @@ import com.darzalgames.libgdxtools.ui.input.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.InputSubject;
 
+/**
+ * Tracks the current input strategy, and handles switching between them as needed.
+ * @author DarZal
+ */
 public class InputStrategyManager extends Actor implements InputStrategy, InputSubject, DoesNotPause {
 
 	protected InputStrategy currentInputStrategy;
@@ -28,6 +32,10 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 		Gdx.graphics.setSystemCursor(SystemCursor.None);
 	}
 
+	/**
+	 * Switch to the keyboard strategy, if it's not already the current strategy
+	 * @return Whether or not the change happened
+	 */
 	public boolean setToKeyboardStrategy() {
 		if (currentInputStrategy != keyboardInputStrategy) {
 			changeStrategy(keyboardInputStrategy);
@@ -36,6 +44,10 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 		return false;
 	}
 
+	/**
+	 * Switch to the mouse strategy, if it's not already the current strategy
+	 * @return Whether or not the change happened
+	 */
 	public boolean setToMouseStrategy() {
 		if (currentInputStrategy != mouseInputStrategy) {
 			changeStrategy(mouseInputStrategy);
@@ -83,11 +95,16 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 		return currentInputStrategy.showMouseExclusiveUI();
 	}
 	
+	/**
+	 * To be used before a call to {@link InputStrategyManager#revertToPreviousStrategy()}
+	 */
 	public void saveCurrentStrategy() {
 		previousInputStrategy = currentInputStrategy;
 	}
 
 	/**
+	 * NOTE: before messing around with something that changes modes, it's essential to call {@link InputStrategyManager#saveCurrentStrategy()}
+	 * <p>
 	 * We revert to the previous input strategy after a very short delay.
 	 * This is used when swapping between full screen and windowed mode,
 	 * because doing so moves the mouse and can take you out of gamepad/keyboard mode.

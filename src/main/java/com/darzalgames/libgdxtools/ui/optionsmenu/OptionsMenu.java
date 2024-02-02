@@ -22,31 +22,54 @@ import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 
 
+/**
+ * The base class for options menus (in-game versus when on the main menu)
+ * @author DarZal
+ */
 public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 	protected KeyboardButton optionsButton;
 	private final Supplier<KeyboardButton> makeWindowModeSelectBox;
 
-
 	protected abstract void setUpBackground();
-	protected abstract PopUp makeControlsPopUp();
-	protected abstract String getGameVersion();
-	protected abstract Collection<KeyboardButton> makeMiddleButtons();
-	protected abstract KeyboardButton makeButtonAboveQuitButton();
 	protected abstract Alignment getEntryAlignment();
 	protected abstract Alignment getMenuAlignment();
+	protected abstract String getGameVersion();
 	
-	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox) {
+	/**
+	 * @return A list of any game-specific options buttons (e.g. language, text speed, etc)
+	 */
+	protected abstract Collection<KeyboardButton> makeMiddleButtons();
+	
+	/**
+	 * @return An optional button that goes right above a quit button (e.g. in-game have a "return to main menu" button)
+	 */
+	protected abstract KeyboardButton makeButtonAboveQuitButton();
+	
+	
+	/**
+	 * @return A PopUp that explains the control schemes
+	 */
+	protected abstract PopUp makeControlsPopUp();
+	
+	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox, int bottomPadding) {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
 		setBounds(0, 0, MainGame.getWidth(), MainGame.getHeight());
-		defaults().padBottom(5);
+		defaults().padBottom(bottomPadding);
 	}
 	
+	/**
+	 * @return The button that opens this options menu
+	 */
 	public KeyboardButton getButton() {
 		return optionsButton;
 	}
 
+	/**
+	 * To be used by child classes to have buttons in the menu hide/show it (e.g. "return to main menu" should toggle screen visibility to false)
+	 * @param show
+	 */
 	protected void toggleScreenVisibility(boolean show) {
 		if (show) {
 			InputPriorityManager.pauseIfNeeded();
@@ -117,14 +140,16 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		addActor(versionTable);
 		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom() + 4).padRight(getPadRight());
 	}
-	
-	protected static final String ACCESSIBILITY_OPTIONS_KEY = "accessibility_options";
 
 	@Override
 	public void actWhilePaused(float delta) {
 		act(delta);
 	}
 
+	/**
+	 * A sub-menu that opens up within this menu (e.g. a sub-menu for sound options)
+	 * @author DarZal
+	 */
 	protected class NestedMenu extends PopUpMenu implements DoesNotPause {
 		
 		private final String buttonKey;

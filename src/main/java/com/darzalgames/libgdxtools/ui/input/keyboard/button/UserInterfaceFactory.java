@@ -16,8 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
@@ -144,8 +144,8 @@ public class UserInterfaceFactory {
 	 * since it will be drawn in the parent's coordinate system.
 	 */
 	public static void makeActorCentered(final Actor actor) {
-		actor.setPosition(MainGame.getWidth() / 2f - actor.getWidth() / 2f,
-				MainGame.getHeight() / 2f - actor.getHeight() / 2f);
+		actor.setPosition(GameInfo.getWidth() / 2f - actor.getWidth() / 2f,
+				GameInfo.getHeight() / 2f - actor.getHeight() / 2f);
 	}
 
 	public static KeyboardSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
@@ -223,7 +223,7 @@ public class UserInterfaceFactory {
 	private static boolean shouldButtonFlash(Button button) {
 		return KeyboardStage.isInTouchableBranch(button)
 				&& !button.isDisabled()
-				&& MainGame.getInputStrategyManager().shouldFlashButtons();
+				&& GameInfo.getInputStrategyManager().shouldFlashButtons();
 	}
 
 	private static Action getChangeStyleAfterDelayAction(Button button, ButtonStyle buttonStyle, float delay) {

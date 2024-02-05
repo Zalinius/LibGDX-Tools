@@ -17,24 +17,28 @@ import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 /**
  * @author DarZal
  * A class which holds a LibGDX {@link Skin} and provides convenient named accessors.
- *  
  */
 public class SkinManager {
 
 	protected final Skin skin;
 	
-	protected static final String UI_BORDERED_NINE = "uiBorderedNine";
+	// NinePatch
 	protected static final String CONFIRMATION_MENU_BACKGROUND = "confirmationMenuBackground";
+	protected static final String UI_BORDERED_NINE = "uiBorderedNine";
 
+	// LabelStyle
 	protected static final String DEFAULT_LABEL = "defaultLabelStyle";
 	protected static final String FLAVOR_TEXT_LABEL = "flavorTextLabelStyle";
 	protected static final String WARNING_LABEL = "warningLabelStyle";
 	protected static final String LABEL_WITH_BACKGROUND = "labelWithBackgroundStyle";
 
+	// SliderStyle
 	protected static final String SLIDER = "sliderStyle";
 
+	// CheckboxStyle
 	protected static final String CHECKBOX = "checkboxStyle";
 
+	// TextButtonStyle
 	protected static final String TEXT_BUTTON = "textButtonStyle";
 	protected static final String FLASHED_TEXT_BUTTON = "flashedTextButtonStyle";
 	protected static final String SNEAKY_LABEL_BUTTON = "sneakyLabelButtonStyle";
@@ -47,7 +51,7 @@ public class SkinManager {
 	protected SkinManager(Skin skin) {
 		super();
 		this.skin = skin;
-		ConfirmationMenu.setConfirmationBackground(skin.get(CONFIRMATION_MENU_BACKGROUND, Texture.class));
+		ConfirmationMenu.setConfirmationBackground(skin.get(CONFIRMATION_MENU_BACKGROUND, NinePatch.class));
 	}
 	
 	/**

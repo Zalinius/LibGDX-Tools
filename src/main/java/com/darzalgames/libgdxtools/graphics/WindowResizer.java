@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.data.Coordinate;
-import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.save.OSType;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
@@ -51,7 +51,7 @@ public abstract class WindowResizer {
 	 * and so LibGDX isn't ready to do any resizing yet
 	 */
 	public void initialize() {
-		String preferredModeString = MainGame.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY, ScreenMode.BORDERLESS.name());
+		String preferredModeString = GameInfo.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY, ScreenMode.BORDERLESS.name());
 		setMode(preferredModeString, false);
 		previousScreenMode = currentScreenMode;
 	}
@@ -82,9 +82,9 @@ public abstract class WindowResizer {
 	private void setMode(ScreenMode screenMode, boolean offerToRevert) {
 		previousScreenMode = currentScreenMode;
 		currentScreenMode = screenMode;
-		MainGame.getPreferenceManager().other().setStringPrefValue(SCREEN_MODE_KEY, currentScreenMode.name());
+		GameInfo.getPreferenceManager().other().setStringPrefValue(SCREEN_MODE_KEY, currentScreenMode.name());
 
-		MainGame.getInputStrategyManager().saveCurrentStrategy();
+		GameInfo.getInputStrategyManager().saveCurrentStrategy();
 		switch (currentScreenMode) {
 		case BORDERLESS:
 			switchToBorderless();
@@ -97,7 +97,7 @@ public abstract class WindowResizer {
 			break;
 		}
 		offerToRevert = offerToRevert && previousScreenMode != currentScreenMode; 
-		MainGame.getInputStrategyManager().revertToPreviousStrategy();
+		GameInfo.getInputStrategyManager().revertToPreviousStrategy();
 		setCurrentlySelectedInBox();
 		if (offerToRevert) {
 			ConfirmationMenu reverter = new WindowRevertCountdownConfirmationMenu(() -> revertCountdown.clearActions());
@@ -125,10 +125,10 @@ public abstract class WindowResizer {
 				windowModeLabelSupplier.get(),
 				availableModes,
 				selectedNewMode -> {
-					String previousMode = MainGame.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY);
+					String previousMode = GameInfo.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY);
 					if (!selectedNewMode.equalsIgnoreCase(previousMode)) {
 						setMode(selectedNewMode, true);
-						MainGame.getPreferenceManager().other().setStringPrefValue(SCREEN_MODE_KEY, currentScreenMode.name());
+						GameInfo.getPreferenceManager().other().setStringPrefValue(SCREEN_MODE_KEY, currentScreenMode.name());
 					}
 				}
 				);

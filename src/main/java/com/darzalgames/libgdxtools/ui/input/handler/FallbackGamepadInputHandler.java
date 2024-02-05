@@ -8,7 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
-import com.darzalgames.libgdxtools.MainGame;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.Input;
 
 public abstract class FallbackGamepadInputHandler extends GamepadInputHandler implements ControllerListener {
@@ -25,7 +25,7 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 
 	@Override
 	public void connected(Controller controller) {
-		MainGame.getInputStrategyManager().setToKeyboardStrategy();
+		GameInfo.getInputStrategyManager().setToKeyboardStrategy();
 	}
 
 	@Override

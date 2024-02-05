@@ -10,7 +10,7 @@ import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 /**
  * @author DarZal
  * A distinct screen in the game (e.g. the main menu, a particular phase of gameplay) which handles making sure
- * its child actors are visible and can be interacted with, and insures proper cleanup when the screen is left from. 
+ * its child actors are visible and can be interacted with, and ensures proper cleanup when the screen is left from. 
  */
 public abstract class GameScreen extends Group implements Screen, Endable, InputConsumerWrapper {
 

@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.darzalgames.libgdxtools.MainGame;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
@@ -62,7 +62,7 @@ public class InputPriorityManager {
 
 		// Set up the dark background screen that goes behind popups
 		// TODO Make a color tools think for this
-		Pixmap background = new Pixmap(MainGame.getWidth(), MainGame.getHeight(), Format.RGBA8888);
+		Pixmap background = new Pixmap(GameInfo.getWidth(), GameInfo.getHeight(), Format.RGBA8888);
 		Color color = Color.BLACK;
 		background.setColor(color.r, color.g, color.b, 0.5f);
 		background.fillRectangle(0, 0, background.getWidth(), background.getHeight());
@@ -86,7 +86,7 @@ public class InputPriorityManager {
 
 
 		// Enter the default strategy (mouse) during this initialization
-		MainGame.getInputStrategyManager().setToMouseStrategy();
+		GameInfo.getInputStrategyManager().setToMouseStrategy();
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class InputPriorityManager {
 			} else if (!inputConsumerStack.isEmpty()) { // Don't try to enter keyboard mode when someone is just pressing escape
 				inputConsumerStack.peek().consumeKeyInput(input);
 			}	
-		} else if (!inputConsumerStack.isEmpty() && !MainGame.getInputStrategyManager().setToKeyboardStrategy()) {
+		} else if (!inputConsumerStack.isEmpty() && !GameInfo.getInputStrategyManager().setToKeyboardStrategy()) {
 			inputConsumerStack.peek().consumeKeyInput(input);
 		}		
 	}
@@ -189,7 +189,7 @@ public class InputPriorityManager {
 
 	public static void inputStrategyChanged() {
 		if (!inputConsumerStack.isEmpty()) {
-			if (MainGame.getInputStrategyManager().shouldFocusFirstButton()) {
+			if (GameInfo.getInputStrategyManager().shouldFocusFirstButton()) {
 				if (!inputConsumerStack.isEmpty()) {
 					inputConsumerStack.peek().selectDefault();
 				}

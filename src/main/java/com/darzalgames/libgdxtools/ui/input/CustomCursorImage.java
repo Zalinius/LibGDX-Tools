@@ -8,8 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
-import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.graphics.WindowResizer;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 
 public class CustomCursorImage extends Image implements DoesNotPause, InputObserver {
 	
@@ -24,7 +24,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 		super(cursorImage);
 		setTouchable(Touchable.disabled);
 		this.checkIsWindowed = checkIsWindowed;
-		MainGame.getInputStrategyManager().register(this);
+		GameInfo.getInputStrategyManager().register(this);
 	}
 	
 	@Override
@@ -54,7 +54,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 
 	@Override
 	public void inputStrategyChanged() {
-		setVisible(MainGame.getInputStrategyManager().showMouseExclusiveUI());
+		setVisible(GameInfo.getInputStrategyManager().showMouseExclusiveUI());
 	}
 
 	@Override

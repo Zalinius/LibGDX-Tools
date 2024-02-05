@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.darzalgames.libgdxtools.MainGame;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class KeyboardStage extends Stage {
@@ -19,7 +19,7 @@ public class KeyboardStage extends Stage {
 
 	@Override
 	public void act(final float delta) {
-		if (!MainGame.getInputStrategyManager().shouldFlashButtons()) {
+		if (!GameInfo.getInputStrategyManager().shouldFlashButtons()) {
 			// if playing mouse-driven, use a normal stage
 			super.act(delta);
 		} else {

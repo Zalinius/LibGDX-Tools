@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
-import com.darzalgames.libgdxtools.MainGame;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 
@@ -43,7 +43,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 	}
 	
 	protected final void controllerDisconnected() {
-		MainGame.getInputStrategyManager().setToMouseStrategy();
+		GameInfo.getInputStrategyManager().setToMouseStrategy();
 		InputPriorityManager.pauseIfNeeded();
 	}
 

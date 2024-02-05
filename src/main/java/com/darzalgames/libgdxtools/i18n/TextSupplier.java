@@ -7,7 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.darzalgames.darzalcommon.data.BiMap;
-import com.darzalgames.libgdxtools.MainGame;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.save.SaveManager;
 
 public abstract class TextSupplier {
@@ -145,7 +145,7 @@ public abstract class TextSupplier {
 	public static Consumer<String> getLanguageChoiceResponder() {
 		return selectedNewLanguage -> {
 			useLanguageFromDisplayName(selectedNewLanguage);
-			MainGame.getSaveManager().save();
+			GameInfo.getSaveManager().save();
 		}; 
 	}
 	

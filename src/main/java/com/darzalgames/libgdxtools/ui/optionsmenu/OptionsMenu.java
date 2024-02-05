@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
-import com.darzalgames.libgdxtools.MainGame;
 import com.darzalgames.libgdxtools.i18n.TextSupplier;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.handler.SteamControllerManager;
@@ -55,7 +55,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox, int bottomPadding) {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
-		setBounds(0, 0, MainGame.getWidth(), MainGame.getHeight());
+		setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight());
 		defaults().padBottom(bottomPadding);
 	}
 	

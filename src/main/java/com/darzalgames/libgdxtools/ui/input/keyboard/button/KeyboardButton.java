@@ -9,10 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Pools;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.MainGame;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.GameObjectView;
-import com.darzalgames.libgdxtools.ui.ListableAsButton;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
 
@@ -22,7 +21,7 @@ import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
  * This is also the base class for other keyboard *buttons* such as checkboxes and sliders,
  * which allows them all to be put in a navigable menu together and treated the same
  */
-public class KeyboardButton implements GameObjectView, InputConsumerWrapper, ListableAsButton {
+public class KeyboardButton implements GameObjectView, InputConsumerWrapper {
 	private TextButton button;
 	private Supplier<Label> labelSupplier;
 	private Supplier<Cell<Label>> cellSupplier;
@@ -117,7 +116,7 @@ public class KeyboardButton implements GameObjectView, InputConsumerWrapper, Lis
 		if (!isFocused) {
 			event.setType(InputEvent.Type.exit);
 		}
-		if (isFocused && MainGame.getInputStrategyManager().shouldFlashButtons()) {
+		if (isFocused && GameInfo.getInputStrategyManager().shouldFlashButtons()) {
 			event.setType(InputEvent.Type.enter);
 		}
 		
@@ -204,11 +203,6 @@ public class KeyboardButton implements GameObjectView, InputConsumerWrapper, Lis
 	public void updateLabels(final String newText, final Image image) {
 		updateText(newText);
 		this.image.setDrawable(image.getDrawable());
-	}
-
-	@Override
-	public KeyboardButton getListableButton() {
-		return this;
 	}
 
 	/**

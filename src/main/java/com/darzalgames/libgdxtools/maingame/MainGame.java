@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools;
+package com.darzalgames.libgdxtools.maingame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +34,12 @@ import com.darzalgames.libgdxtools.ui.screen.PixelPerfectViewport;
 
 public abstract class MainGame extends ApplicationAdapter {
 
-	private final int width;
-	private final int height;
-
-	private InputStrategyManager inputStrategyManager;
+	// Values which are statically shared to the rest of the game by {@link GameInfo}
+	protected final int width;
+	protected final int height;
+	protected InputStrategyManager inputStrategyManager;
+	protected SaveManager saveManager;
+	protected PreferenceManager preferenceManager;
 
 	protected Stage stage;
 	protected Stage popUpStage;
@@ -52,6 +54,11 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 	protected abstract GamepadInputHandler makeGamepadInputHandler(SteamController steamController);
 	protected abstract void quitGame();
+	
+	protected GameScreen currentScreen;
+	protected WindowResizer windowResizer;
+	private SteamController steamController;
+	private List<DoesNotPause> actorsThatDoNotPause;
 
 	/**
 	 * @return Any other stages that the game needs (e.g. a custom stage for the cursor)
@@ -72,27 +79,14 @@ public abstract class MainGame extends ApplicationAdapter {
 	// TODO this can be removed once we figure out our long-standing goal of making Assets extendable
 	protected abstract String getPreferenceManagerName();
 
-	protected GameScreen currentScreen;
-
-	protected WindowResizer windowResizer;
-
-	protected PreferenceManager preferenceManager;
-
-	private SteamController steamController;
-
-	private SaveManager saveManager;
-
-	private List<DoesNotPause> actorsThatDoNotPause;
-
-	private static MainGame instance;
 
 	protected MainGame(int width, int height, WindowResizer windowResizer) {
 		super();
-		setInstance(this);
 		this.width = width;
 		this.height = height;
 		this.windowResizer = windowResizer;
 		actorsThatDoNotPause = new ArrayList<>();
+		GameInfo.initialize(this);
 	}
 
 	@Override
@@ -150,6 +144,10 @@ public abstract class MainGame extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
+	/**
+	 * @return An InputStrategyManager, in case the base class wants to extend its functionality (e.g. Quest Giver adds
+	 * button hints, and more specific gamepad handling may be wanted in the future)
+	 */
 	protected InputStrategyManager makeInputStrategyManager() {
 		return new InputStrategyManager(new MouseInputStrategy(), new KeyboardInputStrategy());
 	}
@@ -169,45 +167,6 @@ public abstract class MainGame extends ApplicationAdapter {
 		actorsThatDoNotPause.add(keyboardInputHandler);
 		actorsThatDoNotPause.add(gamepadInputHandler);
 		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler);
-	}
-
-	private static void setInstance(MainGame mainGame) {
-		MainGame.instance = mainGame;
-	}
-
-	/**
-	 * @return The width (in art "pixels") of the logical game window
-	 */
-	public static int getWidth() {
-		return instance.width;
-	}
-	/**
-	 * @return The height (in art "pixels") of the logical game window
-	 */
-	public static int getHeight() {
-		return instance.height;
-	}
-
-	/**
-	 * @return Gets the {@link InputStrategyManager}, useful to do things like un/registering input-sensitive labels,
-	 * checking what the current input method is, changing input modes, etc.
-	 */
-	public static InputStrategyManager getInputStrategyManager() {
-		return instance.inputStrategyManager;
-	}
-
-	/**
-	 * @return Gets the {@link PreferenceManager}, useful to access the more specific preference managers (such as sound, or more temporary "other" managers)
-	 */
-	public static PreferenceManager getPreferenceManager() {
-		return instance.preferenceManager;
-	}
-
-	/**
-	 * @return Gets the {@link SaveManager}, which is a concrete class in a full game
-	 */
-	public static SaveManager getSaveManager() {
-		return instance.saveManager;
 	}
 
 	@Override

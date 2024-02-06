@@ -5,7 +5,9 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
@@ -35,7 +37,7 @@ public class UserInterfaceFactory {
 	
 	protected UserInterfaceFactory() {}
 
-	protected static void initialize(SkinManager skinManager) {
+	public static void initialize(SkinManager skinManager) {
 		UserInterfaceFactory.skinManager = skinManager;
 		quitGameRunnable = Gdx.app::exit;
 	}
@@ -79,16 +81,16 @@ public class UserInterfaceFactory {
 	 * @return
 	 */
 	public static KeyboardButton getListableLabel(final String text) {
-		// a bit of hack so that a label-like button can be stored in a list of buttons but not be touchable
+		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
 		TextButton textButton = new TextButton(text, skinManager.getSneakyLableButtonStyle());
 		textButton.setName(text);
 		KeyboardButton listableButton = new KeyboardButton(textButton, null, Runnables.nullRunnable());
-		listableButton.setTouchable(Touchable.disabled);
+		listableButton.setDisabled(true);
 		return listableButton;
 	}
 
 	/**
-	 * Makes a spacer which can be listed among other buttons, but isn't intractable and which will
+	 * Makes a spacer which can be listed among other buttons, but isn't interactable and which will
 	 * expand out to fill any available space in the menu
 	 * @return
 	 */
@@ -99,7 +101,7 @@ public class UserInterfaceFactory {
 	}
 
 	public static boolean isSpacer(KeyboardButton button) {
-		return !button.getView().isTouchable() && button.isBlank();
+		return button.getView().isDisabled() && button.isBlank();
 	}
 
 
@@ -175,8 +177,30 @@ public class UserInterfaceFactory {
 
 	private static final String QUIT_GAME_KEY = "quit_game";
 
+	/**
+	 * @param buttonText
+	 * @return A quit button, with a default English text label if not otherwise to find
+	 */
+	public static KeyboardButton getQuitGameButton(String buttonText) {
+		return getButton(buttonText, quitGameRunnable);
+	}
+	
+	/**
+	 * @return A quit button, with a default English text label if not otherwise to find
+	 */
 	public static KeyboardButton getQuitGameButton() {
-		return getButton(TextSupplier.getLine(QUIT_GAME_KEY), quitGameRunnable);
+		return getQuitGameButton(getQuitButtonString());
+	}
+	
+	private static String getQuitButtonString() {
+		String text;
+		try {
+			text = TextSupplier.getLine(QUIT_GAME_KEY);
+		} catch (NullPointerException e) {
+			// if there's no internationalization bundle
+			text = "Quit";
+		}
+		return text;
 	}
 
 	public static KeyboardButton getQuitGameButtonWithWarning(Runnable runnable) {
@@ -186,7 +210,7 @@ public class UserInterfaceFactory {
 					QUIT_GAME_KEY, 
 					quitGameRunnable::run);
 		};
-		return getButton(TextSupplier.getLine(QUIT_GAME_KEY), quitWithConfirmation);
+		return getButton(getQuitButtonString(), quitWithConfirmation);
 	}
 
 	protected static void makeBackgroundFlashing(Button button, ButtonStyle mainButtonStyle, ButtonStyle flashedButtonStyle) {
@@ -215,6 +239,7 @@ public class UserInterfaceFactory {
 				super.exit(event, x, y, pointer, toActor);
 				if (KeyboardStage.isHoverEvent(pointer)) {
 					button.clearActions();
+					button.setStyle(mainButtonStyle);
 				}
 			}
 		});

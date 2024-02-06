@@ -46,7 +46,7 @@ public abstract class WindowResizer {
 	Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase()); 
 
 	/**
-	 * Initialized the WindowResizer, setting the window to the preferred mode based on the user's history
+	 * Initialize the WindowResizer, setting the window to the preferred mode based on the user's history
 	 * We do this in initialize() rather than a constructor because this object is created at the same time as the entire game,
 	 * and so LibGDX isn't ready to do any resizing yet
 	 */
@@ -71,8 +71,17 @@ public abstract class WindowResizer {
 	private void setMode(String screenMode, boolean offerToRevert) {
 		ScreenMode preferredMode = ScreenMode.BORDERLESS;
 		for (int i = 0; i < ScreenMode.values().length; i++) {
+
+			String translatedPref;
+			try {
+				translatedPref = windowModeOptionTranslator.apply(ScreenMode.values()[i]);
+			} catch (NullPointerException e) {
+				// NullPointer if there is no internationalization bundle (e.g. a new project, or the LibGDX TestGame)
+				translatedPref = ScreenMode.BORDERLESS.name();
+			}
+			
 			if (screenMode.equalsIgnoreCase(ScreenMode.values()[i].name()) //English
-					|| screenMode.equalsIgnoreCase(windowModeOptionTranslator.apply(ScreenMode.values()[i]))) { //French
+					|| screenMode.equalsIgnoreCase(translatedPref)) { //French
 				preferredMode = ScreenMode.values()[i];
 			}
 		}

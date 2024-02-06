@@ -49,14 +49,16 @@ public class KeyboardButton implements GameObjectView, InputConsumerWrapper {
 		this.alignment = Alignment.CENTER;
 
 		if (image != null) {
-			float startWidth = button.getWidth();
 			Label label = labelSupplier.get();
 			button.clearChildren();
 
-			button.add(image).padRight(3);
+			int sidePadding = label.getText().toString().isBlank() ? 0 : 3;
+			float startWidth = label.getText().toString().isBlank() ? 0 : button.getWidth();
+
+			button.add(image).padRight(sidePadding);
 			button.add(label);
 			
-			button.setWidth(startWidth + image.getWidth() + 3);
+			button.setWidth(startWidth + image.getWidth() + sidePadding);
 		}
 		
 		labelSupplier.get().setTouchable(Touchable.disabled);

@@ -125,6 +125,9 @@ public class ScrollableUI implements InputConsumerWrapper {
 					table.getCell(button).expandX();
 				}
 			}
+			if (button.isDisabled()) {
+				interactableEntries.remove(entry);				
+			}
 		}
 
 		if (GameInfo.getInputStrategyManager().shouldFocusFirstButton() && !pressButtonOnEntryChanged) {
@@ -140,7 +143,7 @@ public class ScrollableUI implements InputConsumerWrapper {
 			}
 			currentButton = interactableEntries.get(currentEntryIndex);
 		} else {
-			currentButton = null; // this list is empty, uhhh...?
+			currentButton = null; // this list is empty, uhhh...? (though it may just contain unclickable buttons or a spacer)
 		}
 	}
 
@@ -154,7 +157,9 @@ public class ScrollableUI implements InputConsumerWrapper {
 				currentButton.setFocused(false);
 			}
 			findCurrentButton();
-			currentButton.setFocused(true);
+			if (currentButton != null) {
+				currentButton.setFocused(true);				
+			}
 		}
 	}
 
@@ -261,7 +266,9 @@ public class ScrollableUI implements InputConsumerWrapper {
 	public void focusCurrent() {
 		interactableEntries.stream().forEach(e->e.setFocused(false));
 		findCurrentButton();
-		currentButton.setFocused(true);
+		if (currentButton != null) {
+			currentButton.setFocused(true);			
+		}
 	}
 
 	public float getPrefHeight() {

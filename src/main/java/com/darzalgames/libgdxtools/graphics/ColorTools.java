@@ -1,6 +1,8 @@
 package com.darzalgames.libgdxtools.graphics;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 
 public class ColorTools {
 	public static final int MIN_COLOR_CHANNEL_VALUE = 0;
@@ -32,5 +34,47 @@ public class ColorTools {
 
 	protected ColorTools() {
 		throw new IllegalStateException("Utility class");
+	}
+
+	/**
+	 * Get a square colored texture with width and height both being size "size"
+	 * @param color
+	 * @param size
+	 * @return
+	 */
+	public static Texture getColoredTexture(Color color, int size) {
+		return getColoredTexture(color, size, size);
+	}
+
+	/**
+	 * Get a colored texture with the specified width and height
+	 * @param color
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	public static Texture getColoredTexture(Color color, int width, int height) {
+		Pixmap coloredMap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+		coloredMap.setColor(color);
+		coloredMap.fillRectangle(0, 0, width, height);
+		Texture coloredTexture = new Texture(coloredMap);
+		coloredMap.dispose();
+		return coloredTexture;
+	}
+	
+	public static Texture getDefaultCursor() {
+		Pixmap coloredMap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
+		coloredMap.setColor(Color.WHITE);
+		coloredMap.fillRectangle(2, 2, 1, 1);
+		coloredMap.fillRectangle(3, 3, 2, 2);
+		coloredMap.fillRectangle(4, 4, 3, 3);
+		coloredMap.setColor(Color.BLACK);
+		coloredMap.drawLine(0, 0, 8, 4);
+		coloredMap.drawLine(0, 0, 4, 8);
+		coloredMap.drawLine(4, 8, 8, 4);
+		coloredMap.drawLine(6, 6, 9, 9);
+		Texture coloredTexture = new Texture(coloredMap);
+		coloredMap.dispose();
+		return coloredTexture;
 	}
 }

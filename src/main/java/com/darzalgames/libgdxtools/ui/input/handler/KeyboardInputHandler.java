@@ -17,7 +17,6 @@ public abstract class KeyboardInputHandler extends InputHandler {
 
 	/**
 	 * Sets up the listener for keyboard input, and maps various keybindings to others
-	 * @param inputPrioritizer The game's {@link InputPriorityManager}, which this class will forward keyboard input to
 	 */
 	protected KeyboardInputHandler() {
 		super();

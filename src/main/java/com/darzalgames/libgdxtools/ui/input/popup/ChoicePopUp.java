@@ -1,14 +1,10 @@
 package com.darzalgames.libgdxtools.ui.input.popup;
 
 import java.util.List;
-import java.util.function.Function;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.i18n.TextSupplier;
 import com.darzalgames.libgdxtools.ui.Alignment;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 
@@ -19,30 +15,18 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory
  */
 public abstract class ChoicePopUp extends PopUpMenu {
 
-	protected final String messageKey;
-	private final String firstChoiceKey;
-	private final String secondChoiceKey;
 	protected final Runnable firstChoiceRunnable;
 	private final boolean isSecondButtonBack;
-	protected final boolean isWarning;
 
-	protected ChoicePopUp(String messageKey, String firstChoiceKey, String secondChoiceKey, Runnable firstChoiceRunnable) {
-		this(messageKey, firstChoiceKey, secondChoiceKey, firstChoiceRunnable, false, false, false);
-	}
-
-	protected ChoicePopUp(String messageKey, String firstChoiceKey, String secondChoiceKey, Runnable firstChoiceRunnable,
-			boolean isVertical, boolean isSecondButtonBack, boolean isWarning) {
+	protected ChoicePopUp(Runnable firstChoiceRunnable,	boolean isVertical, boolean isSecondButtonBack) {
 		super(isVertical);
-		this.messageKey = messageKey;
-		this.firstChoiceKey = firstChoiceKey;
-		this.secondChoiceKey = secondChoiceKey;
 		this.firstChoiceRunnable = firstChoiceRunnable;
 		this.isSecondButtonBack = isSecondButtonBack;
-		this.isWarning = isWarning;
-
-		InputPriorityManager.claimPriority(this);
 	}
 
+	protected abstract KeyboardButton getFirstChoiceButton();
+	protected abstract KeyboardButton getSecondChoiceButton();
+	
 	/**
 	 * What to do when the second choice is chosen. Sometimes this will be the same as the firstChoiceRunnable,
 	 * sometimes it'll be {@link Runnables#nullRunnable()} when the second button is a back button.
@@ -51,11 +35,9 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	protected abstract Runnable getSecondChoiceRunnable();
 	
 	/**
-	 * Lets the child class set up the message at the top of the choice pop up in anyway they want (in a {@link Table})
-	 * @param labelFunction Creates a label in a different style depending on whether or not the popup is a warning
-	 * @return
+	 * @return the message at the top of the choice pop up, set up by the child class in anyway they want (in a {@link Table})
 	 */
-	protected abstract Table getMessage(Function<String, Label> labelFunction);
+	protected abstract Table getMessage();
 	
 	/**
 	 * Lets the child class optionally respond depending on which key is chosen
@@ -73,23 +55,12 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		setSizeAndBackground();
 		UserInterfaceFactory.makeActorCentered(this);
 
-		Function<String, Label> labelFunction = isWarning ? UserInterfaceFactory::getWarningLabel : UserInterfaceFactory::getLabelWithBackground;
-		add(getMessage(labelFunction)).grow();
+		add(getMessage()).grow();
 		row();
 
 
-		Runnable firstAndHideRunnable = () -> {
-			setChosenKey(firstChoiceKey);
-			hideThis();
-			firstChoiceRunnable.run();
-		};
-		Runnable secondAndHideRunnable = () -> {
-			setChosenKey(secondChoiceKey);
-			hideThis();
-			getSecondChoiceRunnable().run();
-		};
-		KeyboardButton firstButton = UserInterfaceFactory.getButton(TextSupplier.getLine(firstChoiceKey), firstAndHideRunnable); 
-		KeyboardButton secondButton = UserInterfaceFactory.getButton(TextSupplier.getLine(secondChoiceKey), secondAndHideRunnable);
+		KeyboardButton firstButton = getFirstChoiceButton(); 
+		KeyboardButton secondButton = getSecondChoiceButton();
 		if (isSecondButtonBack) {
 			menu.replaceContents(List.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
 		} else {

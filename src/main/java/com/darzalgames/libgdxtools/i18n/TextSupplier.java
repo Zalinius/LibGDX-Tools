@@ -69,6 +69,13 @@ public abstract class TextSupplier {
 		
 		try {
 			return baseBundle.format(key, args).toUpperCase();
+		} catch (NullPointerException e) {
+			// A game that doesn't (yet?) have any bundles just returns the key
+			if (throwExceptions) {
+				throw e;
+			} else {
+				return key;
+			}
 		} catch (MissingResourceException e) {
 			Gdx.app.error("TextSupplier", "Key " + key + " really isn't found anywhere!");
 			if (throwExceptions) {

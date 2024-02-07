@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class KeyboardStage extends Stage {
@@ -27,6 +28,12 @@ public class KeyboardStage extends Stage {
 			// and just call act() on our actors like in Stage
 			getRoot().act(delta);
 		}
+	}
+	
+	@Override
+	public boolean scrolled(float amountX, float amountY) {
+		InputPriorityManager.receiveScrollInput(amountY);
+		return true;
 	}
 
 	/*

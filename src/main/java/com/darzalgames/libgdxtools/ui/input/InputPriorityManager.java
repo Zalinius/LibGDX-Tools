@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -83,6 +84,15 @@ public class InputPriorityManager {
 		// Add the inner group to the stage
 		mainStage.addActor(group);
 		mainStage.setKeyboardFocus(keyboardInputHandler);
+		
+		group.addAction(Actions.forever(new Action() {
+
+			@Override
+			public boolean act(float delta) {
+				InputPriorityManager.timeSinceScroll += delta;
+				return false;
+			}
+		}));
 
 
 		// Enter the default strategy (mouse) during this initialization
@@ -145,7 +155,29 @@ public class InputPriorityManager {
 		}
 		InputPriorityManager.showDarkScreen(popup.getZIndex(), popup.canDismiss());
 	}
+	
+	private static float timeSinceScroll = 0;
+	private static boolean hasFinishedScrolling = true;
+	/**
+	 * This can handle scrolling both from a mouse wheel or something more like a tablet or touchpad.
+	 * @param amount The amount of scrolling on the y-axis
+	 */
+	public static void receiveScrollInput(float amount) {
+		// It seems the mouse wheel returns either 1 or -1, and a tablet returns any value between these two. 
+		// So, I'm using a threshold of 0.1f for the tablet/touchpad, and an input delay of 0.15f
+System.out.println(amount);
+		if (!inputConsumerStack.isEmpty()) {
+			if (Math.abs(amount) < 0.1f || timeSinceScroll > 0.15f) {
+				hasFinishedScrolling = true;
+			}
 
+			if (Math.abs(amount) > 0.1f && hasFinishedScrolling) {
+				timeSinceScroll = 0;
+				inputConsumerStack.peek().consumeKeyInput(amount < 0 ? Input.SCROLL_UP : Input.SCROLL_DOWN);
+				hasFinishedScrolling = false;
+			}
+		}
+	}
 
 	/**
 	 * @param inputConsumer The thing to be put at the top of the input stack

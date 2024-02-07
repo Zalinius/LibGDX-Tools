@@ -26,7 +26,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 		List<KeyboardButton> entryButtons = entries.stream().map(entry -> UserInterfaceFactory.getButton(entry,
 				() -> {
 					options.hideThis();
-					displayLabel.setText(entry);
+					setSelected(entry);
 					action.accept(entry);
 				}
 				)).toList();

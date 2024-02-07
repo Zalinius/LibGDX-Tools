@@ -165,7 +165,6 @@ public class InputPriorityManager {
 	public static void receiveScrollInput(float amount) {
 		// It seems the mouse wheel returns either 1 or -1, and a tablet returns any value between these two. 
 		// So, I'm using a threshold of 0.1f for the tablet/touchpad, and an input delay of 0.15f
-System.out.println(amount);
 		if (!inputConsumerStack.isEmpty()) {
 			if (Math.abs(amount) < 0.1f || timeSinceScroll > 0.15f) {
 				hasFinishedScrolling = true;

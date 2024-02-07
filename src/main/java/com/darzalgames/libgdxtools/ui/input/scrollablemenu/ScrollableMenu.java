@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 
 /**
  * The actor that holds a {@link ScrollableUI} and handles how it looks and is interacted with.
@@ -114,10 +115,15 @@ public abstract class ScrollableMenu extends Table implements InputConsumer {
 	 * @param entry The string of the entry that you want to go to
 	 */
 	public void goTo(String entry) {
+		int nonInteractablesToIgnore = 0;
 		for (int i = 0; i < menu.allEntries.size(); i++) {
-			if (menu.allEntries.get(i).doesTextMatch(entry)) {
-				menu.goTo(i);
+			KeyboardButton thisEntry = menu.allEntries.get(i); 
+			if (thisEntry.doesTextMatch(entry)) {
+				menu.goTo(i - nonInteractablesToIgnore);
 				return;
+			}
+			else if (thisEntry.getView().isDisabled() || UserInterfaceFactory.isSpacer(thisEntry)) {
+				nonInteractablesToIgnore++;
 			}
 		}
 		menu.goTo(0);

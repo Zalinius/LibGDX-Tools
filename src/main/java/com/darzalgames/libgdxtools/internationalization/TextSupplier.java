@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.i18n;
+package com.darzalgames.libgdxtools.internationalization;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -62,14 +62,14 @@ public abstract class TextSupplier {
 	public static String getLine(String key, Object... args) {
 		try { 
 			if (topBundle != null) {
-				return topBundle.format(key, args).toUpperCase();
+				return topBundle.format(key, args);
 			}
 		} catch (MissingResourceException e) {
 			// This will catch any keys that belong in the baseBundle, or any undefined keys
 		}
 		
 		try {
-			return baseBundle.format(key, args).toUpperCase();
+			return baseBundle.format(key, args);
 		} catch (NullPointerException e) {
 			// A game that doesn't (yet?) have any bundles just returns the key
 			if (throwExceptions) {
@@ -155,5 +155,13 @@ public abstract class TextSupplier {
 			useLanguageFromDisplayName(selectedNewLanguage);
 			GameInfo.getSaveManager().save();
 		}; 
+	}
+	
+	/**
+	 * Clear out the base in top bundles, mainly useful for testing.
+	 */
+	protected static void clearBundles() {
+		baseBundle = null;
+		topBundle = null;
 	}
 }

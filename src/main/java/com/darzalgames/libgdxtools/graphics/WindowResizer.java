@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.data.Coordinate;
-import com.darzalgames.libgdxtools.i18n.TextSupplier;
+import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.save.OSType;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;

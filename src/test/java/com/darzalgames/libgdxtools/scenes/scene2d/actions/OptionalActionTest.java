@@ -14,6 +14,8 @@ class OptionalActionTest {
 
 	@Test
 	void act_whenOptionalActionHasSupplierReturningFalse_hasNoEffect() throws Exception {
+		InstantRepeatAction repeatAction = new InstantRepeatAction();
+		repeatAction.setTotalCount(10);
 		AtomicBoolean spy = new AtomicBoolean(false);
 		RunnableAction runnableAction = new RunnableAction();
 		runnableAction.setRunnable(() -> spy.set(true));

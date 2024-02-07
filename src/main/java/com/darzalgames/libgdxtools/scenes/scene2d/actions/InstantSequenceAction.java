@@ -30,7 +30,11 @@ public class InstantSequenceAction extends ParallelActionBest {
 				if (actor == null) return true; // This action was removed.
 				index++;
 				if (index >= actions.size()) return true;
-				act(delta); // THIS is the change.
+				
+				boolean done = act(delta); // THIS is the change.
+				if (done) {
+					return true;
+				}
 			}
 			return false;
 		} finally {

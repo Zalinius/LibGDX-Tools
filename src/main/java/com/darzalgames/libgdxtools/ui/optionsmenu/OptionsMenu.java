@@ -28,6 +28,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 	protected KeyboardButton optionsButton;
 	private final Supplier<KeyboardButton> makeWindowModeSelectBox;
+	private final boolean showWarningBeforeQuitting;
 
 	protected abstract void setUpBackground();
 	protected abstract Alignment getEntryAlignment();
@@ -61,9 +62,10 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	 */
 	protected abstract PopUp makeControlsPopUp();
 
-	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox, int bottomPadding) {
+	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox, int bottomPadding, boolean showWarningBeforeQuitting) {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
+		this.showWarningBeforeQuitting = showWarningBeforeQuitting;
 		setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight());
 		defaults().padBottom(bottomPadding);
 	}
@@ -126,7 +128,11 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		}
 
 		// Quit game button
-		menuButtons.add(UserInterfaceFactory.getQuitGameButtonWithWarning(() -> optionsButton.setTouchable(Touchable.disabled)));
+		KeyboardButton quitButton = UserInterfaceFactory.getQuitGameButton();
+		if (showWarningBeforeQuitting) {
+			quitButton = UserInterfaceFactory.getQuitGameButtonWithWarning(() -> optionsButton.setTouchable(Touchable.disabled));
+		}
+		menuButtons.add(quitButton);
 
 		// Back button
 		KeyboardButton backButton = UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));

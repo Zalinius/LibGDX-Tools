@@ -37,7 +37,7 @@ public class ColorTools {
 	}
 
 	/**
-	 * Get a square colored texture with width and height both being size "size"
+	 * Get a square colored texture with width and height both being "size" long
 	 * @param color
 	 * @param size
 	 * @return
@@ -62,6 +62,9 @@ public class ColorTools {
 		return coloredTexture;
 	}
 	
+	/**
+	 * @return A texture for a black and white cursor
+	 */
 	public static Texture getDefaultCursor() {
 		Pixmap coloredMap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
 		coloredMap.setColor(Color.WHITE);

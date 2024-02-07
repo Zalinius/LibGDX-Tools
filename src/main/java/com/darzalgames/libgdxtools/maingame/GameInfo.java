@@ -14,7 +14,10 @@ public class GameInfo {
 	
 	private GameInfo() {}
 	
-	public static void initialize(MainGame mainGame) {
+	/**
+	 * @param mainGame The game that this class will be sharing info from
+	 */
+	public static void setMainGame(MainGame mainGame) {
 		GameInfo.mainGame = mainGame;
 	}
 	

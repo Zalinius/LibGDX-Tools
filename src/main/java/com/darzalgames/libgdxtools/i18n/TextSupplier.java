@@ -53,7 +53,8 @@ public abstract class TextSupplier {
 	}
 
 	/**
-	 * This will first check the more transitive top bundle (e.g. a scenario in Quest Giver), then the base bundle (text used all the time in the game, such as menus)
+	 * This will first check the more transitive top bundle (e.g. a scenario in Quest Giver), then the base bundle (text used all the time in the game, such as menus).
+	 * If there is no bundle, the supplied key is returned unchanged.
 	 * @param key The localization key, must be an exact match to a key in the bundle file
 	 * @param args Any optional arguments to supply to the localized sentence, e.g. character names, a number for pluralization, etc
 	 * @return The localized line of text
@@ -64,7 +65,7 @@ public abstract class TextSupplier {
 				return topBundle.format(key, args).toUpperCase();
 			}
 		} catch (MissingResourceException e) {
-			// This will catch any keys that belong in the baseBundle (text common to all adventures)
+			// This will catch any keys that belong in the baseBundle, or any undefined keys
 		}
 		
 		try {
@@ -123,7 +124,7 @@ public abstract class TextSupplier {
 	}
 
 	/**
-	 * The "top bundle" to be used, this is a temporary bundle meant to be changed as you go to different parts of a game (e.g. a scenario in Quest Giver)
+	 * The "top bundle" to be used: this is a temporary bundle meant to be changed as you go to different parts of a game (e.g. different scenarios in Quest Giver)
 	 * @param fileHandle The file handle from Assets
 	 */
 	public static void useTopBundle(FileHandle fileHandle) {
@@ -140,26 +141,19 @@ public abstract class TextSupplier {
 	
 	/** 
 	 * ONLY TO BE USED BY THE {@link SaveManager}
-	 * @return
+	 * @return The language string for the current locale, this string ain't pretty (e.g. since English is the default bundle, it returns "", French is "fr")
 	 */
-	public static Locale getLocale() {
-		return locale;
+	public static String getLocaleForSaveManager() {
+		return locale.getLanguage();
 	}
 
 	/**
-	 * @return A Consumer that dictates how this system responds to a change in game language
+	 * @return A Consumer that dictates how this system responds to a change in the game language
 	 */
 	public static Consumer<String> getLanguageChoiceResponder() {
 		return selectedNewLanguage -> {
 			useLanguageFromDisplayName(selectedNewLanguage);
 			GameInfo.getSaveManager().save();
 		}; 
-	}
-	
-	/**
-	 * To be used for localized images (until I think of a better solution)
-	 */
-	public static boolean isInEnglish() {
-		return getLocale().equals(Locale.ROOT);
 	}
 }

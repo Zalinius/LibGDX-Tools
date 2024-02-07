@@ -21,40 +21,36 @@ public class TextChoicePopUp extends ChoicePopUp {
 	protected final String messageKey;
 	private final String firstChoiceKey;
 	private final String secondChoiceKey;
-	protected final Runnable firstChoiceRunnable;
 	private final boolean isWarning;
 
 	protected TextChoicePopUp(String messageKey, String firstChoiceKey, Runnable firstChoiceRunnable, 
-			String secondChoiceKey, boolean isSecondButtonBack, boolean isWarning) {
-		super(firstChoiceRunnable, false, isSecondButtonBack);
+			String secondChoiceKey, boolean isVertical, boolean isSecondButtonBack, boolean isWarning) {
+		super(firstChoiceRunnable, isVertical, isSecondButtonBack);
 		this.messageKey = messageKey;
 		this.firstChoiceKey = firstChoiceKey;
 		this.secondChoiceKey = secondChoiceKey;
-		this.firstChoiceRunnable = firstChoiceRunnable;
 		this.isWarning = isWarning;
 
 		InputPriorityManager.claimPriority(this);
 	}
 
-	// TODO Compress these two in2 one
 	@Override
 	protected KeyboardButton getFirstChoiceButton() {
-		Runnable firstAndHideRunnable = () -> {
-			setChosenKey(firstChoiceKey);
-			hideThis();
-			firstChoiceRunnable.run();
-		};
-		return UserInterfaceFactory.getButton(TextSupplier.getLine(firstChoiceKey), firstAndHideRunnable); 
+		return getChoiceButton(firstChoiceKey, firstChoiceRunnable);
 	}
 
 	@Override
 	protected KeyboardButton getSecondChoiceButton() {
-		Runnable secondAndHideRunnable = () -> {
-			setChosenKey(secondChoiceKey);
+		return getChoiceButton(secondChoiceKey, () -> getSecondChoiceRunnable().run());
+	}
+	
+	private KeyboardButton getChoiceButton(String key, Runnable toRun) {
+		Runnable chooseAndHideRunnable = () -> {
+			setChosenKey(key);
 			hideThis();
-			getSecondChoiceRunnable().run();
+			toRun.run();
 		};
-		return UserInterfaceFactory.getButton(TextSupplier.getLine(secondChoiceKey), secondAndHideRunnable);
+		return UserInterfaceFactory.getButton(TextSupplier.getLine(key), chooseAndHideRunnable);
 	}
 
 	@Override
@@ -68,7 +64,7 @@ public class TextChoicePopUp extends ChoicePopUp {
 		Label label = labelFunction.apply(TextSupplier.getLine(messageKey));
 		label.setAlignment(Alignment.CENTER.getAlignment());
 		Table table = new Table();
-		table.add(label).growX();
+		table.add(label).grow();
 		return table;
 	}
 

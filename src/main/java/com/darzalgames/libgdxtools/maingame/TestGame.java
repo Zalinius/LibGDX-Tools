@@ -2,10 +2,12 @@ package com.darzalgames.libgdxtools.maingame;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.*;
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -20,6 +22,7 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
+import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.*;
@@ -37,28 +40,13 @@ public class TestGame {
 		int height = 720;
 		config.setWindowedMode(width, height);
 		config.setTitle("Test LibGDXTools Game");
-		config.setWindowListener(new Lwjgl3WindowListener() {
-			@Override
-			public void focusLost() {
-				// TODO uncomment these once the audio stuff is in this library
-				//QuestGiverGame.music.temporarilyMute();
-			}
-			@Override
-			public void focusGained() {
-				//QuestGiverGame.music.untemporarilyMute();
-			}
-			@Override public void iconified(boolean isIconified) {}
-			@Override public void created(Lwjgl3Window window) {}
-			@Override public void maximized(boolean isMaximized) {}
-			@Override public boolean closeRequested() {return true;}
-			@Override public void filesDropped(String[] files) {}
-			@Override public void refreshRequested() {}
-		});
-
+		config.setWindowListener(makeWindowListener());
 		new Lwjgl3Application(new MainGame(width/2, height/2, new WindowResizerDesktop(width, height)) {
 
 			@Override
-			protected void initializeAssets() {}
+			protected void initializeAssets() {
+				// notYetNeeded
+			}
 			@Override
 			protected SaveManager makeSaveManager() {
 				return new SaveManager() {
@@ -69,22 +57,30 @@ public class TestGame {
 				};
 			}
 			@Override
-			protected void setUpBeforeLoadingSave() {}
+			protected void setUpBeforeLoadingSave() {
+				// notYetNeeded
+			}
 
 			@Override
 			protected void launchGame(boolean isNewSave) {
-				TextSupplier.setThrowExceptions(false); // To get direct text back rather than using them as keys
 				UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()));
 				changeScreen(new MainMenuScreen(new ScrollableMenu(true, getMenuEntries()) {
 
 					@Override
 					protected void setUpTable() {
 						defaults().align(Align.bottom);
-						setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight() - 25);
+						setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight() - 25f);
 
 						menu.setSpacing(1);
 						menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 						add(menu.getView()).growX().align(Align.center);
+						
+
+						// Options button
+						TestOptionsMenu optionsMenu = new TestOptionsMenu(windowResizer::getModeSelectBox);
+						addActor(optionsMenu.getButton().getView());
+						optionsMenu.getButton().getView().setPosition(3, GameInfo.getHeight() - optionsMenu.getButton().getView().getHeight() - 3);
+						InputPriorityManager.setPauseUI(optionsMenu);
 					}
 				}));
 			}
@@ -108,16 +104,42 @@ public class TestGame {
 
 			@Override
 			protected GamepadInputHandler makeGamepadInputHandler(SteamController steamController) {
-				return new GamepadInputHandler() {
+				return new FallbackGamepadInputHandler() {
 					@Override
 					protected List<Input> getTrackedInputs() {
-						return new ArrayList<>();
+						List<Input> trackedInputs = new ArrayList<>();
+						trackedInputs.add(Input.ACCEPT);
+						trackedInputs.add(Input.BACK);
+						trackedInputs.add(Input.PAUSE);
+						trackedInputs.add(Input.UP);
+						trackedInputs.add(Input.DOWN);
+						trackedInputs.add(Input.LEFT);
+						trackedInputs.add(Input.RIGHT);
+						return trackedInputs;
+					}
+
+					@Override
+					protected Map<Function<Controller, Integer>, Input> makeButtonMappings() {
+						Map<Function<Controller, Integer>, Input> buttonMappings = new HashMap<>();
+						buttonMappings.put(controller -> controller.getMapping().buttonA, Input.ACCEPT);
+						buttonMappings.put(controller -> controller.getMapping().buttonB, Input.BACK);
+						buttonMappings.put(controller -> controller.getMapping().buttonStart, Input.PAUSE);
+
+						buttonMappings.put(controller -> controller.getMapping().buttonL1, Input.LEFT);
+						buttonMappings.put(controller -> controller.getMapping().buttonR1, Input.RIGHT);
+						buttonMappings.put(controller -> controller.getMapping().buttonDpadLeft, Input.LEFT);
+						buttonMappings.put(controller -> controller.getMapping().buttonDpadRight, Input.RIGHT);
+						buttonMappings.put(controller -> controller.getMapping().buttonDpadUp, Input.UP);
+						buttonMappings.put(controller -> controller.getMapping().buttonDpadDown, Input.DOWN);
+						return buttonMappings;
 					}
 				};
 			}
 
 			@Override
-			protected void quitGame() {}
+			protected void quitGame() {
+				// notYetNeeded
+			}
 
 			@Override
 			protected Texture getBackgroundStageTexture() {
@@ -166,11 +188,6 @@ public class TestGame {
 		menuButtons.add(UserInterfaceFactory.getButton("Image Text button!", new Image(ColorTools.getColoredTexture(Color.CHARTREUSE, 50, 12)), 
 				() -> Gdx.app.log(logOrigin, "You pressed the image text button")));
 
-		// Options button
-		TestOptionsMenu optionsMenu = new TestOptionsMenu(() -> UserInterfaceFactory.getButton("window resize", Runnables.nullRunnable()));
-		menuButtons.add(optionsMenu.getButton());
-
-		// the textSpeed selectbox
 		String instant = TextSupplier.getLine("option 1");
 		String fast = TextSupplier.getLine("option 2");
 		Supplier<String> textSpeedLabelSupplier = () -> (TextSupplier.getLine("An option select box")); 
@@ -191,8 +208,9 @@ public class TestGame {
 	private static class TestOptionsMenu extends OptionsMenu {
 
 		protected TestOptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox) {
-			super(makeWindowModeSelectBox, 0);
-			optionsButton = UserInterfaceFactory.getButton("options", () -> toggleScreenVisibility(true));
+			super(makeWindowModeSelectBox, 0, false);
+			optionsButton = UserInterfaceFactory.getInGamesSettingsButton(() -> toggleScreenVisibility(true));
+			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 			InputPriorityManager.setPauseUI(this);
 		}
 
@@ -225,6 +243,36 @@ public class TestGame {
 			return UserInterfaceFactory.getButton("This is where one could theoretically view controls", () -> InputPriorityManager.claimPriority(makeControlsPopUp()));
 		}
 
+	}
+	
+	private static Lwjgl3WindowListener makeWindowListener() {
+		return new Lwjgl3WindowListener() {
+			@Override
+			public void focusLost() {
+				// TODO uncomment these once the audio stuff is in this library
+				//QuestGiverGame.music.temporarilyMute();
+			}
+			@Override
+			public void focusGained() {
+				//QuestGiverGame.music.untemporarilyMute();
+			}
+			@Override public void iconified(boolean isIconified) { 
+				// Not yet needed 
+			}
+			@Override public void created(Lwjgl3Window window) { 
+				// Not yet needed 
+			}
+			@Override public void maximized(boolean isMaximized) { 
+				// Not yet needed 
+			}
+			@Override public boolean closeRequested() {return true;}
+			@Override public void filesDropped(String[] files) { 
+				// Not yet needed 
+			}
+			@Override public void refreshRequested() { 
+				// Not yet needed 
+			}
+		};
 	}
 
 }

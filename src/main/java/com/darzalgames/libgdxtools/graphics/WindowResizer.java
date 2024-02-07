@@ -52,7 +52,7 @@ public abstract class WindowResizer {
 	 */
 	public void initialize() {
 		String preferredModeString = GameInfo.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY, ScreenMode.BORDERLESS.name());
-		setMode(preferredModeString, false);
+		setModeFromPreference(preferredModeString, false);
 		previousScreenMode = currentScreenMode;
 	}
 
@@ -68,18 +68,10 @@ public abstract class WindowResizer {
 	}
 
 
-	private void setMode(String screenMode, boolean offerToRevert) {
+	private void setModeFromPreference(String screenMode, boolean offerToRevert) {
 		ScreenMode preferredMode = ScreenMode.BORDERLESS;
 		for (int i = 0; i < ScreenMode.values().length; i++) {
-
-			String translatedPref;
-			try {
-				translatedPref = windowModeOptionTranslator.apply(ScreenMode.values()[i]);
-			} catch (NullPointerException e) {
-				// NullPointer if there is no internationalization bundle (e.g. a new project, or the LibGDX TestGame)
-				translatedPref = ScreenMode.BORDERLESS.name();
-			}
-			
+			String translatedPref = windowModeOptionTranslator.apply(ScreenMode.values()[i]);
 			if (screenMode.equalsIgnoreCase(ScreenMode.values()[i].name()) //English
 					|| screenMode.equalsIgnoreCase(translatedPref)) { //French
 				preferredMode = ScreenMode.values()[i];
@@ -136,7 +128,7 @@ public abstract class WindowResizer {
 				selectedNewMode -> {
 					String previousMode = GameInfo.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY);
 					if (!selectedNewMode.equalsIgnoreCase(previousMode)) {
-						setMode(selectedNewMode, true);
+						setModeFromPreference(selectedNewMode, true);
 						GameInfo.getPreferenceManager().other().setStringPrefValue(SCREEN_MODE_KEY, currentScreenMode.name());
 					}
 				}

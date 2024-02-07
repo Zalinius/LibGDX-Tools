@@ -18,7 +18,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 	protected enum ButtonState { HELD_DOWN, NOT_HELD_DOWN }
 
 	protected final Map<Input, ButtonState> buttonStates;
-	private static final boolean LOG_INPUT = false;
+	public static boolean LOG_INPUT = false;
 	
 	protected abstract List<Input> getTrackedInputs();
 

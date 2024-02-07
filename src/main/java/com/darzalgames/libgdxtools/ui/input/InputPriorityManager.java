@@ -4,15 +4,13 @@ import java.util.*;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.SnapshotArray;
+import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
@@ -62,14 +60,7 @@ public class InputPriorityManager {
 		InputPriorityManager.keyboardInputHandler = keyboardInputHandler;
 
 		// Set up the dark background screen that goes behind popups
-		// TODO Make a color tools think for this
-		Pixmap background = new Pixmap(GameInfo.getWidth(), GameInfo.getHeight(), Format.RGBA8888);
-		Color color = Color.BLACK;
-		background.setColor(color.r, color.g, color.b, 0.5f);
-		background.fillRectangle(0, 0, background.getWidth(), background.getHeight());
-		darkScreen = new Image(new Texture(background));
-		darkScreen.setBounds(0, 0, background.getWidth(), background.getHeight());
-		background.dispose();
+		darkScreen = new Image(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), GameInfo.getWidth(), GameInfo.getHeight()));
 		darkScreen.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer, final int button) {

@@ -17,7 +17,7 @@ public class ConfirmationMenu extends TextChoicePopUp {
 	}
 	
 	public ConfirmationMenu(String messageKey, String confirmButtonTextKey, String backButtonTextKey, Runnable confirmButtonRunnable) {
-		super(messageKey, confirmButtonTextKey, confirmButtonRunnable, backButtonTextKey, true, true);
+		super(messageKey, confirmButtonTextKey, confirmButtonRunnable, backButtonTextKey, false, true, true);
 	}
 	
 	public static void setConfirmationBackground(NinePatch confirmationBackground) {

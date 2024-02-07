@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 
@@ -104,8 +106,9 @@ public class SkinManager {
 		blankButtonStyle.focused = null;
 		skin.add(BLANK_BUTTON, blankButtonStyle);
 		TextButtonStyle settingsButtonStyle = new TextButtonStyle(new Image(ColorTools.getColoredTexture(Color.PURPLE, size)).getDrawable(), null, null, defaultFont);
-//		settingsButtonStyle.over = new TextureRegionDrawable(Assets.get(Assets.settingsHighlightedIcon));
-//		settingsButtonStyle.focused = new TextureRegionDrawable(Assets.get(Assets.settingsHighlightedIcon));
+		Texture settingsHighlightedIcon = ColorTools.getColoredTexture(Color.PINK, size);
+		settingsButtonStyle.over = new TextureRegionDrawable(settingsHighlightedIcon);
+		settingsButtonStyle.focused = new TextureRegionDrawable(settingsHighlightedIcon);
 		skin.add(SETTINGS_BUTTON, settingsButtonStyle);
 		
 		return skin;

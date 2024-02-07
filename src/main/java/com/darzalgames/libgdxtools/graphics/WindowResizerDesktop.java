@@ -6,7 +6,8 @@ import com.darzalgames.darzalcommon.data.Coordinate;
 
 public class WindowResizerDesktop extends WindowResizer {
 
-	private int defaultWindowWidth, defaultWindowHeight;
+	private int defaultWindowWidth;
+	private int defaultWindowHeight;
 
 	public WindowResizerDesktop(int defaultWindowWidth, int defaultWindowHeight) {
 		super();

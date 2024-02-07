@@ -81,7 +81,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		this.height = height;
 		this.windowResizer = windowResizer;
 		actorsThatDoNotPause = new ArrayList<>();
-		GameInfo.initialize(this);
+		GameInfo.setMainGame(this);
 	}
 
 	@Override

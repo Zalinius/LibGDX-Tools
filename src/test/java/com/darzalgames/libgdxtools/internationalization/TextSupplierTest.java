@@ -45,6 +45,31 @@ class TextSupplierTest {
 
 		assertEquals("Top expected", result);
 	}
+
+	@Test
+	void getLine_withFrenchBaseBundle_returnsTheLocalizedKey() throws Exception {
+		TextSupplier.clearBundles();
+		String key = "test_key";
+		makeTextSupplier();
+		TextSupplier.useLanguage("fr");
+
+		String result = TextSupplier.getLine(key);
+
+		assertEquals("Bonjour base", result);
+	}
+
+	@Test
+	void getLine_withFrenchTopAndBaseBundle_returnsTheLocalizedKey() throws Exception {
+		TextSupplier.clearBundles();
+		String key = "test_key";
+		makeTextSupplier();
+		TextSupplier.useLanguage("fr");
+		TextSupplier.useTopBundle(new FileHandle("./src/test/java/com/darzalgames/libgdxtools/internationalization/top"));
+
+		String result = TextSupplier.getLine(key);
+
+		assertEquals("Bonjour top", result);
+	}
 	
 	private static TextSupplier makeTextSupplier() {
 		TextSupplier textSupplier = new TextSupplier() {
@@ -54,6 +79,7 @@ class TextSupplierTest {
 			@Override protected ArrayList<Locale> getSupportedLocales() {
 				ArrayList<Locale> supportedLocales = new ArrayList<>(); 
 				supportedLocales.add(Locale.ROOT);
+				supportedLocales.add(Locale.FRENCH);
 				return supportedLocales;
 			}
 			

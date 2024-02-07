@@ -18,7 +18,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	protected final Runnable firstChoiceRunnable;
 	private final boolean isSecondButtonBack;
 
-	protected ChoicePopUp(Runnable firstChoiceRunnable,	boolean isVertical, boolean isSecondButtonBack) {
+	protected ChoicePopUp(Runnable firstChoiceRunnable, boolean isVertical, boolean isSecondButtonBack) {
 		super(isVertical);
 		this.firstChoiceRunnable = firstChoiceRunnable;
 		this.isSecondButtonBack = isSecondButtonBack;

@@ -44,9 +44,7 @@ public class TestGame {
 		new Lwjgl3Application(new MainGame(width/2, height/2, new WindowResizerDesktop(width, height)) {
 
 			@Override
-			protected void initializeAssets() {
-				// notYetNeeded
-			}
+			protected void initializeAssets() {/* notYetNeeded */}
 			@Override
 			protected SaveManager makeSaveManager() {
 				return new SaveManager() {
@@ -57,9 +55,7 @@ public class TestGame {
 				};
 			}
 			@Override
-			protected void setUpBeforeLoadingSave() {
-				// notYetNeeded
-			}
+			protected void setUpBeforeLoadingSave() {/* notYetNeeded */}
 
 			@Override
 			protected void launchGame(boolean isNewSave) {
@@ -137,9 +133,7 @@ public class TestGame {
 			}
 
 			@Override
-			protected void quitGame() {
-				// notYetNeeded
-			}
+			protected void quitGame() {/* notYetNeeded */}
 
 			@Override
 			protected Texture getBackgroundStageTexture() {
@@ -256,22 +250,12 @@ public class TestGame {
 			public void focusGained() {
 				//QuestGiverGame.music.untemporarilyMute();
 			}
-			@Override public void iconified(boolean isIconified) { 
-				// Not yet needed 
-			}
-			@Override public void created(Lwjgl3Window window) { 
-				// Not yet needed 
-			}
-			@Override public void maximized(boolean isMaximized) { 
-				// Not yet needed 
-			}
+			@Override public void iconified(boolean isIconified) {/* notYetNeeded */}
+			@Override public void created(Lwjgl3Window window) {/* notYetNeeded */}
+			@Override public void maximized(boolean isMaximized) {/* notYetNeeded */}
 			@Override public boolean closeRequested() {return true;}
-			@Override public void filesDropped(String[] files) { 
-				// Not yet needed 
-			}
-			@Override public void refreshRequested() { 
-				// Not yet needed 
-			}
+			@Override public void filesDropped(String[] files) {/* notYetNeeded */}
+			@Override public void refreshRequested() {/* notYetNeeded */}
 		};
 	}
 

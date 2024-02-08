@@ -3,13 +3,14 @@ package com.darzalgames.libgdxtools.ui.input;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.WindowResizer;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class CustomCursorImage extends Image implements DoesNotPause, InputObserver {
 	
@@ -20,11 +21,15 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	 * @param checkIsWindowed A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
 	 * @param cursorImage
 	 */
-	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorImage) {
-		super(cursorImage);
+	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorImage, InputStrategyManager inputStrategyManager) {
+		super();
+		if (cursorImage != null) {
+			setDrawable(new Image(cursorImage).getDrawable());
+			Gdx.graphics.setSystemCursor(SystemCursor.None);		
+		}
 		setTouchable(Touchable.disabled);
 		this.checkIsWindowed = checkIsWindowed;
-		GameInfo.getInputStrategyManager().register(this);
+		inputStrategyManager.register(this);
 	}
 	
 	@Override
@@ -53,8 +58,8 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	}
 
 	@Override
-	public void inputStrategyChanged() {
-		setVisible(GameInfo.getInputStrategyManager().showMouseExclusiveUI());
+	public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
+		setVisible(inputStrategyManager.showMouseExclusiveUI());
 	}
 
 	@Override

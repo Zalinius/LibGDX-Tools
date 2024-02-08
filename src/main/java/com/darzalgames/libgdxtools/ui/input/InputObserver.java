@@ -1,7 +1,9 @@
 package com.darzalgames.libgdxtools.ui.input;
 
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+
 public interface InputObserver {
-	public void inputStrategyChanged();
+	public void inputStrategyChanged(InputStrategyManager inputStrategyManager);
 	
 	/*
 	 * This is checked regularly by the observer list owner since an actor should be unregistered once it's

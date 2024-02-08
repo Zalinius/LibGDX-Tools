@@ -1,8 +1,8 @@
 package com.darzalgames.libgdxtools.ui.input.keyboard.button;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 
 /**
@@ -11,19 +11,19 @@ import com.darzalgames.libgdxtools.ui.input.InputObserver;
  */
 public class MouseOnlyButton extends KeyboardButton implements InputObserver {
 
-	public MouseOnlyButton(TextButton textButton, Runnable runnable) {
+	public MouseOnlyButton(TextButton textButton, Runnable runnable, InputStrategyManager inputStrategyManager) {
 		super(textButton, runnable);
-		GameInfo.getInputStrategyManager().register(this);
-		setVisibilityBasedOnCurrentInputStrategy();
+		inputStrategyManager.register(this);
+		setVisibilityBasedOnCurrentInputStrategy(inputStrategyManager);
 	}
 
 	@Override
-	public void inputStrategyChanged() {
-		setVisibilityBasedOnCurrentInputStrategy();
+	public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
+		setVisibilityBasedOnCurrentInputStrategy(inputStrategyManager);
 	}
 	
-	private void setVisibilityBasedOnCurrentInputStrategy() {
-		this.getView().setVisible(GameInfo.getInputStrategyManager().showMouseExclusiveUI());
+	private void setVisibilityBasedOnCurrentInputStrategy(InputStrategyManager inputStrategyManager) {
+		this.getView().setVisible(inputStrategyManager.showMouseExclusiveUI());
 	}
 
 	@Override

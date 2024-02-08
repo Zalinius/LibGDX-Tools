@@ -166,7 +166,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		GamepadInputHandler gamepadInputHandler = makeGamepadInputHandler(steamController);
 		actorsThatDoNotPause.add(keyboardInputHandler);
 		actorsThatDoNotPause.add(gamepadInputHandler);
-		CustomCursorImage customCursor = new CustomCursorImage(windowResizer::isWindowed, getCursorTexture());
+		CustomCursorImage customCursor = new CustomCursorImage(windowResizer::isWindowed, getCursorTexture(), inputStrategyManager);
 		cursorStage.addActor(customCursor);
 		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler);
 	}

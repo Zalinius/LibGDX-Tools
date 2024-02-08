@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class InputSensitiveLabel extends Label implements InputObserver {
 	
@@ -23,7 +24,7 @@ public class InputSensitiveLabel extends Label implements InputObserver {
 	}
 
 	@Override
-	public void inputStrategyChanged() {
+	public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
 		this.setText(textSupplier.get());
 	}
 	

@@ -27,7 +27,7 @@ import com.darzalgames.libgdxtools.ui.optionsmenu.OptionsMenu;
  */
 public class InputPriorityManager {
 
-	private static Deque<InputConsumer> inputConsumerStack;
+	private static Deque<InputConsumer> inputConsumerStack = new ArrayDeque<>();
 	private static Image darkScreen;
 
 	private static KeyboardButton pauseButton;
@@ -53,7 +53,6 @@ public class InputPriorityManager {
 	 */
 	public static void initialize(Stage mainStage, Stage popUpStage, Runnable toggleFullscreenRunnable,
 			GamepadInputHandler gamepadInputHandler, KeyboardInputHandler keyboardInputHandler) {
-		inputConsumerStack = new ArrayDeque<>();
 		InputPriorityManager.popUpStage = popUpStage;
 		InputPriorityManager.toggleFullscreenRunnable = toggleFullscreenRunnable;
 		InputPriorityManager.gamepadInputHandler = gamepadInputHandler;

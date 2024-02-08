@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.internationalization;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -23,12 +24,19 @@ public abstract class TextSupplier {
 	private static TextSupplier instance;
 	protected abstract FileHandle getBaseBundleFileHandle();
 	protected abstract ArrayList<Locale> getSupportedLocales();
+	
+	private static UnaryOperator<String> modifierStrategy = String::toString;
 
 
 	protected TextSupplier() {}
 	
 	protected static void initialize(TextSupplier instance) {
+		initialize(instance, modifierStrategy);
+	}
+	
+	protected static void initialize(TextSupplier instance, UnaryOperator<String> modifierStrategy) {
 		TextSupplier.instance = instance;
+		TextSupplier.modifierStrategy = modifierStrategy;
 		
 		displayNames = new BiMap<>();
 		for (Locale current : instance.getSupportedLocales()) {
@@ -62,27 +70,27 @@ public abstract class TextSupplier {
 	public static String getLine(String key, Object... args) {
 		try { 
 			if (topBundle != null) {
-				return topBundle.format(key, args);
+				return modifierStrategy.apply(topBundle.format(key, args));
 			}
 		} catch (MissingResourceException e) {
 			// This will catch any keys that belong in the baseBundle, or any undefined keys
 		}
 		
 		try {
-			return baseBundle.format(key, args);
+			return modifierStrategy.apply(baseBundle.format(key, args));
 		} catch (NullPointerException e) {
 			// A game that doesn't (yet?) have any bundles just returns the key
 			if (throwExceptions) {
 				throw e;
 			} else {
-				return key;
+				return modifierStrategy.apply(key);
 			}
 		} catch (MissingResourceException e) {
 			Gdx.app.error("TextSupplier", "Key " + key + " really isn't found anywhere!");
 			if (throwExceptions) {
 				throw e;
 			} else {
-				return baseBundle.format("missing_text", key);
+				return modifierStrategy.apply(baseBundle.format("missing_text", key));
 			}
 		}
 	}

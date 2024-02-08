@@ -1,6 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 	protected abstract List<Input> getTrackedInputs();
 
 	protected GamepadInputHandler() {
-		buttonStates = new EnumMap<>(Input.class);
+		buttonStates = new HashMap<>();
 		getTrackedInputs().forEach(input -> buttonStates.put(input, ButtonState.NOT_HELD_DOWN));
 	}
 

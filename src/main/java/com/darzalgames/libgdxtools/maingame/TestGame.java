@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
@@ -98,9 +99,21 @@ public class TestGame extends MainGame {
 			@Override
 			protected List<Input> getKeyWhitelist() {
 				List<Input> keysToAllow = new ArrayList<>();
-				keysToAllow.addAll(Arrays.asList(Input.values()));
-				keysToAllow.remove(Input.NONE);
+				Input.ACCEPT.replaceKey(Keys.ENTER);
+				keysToAllow.add(Input.ACCEPT);
+				keysToAllow.add(Input.BACK);
+				keysToAllow.add(Input.UP);
+				keysToAllow.add(Input.DOWN);
+				keysToAllow.add(Input.LEFT);
+				keysToAllow.add(Input.RIGHT);
+				keysToAllow.add(Input.PAUSE);
+				keysToAllow.add(Input.TOGGLE_FULLSCREEN);
 				return keysToAllow;
+			}
+
+			@Override
+			protected Input getInputFromKey(int keycode) {
+				return Input.getToolsInputFromKey(keycode);
 			}
 		};
 	}

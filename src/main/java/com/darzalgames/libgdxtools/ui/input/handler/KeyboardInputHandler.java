@@ -26,7 +26,7 @@ public abstract class KeyboardInputHandler extends InputHandler {
 		addListener(new InputListener() {
 			@Override
 			public boolean keyDown(final InputEvent event, int keycode) {
-				Input input = Input.getInputFromKey(keycode);
+				Input input = getInputFromKey(keycode);
 				input = remapInputIfNecessary(input, keycode);
 				
 				if (keysToAllow.contains(input)) {
@@ -40,6 +40,7 @@ public abstract class KeyboardInputHandler extends InputHandler {
 		});
 	}
 	
+	protected abstract Input getInputFromKey(int keycode);
 	protected abstract Input remapInputIfNecessary(Input input, int keycode);
 	protected abstract List<Input> getKeyWhitelist();
 }

@@ -32,7 +32,8 @@ import com.darzalgames.libgdxtools.ui.input.scrollablemenu.ScrollableMenu;
 import com.darzalgames.libgdxtools.ui.optionsmenu.OptionsMenu;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
 
-public class TestGame {
+public class TestGame extends MainGame {
+
 
 	public static void main(String[] args) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -41,116 +42,119 @@ public class TestGame {
 		config.setWindowedMode(width, height);
 		config.setTitle("Test LibGDXTools Game");
 		config.setWindowListener(makeWindowListener());
-		new Lwjgl3Application(new MainGame(width/2, height/2, new WindowResizerDesktop(width, height)) {
+		new Lwjgl3Application(new TestGame(width, height), config);
+	}
+
+
+	public TestGame(int width, int height) {
+		super(width/2, height/2, new WindowResizerDesktop(width, height));
+	}
+
+	@Override
+	protected void initializeAssets() {/* notYetNeeded */}
+	@Override
+	protected SaveManager makeSaveManager() {
+		return new SaveManager() {
+			@Override
+			public void save() {}
+			@Override
+			public boolean load() { return true; }
+		};
+	}
+	@Override
+	protected void setUpBeforeLoadingSave() {/* notYetNeeded */}
+
+	@Override
+	protected void launchGame(boolean isNewSave) {
+		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()));
+		changeScreen(new MainMenuScreen(new ScrollableMenu(true, getMenuEntries()) {
 
 			@Override
-			protected void initializeAssets() {/* notYetNeeded */}
+			protected void setUpTable() {
+				defaults().align(Align.bottom);
+				setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight() - 25f);
+
+				menu.setSpacing(1);
+				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
+				add(menu.getView()).growX().align(Align.center);
+
+
+				// Options button
+				TestOptionsMenu optionsMenu = new TestOptionsMenu(windowResizer::getModeSelectBox);
+				addActor(optionsMenu.getButton().getView());
+				optionsMenu.getButton().getView().setPosition(3, GameInfo.getHeight() - optionsMenu.getButton().getView().getHeight() - 3);
+				InputPriorityManager.setPauseUI(optionsMenu);
+			}
+		}));
+	}
+
+	@Override
+	protected KeyboardInputHandler makeKeyboardInputHandler() {
+		return new KeyboardInputHandler() {
 			@Override
-			protected SaveManager makeSaveManager() {
-				return new SaveManager() {
-					@Override
-					public void save() {}
-					@Override
-					public boolean load() { return true; }
-				};
+			protected Input remapInputIfNecessary(Input input, int keycode) {
+				return input;
 			}
 			@Override
-			protected void setUpBeforeLoadingSave() {/* notYetNeeded */}
-
-			@Override
-			protected void launchGame(boolean isNewSave) {
-				UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()));
-				changeScreen(new MainMenuScreen(new ScrollableMenu(true, getMenuEntries()) {
-
-					@Override
-					protected void setUpTable() {
-						defaults().align(Align.bottom);
-						setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight() - 25f);
-
-						menu.setSpacing(1);
-						menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
-						add(menu.getView()).growX().align(Align.center);
-						
-
-						// Options button
-						TestOptionsMenu optionsMenu = new TestOptionsMenu(windowResizer::getModeSelectBox);
-						addActor(optionsMenu.getButton().getView());
-						optionsMenu.getButton().getView().setPosition(3, GameInfo.getHeight() - optionsMenu.getButton().getView().getHeight() - 3);
-						InputPriorityManager.setPauseUI(optionsMenu);
-					}
-				}));
+			protected List<Input> getKeyWhitelist() {
+				List<Input> keysToAllow = new ArrayList<>();
+				keysToAllow.addAll(Arrays.asList(Input.values()));
+				keysToAllow.remove(Input.NONE);
+				return keysToAllow;
 			}
+		};
+	}
 
+	@Override
+	protected GamepadInputHandler makeGamepadInputHandler(SteamController steamController) {
+		return new FallbackGamepadInputHandler() {
 			@Override
-			protected KeyboardInputHandler makeKeyboardInputHandler() {
-				return new KeyboardInputHandler() {
-					@Override
-					protected Input remapInputIfNecessary(Input input, int keycode) {
-						return input;
-					}
-					@Override
-					protected List<Input> getKeyWhitelist() {
-						List<Input> keysToAllow = new ArrayList<>();
-						keysToAllow.addAll(Arrays.asList(Input.values()));
-						keysToAllow.remove(Input.NONE);
-						return keysToAllow;
-					}
-				};
-			}
-
-			@Override
-			protected GamepadInputHandler makeGamepadInputHandler(SteamController steamController) {
-				return new FallbackGamepadInputHandler() {
-					@Override
-					protected List<Input> getTrackedInputs() {
-						List<Input> trackedInputs = new ArrayList<>();
-						trackedInputs.add(Input.ACCEPT);
-						trackedInputs.add(Input.BACK);
-						trackedInputs.add(Input.PAUSE);
-						trackedInputs.add(Input.UP);
-						trackedInputs.add(Input.DOWN);
-						trackedInputs.add(Input.LEFT);
-						trackedInputs.add(Input.RIGHT);
-						return trackedInputs;
-					}
-
-					@Override
-					protected Map<Function<Controller, Integer>, Input> makeButtonMappings() {
-						Map<Function<Controller, Integer>, Input> buttonMappings = new HashMap<>();
-						buttonMappings.put(controller -> controller.getMapping().buttonA, Input.ACCEPT);
-						buttonMappings.put(controller -> controller.getMapping().buttonB, Input.BACK);
-						buttonMappings.put(controller -> controller.getMapping().buttonStart, Input.PAUSE);
-
-						buttonMappings.put(controller -> controller.getMapping().buttonL1, Input.LEFT);
-						buttonMappings.put(controller -> controller.getMapping().buttonR1, Input.RIGHT);
-						buttonMappings.put(controller -> controller.getMapping().buttonDpadLeft, Input.LEFT);
-						buttonMappings.put(controller -> controller.getMapping().buttonDpadRight, Input.RIGHT);
-						buttonMappings.put(controller -> controller.getMapping().buttonDpadUp, Input.UP);
-						buttonMappings.put(controller -> controller.getMapping().buttonDpadDown, Input.DOWN);
-						return buttonMappings;
-					}
-				};
+			protected List<Input> getTrackedInputs() {
+				List<Input> trackedInputs = new ArrayList<>();
+				trackedInputs.add(Input.ACCEPT);
+				trackedInputs.add(Input.BACK);
+				trackedInputs.add(Input.PAUSE);
+				trackedInputs.add(Input.UP);
+				trackedInputs.add(Input.DOWN);
+				trackedInputs.add(Input.LEFT);
+				trackedInputs.add(Input.RIGHT);
+				return trackedInputs;
 			}
 
 			@Override
-			protected void quitGame() {/* notYetNeeded */}
+			protected Map<Function<Controller, Integer>, Input> makeButtonMappings() {
+				Map<Function<Controller, Integer>, Input> buttonMappings = new HashMap<>();
+				buttonMappings.put(controller -> controller.getMapping().buttonA, Input.ACCEPT);
+				buttonMappings.put(controller -> controller.getMapping().buttonB, Input.BACK);
+				buttonMappings.put(controller -> controller.getMapping().buttonStart, Input.PAUSE);
 
-			@Override
-			protected Texture getBackgroundStageTexture() {
-				return ColorTools.getColoredTexture(Color.PINK, 100);
+				buttonMappings.put(controller -> controller.getMapping().buttonL1, Input.LEFT);
+				buttonMappings.put(controller -> controller.getMapping().buttonR1, Input.RIGHT);
+				buttonMappings.put(controller -> controller.getMapping().buttonDpadLeft, Input.LEFT);
+				buttonMappings.put(controller -> controller.getMapping().buttonDpadRight, Input.RIGHT);
+				buttonMappings.put(controller -> controller.getMapping().buttonDpadUp, Input.UP);
+				buttonMappings.put(controller -> controller.getMapping().buttonDpadDown, Input.DOWN);
+				return buttonMappings;
 			}
+		};
+	}
 
-			@Override
-			protected Texture getMainStageBackgroundTexture() {
-				return ColorTools.getColoredTexture(Color.LIGHT_GRAY, width, height);
-			}
+	@Override
+	protected void quitGame() {/* notYetNeeded */}
 
-			@Override
-			protected String getPreferenceManagerName() {
-				return "com.darzalgames.libgdxtools.preferences";
-			}
+	@Override
+	protected Texture getBackgroundStageTexture() {
+		return ColorTools.getColoredTexture(Color.PINK, 100);
+	}
 
-		}, config);
+	@Override
+	protected Texture getMainStageBackgroundTexture() {
+		return ColorTools.getColoredTexture(Color.LIGHT_GRAY, width, height);
+	}
+
+	@Override
+	protected String getPreferenceManagerName() {
+		return "com.darzalgames.libgdxtools.preferences";
 	}
 
 	protected static List<KeyboardButton> getMenuEntries() {
@@ -238,7 +242,7 @@ public class TestGame {
 		}
 
 	}
-	
+
 	private static Lwjgl3WindowListener makeWindowListener() {
 		return new Lwjgl3WindowListener() {
 			@Override

@@ -101,7 +101,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		setUpBeforeLoadingSave();
 		saveManager = makeSaveManager();
 		boolean isNewSave = !saveManager.load();
-		windowResizer.initialize();
+		windowResizer.initialize(inputStrategyManager);
 
 		launchGame(isNewSave);
 	}
@@ -168,7 +168,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		actorsThatDoNotPause.add(gamepadInputHandler);
 		CustomCursorImage customCursor = new CustomCursorImage(windowResizer::isWindowed, getCursorTexture(), inputStrategyManager);
 		cursorStage.addActor(customCursor);
-		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler);
+		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler, inputStrategyManager);
 	}
 
 	protected void changeScreen(GameScreen gameScreen) {

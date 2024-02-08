@@ -21,6 +21,7 @@ import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSelectBox;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public abstract class WindowResizer {
 
@@ -42,6 +43,7 @@ public abstract class WindowResizer {
 
 	private KeyboardSelectBox modeSelectBox;
 	private Label revertCountdown;
+	private InputStrategyManager inputStrategyManager;
 
 	Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase()); 
 
@@ -50,7 +52,8 @@ public abstract class WindowResizer {
 	 * We do this in initialize() rather than a constructor because this object is created at the same time as the entire game,
 	 * and so LibGDX isn't ready to do any resizing yet
 	 */
-	public void initialize() {
+	public void initialize(InputStrategyManager inputStrategyManager) {
+		this.inputStrategyManager = inputStrategyManager;
 		String preferredModeString = GameInfo.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY, ScreenMode.BORDERLESS.name());
 		setModeFromPreference(preferredModeString, false);
 		previousScreenMode = currentScreenMode;
@@ -85,7 +88,7 @@ public abstract class WindowResizer {
 		currentScreenMode = screenMode;
 		GameInfo.getPreferenceManager().other().setStringPrefValue(SCREEN_MODE_KEY, currentScreenMode.name());
 
-		GameInfo.getInputStrategyManager().saveCurrentStrategy();
+		inputStrategyManager.saveCurrentStrategy();
 		switch (currentScreenMode) {
 		case BORDERLESS:
 			switchToBorderless();
@@ -98,7 +101,7 @@ public abstract class WindowResizer {
 			break;
 		}
 		offerToRevert = offerToRevert && previousScreenMode != currentScreenMode; 
-		GameInfo.getInputStrategyManager().revertToPreviousStrategy();
+		inputStrategyManager.revertToPreviousStrategy();
 		setCurrentlySelectedInBox();
 		if (offerToRevert) {
 			ConfirmationMenu reverter = new WindowRevertCountdownConfirmationMenu(() -> revertCountdown.clearActions());

@@ -25,6 +25,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 		super();
 		if (cursorImage != null) {
 			setDrawable(new Image(cursorImage).getDrawable());
+			pack();
 			Gdx.graphics.setSystemCursor(SystemCursor.None);		
 		}
 		setTouchable(Touchable.disabled);

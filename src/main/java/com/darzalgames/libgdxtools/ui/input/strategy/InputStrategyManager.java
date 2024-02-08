@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.InputObserver;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.InputSubject;
 
 /**
@@ -27,6 +26,7 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 		this.keyboardInputStrategy = keyboardInputStrategy;
 
 		observers = new ArrayList<>();
+		setToMouseStrategy();
 	}
 
 	/**
@@ -73,7 +73,6 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 		List<InputObserver> toRemove = observers.stream().filter(o -> o == null || o.shouldBeUnregistered()).toList();
 		observers.removeAll(toRemove);
 		observers.stream().forEach(observer -> observer.inputStrategyChanged(this));
-		InputPriorityManager.inputStrategyChanged();
 	}
 
 

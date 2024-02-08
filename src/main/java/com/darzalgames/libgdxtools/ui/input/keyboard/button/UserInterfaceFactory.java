@@ -172,7 +172,7 @@ public class UserInterfaceFactory {
 
 	public static KeyboardButton getInGamesSettingsButton(Runnable onclick) {
 		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()); 
-		return new MouseOnlyButton(textButton, onclick);
+		return new MouseOnlyButton(textButton, onclick, GameInfo.getInputStrategyManager());
 	}
 
 	private static final String QUIT_GAME_KEY = "quit_game";

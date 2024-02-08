@@ -17,6 +17,7 @@ import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 import com.darzalgames.libgdxtools.ui.optionsmenu.OptionsMenu;
 
 /**
@@ -40,6 +41,7 @@ public class InputPriorityManager {
 
 	private static GamepadInputHandler gamepadInputHandler;
 	private static KeyboardInputHandler keyboardInputHandler;
+	private static InputStrategyManager inputStrategyManager;
 
 	private InputPriorityManager() {}
 
@@ -52,11 +54,12 @@ public class InputPriorityManager {
 	 * @param keyboardInputHandler The keyboard input handler to use
 	 */
 	public static void initialize(Stage mainStage, Stage popUpStage, Runnable toggleFullscreenRunnable,
-			GamepadInputHandler gamepadInputHandler, KeyboardInputHandler keyboardInputHandler) {
+			GamepadInputHandler gamepadInputHandler, KeyboardInputHandler keyboardInputHandler, InputStrategyManager inputStrategyManager) {
 		InputPriorityManager.popUpStage = popUpStage;
 		InputPriorityManager.toggleFullscreenRunnable = toggleFullscreenRunnable;
 		InputPriorityManager.gamepadInputHandler = gamepadInputHandler;
 		InputPriorityManager.keyboardInputHandler = keyboardInputHandler;
+		InputPriorityManager.inputStrategyManager = inputStrategyManager;
 
 		// Set up the dark background screen that goes behind popups
 		darkScreen = new Image(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), GameInfo.getWidth(), GameInfo.getHeight()));
@@ -86,7 +89,8 @@ public class InputPriorityManager {
 
 
 		// Enter the default strategy (mouse) during this initialization
-		GameInfo.getInputStrategyManager().setToMouseStrategy();
+		inputStrategyManager.setToMouseStrategy();
+		inputStrategyManager.register(new InputChangeObserver());
 	}
 
 	/**
@@ -115,7 +119,7 @@ public class InputPriorityManager {
 			} else if (!inputConsumerStack.isEmpty()) { // Don't try to enter keyboard mode when someone is just pressing escape
 				inputConsumerStack.peek().consumeKeyInput(input);
 			}	
-		} else if (!inputConsumerStack.isEmpty() && !GameInfo.getInputStrategyManager().setToKeyboardStrategy()) {
+		} else if (!inputConsumerStack.isEmpty() && !inputStrategyManager.setToKeyboardStrategy()) {
 			inputConsumerStack.peek().consumeKeyInput(input);
 		}		
 	}
@@ -208,9 +212,9 @@ public class InputPriorityManager {
 		InputPriorityManager.optionsMenu = optionsMenu;
 	}
 
-	public static void inputStrategyChanged() {
+	private static void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
 		if (!inputConsumerStack.isEmpty()) {
-			if (GameInfo.getInputStrategyManager().shouldFocusFirstButton()) {
+			if (inputStrategyManager.shouldFocusFirstButton()) {
 				if (!inputConsumerStack.isEmpty()) {
 					inputConsumerStack.peek().selectDefault();
 				}
@@ -326,6 +330,20 @@ public class InputPriorityManager {
 			pauseButton = null;
 			optionsMenu = null;
 		}
+	}
+	
+	private static class InputChangeObserver implements InputObserver {
+
+		@Override
+		public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
+			InputPriorityManager.inputStrategyChanged(inputStrategyManager);
+		}
+
+		@Override
+		public boolean shouldBeUnregistered() {
+			return false;
+		}
+		
 	}
 
 }

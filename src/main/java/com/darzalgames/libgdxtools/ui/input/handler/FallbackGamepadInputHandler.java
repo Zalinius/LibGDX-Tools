@@ -56,7 +56,7 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 
 	@Override
 	public boolean axisMoved(Controller controller, int axisCode, float value) {
-		// TODO Set this up to handle diagonal axis input, and maybe even ignore certain directions in particular games? (e.g. ignore horizontal movement in hexagon grid navigation?)
+		// TODO Set this up to handle diagonal axis input?
 		Input inputKey = Input.NONE;			
 		if (isXAxis(axisCode, controller)) {
 			inputKey = (value > 0 ? Input.RIGHT : Input.LEFT);

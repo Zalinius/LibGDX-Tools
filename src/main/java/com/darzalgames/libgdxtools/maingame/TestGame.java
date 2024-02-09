@@ -57,7 +57,7 @@ public class TestGame extends MainGame {
 	protected SaveManager makeSaveManager() {
 		return new SaveManager() {
 			@Override
-			public void save() {}
+			public void save() {/* notYetNeeded */}
 			@Override
 			public boolean load() { return true; }
 		};

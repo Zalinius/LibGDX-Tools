@@ -26,7 +26,6 @@ public abstract class SimplePopUp extends Table implements InputConsumerWrapper,
 		InputPriorityManager.claimPriority(this);
 	}
 
-	// TODO These next two methods should only be called by the InputPrioritizer (or within this class), is there anyway to enforce that?
 	@Override
 	public void gainFocus() {
 		clear();

@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 /**
  * This is the entry point for gamepad input, and where we define all button mappings to game actions.
@@ -22,7 +22,8 @@ public abstract class GamepadInputHandler extends InputHandler {
 	
 	protected abstract List<Input> getTrackedInputs();
 
-	protected GamepadInputHandler() {
+	protected GamepadInputHandler(InputStrategyManager inputStrategyManager) {
+		super(inputStrategyManager);
 		buttonStates = new HashMap<>();
 		getTrackedInputs().forEach(input -> buttonStates.put(input, ButtonState.NOT_HELD_DOWN));
 	}
@@ -43,7 +44,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 	}
 	
 	protected final void controllerDisconnected() {
-		GameInfo.getInputStrategyManager().setToMouseStrategy();
+		inputStrategyManager.setToMouseStrategy();
 		InputPriorityManager.pauseIfNeeded();
 	}
 

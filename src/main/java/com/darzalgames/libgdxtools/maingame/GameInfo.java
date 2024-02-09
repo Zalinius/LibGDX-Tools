@@ -2,7 +2,6 @@ package com.darzalgames.libgdxtools.maingame;
 
 import com.darzalgames.libgdxtools.preferencemanagers.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 /**
  * Allows static access to the globally useful variables/managers from {@link MainGame}
@@ -32,14 +31,6 @@ public class GameInfo {
 	 */
 	public static int getHeight() {
 		return mainGame.height;
-	}
-
-	/**
-	 * @return Gets the {@link InputStrategyManager}, useful to do things like un/registering input-sensitive labels,
-	 * checking what the current input method is, changing input modes, etc.
-	 */
-	public static InputStrategyManager getInputStrategyManager() {
-		return mainGame.inputStrategyManager;
 	}
 
 	/**

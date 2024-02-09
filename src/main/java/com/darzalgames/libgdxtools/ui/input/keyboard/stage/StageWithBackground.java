@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class StageWithBackground extends KeyboardStage {
 	private Image background;
@@ -14,8 +15,8 @@ public class StageWithBackground extends KeyboardStage {
 	 * @param viewport
 	 * @param backgroundTex
 	 */
-	public StageWithBackground(final Viewport viewport, Texture backgroundTex) {
-		super(viewport);
+	public StageWithBackground(final Viewport viewport, Texture backgroundTex, InputStrategyManager inputStrategyManager) {
+		super(viewport, inputStrategyManager);
 
 		background = new Image(backgroundTex);
 		UserInterfaceFactory.makeActorCentered(background);

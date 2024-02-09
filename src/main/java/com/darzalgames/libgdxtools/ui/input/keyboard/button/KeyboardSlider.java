@@ -8,14 +8,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class KeyboardSlider extends KeyboardButton {
 
 	private final Slider slider;
 	private float previousValue;
 
-	public KeyboardSlider(TextButton textButton, SliderStyle sliderStyle, Consumer<Float> consumer) {
-		super(textButton);
+	public KeyboardSlider(TextButton textButton, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategyManager inputStrategyManager) {
+		super(textButton, inputStrategyManager);
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle);
 		slider.addListener(new ChangeListener() {
 			@Override

@@ -12,7 +12,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 public class MouseOnlyButton extends KeyboardButton implements InputObserver {
 
 	public MouseOnlyButton(TextButton textButton, Runnable runnable, InputStrategyManager inputStrategyManager) {
-		super(textButton, runnable);
+		super(textButton, runnable, inputStrategyManager);
 		inputStrategyManager.register(this);
 		setVisibilityBasedOnCurrentInputStrategy(inputStrategyManager);
 	}

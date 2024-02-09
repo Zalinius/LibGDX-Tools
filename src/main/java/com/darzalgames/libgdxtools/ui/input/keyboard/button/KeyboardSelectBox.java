@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class KeyboardSelectBox extends KeyboardButton {
 
@@ -18,8 +19,8 @@ public class KeyboardSelectBox extends KeyboardButton {
 	private Label displayLabel;
 	private String defaultEntry;
 
-	protected KeyboardSelectBox(Collection<String> entries, TextButton textButton, Consumer<String> action) {
-		super(textButton);
+	protected KeyboardSelectBox(Collection<String> entries, TextButton textButton, Consumer<String> action, InputStrategyManager inputStrategyManager) {
+		super(textButton, inputStrategyManager);
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the scrollable selectable portion of this select box,
 		// sets that as the text in our display label (e.g. English), and calls the Consumer (which responds to the new entry, e.g. changing the game language and refreshing the main menu)

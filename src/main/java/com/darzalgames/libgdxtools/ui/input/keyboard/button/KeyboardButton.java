@@ -9,11 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Pools;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.GameObjectView;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 /**
  * @author DarZal
@@ -30,20 +30,22 @@ public class KeyboardButton implements GameObjectView, InputConsumerWrapper {
 	private Alignment alignment;
 	private boolean wrap;
 	private boolean doesSoundOnInteract = true;
+	private final InputStrategyManager inputStrategyManager;
 
-	KeyboardButton(TextButton button) {
-		this(button, Runnables.nullRunnable());
+	KeyboardButton(TextButton button, InputStrategyManager inputStrategyManager) {
+		this(button, Runnables.nullRunnable(), inputStrategyManager);
 	}
 	
-	KeyboardButton(TextButton button, Runnable runnable) { 
-		this(button, null, runnable);
+	KeyboardButton(TextButton button, Runnable runnable, InputStrategyManager inputStrategyManager) { 
+		this(button, null, runnable, inputStrategyManager);
 	}
 	
-	KeyboardButton(TextButton button, Image image, Runnable runnable) {
+	KeyboardButton(TextButton button, Image image, Runnable runnable, InputStrategyManager inputStrategyManager) {
 		this.button = button;
 		this.labelSupplier = button::getLabel;
 		this.cellSupplier = button::getLabelCell;
 		this.buttonRunnable = runnable;
+		this.inputStrategyManager = inputStrategyManager;
 		this.image = image;
 		this.wrap = true;
 		this.alignment = Alignment.CENTER;
@@ -118,7 +120,7 @@ public class KeyboardButton implements GameObjectView, InputConsumerWrapper {
 		if (!isFocused) {
 			event.setType(InputEvent.Type.exit);
 		}
-		if (isFocused && GameInfo.getInputStrategyManager().shouldFlashButtons()) {
+		if (isFocused && inputStrategyManager.shouldFlashButtons()) {
 			event.setType(InputEvent.Type.enter);
 		}
 		

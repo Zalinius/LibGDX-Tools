@@ -214,7 +214,7 @@ public class InputPriorityManager {
 
 	private static void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
 		if (!inputConsumerStack.isEmpty()) {
-			if (inputStrategyManager.shouldFocusFirstButton()) {
+			if (inputStrategyManager.shouldFlashButtons()) {
 				if (!inputConsumerStack.isEmpty()) {
 					inputConsumerStack.peek().selectDefault();
 				}

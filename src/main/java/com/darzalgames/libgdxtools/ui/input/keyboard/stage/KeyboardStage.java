@@ -4,23 +4,25 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class KeyboardStage extends Stage {
 
+	private final InputStrategyManager inputStrategyManager;
+
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategyManager} input mode
 	 * @param viewport
 	 */
-	public KeyboardStage(Viewport viewport) {
+	public KeyboardStage(Viewport viewport, InputStrategyManager inputStrategyManager) {
 		super(viewport);
+		this.inputStrategyManager = inputStrategyManager;
 	}
 
 	@Override
 	public void act(final float delta) {
-		if (!GameInfo.getInputStrategyManager().shouldFlashButtons()) {
+		if (!inputStrategyManager.shouldFlashButtons()) {
 			// if playing mouse-driven, use a normal stage
 			super.act(delta);
 		} else {

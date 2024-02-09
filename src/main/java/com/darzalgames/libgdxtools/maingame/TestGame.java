@@ -67,7 +67,7 @@ public class TestGame extends MainGame {
 
 	@Override
 	protected void launchGame(boolean isNewSave) {
-		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()));
+		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategyManager);
 		changeScreen(new MainMenuScreen(new ScrollableMenu(true, getMenuEntries()) {
 
 			@Override
@@ -91,7 +91,7 @@ public class TestGame extends MainGame {
 
 	@Override
 	protected KeyboardInputHandler makeKeyboardInputHandler() {
-		return new KeyboardInputHandler() {
+		return new KeyboardInputHandler(inputStrategyManager) {
 			@Override
 			protected Input remapInputIfNecessary(Input input, int keycode) {
 				return input;
@@ -120,7 +120,7 @@ public class TestGame extends MainGame {
 
 	@Override
 	protected GamepadInputHandler makeGamepadInputHandler(SteamController steamController) {
-		return new FallbackGamepadInputHandler() {
+		return new FallbackGamepadInputHandler(inputStrategyManager) {
 			@Override
 			protected List<Input> getTrackedInputs() {
 				List<Input> trackedInputs = new ArrayList<>();

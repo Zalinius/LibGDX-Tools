@@ -89,6 +89,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		initializeAssets();
 
 		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
+		inputStrategyManager = makeInputStrategyManager();
 
 		makeBackgroundStage();
 		makePopUpStage();
@@ -118,15 +119,15 @@ public abstract class MainGame extends ApplicationAdapter {
 
 	private void makePopUpStage() {
 		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
-		popUpStage = new KeyboardStage(new PixelPerfectViewport(width, height));
+		popUpStage = new KeyboardStage(new PixelPerfectViewport(width, height), inputStrategyManager);
 	}
 
 	private void makeMainStageAndMouseStages() {
 		mouseDetectorStage = new Stage(new ScreenViewport());
-		mouseDetectorStage.addActor(new MouseDetector());
+		mouseDetectorStage.addActor(new MouseDetector(inputStrategyManager));
 
 		// Set up main game stage
-		stage = new StageWithBackground(new PixelPerfectViewport(width, height), getMainStageBackgroundTexture());
+		stage = new StageWithBackground(new PixelPerfectViewport(width, height), getMainStageBackgroundTexture(), inputStrategyManager);
 
 		cursorStage = new Stage(new ExtendViewport(width, height));
 	}
@@ -160,7 +161,6 @@ public abstract class MainGame extends ApplicationAdapter {
 		if (SteamAPI.isSteamRunning()) {
 			steamController.init();
 		}
-		inputStrategyManager = makeInputStrategyManager();
 		stage.addActor(inputStrategyManager);
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
 		GamepadInputHandler gamepadInputHandler = makeGamepadInputHandler(steamController);

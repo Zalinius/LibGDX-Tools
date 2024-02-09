@@ -75,12 +75,6 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 		observers.stream().forEach(observer -> observer.inputStrategyChanged(this));
 	}
 
-
-	@Override
-	public boolean shouldFocusFirstButton() {
-		return currentInputStrategy.shouldFocusFirstButton();
-	}
-
 	@Override
 	public boolean shouldFlashButtons() {
 		return currentInputStrategy.shouldFlashButtons();

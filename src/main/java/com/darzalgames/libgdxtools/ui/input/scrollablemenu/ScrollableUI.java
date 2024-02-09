@@ -8,7 +8,6 @@ import java.util.function.Consumer;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
@@ -130,7 +129,7 @@ public class ScrollableUI implements InputConsumerWrapper {
 			}
 		}
 
-		if (GameInfo.getInputStrategyManager().shouldFocusFirstButton() && !pressButtonOnEntryChanged) {
+		if (!pressButtonOnEntryChanged) {
 			changedEntries();
 		}
 	}
@@ -215,7 +214,7 @@ public class ScrollableUI implements InputConsumerWrapper {
 			refreshPage();
 		}
 
-		if (GameInfo.getInputStrategyManager().shouldFocusFirstButton() && !pressButtonOnEntryChanged) {
+		if (!pressButtonOnEntryChanged) {
 			focusCurrent();
 		}
 	}

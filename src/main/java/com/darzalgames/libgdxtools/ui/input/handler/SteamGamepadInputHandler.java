@@ -8,6 +8,7 @@ import java.util.Objects;
 import com.badlogic.gdx.Gdx;
 import com.codedisaster.steamworks.*;
 import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
@@ -20,7 +21,8 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 	private boolean justDisconnected;
 
-	protected SteamGamepadInputHandler(SteamController steamController) {
+	protected SteamGamepadInputHandler(SteamController steamController, InputStrategyManager inputStrategyManager) {
+		super(inputStrategyManager);
 		this.steamController = steamController;
 		justDisconnected = false;
 

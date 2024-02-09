@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 /**
  * @author DarZal
@@ -18,8 +19,8 @@ public abstract class KeyboardInputHandler extends InputHandler {
 	/**
 	 * Sets up the listener for keyboard input, and maps various keybindings to others
 	 */
-	protected KeyboardInputHandler() {
-		super();
+	protected KeyboardInputHandler(InputStrategyManager inputStrategyManager) {
+		super(inputStrategyManager);
 		
 		keysToAllow = getKeyWhitelist();
 

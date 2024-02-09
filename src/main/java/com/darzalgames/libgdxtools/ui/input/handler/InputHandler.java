@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.handler;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 /**
  * @author DarZal
@@ -10,6 +11,12 @@ import com.darzalgames.darzalcommon.state.DoesNotPause;
  */
 public abstract class InputHandler extends Table implements DoesNotPause {
 	
+	protected final InputStrategyManager inputStrategyManager;
+	
+	protected InputHandler(InputStrategyManager inputStrategyManager) {
+		this.inputStrategyManager = inputStrategyManager;
+	}
+
 	/**
 	 * @author DarZal
 	 * The various input methods that we support.

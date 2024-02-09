@@ -18,6 +18,11 @@ import com.darzalgames.libgdxtools.ui.input.scrollablemenu.ScrollableMenu;
  */
 public abstract class PopUpMenu extends ScrollableMenu implements PopUp {
 
+	/** The height the menu background should be, override if you don't like the default  */
+	protected int desiredWidth = 200;
+	/** The height the menu background should be, override if you don't like the default  */
+	protected int desiredHeight = 100;
+	
 	protected PopUpMenu(boolean isVertical) {
 		super(isVertical);
 	}

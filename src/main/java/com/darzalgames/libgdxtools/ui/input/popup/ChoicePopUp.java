@@ -17,11 +17,13 @@ public abstract class ChoicePopUp extends PopUpMenu {
 
 	protected final Runnable firstChoiceRunnable;
 	private final boolean isSecondButtonBack;
-
+	
 	protected ChoicePopUp(Runnable firstChoiceRunnable, boolean isVertical, boolean isSecondButtonBack) {
 		super(isVertical);
 		this.firstChoiceRunnable = firstChoiceRunnable;
 		this.isSecondButtonBack = isSecondButtonBack;
+		desiredWidth = 200;
+		desiredHeight = 106;
 	}
 
 	protected abstract KeyboardButton getFirstChoiceButton();
@@ -46,7 +48,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	protected void setChosenKey(String chosenKey) {}
 
 	protected void setSizeAndBackground() {
-		setSize(200, 106);
+		setSize(desiredWidth, desiredHeight);
 		background(UserInterfaceFactory.getUIBorderedNine());
 	}
 

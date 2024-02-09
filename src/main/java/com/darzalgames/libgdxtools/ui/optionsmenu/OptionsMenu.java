@@ -34,7 +34,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected abstract Alignment getEntryAlignment();
 	protected abstract Alignment getMenuAlignment();
 	protected abstract String getGameVersion();
-
+	
 	/**
 	 * @return An optional button for players to report bugs (return null if you don't want this)
 	 */
@@ -68,6 +68,8 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		this.showWarningBeforeQuitting = showWarningBeforeQuitting;
 		setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight());
 		defaults().padBottom(bottomPadding);
+		desiredWidth = 250;
+		desiredHeight = 125;
 	}
 
 	/**
@@ -98,9 +100,6 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	@Override
 	protected void setUpTable() {
 		setUpBackground();
-
-		padTop(7);
-		padBottom(3);
 
 		// ALL SELECTABLE MENU BUTTONS
 		List<KeyboardButton> menuButtons = new ArrayList<>();
@@ -181,7 +180,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 		@Override
 		protected void setUpTable() {
-			setSize(250, 125);
+			setSize(desiredWidth, desiredHeight);
 			NinePatchDrawable back = UserInterfaceFactory.getUIBorderedNine();
 			background(back);
 			UserInterfaceFactory.makeActorCentered(this);

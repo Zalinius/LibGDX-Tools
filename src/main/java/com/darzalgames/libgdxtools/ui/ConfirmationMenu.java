@@ -18,6 +18,8 @@ public class ConfirmationMenu extends TextChoicePopUp {
 	
 	public ConfirmationMenu(String messageKey, String confirmButtonTextKey, String backButtonTextKey, Runnable confirmButtonRunnable) {
 		super(messageKey, confirmButtonTextKey, confirmButtonRunnable, backButtonTextKey, false, true, true);
+		desiredWidth = 275;
+		desiredHeight = 100;
 	}
 	
 	public static void setConfirmationBackground(NinePatch confirmationBackground) {
@@ -26,7 +28,7 @@ public class ConfirmationMenu extends TextChoicePopUp {
 
 	@Override
 	protected void setSizeAndBackground() {
-		setSize(275, 100);
+		setSize(desiredWidth, desiredHeight);
         NinePatchDrawable back = new NinePatchDrawable(confirmationBackground);
 		background(back);
 	}

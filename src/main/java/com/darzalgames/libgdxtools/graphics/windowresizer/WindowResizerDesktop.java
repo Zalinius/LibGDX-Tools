@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.graphics;
+package com.darzalgames.libgdxtools.graphics.windowresizer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;

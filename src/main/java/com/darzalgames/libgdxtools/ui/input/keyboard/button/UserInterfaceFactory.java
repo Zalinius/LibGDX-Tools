@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerTextSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
@@ -264,5 +266,11 @@ public class UserInterfaceFactory {
 		changeAfterDelay.setAction(change);
 
 		return changeAfterDelay;
+	}
+
+	public static WindowResizerSelectBox getWindowModeTextSelectBox() {
+		TextButton textButton = new TextButton(TextSupplier.getLine("window_mode_label") + ":  ", skinManager.getTextButtonStyle()); 
+		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
+		return new WindowResizerTextSelectBox(textButton, inputStrategyManager);
 	}
 }

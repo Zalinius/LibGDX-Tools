@@ -16,7 +16,8 @@ import com.badlogic.gdx.utils.Align;
 import com.codedisaster.steamworks.SteamController;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
-import com.darzalgames.libgdxtools.graphics.WindowResizerDesktop;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
@@ -274,6 +275,12 @@ public class TestGame extends MainGame {
 			@Override public void filesDropped(String[] files) {/* notYetNeeded */}
 			@Override public void refreshRequested() {/* notYetNeeded */}
 		};
+	}
+
+
+	@Override
+	protected WindowResizerSelectBox makeWindowResizerSelectBox() {
+		return UserInterfaceFactory.getWindowModeTextSelectBox();
 	}
 
 }

@@ -17,7 +17,8 @@ import com.codedisaster.steamworks.SteamAPI;
 import com.codedisaster.steamworks.SteamController;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
-import com.darzalgames.libgdxtools.graphics.WindowResizer;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.preferencemanagers.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.SteamConnection;
@@ -53,6 +54,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected abstract SaveManager makeSaveManager();
 	protected abstract void setUpBeforeLoadingSave();
 	protected abstract void launchGame(boolean isNewSave);
+	protected abstract WindowResizerSelectBox makeWindowResizerSelectBox();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 	protected abstract GamepadInputHandler makeGamepadInputHandler(SteamController steamController);
 	protected abstract void quitGame();
@@ -102,9 +104,9 @@ public abstract class MainGame extends ApplicationAdapter {
 		setUpBeforeLoadingSave();
 		saveManager = makeSaveManager();
 		boolean isNewSave = !saveManager.load();
-		windowResizer.initialize(inputStrategyManager);
 
 		launchGame(isNewSave);
+		windowResizer.initialize(inputStrategyManager, makeWindowResizerSelectBox());
 	}
 
 	private void makeBackgroundStage() {

@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
-import com.codedisaster.steamworks.SteamController;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
@@ -117,7 +116,7 @@ public class TestGame extends MainGame {
 	}
 
 	@Override
-	protected GamepadInputHandler makeGamepadInputHandler(SteamController steamController) {
+	protected GamepadInputHandler makeGamepadInputHandler() {
 		return new FallbackGamepadInputHandler(inputStrategyManager) {
 			@Override
 			protected List<Input> getTrackedInputs() {

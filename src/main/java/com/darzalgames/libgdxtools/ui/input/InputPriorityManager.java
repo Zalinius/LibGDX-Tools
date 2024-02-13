@@ -79,6 +79,7 @@ public class InputPriorityManager {
 		// Add the inner group to the stage
 		mainStage.addActor(group);
 		mainStage.setKeyboardFocus(keyboardInputHandler);
+		group.addActor(gamepadInputHandler);
 		
 		group.addAction(Actions.forever(new Action() {
 

@@ -13,8 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.codedisaster.steamworks.SteamAPI;
-import com.codedisaster.steamworks.SteamController;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
@@ -55,12 +53,11 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected abstract void launchGame(boolean isNewSave);
 	protected abstract WindowResizerSelectBox makeWindowResizerSelectBox();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
-	protected abstract GamepadInputHandler makeGamepadInputHandler(SteamController steamController);
+	protected abstract GamepadInputHandler makeGamepadInputHandler();
 	protected abstract void quitGame();
 
 	protected GameScreen currentScreen;
 	protected WindowResizer windowResizer;
-	private SteamController steamController;
 	private List<DoesNotPause> actorsThatDoNotPause;
 	protected InputStrategyManager inputStrategyManager;
 	
@@ -161,13 +158,9 @@ public abstract class MainGame extends ApplicationAdapter {
 
 	private void setUpInputPrioritizer() {
 		// Set up input processing for all strategies
-		steamController = new SteamController();
-		if (SteamAPI.isSteamRunning()) {
-			steamController.init();
-		}
 		stage.addActor(inputStrategyManager);
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
-		GamepadInputHandler gamepadInputHandler = makeGamepadInputHandler(steamController);
+		GamepadInputHandler gamepadInputHandler = makeGamepadInputHandler();
 		actorsThatDoNotPause.add(keyboardInputHandler);
 		actorsThatDoNotPause.add(gamepadInputHandler);
 		CustomCursorImage customCursor = new CustomCursorImage(windowResizer::isWindowed, getCursorTexture(), inputStrategyManager);
@@ -224,9 +217,6 @@ public abstract class MainGame extends ApplicationAdapter {
 
 		saveManager.save();
 
-		if (SteamAPI.isSteamRunning()) {
-			steamController.shutdown();
-		}
 		SteamConnection.dispose();
 
 		quitGame();

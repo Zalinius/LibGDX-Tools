@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.codedisaster.steamworks.*;
+import com.darzalgames.libgdxtools.steam.SteamConnection;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
@@ -21,12 +22,13 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 	private boolean justDisconnected;
 
-	protected SteamGamepadInputHandler(SteamController steamController, InputStrategyManager inputStrategyManager, SteamControllerActionSetHandle actionsSetHandle) {
+	protected SteamGamepadInputHandler(InputStrategyManager inputStrategyManager, String actionsSetHandleKey) {
 		super(inputStrategyManager);
-		this.steamController = steamController;
+		SteamControllerManager.initialize(this);
+		this.steamController = SteamConnection.getSteamController();
 		justDisconnected = false;
-
-		this.actionsSetHandle = actionsSetHandle; // TODO maybe some day add support for multiple action sets
+		// TODO maybe some day add support for multiple action sets
+		this.actionsSetHandle = steamController.getActionSetHandle(actionsSetHandleKey);	
 		buttonMappings = makeButtonMappings(steamController);
 
 		Gdx.app.log("GamepadInputHandler", "Using STEAM gamepad input handling.");
@@ -71,7 +73,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 			justDisconnected = false;
 		}
 	}
-	
+
 	private void checkForActiveController(SteamControllerHandle[] handlesOut) {
 		if (Arrays.asList(handlesOut).stream().anyMatch(Objects::nonNull)) {
 			for (int i = 0; i < handlesOut.length; i++) {

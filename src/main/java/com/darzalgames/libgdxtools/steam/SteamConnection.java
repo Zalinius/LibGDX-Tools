@@ -8,6 +8,7 @@ public class SteamConnection {
 	private static SteamUserStats steamUserStats;
 	private static SteamUser steamUser;
 	private static SteamFriends steamFriends;
+	private static SteamController steamController;
 
 	private static final String STEAM_CONNECTED = "[STEAM]";
 	private static final String STEAM_NOT_CONNECTED = "[STEAM (NOT CONNECTED)]";
@@ -29,6 +30,8 @@ public class SteamConnection {
 				steamUserStats.requestGlobalStats(0);
 				steamUser = new SteamUser(null);
 				steamFriends = new SteamFriends(new FriendsCallback());
+				steamController = new SteamController();
+				steamController.init();
 				Gdx.app.log(STEAM_CONNECTED, "Libraries loaded!");
 			}
 		} catch (SteamException e) {
@@ -50,8 +53,9 @@ public class SteamConnection {
 	 */
 	public static void dispose() {
 		if(SteamAPI.isSteamRunning()) {
+			steamController.shutdown();
 			SteamAPI.shutdown();
-			steamUserStats.dispose();			
+			steamUserStats.dispose();
 		}
 	}
 
@@ -106,6 +110,13 @@ public class SteamConnection {
 		} else {
 			return "dev";
 		}
+	}
+
+	/**
+	 * @return The SteamController, will be null if initialization failed
+	 */
+	public static SteamController getSteamController() {
+		return steamController;
 	}
 
 	/**

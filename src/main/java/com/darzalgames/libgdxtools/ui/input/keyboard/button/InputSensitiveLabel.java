@@ -9,7 +9,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class InputSensitiveLabel extends Label implements InputObserver {
 	
-	private final Supplier<String> textSupplier;
+	private final Supplier<String> labelTextSupplier;
 	private final InputStrategyManager inputStrategyManager;
 
 	/**
@@ -17,16 +17,16 @@ public class InputSensitiveLabel extends Label implements InputObserver {
 	 * @param textSupplier supplies a string for what the lebel should say based on the current input method (e.g. using an argument like inputStrategyManager.getRosterButtonInputHint()))
 	 * @param style
 	 */
-	protected InputSensitiveLabel(Supplier<String> textSupplier, LabelStyle style, InputStrategyManager inputStrategyManager) {
-		super(textSupplier.get(), style);
-		this.textSupplier = textSupplier;
+	protected InputSensitiveLabel(Supplier<String> labelTextSupplier, LabelStyle style, InputStrategyManager inputStrategyManager) {
+		super(labelTextSupplier.get(), style);
+		this.labelTextSupplier = labelTextSupplier;
 		this.inputStrategyManager = inputStrategyManager;
 		inputStrategyManager.register(this);
 	}
 
 	@Override
 	public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
-		this.setText(textSupplier.get());
+		this.setText(labelTextSupplier.get());
 	}
 	
 	@Override

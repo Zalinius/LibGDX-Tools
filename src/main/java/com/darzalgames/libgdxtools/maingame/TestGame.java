@@ -18,6 +18,7 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
+import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
@@ -68,6 +69,7 @@ public class TestGame extends MainGame {
 
 	@Override
 	protected void launchGame(boolean isNewSave) {
+		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategyManager);
 		changeScreen(new MainMenuScreen(new ScrollableMenu(true, getMenuEntries()) {
 

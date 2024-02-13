@@ -10,11 +10,12 @@ import org.junit.jupiter.api.Test;
 import com.badlogic.gdx.files.FileHandle;
 
 class TextSupplierTest {
+
+	private String key = "test_key";
 	
 	@Test
 	void getLine_withoutAnyBundles_returnsTheKeyAsProvided() throws Exception {
-		TextSupplier.clearBundles();
-		String key = "test_key";
+		makeTextSupplier();
 
 		String result = TextSupplier.getLine(key);
 
@@ -23,8 +24,6 @@ class TextSupplierTest {
 
 	@Test
 	void getLine_withOnlyBaseBundle_returnsTheLocalizedKey() throws Exception {
-		TextSupplier.clearBundles();
-		String key = "test_key";
 		makeTextSupplier();
 		TextSupplier.useLanguage("");
 
@@ -35,8 +34,6 @@ class TextSupplierTest {
 
 	@Test
 	void getLine_withTopAndBaseBundle_returnsTheLocalizedKey() throws Exception {
-		TextSupplier.clearBundles();
-		String key = "test_key";
 		makeTextSupplier();
 		TextSupplier.useLanguage("");
 		TextSupplier.useTopBundle(new FileHandle("./src/test/java/com/darzalgames/libgdxtools/internationalization/top"));
@@ -48,8 +45,6 @@ class TextSupplierTest {
 
 	@Test
 	void getLine_withFrenchBaseBundle_returnsTheLocalizedKey() throws Exception {
-		TextSupplier.clearBundles();
-		String key = "test_key";
 		makeTextSupplier();
 		TextSupplier.useLanguage("fr");
 
@@ -60,8 +55,6 @@ class TextSupplierTest {
 
 	@Test
 	void getLine_withFrenchTopAndBaseBundle_returnsTheLocalizedKey() throws Exception {
-		TextSupplier.clearBundles();
-		String key = "test_key";
 		makeTextSupplier();
 		TextSupplier.useLanguage("fr");
 		TextSupplier.useTopBundle(new FileHandle("./src/test/java/com/darzalgames/libgdxtools/internationalization/top"));
@@ -70,21 +63,17 @@ class TextSupplierTest {
 
 		assertEquals("Bonjour top", result);
 	}
-	
-	private static TextSupplier makeTextSupplier() {
-		TextSupplier textSupplier = new TextSupplier() {
-			@Override protected FileHandle getBaseBundleFileHandle() {
-				return new FileHandle("./src/test/java/com/darzalgames/libgdxtools/internationalization/base");
-			}
-			@Override protected ArrayList<Locale> getSupportedLocales() {
-				ArrayList<Locale> supportedLocales = new ArrayList<>(); 
-				supportedLocales.add(Locale.ROOT);
-				supportedLocales.add(Locale.FRENCH);
-				return supportedLocales;
-			}
-			
-		};
-		TextSupplier.initialize(textSupplier);
-		return textSupplier;
+
+	private static void makeTextSupplier() {
+		TextSupplier.initialize(new BundleManager(
+				new FileHandle("./src/test/java/com/darzalgames/libgdxtools/internationalization/base"),
+				getSupportedLocales()));
+	}
+
+	protected static ArrayList<Locale> getSupportedLocales() {
+		ArrayList<Locale> supportedLocales = new ArrayList<>(); 
+		supportedLocales.add(Locale.ROOT);
+		supportedLocales.add(Locale.FRENCH);
+		return supportedLocales;
 	}
 }

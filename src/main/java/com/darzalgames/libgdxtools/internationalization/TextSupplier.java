@@ -1,63 +1,23 @@
 package com.darzalgames.libgdxtools.internationalization;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
-import com.darzalgames.darzalcommon.data.BiMap;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.save.SaveManager;
 
 public abstract class TextSupplier {
 
-	private static I18NBundle baseBundle;
-	private static I18NBundle topBundle;
-	protected static Locale locale;
-
-	private static BiMap<String, Locale> displayNames;
+	private static BundleManager bundleManager;
 	
-	private static boolean throwExceptions;
+	private TextSupplier() {}
 	
-	private static TextSupplier instance;
-	protected abstract FileHandle getBaseBundleFileHandle();
-	protected abstract ArrayList<Locale> getSupportedLocales();
-	
-	private static UnaryOperator<String> modifierStrategy = String::toString;
-
-
-	protected TextSupplier() {}
-	
-	protected static void initialize(TextSupplier instance) {
-		initialize(instance, modifierStrategy);
-	}
-	
-	protected static void initialize(TextSupplier instance, UnaryOperator<String> modifierStrategy) {
-		TextSupplier.instance = instance;
-		TextSupplier.modifierStrategy = modifierStrategy;
-		
-		displayNames = new BiMap<>();
-		for (Locale current : instance.getSupportedLocales()) {
-			I18NBundle tempBundle = I18NBundle.createBundle(instance.getBaseBundleFileHandle(), current);
-			String displayname = tempBundle.format("language_display_name");
-			displayNames.addPair(displayname, current);
-		}
-	}
-
-	/**
-	 * @return The current language's display name, in the current locale
-	 */
-	public static String getCurrentLanguageDisplayName() {
-		return displayNames.getFirstValue(locale);
-	}
-
-	/**
-	 * @return All supported languages, written in their own locales
-	 */
-	public static Set<String> getAllDisplayNames() {
-		return displayNames.getFirstKeySet();
+	public static void initialize(BundleManager bundleManager) {
+		TextSupplier.bundleManager = bundleManager;
 	}
 
 	/**
@@ -68,91 +28,20 @@ public abstract class TextSupplier {
 	 * @return The localized line of text
 	 */
 	public static String getLine(String key, Object... args) {
-		try { 
-			if (topBundle != null) {
-				return modifierStrategy.apply(topBundle.format(key, args));
-			}
-		} catch (MissingResourceException e) {
-			// This will catch any keys that belong in the baseBundle, or any undefined keys
-		}
-		
-		try {
-			return modifierStrategy.apply(baseBundle.format(key, args));
-		} catch (NullPointerException e) {
-			// A game that doesn't (yet?) have any bundles just returns the key
-			if (throwExceptions) {
-				throw e;
-			} else {
-				return modifierStrategy.apply(key);
-			}
-		} catch (MissingResourceException e) {
-			Gdx.app.error("TextSupplier", "Key " + key + " really isn't found anywhere!");
-			if (throwExceptions) {
-				throw e;
-			} else {
-				return modifierStrategy.apply(baseBundle.format("missing_text", key));
-			}
-		}
-	}
-
-	/** 
-	 * Only to be used during validation, otherwise use TextSupplier.getLanguageChoiceResponder()
-	 * @param languageDisplayName
-	 */
-	public static void useLanguageFromDisplayName(String languageDisplayName) {
-		locale = displayNames.getSecondValue(languageDisplayName);
-
-		if(locale == null) {
-			locale = Locale.ROOT;
-		}
-		useLocale(locale);
-	}
-	
-	/** 
-	 * Only to be used when loading a save, otherwise use TextSupplier.getLanguageChoiceResponder()
-	 * @param languageCode
-	 */
-	public static void useLanguage(String languageCode) {
-		List<Locale> match = displayNames.getSecondKeyset().stream().filter(loc -> loc.getLanguage().equalsIgnoreCase(languageCode)).toList();
-		if (!match.isEmpty()) {
-			locale = match.get(0);
-		} else {
-			locale = Locale.ROOT;
-		}
-
-		useLocale(locale);
-	}
-
-	private static void useLocale(Locale useLocale) {
-		if(useLocale == null) {
-			useLocale = Locale.ROOT;
-		}
-		locale = useLocale;
-		baseBundle = I18NBundle.createBundle(instance.getBaseBundleFileHandle(), locale);
+		return bundleManager.getLine(key, args);
 	}
 
 	/**
-	 * The "top bundle" to be used: this is a temporary bundle meant to be changed as you go to different parts of a game (e.g. different scenarios in Quest Giver)
-	 * @param fileHandle The file handle from Assets
+	 * @return All supported languages, written in their own locales
 	 */
-	public static void useTopBundle(FileHandle fileHandle) {
-		topBundle = I18NBundle.createBundle(fileHandle, locale);
+	public static Set<String> getAllDisplayNames() {
+		return bundleManager.displayNames.getFirstKeySet();
 	}
-
 	/**
-	 * Set whether or not to throw exceptions if a key is missing (generally yes during validation, and no during actual gameplay)
-	 * @param throwExceptions 
+	 * @return The current language's display name, in the current locale
 	 */
-	public static void setThrowExceptions(boolean throwExceptions) {
-		TextSupplier.throwExceptions = throwExceptions;
-	}
-	
-	/** 
-	 * ONLY TO BE USED BY THE {@link SaveManager}
-	 * @return The language string for the current locale, this string ain't pretty (e.g. since English is the default bundle, it returns "", French is "fr")
-	 */
-	public static String getLocaleForSaveManager() {
-		return locale.getLanguage();
+	public static String getCurrentLanguageDisplayName() {
+		return bundleManager.displayNames.getFirstValue(bundleManager.locale);
 	}
 
 	/**
@@ -160,16 +49,57 @@ public abstract class TextSupplier {
 	 */
 	public static Consumer<String> getLanguageChoiceResponder() {
 		return selectedNewLanguage -> {
-			useLanguageFromDisplayName(selectedNewLanguage);
+			TextSupplier.useLanguageFromDisplayName(selectedNewLanguage);
 			GameInfo.getSaveManager().save();
 		}; 
 	}
 	
-	/**
-	 * Clear out the base in top bundles, mainly useful for testing.
+	/** 
+	 * ONLY TO BE USED BY THE {@link SaveManager}
+	 * @return The language string for the current locale, this string ain't pretty (e.g. since English is the default bundle, it returns "", French is "fr")
 	 */
-	protected static void clearBundles() {
-		baseBundle = null;
-		topBundle = null;
+	public static String getLocaleForSaveManager() {
+		return bundleManager.locale.getLanguage();
+	}
+	
+	/** 
+	 * Only to be used when loading a save, otherwise use TextSupplier.getLanguageChoiceResponder()
+	 * @param languageCode
+	 */
+	public static void useLanguage(String languageCode) {
+		List<Locale> match = bundleManager.displayNames.getSecondKeyset().stream().filter(loc -> loc.getLanguage().equalsIgnoreCase(languageCode)).toList();
+		if (!match.isEmpty()) {
+			bundleManager.locale = match.get(0);
+		} else {
+			bundleManager.locale = Locale.ROOT;
+		}
+
+		bundleManager.useLocale();
+	}
+
+	/**
+	 * The "top bundle" to be used: this is a temporary bundle meant to be changed as you go to different parts of a game (e.g. different scenarios in Quest Giver)
+	 * @param fileHandle The file handle from Assets
+	 */
+	public static void useTopBundle(FileHandle fileHandle) {
+		bundleManager.topBundle = I18NBundle.createBundle(fileHandle, bundleManager.locale);
+	}
+
+	/**
+	 * Set whether or not to throw exceptions if a key is missing (generally yes during validation, and no during actual gameplay)
+	 * @param throwExceptions 
+	 */
+	public static void setThrowExceptions(boolean throwExceptions) {
+		bundleManager.throwExceptions = throwExceptions;
+	}
+
+	/** 
+	 * Only to be used during validation, otherwise use TextSupplier.getLanguageChoiceResponder()
+	 * @param languageDisplayName
+	 */
+	public static void useLanguageFromDisplayName(String languageDisplayName) {
+		bundleManager.locale = bundleManager.displayNames.getSecondValue(languageDisplayName);
+
+		bundleManager.useLocale();
 	}
 }

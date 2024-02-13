@@ -19,6 +19,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 	private Label displayLabel;
 	private String defaultEntry;
 
+	// TODO experiment with making a constructor that takes a list of buttons instead of making them?
 	protected KeyboardSelectBox(Collection<String> entries, TextButton textButton, Consumer<String> action, InputStrategyManager inputStrategyManager) {
 		super(textButton, inputStrategyManager);
 

@@ -106,7 +106,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		boolean isNewSave = !saveManager.load();
 
 		launchGame(isNewSave);
-		windowResizer.initialize(inputStrategyManager, makeWindowResizerSelectBox());
+		windowResizer.initialize(inputStrategyManager, this::makeWindowResizerSelectBox);
 	}
 
 	private void makeBackgroundStage() {

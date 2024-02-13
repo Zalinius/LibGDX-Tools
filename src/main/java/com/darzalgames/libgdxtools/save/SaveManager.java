@@ -1,9 +1,7 @@
 package com.darzalgames.libgdxtools.save;
 
-import javax.swing.filechooser.FileSystemView;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.steam.SteamConnection;
 
 public interface SaveManager {
@@ -34,14 +32,7 @@ public interface SaveManager {
 
 	private FileHandle getSaveFileByOperatingSystem(String saveFileName, String gameName) {
 		String fullGameAndSaveName = gameName + "/" + SteamConnection.getSteamID() + "/" + saveFileName;
-		switch (OSType.getOperatingSystemType()) {
-		case WINDOWS:
-			return Gdx.files.absolute(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/My Games/"+ fullGameAndSaveName);
-		case LINUX:
-			return Gdx.files.external(".local/share/" + fullGameAndSaveName);
-		default:
-			return null;
-		}
+		return GameInfo.getGamePlatform().getSaveFileLocation(fullGameAndSaveName);
 	}
 
 }

@@ -17,6 +17,7 @@ import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
+import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferencemanagers.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.SteamConnection;
@@ -40,6 +41,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected final int height;
 	protected SaveManager saveManager;
 	protected PreferenceManager preferenceManager;
+	protected final GamePlatform gamePlatform;
 
 	protected Stage stage;
 	protected Stage popUpStage;
@@ -76,11 +78,11 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected abstract String getPreferenceManagerName();
 
 
-	protected MainGame(int width, int height, WindowResizer windowResizer) {
-		super();
+	protected MainGame(int width, int height, WindowResizer windowResizer, GamePlatform gamePlatform) {
 		this.width = width;
 		this.height = height;
 		this.windowResizer = windowResizer;
+		this.gamePlatform = gamePlatform;
 		actorsThatDoNotPause = new ArrayList<>();
 		GameInfo.setMainGame(this);
 	}
@@ -237,5 +239,5 @@ public abstract class MainGame extends ApplicationAdapter {
 		cursorStage.getViewport().update(width, height, true);
 		cursorStage.getCamera().update();
 	}
-
+	
 }

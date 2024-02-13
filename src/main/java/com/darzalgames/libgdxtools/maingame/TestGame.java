@@ -1,13 +1,20 @@
 package com.darzalgames.libgdxtools.maingame;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.backends.lwjgl3.*;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowListener;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,6 +26,7 @@ import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
+import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
@@ -27,7 +35,11 @@ import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.*;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardCheckbox;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSelectBox;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSlider;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -44,12 +56,12 @@ public class TestGame extends MainGame {
 		config.setWindowedMode(width, height);
 		config.setTitle("Test LibGDXTools Game");
 		config.setWindowListener(makeWindowListener());
-		new Lwjgl3Application(new TestGame(width, height), config);
+		new Lwjgl3Application(new TestGame(width, height, args), config);
 	}
 
 
-	public TestGame(int width, int height) {
-		super(width/2, height/2, new WindowResizerDesktop(width, height));
+	public TestGame(int width, int height, String[] args) {
+		super(width/2, height/2, new WindowResizerDesktop(width, height), GamePlatform.getTypeFromArgs(args));
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.maingame;
 
+import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferencemanagers.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 
@@ -45,5 +46,9 @@ public class GameInfo {
 	 */
 	public static SaveManager getSaveManager() {
 		return mainGame.saveManager;
+	}
+	
+	public static GamePlatform getGamePlatform() {
+		return mainGame.gamePlatform;
 	}
 }

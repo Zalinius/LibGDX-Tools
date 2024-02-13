@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.graphics.windowresizer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -15,7 +16,6 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.save.OSType;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
@@ -41,8 +41,8 @@ public class WindowResizerTextSelectBox extends WindowResizerSelectBox {
 	}
 	
 	private static Collection<String> getEntries() {
-		List<ScreenMode> allModes = Arrays.asList(ScreenMode.values());
-		if (OSType.getOperatingSystemType().equals(OSType.LINUX)) {
+		List<ScreenMode> allModes = new ArrayList<>(Arrays.asList(ScreenMode.values()));
+		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
 		return allModes.stream().map(mode -> windowModeOptionTranslator.apply(mode)).toList();

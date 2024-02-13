@@ -107,5 +107,5 @@ public abstract class WindowResizer {
 		WindowResizerSelectBox.windowResizer.setMode(previousScreenMode, false);
 		previousScreenMode = currentScreenMode;
 	}
-
+	
 }

@@ -75,12 +75,6 @@
 			<type>pom.sha512</type>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-		    <groupId>io.github.glytching</groupId>
-		    <artifactId>junit-extensions</artifactId>
-		    <version>2.6.0</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter -->
 		<dependency>
 		    <groupId>org.mockito</groupId>

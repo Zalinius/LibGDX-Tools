@@ -40,7 +40,6 @@ public abstract class MainGame extends ApplicationAdapter {
 	// Values which are statically shared to the rest of the game by {@link GameInfo}
 	protected final int width;
 	protected final int height;
-	protected InputStrategyManager inputStrategyManager;
 	protected SaveManager saveManager;
 	protected PreferenceManager preferenceManager;
 
@@ -63,6 +62,9 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected WindowResizer windowResizer;
 	private SteamController steamController;
 	private List<DoesNotPause> actorsThatDoNotPause;
+	protected InputStrategyManager inputStrategyManager;
+	
+	private boolean isQuitting = false;
 
 	/**
 	 * @return The background texture to be used in the "gutters" around the game, visible when the window size doesn't match the game's fixed resolution
@@ -87,8 +89,10 @@ public abstract class MainGame extends ApplicationAdapter {
 	}
 
 	@Override
-	public void create() {
+	public final void create() {
 		initializeAssets();
+
+		SteamConnection.initialize();
 
 		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
 		inputStrategyManager = makeInputStrategyManager();
@@ -104,7 +108,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		setUpBeforeLoadingSave();
 		saveManager = makeSaveManager();
 		boolean isNewSave = !saveManager.load();
-
+		
 		launchGame(isNewSave);
 		windowResizer.initialize(inputStrategyManager, this::makeWindowResizerSelectBox);
 	}
@@ -156,8 +160,6 @@ public abstract class MainGame extends ApplicationAdapter {
 	}
 
 	private void setUpInputPrioritizer() {
-		SteamConnection.initialize();
-
 		// Set up input processing for all strategies
 		steamController = new SteamController();
 		if (SteamAPI.isSteamRunning()) {
@@ -173,7 +175,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler, inputStrategyManager);
 	}
 
-	protected void changeScreen(GameScreen gameScreen) {
+	protected final void changeScreen(GameScreen gameScreen) {
 		if (currentScreen != null) {
 			currentScreen.hide();
 			currentScreen.remove();
@@ -184,7 +186,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
+	public final void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if (!isQuitting) {
 			backgroundStage.getViewport().apply();
@@ -216,9 +218,8 @@ public abstract class MainGame extends ApplicationAdapter {
 		SteamConnection.update();
 	}
 
-	private boolean isQuitting = false;
 	@Override
-	public void dispose() {
+	public final void dispose() {
 		isQuitting = true;
 
 		saveManager.save();
@@ -234,7 +235,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	}
 
 	@Override
-	public void resize (int width, int height) {
+	public final void resize (int width, int height) {
 		backgroundStage.getViewport().update(width, height, true);
 		backgroundStage.getCamera().update();
 		stage.getViewport().update(width, height, true);

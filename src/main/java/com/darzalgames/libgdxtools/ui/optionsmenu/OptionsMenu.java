@@ -68,6 +68,10 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		this.showWarningBeforeQuitting = showWarningBeforeQuitting;
 		setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight());
 		defaults().padBottom(bottomPadding);
+	}
+	
+	@Override
+	protected void setUpDesiredSize() {
 		desiredWidth = 250;
 		desiredHeight = 125;
 	}
@@ -167,6 +171,12 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		public NestedMenu(final List<KeyboardButton> entries, String buttonKey) {
 			super(true, entries, "back_message");
 			this.buttonKey = buttonKey;
+		}
+
+		@Override
+		protected void setUpDesiredSize() {
+			desiredWidth = 2252;
+			desiredHeight = 100;
 		}
 
 		public KeyboardButton getButton() {

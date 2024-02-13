@@ -18,18 +18,25 @@ import com.darzalgames.libgdxtools.ui.input.scrollablemenu.ScrollableMenu;
  */
 public abstract class PopUpMenu extends ScrollableMenu implements PopUp {
 
-	/** The height the menu background should be, override if you don't like the default  */
-	protected int desiredWidth = 200;
-	/** The height the menu background should be, override if you don't like the default  */
-	protected int desiredHeight = 100;
+	protected int desiredWidth;
+	protected int desiredHeight;
 	
 	protected PopUpMenu(boolean isVertical) {
 		super(isVertical);
+		setUpDesiredSize();
 	}
 
 	protected PopUpMenu(boolean isVertical, List<KeyboardButton> entries, String finalButtonMessageKey) {
 		super(isVertical, entries);
 		menu.replaceContents(entries, makeFinalButton(finalButtonMessageKey)); // Because the final button calls this::hideThis, we make it after the call to super()
+		
+		setUpDesiredSize();
+	}
+
+	/** The height and width the menu background should be, override if you don't like the default  */
+	protected void setUpDesiredSize() {
+		desiredWidth = 200;
+		desiredHeight = 100;
 	}
 	
 	private KeyboardButton makeFinalButton(String finalButtonMessageKey) {

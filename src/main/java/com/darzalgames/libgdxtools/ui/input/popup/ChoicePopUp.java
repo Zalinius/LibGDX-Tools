@@ -22,6 +22,9 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		super(isVertical);
 		this.firstChoiceRunnable = firstChoiceRunnable;
 		this.isSecondButtonBack = isSecondButtonBack;
+	}
+
+	protected void setUpDesiredSize() {
 		desiredWidth = 200;
 		desiredHeight = 106;
 	}

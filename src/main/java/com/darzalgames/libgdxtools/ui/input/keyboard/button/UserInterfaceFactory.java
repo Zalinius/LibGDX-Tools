@@ -223,7 +223,7 @@ public class UserInterfaceFactory {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				super.enter(event, x, y, pointer, fromActor);
-				float flashTime = 1f / 2.5f;
+				float flashTime = 1f / 2.5f; // TODO Changes to be the BPS once the audio stuff is in this library
 				if (KeyboardStage.isHoverEvent(pointer) && button.isTouchable()) {
 					button.setStyle(mainButtonStyle);
 					if (shouldButtonFlash(button)) {

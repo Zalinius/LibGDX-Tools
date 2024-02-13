@@ -1,17 +1,16 @@
 package com.darzalgames.libgdxtools.scenes.scene2d.actions;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 
 /**
- * Almost entirely copied from the original ForeverAction, this class will call act()
- * on the action right after restart().
+ * Almost entirely copied from the original RepeatAction implementation of a forever action,
+ * this class will call act() on the action right after restart().
  * @author DarZal
  *
  */
 public class InstantForeverAction extends RepeatAction {
-	public static final int FOREVER = -1;
-
 	private int repeatCount;
 	private int executedCount;
 	private boolean finished;
@@ -24,6 +23,7 @@ public class InstantForeverAction extends RepeatAction {
 	public InstantForeverAction(Action action) {
 		setCount(RepeatAction.FOREVER);
 		setAction(action);
+		Actions.forever(action);
 	}
 
 	@Override
@@ -40,7 +40,10 @@ public class InstantForeverAction extends RepeatAction {
 				return true;
 			}
 			action.restart();
-			action.act(delta); // THIS is the change
+			boolean isDelegateDone = action.act(delta); // THIS IS THE MAIN CHANGE TO MAKE IT INSTANT
+			if (isDelegateDone) {
+				return true;
+			}
 		}
 		return false;
 	}

@@ -33,11 +33,12 @@ public interface SaveManager {
 	}
 
 	private FileHandle getSaveFileByOperatingSystem(String saveFileName, String gameName) {
+		String fullGameAndSaveName = gameName + "/" + SteamConnection.getSteamID() + "/" + saveFileName;
 		switch (OSType.getOperatingSystemType()) {
 		case WINDOWS:
-			return Gdx.files.absolute(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/My Games/"+ gameName + "/" + SteamConnection.getSteamID() + "/" + saveFileName);
+			return Gdx.files.absolute(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/My Games/"+ fullGameAndSaveName);
 		case LINUX:
-			return Gdx.files.external(".local/share/Quest Giver/" + SteamConnection.getSteamID() + "/" + saveFileName);
+			return Gdx.files.external(".local/share/" + fullGameAndSaveName);
 		default:
 			return null;
 		}

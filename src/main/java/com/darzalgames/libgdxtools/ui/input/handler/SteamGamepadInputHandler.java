@@ -21,12 +21,12 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 	private boolean justDisconnected;
 
-	protected SteamGamepadInputHandler(SteamController steamController, InputStrategyManager inputStrategyManager) {
+	protected SteamGamepadInputHandler(SteamController steamController, InputStrategyManager inputStrategyManager, SteamControllerActionSetHandle actionsSetHandle) {
 		super(inputStrategyManager);
 		this.steamController = steamController;
 		justDisconnected = false;
 
-		actionsSetHandle = steamController.getActionSetHandle("MenuControls");
+		this.actionsSetHandle = actionsSetHandle; // TODO maybe some day add support for multiple action sets
 		buttonMappings = makeButtonMappings(steamController);
 
 		Gdx.app.log("GamepadInputHandler", "Using STEAM gamepad input handling.");

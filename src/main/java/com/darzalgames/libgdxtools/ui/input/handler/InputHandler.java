@@ -20,7 +20,7 @@ public abstract class InputHandler extends Table implements DoesNotPause {
 	/**
 	 * @author DarZal
 	 * The various input methods that we support.
-	 * Some strategies will share an input method, e.g. the Steam gamepad verse is the LibGDX gamepad 
+	 * Some strategies will share an input method, e.g. the Steam gamepad versus the LibGDX gamepad 
 	 */
 	public enum InputMethod {
 		MOUSE,

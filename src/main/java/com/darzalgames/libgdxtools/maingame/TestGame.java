@@ -30,8 +30,8 @@ import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.*;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager.SkinManager;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
-import com.darzalgames.libgdxtools.ui.input.scrollablemenu.ScrollableMenu;
 import com.darzalgames.libgdxtools.ui.optionsmenu.OptionsMenu;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
 
@@ -71,7 +71,7 @@ public class TestGame extends MainGame {
 	protected void launchGame(boolean isNewSave) {
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategyManager);
-		changeScreen(new MainMenuScreen(new ScrollableMenu(true, getMenuEntries()) {
+		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override
 			protected void setUpTable() {

@@ -23,7 +23,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 	protected KeyboardSelectBox(Collection<String> entries, TextButton textButton, Consumer<String> action, InputStrategyManager inputStrategyManager) {
 		super(textButton, inputStrategyManager);
 
-		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the scrollable selectable portion of this select box,
+		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,
 		// sets that as the text in our display label (e.g. English), and calls the Consumer (which responds to the new entry, e.g. changing the game language and refreshing the main menu)
 		List<KeyboardButton> entryButtons = entries.stream().map(entry -> UserInterfaceFactory.getButton(entry,
 				() -> {
@@ -33,7 +33,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 				}
 				)).toList();
 		
-		// This is the keyboard scrollable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
+		// This is the keyboard navigable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
 		this.options = new PopUpMenu(true, entryButtons, "back_message") {
 			@Override
 			protected void setUpTable() {
@@ -61,7 +61,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 		displayLabel = UserInterfaceFactory.getLabel("");
 		displayLabel.setWrap(false);
 		textButton.add(displayLabel);
-		this.setButtonRunnable(this::showScrollPane);
+		this.setButtonRunnable(this::showInnerOptionsPopUpMenu);
 		this.setWrap(false);
 		
 		setSelected(entryButtons.get(0).getView().getText().toString());
@@ -82,7 +82,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 		view.setWidth(view.getLabelCell().getPadRight() + label.getWidth() + displayLabel.getPrefWidth());
 	}
 
-	private void showScrollPane() {
+	private void showInnerOptionsPopUpMenu() {
 		InputPriorityManager.claimPriority(options);
 		options.goTo(defaultEntry);
 	}

@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.scrollablemenu;
+package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,12 +15,12 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 
 /**
- * This class is not an Actor, it's the logical list of scrollable buttons held in a Table.
- * One of these is owned by a {@link ScrollableMenu}, which is responsible for any decorative elements around this,
+ * This class is not an Actor, it's the logical list of buttons held in a Table.
+ * One of these is owned by a {@link NavigableListMenu}, which is responsible for any decorative elements around this,
  * and any interactions with it.
  * @author DarZal
  */
-public class ScrollableUI implements InputConsumerWrapper {
+public class NavigableList implements InputConsumerWrapper {
 	private final Input backCode;	
 	private final Input forwardCode;
 	protected final LinkedList<KeyboardButton> allEntries;
@@ -39,7 +39,7 @@ public class ScrollableUI implements InputConsumerWrapper {
 
 	private final List<Consumer<Input>> extraKeyListeners;
 
-	ScrollableUI(boolean isVertical, final List<KeyboardButton> entries) {
+	NavigableList(boolean isVertical, final List<KeyboardButton> entries) {
 		this.backCode = (isVertical ? Input.UP : Input.LEFT);
 		this.forwardCode = (isVertical ? Input.DOWN : Input.RIGHT);
 		this.allEntries = new LinkedList<>(entries);

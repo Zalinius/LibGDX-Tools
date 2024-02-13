@@ -2,17 +2,17 @@ package com.darzalgames.libgdxtools.ui.screen;
 
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.scrollablemenu.ScrollableMenu;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
 /**
- * Essentially a wrapper for the main menu (a highly-custom class which extends {@link ScrollableMenu}) which handles initialization and cleanup
+ * Essentially a wrapper for the main menu (a highly-custom class which extends {@link NavigableListMenu}) which handles initialization and cleanup
  * @author DarZal
  */
 public class MainMenuScreen extends GameScreen {
 
-	private ScrollableMenu mainMenu;
+	private NavigableListMenu mainMenu;
 	
-	public MainMenuScreen(ScrollableMenu mainMenu)
+	public MainMenuScreen(NavigableListMenu mainMenu)
 	{
 		super(Runnables.nullRunnable());
 		this.mainMenu = mainMenu;

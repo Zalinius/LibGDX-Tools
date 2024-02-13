@@ -14,7 +14,7 @@ public class InputSensitiveLabel extends Label implements InputObserver {
 
 	/**
 	 * Creates a label that changes it's text when the input strategy changes
-	 * @param textSupplier supplies a string for what the lebel should say based on the current input method (e.g. using an argument like inputStrategyManager.getRosterButtonInputHint()))
+	 * @param textSupplier supplies a string for what the label should say based on the current input method (using info from the inputStrategyManager, perhaps)
 	 * @param style
 	 */
 	protected InputSensitiveLabel(Supplier<String> labelTextSupplier, LabelStyle style, InputStrategyManager inputStrategyManager) {

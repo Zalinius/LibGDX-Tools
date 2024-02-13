@@ -60,6 +60,8 @@ public class InputPriorityManager {
 		InputPriorityManager.gamepadInputHandler = gamepadInputHandler;
 		InputPriorityManager.keyboardInputHandler = keyboardInputHandler;
 		InputPriorityManager.inputStrategyManager = inputStrategyManager;
+		
+		inputConsumerStack.add((InputConsumerWrapper) isTouchable -> {/*not needed*/});
 
 		// Set up the dark background screen that goes behind popups
 		darkScreen = new Image(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), GameInfo.getWidth(), GameInfo.getHeight()));
@@ -100,6 +102,7 @@ public class InputPriorityManager {
 	public static void clearChildren() {
 		group.clearChildren(false);
 		inputConsumerStack.clear();
+		inputConsumerStack.add((InputConsumerWrapper) isTouchable -> {/*not needed*/});
 		group.addActor(gamepadInputHandler);
 		group.addActor(keyboardInputHandler);
 		darkScreen.remove();
@@ -166,6 +169,7 @@ public class InputPriorityManager {
 
 			if (Math.abs(amount) > 0.1f && hasFinishedScrolling) {
 				timeSinceScroll = 0;
+				inputStrategyManager.setToMouseStrategy();
 				inputConsumerStack.peek().consumeKeyInput(amount < 0 ? Input.SCROLL_UP : Input.SCROLL_DOWN);
 				hasFinishedScrolling = false;
 			}

@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.scrollablemenu;
+package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,19 +11,19 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 
 /**
- * The actor that holds a {@link ScrollableUI} and handles how it looks and is interacted with.
+ * The actor that holds a {@link NavigableList} and handles how it looks and is interacted with.
  * @author DarZal
  *
  */
-public abstract class ScrollableMenu extends Table implements InputConsumer {
-	protected ScrollableUI menu;
+public abstract class NavigableListMenu extends Table implements InputConsumer {
+	protected NavigableList menu;
 
-	protected ScrollableMenu(boolean isVertical) {
+	protected NavigableListMenu(boolean isVertical) {
 		this(isVertical, new LinkedList<>());
 	}
 
-	protected ScrollableMenu(boolean isVertical, List<KeyboardButton> entries) {
-		menu = new ScrollableUI(isVertical, entries);
+	protected NavigableListMenu(boolean isVertical, List<KeyboardButton> entries) {
+		menu = new NavigableList(isVertical, entries);
 	}
 
 	@Override

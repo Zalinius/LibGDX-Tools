@@ -10,13 +10,13 @@ import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
-import com.darzalgames.libgdxtools.ui.input.scrollablemenu.ScrollableMenu;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
 /**
- * It's a scrollable menu, and it's a pop up!
+ * It's a navigable menu, and it's a pop up!
  * @author DarZal
  */
-public abstract class PopUpMenu extends ScrollableMenu implements PopUp {
+public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 
 	protected int desiredWidth;
 	protected int desiredHeight;

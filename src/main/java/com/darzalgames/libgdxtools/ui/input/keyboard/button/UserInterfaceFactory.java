@@ -81,7 +81,7 @@ public class UserInterfaceFactory {
 	}
 
 	/**
-	 * Makes a label which can be listed among other buttons, but isn't intractable
+	 * Makes a label which can be listed among other buttons, but isn't interactable
 	 * @param text
 	 * @return
 	 */

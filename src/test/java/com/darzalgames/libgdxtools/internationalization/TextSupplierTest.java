@@ -36,7 +36,7 @@ class TextSupplierTest {
 	void getLine_withTopAndBaseBundle_returnsTheLocalizedKey() throws Exception {
 		makeTextSupplier();
 		TextSupplier.useLanguage("");
-		TextSupplier.useTopBundle(new FileHandle("./src/test/java/com/darzalgames/libgdxtools/internationalization/top"));
+		TextSupplier.useTopBundle(new FileHandle("./src/test/resources/top"));
 
 		String result = TextSupplier.getLine(key);
 
@@ -57,7 +57,7 @@ class TextSupplierTest {
 	void getLine_withFrenchTopAndBaseBundle_returnsTheLocalizedKey() throws Exception {
 		makeTextSupplier();
 		TextSupplier.useLanguage("fr");
-		TextSupplier.useTopBundle(new FileHandle("./src/test/java/com/darzalgames/libgdxtools/internationalization/top"));
+		TextSupplier.useTopBundle(new FileHandle("./src/test/resources/top"));
 
 		String result = TextSupplier.getLine(key);
 
@@ -66,7 +66,7 @@ class TextSupplierTest {
 
 	private static void makeTextSupplier() {
 		TextSupplier.initialize(new BundleManager(
-				new FileHandle("./src/test/java/com/darzalgames/libgdxtools/internationalization/base"),
+				new FileHandle("./src/test/resources/base"),
 				getSupportedLocales()));
 	}
 

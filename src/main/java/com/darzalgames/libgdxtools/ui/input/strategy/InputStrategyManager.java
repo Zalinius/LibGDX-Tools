@@ -70,7 +70,7 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 	}
 	@Override
 	public void notifyObservers() {
-		List<InputObserver> toRemove = observers.stream().filter(o -> o == null || o.shouldBeUnregistered()).toList();
+		List<InputObserver> toRemove = observers.stream().filter(InputObserver::shouldBeUnregistered).toList();
 		observers.removeAll(toRemove);
 		observers.stream().forEach(observer -> observer.inputStrategyChanged(this));
 	}

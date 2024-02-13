@@ -113,11 +113,6 @@ public class TestGame extends MainGame {
 				keysToAllow.add(Input.TOGGLE_FULLSCREEN);
 				return keysToAllow;
 			}
-
-			@Override
-			protected Input getInputFromKey(int keycode) {
-				return Input.getToolsInputFromKey(keycode);
-			}
 		};
 	}
 

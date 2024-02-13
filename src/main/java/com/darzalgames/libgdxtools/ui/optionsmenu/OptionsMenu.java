@@ -175,7 +175,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 		@Override
 		protected void setUpDesiredSize() {
-			desiredWidth = 2252;
+			desiredWidth = 252;
 			desiredHeight = 100;
 		}
 

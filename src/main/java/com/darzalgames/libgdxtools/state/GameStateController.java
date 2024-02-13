@@ -3,10 +3,9 @@ package com.darzalgames.libgdxtools.state;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.darzalgames.libgdxtools.ui.GameObjectView;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 
-public abstract class GameStateController implements GameObjectView, InputConsumer {
+public abstract class GameStateController implements InputConsumer {
 	
 	private GameState state;
 	private Group group;
@@ -16,6 +15,8 @@ public abstract class GameStateController implements GameObjectView, InputConsum
 		this.state = state;
 		this.group = new Group();
 	}
+	
+	protected abstract Actor getView();
 
 	/**
 	 * Since a GameStateController owns an {@link Actor} rather than being one,

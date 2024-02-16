@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.scenes.scene2d.actions;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -8,12 +9,13 @@ import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelegateAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.darzalgames.libgdxtools.scenes.scene2d.actions.OptionalAction;
 
-public class OptionalActionTest {
+class OptionalActionTest {
 
 	@Test
 	void act_whenOptionalActionHasSupplierReturningFalse_hasNoEffect() throws Exception {
+		InstantRepeatAction repeatAction = new InstantRepeatAction();
+		repeatAction.setTotalCount(10);
 		AtomicBoolean spy = new AtomicBoolean(false);
 		RunnableAction runnableAction = new RunnableAction();
 		runnableAction.setRunnable(() -> spy.set(true));

@@ -3,14 +3,14 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.2.2</version>
+	<version>0.3.0</version>
 	<name>libGDX Tools</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>17</maven.compiler.release>
 		<libgdx.version>1.12.1</libgdx.version>
-		<darzalcommon.version>0.4.0</darzalcommon.version>
+		<darzalcommon.version>0.5.2</darzalcommon.version>
 	</properties>
 
 	<build>
@@ -75,6 +75,13 @@
 			<type>pom.sha512</type>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter -->
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-junit-jupiter</artifactId>
+		    <version>5.10.0</version>
+		    <scope>test</scope>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-lwjgl -->
 		<dependency>
@@ -112,18 +119,25 @@
 			<version>${darzalcommon.version}</version>
 		</dependency>
 
-
-		<!-- freetype-specific dependencies -->
 		<dependency>
-			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx-freetype</artifactId>
-			<version>${libgdx.version}</version>
+			<groupId>com.code-disaster.steamworks4j</groupId>
+			<artifactId>steamworks4j</artifactId>
+			<version>1.9.0</version>
 		</dependency>
+		
+		<!--
+		https://mvnrepository.com/artifact/com.badlogicgames.gdx-controllers/gdx-controllers-core -->
 		<dependency>
-			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx-freetype-platform</artifactId>
-			<version>${libgdx.version}</version>
-			<classifier>natives-desktop</classifier>
+			<groupId>com.badlogicgames.gdx-controllers</groupId>
+			<artifactId>gdx-controllers-core</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/com.badlogicgames.gdx-controllers/gdx-controllers-desktop -->
+		<dependency>
+			<groupId>com.badlogicgames.gdx-controllers</groupId>
+			<artifactId>gdx-controllers-desktop</artifactId>
+			<version>2.2.2</version>
 		</dependency>
 
 	</dependencies>

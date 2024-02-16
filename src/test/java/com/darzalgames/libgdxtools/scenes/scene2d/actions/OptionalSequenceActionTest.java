@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.scenes.scene2d.actions;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,10 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.darzalgames.libgdxtools.scenes.scene2d.actions.OptionalAction;
-import com.darzalgames.libgdxtools.scenes.scene2d.actions.OptionalSequenceAction;
 
-public class OptionalSequenceActionTest {
+class OptionalSequenceActionTest {
 	
 	private List<AtomicBoolean> spies;
 	

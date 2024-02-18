@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
@@ -26,7 +27,6 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 public class WindowResizerTextSelectBox extends WindowResizerSelectBox {
 
 	private static Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase()); 
-	private Label revertCountdown;
 
 	public WindowResizerTextSelectBox(TextButton textButton, InputStrategyManager inputStrategyManager) {
 		super(getEntries(), textButton, getAction(), inputStrategyManager);
@@ -73,16 +73,23 @@ public class WindowResizerTextSelectBox extends WindowResizerSelectBox {
 
 	@Override
 	protected ConfirmationMenu getRevertMenu() {
-		return new WindowRevertCountdownConfirmationMenu(revertCountdown);
+		return new WindowRevertCountdownConfirmationMenu();
 	}
-
+	
 	private class WindowRevertCountdownConfirmationMenu extends ConfirmationMenu {
 
-		private WindowRevertCountdownConfirmationMenu(Label revertCountdown) {
+		private Label revertCountdown;
+
+		private WindowRevertCountdownConfirmationMenu() {
 			super("screen_mode_accept", 
 					"accept_control",
 					"revert_message",
-					() -> revertCountdown.clearActions());
+					Runnables.nullRunnable());
+		}
+		
+		@Override
+		protected void setChosenKey(String chosenKey) {
+			revertCountdown.clearActions();
 		}
 
 		@Override

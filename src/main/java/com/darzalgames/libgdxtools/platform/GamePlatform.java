@@ -17,6 +17,9 @@ public interface GamePlatform {
 	 */
 	public FileHandle getSaveFileLocation(String fullGameAndSaveName);
 	
+	/**
+	 * @return A SteamStrategy befitting the GamePlatform
+	 */
 	public SteamStrategy getSteamStrategy();
 
 }

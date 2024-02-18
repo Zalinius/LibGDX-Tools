@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.steam.agnostic;
 
 import com.codedisaster.steamworks.SteamController;
+import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 
 public class DummySteamStrategy implements SteamStrategy {
 
@@ -29,9 +30,7 @@ public class DummySteamStrategy implements SteamStrategy {
 	}
 	
 	@Override
-	public SteamController getSteamController() {
-		return null;
-	}
+	public void acceptController(GamepadInputHandler gamepadInputHandler) {}
 	
 	@Override
 	public void giveAchievement(String achievement) {}

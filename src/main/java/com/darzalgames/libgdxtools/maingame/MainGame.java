@@ -42,7 +42,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected SaveManager saveManager;
 	protected PreferenceManager preferenceManager;
 	protected final GamePlatform gamePlatform;
-	protected final SteamStrategy steamStrategy;
+	protected SteamStrategy steamStrategy;
 
 	protected Stage stage;
 	protected Stage popUpStage;
@@ -84,7 +84,6 @@ public abstract class MainGame extends ApplicationAdapter {
 		this.height = height;
 		this.windowResizer = windowResizer;
 		this.gamePlatform = gamePlatform;
-		this.steamStrategy = gamePlatform.getSteamStrategy();
 		actorsThatDoNotPause = new ArrayList<>();
 		GameInfo.setMainGame(this);
 	}
@@ -92,7 +91,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	@Override
 	public final void create() {
 		initializeAssets();
-
+		this.steamStrategy = gamePlatform.getSteamStrategy();
 		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
 		inputStrategyManager = makeInputStrategyManager();
 

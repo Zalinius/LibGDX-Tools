@@ -177,32 +177,36 @@
 			<artifactId>gdx-controllers-desktop</artifactId>
 			<version>${libgdx.controllers.version}</version>
 		</dependency>
+		
+		
+		<!-- vvv HERE vvv -->
 
-<!--		<dependency>-->
-<!--			<groupId>com.badlogicgames.gdx-controllers</groupId>-->
-<!--			<artifactId>gdx-controllers-gwt</artifactId>-->
-<!--			<version>${libgdx.controllers.version}</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>com.badlogicgames.gdx-controllers</groupId>-->
-<!--			<artifactId>gdx-controllers-gwt</artifactId>-->
-<!--			<version>${libgdx.controllers.version}</version>-->
-<!--			<classifier>sources</classifier>-->
-<!--			<scope>provided</scope>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>com.github.tommyettinger</groupId>-->
-<!--			<artifactId>gdx-backend-gwt</artifactId>-->
-<!--			<version>${tommyettinger.version}</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>com.github.tommyettinger</groupId>-->
-<!--			<artifactId>gdx-backend-gwt</artifactId>-->
-<!--			<version>${tommyettinger.version}</version>-->
-<!--			<classifier>sources</classifier>-->
-<!--			<scope>provided</scope>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>com.badlogicgames.gdx-controllers</groupId>
+			<artifactId>gdx-controllers-gwt</artifactId>
+			<version>${libgdx.controllers.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.badlogicgames.gdx-controllers</groupId>
+			<artifactId>gdx-controllers-gwt</artifactId>
+			<version>${libgdx.controllers.version}</version>
+			<classifier>sources</classifier>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.tommyettinger</groupId>
+			<artifactId>gdx-backend-gwt</artifactId>
+			<version>${tommyettinger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.tommyettinger</groupId>
+			<artifactId>gdx-backend-gwt</artifactId>
+			<version>${tommyettinger.version}</version>
+			<classifier>sources</classifier>
+			<scope>provided</scope>
+		</dependency>
 
+		<!-- ^^^ HERE ^^^ -->
 
 
 		<dependency>

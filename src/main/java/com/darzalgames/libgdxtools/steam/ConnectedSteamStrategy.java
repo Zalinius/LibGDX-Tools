@@ -12,6 +12,8 @@ import com.codedisaster.steamworks.SteamUser;
 import com.codedisaster.steamworks.SteamUserStats;
 import com.codedisaster.steamworks.SteamUserStatsCallback;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
+import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
+import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
 
 public class ConnectedSteamStrategy implements SteamStrategy {
 	
@@ -63,8 +65,12 @@ public class ConnectedSteamStrategy implements SteamStrategy {
 	}
 	
 	@Override
-	public SteamController getSteamController() {
-		return steamController;
+	public void acceptController(GamepadInputHandler gamepadInputHandler) {
+		
+		//TODO this is hacky, can we replace it when we give action sets to normal controllers?
+		if(gamepadInputHandler instanceof SteamGamepadInputHandler steamGamepadInputHandler) {
+			steamGamepadInputHandler.setSteamController(steamController);			
+		}
 	}
 
 	@Override

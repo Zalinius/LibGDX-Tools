@@ -10,7 +10,7 @@
 	<entry-point class='com.darzalgames.libgdxtools.gwt.DummyEntryPoint' />
 
 	<source path="libgdxtools">
-			<exclude name="**/preferencemanagers/DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA.java" />
+			<exclude name="**/preferences/DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA.java" />
 			<exclude name="**/maingame/TestGame.java" />
 			<exclude name="**/errorhandling/**" />
 			<exclude name="**/steam/*" />

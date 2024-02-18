@@ -1,7 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.strategy;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List;import java.util.stream.Collectors;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
@@ -70,7 +70,7 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 	}
 	@Override
 	public void notifyObservers() {
-		List<InputObserver> toRemove = observers.stream().filter(InputObserver::shouldBeUnregistered).toList();
+		List<InputObserver> toRemove = observers.stream().filter(InputObserver::shouldBeUnregistered).collect(Collectors.toList());
 		observers.removeAll(toRemove);
 		observers.stream().forEach(observer -> observer.inputStrategyChanged(this));
 	}

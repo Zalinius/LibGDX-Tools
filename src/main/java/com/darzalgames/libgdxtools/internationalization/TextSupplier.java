@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.save.SaveManager;
+import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 
 public abstract class TextSupplier {
 
@@ -55,7 +56,7 @@ public abstract class TextSupplier {
 	}
 	
 	/** 
-	 * ONLY TO BE USED BY THE {@link SaveManager}
+	 * ONLY TO BE USED BY THE {@link DesktopSaveManager}
 	 * @return The language string for the current locale, this string ain't pretty (e.g. since English is the default bundle, it returns "", French is "fr")
 	 */
 	public static String getLocaleForSaveManager() {
@@ -67,7 +68,7 @@ public abstract class TextSupplier {
 	 * @param languageCode
 	 */
 	public static void useLanguage(String languageCode) {
-		List<Locale> match = bundleManager.displayNames.getSecondKeyset().stream().filter(loc -> loc.getLanguage().equalsIgnoreCase(languageCode)).toList();
+		List<Locale> match = bundleManager.displayNames.getSecondKeyset().stream().filter(loc -> loc.getLanguage().equalsIgnoreCase(languageCode)).collect(Collectors.toList());
 		if (!match.isEmpty()) {
 			bundleManager.locale = match.get(0);
 		} else {

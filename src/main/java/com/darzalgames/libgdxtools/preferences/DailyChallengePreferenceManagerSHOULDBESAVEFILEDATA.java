@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.preferencemanagers;
+package com.darzalgames.libgdxtools.preferences;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

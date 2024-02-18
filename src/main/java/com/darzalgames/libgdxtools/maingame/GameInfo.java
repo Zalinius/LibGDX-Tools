@@ -1,8 +1,10 @@
 package com.darzalgames.libgdxtools.maingame;
 
 import com.darzalgames.libgdxtools.platform.GamePlatform;
-import com.darzalgames.libgdxtools.preferencemanagers.PreferenceManager;
+import com.darzalgames.libgdxtools.preferences.PreferenceManager;
+import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
+import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 
 /**
  * Allows static access to the globally useful variables/managers from {@link MainGame}
@@ -42,7 +44,7 @@ public class GameInfo {
 	}
 
 	/**
-	 * @return Gets the {@link SaveManager}, which is a concrete class in a full game
+	 * @return Gets the {@link DesktopSaveManager}, which is a concrete class in a full game
 	 */
 	public static SaveManager getSaveManager() {
 		return mainGame.saveManager;
@@ -50,5 +52,9 @@ public class GameInfo {
 	
 	public static GamePlatform getGamePlatform() {
 		return mainGame.gamePlatform;
+	}
+	
+	public static SteamStrategy getSteamStrategy() { 
+		return mainGame.steamStrategy;
 	}
 }

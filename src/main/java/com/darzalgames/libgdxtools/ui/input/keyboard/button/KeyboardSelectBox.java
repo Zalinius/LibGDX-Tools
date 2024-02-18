@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -31,7 +32,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 					setSelected(entry);
 					action.accept(entry);
 				}
-				)).toList();
+				)).collect(Collectors.toList());
 		
 		// This is the keyboard navigable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
 		this.options = new PopUpMenu(true, entryButtons, "back_message") {

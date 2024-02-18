@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.preferencemanagers;
+package com.darzalgames.libgdxtools.preferences;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;

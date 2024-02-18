@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
@@ -45,7 +46,7 @@ public class WindowResizerTextSelectBox extends WindowResizerSelectBox {
 		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
-		return allModes.stream().map(mode -> windowModeOptionTranslator.apply(mode)).toList();
+		return allModes.stream().map(mode -> windowModeOptionTranslator.apply(mode)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -72,12 +73,12 @@ public class WindowResizerTextSelectBox extends WindowResizerSelectBox {
 
 	@Override
 	protected ConfirmationMenu getRevertMenu() {
-		return new WindowRevertCountdownConfirmationMenu();
+		return new WindowRevertCountdownConfirmationMenu(revertCountdown);
 	}
 
 	private class WindowRevertCountdownConfirmationMenu extends ConfirmationMenu {
 
-		private WindowRevertCountdownConfirmationMenu() {
+		private WindowRevertCountdownConfirmationMenu(Label revertCountdown) {
 			super("screen_mode_accept", 
 					"accept_control",
 					"revert_message",

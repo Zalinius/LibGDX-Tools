@@ -26,8 +26,8 @@ import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
-import com.darzalgames.libgdxtools.platform.GamePlatform;
-import com.darzalgames.libgdxtools.save.SaveManager;
+import com.darzalgames.libgdxtools.platform.DesktopGamePlatformHelper;
+import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.Input;
@@ -48,7 +48,6 @@ import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
 
 public class TestGame extends MainGame {
 
-
 	public static void main(String[] args) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		int width = 1280;
@@ -61,14 +60,14 @@ public class TestGame extends MainGame {
 
 
 	public TestGame(int width, int height, String[] args) {
-		super(width/2, height/2, new WindowResizerDesktop(width, height), GamePlatform.getTypeFromArgs(args));
+		super(width/2, height/2, new WindowResizerDesktop(width, height), DesktopGamePlatformHelper.getTypeFromArgs(args));
 	}
 
 	@Override
 	protected void initializeAssets() {/* notYetNeeded */}
 	@Override
-	protected SaveManager makeSaveManager() {
-		return new SaveManager() {
+	protected DesktopSaveManager makeSaveManager() {
+		return new DesktopSaveManager() {
 			@Override
 			public void save() {/* notYetNeeded */}
 			@Override

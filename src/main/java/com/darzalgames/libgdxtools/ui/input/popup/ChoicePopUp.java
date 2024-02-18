@@ -1,8 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.popup;
 
-import java.util.List;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.darzalgames.darzalcommon.data.ListFactory;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
@@ -67,9 +66,9 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		KeyboardButton firstButton = getFirstChoiceButton(); 
 		KeyboardButton secondButton = getSecondChoiceButton();
 		if (isSecondButtonBack) {
-			menu.replaceContents(List.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
+			menu.replaceContents(ListFactory.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
 		} else {
-			menu.replaceContents(List.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button			
+			menu.replaceContents(ListFactory.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button			
 		}
 
 		menu.setAlignment(Alignment.CENTER, Alignment.CENTER);

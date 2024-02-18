@@ -1,10 +1,14 @@
 package com.darzalgames.libgdxtools.steam;
 
+import java.util.function.Supplier;
+
 import com.badlogic.gdx.Gdx;
 import com.codedisaster.steamworks.SteamAPI;
 import com.codedisaster.steamworks.SteamException;
 import com.darzalgames.libgdxtools.steam.agnostic.DummySteamStrategy;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
+import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
+import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
 
 public class SteamConnection {
 
@@ -13,22 +17,24 @@ public class SteamConnection {
 
 	private SteamConnection() {}
 	
-	public static SteamStrategy initializeStrategy() {
+	public static SteamStrategy initializeStrategy(
+			Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandler,
+			Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler) {
 		try {
 			SteamAPI.loadLibraries();
 			boolean steamInitialized = SteamAPI.init();
 			if(steamInitialized) {
-				ConnectedSteamStrategy connectedSteamStrategy = new ConnectedSteamStrategy();
+				ConnectedSteamStrategy connectedSteamStrategy = new ConnectedSteamStrategy(makeSteamGamepadInputHandler.get());
 				connectedSteamStrategy.initialize();
 				return connectedSteamStrategy;
 			}
 			else {
 				Gdx.app.error(STEAM_NOT_CONNECTED, "Could not initialize Steam. Is Steam running?");
-				return new DummySteamStrategy();
+				return new DummySteamStrategy(makeFallbackGamepadInputHandler.get());
 			}
 		} catch (SteamException e) {
 			Gdx.app.error(STEAM_NOT_CONNECTED, "Could not load Steam libraries. Is Steam running?");
-			return new DummySteamStrategy();
+			return new DummySteamStrategy(makeFallbackGamepadInputHandler.get());
 		}
 	}
 

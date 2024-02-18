@@ -1,26 +1,22 @@
 package com.darzalgames.libgdxtools.steam;
 
 import com.badlogic.gdx.Gdx;
-import com.codedisaster.steamworks.SteamAPI;
-import com.codedisaster.steamworks.SteamController;
-import com.codedisaster.steamworks.SteamFriends;
-import com.codedisaster.steamworks.SteamID;
-import com.codedisaster.steamworks.SteamLeaderboardEntriesHandle;
-import com.codedisaster.steamworks.SteamLeaderboardHandle;
-import com.codedisaster.steamworks.SteamResult;
-import com.codedisaster.steamworks.SteamUser;
-import com.codedisaster.steamworks.SteamUserStats;
-import com.codedisaster.steamworks.SteamUserStatsCallback;
+import com.codedisaster.steamworks.*;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
 
 public class ConnectedSteamStrategy implements SteamStrategy {
+	private SteamGamepadInputHandler gamepadInputHandler;
 	
 	private static SteamUserStats steamUserStats;
 	private static SteamUser steamUser;
 	private static SteamFriends steamFriends;
 	private static SteamController steamController;
+
+	public ConnectedSteamStrategy(SteamGamepadInputHandler gamepadInputHandler) {
+		this.gamepadInputHandler = gamepadInputHandler;
+	}
 
 	public void initialize() {
 		steamUserStats = new SteamUserStats(getSteamUserStatsCallback());
@@ -29,6 +25,7 @@ public class ConnectedSteamStrategy implements SteamStrategy {
 		steamUser = new SteamUser(null);
 		steamFriends = new SteamFriends(new FriendsCallback());
 		steamController = new SteamController();
+		this.gamepadInputHandler.setSteamController(steamController);
 		steamController.init();
 	}
 
@@ -42,6 +39,11 @@ public class ConnectedSteamStrategy implements SteamStrategy {
 		steamController.shutdown();
 		SteamAPI.shutdown();
 		steamUserStats.dispose();
+	}
+	
+	@Override
+	public GamepadInputHandler getGamepadInputHandler() {
+		return gamepadInputHandler;
 	}
 	
 	@Override
@@ -120,4 +122,5 @@ public class ConnectedSteamStrategy implements SteamStrategy {
 			}
 		};
 	}
+
 }

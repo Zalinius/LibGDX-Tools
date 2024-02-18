@@ -56,7 +56,6 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected abstract void launchGame(boolean isNewSave);
 	protected abstract WindowResizerSelectBox makeWindowResizerSelectBox();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
-	protected abstract GamepadInputHandler makeGamepadInputHandler();
 	protected abstract void quitGame();
 
 	protected GameScreen currentScreen;
@@ -91,9 +90,9 @@ public abstract class MainGame extends ApplicationAdapter {
 	@Override
 	public final void create() {
 		initializeAssets();
-		this.steamStrategy = gamePlatform.getSteamStrategy();
 		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
 		inputStrategyManager = makeInputStrategyManager();
+		this.steamStrategy = gamePlatform.getSteamStrategy(inputStrategyManager);
 
 		makeBackgroundStage();
 		makePopUpStage();
@@ -161,7 +160,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		// Set up input processing for all strategies
 		stage.addActor(inputStrategyManager);
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
-		GamepadInputHandler gamepadInputHandler = makeGamepadInputHandler();
+		GamepadInputHandler gamepadInputHandler = steamStrategy.getGamepadInputHandler();
 		actorsThatDoNotPause.add(keyboardInputHandler);
 		actorsThatDoNotPause.add(gamepadInputHandler);
 		CustomCursorImage customCursor = new CustomCursorImage(windowResizer::isWindowed, getCursorTexture(), inputStrategyManager);

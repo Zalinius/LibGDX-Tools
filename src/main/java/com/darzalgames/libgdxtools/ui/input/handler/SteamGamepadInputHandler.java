@@ -6,13 +6,8 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import com.badlogic.gdx.Gdx;
-import com.codedisaster.steamworks.SteamController;
-import com.codedisaster.steamworks.SteamControllerActionSetHandle;
-import com.codedisaster.steamworks.SteamControllerDigitalActionData;
-import com.codedisaster.steamworks.SteamControllerDigitalActionHandle;
-import com.codedisaster.steamworks.SteamControllerHandle;
+import com.codedisaster.steamworks.*;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.steam.ConnectedSteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 

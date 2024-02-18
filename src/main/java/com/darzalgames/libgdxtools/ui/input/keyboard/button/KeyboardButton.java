@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Pools;
 import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.darzalcommon.strings.StringUtils;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
@@ -53,8 +54,8 @@ public class KeyboardButton implements InputConsumerWrapper {
 			Label label = labelSupplier.get();
 			button.clearChildren();
 
-			int sidePadding = label.getText().toString().isBlank() ? 0 : 3;
-			float startWidth = label.getText().toString().isBlank() ? 0 : button.getWidth();
+			int sidePadding = StringUtils.isBlank(label.getText().toString()) ? 0 : 3;
+			float startWidth = StringUtils.isBlank(label.getText().toString()) ? 0 : button.getWidth();
 
 			button.add(image).padRight(sidePadding);
 			button.add(label);
@@ -158,7 +159,7 @@ public class KeyboardButton implements InputConsumerWrapper {
 	 * @return Whether or not the button is blank
 	 */
 	public boolean isBlank() {
-		return labelSupplier.get().getText().toString().isBlank();
+		return StringUtils.isBlank(labelSupplier.get().getText().toString());
 	}
 	
 	/**

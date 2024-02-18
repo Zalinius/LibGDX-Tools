@@ -1,7 +1,5 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
-import com.codedisaster.steamworks.SteamAPI;
-
 public class SteamControllerManager {
 
 	private static SteamGamepadInputHandler steamGamepadInputHandler;
@@ -13,8 +11,6 @@ public class SteamControllerManager {
 	}
 
 	public static void openControlsOverlay() {
-		if (SteamAPI.isSteamRunning()) {
-			steamGamepadInputHandler.openControlsOverlay();
-		}
+		steamGamepadInputHandler.openControlsOverlay();
 	}
 }

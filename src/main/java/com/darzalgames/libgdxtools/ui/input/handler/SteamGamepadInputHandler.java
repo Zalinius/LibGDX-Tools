@@ -6,8 +6,13 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import com.badlogic.gdx.Gdx;
-import com.codedisaster.steamworks.*;
-import com.darzalgames.libgdxtools.steam.SteamConnection;
+import com.codedisaster.steamworks.SteamController;
+import com.codedisaster.steamworks.SteamControllerActionSetHandle;
+import com.codedisaster.steamworks.SteamControllerDigitalActionData;
+import com.codedisaster.steamworks.SteamControllerDigitalActionHandle;
+import com.codedisaster.steamworks.SteamControllerHandle;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.steam.ConnectedSteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
@@ -25,7 +30,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 	protected SteamGamepadInputHandler(InputStrategyManager inputStrategyManager, String actionsSetHandleKey) {
 		super(inputStrategyManager);
 		SteamControllerManager.initialize(this);
-		this.steamController = SteamConnection.getSteamController();
+		GameInfo.getSteamStrategy().acceptController(this);
 		justDisconnected = false;
 		// TODO maybe some day add support for multiple action sets
 		this.actionsSetHandle = steamController.getActionSetHandle(actionsSetHandleKey);	
@@ -33,7 +38,11 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 		Gdx.app.log("GamepadInputHandler", "Using STEAM gamepad input handling.");
 	}
-
+	
+	public void setSteamController(SteamController steamController) {
+		this.steamController = steamController;
+	}
+	
 
 	@Override
 	public void act(float delta) {

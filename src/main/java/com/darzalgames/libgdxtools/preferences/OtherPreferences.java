@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.preferencemanagers;
+package com.darzalgames.libgdxtools.preferences;
 
 public class OtherPreferences {
 	

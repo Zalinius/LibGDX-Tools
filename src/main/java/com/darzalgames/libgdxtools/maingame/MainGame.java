@@ -18,9 +18,9 @@ import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
-import com.darzalgames.libgdxtools.preferencemanagers.PreferenceManager;
+import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
-import com.darzalgames.libgdxtools.steam.SteamConnection;
+import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
@@ -42,6 +42,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected SaveManager saveManager;
 	protected PreferenceManager preferenceManager;
 	protected final GamePlatform gamePlatform;
+	protected SteamStrategy steamStrategy;
 
 	protected Stage stage;
 	protected Stage popUpStage;
@@ -90,9 +91,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	@Override
 	public final void create() {
 		initializeAssets();
-
-		SteamConnection.initialize();
-
+		this.steamStrategy = gamePlatform.getSteamStrategy();
 		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
 		inputStrategyManager = makeInputStrategyManager();
 
@@ -210,7 +209,7 @@ public abstract class MainGame extends ApplicationAdapter {
 			mouseDetectorStage.draw();
 		}
 
-		SteamConnection.update();
+		steamStrategy.update();
 	}
 
 	@Override
@@ -219,7 +218,7 @@ public abstract class MainGame extends ApplicationAdapter {
 
 		saveManager.save();
 
-		SteamConnection.dispose();
+		steamStrategy.dispose();
 
 		quitGame();
 

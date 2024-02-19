@@ -16,8 +16,12 @@ public class ParallelActionBest extends Action {
 	protected List<Action> actions = new ArrayList<>();
 	private boolean complete;
 
-	public ParallelActionBest (Action... allActions) {
+	public ParallelActionBest(Action... allActions) {
 		actions.addAll(Arrays.asList(allActions));
+	}
+
+	public ParallelActionBest(List<Action> allActions) {
+		actions = allActions;
 	}
 
 	@Override

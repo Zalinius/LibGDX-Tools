@@ -174,8 +174,8 @@ public abstract class MainGame extends ApplicationAdapter {
 			currentScreen.remove();
 		}
 		currentScreen = gameScreen;
-		currentScreen.show();
 		stage.addActor(currentScreen);
+		currentScreen.show();
 	}
 
 	@Override

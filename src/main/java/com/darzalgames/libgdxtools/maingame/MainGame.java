@@ -144,8 +144,8 @@ public abstract class MainGame extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
-	protected Texture getCursorTexture() {
-		return ColorTools.getDefaultCursor();
+	protected CustomCursorImage getCustomCursor() {
+		return new CustomCursorImage(windowResizer::isWindowed, ColorTools.getDefaultCursor(), inputStrategyManager);
 	}
 
 	/**
@@ -163,8 +163,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		GamepadInputHandler gamepadInputHandler = steamStrategy.getGamepadInputHandler();
 		actorsThatDoNotPause.add(keyboardInputHandler);
 		actorsThatDoNotPause.add(gamepadInputHandler);
-		CustomCursorImage customCursor = new CustomCursorImage(windowResizer::isWindowed, getCursorTexture(), inputStrategyManager);
-		cursorStage.addActor(customCursor);
+		cursorStage.addActor(getCustomCursor());
 		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler, inputStrategyManager);
 	}
 

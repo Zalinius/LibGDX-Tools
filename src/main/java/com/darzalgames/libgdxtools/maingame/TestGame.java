@@ -2,20 +2,13 @@ package com.darzalgames.libgdxtools.maingame;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowListener;
-import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -27,19 +20,15 @@ import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.platform.DesktopGamePlatformHelper;
+import com.darzalgames.libgdxtools.platform.LinuxGamePlatform;
+import com.darzalgames.libgdxtools.platform.WindowsGamePlatform;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
-import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardCheckbox;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSelectBox;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSlider;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.*;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -60,7 +49,8 @@ public class TestGame extends MainGame {
 
 
 	public TestGame(int width, int height, String[] args) {
-		super(width/2, height/2, new WindowResizerDesktop(width, height), DesktopGamePlatformHelper.getTypeFromArgs(args));
+		super(width/2, height/2, new WindowResizerDesktop(width, height),
+				DesktopGamePlatformHelper.getTypeFromArgs(args, WindowsGamePlatform::new, LinuxGamePlatform::new));
 	}
 
 	@Override
@@ -122,40 +112,6 @@ public class TestGame extends MainGame {
 				keysToAllow.add(Input.PAUSE);
 				keysToAllow.add(Input.TOGGLE_FULLSCREEN);
 				return keysToAllow;
-			}
-		};
-	}
-
-	@Override
-	protected GamepadInputHandler makeGamepadInputHandler() {
-		return new FallbackGamepadInputHandler(inputStrategyManager) {
-			@Override
-			protected List<Input> getTrackedInputs() {
-				List<Input> trackedInputs = new ArrayList<>();
-				trackedInputs.add(Input.ACCEPT);
-				trackedInputs.add(Input.BACK);
-				trackedInputs.add(Input.PAUSE);
-				trackedInputs.add(Input.UP);
-				trackedInputs.add(Input.DOWN);
-				trackedInputs.add(Input.LEFT);
-				trackedInputs.add(Input.RIGHT);
-				return trackedInputs;
-			}
-
-			@Override
-			protected Map<Function<Controller, Integer>, Input> makeButtonMappings() {
-				Map<Function<Controller, Integer>, Input> buttonMappings = new HashMap<>();
-				buttonMappings.put(controller -> controller.getMapping().buttonA, Input.ACCEPT);
-				buttonMappings.put(controller -> controller.getMapping().buttonB, Input.BACK);
-				buttonMappings.put(controller -> controller.getMapping().buttonStart, Input.PAUSE);
-
-				buttonMappings.put(controller -> controller.getMapping().buttonL1, Input.LEFT);
-				buttonMappings.put(controller -> controller.getMapping().buttonR1, Input.RIGHT);
-				buttonMappings.put(controller -> controller.getMapping().buttonDpadLeft, Input.LEFT);
-				buttonMappings.put(controller -> controller.getMapping().buttonDpadRight, Input.RIGHT);
-				buttonMappings.put(controller -> controller.getMapping().buttonDpadUp, Input.UP);
-				buttonMappings.put(controller -> controller.getMapping().buttonDpadDown, Input.DOWN);
-				return buttonMappings;
 			}
 		};
 	}

@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.scenes.scene2d.actions;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.utils.Pool;
@@ -17,6 +18,10 @@ public class InstantSequenceAction extends ParallelActionBest {
 
 	public InstantSequenceAction (Action... allActions) {
 		actions.addAll(Arrays.asList(allActions));
+	}
+
+	public InstantSequenceAction (List<Action> allActions) {
+		actions = allActions;
 	}
 	
 	@Override

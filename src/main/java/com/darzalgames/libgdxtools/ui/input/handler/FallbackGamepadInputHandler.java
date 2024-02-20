@@ -77,12 +77,12 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 		return false;
 	}
 
-	private static boolean isYAxis(int axisCode, Controller controller) {
+	public static boolean isYAxis(int axisCode, Controller controller) {
 		return axisCode == controller.getMapping().axisLeftY
 				|| axisCode == controller.getMapping().axisRightY;
 	}
 
-	private static boolean isXAxis(int axisCode, Controller controller) {
+	public static boolean isXAxis(int axisCode, Controller controller) {
 		return axisCode == controller.getMapping().axisLeftX
 				|| axisCode == controller.getMapping().axisRightX;
 	}

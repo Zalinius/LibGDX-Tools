@@ -18,6 +18,7 @@
 			<exclude name="**/ui/input/handler/SteamGamepadInputHandler.java" />
 			<exclude name="**/save/DesktopSaveManager.java" />
 			<exclude name="**/platform/DesktopGamePlatformHelper.java" />
+			<exclude name="**/platform/GenericDesktopGamePlatform.java" />
 			<exclude name="**/platform/WindowsGamePlatform.java" />
 			<exclude name="**/platform/LinuxGamePlatform.java" />
 	</source>

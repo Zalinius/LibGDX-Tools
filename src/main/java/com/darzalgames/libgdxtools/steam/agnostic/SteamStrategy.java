@@ -1,6 +1,5 @@
 package com.darzalgames.libgdxtools.steam.agnostic;
 
-import com.codedisaster.steamworks.SteamController;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 
 public interface SteamStrategy {
@@ -47,6 +46,9 @@ public interface SteamStrategy {
 	 * @param gamepadInputHandler Gives a controller to the handler
 	 */
 	public void acceptController(GamepadInputHandler gamepadInputHandler);
+	
+	// TODO docs, remove above?
+	public GamepadInputHandler getGamepadInputHandler();
 	
 	/**
 	 * Grant an achievement to a player. This only works if Steam is running.

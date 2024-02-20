@@ -4,10 +4,15 @@ public interface InputStrategy  {
 	/**
 	 * @return Whether or not to flash buttons when they're in focus
 	 */
-	public abstract boolean shouldFlashButtons();
+	public boolean shouldFlashButtons();
 	
 	/**
 	 * @return Whether or not to show mouse exclusive buttons, the cursor, etc. (probably the opposite answer as the above method)
 	 */
-	public abstract boolean showMouseExclusiveUI();
+	public boolean showMouseExclusiveUI();
+	
+//	/**
+//	 * @return Whether or not to show keyboard exclusive UI such as control hints
+//	 */
+//	public boolean showKeyboardExclusiveUI();
 }

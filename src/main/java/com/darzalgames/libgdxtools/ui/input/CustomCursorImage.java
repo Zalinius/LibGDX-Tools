@@ -19,7 +19,6 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	private final Supplier<Boolean> checkIsWindowed;
 	private final Texture cursorTexture;
 	private final Texture clickedCursorTexture;
-	private final Alignment alignment;
 
 	/**
 	 * An Image which follows the (hidden) cursor around, allowing you to keep the visible cursor the same pixel resolution regardless of window size.
@@ -27,7 +26,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	 * @param cursorTexture
 	 */
 	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, InputStrategyManager inputStrategyManager) {
-		this(checkIsWindowed, cursorTexture, cursorTexture, Alignment.TOP_LEFT, inputStrategyManager);
+		this(checkIsWindowed, cursorTexture, cursorTexture, inputStrategyManager);
 	}
 
 	/**
@@ -38,11 +37,10 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	 * @param alignment Only {@link Alignment#TOP_LEFT} (the default) and {@link Alignment#CENTER} are supported, and center is actually halfway between center and top left
 	 * @param inputStrategyManager
 	 */
-	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, Texture clickedCursorTexture, Alignment alignment, InputStrategyManager inputStrategyManager) {
+	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, Texture clickedCursorTexture, InputStrategyManager inputStrategyManager) {
 		super();
 		this.cursorTexture = cursorTexture;
 		this.clickedCursorTexture = clickedCursorTexture;
-		this.alignment = alignment;
 		if (cursorTexture != null) {
 			setCursorImage(cursorTexture);
 			pack();
@@ -78,10 +76,6 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 		Vector2 position = getStage().screenToStageCoordinates(new Vector2(x, y));
 		setPosition(position.x, position.y - getHeight());
 		
-		if (alignment.equals(Alignment.CENTER)) {
-			moveBy(-getWidth()/4, getHeight()/4);
-		}
-
 		if (cursorTexture != null) {
 			setCursorImage(Gdx.input.isButtonPressed(Buttons.LEFT) ? clickedCursorTexture : cursorTexture);
 		}

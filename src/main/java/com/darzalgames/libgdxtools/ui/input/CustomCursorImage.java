@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
-import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class CustomCursorImage extends Image implements DoesNotPause, InputObserver {
@@ -24,6 +23,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	 * An Image which follows the (hidden) cursor around, allowing you to keep the visible cursor the same pixel resolution regardless of window size.
 	 * @param checkIsWindowed A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
 	 * @param cursorTexture
+	 * @param inputStrategyManager
 	 */
 	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, InputStrategyManager inputStrategyManager) {
 		this(checkIsWindowed, cursorTexture, cursorTexture, inputStrategyManager);
@@ -34,7 +34,6 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	 * @param checkIsWindowed A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
 	 * @param cursorTexture
 	 * @param clickedCursorTexture The texture shown while the left mouse button is held down
-	 * @param alignment Only {@link Alignment#TOP_LEFT} (the default) and {@link Alignment#CENTER} are supported, and center is actually halfway between center and top left
 	 * @param inputStrategyManager
 	 */
 	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, Texture clickedCursorTexture, InputStrategyManager inputStrategyManager) {

@@ -60,7 +60,7 @@ public class InputPriorityManager {
 		InputPriorityManager.gamepadInputHandler = gamepadInputHandler;
 		InputPriorityManager.keyboardInputHandler = keyboardInputHandler;
 		InputPriorityManager.inputStrategyManager = inputStrategyManager;
-		
+
 		inputConsumerStack.add((InputConsumerWrapper) isTouchable -> {/*not needed*/});
 
 		// Set up the dark background screen that goes behind popups
@@ -80,7 +80,7 @@ public class InputPriorityManager {
 		mainStage.addActor(group);
 		mainStage.setKeyboardFocus(keyboardInputHandler);
 		group.addActor(gamepadInputHandler);
-		
+
 		group.addAction(Actions.forever(new Action() {
 
 			@Override
@@ -153,7 +153,7 @@ public class InputPriorityManager {
 		}
 		InputPriorityManager.showDarkScreen(popup.getZIndex(), popup.canDismiss());
 	}
-	
+
 	private static float timeSinceScroll = 0;
 	private static boolean hasFinishedScrolling = true;
 	/**
@@ -248,7 +248,7 @@ public class InputPriorityManager {
 	public static void hideDarkScreenForVeryExceptionalCircumstances() {
 		darkScreen.remove();
 	}
-	
+
 	//-----------------------------------------------------------
 
 	private static void focusTop(boolean isFirstFocus) {
@@ -262,7 +262,7 @@ public class InputPriorityManager {
 			focusCurrent();
 		}
 	}
-	
+
 	private static void unFocusTop() {
 		if (!inputConsumerStack.isEmpty()) {
 			inputConsumerStack.peek().setTouchable(Touchable.disabled);
@@ -300,12 +300,14 @@ public class InputPriorityManager {
 		}
 		return false;
 	}
-	
+
 	private static void showPauseMenu() {
-		showPopup(optionsMenu);
-		claimPriority(optionsMenu);
+		if (optionsMenu != null) {
+			showPopup(optionsMenu);
+			claimPriority(optionsMenu);	
+		}
 	}
-	
+
 	private static void showDarkScreen(int actorIndex, boolean isTouchable) {
 		popUpStage.addActor(darkScreen);
 		darkScreen.setZIndex(actorIndex);
@@ -328,7 +330,7 @@ public class InputPriorityManager {
 			inputConsumerStack.peek().clearSelected();
 		}
 	}
-	
+
 	private static void clearPauseButtonUI() {
 		if (pauseButton != null) {
 			pauseButton.getView().remove();
@@ -336,7 +338,7 @@ public class InputPriorityManager {
 			optionsMenu = null;
 		}
 	}
-	
+
 	private static class InputChangeObserver implements InputObserver {
 
 		@Override
@@ -348,7 +350,7 @@ public class InputPriorityManager {
 		public boolean shouldBeUnregistered() {
 			return false;
 		}
-		
+
 	}
 
 }

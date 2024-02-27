@@ -32,15 +32,15 @@ public class KeyboardButton implements InputConsumerWrapper {
 	private boolean doesSoundOnInteract = true;
 	private final InputStrategyManager inputStrategyManager;
 
-	KeyboardButton(TextButton button, InputStrategyManager inputStrategyManager) {
+	public KeyboardButton(TextButton button, InputStrategyManager inputStrategyManager) {
 		this(button, Runnables.nullRunnable(), inputStrategyManager);
 	}
 	
-	KeyboardButton(TextButton button, Runnable runnable, InputStrategyManager inputStrategyManager) { 
+	public KeyboardButton(TextButton button, Runnable runnable, InputStrategyManager inputStrategyManager) { 
 		this(button, null, runnable, inputStrategyManager);
 	}
 	
-	KeyboardButton(TextButton button, Image image, Runnable runnable, InputStrategyManager inputStrategyManager) {
+	public KeyboardButton(TextButton button, Image image, Runnable runnable, InputStrategyManager inputStrategyManager) {
 		this.button = button;
 		this.labelSupplier = button::getLabel;
 		this.cellSupplier = button::getLabelCell;

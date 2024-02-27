@@ -35,7 +35,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
  */
 public class UserInterfaceFactory {
 
-	private static Runnable quitGameRunnable;
+	protected static Runnable quitGameRunnable;
 	private static SkinManager skinManager;
 	protected static InputStrategyManager inputStrategyManager;
 	

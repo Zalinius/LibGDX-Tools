@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -30,6 +31,10 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	private final Supplier<KeyboardButton> makeWindowModeSelectBox;
 	private final boolean showWarningBeforeQuitting;
 
+	/**
+	 * NOTE: Setting the position is important, otherwise the options menu will not open!<p>
+	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceFactory.makeActorCentered(this)} 
+	 */
 	protected abstract void setUpBackground();
 	protected abstract Alignment getEntryAlignment();
 	protected abstract Alignment getMenuAlignment();

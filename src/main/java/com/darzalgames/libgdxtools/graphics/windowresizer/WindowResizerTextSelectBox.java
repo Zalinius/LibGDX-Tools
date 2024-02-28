@@ -90,11 +90,6 @@ public class WindowResizerTextSelectBox extends WindowResizerSelectBox {
 		}
 
 		@Override
-		public boolean canDismiss() {
-			return false;
-		}
-
-		@Override
 		protected void setUpTable() {
 			super.setUpTable();
 			IntFunction<String> makeCountdownString = count -> TextSupplier.getLine("screen_mode_revert", count);

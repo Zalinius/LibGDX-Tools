@@ -29,7 +29,6 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 	protected KeyboardButton optionsButton;
 	private final Supplier<KeyboardButton> makeWindowModeSelectBox;
-	private final boolean showWarningBeforeQuitting;
 
 	/**
 	 * NOTE: Setting the position is important, otherwise the options menu will not open!<p>
@@ -39,9 +38,9 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected abstract Alignment getEntryAlignment();
 	protected abstract Alignment getMenuAlignment();
 	protected abstract String getGameVersion();
-	
+
 	/**
-	 * @return An optional button for players to report bugs (return null if you don't want this)
+	 * @return A button for players to report bugs (return null if you don't want this)
 	 */
 	protected abstract KeyboardButton makeReportBugButton();
 
@@ -61,20 +60,25 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	 */
 	protected abstract KeyboardButton makeButtonAboveQuitButton();
 
+	/**
+	 * @return Make it however you like (return null if you don't want this)
+	 */
+	protected abstract KeyboardButton makeQuitButton();
+
+
 
 	/**
 	 * @return A PopUp that explains the control schemes
 	 */
 	protected abstract PopUp makeControlsPopUp();
 
-	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox, int bottomPadding, boolean showWarningBeforeQuitting) {
+	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox, int bottomPadding) {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
-		this.showWarningBeforeQuitting = showWarningBeforeQuitting;
 		setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight());
 		defaults().padBottom(bottomPadding);
 	}
-	
+
 	@Override
 	protected void setUpDesiredSize() {
 		desiredWidth = 250;
@@ -122,29 +126,24 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		}
 
 		KeyboardButton controlsButton = makeControlsButton();
-		if (controlsButton != null) {
-			menuButtons.add(controlsButton);					
-		}
+		menuButtons.add(controlsButton);					
 
 		// Window mode select box
 		KeyboardButton windowModeSelectBox = makeWindowModeSelectBox.get();
 		menuButtons.add(windowModeSelectBox);
 
 		KeyboardButton optionalButtonAboveQuit = makeButtonAboveQuitButton();
-		if (optionalButtonAboveQuit != null) {
-			menuButtons.add(optionalButtonAboveQuit);
-		}
+		menuButtons.add(optionalButtonAboveQuit);
 
 		// Quit game button
-		KeyboardButton quitButton = UserInterfaceFactory.getQuitGameButton();
-		if (showWarningBeforeQuitting) {
-			quitButton = UserInterfaceFactory.getQuitGameButtonWithWarning(() -> optionsButton.setTouchable(Touchable.disabled));
-		}
+		KeyboardButton quitButton = makeQuitButton();
 		menuButtons.add(quitButton);
 
 		// Back button
 		KeyboardButton backButton = UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
 		menuButtons.add(UserInterfaceFactory.getSpacer());
+
+		menuButtons.removeIf(button -> button == null);
 
 		menu.setAlignment(getEntryAlignment(), getMenuAlignment());
 		menu.replaceContents(menuButtons, backButton);

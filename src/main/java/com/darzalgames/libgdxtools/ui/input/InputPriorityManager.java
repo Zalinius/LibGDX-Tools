@@ -107,6 +107,10 @@ public class InputPriorityManager {
 		group.addActor(gamepadInputHandler);
 		group.addActor(keyboardInputHandler);
 		darkScreen.remove();
+		
+		// TODO Does this still work for Quest Giver??
+		popUpStage.clear();
+		popUpStage.addActor(pauseButton.getView());
 	}
 
 	/**

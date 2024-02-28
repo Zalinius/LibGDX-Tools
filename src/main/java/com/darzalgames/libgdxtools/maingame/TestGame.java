@@ -183,7 +183,7 @@ public class TestGame extends MainGame {
 	private static class TestOptionsMenu extends OptionsMenu {
 
 		protected TestOptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox) {
-			super(makeWindowModeSelectBox, 0, false);
+			super(makeWindowModeSelectBox, 0);
 			optionsButton = UserInterfaceFactory.getInGamesSettingsButton(() -> toggleScreenVisibility(true));
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 			InputPriorityManager.setPauseUI(this);
@@ -216,6 +216,11 @@ public class TestGame extends MainGame {
 		@Override protected KeyboardButton makeReportBugButton() {return UserInterfaceFactory.getButton("One could report a bug here", Runnables.nullRunnable());}
 		@Override protected KeyboardButton makeControlsButton() {
 			return UserInterfaceFactory.getButton("This is where one could theoretically view controls", () -> InputPriorityManager.claimPriority(makeControlsPopUp()));
+		}
+
+		@Override
+		protected KeyboardButton makeQuitButton() {
+			return UserInterfaceFactory.getQuitGameButton();
 		}
 
 	}

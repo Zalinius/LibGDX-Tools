@@ -60,7 +60,7 @@ public abstract class MainGame extends ApplicationAdapter {
 
 	protected GameScreen currentScreen;
 	protected WindowResizer windowResizer;
-	private List<DoesNotPause> actorsThatDoNotPause;
+	protected List<DoesNotPause> actorsThatDoNotPause;
 	protected InputStrategyManager inputStrategyManager;
 	
 	private boolean isQuitting = false;

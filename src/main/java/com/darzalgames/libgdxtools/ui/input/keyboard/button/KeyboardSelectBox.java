@@ -19,9 +19,10 @@ public class KeyboardSelectBox extends KeyboardButton {
 	private PopUpMenu options;
 	private Label displayLabel;
 	private String defaultEntry;
+	protected Consumer<String> action;
 
 	// TODO experiment with making a constructor that takes a list of buttons instead of making them?
-	protected KeyboardSelectBox(Collection<String> entries, TextButton textButton, Consumer<String> action, InputStrategyManager inputStrategyManager) {
+	protected KeyboardSelectBox(Collection<String> entries, TextButton textButton, InputStrategyManager inputStrategyManager) {
 		super(textButton, inputStrategyManager);
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,

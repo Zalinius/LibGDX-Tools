@@ -159,7 +159,7 @@ public class KeyboardButton implements InputConsumerWrapper {
 	 * @return Whether or not the button is blank
 	 */
 	public boolean isBlank() {
-		return StringUtils.isBlank(labelSupplier.get().getText().toString());
+		return StringUtils.isBlank(labelSupplier.get().getText().toString()) && image == null;
 	}
 	
 	/**

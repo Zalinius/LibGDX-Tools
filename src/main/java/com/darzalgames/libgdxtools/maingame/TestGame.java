@@ -15,8 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
-import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.platform.DesktopGamePlatformHelper;
@@ -247,7 +247,7 @@ public class TestGame extends MainGame {
 
 
 	@Override
-	protected WindowResizerSelectBox makeWindowResizerSelectBox() {
+	protected WindowResizerButton makeWindowResizerButton() {
 		return UserInterfaceFactory.getWindowModeTextSelectBox();
 	}
 

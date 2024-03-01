@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
-import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerTextSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
@@ -158,7 +157,9 @@ public class UserInterfaceFactory {
 	public static KeyboardSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
 		TextButton textButton = new TextButton(boxLabel + ":  ", skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		return new KeyboardSelectBox(entries, textButton, consumer, inputStrategyManager);
+		KeyboardSelectBox keyboardSelectBox =  new KeyboardSelectBox(entries, textButton, inputStrategyManager);
+		keyboardSelectBox.action = consumer;
+		return keyboardSelectBox;
 	}
 
 	public static NinePatchDrawable getUIBorderedNine() {
@@ -271,6 +272,6 @@ public class UserInterfaceFactory {
 	public static WindowResizerSelectBox getWindowModeTextSelectBox() {
 		TextButton textButton = new TextButton(TextSupplier.getLine("window_mode_label") + ":  ", skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		return new WindowResizerTextSelectBox(textButton, inputStrategyManager);
+		return new WindowResizerSelectBox(textButton, inputStrategyManager);
 	}
 }

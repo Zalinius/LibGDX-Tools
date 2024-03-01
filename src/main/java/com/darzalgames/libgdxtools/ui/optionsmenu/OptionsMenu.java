@@ -1,8 +1,6 @@
 package com.darzalgames.libgdxtools.ui.optionsmenu;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -66,6 +64,12 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected abstract KeyboardButton makeQuitButton();
 
 
+	/**
+	 * @return Make it however you like, a default will be provided otherwise
+	 */
+	protected KeyboardButton makeBackButton() {
+		return UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
+	}
 
 	/**
 	 * @return A PopUp that explains the control schemes
@@ -140,10 +144,11 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		menuButtons.add(quitButton);
 
 		// Back button
-		KeyboardButton backButton = UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
+		KeyboardButton backButton = makeBackButton();
+		
 		menuButtons.add(UserInterfaceFactory.getSpacer());
 
-		menuButtons.removeIf(button -> button == null);
+		menuButtons.removeIf(Objects::isNull);
 
 		menu.setAlignment(getEntryAlignment(), getMenuAlignment());
 		menu.replaceContents(menuButtons, backButton);

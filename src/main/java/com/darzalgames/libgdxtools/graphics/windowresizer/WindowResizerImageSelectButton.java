@@ -1,75 +1,43 @@
 package com.darzalgames.libgdxtools.graphics.windowresizer;
 
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.IntFunction;
-import java.util.stream.Collectors;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
+import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
-public class WindowResizerTextSelectBox extends WindowResizerSelectBox {
+public abstract class WindowResizerImageSelectButton extends KeyboardButton implements WindowResizerButton {
 
-	private static Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase()); 
+	private WindowResizer windowResizer;
 
-	public WindowResizerTextSelectBox(TextButton textButton, InputStrategyManager inputStrategyManager) {
-		super(getEntries(), textButton, getAction(), inputStrategyManager);
-	}
-	
-	private static Consumer<String> getAction() {
-		return selectedNewMode -> {
-			String previousMode = GameInfo.getPreferenceManager().other().getStringPrefValue(WindowResizer.SCREEN_MODE_KEY);
-			if (!selectedNewMode.equalsIgnoreCase(previousMode)) {
-				windowResizer.setMode(getModeFromPreferenceString(selectedNewMode), true);
-			}
-		};
-	}
-	
-	private static Collection<String> getEntries() {
-		List<ScreenMode> allModes = new ArrayList<>(Arrays.asList(ScreenMode.values()));
-		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
-			allModes.remove(ScreenMode.BORDERLESS);
-		}
-		return allModes.stream().map(mode -> windowModeOptionTranslator.apply(mode)).collect(Collectors.toList());
+	protected WindowResizerImageSelectButton(TextButton button, Image image, Runnable runnable,
+			InputStrategyManager inputStrategyManager) {
+		super(button, image, runnable, inputStrategyManager);
 	}
 
 	@Override
-	public void setSelectedInBox(ScreenMode screenMode) {
-		this.setSelected(windowModeOptionTranslator.apply(screenMode));			
+	public void setWindowResizer(WindowResizer windowResizer) {
+		this.windowResizer = windowResizer;
 	}
 
 	@Override
-	protected ScreenMode getModeFromPreference(String screenMode) {
-		return getModeFromPreferenceString(screenMode);
-	}
-	
-	private static ScreenMode getModeFromPreferenceString(String screenMode) {
-		ScreenMode preferredMode = ScreenMode.BORDERLESS;
-		for (int i = 0; i < ScreenMode.values().length; i++) {
-			String translatedPref = windowModeOptionTranslator.apply(ScreenMode.values()[i]);
-			if (screenMode.equalsIgnoreCase(ScreenMode.values()[i].name()) //English
-					|| screenMode.equalsIgnoreCase(translatedPref)) { //French
-				preferredMode = ScreenMode.values()[i];
-			}
-		}
-		return preferredMode;
+	public KeyboardButton getButton() {
+		return this;
 	}
 
 	@Override
-	protected ConfirmationMenu getRevertMenu() {
+	public ConfirmationMenu getRevertMenu() {
 		return new WindowRevertCountdownConfirmationMenu();
 	}
 	
@@ -118,7 +86,8 @@ public class WindowResizerTextSelectBox extends WindowResizerSelectBox {
 		}
 
 		private void revertMode() {
-			WindowResizerSelectBox.windowResizer.revertMode();
+			windowResizer.revertMode();
 		}
 	}
+
 }

@@ -10,7 +10,7 @@ import com.darzalgames.libgdxtools.ui.input.popup.TextChoicePopUp;
  */
 public class ConfirmationMenu extends TextChoicePopUp {
 	
-	private static NinePatch confirmationBackground;
+	public static NinePatch confirmationBackground;
 
 	public ConfirmationMenu(String messageKey, String confirmButtonTextKey, Runnable confirmButtonRunnable) {
 		this(messageKey, confirmButtonTextKey, "back_message", confirmButtonRunnable);

@@ -16,13 +16,14 @@ public abstract class ChoicePopUp extends PopUpMenu {
 
 	protected final Runnable firstChoiceRunnable;
 	private final boolean isSecondButtonBack;
-	
+
 	protected ChoicePopUp(Runnable firstChoiceRunnable, boolean isVertical, boolean isSecondButtonBack) {
 		super(isVertical);
 		this.firstChoiceRunnable = firstChoiceRunnable;
 		this.isSecondButtonBack = isSecondButtonBack;
 	}
 
+	@Override
 	protected void setUpDesiredSize() {
 		desiredWidth = 200;
 		desiredHeight = 106;
@@ -30,19 +31,19 @@ public abstract class ChoicePopUp extends PopUpMenu {
 
 	protected abstract KeyboardButton getFirstChoiceButton();
 	protected abstract KeyboardButton getSecondChoiceButton();
-	
+
 	/**
 	 * What to do when the second choice is chosen. Sometimes this will be the same as the firstChoiceRunnable,
 	 * sometimes it'll be {@link Runnables#nullRunnable()} when the second button is a back button.
 	 * @return
 	 */
 	protected abstract Runnable getSecondChoiceRunnable();
-	
+
 	/**
 	 * @return the message at the top of the choice pop up, set up by the child class in anyway they want (in a {@link Table})
 	 */
 	protected abstract Table getMessage();
-	
+
 	/**
 	 * Lets the child class optionally respond depending on which key is chosen
 	 * @param chosenKey The key that was chosen
@@ -60,7 +61,9 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		UserInterfaceFactory.makeActorCentered(this);
 
 		add(getMessage()).grow();
-		row();
+		if (!menu.isVertical()) {
+			row();
+		}
 
 
 		KeyboardButton firstButton = getFirstChoiceButton(); 

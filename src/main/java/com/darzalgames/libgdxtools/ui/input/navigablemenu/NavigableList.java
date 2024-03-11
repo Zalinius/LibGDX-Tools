@@ -104,13 +104,13 @@ public class NavigableList implements InputConsumerWrapper {
 		table.clear();
 		table.defaults().expandX().spaceTop(spacing).spaceBottom(spacing).align(entryAlignment.getAlignment());
 
-		if (!isVertical) {
+		if (!isVertical()) {
 			table.defaults().expandY();
 		}
 		table.align(tableAlignment.getAlignment());
 
 		for (KeyboardButton entry : allEntries) {
-			if(isVertical) {
+			if(isVertical()) {
 				table.row();
 			}
 			entry.setAlignment(entryAlignment);
@@ -118,7 +118,7 @@ public class NavigableList implements InputConsumerWrapper {
 			table.add(button).prefWidth(button.getWidth());
 			if (UserInterfaceFactory.isSpacer(entry)) {
 				interactableEntries.remove(entry);
-				if (isVertical) {
+				if (isVertical()) {
 					table.getCell(button).expandY();
 				} else {
 					table.getCell(button).expandX();
@@ -164,7 +164,7 @@ public class NavigableList implements InputConsumerWrapper {
 
 	@Override
 	public void consumeKeyInput(final Input input) {
-		if(input == forwardCode) {
+		if(input.equals(forwardCode)) {
 			if (currentEntryIndex < interactableEntries.size() - 1) {
 				currentEntryIndex++;
 				changedEntries();
@@ -173,7 +173,7 @@ public class NavigableList implements InputConsumerWrapper {
 				changedEntries();
 			}
 		}
-		else if(input == backCode) {
+		else if(input.equals(backCode)) {
 			if (currentEntryIndex > 0) {
 				currentEntryIndex--;
 				changedEntries();
@@ -181,7 +181,7 @@ public class NavigableList implements InputConsumerWrapper {
 				currentEntryIndex = interactableEntries.size() - 1;
 				changedEntries();
 			}
-		} else if (input == Input.BACK && finalButton != null) {
+		} else if (input.equals(Input.BACK) && finalButton != null) {
 			finalButton.consumeKeyInput(Input.ACCEPT);
 		}
 		else if (currentButton != null) {
@@ -271,7 +271,7 @@ public class NavigableList implements InputConsumerWrapper {
 	}
 
 	public float getPrefHeight() {
-		if(isVertical) {
+		if(isVertical()) {
 			float total = spacing;
 			for (KeyboardButton entry : allEntries) {
 				Button button = entry.getView();
@@ -290,6 +290,10 @@ public class NavigableList implements InputConsumerWrapper {
 
 	public void setMenuLoops(boolean menuLoops) {
 		this.menuLoops = menuLoops;
+	}
+
+	public boolean isVertical() {
+		return isVertical;
 	}
 
 }

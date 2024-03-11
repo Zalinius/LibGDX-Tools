@@ -6,13 +6,11 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
@@ -107,6 +105,10 @@ public class InputPriorityManager {
 		group.addActor(gamepadInputHandler);
 		group.addActor(keyboardInputHandler);
 		darkScreen.remove();
+		
+		// TODO Does this still work for Quest Giver??
+		popUpStage.clear();
+		popUpStage.addActor(pauseButton.getView());
 	}
 
 	/**
@@ -311,12 +313,8 @@ public class InputPriorityManager {
 	private static void showDarkScreen(int actorIndex, boolean isTouchable) {
 		popUpStage.addActor(darkScreen);
 		darkScreen.setZIndex(actorIndex);
-		darkScreen.setTouchable(Touchable.disabled);
-		DelayAction delayThenTouchable = new DelayAction(1f);
-		delayThenTouchable.setAction(new RunnableActionBest(() -> 
-		darkScreen.setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled)
-				));
-		darkScreen.addAction(delayThenTouchable);
+		// They used to be a 1 second delay here before setting the dark screen touchable, I'm not sure why.
+		darkScreen.setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled);
 	}
 
 	private static void focusCurrent() {

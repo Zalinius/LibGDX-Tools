@@ -14,12 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
-import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerTextSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
@@ -35,7 +35,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
  */
 public class UserInterfaceFactory {
 
-	private static Runnable quitGameRunnable;
+	protected static Runnable quitGameRunnable;
 	private static SkinManager skinManager;
 	protected static InputStrategyManager inputStrategyManager;
 	
@@ -137,7 +137,7 @@ public class UserInterfaceFactory {
 	}
 
 	/**
-	 * Make a LIBGDX textbutton, only to be used inside nested buttons (e.g. checkboxes & sliders)
+	 * Make a LIBGDX textbutton, only to be used inside nested buttons (e.g. checkboxes and sliders)
 	 * @param text
 	 * @return
 	 */
@@ -158,7 +158,9 @@ public class UserInterfaceFactory {
 	public static KeyboardSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
 		TextButton textButton = new TextButton(boxLabel + ":  ", skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		return new KeyboardSelectBox(entries, textButton, consumer, inputStrategyManager);
+		KeyboardSelectBox keyboardSelectBox =  new KeyboardSelectBox(entries, textButton, inputStrategyManager);
+		keyboardSelectBox.action = consumer;
+		return keyboardSelectBox;
 	}
 
 	public static NinePatchDrawable getUIBorderedNine() {
@@ -228,8 +230,8 @@ public class UserInterfaceFactory {
 					button.setStyle(mainButtonStyle);
 					if (shouldButtonFlash(button)) {
 						button.clearActions();
-						Action flashAfterDelay = getChangeStyleAfterDelayAction(button, flashedButtonStyle, flashTime);
-						Action showAfterDelay = getChangeStyleAfterDelayAction(button, mainButtonStyle, flashTime);
+						Action flashAfterDelay = getChangeButtonStyleAfterDelayAction(button, flashedButtonStyle, flashTime);
+						Action showAfterDelay = getChangeButtonStyleAfterDelayAction(button, mainButtonStyle, flashTime);
 						button.addAction(new InstantForeverAction(new InstantSequenceAction(
 								flashAfterDelay,
 								showAfterDelay
@@ -249,6 +251,38 @@ public class UserInterfaceFactory {
 			}
 		});
 	}
+	protected static void makeSliderFlashing(KeyboardSlider keyboardSlider, SliderStyle mainStyle, SliderStyle flashedStyle) {
+		Button button = keyboardSlider.getView(); 
+		button.addListener(new ClickListener() {
+			@Override
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+				super.enter(event, x, y, pointer, fromActor);
+				float flashTime = 1f / 2.5f; // TODO Changes to be the BPS once the audio stuff is in this library
+				if (KeyboardStage.isHoverEvent(pointer) && button.isTouchable()) {
+					keyboardSlider.setSliderStyle(flashedStyle);
+					if (shouldButtonFlash(button)) {
+						button.clearActions();
+						Action flashAfterDelay = getChangeSliderStyleAfterDelayAction(keyboardSlider, flashedStyle, flashTime);
+						Action normalAfterDelay = getChangeSliderStyleAfterDelayAction(keyboardSlider, mainStyle, flashTime);
+						button.addAction(new InstantForeverAction(new InstantSequenceAction(
+								normalAfterDelay,
+								flashAfterDelay
+								)));
+
+					}
+				}
+			}
+
+			@Override
+			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+				super.exit(event, x, y, pointer, toActor);
+				if (KeyboardStage.isHoverEvent(pointer)) {
+					button.clearActions();
+					keyboardSlider.setSliderStyle(mainStyle);
+				}
+			}
+		});
+	}
 
 	private static boolean shouldButtonFlash(Button button) {
 		return KeyboardStage.isInTouchableBranch(button)
@@ -256,10 +290,22 @@ public class UserInterfaceFactory {
 				&& inputStrategyManager.shouldFlashButtons();
 	}
 
-	private static Action getChangeStyleAfterDelayAction(Button button, ButtonStyle buttonStyle, float delay) {
+	private static Action getChangeButtonStyleAfterDelayAction(Button button, ButtonStyle buttonStyle, float delay) {
 		RunnableAction change = Actions.run(() -> {
 			if (shouldButtonFlash(button)) {
 				button.setStyle(buttonStyle);
+			}
+		});
+		DelayAction changeAfterDelay = Actions.delay(delay);
+		changeAfterDelay.setAction(change);
+
+		return changeAfterDelay;
+	}
+	
+	private static Action getChangeSliderStyleAfterDelayAction(KeyboardSlider keyboardSlider, SliderStyle sliderStyle, float delay) {
+		RunnableAction change = Actions.run(() -> {
+			if (shouldButtonFlash(keyboardSlider.getView())) {
+				keyboardSlider.setSliderStyle(sliderStyle);
 			}
 		});
 		DelayAction changeAfterDelay = Actions.delay(delay);
@@ -271,6 +317,6 @@ public class UserInterfaceFactory {
 	public static WindowResizerSelectBox getWindowModeTextSelectBox() {
 		TextButton textButton = new TextButton(TextSupplier.getLine("window_mode_label") + ":  ", skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		return new WindowResizerTextSelectBox(textButton, inputStrategyManager);
+		return new WindowResizerSelectBox(textButton, inputStrategyManager);
 	}
 }

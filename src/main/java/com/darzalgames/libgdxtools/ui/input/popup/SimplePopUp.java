@@ -14,7 +14,7 @@ public abstract class SimplePopUp extends Table implements InputConsumerWrapper,
 	
 	@Override
 	public void consumeKeyInput(Input input) {
-		if (input == Input.ACCEPT || input == Input.BACK) {
+		if (input == Input.ACCEPT || input == Input.BACK || input == Input.PAUSE) {
 			hideThis();	
 		}
 	}

@@ -15,8 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
-import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.platform.DesktopGamePlatformHelper;
@@ -183,7 +183,7 @@ public class TestGame extends MainGame {
 	private static class TestOptionsMenu extends OptionsMenu {
 
 		protected TestOptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox) {
-			super(makeWindowModeSelectBox, 0, false);
+			super(makeWindowModeSelectBox, 0);
 			optionsButton = UserInterfaceFactory.getInGamesSettingsButton(() -> toggleScreenVisibility(true));
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 			InputPriorityManager.setPauseUI(this);
@@ -218,6 +218,11 @@ public class TestGame extends MainGame {
 			return UserInterfaceFactory.getButton("This is where one could theoretically view controls", () -> InputPriorityManager.claimPriority(makeControlsPopUp()));
 		}
 
+		@Override
+		protected KeyboardButton makeQuitButton() {
+			return UserInterfaceFactory.getQuitGameButton();
+		}
+
 	}
 
 	private static Lwjgl3WindowListener makeWindowListener() {
@@ -242,7 +247,7 @@ public class TestGame extends MainGame {
 
 
 	@Override
-	protected WindowResizerSelectBox makeWindowResizerSelectBox() {
+	protected WindowResizerButton makeWindowResizerButton() {
 		return UserInterfaceFactory.getWindowModeTextSelectBox();
 	}
 

@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
-import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
@@ -54,13 +54,13 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected abstract SaveManager makeSaveManager();
 	protected abstract void setUpBeforeLoadingSave();
 	protected abstract void launchGame(boolean isNewSave);
-	protected abstract WindowResizerSelectBox makeWindowResizerSelectBox();
+	protected abstract WindowResizerButton makeWindowResizerButton();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 	protected abstract void quitGame();
 
 	protected GameScreen currentScreen;
 	protected WindowResizer windowResizer;
-	private List<DoesNotPause> actorsThatDoNotPause;
+	protected List<DoesNotPause> actorsThatDoNotPause;
 	protected InputStrategyManager inputStrategyManager;
 	
 	private boolean isQuitting = false;
@@ -107,7 +107,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		boolean isNewSave = !saveManager.load();
 		
 		launchGame(isNewSave);
-		windowResizer.initialize(inputStrategyManager, this::makeWindowResizerSelectBox);
+		windowResizer.initialize(inputStrategyManager, makeWindowResizerButton());
 	}
 
 	private void makeBackgroundStage() {

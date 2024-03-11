@@ -1,7 +1,5 @@
 package com.darzalgames.libgdxtools.graphics.windowresizer;
 
-import java.util.function.Supplier;
-
 import com.darzalgames.darzalcommon.data.Coordinate;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
@@ -11,7 +9,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public abstract class WindowResizer {
 
-	protected enum ScreenMode {
+	public enum ScreenMode {
 		FULLSCREEN,
 		BORDERLESS,
 		WINDOWED,
@@ -28,23 +26,22 @@ public abstract class WindowResizer {
 	protected abstract void switchToFullScreen();
 
 	private InputStrategyManager inputStrategyManager;
-	private Supplier<WindowResizerSelectBox> windowResizerSelectBoxSupplier;
-	private WindowResizerSelectBox windowResizerSelectBox;
+	private WindowResizerButton windowResizerButton;
 
 	/**
 	 * Initialize the WindowResizer, setting the window to the preferred mode based on the user's history
 	 * We do this in initialize() rather than a constructor because this object is created at the same time as the entire game,
 	 * and so LibGDX isn't ready to do any resizing yet
 	 * @param inputStrategyManager
-	 * @param windowResizerSelectBoxSupplier
+	 * @param windowResizerButton
 	 */
-	public void initialize(InputStrategyManager inputStrategyManager, Supplier<WindowResizerSelectBox> windowResizerSelectBoxSupplier) {
+	public void initialize(InputStrategyManager inputStrategyManager, WindowResizerButton windowResizerButton) {
 		this.inputStrategyManager = inputStrategyManager;
-		this.windowResizerSelectBoxSupplier = windowResizerSelectBoxSupplier;
-		WindowResizerSelectBox.setWindowResizer(this);
+		this.windowResizerButton = windowResizerButton;
+		windowResizerButton.setWindowResizer(this);
 		getModeSelectBox();
 		String preferredModeString = GameInfo.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY, ScreenMode.BORDERLESS.name());
-		setMode(windowResizerSelectBox.getModeFromPreference(preferredModeString), false);
+		setMode(windowResizerButton.getModeFromPreference(preferredModeString), false);
 		previousScreenMode = currentScreenMode;
 	}
 
@@ -52,11 +49,10 @@ public abstract class WindowResizer {
 	 * @return A {@link KeyboardButton} which, when pressed, opens a {@link KeyboardSelectBox select box} for changing the window mode
 	 */
 	public KeyboardButton getModeSelectBox() {
-		windowResizerSelectBox = windowResizerSelectBoxSupplier.get();
 		if (currentScreenMode != null) {
-			windowResizerSelectBox.setSelectedInBox(currentScreenMode);			
+			windowResizerButton.setSelected(currentScreenMode);			
 		}
-		return windowResizerSelectBox;
+		return windowResizerButton.getButton();
 	}
 
 	/**
@@ -64,9 +60,13 @@ public abstract class WindowResizer {
 	 */
 	public void toggleWindow() {
 		if (isWindowed()) {
-			setMode(ScreenMode.FULLSCREEN, false);
+			ScreenMode bigMode = ScreenMode.BORDERLESS;
+			if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
+				bigMode = ScreenMode.FULLSCREEN;
+			}
+			setMode(bigMode, true);
 		} else {
-			setMode(ScreenMode.WINDOWED, false);
+			setMode(ScreenMode.WINDOWED, true);
 		}
 	}
 
@@ -90,9 +90,9 @@ public abstract class WindowResizer {
 		}
 		offerToRevert = offerToRevert && previousScreenMode != currentScreenMode; 
 		inputStrategyManager.revertToPreviousStrategy();
-		windowResizerSelectBox.setSelectedInBox(currentScreenMode);
+		windowResizerButton.setSelected(currentScreenMode);
 		if (offerToRevert) {
-			InputPriorityManager.claimPriority(windowResizerSelectBox.getRevertMenu());
+			InputPriorityManager.claimPriority(windowResizerButton.getRevertMenu());
 		}
 	}
 
@@ -104,7 +104,7 @@ public abstract class WindowResizer {
 	}
 
 	public void revertMode() {
-		WindowResizerSelectBox.windowResizer.setMode(previousScreenMode, false);
+		WindowResizer.this.setMode(previousScreenMode, false);
 		previousScreenMode = currentScreenMode;
 	}
 	

@@ -259,9 +259,9 @@ public class UserInterfaceFactory {
 				super.enter(event, x, y, pointer, fromActor);
 				float flashTime = 1f / 2.5f; // TODO Changes to be the BPS once the audio stuff is in this library
 				if (KeyboardStage.isHoverEvent(pointer) && button.isTouchable()) {
+					button.clearActions();
 					keyboardSlider.setSliderStyle(flashedStyle);
 					if (shouldButtonFlash(button)) {
-						button.clearActions();
 						Action flashAfterDelay = getChangeSliderStyleAfterDelayAction(keyboardSlider, flashedStyle, flashTime);
 						Action normalAfterDelay = getChangeSliderStyleAfterDelayAction(keyboardSlider, mainStyle, flashTime);
 						button.addAction(new InstantForeverAction(new InstantSequenceAction(

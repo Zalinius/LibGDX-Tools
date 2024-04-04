@@ -42,12 +42,10 @@ public interface SteamStrategy {
 	 */
 	public String getSteamID();
 	
-	/**
-	 * @param gamepadInputHandler Gives a controller to the handler
-	 */
-	public void acceptController(GamepadInputHandler gamepadInputHandler);
 	
-	// TODO docs, remove above?
+	/**
+	 * @return The game-specific input handler for Steam
+	 */
 	public GamepadInputHandler getGamepadInputHandler();
 	
 	/**

@@ -7,43 +7,51 @@ import java.util.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.codedisaster.steamworks.*;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
+	private final String actionsSetHandleKey;
+
 	private SteamController steamController;
 	private SteamControllerHandle activeController;
 
 	private SteamControllerActionSetHandle actionsSetHandle;
-	private final Map<SteamControllerDigitalActionHandle, Input> buttonMappings;
+	private Map<SteamControllerDigitalActionHandle, Input> buttonMappings;
 	protected abstract Map<SteamControllerDigitalActionHandle, Input> makeButtonMappings(SteamController steamController);
 
 	private boolean justDisconnected;
 
+	protected float currentX = 0;
+	protected float currentY = 0;
+	protected static final float INPUT_REPEAT_DELAY = 0.25f;
+	protected float inputRepeatTimer = INPUT_REPEAT_DELAY;
+
 	protected SteamGamepadInputHandler(InputStrategyManager inputStrategyManager, String actionsSetHandleKey) {
 		super(inputStrategyManager);
 		SteamControllerManager.initialize(this);
-		GameInfo.getSteamStrategy().acceptController(this);
 		justDisconnected = false;
+
 		// TODO maybe some day add support for multiple action sets
-		this.actionsSetHandle = steamController.getActionSetHandle(actionsSetHandleKey);	
-		buttonMappings = makeButtonMappings(steamController);
+		this.actionsSetHandleKey = actionsSetHandleKey;
 
 		Gdx.app.log("GamepadInputHandler", "Using STEAM gamepad input handling.");
 	}
-	
+
 	public void setSteamController(SteamController steamController) {
 		this.steamController = steamController;
+		this.actionsSetHandle = steamController.getActionSetHandle(actionsSetHandleKey);	
+		buttonMappings = makeButtonMappings(steamController);
 	}
-	
+
 
 	@Override
 	public void act(float delta) {
 		super.act(delta);
 		checkForControllerConnected();
 		updateButtonsState();
+		updateAxisState();
 	}
 
 	private void checkForControllerConnected() {
@@ -120,7 +128,19 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 				}
 			}
 		}
+	}
 
+	private void updateAxisState() {
+		inputRepeatTimer += Gdx.graphics.getDeltaTime();
+		SteamControllerHandle steamControllerHandle = activeController;
+		if (steamControllerHandle != null) {
+			SteamControllerAnalogActionData analogActionData = new SteamControllerAnalogActionData();
+			SteamControllerAnalogActionHandle analogActionHandle = steamController.getAnalogActionHandle("Move");
+			steamController.getAnalogActionData(steamControllerHandle, analogActionHandle, analogActionData);
+			currentX = analogActionData.getX();
+			currentY = analogActionData.getY();
+			sendAxisInput();		
+		}
 	}
 
 	private void changeButtonState(SteamControllerDigitalActionHandle handle, ButtonState buttonState) {
@@ -141,4 +161,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 			steamController.showBindingPanel(activeController);
 		}
 	}
+	
+
+	protected abstract void sendAxisInput();
 }

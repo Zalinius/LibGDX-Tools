@@ -67,15 +67,6 @@ public class ConnectedSteamStrategy implements SteamStrategy {
 	}
 	
 	@Override
-	public void acceptController(GamepadInputHandler gamepadInputHandler) {
-		
-		//TODO this is hacky, can we replace it when we give action sets to normal controllers?
-		if(gamepadInputHandler instanceof SteamGamepadInputHandler steamGamepadInputHandler) {
-			steamGamepadInputHandler.setSteamController(steamController);			
-		}
-	}
-
-	@Override
 	public void giveAchievement(String achievement) {
 		steamUserStats.setAchievement(achievement);
 		steamUserStats.storeStats();

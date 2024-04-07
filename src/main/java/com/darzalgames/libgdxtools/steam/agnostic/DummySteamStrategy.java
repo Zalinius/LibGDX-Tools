@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.steam.agnostic;
 
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
-import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 
 public class DummySteamStrategy implements SteamStrategy {
 	
@@ -45,7 +44,7 @@ public class DummySteamStrategy implements SteamStrategy {
 	public void setRichPresents(String key) {}
 
 	@Override
-	public GamepadInputHandler getGamepadInputHandler() {
+	public FallbackGamepadInputHandler getGamepadInputHandler() {
 		return gamepadInputHandler;
 	}
 }

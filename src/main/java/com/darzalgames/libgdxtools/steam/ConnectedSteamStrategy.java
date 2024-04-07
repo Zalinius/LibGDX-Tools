@@ -3,7 +3,6 @@ package com.darzalgames.libgdxtools.steam;
 import com.badlogic.gdx.Gdx;
 import com.codedisaster.steamworks.*;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
-import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
 
 public class ConnectedSteamStrategy implements SteamStrategy {
@@ -42,7 +41,7 @@ public class ConnectedSteamStrategy implements SteamStrategy {
 	}
 	
 	@Override
-	public GamepadInputHandler getGamepadInputHandler() {
+	public SteamGamepadInputHandler getGamepadInputHandler() {
 		return gamepadInputHandler;
 	}
 	

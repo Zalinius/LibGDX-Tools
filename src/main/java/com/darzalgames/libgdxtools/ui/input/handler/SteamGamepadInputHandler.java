@@ -1,12 +1,14 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.graphics.Texture;
 import com.codedisaster.steamworks.*;
+import com.codedisaster.steamworks.SteamController.ActionOrigin;
+import com.darzalgames.darzalcommon.data.BiMap;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
@@ -18,8 +20,8 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 	private SteamControllerHandle activeController;
 
 	private SteamControllerActionSetHandle actionsSetHandle;
-	private Map<SteamControllerDigitalActionHandle, Input> buttonMappings;
-	protected abstract Map<SteamControllerDigitalActionHandle, Input> makeButtonMappings(SteamController steamController);
+	private BiMap<SteamControllerDigitalActionHandle, Input> buttonMappings;
+	protected abstract BiMap<SteamControllerDigitalActionHandle, Input> makeButtonMappings(SteamController steamController);
 
 	private boolean justDisconnected;
 
@@ -43,6 +45,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 		this.steamController = steamController;
 		this.actionsSetHandle = steamController.getActionSetHandle(actionsSetHandleKey);	
 		buttonMappings = makeButtonMappings(steamController);
+
 	}
 
 
@@ -90,10 +93,10 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 		if (Arrays.asList(handlesOut).stream().anyMatch(Objects::nonNull)) {
 			for (int i = 0; i < handlesOut.length; i++) {
 				SteamControllerHandle steamControllerHandle = handlesOut[i];
-				for(Entry<SteamControllerDigitalActionHandle, Input> entry : buttonMappings.entrySet()) {
+				for (SteamControllerDigitalActionHandle handle : buttonMappings.getFirstKeySet()) {
 					SteamControllerDigitalActionData digitalActionData = new SteamControllerDigitalActionData();
 					if (steamControllerHandle != null) {
-						steamController.getDigitalActionData(steamControllerHandle, entry.getKey(), digitalActionData);
+						steamController.getDigitalActionData(steamControllerHandle, handle, digitalActionData);
 						boolean isCurrentlyPressedAccordingToPoling = digitalActionData.getState();
 						if (isCurrentlyPressedAccordingToPoling) {
 							activeController = steamControllerHandle;
@@ -108,21 +111,21 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 	private void updateButtonsState() {
 		SteamControllerHandle steamControllerHandle = activeController;
-		for(Entry<SteamControllerDigitalActionHandle, Input> entry : buttonMappings.entrySet()) {
-			SteamControllerDigitalActionHandle actionHandle = entry.getKey();
+		for (SteamControllerDigitalActionHandle actionHandle : buttonMappings.getFirstKeySet()) {
 			SteamControllerDigitalActionData digitalActionData = new SteamControllerDigitalActionData();
 			if (steamControllerHandle != null) {
-				steamController.getDigitalActionData(steamControllerHandle, entry.getKey(), digitalActionData);
+				steamController.getDigitalActionData(steamControllerHandle, actionHandle, digitalActionData);
 				boolean isCurrentlyPressedAccordingToPoling = digitalActionData.getState();
-				ButtonState latestState = buttonStates.get(buttonMappings.get(actionHandle));
+				Input input = buttonMappings.getSecondValue(actionHandle);
+				ButtonState latestState = buttonStates.get(input);
 				if (isCurrentlyPressedAccordingToPoling) {
 					if (latestState.equals(ButtonState.NOT_HELD_DOWN)) {
-						justPressed(entry.getValue());
+						justPressed(input);
 						changeButtonState(actionHandle, ButtonState.HELD_DOWN);
 					}
 				} else {
 					if (latestState.equals(ButtonState.HELD_DOWN)) {
-						justReleased(entry.getValue());
+						justReleased(input);
 						changeButtonState(actionHandle, ButtonState.NOT_HELD_DOWN);
 					} 
 				}
@@ -144,7 +147,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 	}
 
 	private void changeButtonState(SteamControllerDigitalActionHandle handle, ButtonState buttonState) {
-		buttonStates.put(buttonMappings.get(handle), buttonState);
+		buttonStates.put(buttonMappings.getSecondValue(handle), buttonState);
 	}
 
 	public boolean isAControllerConnected() {
@@ -164,4 +167,25 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 	
 
 	protected abstract void sendAxisInput();
+	
+
+	@Override
+	public Texture getGlyphForInput(Input input) {
+		SteamControllerDigitalActionHandle handle = buttonMappings.getFirstValue(input);
+		ActionOrigin[] originsOut = new ActionOrigin[10];
+		
+		if (activeController == null) {
+			return null;
+		}
+		
+		steamController.getDigitalActionOrigins(activeController,
+				   actionsSetHandle,
+				   handle,
+				   originsOut);
+		
+		String absolutePath = steamController.getGlyphForActionOrigin(originsOut[0]);
+		AssetDescriptor<Texture> descriptor = new AssetDescriptor<>(absolutePath, Texture.class);
+		// TODO memory leak?
+		return getTextureFromDescriptor(descriptor);
+	}
 }

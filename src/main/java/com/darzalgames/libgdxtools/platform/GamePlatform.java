@@ -4,8 +4,10 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
@@ -60,6 +62,16 @@ public interface GamePlatform {
 				buttonMappings.put(controller -> controller.getMapping().buttonDpadUp, Input.UP);
 				buttonMappings.put(controller -> controller.getMapping().buttonDpadDown, Input.DOWN);
 				return buttonMappings;
+			}
+
+			@Override
+			protected Map<Input, AssetDescriptor<Texture>> makeGlyphMappings() {
+				return new HashMap<>();
+			}
+
+			@Override
+			protected Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor) {
+				return null;
 			}
 		};
 	}

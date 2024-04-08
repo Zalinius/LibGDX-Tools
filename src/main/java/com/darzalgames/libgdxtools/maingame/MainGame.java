@@ -22,6 +22,7 @@ import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.CustomCursorImage;
+import com.darzalgames.libgdxtools.ui.input.GlyphFactory;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
@@ -165,6 +166,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		actorsThatDoNotPause.add(gamepadInputHandler);
 		cursorStage.addActor(getCustomCursor());
 		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler, inputStrategyManager);
+		GlyphFactory.initialize(gamepadInputHandler);
 	}
 
 	protected final void changeScreen(GameScreen gameScreen) {

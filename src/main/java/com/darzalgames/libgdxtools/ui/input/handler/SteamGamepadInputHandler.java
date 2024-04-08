@@ -183,7 +183,24 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 				   handle,
 				   originsOut);
 		
-		String absolutePath = steamController.getGlyphForActionOrigin(originsOut[0]);
+		ActionOrigin action = originsOut[0]; 
+
+		if (action == null) {
+			// TODO I don't know if there's a better way to handle the joystick?
+			if (input.equals(Input.UP)) {
+				action = ActionOrigin.LeftStick_DPadNorth;
+			} else if (input.equals(Input.RIGHT)) {
+				action = ActionOrigin.LeftStick_DPadEast;
+			} else if (input.equals(Input.DOWN)) {
+				action = ActionOrigin.LeftStick_DPadSouth;
+			} else if (input.equals(Input.LEFT)) {
+				action = ActionOrigin.LeftStick_DPadWest;
+			} else {
+				return null;				
+			}
+		}
+		
+		String absolutePath = steamController.getGlyphForActionOrigin(action);
 		AssetDescriptor<Texture> descriptor = new AssetDescriptor<>(absolutePath, Texture.class);
 		// TODO memory leak?
 		return getTextureFromDescriptor(descriptor);

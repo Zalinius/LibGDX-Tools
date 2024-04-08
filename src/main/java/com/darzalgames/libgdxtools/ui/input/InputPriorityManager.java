@@ -4,7 +4,6 @@ import java.util.*;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -338,9 +337,6 @@ public class InputPriorityManager {
 		}
 	}
 	
-	public static Texture getGlyphForInput(Input input) {
-		return gamepadInputHandler.getGlyphForInput(input);
-	}
 
 	private static class InputChangeObserver implements InputObserver {
 

@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
@@ -66,7 +68,7 @@ public class InputPriorityManager {
 		darkScreen.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer, final int button) {
-				darkScreen.remove();
+				hideDarkScreen();
 				if (!inputConsumerStack.isEmpty()) {
 					inputConsumerStack.peek().consumeKeyInput(Input.BACK); 
 				}
@@ -195,7 +197,7 @@ public class InputPriorityManager {
 	 */
 	public static void releasePriority(InputConsumer inputConsumer) {
 		if (!inputConsumerStack.isEmpty() && inputConsumer.equals(inputConsumerStack.peek())) {
-			darkScreen.remove();
+			hideDarkScreen();
 			boolean isClosingPauseMenu = inputConsumerStack.peek() == optionsMenu; 
 			removeTop();
 			if (isClosingPauseMenu) {
@@ -276,7 +278,7 @@ public class InputPriorityManager {
 		if (!inputConsumerStack.isEmpty()) {
 			unFocusTop();
 			inputConsumerStack.pop();
-			darkScreen.remove();
+			hideDarkScreen();
 			checkIfLandingOnPopup();	
 		}
 	}
@@ -311,10 +313,20 @@ public class InputPriorityManager {
 	}
 
 	private static void showDarkScreen(int actorIndex, boolean isTouchable) {
+		darkScreen.clearActions();
 		popUpStage.addActor(darkScreen);
 		darkScreen.setZIndex(actorIndex);
 		// They used to be a 1 second delay here before setting the dark screen touchable, I'm not sure why.
 		darkScreen.setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled);
+		darkScreen.addAction(Actions.fadeIn(0.25f, Interpolation.circle));
+	}
+	
+	private static void hideDarkScreen() {
+		darkScreen.clearActions();
+		darkScreen.addAction(new InstantSequenceAction(
+				Actions.fadeOut(0.25f, Interpolation.circle),
+				Actions.removeActor(darkScreen)
+				));
 	}
 
 	private static void focusCurrent() {

@@ -1,13 +1,12 @@
 package com.darzalgames.libgdxtools.maingame;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -112,6 +111,15 @@ public class TestGame extends MainGame {
 				keysToAllow.add(Input.PAUSE);
 				keysToAllow.add(Input.TOGGLE_FULLSCREEN);
 				return keysToAllow;
+			}
+
+			@Override
+			public Texture getGlyphForInput(Input input) {
+				return null;
+			}
+			@Override
+			protected Map<Input, AssetDescriptor<Texture>> makeButtonMappings() {
+				return Collections.emptyMap();
 			}
 		};
 	}

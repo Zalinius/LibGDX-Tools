@@ -1,7 +1,9 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
+import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 /**
@@ -12,9 +14,11 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 public abstract class InputHandler extends Table implements DoesNotPause {
 	
 	protected final InputStrategyManager inputStrategyManager;
+	protected final InputMethod inputMethod;
 	
-	protected InputHandler(InputStrategyManager inputStrategyManager) {
+	protected InputHandler(InputStrategyManager inputStrategyManager, InputMethod inputMethod) {
 		this.inputStrategyManager = inputStrategyManager;
+		this.inputMethod = inputMethod;
 	}
 
 	/**
@@ -46,5 +50,11 @@ public abstract class InputHandler extends Table implements DoesNotPause {
 	public static InputMethod getLatestInputMethod() {
 		return latestInputMethod;
 	}
+	
+	public InputMethod getInputMethod() {
+		return inputMethod;
+	}
+
+	public abstract Texture getGlyphForInput(Input input);
 
 }

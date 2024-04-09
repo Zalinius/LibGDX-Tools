@@ -63,6 +63,7 @@ public abstract class MainGame extends ApplicationAdapter {
 	protected WindowResizer windowResizer;
 	protected List<DoesNotPause> actorsThatDoNotPause;
 	protected InputStrategyManager inputStrategyManager;
+	private MouseDetector mouseDetector;
 	
 	private boolean isQuitting = false;
 
@@ -128,7 +129,8 @@ public abstract class MainGame extends ApplicationAdapter {
 
 	private void makeMainStageAndMouseStages() {
 		mouseDetectorStage = new Stage(new ScreenViewport());
-		mouseDetectorStage.addActor(new MouseDetector(inputStrategyManager));
+		mouseDetector = new MouseDetector(inputStrategyManager);
+		mouseDetectorStage.addActor(mouseDetector);
 
 		// Set up main game stage
 		stage = new StageWithBackground(new PixelPerfectViewport(width, height), getMainStageBackgroundTexture(), inputStrategyManager);
@@ -166,7 +168,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		actorsThatDoNotPause.add(gamepadInputHandler);
 		cursorStage.addActor(getCustomCursor());
 		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler, inputStrategyManager);
-		GlyphFactory.initialize(gamepadInputHandler);
+		GlyphFactory.initialize(gamepadInputHandler, keyboardInputHandler, mouseDetector);
 	}
 
 	protected final void changeScreen(GameScreen gameScreen) {

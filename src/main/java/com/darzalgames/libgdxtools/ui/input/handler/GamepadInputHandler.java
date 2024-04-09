@@ -26,18 +26,16 @@ public abstract class GamepadInputHandler extends InputHandler {
 	protected abstract Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor);
 
 	protected GamepadInputHandler(InputStrategyManager inputStrategyManager) {
-		super(inputStrategyManager);
+		super(inputStrategyManager, InputMethod.GAMEPAD);
 		buttonStates = new HashMap<>();
 		getTrackedInputs().forEach(input -> buttonStates.put(input, ButtonState.NOT_HELD_DOWN));
 	}
-	
-	public abstract Texture getGlyphForInput(Input input);
 
 	protected final void justPressed(Input buttonKey) {
 		if (LOG_INPUT) {
 			Gdx.app.log("GamepadInputHandler", "Just pressed:" + buttonKey);
 		}
-		setLatestInputMethod(InputMethod.GAMEPAD);
+		setLatestInputMethod(this.inputMethod);
 		InputPriorityManager.processKeyInput(buttonKey);
 	}
 
@@ -45,7 +43,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 		if (LOG_INPUT) {
 			Gdx.app.log("GamepadInputHandler", "Just released:" + buttonKey);
 		}
-		setLatestInputMethod(InputMethod.GAMEPAD);
+		setLatestInputMethod(this.inputMethod);
 	}
 	
 	protected final void controllerDisconnected() {

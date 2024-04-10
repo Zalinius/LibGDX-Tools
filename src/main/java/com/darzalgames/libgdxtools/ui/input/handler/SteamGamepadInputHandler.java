@@ -1,7 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -164,43 +164,64 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 			steamController.showBindingPanel(activeController);
 		}
 	}
-	
+
 
 	protected abstract void sendAxisInput();
-	
+
 
 	@Override
 	public Texture getGlyphForInput(Input input) {
 		SteamControllerDigitalActionHandle handle = buttonMappings.getFirstValue(input);
 		ActionOrigin[] originsOut = new ActionOrigin[10];
-		
+
 		if (activeController == null) {
 			return null;
 		}
-		
+
 		steamController.getDigitalActionOrigins(activeController,
-				   actionsSetHandle,
-				   handle,
-				   originsOut);
-		
+				actionsSetHandle,
+				handle,
+				originsOut);
+
 		ActionOrigin action = originsOut[0]; 
 
-		if (action == null) {
-			// TODO I don't know if there's a better way to handle the joystick?
-			if (input.equals(Input.UP)) {
-				action = ActionOrigin.LeftStick_DPadNorth;
-			} else if (input.equals(Input.RIGHT)) {
-				action = ActionOrigin.LeftStick_DPadEast;
-			} else if (input.equals(Input.DOWN)) {
-				action = ActionOrigin.LeftStick_DPadSouth;
-			} else if (input.equals(Input.LEFT)) {
-				action = ActionOrigin.LeftStick_DPadWest;
-			} else {
-				return null;				
-			}
+		if (action == null) { // Check for analog joystick movement
+			SteamControllerAnalogActionHandle handle2 = steamController.getAnalogActionHandle("move"); //note: you have to name the joystick "move" in each app's game_actions_#####.vdf file
+			steamController.getAnalogActionOrigins(activeController,
+					actionsSetHandle,
+					handle2,
+					originsOut);
+
+			// Prioritize left stick when several joysticks are available
+			List<ActionOrigin> origins = Arrays.asList(originsOut);
+			origins = origins.stream().filter(o -> o != null).collect(Collectors.toList());
+			Comparator<ActionOrigin> comparator = Comparator.<ActionOrigin, Boolean>comparing(s -> s.toString().toLowerCase().contains("left")).reversed()
+			        .thenComparing(Comparator.naturalOrder());
+			origins.sort(comparator);
+			
+			action = origins.get(0);
 		}
-		
+
 		String absolutePath = steamController.getGlyphForActionOrigin(action);
+
+		String direction = "";
+		if (input.equals(Input.UP)) {
+			direction = "_up";
+		} else if (input.equals(Input.RIGHT)) {
+			direction = "_right";
+		} else if (input.equals(Input.DOWN)) {
+			direction = "_down";
+		} else if (input.equals(Input.LEFT)) {
+			direction = "_left";
+		}
+		String ending = "_sz.png"; //all glyphs end in a size "sm"/"md"/"lg", and the direction goes before that
+		if (!absolutePath.contains(direction)) {
+			absolutePath = new StringBuilder(absolutePath).insert(absolutePath.length()-ending.length(), direction).toString();
+		}
+
+		absolutePath = absolutePath.replace("\\light\\", "\\dark\\");
+		absolutePath = absolutePath.replace("\\knockout\\", "\\dark\\");
+
 		AssetDescriptor<Texture> descriptor = new AssetDescriptor<>(absolutePath, Texture.class);
 		// TODO memory leak?
 		return getTextureFromDescriptor(descriptor);

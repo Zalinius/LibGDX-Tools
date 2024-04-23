@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.darzalgames.libgdxtools.ui.input.handler.InputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.InputHandler.InputMethod;
@@ -21,10 +22,12 @@ public class GlyphFactory {
 	public static Texture getGlyphForInput(Input input) {
 		InputMethod latest = InputHandler.getLatestInputMethod();
 		
-		if (handlers.containsKey(latest)) {
-			return handlers.get(latest).getGlyphForInput(input);
+		InputHandler inputHandler = handlers.get(latest); 
+		if (inputHandler != null) {
+ 			return inputHandler.getGlyphForInput(input);
 		}
 		
+		Gdx.app.error("GlyphFactory", "Missing glyph for: " + latest + " " + input);
 		return null;
 	}
 

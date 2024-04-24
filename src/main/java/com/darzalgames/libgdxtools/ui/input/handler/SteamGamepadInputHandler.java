@@ -195,7 +195,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 			// Prioritize left stick when several joysticks are available
 			List<ActionOrigin> origins = Arrays.asList(originsOut);
 			origins = origins.stream().filter(o -> o != null).collect(Collectors.toList());
-			Comparator<ActionOrigin> comparator = Comparator.<ActionOrigin, Boolean>comparing(s -> s.toString().toLowerCase().contains("left")).reversed()
+			Comparator<ActionOrigin> comparator = Comparator.<ActionOrigin, Boolean>comparing(s -> s.toString().toLowerCase().contains("left") && s.toString().contains("stick")).reversed()
 			        .thenComparing(Comparator.naturalOrder());
 			origins.sort(comparator);
 			
@@ -218,9 +218,9 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 		if (!absolutePath.contains(direction)) {
 			absolutePath = new StringBuilder(absolutePath).insert(absolutePath.length()-ending.length(), direction).toString();
 		}
-
-		absolutePath = absolutePath.replace("\\light\\", "\\dark\\");
-		absolutePath = absolutePath.replace("\\knockout\\", "\\dark\\");
+		
+//		absolutePath = absolutePath.replace("\\light\\", "\\dark\\");
+//		absolutePath = absolutePath.replace("\\knockout\\", "\\dark\\");
 
 		AssetDescriptor<Texture> descriptor = new AssetDescriptor<>(absolutePath, Texture.class);
 		// TODO memory leak?

@@ -107,8 +107,7 @@ public class InputPriorityManager {
 		group.addActor(gamepadInputHandler);
 		group.addActor(keyboardInputHandler);
 		darkScreen.remove();
-		
-		// TODO Does this still work for Quest Giver??
+
 		popUpStage.clear();
 		popUpStage.addActor(pauseButton.getView());
 	}
@@ -148,8 +147,10 @@ public class InputPriorityManager {
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				popup.removeListener(this);
-				popup.consumeKeyInput(Input.BACK);
+				if (inputConsumerStack.peek().equals(popup)) {
+					popup.removeListener(this);
+					popup.consumeKeyInput(Input.BACK);
+				}
 			}
 		};
 		if (popup.canDismiss()) {
@@ -320,7 +321,7 @@ public class InputPriorityManager {
 		darkScreen.setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled);
 		darkScreen.addAction(Actions.fadeIn(0.25f, Interpolation.circle));
 	}
-	
+
 	private static void hideDarkScreen() {
 		darkScreen.clearActions();
 		darkScreen.addAction(new InstantSequenceAction(
@@ -348,7 +349,7 @@ public class InputPriorityManager {
 			optionsMenu = null;
 		}
 	}
-	
+
 
 	private static class InputChangeObserver implements InputObserver {
 

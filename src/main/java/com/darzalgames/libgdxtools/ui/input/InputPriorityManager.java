@@ -322,6 +322,7 @@ public class InputPriorityManager {
 		darkScreen.addAction(Actions.fadeIn(0.25f, Interpolation.circle));
 	}
 
+
 	private static void hideDarkScreen() {
 		darkScreen.clearActions();
 		darkScreen.addAction(new InstantSequenceAction(

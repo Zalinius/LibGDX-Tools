@@ -19,10 +19,10 @@ public class KeyboardSelectBox extends KeyboardButton {
 	private PopUpMenu options;
 	private Label displayLabel;
 	private String defaultEntry;
-	protected Consumer<String> action;
+	private Consumer<String> action;
 
 	// TODO experiment with making a constructor that takes a list of buttons instead of making them?
-	protected KeyboardSelectBox(Collection<String> entries, TextButton textButton, InputStrategyManager inputStrategyManager) {
+	public KeyboardSelectBox(Collection<String> entries, TextButton textButton, InputStrategyManager inputStrategyManager) {
 		super(textButton, inputStrategyManager);
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,
@@ -88,6 +88,11 @@ public class KeyboardSelectBox extends KeyboardButton {
 		InputPriorityManager.claimPriority(options);
 		options.goTo(defaultEntry);
 	}
+
+	public void setAction(Consumer<String> action) {
+		this.action = action;
+	}
+	
 }
 
 

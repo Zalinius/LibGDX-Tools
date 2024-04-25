@@ -27,7 +27,7 @@ public class GlyphFactory {
  			return inputHandler.getGlyphForInput(input);
 		}
 		
-		Gdx.app.error("GlyphFactory", "Missing glyph for: " + latest + " " + input);
+		Gdx.app.error("GlyphFactory", "Missing glyph setup for: " + " " + latest);
 		return null;
 	}
 

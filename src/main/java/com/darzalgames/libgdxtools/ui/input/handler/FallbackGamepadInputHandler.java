@@ -94,7 +94,10 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 
 	@Override
 	public Texture getGlyphForInput(Input input) {
-		return getTextureFromDescriptor(glyphMappings.get(input));
+		if (glyphMappings.containsKey(input)) {
+			return getTextureFromDescriptor(glyphMappings.get(input));
+		}
+		return null;
 	}
 
 }

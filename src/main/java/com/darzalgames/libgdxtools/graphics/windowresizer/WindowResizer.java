@@ -49,10 +49,11 @@ public abstract class WindowResizer {
 	 * @return A {@link KeyboardButton} which, when pressed, opens a {@link KeyboardSelectBox select box} for changing the window mode
 	 */
 	public KeyboardButton getModeSelectBox() {
+		KeyboardButton button = windowResizerButton.getButton();
 		if (currentScreenMode != null) {
 			windowResizerButton.setSelected(currentScreenMode);			
 		}
-		return windowResizerButton.getButton();
+		return button;
 	}
 
 	/**

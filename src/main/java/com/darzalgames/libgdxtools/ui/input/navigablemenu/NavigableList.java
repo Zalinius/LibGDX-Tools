@@ -238,6 +238,7 @@ public class NavigableList implements InputConsumerWrapper {
 	@Override
 	public void setTouchable(Touchable isTouchable) {
 		table.setTouchable(isTouchable);
+		interactableEntries.forEach(entry -> entry.setTouchable(isTouchable));
 	}
 
 	public void setPressButtonOnEntryChanged(boolean pressButtonOnEntryChanged) {

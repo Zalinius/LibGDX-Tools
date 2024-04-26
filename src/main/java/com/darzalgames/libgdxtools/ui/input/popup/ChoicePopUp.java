@@ -16,6 +16,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 
 	protected final Runnable firstChoiceRunnable;
 	private final boolean isSecondButtonBack;
+	protected boolean addRowAfterMessage = true;
 
 	protected ChoicePopUp(Runnable firstChoiceRunnable, boolean isVertical, boolean isSecondButtonBack) {
 		super(isVertical);
@@ -61,7 +62,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		UserInterfaceFactory.makeActorCentered(this);
 
 		add(getMessage()).grow();
-		if (!menu.isVertical()) {
+		if (addRowAfterMessage) {
 			row();
 		}
 

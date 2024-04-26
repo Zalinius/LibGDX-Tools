@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.graphics.Texture;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
@@ -21,9 +23,10 @@ public abstract class GamepadInputHandler extends InputHandler {
 	public static final boolean LOG_INPUT = false;
 	
 	protected abstract List<Input> getTrackedInputs();
+	protected abstract Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor);
 
 	protected GamepadInputHandler(InputStrategyManager inputStrategyManager) {
-		super(inputStrategyManager);
+		super(inputStrategyManager, InputMethod.GAMEPAD);
 		buttonStates = new HashMap<>();
 		getTrackedInputs().forEach(input -> buttonStates.put(input, ButtonState.NOT_HELD_DOWN));
 	}
@@ -32,7 +35,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 		if (LOG_INPUT) {
 			Gdx.app.log("GamepadInputHandler", "Just pressed:" + buttonKey);
 		}
-		setLatestInputMethod(InputMethod.GAMEPAD);
+		setLatestInputMethod(this.inputMethod);
 		InputPriorityManager.processKeyInput(buttonKey);
 	}
 
@@ -40,7 +43,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 		if (LOG_INPUT) {
 			Gdx.app.log("GamepadInputHandler", "Just released:" + buttonKey);
 		}
-		setLatestInputMethod(InputMethod.GAMEPAD);
+		setLatestInputMethod(this.inputMethod);
 	}
 	
 	protected final void controllerDisconnected() {

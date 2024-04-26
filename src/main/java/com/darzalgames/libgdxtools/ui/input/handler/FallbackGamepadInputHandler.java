@@ -5,9 +5,11 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.graphics.Texture;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
@@ -15,11 +17,14 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 
 	private final Map<Function<Controller, Integer>, Input> buttonMappings;
 	protected abstract Map<Function<Controller, Integer>, Input> makeButtonMappings();
+	private final Map<Input, AssetDescriptor<Texture>> glyphMappings;
+	protected abstract Map<Input, AssetDescriptor<Texture>> makeGlyphMappings();
 
 	protected FallbackGamepadInputHandler(InputStrategyManager inputStrategyManager) {
 		super(inputStrategyManager);
 		Controllers.addListener(this); // receives events from all controllers
 		buttonMappings = makeButtonMappings();
+		glyphMappings = makeGlyphMappings();
 
 		Gdx.app.log("GamepadInputHandler", "Using FALLBACK gamepad input handling.");
 	}
@@ -85,6 +90,14 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 	public static boolean isXAxis(int axisCode, Controller controller) {
 		return axisCode == controller.getMapping().axisLeftX
 				|| axisCode == controller.getMapping().axisRightX;
+	}
+
+	@Override
+	public Texture getGlyphForInput(Input input) {
+		if (glyphMappings.containsKey(input)) {
+			return getTextureFromDescriptor(glyphMappings.get(input));
+		}
+		return null;
 	}
 
 }

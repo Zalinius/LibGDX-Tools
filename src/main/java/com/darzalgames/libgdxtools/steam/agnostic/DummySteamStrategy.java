@@ -36,9 +36,6 @@ public class DummySteamStrategy implements SteamStrategy {
 	}
 	
 	@Override
-	public void acceptController(GamepadInputHandler gamepadInputHandler) {}
-	
-	@Override
 	public void giveAchievement(String achievement) {}
 	
 	@Override

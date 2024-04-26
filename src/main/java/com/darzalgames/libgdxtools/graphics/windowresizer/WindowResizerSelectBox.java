@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
@@ -22,9 +23,12 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSelectBox;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
-public class WindowResizerSelectBox extends KeyboardSelectBox implements WindowResizerButton {
+public class WindowResizerSelectBox  implements WindowResizerButton {
 
-	private static Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase()); 
+	private static Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase());
+	private KeyboardSelectBox selectBox;
+	private final Supplier<TextButton> textButtonSupplier;
+	private final InputStrategyManager inputStrategyManager;
 	
 	private WindowResizer windowResizer;
 	@Override
@@ -32,15 +36,9 @@ public class WindowResizerSelectBox extends KeyboardSelectBox implements WindowR
 		this.windowResizer = windowResizer;
 	}
 
-	public WindowResizerSelectBox(TextButton textButton, InputStrategyManager inputStrategyManager) {
-		super(getEntries(), textButton, inputStrategyManager);
-		
-		this.action = selectedNewMode -> {
-			String previousMode = GameInfo.getPreferenceManager().other().getStringPrefValue(WindowResizer.SCREEN_MODE_KEY);
-			if (!selectedNewMode.equalsIgnoreCase(previousMode)) {
-				windowResizer.setMode(getModeFromPreference(selectedNewMode), true);
-			}
-		};
+	public WindowResizerSelectBox(Supplier<TextButton> textButtonSupplier, InputStrategyManager inputStrategyManager) {
+		this.textButtonSupplier = textButtonSupplier;
+		this.inputStrategyManager = inputStrategyManager;
 	}
 	
 	private static Collection<String> getEntries() {
@@ -53,7 +51,7 @@ public class WindowResizerSelectBox extends KeyboardSelectBox implements WindowR
 
 	@Override
 	public void setSelected(ScreenMode screenMode) {
-		this.setSelected(windowModeOptionTranslator.apply(screenMode));			
+		selectBox.setSelected(windowModeOptionTranslator.apply(screenMode));			
 	}
 
 	@Override
@@ -125,6 +123,14 @@ public class WindowResizerSelectBox extends KeyboardSelectBox implements WindowR
 
 	@Override
 	public KeyboardButton getButton() {
-		return this;
+		selectBox = new KeyboardSelectBox(getEntries(), textButtonSupplier.get(), inputStrategyManager);
+		
+		selectBox.setAction(selectedNewMode -> {
+			String previousMode = GameInfo.getPreferenceManager().other().getStringPrefValue(WindowResizer.SCREEN_MODE_KEY);
+			if (!selectedNewMode.equalsIgnoreCase(previousMode)) {
+				windowResizer.setMode(getModeFromPreference(selectedNewMode), true);
+			}
+		});
+		return selectBox;
 	}
 }

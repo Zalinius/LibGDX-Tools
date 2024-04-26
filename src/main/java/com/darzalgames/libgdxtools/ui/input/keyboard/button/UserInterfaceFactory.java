@@ -38,7 +38,7 @@ public class UserInterfaceFactory {
 	protected static Runnable quitGameRunnable;
 	private static SkinManager skinManager;
 	protected static InputStrategyManager inputStrategyManager;
-	
+
 	protected UserInterfaceFactory() {}
 
 	public static void initialize(SkinManager skinManager, InputStrategyManager inputStrategyManager) {
@@ -113,21 +113,21 @@ public class UserInterfaceFactory {
 	public static KeyboardButton getButton(final String text, final Runnable runnable) {
 		return makeButton(text, null, runnable);
 	}
-	
+
 	public static KeyboardButton getButton(final Image image, final Runnable runnable) {
 		return makeButton("", image, runnable);
 	}
-	
+
 	public static KeyboardButton getButton(final String text, Image image, final Runnable runnable) {
 		return makeButton(text, image, runnable);
 	}
-	
+
 	private static KeyboardButton makeButton(final String text, Image image, final Runnable runnable) {
 		TextButton textButton = makeLibGDXTextButton(text);
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 		return new KeyboardButton(textButton, image, runnable, inputStrategyManager);
 	}
-	
+
 	/**
 	 * Make a button in a particular style, these are generally exceptional buttons (in Quest Giver this includes the play button, scenario map pips, etc)
 	 */
@@ -159,7 +159,7 @@ public class UserInterfaceFactory {
 		TextButton textButton = new TextButton(boxLabel + ":  ", skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 		KeyboardSelectBox keyboardSelectBox =  new KeyboardSelectBox(entries, textButton, inputStrategyManager);
-		keyboardSelectBox.action = consumer;
+		keyboardSelectBox.setAction(consumer);
 		return keyboardSelectBox;
 	}
 
@@ -191,14 +191,14 @@ public class UserInterfaceFactory {
 	public static KeyboardButton getQuitGameButton(String buttonText) {
 		return getButton(buttonText, quitGameRunnable);
 	}
-	
+
 	/**
 	 * @return A quit button, with a default English text label if not otherwise to find
 	 */
 	public static KeyboardButton getQuitGameButton() {
 		return getQuitGameButton(getQuitButtonString());
 	}
-	
+
 	private static String getQuitButtonString() {
 		String text;
 		try {
@@ -259,9 +259,9 @@ public class UserInterfaceFactory {
 				super.enter(event, x, y, pointer, fromActor);
 				float flashTime = 1f / 2.5f; // TODO Changes to be the BPS once the audio stuff is in this library
 				if (KeyboardStage.isHoverEvent(pointer) && button.isTouchable()) {
+					button.clearActions();
 					keyboardSlider.setSliderStyle(flashedStyle);
 					if (shouldButtonFlash(button)) {
-						button.clearActions();
 						Action flashAfterDelay = getChangeSliderStyleAfterDelayAction(keyboardSlider, flashedStyle, flashTime);
 						Action normalAfterDelay = getChangeSliderStyleAfterDelayAction(keyboardSlider, mainStyle, flashTime);
 						button.addAction(new InstantForeverAction(new InstantSequenceAction(
@@ -301,7 +301,7 @@ public class UserInterfaceFactory {
 
 		return changeAfterDelay;
 	}
-	
+
 	private static Action getChangeSliderStyleAfterDelayAction(KeyboardSlider keyboardSlider, SliderStyle sliderStyle, float delay) {
 		RunnableAction change = Actions.run(() -> {
 			if (shouldButtonFlash(keyboardSlider.getView())) {
@@ -315,8 +315,11 @@ public class UserInterfaceFactory {
 	}
 
 	public static WindowResizerSelectBox getWindowModeTextSelectBox() {
-		TextButton textButton = new TextButton(TextSupplier.getLine("window_mode_label") + ":  ", skinManager.getTextButtonStyle()); 
-		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		return new WindowResizerSelectBox(textButton, inputStrategyManager);
+		Supplier<TextButton> supplier = () -> {
+			TextButton textButton = new TextButton(TextSupplier.getLine("window_mode_label") + ":  ", skinManager.getTextButtonStyle()); 
+			makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
+			return textButton;
+		};
+		return new WindowResizerSelectBox(supplier, inputStrategyManager);
 	}
 }

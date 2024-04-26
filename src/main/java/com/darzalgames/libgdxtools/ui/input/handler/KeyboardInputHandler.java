@@ -1,7 +1,10 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
 import java.util.List;
+import java.util.Map;
 
+import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.darzalgames.libgdxtools.ui.input.Input;
@@ -15,14 +18,16 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 public abstract class KeyboardInputHandler extends InputHandler {
 	
 	private final List<Input> keysToAllow;
+	protected final Map<Input, AssetDescriptor<Texture>> buttonMappings;
 
 	/**
 	 * Sets up the listener for keyboard input, and maps various keybindings to others
 	 */
 	protected KeyboardInputHandler(InputStrategyManager inputStrategyManager) {
-		super(inputStrategyManager);
+		super(inputStrategyManager, InputMethod.KEYBOARD);
 		
 		keysToAllow = getKeyWhitelist();
+		buttonMappings = makeButtonMappings();
 
 		addListener(new InputListener() {
 			@Override
@@ -31,7 +36,7 @@ public abstract class KeyboardInputHandler extends InputHandler {
 				input = remapInputIfNecessary(input, keycode);
 				
 				if (keysToAllow.contains(input)) {
-					setLatestInputMethod(InputMethod.KEYBOARD);
+					setLatestInputMethod(KeyboardInputHandler.this.inputMethod);
 					InputPriorityManager.processKeyInput(input);	
 					return true;
 				}
@@ -43,4 +48,5 @@ public abstract class KeyboardInputHandler extends InputHandler {
 	
 	protected abstract Input remapInputIfNecessary(Input input, int keycode);
 	protected abstract List<Input> getKeyWhitelist();
+	protected abstract Map<Input, AssetDescriptor<Texture>> makeButtonMappings();
 }

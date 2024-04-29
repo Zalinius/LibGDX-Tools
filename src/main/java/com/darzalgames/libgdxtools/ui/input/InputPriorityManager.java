@@ -187,7 +187,7 @@ public class InputPriorityManager {
 	 */
 	public static void claimPriority(InputConsumer inputConsumer) {
 		if (inputConsumerStack.isEmpty() || !inputConsumer.equals(inputConsumerStack.peek())) {
-			unFocusTop();
+			unFocusTop(inputConsumerStack.peek());
 			inputConsumerStack.push(inputConsumer);
 			focusTop(true);
 		}
@@ -268,17 +268,16 @@ public class InputPriorityManager {
 		}
 	}
 
-	private static void unFocusTop() {
+	private static void unFocusTop(InputConsumer top) {
 		if (!inputConsumerStack.isEmpty()) {
-			inputConsumerStack.peek().setTouchable(Touchable.disabled);
-			inputConsumerStack.peek().loseFocus();
+			top.setTouchable(Touchable.disabled);
+			top.loseFocus();
 		}
 	}
 
 	private static void removeTop() {
 		if (!inputConsumerStack.isEmpty()) {
-			unFocusTop();
-			inputConsumerStack.pop();
+			unFocusTop(inputConsumerStack.pop());
 			hideDarkScreen();
 			checkIfLandingOnPopup();	
 		}

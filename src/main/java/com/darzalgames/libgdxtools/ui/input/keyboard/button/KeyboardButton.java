@@ -116,12 +116,14 @@ public class KeyboardButton implements InputConsumerWrapper {
 	 */
 	public void setFocused(boolean isFocused) {
 		InputEvent event = Pools.obtain(InputEvent.class);
-		event.setType(null); // Since the events are pooled I think they can come with a type?! (the type of the last event it was used for?)
 		if (!isFocused) {
 			event.setType(InputEvent.Type.exit);
 		}
-		if (isFocused && inputStrategyManager.shouldFlashButtons()) {
+		else if (isFocused && inputStrategyManager.shouldFlashButtons()) {
 			event.setType(InputEvent.Type.enter);
+		}
+		else {
+			event.setType(null); // Since the events are pooled I think they can come with a type?! (the type of the last event it was used for?)
 		}
 		
 		if (event.getType() != null) {

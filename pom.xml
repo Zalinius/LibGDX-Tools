@@ -5,7 +5,7 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.3.5</version>
+	<version>0.3.6</version>
 	<name>libGDX Tools</name>
 
 	<properties>
@@ -14,7 +14,7 @@
 		<libgdx.version>1.12.1</libgdx.version>
 		<tommyettinger.version>1.1200.1</tommyettinger.version>
 		<libgdx.controllers.version>2.2.3</libgdx.controllers.version>
-		<darzalcommon.version>0.5.3</darzalcommon.version>
+		<darzalcommon.version>0.5.4</darzalcommon.version>
 		<gwt.version>2.10.0</gwt.version>
 		<gwt.maven.version>2.10.0</gwt.maven.version>
 	</properties>
@@ -177,6 +177,15 @@
 			<artifactId>gdx-controllers-desktop</artifactId>
 			<version>${libgdx.controllers.version}</version>
 		</dependency>
+		
+		<!-- For GWT compliancy verification -->
+		<dependency>
+			<groupId>org.gwtproject</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>${gwt.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 		
 		
 		<!-- vvv HERE vvv -->

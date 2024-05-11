@@ -12,13 +12,21 @@ public class NoteDuration {
 	public static final NoteDuration WHOLE = new NoteDuration(4.0f, 16);
 	public static final NoteDuration WHOLE_DOT = new NoteDuration(6.0f, 24);
 
-	
-	public final float duration;
-	public final int durationInSixteenths;
+	private final float duration;
+	//TODO change whole system over to 32nds or 64ths?
+	private final int durationInSixteenths;
 
 	public NoteDuration(float duration, int durationInSixteenths) {
 		this.duration = duration;
 		this.durationInSixteenths = durationInSixteenths;
+	}
+	
+	public float getDuration() {
+		return duration;
+	}
+	
+	public int getDurationInSixteenths() {
+		return durationInSixteenths;
 	}
 
 }

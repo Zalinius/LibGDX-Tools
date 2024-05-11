@@ -4,6 +4,9 @@ import java.util.NavigableSet;
 import java.util.Objects;
 import java.util.TreeSet;
 
+/**
+ * A collection of natural pitches, and some functions for going between them.
+ */
 public class Pitch implements Comparable<Pitch>{
 	
 	private final float frequency;
@@ -73,10 +76,17 @@ public class Pitch implements Comparable<Pitch>{
 		}
 	}
 	
+	/**
+	 * @param frequency The frequency in hz
+	 * @return Returns a custom Pitch
+	 */
 	public static Pitch makePitch(float frequency) {
 		return new Pitch(frequency, "Artificial Pitch", false);
 	}
 	
+	/**
+	 * @return A pitch one natural note higher, if available. The same note otherwise
+	 */
 	public Pitch up() {
 		if(this == NONE) {
 			return NONE;
@@ -92,6 +102,9 @@ public class Pitch implements Comparable<Pitch>{
 		}
 	}
 	
+	/**
+	 * @return A pitch one natural note lower, if available. The same note otherwise
+	 */
 	public Pitch down() {
 		if(this == NONE) {
 			return NONE;
@@ -107,6 +120,9 @@ public class Pitch implements Comparable<Pitch>{
 		}
 	}
 	
+	/**
+	 * @return A pitch one octave higher, if available. The same note otherwise
+	 */
 	public Pitch octaveUp() {
 		if(this.compareTo(B5) > 0) {
 			return this;
@@ -116,6 +132,9 @@ public class Pitch implements Comparable<Pitch>{
 		}
 	}
 	
+	/**
+	 * @return A pitch one octave lower, if available. The same note otherwise
+	 */
 	public Pitch octaveDown() {
 		if(this.compareTo(C2) < 0) {
 			return this;
@@ -125,11 +144,16 @@ public class Pitch implements Comparable<Pitch>{
 		}
 	}
 	
-	
+	/**
+	 * @return The pitche's frequency in hz
+	 */
 	public float getFrequency() {
 		return frequency;
 	}
 	
+	/**
+	 * @return True if the pitch is a natural note
+	 */
 	public boolean isNatural() {
 		return natural;
 	}

@@ -1,5 +1,8 @@
 package com.darzalgames.libgdxtools.audio.amplitude;
 
+/**
+ * An envelope with an Attack period, a decay period, an interpolated sustain period, and a Release period. It's length is defined on a per call basis
+ */
 public class AdsrEnvelope implements Envelope {
 	
 	private final float attackTime; //in seconds
@@ -8,6 +11,12 @@ public class AdsrEnvelope implements Envelope {
 	private final float releaseTime; //in seconds
 	
 	
+	/**
+	 * @param attackTime The upward attack time in seconds, can be 0
+	 * @param decayTime The downward decay time in seconds, can be 0
+	 * @param sustainLevel The amplitude level during the sustain period, within [0,1]
+	 * @param releaseTime The downward release time in seconds, can be 0
+	 */
 	public AdsrEnvelope(float attackTime, float decayTime, float sustainLevel, float releaseTime) {
 		this.attackTime = attackTime;
 		this.decayTime = decayTime;
@@ -15,13 +24,6 @@ public class AdsrEnvelope implements Envelope {
 		this.releaseTime = releaseTime;
 	}
 
-	/**
-	 * Returns the value of the ADSR envelope at a given time in it's life.
-	 * As a convenience, if the currentTime is outside the envelope, 0f is returned. 
-	 * @param envelopeDuration The duration of the envelope in seconds
-	 * @param currentTime The time input of the envelope in seconds
-	 * @return The amplitude of the envelope, within [0,1]
-	 */
 	public float getEnvelope(float envelopeDuration, float currentTime) {
 		if(currentTime < 0f || currentTime >= envelopeDuration) {
 			return 0f;
@@ -41,7 +43,6 @@ public class AdsrEnvelope implements Envelope {
 		else {
 			return -sustainLevel/releaseTime*currentTime + sustainLevel/releaseTime*(envelopeDuration);
 		}
-		
 	}
 	
 }

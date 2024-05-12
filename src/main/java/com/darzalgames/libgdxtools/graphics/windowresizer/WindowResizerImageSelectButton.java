@@ -10,8 +10,8 @@ public abstract class WindowResizerImageSelectButton extends KeyboardButton impl
 	protected WindowResizer windowResizer;
 
 	protected WindowResizerImageSelectButton(TextButton button, Image image, Runnable runnable,
-			InputStrategyManager inputStrategyManager) {
-		super(button, image, runnable, inputStrategyManager);
+			InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+		super(button, image, runnable, inputStrategyManager, soundInteractListener);
 	}
 
 	@Override

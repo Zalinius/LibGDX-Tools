@@ -23,7 +23,7 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSelectBox;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
-public class WindowResizerSelectBox  implements WindowResizerButton {
+public class WindowResizerSelectBox implements WindowResizerButton {
 
 	private static Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase());
 	private KeyboardSelectBox selectBox;
@@ -123,7 +123,7 @@ public class WindowResizerSelectBox  implements WindowResizerButton {
 
 	@Override
 	public KeyboardButton getButton() {
-		selectBox = new KeyboardSelectBox(getEntries(), textButtonSupplier.get(), inputStrategyManager);
+		selectBox = new KeyboardSelectBox(getEntries(), textButtonSupplier.get(), inputStrategyManager, Runnables.nullRunnable());//TODO replace null runnable?
 		
 		selectBox.setAction(selectedNewMode -> {
 			String previousMode = GameInfo.getPreferenceManager().other().getStringPrefValue(WindowResizer.SCREEN_MODE_KEY);

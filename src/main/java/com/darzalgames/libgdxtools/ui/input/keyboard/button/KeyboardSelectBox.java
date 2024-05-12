@@ -22,8 +22,8 @@ public class KeyboardSelectBox extends KeyboardButton {
 	private Consumer<String> action;
 
 	// TODO experiment with making a constructor that takes a list of buttons instead of making them?
-	public KeyboardSelectBox(Collection<String> entries, TextButton textButton, InputStrategyManager inputStrategyManager) {
-		super(textButton, inputStrategyManager);
+	public KeyboardSelectBox(Collection<String> entries, TextButton textButton, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+		super(textButton, inputStrategyManager, soundInteractListener);
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,
 		// sets that as the text in our display label (e.g. English), and calls the Consumer (which responds to the new entry, e.g. changing the game language and refreshing the main menu)

@@ -31,16 +31,17 @@ public class KeyboardButton implements InputConsumerWrapper {
 	private boolean wrap;
 	private boolean doesSoundOnInteract = true;
 	private final InputStrategyManager inputStrategyManager;
+	private final Runnable soundInteractListener;
 
-	public KeyboardButton(TextButton button, InputStrategyManager inputStrategyManager) {
-		this(button, Runnables.nullRunnable(), inputStrategyManager);
+	public KeyboardButton(TextButton button, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+		this(button, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 	}
 	
-	public KeyboardButton(TextButton button, Runnable runnable, InputStrategyManager inputStrategyManager) { 
-		this(button, null, runnable, inputStrategyManager);
+	public KeyboardButton(TextButton button, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) { 
+		this(button, null, runnable, inputStrategyManager, soundInteractListener);
 	}
 	
-	public KeyboardButton(TextButton button, Image image, Runnable runnable, InputStrategyManager inputStrategyManager) {
+	public KeyboardButton(TextButton button, Image image, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		this.button = button;
 		this.labelSupplier = button::getLabel;
 		this.cellSupplier = button::getLabelCell;
@@ -49,6 +50,7 @@ public class KeyboardButton implements InputConsumerWrapper {
 		this.image = image;
 		this.wrap = true;
 		this.alignment = Alignment.CENTER;
+		this.soundInteractListener = soundInteractListener;
 
 		if (image != null) {
 			Label label = labelSupplier.get();
@@ -72,6 +74,7 @@ public class KeyboardButton implements InputConsumerWrapper {
 				if (button.isTouchable() && button.isChecked() && !button.isDisabled()) {
 					buttonRunnable.run();
 					setUnchecked();
+					requestInteractSound();
 				}
 			}
 		});
@@ -82,8 +85,7 @@ public class KeyboardButton implements InputConsumerWrapper {
 	 */
 	protected void requestInteractSound() {
 		if (doesSoundOnInteract) {
-			// TODO uncomment this once the audio bits are in this library (libgdx tools) 
-//			QuestGiverGame.music.playSound(SoundEffects.inputSoundEffect());
+			soundInteractListener.run();
 		}
 	}
 	

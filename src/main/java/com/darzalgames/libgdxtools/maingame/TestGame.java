@@ -69,7 +69,7 @@ public class TestGame extends MainGame {
 	@Override
 	protected void launchGame(boolean isNewSave) {
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
-		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategyManager, () -> 2.5f);
+		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategyManager, () -> 2.5f, Runnables.nullRunnable());
 		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override

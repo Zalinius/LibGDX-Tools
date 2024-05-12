@@ -17,12 +17,12 @@ public class KeyboardSlider extends KeyboardButton {
 	private final Slider slider;
 	private float previousValue;
 
-	public KeyboardSlider(TextButton textButton, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategyManager inputStrategyManager) {
-		this(textButton, null, sliderStyle, consumer, inputStrategyManager);
+	public KeyboardSlider(TextButton textButton, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+		this(textButton, null, sliderStyle, consumer, inputStrategyManager, soundInteractListener);
 	}
 
-	public KeyboardSlider(TextButton textButton, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategyManager inputStrategyManager) {
-		super(textButton, image, Runnables.nullRunnable(), inputStrategyManager);
+	public KeyboardSlider(TextButton textButton, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+		super(textButton, image, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle);
 		slider.addListener(new ChangeListener() {
 			@Override

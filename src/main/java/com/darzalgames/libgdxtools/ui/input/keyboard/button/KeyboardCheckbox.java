@@ -16,8 +16,8 @@ public class KeyboardCheckbox extends KeyboardButton {
 	private final String uncheckedLabel;
 	private final String checkedLabel;
 	
-	protected KeyboardCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategyManager inputStrategyManager) {
-		super(textButton, Runnables.nullRunnable(), inputStrategyManager);
+	protected KeyboardCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+		super(textButton, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 		this.uncheckedLabel = uncheckedLabel;
 		this.checkedLabel = checkedLabel;
 		box = new CheckBox(uncheckedLabel.length() > checkedLabel.length() ? uncheckedLabel : checkedLabel, style);

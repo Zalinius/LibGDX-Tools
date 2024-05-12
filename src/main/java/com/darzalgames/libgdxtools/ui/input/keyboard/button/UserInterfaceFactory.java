@@ -39,14 +39,16 @@ public class UserInterfaceFactory {
 	private static SkinManager skinManager;
 	protected static InputStrategyManager inputStrategyManager;
 	private static Supplier<Float> flashesPerSecondSupplier;
+	protected static Runnable soundInteractListener;
 
 	protected UserInterfaceFactory() {}
 
-	public static void initialize(SkinManager skinManager, InputStrategyManager inputStrategyManager, Supplier<Float> flashesPerSecondSupplier) {
+	public static void initialize(SkinManager skinManager, InputStrategyManager inputStrategyManager, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener) {
 		UserInterfaceFactory.skinManager = skinManager;
 		UserInterfaceFactory.inputStrategyManager = inputStrategyManager;
 		quitGameRunnable = Gdx.app::exit;
 		UserInterfaceFactory.flashesPerSecondSupplier = flashesPerSecondSupplier;
+		UserInterfaceFactory.soundInteractListener = soundInteractListener;
 	}
 
 	public static Label getLabel(final String text) {
@@ -91,7 +93,7 @@ public class UserInterfaceFactory {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
 		TextButton textButton = new TextButton(text, skinManager.getSneakyLableButtonStyle());
 		textButton.setName(text);
-		KeyboardButton listableButton = new KeyboardButton(textButton, null, Runnables.nullRunnable(), inputStrategyManager);
+		KeyboardButton listableButton = new KeyboardButton(textButton, null, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 		listableButton.setDisabled(true);
 		return listableButton;
 	}
@@ -127,7 +129,7 @@ public class UserInterfaceFactory {
 	private static KeyboardButton makeButton(final String text, Image image, final Runnable runnable) {
 		TextButton textButton = makeLibGDXTextButton(text);
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		return new KeyboardButton(textButton, image, runnable, inputStrategyManager);
+		return new KeyboardButton(textButton, image, runnable, inputStrategyManager, soundInteractListener);
 	}
 
 	/**
@@ -135,7 +137,7 @@ public class UserInterfaceFactory {
 	 */
 	protected static KeyboardButton makeButton(final String text, final Runnable runnable, TextButtonStyle textButtonStyle) {
 		TextButton textButton = new TextButton(text, textButtonStyle);
-		return new KeyboardButton(textButton, null, runnable, inputStrategyManager);
+		return new KeyboardButton(textButton, null, runnable, inputStrategyManager, soundInteractListener);
 	}
 
 	/**
@@ -160,7 +162,7 @@ public class UserInterfaceFactory {
 	public static KeyboardSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
 		TextButton textButton = new TextButton(boxLabel + ":  ", skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		KeyboardSelectBox keyboardSelectBox =  new KeyboardSelectBox(entries, textButton, inputStrategyManager);
+		KeyboardSelectBox keyboardSelectBox =  new KeyboardSelectBox(entries, textButton, inputStrategyManager, soundInteractListener);
 		keyboardSelectBox.setAction(consumer);
 		return keyboardSelectBox;
 	}
@@ -171,17 +173,17 @@ public class UserInterfaceFactory {
 
 	public static KeyboardSlider getSlider(String sliderLabel, Consumer<Float> consumer) {
 		KeyboardButton textButton = getButton(sliderLabel, Runnables.nullRunnable());
-		return new KeyboardSlider(textButton.getView(), skinManager.getSliderStyle(), consumer, inputStrategyManager);
+		return new KeyboardSlider(textButton.getView(), skinManager.getSliderStyle(), consumer, inputStrategyManager, soundInteractListener);
 	}
 
 	public static KeyboardCheckbox getCheckbox(String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer) {
 		KeyboardButton textButton = getButton("", Runnables.nullRunnable());
-		return new KeyboardCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategyManager);
+		return new KeyboardCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategyManager, soundInteractListener);
 	}
 
 	public static KeyboardButton getInGamesSettingsButton(Runnable onclick) {
 		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()); 
-		return new MouseOnlyButton(textButton, onclick, inputStrategyManager);
+		return new MouseOnlyButton(textButton, onclick, inputStrategyManager, soundInteractListener);
 	}
 
 	private static final String QUIT_GAME_KEY = "quit_game";

@@ -38,13 +38,15 @@ public class UserInterfaceFactory {
 	protected static Runnable quitGameRunnable;
 	private static SkinManager skinManager;
 	protected static InputStrategyManager inputStrategyManager;
+	private static Supplier<Float> flashesPerSecondSupplier;
 
 	protected UserInterfaceFactory() {}
 
-	public static void initialize(SkinManager skinManager, InputStrategyManager inputStrategyManager) {
+	public static void initialize(SkinManager skinManager, InputStrategyManager inputStrategyManager, Supplier<Float> flashesPerSecondSupplier) {
 		UserInterfaceFactory.skinManager = skinManager;
 		UserInterfaceFactory.inputStrategyManager = inputStrategyManager;
 		quitGameRunnable = Gdx.app::exit;
+		UserInterfaceFactory.flashesPerSecondSupplier = flashesPerSecondSupplier;
 	}
 
 	public static Label getLabel(final String text) {
@@ -225,16 +227,13 @@ public class UserInterfaceFactory {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				super.enter(event, x, y, pointer, fromActor);
-				float flashTime = 1f / 2.5f; // TODO Changes to be the BPS once the audio stuff is in this library
 				if (KeyboardStage.isHoverEvent(pointer) && button.isTouchable()) {
 					button.setStyle(mainButtonStyle);
 					if (shouldButtonFlash(button)) {
 						button.clearActions();
-						Action flashAfterDelay = getChangeButtonStyleAfterDelayAction(button, flashedButtonStyle, flashTime);
-						Action showAfterDelay = getChangeButtonStyleAfterDelayAction(button, mainButtonStyle, flashTime);
 						button.addAction(new InstantForeverAction(new InstantSequenceAction(
-								flashAfterDelay,
-								showAfterDelay
+								getChangeButtonStyleAfterDelayAction(button, flashedButtonStyle),
+								getChangeButtonStyleAfterDelayAction(button, mainButtonStyle)
 								)));
 
 					}
@@ -257,16 +256,13 @@ public class UserInterfaceFactory {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				super.enter(event, x, y, pointer, fromActor);
-				float flashTime = 1f / 2.5f; // TODO Changes to be the BPS once the audio stuff is in this library
 				if (KeyboardStage.isHoverEvent(pointer) && button.isTouchable()) {
-					button.clearActions();
 					keyboardSlider.setSliderStyle(flashedStyle);
 					if (shouldButtonFlash(button)) {
-						Action flashAfterDelay = getChangeSliderStyleAfterDelayAction(keyboardSlider, flashedStyle, flashTime);
-						Action normalAfterDelay = getChangeSliderStyleAfterDelayAction(keyboardSlider, mainStyle, flashTime);
+						button.clearActions();
 						button.addAction(new InstantForeverAction(new InstantSequenceAction(
-								normalAfterDelay,
-								flashAfterDelay
+								getChangeSliderStyleAfterDelayAction(keyboardSlider, flashedStyle),
+								getChangeSliderStyleAfterDelayAction(keyboardSlider, mainStyle)
 								)));
 
 					}
@@ -290,25 +286,25 @@ public class UserInterfaceFactory {
 				&& inputStrategyManager.shouldFlashButtons();
 	}
 
-	private static Action getChangeButtonStyleAfterDelayAction(Button button, ButtonStyle buttonStyle, float delay) {
+	private static Action getChangeButtonStyleAfterDelayAction(Button button, ButtonStyle buttonStyle) {
 		RunnableAction change = Actions.run(() -> {
 			if (shouldButtonFlash(button)) {
 				button.setStyle(buttonStyle);
 			}
 		});
-		DelayAction changeAfterDelay = Actions.delay(delay);
+		DelayAction changeAfterDelay = Actions.delay(computeDelay());
 		changeAfterDelay.setAction(change);
 
 		return changeAfterDelay;
 	}
 
-	private static Action getChangeSliderStyleAfterDelayAction(KeyboardSlider keyboardSlider, SliderStyle sliderStyle, float delay) {
+	private static Action getChangeSliderStyleAfterDelayAction(KeyboardSlider keyboardSlider, SliderStyle sliderStyle) {
 		RunnableAction change = Actions.run(() -> {
 			if (shouldButtonFlash(keyboardSlider.getView())) {
 				keyboardSlider.setSliderStyle(sliderStyle);
 			}
 		});
-		DelayAction changeAfterDelay = Actions.delay(delay);
+		DelayAction changeAfterDelay = Actions.delay(computeDelay());
 		changeAfterDelay.setAction(change);
 
 		return changeAfterDelay;
@@ -321,5 +317,9 @@ public class UserInterfaceFactory {
 			return textButton;
 		};
 		return new WindowResizerSelectBox(supplier, inputStrategyManager);
+	}
+	
+	private static float computeDelay() {
+		return 1f/flashesPerSecondSupplier.get();
 	}
 }

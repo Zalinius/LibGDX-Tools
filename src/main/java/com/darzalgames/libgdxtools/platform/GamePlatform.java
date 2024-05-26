@@ -8,6 +8,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
@@ -26,6 +27,8 @@ public interface GamePlatform {
 	 * @return A libgdx file handle to the save file
 	 */
 	public FileHandle getSaveFileLocation(String fullGameAndSaveName);
+	
+	public SaveManager makeSaveManager();
 
 	/**
 	 * @param inputStrategyManager The input strategy manager, so we can make the gamepad input handler

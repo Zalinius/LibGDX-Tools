@@ -1,8 +1,6 @@
 package com.darzalgames.libgdxtools.internationalization;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -35,8 +33,12 @@ public abstract class TextSupplier {
 	/**
 	 * @return All supported languages, written in their own locales
 	 */
-	public static Set<String> getAllDisplayNames() {
-		return bundleManager.displayNames.getFirstKeySet();
+	public static List<String> getAllDisplayNames() {
+		Set<String> namesUnsorted = bundleManager.displayNames.getFirstKeySet();
+		List<String> names = new ArrayList<>();
+		names.addAll(namesUnsorted);
+		Collections.sort(names);
+		return names;
 	}
 	/**
 	 * @return The current language's display name, in the current locale
@@ -60,7 +62,12 @@ public abstract class TextSupplier {
 	 * @return The language string for the current locale, this string ain't pretty (e.g. since English is the default bundle, it returns "", French is "fr")
 	 */
 	public static String getLocaleForSaveManager() {
-		return bundleManager.locale.getLanguage();
+		return getFormattedLocaleForSave(bundleManager.locale);
+	}
+	
+	private static String getFormattedLocaleForSave(Locale locale) {
+		String base = locale.getLanguage();
+		return base + (base.isBlank() ? "" : "_" + locale.getCountry());
 	}
 	
 	/** 
@@ -68,7 +75,7 @@ public abstract class TextSupplier {
 	 * @param languageCode
 	 */
 	public static void useLanguage(String languageCode) {
-		List<Locale> match = bundleManager.displayNames.getSecondKeyset().stream().filter(loc -> loc.getLanguage().equalsIgnoreCase(languageCode)).collect(Collectors.toList());
+		List<Locale> match = bundleManager.displayNames.getSecondKeyset().stream().filter(loc -> getFormattedLocaleForSave(loc).equalsIgnoreCase(languageCode)).collect(Collectors.toList());
 		if (!match.isEmpty()) {
 			bundleManager.locale = match.get(0);
 		} else {

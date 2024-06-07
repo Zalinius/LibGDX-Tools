@@ -12,49 +12,49 @@ import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
  */
 public class GameInfo {
 
-	private static MainGame mainGame;
+	private static SharesGameInformation game;
 	
 	private GameInfo() {}
 	
 	/**
-	 * @param mainGame The game that this class will be sharing info from
+	 * @param game The game that this class will be sharing info from
 	 */
-	public static void setMainGame(MainGame mainGame) {
-		GameInfo.mainGame = mainGame;
+	public static void setMainGame(SharesGameInformation game) {
+		GameInfo.game = game;
 	}
 	
 	/**
 	 * @return The width (in art "pixels") of the logical game window
 	 */
 	public static int getWidth() {
-		return mainGame.width;
+		return game.getWidth();
 	}
 	/**
 	 * @return The height (in art "pixels") of the logical game window
 	 */
 	public static int getHeight() {
-		return mainGame.height;
+		return game.getHeight();
 	}
 
 	/**
 	 * @return Gets the {@link PreferenceManager}, useful to access the more specific preference managers (such as sound, or more temporary "other" managers)
 	 */
 	public static PreferenceManager getPreferenceManager() {
-		return mainGame.preferenceManager;
+		return game.getPreferenceManager();
 	}
 
 	/**
 	 * @return Gets the {@link DesktopSaveManager}, which is a concrete class in a full game
 	 */
 	public static SaveManager getSaveManager() {
-		return mainGame.saveManager;
+		return game.getSaveManager();
 	}
 	
 	public static GamePlatform getGamePlatform() {
-		return mainGame.gamePlatform;
+		return game.getGamePlatform();
 	}
 	
 	public static SteamStrategy getSteamStrategy() { 
-		return mainGame.steamStrategy;
+		return game.getSteamStrategy();
 	}
 }

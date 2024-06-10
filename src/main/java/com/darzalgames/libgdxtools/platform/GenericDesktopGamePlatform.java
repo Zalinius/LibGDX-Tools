@@ -16,6 +16,11 @@ import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public abstract class GenericDesktopGamePlatform implements GamePlatform {
+	
+	@Override
+	public boolean isDesktop() {
+		return true;
+	}
 
 	@Override
 	public SteamStrategy getSteamStrategy(InputStrategyManager inputStrategyManager) {

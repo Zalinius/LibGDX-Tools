@@ -16,6 +16,11 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 public interface GamePlatform {
 
 	/**
+	 * @return True if the active game platform is desktop (as opposed to web)
+	 */
+	public boolean isDesktop();
+	
+	/**
 	 * @return True if the active game platform supports borderless fullsreen
 	 */
 	public boolean supportsBorderlessFullscreen();

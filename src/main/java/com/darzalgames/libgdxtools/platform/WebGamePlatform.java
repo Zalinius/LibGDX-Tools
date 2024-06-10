@@ -6,6 +6,12 @@ import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class WebGamePlatform implements GamePlatform {
+	
+	@Override
+	public boolean isDesktop() {
+		return false;
+	}
+	
 	@Override
 	public boolean supportsBorderlessFullscreen() {
 		return false;//TODO or does it??

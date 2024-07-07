@@ -11,6 +11,9 @@ public class SteamControllerManager {
 	}
 
 	public static void openControlsOverlay() {
-		steamGamepadInputHandler.openControlsOverlay();
+		if (steamGamepadInputHandler != null) {
+			// Is null unless booted via Steam
+			steamGamepadInputHandler.openControlsOverlay();
+		}
 	}
 }

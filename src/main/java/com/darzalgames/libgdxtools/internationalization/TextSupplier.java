@@ -12,9 +12,9 @@ import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 public abstract class TextSupplier {
 
 	private static BundleManager bundleManager;
-	
+
 	private TextSupplier() {}
-	
+
 	public static void initialize(BundleManager bundleManager) {
 		TextSupplier.bundleManager = bundleManager;
 	}
@@ -56,7 +56,7 @@ public abstract class TextSupplier {
 			GameInfo.getSaveManager().save();
 		}; 
 	}
-	
+
 	/** 
 	 * ONLY TO BE USED BY THE {@link DesktopSaveManager}
 	 * @return The language string for the current locale, this string ain't pretty (e.g. since English is the default bundle, it returns "", French is "fr")
@@ -64,12 +64,17 @@ public abstract class TextSupplier {
 	public static String getLocaleForSaveManager() {
 		return getFormattedLocaleForSave(bundleManager.locale);
 	}
-	
-	private static String getFormattedLocaleForSave(Locale locale) {
+
+	public static String getFormattedLocaleForSave(Locale locale) {
 		String base = locale.getLanguage();
-		return base + (base.isBlank() ? "" : "_" + locale.getCountry());
+		// maybe use this some day? locale.toLanguageTag());
+		String optionalCountry = locale.getCountry();
+		if (!optionalCountry.isBlank()) {
+			base += "_" + optionalCountry; 
+		}
+		return base;
 	}
-	
+
 	/** 
 	 * Only to be used when loading a save, otherwise use TextSupplier.getLanguageChoiceResponder()
 	 * @param languageCode

@@ -31,7 +31,7 @@ public abstract class TextSupplier {
 	}
 
 	/**
-	 * @return All supported languages, written in their own locales
+	 * @return All supported languages in alphabetical order, written in their own locales
 	 */
 	public static List<String> getAllDisplayNames() {
 		Set<String> namesUnsorted = bundleManager.displayNames.getFirstKeySet();

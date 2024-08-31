@@ -11,14 +11,14 @@ public class DesktopGamePlatformHelper {
 	 * @param args java main arguments
 	 * @return The corresponding platform
 	 */
-	public static GamePlatform getTypeFromArgs(String[] args, Supplier<GamePlatform> makeWindowsPlatform, Supplier<GamePlatform> makeLinuxPlatform) {
+	public static GamePlatform getTypeFromArgs(String[] args) {
 		List<String> argsList = Arrays.asList(args);
 		
 		if(argsList.contains("windows")) {
-			return makeWindowsPlatform.get();
+			return new WindowsGamePlatform();
 		}
 		else if(argsList.contains("linux")) {
-			return makeLinuxPlatform.get();
+			return new LinuxGamePlatform();
 		}
 		else {
 			throw new IllegalArgumentException("Args :" + Arrays.toString(args) + " does not contain a valid Game Platform");

@@ -10,7 +10,13 @@ public class SteamControllerManager {
 		SteamControllerManager.steamGamepadInputHandler = steamGamepadInputHandler;
 	}
 
+	/**
+	 * Only works when playing through Steam, otherwise does nothing
+	 */
 	public static void openControlsOverlay() {
-		steamGamepadInputHandler.openControlsOverlay();
+		if (steamGamepadInputHandler != null) {
+			// Is null unless booted via Steam
+			steamGamepadInputHandler.openControlsOverlay();
+		}
 	}
 }

@@ -28,6 +28,8 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected KeyboardButton optionsButton;
 	private final Supplier<KeyboardButton> makeWindowModeSelectBox;
 
+	private static String platformName = "";
+
 	/**
 	 * NOTE: Setting the position is important, otherwise the options menu will not open!<p>
 	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceFactory.makeActorCentered(this)} 
@@ -157,7 +159,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		// Set up the version tag to be in its own inner table, so that the actual buttons can still reach the bottom of the main table
 		Table versionTable = new Table();
 		versionTable.setFillParent(true);
-		Label versionLabel = UserInterfaceFactory.getFlavorTextLabel(getGameVersion());
+		Label versionLabel = UserInterfaceFactory.getFlavorTextLabel(getGameVersion() + platformName);
 		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT.getAlignment());
 		versionTable.setTouchable(Touchable.disabled);
 		addActor(versionTable);
@@ -167,6 +169,10 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	@Override
 	public void actWhilePaused(float delta) {
 		act(delta);
+	}
+
+	public static void setPlatformName(String platformName) {
+		OptionsMenu.platformName = " (" + platformName + ")";
 	}
 
 	/**

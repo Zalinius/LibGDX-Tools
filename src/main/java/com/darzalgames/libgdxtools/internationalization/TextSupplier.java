@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.darzalgames.darzalcommon.strings.StringUtils;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 
@@ -69,7 +70,7 @@ public abstract class TextSupplier {
 		String base = locale.getLanguage();
 		// maybe use this some day? locale.toLanguageTag());
 		String optionalCountry = locale.getCountry();
-		if (!optionalCountry.isBlank()) {
+		if (!StringUtils.isBlank(optionalCountry)) {
 			base += "_" + optionalCountry; 
 		}
 		return base;

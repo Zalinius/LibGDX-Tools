@@ -8,7 +8,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 public class WebGamePlatform implements GamePlatform {
 	
 	@Override
-	public boolean isDesktop() {
+	public boolean needsQuitButton() {
 		return false;
 	}
 	
@@ -31,5 +31,10 @@ public class WebGamePlatform implements GamePlatform {
 	@Override
 	public SteamStrategy getSteamStrategy(InputStrategyManager inputStrategyManager) {
 		return new DummySteamStrategy(GamePlatform.makeFallbackGamepadInputHandlerSupplier(inputStrategyManager).get());
+	}
+
+	@Override
+	public String getPlatformName() {
+		return "Web";
 	}
 }

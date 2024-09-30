@@ -14,12 +14,9 @@ import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public interface GamePlatform {
-
-	/**
-	 * @return True if the active game platform is desktop (as opposed to web)
-	 */
-	public boolean isDesktop();
 	
+	public String getPlatformName();
+
 	/**
 	 * @return True if the active game platform supports borderless fullsreen
 	 */
@@ -37,7 +34,10 @@ public interface GamePlatform {
 	 * @return A SteamStrategy befitting the GamePlatform
 	 */
 	public SteamStrategy getSteamStrategy(InputStrategyManager inputStrategyManager);
-	
+
+	public default boolean needsQuitButton() {
+		return true;
+	}
 
 	public default boolean toggleFullScreenWithF11() {
 		return true;

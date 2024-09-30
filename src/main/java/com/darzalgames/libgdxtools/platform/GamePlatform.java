@@ -37,6 +37,11 @@ public interface GamePlatform {
 	 * @return A SteamStrategy befitting the GamePlatform
 	 */
 	public SteamStrategy getSteamStrategy(InputStrategyManager inputStrategyManager);
+	
+
+	public default boolean toggleFullScreenWithF11() {
+		return true;
+	}
 
 	static Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandlerSupplier(InputStrategyManager inputStrategyManager) {
 		return () -> new FallbackGamepadInputHandler(inputStrategyManager) {

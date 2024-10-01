@@ -35,6 +35,6 @@ public class WebGamePlatform implements GamePlatform {
 
 	@Override
 	public String getPlatformName() {
-		return "Web";
+		return GamePlatform.WEB;
 	}
 }

@@ -28,7 +28,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected KeyboardButton optionsButton;
 	private final Supplier<KeyboardButton> makeWindowModeSelectBox;
 
-	private static String platformName = "";
+	private final String platformName;
 
 	/**
 	 * NOTE: Setting the position is important, otherwise the options menu will not open!<p>
@@ -81,6 +81,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox, int bottomPadding) {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
+		this.platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
 		setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight());
 		defaults().padBottom(bottomPadding);
 	}
@@ -169,10 +170,6 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	@Override
 	public void actWhilePaused(float delta) {
 		act(delta);
-	}
-
-	public static void setPlatformName(String platformName) {
-		OptionsMenu.platformName = " (" + platformName + ")";
 	}
 
 	/**

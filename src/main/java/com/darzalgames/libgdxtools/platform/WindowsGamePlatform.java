@@ -19,6 +19,6 @@ public class WindowsGamePlatform extends GenericDesktopGamePlatform {
 
 	@Override
 	public String getPlatformName() {
-		return "Windows";
+		return GamePlatform.WINDOWS;
 	}
 }

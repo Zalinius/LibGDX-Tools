@@ -17,6 +17,6 @@ public class LinuxGamePlatform extends GenericDesktopGamePlatform {
 
 	@Override
 	public String getPlatformName() {
-		return "Linux";
+		return GamePlatform.LINUX;
 	}
 }

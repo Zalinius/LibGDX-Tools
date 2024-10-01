@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class DesktopGamePlatformHelper {
+	
 
 	/**
 	 * Determines the correct platform based on launch arguments
@@ -14,15 +15,19 @@ public class DesktopGamePlatformHelper {
 	public static GamePlatform getTypeFromArgs(String[] args, Supplier<GamePlatform> makeWindowsPlatform, Supplier<GamePlatform> makeLinuxPlatform) {
 		List<String> argsList = Arrays.asList(args);
 		
-		if(argsList.contains("windows")) {
+		if(listContainsIgnoreCase(argsList, GamePlatform.WINDOWS)) {
 			return makeWindowsPlatform.get();
 		}
-		else if(argsList.contains("linux")) {
+		else if(listContainsIgnoreCase(argsList, GamePlatform.LINUX)) {
 			return makeLinuxPlatform.get();
 		}
 		else {
 			throw new IllegalArgumentException("Args :" + Arrays.toString(args) + " does not contain a valid Game Platform");
 		}
+	}
+	
+	private static boolean listContainsIgnoreCase(List<String> argsList, String toCheckFor) {
+		return argsList.stream().anyMatch(argument -> argument.equalsIgnoreCase(toCheckFor));
 	}
 
 }

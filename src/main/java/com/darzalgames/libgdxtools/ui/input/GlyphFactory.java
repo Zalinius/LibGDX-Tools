@@ -1,7 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input;
 
-import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -13,10 +13,10 @@ public class GlyphFactory {
 
 	private static Map<InputMethod, InputHandler> handlers;
 
-	public static void initialize(InputHandler ... allHandlers) {
+	public static void initialize(List<InputHandler> allHandlers) {
 		handlers = new EnumMap<>(InputMethod.class);
 
-		Arrays.asList(allHandlers).forEach(handler -> handlers.put(handler.getInputMethod(), handler));
+		allHandlers.forEach(handler -> handlers.put(handler.getInputMethod(), handler));
 	}
 
 	public static Texture getGlyphForInput(Input input) {

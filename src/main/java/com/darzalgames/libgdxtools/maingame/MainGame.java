@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.darzalgames.darzalcommon.data.ListFactory;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
@@ -35,7 +36,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 import com.darzalgames.libgdxtools.ui.screen.PixelPerfectViewport;
 
-public abstract class MainGame extends ApplicationAdapter {
+public abstract class MainGame extends ApplicationAdapter implements SharesGameInformation {
 
 	// Values which are statically shared to the rest of the game by {@link GameInfo}
 	protected final int width;
@@ -168,7 +169,7 @@ public abstract class MainGame extends ApplicationAdapter {
 		actorsThatDoNotPause.add(gamepadInputHandler);
 		cursorStage.addActor(getCustomCursor());
 		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler, inputStrategyManager);
-		GlyphFactory.initialize(gamepadInputHandler, keyboardInputHandler, mouseDetector);
+		GlyphFactory.initialize(ListFactory.of(gamepadInputHandler, keyboardInputHandler, mouseDetector));
 	}
 
 	protected final void changeScreen(GameScreen gameScreen) {
@@ -240,5 +241,34 @@ public abstract class MainGame extends ApplicationAdapter {
 		cursorStage.getViewport().update(width, height, true);
 		cursorStage.getCamera().update();
 	}
-	
+
+	@Override
+	public int getWidth() {
+		return width;
+	}
+
+	@Override
+	public int getHeight() {
+		return height;
+	}
+
+	@Override
+	public SaveManager getSaveManager() {
+		return saveManager;
+	}
+
+	@Override
+	public PreferenceManager getPreferenceManager() {
+		return preferenceManager;
+	}
+
+	@Override
+	public GamePlatform getGamePlatform() {
+		return gamePlatform;
+	}
+
+	@Override
+	public SteamStrategy getSteamStrategy() {
+		return steamStrategy;
+	}
 }

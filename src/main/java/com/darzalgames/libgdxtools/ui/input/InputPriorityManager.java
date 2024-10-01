@@ -42,11 +42,13 @@ public class InputPriorityManager {
 	private static GamepadInputHandler gamepadInputHandler;
 	private static KeyboardInputHandler keyboardInputHandler;
 	private static InputStrategyManager inputStrategyManager;
+	
+	private static boolean toggleWithF11 = true;
 
 	private InputPriorityManager() {}
 
 	/**
-	 * Is essential to do this, there'll probably be a crash if you don't \_( ͡⟃ ͜ʖ ⟄)_/
+	 * It's essential to do this, there'll probably be a crash if you don't \_( ͡⟃ ͜ʖ ⟄)_/
 	 * @param mainStage The stage where the game is  
 	 * @param popUpStage The stage where pop ups are held, ensuring that they are in front of the rest of the game
 	 * @param toggleFullscreenRunnable A runnable that toggles between full screen and windowed mode
@@ -116,7 +118,7 @@ public class InputPriorityManager {
 	 * @param input The input to pass into the system: this can be from the user (keyboard, controller), or simulated input
 	 */
 	public static void processKeyInput(Input input) {
-		if (input == Input.TOGGLE_FULLSCREEN) {
+		if (input == Input.TOGGLE_FULLSCREEN && toggleWithF11) {
 			toggleFullscreenRunnable.run();
 		} else if (input == Input.PAUSE) {
 			if (pauseButton != null && 
@@ -348,6 +350,10 @@ public class InputPriorityManager {
 			pauseButton = null;
 			optionsMenu = null;
 		}
+	}
+
+	public static void setToggleWithF11(boolean toggleWithF11) {
+		InputPriorityManager.toggleWithF11 = toggleWithF11;
 	}
 
 

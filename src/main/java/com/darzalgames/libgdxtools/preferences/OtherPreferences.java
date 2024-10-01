@@ -27,5 +27,15 @@ public class OtherPreferences {
 	public void setBooleanPrefValue(String key, boolean value) {
 		preferenceManager.savePrefValue(key, value);
 	}
+	
+	public Integer getIntegerPrefValue(String key) {
+		return preferenceManager.getIntegerPrefValue(key);
+	}
+	public Integer getIntegerPrefValue(String key, Integer defaultInteger) {
+		return preferenceManager.getIntegerPrefValue(key, defaultInteger);
+	}
+	public void setIntegerPrefValue(String key, Integer value) {
+		preferenceManager.savePrefValue(key, value);
+	}
 
 }

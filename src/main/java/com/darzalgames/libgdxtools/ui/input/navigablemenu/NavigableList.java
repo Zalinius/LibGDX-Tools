@@ -99,7 +99,7 @@ public class NavigableList implements InputConsumerWrapper {
 		refreshPageRunnable.run();
 	}
 
-	private void defaultRefreshPage() {
+	public void defaultRefreshPage() {
 		table.clearChildren();
 		table.clear();
 		table.defaults().expandX().spaceTop(spacing).spaceBottom(spacing).align(entryAlignment.getAlignment());

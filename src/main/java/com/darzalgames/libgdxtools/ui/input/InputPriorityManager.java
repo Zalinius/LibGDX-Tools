@@ -33,6 +33,7 @@ public class InputPriorityManager {
 
 	private static KeyboardButton pauseButton;
 	private static OptionsMenu optionsMenu;
+	private static Map<Input, KeyboardButton> specialButtons = new HashMap<>();
 
 	private static Stage popUpStage;
 
@@ -42,7 +43,7 @@ public class InputPriorityManager {
 	private static GamepadInputHandler gamepadInputHandler;
 	private static KeyboardInputHandler keyboardInputHandler;
 	private static InputStrategyManager inputStrategyManager;
-	
+
 	private static boolean toggleWithF11 = true;
 
 	private InputPriorityManager() {}
@@ -128,7 +129,10 @@ public class InputPriorityManager {
 			} else if (!inputConsumerStack.isEmpty()) { // Don't try to enter keyboard mode when someone is just pressing escape
 				inputConsumerStack.peek().consumeKeyInput(input);
 			}	
-		} else if (!inputConsumerStack.isEmpty() && !inputStrategyManager.setToKeyboardStrategy()) {
+		} else if (specialButtons.containsKey(input)) {
+			specialButtons.get(input).consumeKeyInput(Input.ACCEPT);
+		}
+		else if (!inputConsumerStack.isEmpty() && !inputStrategyManager.setToKeyboardStrategy()) {
 			inputConsumerStack.peek().consumeKeyInput(input);
 		}		
 	}
@@ -254,6 +258,10 @@ public class InputPriorityManager {
 	 */
 	public static void hideDarkScreenForVeryExceptionalCircumstances() {
 		darkScreen.remove();
+	}
+	
+	public static void addSpecialButton(Input input, KeyboardButton button) {
+		specialButtons.put(input, button);
 	}
 
 	//-----------------------------------------------------------

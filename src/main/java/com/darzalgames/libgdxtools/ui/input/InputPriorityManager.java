@@ -241,7 +241,8 @@ public class InputPriorityManager {
 	}
 
 	public static boolean isPaused() {
-		return optionsMenu != null && optionsMenu.getStage() != null;
+		return (optionsMenu != null && optionsMenu.getStage() != null)
+				|| inputConsumerStack.peek().isGamePausedWhileThisIsInFocus();
 	}
 
 	/**

@@ -48,4 +48,11 @@ public interface InputConsumer {
 	 * If applicable, select a default object (e.g. the first button in a list, or the only intractable object in the current scene)
 	 */
 	public void selectDefault();
+	
+	/**
+	 * If this object is the topmost UI, is the game paused?
+	 */
+	public default boolean isGamePausedWhileThisIsInFocus() {
+		return false;
+	}
 }

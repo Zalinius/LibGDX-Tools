@@ -15,4 +15,9 @@ public interface PopUp extends InputConsumer {
 	 * Handles hiding the pop up and unregistering it from the input system
 	 */
 	public default void hideThis() {}
+
+	@Override
+	public default boolean isGamePausedWhileThisIsInFocus() {
+		return true;
+	}
 }

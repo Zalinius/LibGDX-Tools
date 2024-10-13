@@ -171,6 +171,11 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	public void actWhilePaused(float delta) {
 		act(delta);
 	}
+	
+	@Override
+	public boolean isGamePausedWhileThisIsInFocus() {
+		return true;
+	}
 
 	/**
 	 * A sub-menu that opens up within this menu (e.g. a sub-menu for sound options)

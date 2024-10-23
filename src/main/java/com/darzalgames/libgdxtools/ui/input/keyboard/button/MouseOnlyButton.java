@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.keyboard.button;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.darzalgames.libgdxtools.ui.input.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
@@ -13,6 +14,12 @@ public class MouseOnlyButton extends KeyboardButton implements InputObserver {
 
 	public MouseOnlyButton(TextButton textButton, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		super(textButton, runnable, inputStrategyManager, soundInteractListener);
+		inputStrategyManager.register(this);
+		setVisibilityBasedOnCurrentInputStrategy(inputStrategyManager);
+	}
+
+	public MouseOnlyButton(TextButton textButton, Image image, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+		super(textButton, image, runnable, inputStrategyManager, soundInteractListener);
 		inputStrategyManager.register(this);
 		setVisibilityBasedOnCurrentInputStrategy(inputStrategyManager);
 	}

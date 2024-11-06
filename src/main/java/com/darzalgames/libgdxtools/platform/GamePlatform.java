@@ -47,6 +47,8 @@ public interface GamePlatform {
 	public default boolean toggleFullScreenWithF11() {
 		return true;
 	}
+	
+	public boolean isDevMode();
 
 	static Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandlerSupplier(InputStrategyManager inputStrategyManager) {
 		return () -> new FallbackGamepadInputHandler(inputStrategyManager) {

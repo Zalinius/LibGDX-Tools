@@ -17,6 +17,9 @@ public class ConnectedSteamStrategy implements SteamStrategy {
 		this.gamepadInputHandler = gamepadInputHandler;
 	}
 
+	/**
+	 * Initialize all Steam interfaces
+	 */
 	public void initialize() {
 		steamUserStats = new SteamUserStats(getSteamUserStatsCallback());
 		steamUserStats.requestCurrentStats();

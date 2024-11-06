@@ -44,4 +44,9 @@ public abstract class GenericDesktopGamePlatform implements GamePlatform {
 		};
 		return SteamConnection.initializeStrategy(GamePlatform.makeFallbackGamepadInputHandlerSupplier(inputStrategyManager), makeSteamGamepadInputHandler);
 	}
+	
+	@Override
+	public boolean isDevMode() {
+		return !SteamConnection.isSteamConnected();
+	}
 }

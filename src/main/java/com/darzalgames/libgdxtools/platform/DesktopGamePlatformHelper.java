@@ -4,8 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ * Some helper functions for managing different desktop OSes
+ */
 public class DesktopGamePlatformHelper {
-	
 
 	/**
 	 * Determines the correct platform based on launch arguments

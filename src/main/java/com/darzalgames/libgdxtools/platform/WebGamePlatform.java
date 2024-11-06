@@ -37,4 +37,9 @@ public class WebGamePlatform implements GamePlatform {
 	public String getPlatformName() {
 		return GamePlatform.WEB;
 	}
+	
+	@Override
+	public boolean isDevMode() {
+		return false;
+	}
 }

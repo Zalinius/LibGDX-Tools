@@ -40,6 +40,9 @@ public class SteamConnection {
 		}
 	}
 	
+	/**
+	 * @return True if steam is running and initialized
+	 */
 	public static boolean isSteamConnected() {
 		return steamInitialized;
 	}

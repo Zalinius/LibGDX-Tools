@@ -48,6 +48,11 @@ public interface GamePlatform {
 		return true;
 	}
 
+	/**
+	 * @return True if a developer is playing, false if a player is playing
+	 */
+	public boolean isDevMode();
+
 	static Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandlerSupplier(InputStrategyManager inputStrategyManager) {
 		return () -> new FallbackGamepadInputHandler(inputStrategyManager) {
 			@Override

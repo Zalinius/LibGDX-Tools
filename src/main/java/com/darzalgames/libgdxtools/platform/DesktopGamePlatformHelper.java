@@ -14,7 +14,8 @@ public class DesktopGamePlatformHelper {
 	 * @param args java main arguments
 	 * @return The corresponding platform
 	 */
-	public static GamePlatform getTypeFromArgs(String[] args, Supplier<GamePlatform> makeWindowsPlatform, Supplier<GamePlatform> makeLinuxPlatform) {
+	public static GamePlatform getTypeFromArgs(String[] args, Supplier<GamePlatform> makeWindowsPlatform, Supplier<GamePlatform> makeLinuxPlatform,
+			Supplier<GamePlatform> makeMacPlatform) {
 		List<String> argsList = Arrays.asList(args);
 		
 		if(listContainsIgnoreCase(argsList, GamePlatform.WINDOWS)) {
@@ -22,6 +23,9 @@ public class DesktopGamePlatformHelper {
 		}
 		else if(listContainsIgnoreCase(argsList, GamePlatform.LINUX)) {
 			return makeLinuxPlatform.get();
+		}
+		else if(listContainsIgnoreCase(argsList, GamePlatform.MAC)) {
+			return makeMacPlatform.get();
 		}
 		else {
 			throw new IllegalArgumentException("Args :" + Arrays.toString(args) + " does not contain a valid Game Platform");

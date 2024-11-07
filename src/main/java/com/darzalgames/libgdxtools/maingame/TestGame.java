@@ -20,6 +20,7 @@ import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.platform.DesktopGamePlatformHelper;
 import com.darzalgames.libgdxtools.platform.LinuxGamePlatform;
+import com.darzalgames.libgdxtools.platform.MacGamePlatform;
 import com.darzalgames.libgdxtools.platform.WindowsGamePlatform;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
@@ -49,7 +50,7 @@ public class TestGame extends MainGame {
 
 	public TestGame(int width, int height, String[] args) {
 		super(width/2, height/2, new WindowResizerDesktop(width, height),
-				DesktopGamePlatformHelper.getTypeFromArgs(args, WindowsGamePlatform::new, LinuxGamePlatform::new));
+				DesktopGamePlatformHelper.getTypeFromArgs(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new));
 	}
 
 	@Override

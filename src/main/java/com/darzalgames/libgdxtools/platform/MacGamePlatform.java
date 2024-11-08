@@ -7,7 +7,7 @@ public class MacGamePlatform extends GenericDesktopGamePlatform {
 
 	@Override
 	public boolean supportsBorderlessFullscreen() {
-		return true;
+		return false;
 	}
 
 	@Override

@@ -12,7 +12,7 @@ public class MacGamePlatform extends GenericDesktopGamePlatform {
 
 	@Override
 	public FileHandle getSaveFileLocation(String fullGameAndSaveName) {
-		return Gdx.files.absolute(System.getProperty("user.home") + "/Documents/My Games/"+ fullGameAndSaveName);
+		return Gdx.files.external("Library/Application Support/"+ fullGameAndSaveName);
 	}
 
 	@Override

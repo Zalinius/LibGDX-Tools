@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.hexagon;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -9,25 +10,42 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.darzalcommon.data.BiMap;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
-import com.darzalgames.darzalcommon.hexagon.HexagonGrid;
+import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.*;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
-public class NavigableHexagonGridController extends Group implements InputConsumer, InputObserver {
+public class NavigableHexagonGridController<E> extends Group implements InputConsumer, InputObserver {
 
-	private final HexagonGrid hexagonGrid;
+	private final HexagonMap<E> hexagonMap;
 	private final Function<Hexagon, HexagonController> makeHexagonControllerFunction;
-	protected final BiMap<Hexagon, HexagonController> controllers;
+	private final BiMap<Hexagon, HexagonController> controllers;
 	private HexagonController currentHexagonController;
 
-	public NavigableHexagonGridController(HexagonGrid hexagonGrid, InputStrategyManager inputStrategyManager, Function<Hexagon, HexagonController> makeHexagonControllerFunction) {
-		this.hexagonGrid = hexagonGrid;
+	public NavigableHexagonGridController(HexagonMap<E> hexagonMap, InputStrategyManager inputStrategyManager,
+			Function<Hexagon, HexagonController> makeHexagonControllerFunction) {
+		this.hexagonMap = hexagonMap;
 		this.makeHexagonControllerFunction = makeHexagonControllerFunction;
 		inputStrategyManager.register(this);
 
 		controllers = new BiMap<>();
+		this.setSize(GameInfo.getWidth(), GameInfo.getHeight());
+		this.setPosition(0, 0);
+	}
+
+	/**
+	 * To be used to apply any visual effects to a hexagon's neighbors
+	 * @param hexagon The {@link Hexagon} whose visual neighbors you're looking for
+	 * @return A list of the neighboring {@link HexagonController} objects
+	 */
+	List<HexagonController> getControllerNeighborsOf(Hexagon hexagon) {
+		Set<Hexagon> hexes = hexagonMap.getHexagonNeighborsOf(hexagon);
+		List<HexagonController> neighbors = new ArrayList<>();
+		for (Hexagon neighborHexagon : hexes) {
+			neighbors.add(controllers.getSecondValue(neighborHexagon));
+		}
+		return neighbors;
 	}
 
 	@Override
@@ -38,7 +56,7 @@ public class NavigableHexagonGridController extends Group implements InputConsum
 			} else {
 				HexagonDirection direction = InputOnHexagonGrid.getDirectionFromInput(input);
 				if (direction != null) {
-					HexagonController navigateTo = controllers.getSecondValue(hexagonGrid.getNeighborInDirection(getCurrentHexagon(), direction));
+					HexagonController navigateTo = controllers.getSecondValue(HexagonDirection.getNeighborHexagon(getCurrentHexagon(), direction));
 					if (navigateTo != null) {
 						currentHexagonController.setButtonFocused(false);
 						currentHexagonController = navigateTo;
@@ -51,9 +69,11 @@ public class NavigableHexagonGridController extends Group implements InputConsum
 
 	@Override
 	public void gainFocus() {
-		for (Hexagon hexagon : hexagonGrid.getAllHexagons()) {
+		this.debug();
+		for (Hexagon hexagon : hexagonMap.getAllHexagons()) {
 			HexagonController controller = makeHexagonControllerFunction.apply(hexagon);
 			controllers.addPair(hexagon, controller);
+			addActor(controller);
 		}
 		selectDefault();
 		clearSelected();
@@ -74,7 +94,7 @@ public class NavigableHexagonGridController extends Group implements InputConsum
 
 	@Override
 	public void selectDefault() {
-		currentHexagonController = controllers.getSecondValue(hexagonGrid.getMiddleHexagon());
+		currentHexagonController = controllers.getSecondValue(new Hexagon(0, 0)); // TODO this used to be getMiddleHexagon(), but now we only return the middle hexagon value (not its coordinates)
 		focusCurrent();
 	}
 
@@ -87,9 +107,6 @@ public class NavigableHexagonGridController extends Group implements InputConsum
 		}
 	}
 
-	private Hexagon getCurrentHexagon() {
-		return controllers.getFirstValue(currentHexagonController);
-	}
 
 	@Override
 	public boolean shouldBeUnregistered() {
@@ -127,20 +144,9 @@ public class NavigableHexagonGridController extends Group implements InputConsum
 		float diff = (GameInfo.getHeight() - this.getHeight());
 		controllers.getSecondKeyset().forEach(controller -> controller.moveBy(0, -diff));
 	}
-
-	/**
-	 * To be used within a {@link HexagonController} (the only thing outside of the {@link PuzzleController} who knows about their {@link Hexagon} object)
-	 * to apply any visual effects to the neighbors
-	 * @param hexagon The {@link Hexagon} whose visual neighbors you're looking for
-	 * @return A list of the neighboring {@link HexagonController} objects
-	 */
-	public List<HexagonController> getControllerNeighborsOf(Hexagon hexagon) {
-		List<Hexagon> hexes = hexagonGrid.getNeighborsOf(hexagon);
-		List<HexagonController> neighbors = new ArrayList<>();
-		for (Hexagon neighborHexagon : hexes) {
-			neighbors.add(controllers.getSecondValue(neighborHexagon));
-		}
-		return neighbors;
+	
+	private Hexagon getCurrentHexagon() {
+		return controllers.getFirstValue(currentHexagonController);
 	}
 	
 

@@ -14,7 +14,7 @@
 		<libgdx.version>1.12.1</libgdx.version>
 		<tommyettinger.version>1.1200.1</tommyettinger.version>
 		<libgdx.controllers.version>2.2.3</libgdx.controllers.version>
-		<darzalcommon.version>0.5.5</darzalcommon.version>
+		<darzalcommon.version>0.5.6</darzalcommon.version>
 		<gwt.version>2.10.0</gwt.version>
 		<gwt.maven.version>2.10.0</gwt.maven.version>
 	</properties>

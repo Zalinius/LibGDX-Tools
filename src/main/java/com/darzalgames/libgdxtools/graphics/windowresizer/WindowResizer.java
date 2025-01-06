@@ -40,7 +40,7 @@ public abstract class WindowResizer {
 		this.windowResizerButton = windowResizerButton;
 		windowResizerButton.setWindowResizer(this);
 		getModeSelectBox();
-		String preferredModeString = GameInfo.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY, ScreenMode.BORDERLESS.name());
+		String preferredModeString = GameInfo.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY, ScreenMode.FULLSCREEN.name());
 		setMode(windowResizerButton.getModeFromPreference(preferredModeString), false);
 		previousScreenMode = currentScreenMode;
 	}

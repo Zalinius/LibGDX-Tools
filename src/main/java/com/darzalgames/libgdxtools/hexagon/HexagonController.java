@@ -23,7 +23,6 @@ public abstract class HexagonController extends Group implements InputConsumerWr
 		keyboardButton = makeHexagonButton();
 		this.addActor(keyboardButton.getView());
 		this.setSize(keyboardButton.getView().getPrefWidth(), keyboardButton.getView().getPrefHeight());
-		this.debugAll();
 		
 		setPositionOnScreen();
 	}

@@ -13,6 +13,7 @@ import com.darzalgames.darzalcommon.strings.StringUtils;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
+import com.darzalgames.libgdxtools.ui.input.Interactable;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 /**
@@ -21,7 +22,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
  * This is also the base class for other keyboard *buttons* such as checkboxes and sliders,
  * which allows them all to be put in a navigable menu together and treated the same
  */
-public class KeyboardButton implements InputConsumerWrapper {
+public class KeyboardButton implements InputConsumerWrapper, Interactable {
 	private TextButton button;
 	private Supplier<Label> labelSupplier;
 	private Supplier<Cell<Label>> cellSupplier;
@@ -89,6 +90,7 @@ public class KeyboardButton implements InputConsumerWrapper {
 		}
 	}
 	
+	@Override
 	public TextButton getView() {
 		labelSupplier.get().setWrap(wrap);
 		labelSupplier.get().setAlignment(alignment.getAlignment(), alignment.getAlignment());
@@ -101,7 +103,7 @@ public class KeyboardButton implements InputConsumerWrapper {
 	@Override
 	public void consumeKeyInput(Input input) {
 		if (input == Input.ACCEPT) {
-			button.toggle();
+			press();
 		}
 	}
 
@@ -219,5 +221,20 @@ public class KeyboardButton implements InputConsumerWrapper {
 	 */
 	public void setDoesSoundOnInteract(boolean doesSoundOnInteract) {
 		this.doesSoundOnInteract = doesSoundOnInteract;
+	}
+
+	@Override
+	public void focus() {
+		setFocused(true);
+	}
+
+	@Override
+	public void unfocus() {
+		setFocused(false);
+	}
+
+	@Override
+	public void press() {
+		button.toggle();
 	}
 }

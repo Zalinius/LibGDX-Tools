@@ -11,6 +11,11 @@ import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 
+/**
+ * Responsible for the visual representation and layout of a {@link HexagonMap}
+ * @author DarZal
+ * @param <E>
+ */
 public class HexagonControllerMap<E> extends Group {
 
 	private final HexagonMap<E> hexagonMap;
@@ -30,13 +35,17 @@ public class HexagonControllerMap<E> extends Group {
 		this.setPosition(0, 0);
 	}
 	
+	/**
+	 * @param hexagon
+	 * @return Whether or not this map has a visual representation for the given hexagon
+	 */
 	boolean containsHexagon(Hexagon hexagon) {
 		return controllers.containsFirstValue(hexagon);
 	}
 	
 	/**
-	 * @param hexagon The {@link Hexagon} whose visual representation you're looking for
-	 * @return
+	 * @param hexagon The {@link Hexagon} whose visual representation you're looking for. Call {@link #containsHexagon} first to check it exists.
+	 * @return The given controller, or null if the hexagon is not present on this map
 	 */
 	HexagonController getControllerOf(Hexagon hexagon) {
 		return controllers.getSecondValue(hexagon);

@@ -1,37 +1,44 @@
 package com.darzalgames.libgdxtools.hexagon;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.data.Tuple;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMath;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.Interactable;
 
-public abstract class HexagonController extends Group implements InputConsumerWrapper {
+public abstract class HexagonController extends Container<Actor> implements InputConsumerWrapper {
 
 	protected final Hexagon hexagon;
-	protected final InputStrategyManager inputStrategyManager;
-	private final KeyboardButton keyboardButton;
+	private final Interactable interactable;
 	
-	protected HexagonController(Hexagon hexagon, InputStrategyManager inputStrategyManager) {
+	protected HexagonController(Hexagon hexagon) {
 		this.hexagon = hexagon;
-		this.inputStrategyManager = inputStrategyManager;
-		keyboardButton = makeHexagonButton();
-		this.addActor(keyboardButton.getView());
-		this.setSize(keyboardButton.getView().getPrefWidth(), keyboardButton.getView().getPrefHeight());
+		interactable = makeHexagonButton();
+		this.setActor(interactable.getView());
+		this.setSize(interactable.getView().getWidth(), interactable.getView().getHeight());
 		
 		setPositionOnScreen();
 	}
 
-	protected abstract KeyboardButton makeHexagonButton();
+	protected abstract Interactable makeHexagonButton();
 
 	public void setButtonFocused(boolean focused) {
-		keyboardButton.setFocused(focused);
+		if (focused) {
+			interactable.focus();
+		} else {
+			interactable.unfocus();
+		}
 	}
+
+	
+	public void press() {
+		interactable.press();
+	}
+
 	
 	@Override
 	public Actor hit(float x, float y, boolean touchable) {
@@ -51,7 +58,7 @@ public abstract class HexagonController extends Group implements InputConsumerWr
 	private void setPositionOnScreen() {
 		// TODO Allow for different ratios
 		Tuple<Float, Float> hexagonPosition =  HexagonMath.getScreenPositionOnStage(7, 8, hexagon.getQ(), hexagon.getR(),
-				keyboardButton.getView().getPrefWidth(), keyboardButton.getView().getPrefHeight(), GameInfo.getHeight());
+				interactable.getView().getWidth(), interactable.getView().getHeight(), GameInfo.getHeight());
 		this.setOrigin(Align.center);
 		this.setPosition(hexagonPosition.e, hexagonPosition.f);
 	}

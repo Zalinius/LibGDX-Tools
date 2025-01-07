@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.*;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
@@ -24,8 +25,6 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	 */
 	public NavigableHexagonMap(HexagonControllerMap<E> hexagonControllerMap) {
 		this.hexagonControllerMap = hexagonControllerMap;
-		this.setSize(GameInfo.getWidth(), GameInfo.getHeight());
-		this.setPosition(0, 0);
 		this.setActor(hexagonControllerMap);
 	}
 
@@ -57,7 +56,8 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	public void gainFocus() {
 		selectDefault();
 		unfocusCurrentHexagon();
-		hexagonControllerMap.centerSelf(); // TODO positioning the visual grid centered on screen? Properly?
+		hexagonControllerMap.centerSelf();
+        centerSelf();
 	}
 	
 	@Override
@@ -83,7 +83,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 
 	@Override
 	public void selectDefault() {
-		currentHexagon = new Hexagon(0, 0); // TODO this used to be getMiddleHexagon(), but now we only return the middle hexagon value (not its coordinates)
+		currentHexagon = new Hexagon(0, 0);
 		focusCurrent();
 	}
 
@@ -111,6 +111,10 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	 */
 	public HexagonController getCurrentHexagonController() {
 		return hexagonControllerMap.getControllerOf(currentHexagon);
+	}
+	
+	private void centerSelf() {
+		this.setPosition(GameInfo.getWidth() / 2f - this.getWidth() / 2, GameInfo.getHeight() / 2f - this.getHeight() / 2);
 	}
 
 }

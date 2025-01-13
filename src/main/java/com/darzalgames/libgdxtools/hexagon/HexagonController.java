@@ -47,7 +47,7 @@ public abstract class HexagonController extends Container<Actor> implements Inpu
 			return null;
 		}
 
-		boolean isInsideHexagon = !HexagonButtonHitBox.isPixelTransparentOnMask(x, y);
+		boolean isInsideHexagon = !CustomButtonHitBox.isHit(x, y);
 		if (!isInsideHexagon) {
 			return null;
 		} else {

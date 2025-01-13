@@ -32,7 +32,6 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	public void consumeKeyInput(Input input) {
 		if (isInputAllowed()) {
 			if (input.equals(Input.ACCEPT)) {
-				// TODO This system is from 6SS where you "lock in" a hexagon by pressing on it, not sure if that's what we'll always want...
 				getCurrentHexagonController().press();
 			} else {
 				HexagonDirection direction = InputOnHexagonGrid.getDirectionFromInput(input);
@@ -40,7 +39,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 			}
 		}
 	}
-	
+
 	private void navigateToNeighborInDirection(HexagonDirection direction) {
 		if (direction != null) {
 			Hexagon neighborHexagon = HexagonDirection.getNeighborHexagon(currentHexagon, direction);
@@ -57,9 +56,9 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 		selectDefault();
 		unfocusCurrentHexagon();
 		hexagonControllerMap.centerSelf();
-        centerSelf();
+		centerSelf();
 	}
-	
+
 	@Override
 	public void regainFocus() {
 		selectDefault();
@@ -76,7 +75,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	public void clearSelected() {
 		unfocusCurrentHexagon();
 	}
-	
+
 	private void unfocusCurrentHexagon() {
 		getCurrentHexagonController().setButtonFocused(false);
 	}
@@ -105,14 +104,14 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	private boolean isInputAllowed() {
 		return KeyboardStage.isInTouchableBranch(this);
 	}
-	
+
 	/**
 	 * @return The visual representation of the currently selected hexagon (keyboard and gamepad)
 	 */
 	public HexagonController getCurrentHexagonController() {
 		return hexagonControllerMap.getControllerOf(currentHexagon);
 	}
-	
+
 	private void centerSelf() {
 		this.setPosition(GameInfo.getWidth() / 2f - this.getWidth() / 2, GameInfo.getHeight() / 2f - this.getHeight() / 2);
 	}

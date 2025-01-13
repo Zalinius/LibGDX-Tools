@@ -1,6 +1,5 @@
 package com.darzalgames.libgdxtools.hexagon;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -19,16 +18,14 @@ public class HexagonControllerMap<E> extends Group {
 
 	private final HexagonMap<E> hexagonMap;
 	private final BiMap<Hexagon, HexagonController> controllers;
+	private final Function<Hexagon, HexagonController> makeHexagonControllerFunction;
 
 	public HexagonControllerMap(HexagonMap<E> hexagonMap, Function<Hexagon, HexagonController> makeHexagonControllerFunction) {
 		this.hexagonMap = hexagonMap;
+		this.makeHexagonControllerFunction = makeHexagonControllerFunction;
 
 		controllers = new BiMap<>();
-		for (Hexagon hexagon : hexagonMap.getAllHexagons()) {
-			HexagonController controller = makeHexagonControllerFunction.apply(hexagon);
-			controllers.addPair(hexagon, controller);
-			addActor(controller);
-		}
+		hexagonMap.getAllHexagons().forEach(hexagon -> makeControllerForHexagon(hexagon));
 	}
 
 	/**
@@ -52,13 +49,9 @@ public class HexagonControllerMap<E> extends Group {
 	 * @param hexagon The {@link Hexagon} whose visual neighbors you're looking for
 	 * @return A list of the neighboring {@link HexagonController} objects
 	 */
-	List<HexagonController> getControllerNeighborsOf(Hexagon hexagon) {
+	public List<HexagonController> getControllerNeighborsOf(Hexagon hexagon) {
 		Set<Hexagon> hexes = hexagonMap.getHexagonNeighborsOf(hexagon);
-		List<HexagonController> neighbors = new ArrayList<>();
-		for (Hexagon neighborHexagon : hexes) {
-			neighbors.add(controllers.getSecondValue(neighborHexagon));
-		}
-		return neighbors;
+		return hexes.stream().map(neighborHexagon -> controllers.getSecondValue(neighborHexagon)).toList();
 	}
 
 	void centerSelf() {
@@ -88,6 +81,13 @@ public class HexagonControllerMap<E> extends Group {
 		float diffX = left; 
 		float diffY = bottom; 
 		controllers.getSecondKeyset().forEach(controller -> controller.moveBy(-diffX, -diffY));
+	}
+
+	
+	private void makeControllerForHexagon(Hexagon hexagon) {
+		HexagonController controller = makeHexagonControllerFunction.apply(hexagon);
+		controllers.addPair(hexagon, controller);
+		addActor(controller);
 	}
 
 }

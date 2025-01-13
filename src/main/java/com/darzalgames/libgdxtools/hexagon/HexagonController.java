@@ -11,6 +11,8 @@ import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
 import com.darzalgames.libgdxtools.ui.input.Interactable;
 
 public abstract class HexagonController extends Container<Actor> implements InputConsumerWrapper {
+	
+	public static final String HEXAGON_MASK_KEY = "Hexagon";
 
 	protected final Hexagon hexagon;
 	private final Interactable interactable;
@@ -47,7 +49,7 @@ public abstract class HexagonController extends Container<Actor> implements Inpu
 			return null;
 		}
 
-		boolean isInsideHexagon = !CustomButtonHitBox.isHit(x, y);
+		boolean isInsideHexagon = !CustomHitBox.isHit(HEXAGON_MASK_KEY, x, y);
 		if (!isInsideHexagon) {
 			return null;
 		} else {

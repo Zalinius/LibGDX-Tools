@@ -56,8 +56,7 @@ public abstract class HexagonController extends Container<Actor> implements Inpu
 	}
 
 	private void setPositionOnScreen() {
-		// TODO Allow for different ratios
-		Tuple<Float, Float> hexagonPosition =  HexagonMath.getScreenPositionOnStage(8, 7, hexagon.getQ(), hexagon.getR(),
+		Tuple<Float, Float> hexagonPosition =  HexagonMath.getScreenPositionOnStage(hexagon.getQ(), hexagon.getR(),
 				interactable.getView().getWidth(), interactable.getView().getHeight(), GameInfo.getHeight());
 		this.setOrigin(Align.center);
 		this.setPosition(hexagonPosition.e, hexagonPosition.f);

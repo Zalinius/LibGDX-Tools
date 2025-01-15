@@ -178,6 +178,13 @@
 			<version>${libgdx.controllers.version}</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/com.github.tommyettinger/textratypist -->
+		<dependency>
+		    <groupId>com.github.tommyettinger</groupId>
+		    <artifactId>textratypist</artifactId>
+		    <version>1.1.0</version>
+		</dependency>
+		
 		<!-- For GWT compliancy verification -->
 		<dependency>
 			<groupId>org.gwtproject</groupId>

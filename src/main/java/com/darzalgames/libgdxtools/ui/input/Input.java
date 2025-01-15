@@ -23,6 +23,8 @@ public class Input {
 
 	public static final Input PAUSE = new Input(Keys.ESCAPE, "ESCAPE");
 
+	public static final Input SKIP = new Input(Keys.ENTER, "SKIP");
+
 	public static final Input TOGGLE_FULLSCREEN = new Input(Keys.F11, "F11");
 	
 	public static final Input NONE = new Input(-1, "N/A");

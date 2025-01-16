@@ -48,6 +48,13 @@ public interface InputConsumer {
 	 * If applicable, select a default object (e.g. the first button in a list, or the only intractable object in the current scene)
 	 */
 	public void selectDefault();
+
+	/**
+	 * A convenient shorthand for releasing priority
+	 */
+	public default void releasePriority() {
+		InputPriorityManager.releasePriority(this);
+	}
 	
 	/**
 	 * If this object is the topmost UI, is the game paused?

@@ -24,10 +24,13 @@ import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
+import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.github.tommyettinger.textra.Font;
+import com.github.tommyettinger.textra.TypingLabel;
 
 /**
  * @author DarZal
@@ -67,6 +70,14 @@ public class UserInterfaceFactory {
 		return getLabel(text, skinManager.getLabelWithBackgroundStyle());
 	}
 
+
+	public static TypingLabel getTypingLabel(final String text) {
+		TypingLabel label = new TypingLabel(text, new Font(skinManager.getDefaultLableStyle().font, Font.DistanceFieldType.STANDARD, 0, 0, 0, 0, false));
+		label.setWrap(true);
+		
+		return label;
+	}
+
 	/**
 	 * Makes a label which changes its text based on the current input mode
 	 * @param textSupplier
@@ -76,6 +87,29 @@ public class UserInterfaceFactory {
 		Label label = new InputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategyManager);
 		label.setWrap(true);
 		return label;
+	}
+	public static Label getFlashingArrowLabel() {
+		return getFlashingTextLabel(">");
+	}
+	public static Label getFlashingContinueArrowLabel() {
+		return getFlashingTextLabel("\\/"); // TODO This arrow is stupid
+	}
+
+	private static Label getFlashingTextLabel(final String text) {
+		Label textLabel = getLabel(text);
+		textLabel.setWrap(false);
+		RunnableActionBest flash = new RunnableActionBest(() -> textLabel.setVisible(false));
+		RunnableActionBest show = new RunnableActionBest(() -> textLabel.setVisible(true));
+		float flashTime = 0.9f; // TODO synchronize with music
+		DelayAction flashAfterDelay = Actions.delay(flashTime);
+		flashAfterDelay.setAction(flash);
+		DelayAction showAfterDelay = Actions.delay(flashTime);
+		showAfterDelay.setAction(show);
+		textLabel.addAction(new InstantForeverAction(new InstantSequenceAction(
+				flashAfterDelay,
+				showAfterDelay
+				)));
+		return textLabel;
 	}
 
 	protected static Label getLabel(final String text, LabelStyle labelStyle) {
@@ -113,6 +147,10 @@ public class UserInterfaceFactory {
 		return button.getView().isDisabled() && button.isBlank();
 	}
 
+
+	public static KeyboardButton getFastForwardButton(Runnable runnable) {
+		return getButton(">>", runnable);
+	}
 
 	public static KeyboardButton getButton(final String text, final Runnable runnable) {
 		return makeButton(text, null, runnable);

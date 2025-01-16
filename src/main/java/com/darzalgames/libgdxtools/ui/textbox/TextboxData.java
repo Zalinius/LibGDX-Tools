@@ -13,6 +13,8 @@ public class TextboxData {
 	private DialogChoiceData dialogueChoiceData;
 	private Speaker speaker;
 
+	private boolean isLastLineByThisSpeaker = false;
+	
 	public TextboxData(String messageKey, Speaker speaker, Object... args) {
 		this.messageKey = messageKey;
 		this.args = args;
@@ -50,6 +52,14 @@ public class TextboxData {
 
 	public String getSpeakerName() {
 		return speaker.getLocalizedName();
+	}
+
+	public boolean isLastLineByThisSpeaker() {
+		return isLastLineByThisSpeaker;
+	}
+
+	public void setLastLineByThisSpeaker(boolean isLastLineByThisSpeaker) {
+		this.isLastLineByThisSpeaker = isLastLineByThisSpeaker;
 	}
 
 }

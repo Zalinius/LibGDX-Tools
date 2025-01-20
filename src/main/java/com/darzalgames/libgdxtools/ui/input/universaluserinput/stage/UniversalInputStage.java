@@ -1,13 +1,13 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.stage;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.stage;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
-public class KeyboardStage extends Stage {
+public class UniversalInputStage extends Stage {
 
 	private final InputStrategyManager inputStrategyManager;
 
@@ -15,7 +15,7 @@ public class KeyboardStage extends Stage {
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategyManager} input mode
 	 * @param viewport
 	 */
-	public KeyboardStage(Viewport viewport, InputStrategyManager inputStrategyManager) {
+	public UniversalInputStage(Viewport viewport, InputStrategyManager inputStrategyManager) {
 		super(viewport);
 		this.inputStrategyManager = inputStrategyManager;
 	}

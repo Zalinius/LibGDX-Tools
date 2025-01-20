@@ -6,8 +6,9 @@ import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.*;
-import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.stage.UniversalInputStage;
 
 /**
  * Allows for navigation around a {@link HexagonControllerMap} using keyboard or gamepad
@@ -102,7 +103,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	}
 
 	private boolean isInputAllowed() {
-		return KeyboardStage.isInTouchableBranch(this);
+		return UniversalInputStage.isInTouchableBranch(this);
 	}
 
 	/**

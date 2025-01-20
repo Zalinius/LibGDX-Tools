@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.function.Consumer;
 
@@ -10,13 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
-public class KeyboardCheckbox extends KeyboardButton {
+public class UniversalCheckbox extends UniversalButton {
 	
 	private final CheckBox box;
 	private final String uncheckedLabel;
 	private final String checkedLabel;
 	
-	protected KeyboardCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	protected UniversalCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		super(textButton, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 		this.uncheckedLabel = uncheckedLabel;
 		this.checkedLabel = checkedLabel;
@@ -32,7 +32,7 @@ public class KeyboardCheckbox extends KeyboardButton {
 				initializeAsChecked(!box.isChecked());
 				textButton.setChecked(false);
 				consumer.accept(box.isChecked());
-				KeyboardCheckbox.this.setFocused(true);
+				UniversalCheckbox.this.setFocused(true);
 			}
 		});
 	}

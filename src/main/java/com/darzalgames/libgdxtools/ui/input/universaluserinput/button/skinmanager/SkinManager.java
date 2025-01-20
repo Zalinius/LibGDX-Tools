@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.button.skinmanager;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;

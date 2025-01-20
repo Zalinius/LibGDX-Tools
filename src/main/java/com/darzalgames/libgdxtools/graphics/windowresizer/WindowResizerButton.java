@@ -2,7 +2,7 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 public interface WindowResizerButton {
 
@@ -10,7 +10,7 @@ public interface WindowResizerButton {
 	
 	public void setSelected(ScreenMode currentScreenMode);
 
-	public KeyboardButton getButton();
+	public UniversalButton getButton();
 	public InputConsumer getRevertMenu();
 	
 	public default ScreenMode getModeFromPreference(String screenMode) {

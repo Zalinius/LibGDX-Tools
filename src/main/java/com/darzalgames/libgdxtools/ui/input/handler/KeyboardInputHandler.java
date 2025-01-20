@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 /**
  * @author DarZal
@@ -36,7 +36,7 @@ public abstract class KeyboardInputHandler extends InputHandler {
 				input = remapInputIfNecessary(input, keycode);
 				
 				if (keysToAllow.contains(input)) {
-					setLatestInputMethod(KeyboardInputHandler.this.inputMethod);
+					updateLatestInputMethod();
 					InputPriorityManager.processKeyInput(input);	
 					return true;
 				}

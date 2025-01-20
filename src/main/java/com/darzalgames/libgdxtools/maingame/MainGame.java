@@ -22,17 +22,14 @@ import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
-import com.darzalgames.libgdxtools.ui.input.CustomCursorImage;
-import com.darzalgames.libgdxtools.ui.input.GlyphFactory;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
-import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
-import com.darzalgames.libgdxtools.ui.input.keyboard.MouseDetector;
-import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
-import com.darzalgames.libgdxtools.ui.input.keyboard.stage.StageWithBackground;
+import com.darzalgames.libgdxtools.ui.input.*;
+import com.darzalgames.libgdxtools.ui.input.handler.*;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.stage.UniversalInputStage;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.stage.StageWithBackground;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 import com.darzalgames.libgdxtools.ui.screen.PixelPerfectViewport;
 
@@ -64,7 +61,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected WindowResizer windowResizer;
 	protected List<DoesNotPause> actorsThatDoNotPause;
 	protected InputStrategyManager inputStrategyManager;
-	private MouseDetector mouseDetector;
+	private MouseInputHandler mouseDetector;
 	
 	private boolean isQuitting = false;
 
@@ -125,12 +122,12 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void makePopUpStage() {
 		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
-		popUpStage = new KeyboardStage(new PixelPerfectViewport(width, height), inputStrategyManager);
+		popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategyManager);
 	}
 
 	private void makeMainStageAndMouseStages() {
 		mouseDetectorStage = new Stage(new ScreenViewport());
-		mouseDetector = new MouseDetector(inputStrategyManager);
+		mouseDetector = new MouseInputHandler(inputStrategyManager);
 		mouseDetectorStage.addActor(mouseDetector);
 
 		// Set up main game stage

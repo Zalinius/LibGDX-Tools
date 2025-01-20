@@ -20,10 +20,12 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.MouseOnlyButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 class MouseOnlyButtonTest {
 	
-	private static KeyboardButton button;
+	private static UniversalButton button;
 	private static InputStrategyManager inputStrategyManager;
 
 	@Test

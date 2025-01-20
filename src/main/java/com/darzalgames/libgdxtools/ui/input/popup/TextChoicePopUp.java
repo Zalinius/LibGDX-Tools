@@ -7,9 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.ui.Alignment;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 /**
  * @author DarZal
@@ -35,16 +35,16 @@ public class TextChoicePopUp extends ChoicePopUp {
 	}
 
 	@Override
-	protected KeyboardButton getFirstChoiceButton() {
+	protected UniversalButton getFirstChoiceButton() {
 		return getChoiceButton(firstChoiceKey, firstChoiceRunnable);
 	}
 
 	@Override
-	protected KeyboardButton getSecondChoiceButton() {
+	protected UniversalButton getSecondChoiceButton() {
 		return getChoiceButton(secondChoiceKey, () -> getSecondChoiceRunnable().run());
 	}
 	
-	private KeyboardButton getChoiceButton(String key, Runnable toRun) {
+	private UniversalButton getChoiceButton(String key, Runnable toRun) {
 		Runnable chooseAndHideRunnable = () -> {
 			setChosenKey(key);
 			hideThis();

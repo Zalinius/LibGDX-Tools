@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input;
 
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 /**
  * Anything that can be interacted with via user input

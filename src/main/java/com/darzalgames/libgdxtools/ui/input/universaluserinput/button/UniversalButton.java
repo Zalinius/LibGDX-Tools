@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.function.Supplier;
 
@@ -21,7 +21,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
  * This is also the base class for other keyboard *buttons* such as checkboxes and sliders,
  * which allows them all to be put in a navigable menu together and treated the same
  */
-public class KeyboardButton implements VisibleInputConsumer {
+public class UniversalButton implements VisibleInputConsumer {
 	private TextButton button;
 	private Supplier<Label> labelSupplier;
 	private Supplier<Cell<Label>> cellSupplier;
@@ -33,15 +33,15 @@ public class KeyboardButton implements VisibleInputConsumer {
 	private final InputStrategyManager inputStrategyManager;
 	private final Runnable soundInteractListener;
 
-	public KeyboardButton(TextButton button, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalButton(TextButton button, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		this(button, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 	}
 	
-	public KeyboardButton(TextButton button, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) { 
+	public UniversalButton(TextButton button, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) { 
 		this(button, null, runnable, inputStrategyManager, soundInteractListener);
 	}
 	
-	public KeyboardButton(TextButton button, Image image, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalButton(TextButton button, Image image, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		this.button = button;
 		this.labelSupplier = button::getLabel;
 		this.cellSupplier = button::getLabelCell;
@@ -81,7 +81,7 @@ public class KeyboardButton implements VisibleInputConsumer {
 	}
 
 	/**
-	 * This will play the interaction sound immediately if this button has {@link KeyboardButton#doesSoundOnInteract} set to true (generally the default)
+	 * This will play the interaction sound immediately if this button has {@link UniversalButton#doesSoundOnInteract} set to true (generally the default)
 	 */
 	protected void requestInteractSound() {
 		if (doesSoundOnInteract) {

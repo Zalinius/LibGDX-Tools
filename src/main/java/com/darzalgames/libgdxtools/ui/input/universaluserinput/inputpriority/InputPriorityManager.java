@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority;
 
 import java.util.*;
 
@@ -13,11 +13,13 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
+import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 import com.darzalgames.libgdxtools.ui.optionsmenu.OptionsMenu;
 
 /**
@@ -31,9 +33,9 @@ public class InputPriorityManager {
 	private static Deque<InputConsumer> inputConsumerStack = new ArrayDeque<>();
 	private static Image darkScreen;
 
-	private static KeyboardButton pauseButton;
+	private static UniversalButton pauseButton;
 	private static OptionsMenu optionsMenu;
-	private static Map<Input, KeyboardButton> specialButtons = new HashMap<>();
+	private static Map<Input, UniversalButton> specialButtons = new HashMap<>();
 
 	private static Stage popUpStage;
 
@@ -260,7 +262,7 @@ public class InputPriorityManager {
 		darkScreen.remove();
 	}
 
-	public static void addSpecialButton(Input input, KeyboardButton button) {
+	public static void addSpecialButton(Input input, UniversalButton button) {
 		specialButtons.put(input, button);
 	}
 

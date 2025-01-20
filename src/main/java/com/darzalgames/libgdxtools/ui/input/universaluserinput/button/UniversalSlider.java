@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.function.Consumer;
 
@@ -12,16 +12,16 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
-public class KeyboardSlider extends KeyboardButton {
+public class UniversalSlider extends UniversalButton {
 
 	private final Slider slider;
 	private float previousValue;
 
-	public KeyboardSlider(TextButton textButton, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalSlider(TextButton textButton, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		this(textButton, null, sliderStyle, consumer, inputStrategyManager, soundInteractListener);
 	}
 
-	public KeyboardSlider(TextButton textButton, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalSlider(TextButton textButton, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		super(textButton, image, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle);
 		slider.addListener(new ChangeListener() {
@@ -36,7 +36,7 @@ public class KeyboardSlider extends KeyboardButton {
 		textButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				KeyboardSlider.this.setFocused(true);
+				UniversalSlider.this.setFocused(true);
 				float currentValue = slider.getValue();
 				if (currentValue != previousValue) { //The slider fires a ChangeEvent on touchUp (mouse mode) which we want to ignore
 					requestInteractSound();

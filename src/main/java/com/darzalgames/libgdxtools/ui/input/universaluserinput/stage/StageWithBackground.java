@@ -1,13 +1,13 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.stage;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.stage;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
-public class StageWithBackground extends KeyboardStage {
+public class StageWithBackground extends UniversalInputStage {
 	private Image background;
 
 	/**

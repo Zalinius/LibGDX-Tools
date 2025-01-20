@@ -2,10 +2,10 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 
 import com.darzalgames.darzalcommon.data.Coordinate;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSelectBox;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 public abstract class WindowResizer {
 
@@ -46,10 +46,10 @@ public abstract class WindowResizer {
 	}
 
 	/**
-	 * @return A {@link KeyboardButton} which, when pressed, opens a {@link KeyboardSelectBox select box} for changing the window mode
+	 * @return A {@link UniversalButton} which, when pressed, opens a {@link UniversalSelectBox select box} for changing the window mode
 	 */
-	public KeyboardButton getModeSelectBox() {
-		KeyboardButton button = windowResizerButton.getButton();
+	public UniversalButton getModeSelectBox() {
+		UniversalButton button = windowResizerButton.getButton();
 		if (currentScreenMode != null) {
 			windowResizerButton.setSelected(currentScreenMode);			
 		}

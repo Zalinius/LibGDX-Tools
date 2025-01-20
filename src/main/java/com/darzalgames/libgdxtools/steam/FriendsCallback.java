@@ -1,10 +1,10 @@
 package com.darzalgames.libgdxtools.steam;
 
 import com.codedisaster.steamworks.SteamFriends.PersonaChange;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 import com.codedisaster.steamworks.SteamFriendsCallback;
 import com.codedisaster.steamworks.SteamID;
 import com.codedisaster.steamworks.SteamResult;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 
 public class FriendsCallback implements SteamFriendsCallback {
 

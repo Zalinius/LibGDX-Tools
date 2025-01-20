@@ -1,16 +1,16 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.darzalgames.libgdxtools.ui.input.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputObserver;
 
 
 /**
  * @author DarZal
- * A {@link KeyboardButton} which will only be visible and intractable in mouse mode
+ * A {@link UniversalButton} which will only be visible and intractable in mouse mode
  */
-public class MouseOnlyButton extends KeyboardButton implements InputObserver {
+public class MouseOnlyButton extends UniversalButton implements InputObserver {
 
 	public MouseOnlyButton(TextButton textButton, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		super(textButton, runnable, inputStrategyManager, soundInteractListener);

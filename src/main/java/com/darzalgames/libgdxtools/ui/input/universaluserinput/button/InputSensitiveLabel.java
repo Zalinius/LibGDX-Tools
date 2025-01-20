@@ -1,11 +1,11 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.darzalgames.libgdxtools.ui.input.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputObserver;
 
 public class InputSensitiveLabel extends Label implements InputObserver {
 	

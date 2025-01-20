@@ -2,10 +2,10 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
-public abstract class WindowResizerImageSelectButton extends KeyboardButton implements WindowResizerButton {
+public abstract class WindowResizerImageSelectButton extends UniversalButton implements WindowResizerButton {
 
 	protected WindowResizer windowResizer;
 
@@ -20,7 +20,7 @@ public abstract class WindowResizerImageSelectButton extends KeyboardButton impl
 	}
 
 	@Override
-	public KeyboardButton getButton() {
+	public UniversalButton getButton() {
 		return this;
 	}
 	

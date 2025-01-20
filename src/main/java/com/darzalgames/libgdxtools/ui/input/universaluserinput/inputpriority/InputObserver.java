@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority;
 
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 

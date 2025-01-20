@@ -8,8 +8,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Texture;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 /**
  * This is the entry point for gamepad input, and where we define all button mappings to game actions.
@@ -35,15 +35,15 @@ public abstract class GamepadInputHandler extends InputHandler {
 		if (LOG_INPUT) {
 			Gdx.app.log("GamepadInputHandler", "Just pressed:" + buttonKey);
 		}
-		setLatestInputMethod(this.inputMethod);
 		InputPriorityManager.processKeyInput(buttonKey);
+		updateLatestInputMethod();
 	}
 
 	protected final void justReleased(Input buttonKey) {
 		if (LOG_INPUT) {
 			Gdx.app.log("GamepadInputHandler", "Just released:" + buttonKey);
 		}
-		setLatestInputMethod(this.inputMethod);
+		updateLatestInputMethod();
 	}
 	
 	protected final void controllerDisconnected() {

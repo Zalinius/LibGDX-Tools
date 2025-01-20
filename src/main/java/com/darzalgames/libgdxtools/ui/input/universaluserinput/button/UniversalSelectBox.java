@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -10,11 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.libgdxtools.ui.Alignment;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
-public class KeyboardSelectBox extends KeyboardButton {
+public class UniversalSelectBox extends UniversalButton {
 
 	private PopUpMenu options;
 	private Label displayLabel;
@@ -22,12 +22,12 @@ public class KeyboardSelectBox extends KeyboardButton {
 	private Consumer<String> action;
 
 	// TODO experiment with making a constructor that takes a list of buttons instead of making them?
-	public KeyboardSelectBox(Collection<String> entries, TextButton textButton, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalSelectBox(Collection<String> entries, TextButton textButton, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		super(textButton, inputStrategyManager, soundInteractListener);
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,
 		// sets that as the text in our display label (e.g. English), and calls the Consumer (which responds to the new entry, e.g. changing the game language and refreshing the main menu)
-		List<KeyboardButton> entryButtons = entries.stream().map(entry -> UserInterfaceFactory.getButton(entry,
+		List<UniversalButton> entryButtons = entries.stream().map(entry -> UserInterfaceFactory.getButton(entry,
 				() -> {
 					options.hideThis();
 					setSelected(entry);
@@ -45,7 +45,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 				add(menu.getView()).left();
 				
 				float longestWidth = 0;
-				for (Iterator<KeyboardButton> iterator = entryButtons.iterator(); iterator.hasNext();) {
+				for (Iterator<UniversalButton> iterator = entryButtons.iterator(); iterator.hasNext();) {
 					TextButton button = iterator.next().getView(); 
 					if (button.getWidth() > longestWidth) {
 						longestWidth = button.getWidth();

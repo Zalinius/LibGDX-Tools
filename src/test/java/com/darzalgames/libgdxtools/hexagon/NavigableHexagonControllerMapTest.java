@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 import com.darzalgames.darzalcommon.hexagon.gridfactory.HexagonGridRectangular;
@@ -22,8 +23,9 @@ import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
+import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputOnHexagonGrid;
-import com.darzalgames.libgdxtools.ui.input.Interactable;
+import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
 public class NavigableHexagonControllerMapTest {
 
@@ -90,19 +92,21 @@ public class NavigableHexagonControllerMapTest {
 		HexagonGridRectangular.makeGrid(3, 3).forEach(hex -> hexagonMap.put(hex, hex.toString()));
 		hexagonControllerMap = new HexagonControllerMap<>(hexagonMap, hex -> new HexagonController(hex, null) {
 			@Override
-			protected Interactable makeHexagonButton() {
+			protected VisibleInputConsumer makeInputConsumer() {
 				return new BlankHexagonControllerForTesting();
 			}
 		});
 		navigableHexagonMap = new NavigableHexagonMap<>(hexagonControllerMap);
 	}
 
-	private static class BlankHexagonControllerForTesting implements Interactable {
-		@Override public void focus() {}
-		@Override public void unfocus() {}
-		@Override public void press() {}
+	private static class BlankHexagonControllerForTesting implements VisibleInputConsumer {
 		@Override public Actor getView() {
 			return new Actor();
 		}
+		@Override public void consumeKeyInput(Input input) {}
+		@Override public void setTouchable(Touchable isTouchable) {}
+		@Override public void focusCurrent() {}
+		@Override public void clearSelected() {}
+		@Override public void selectDefault() {}
 	}
 }

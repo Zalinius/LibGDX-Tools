@@ -62,7 +62,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	
 	@Override
 	public void hideThis() {
-		InputPriorityManager.releasePriority(this);
+		releasePriority();
 		this.toFront();
 		this.addAction(Actions.sequence(
 				Actions.moveTo(getX(), getStage().getHeight(), 0.25f, Interpolation.circle),

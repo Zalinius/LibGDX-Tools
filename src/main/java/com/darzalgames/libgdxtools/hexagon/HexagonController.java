@@ -7,40 +7,40 @@ import com.darzalgames.darzalcommon.data.Tuple;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMath;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
-import com.darzalgames.libgdxtools.ui.input.Interactable;
+import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
-public abstract class HexagonController extends Container<Actor> implements InputConsumerWrapper {
+public abstract class HexagonController extends Container<Actor> implements VisibleInputConsumer {
 	
 	public static final String HEXAGON_MASK_KEY = "Hexagon";
 
 	protected final Hexagon hexagon;
-	private final Interactable interactable;
+	private final VisibleInputConsumer inputConsumer;
 	private final CustomHitbox hitBox;
 	
 	protected HexagonController(Hexagon hexagon, CustomHitbox hitBox) {
 		this.hexagon = hexagon;
 		this.hitBox = hitBox;
-		interactable = makeHexagonButton();
-		this.setActor(interactable.getView());
-		this.setSize(interactable.getView().getWidth(), interactable.getView().getHeight());
+		this.inputConsumer = makeInputConsumer();
+		this.setActor(inputConsumer.getView());
+		this.setSize(inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight());
 		
 		setPositionOnScreen();
 	}
 
-	protected abstract Interactable makeHexagonButton();
+	protected abstract VisibleInputConsumer makeInputConsumer();
 
 	public void setButtonFocused(boolean focused) {
 		if (focused) {
-			interactable.focus();
+			inputConsumer.regainFocus();
 		} else {
-			interactable.unfocus();
+			inputConsumer.loseFocus();
 		}
 	}
 
 	
 	public void press() {
-		interactable.press();
+		inputConsumer.consumeKeyInput(Input.ACCEPT);
 	}
 
 	
@@ -61,9 +61,39 @@ public abstract class HexagonController extends Container<Actor> implements Inpu
 
 	private void setPositionOnScreen() {
 		Tuple<Float, Float> hexagonPosition =  HexagonMath.getScreenPositionOnStage(hexagon.getQ(), hexagon.getR(),
-				interactable.getView().getWidth(), interactable.getView().getHeight(), GameInfo.getHeight());
+				inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight(), GameInfo.getHeight());
 		this.setOrigin(Align.center);
 		this.setPosition(hexagonPosition.e, hexagonPosition.f);
+	}
+
+	@Override
+	public void consumeKeyInput(Input input) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void focusCurrent() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clearSelected() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void selectDefault() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Actor getView() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

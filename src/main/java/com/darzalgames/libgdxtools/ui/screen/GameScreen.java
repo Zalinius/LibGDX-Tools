@@ -4,7 +4,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.darzalcommon.state.Endable;
-import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
+import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 
 /**
@@ -12,7 +13,7 @@ import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
  * A distinct screen in the game (e.g. the main menu, a particular phase of gameplay) which handles making sure
  * its child actors are visible and can be interacted with, and ensures proper cleanup when the screen is left from. 
  */
-public abstract class GameScreen extends Group implements Screen, Endable, InputConsumerWrapper {
+public abstract class GameScreen extends Group implements Screen, Endable, InputConsumer {
 
 	private final Runnable leaveScreenRunnable;
 
@@ -45,8 +46,16 @@ public abstract class GameScreen extends Group implements Screen, Endable, Input
 	@Override
 	public void hide() {
 		InputPriorityManager.clearChildren();
-		InputPriorityManager.releasePriority(this);
+		releasePriority();
 	}
+    @Override
+    public void selectDefault() {}
+    @Override
+    public void clearSelected() {}
+    @Override
+    public void focusCurrent() {}
+    @Override
+    public void consumeKeyInput(Input input) {}
 	
 	@Override
 	public void end() {

@@ -1,11 +1,9 @@
 package com.darzalgames.libgdxtools.hexagon;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.darzalgames.darzalcommon.data.BiMap;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 
@@ -17,14 +15,14 @@ import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 public class HexagonControllerMap<E> extends Group {
 
 	private final HexagonMap<E> hexagonMap;
-	private final BiMap<Hexagon, HexagonController> controllers;
-	private final Function<Hexagon, HexagonController> makeHexagonControllerFunction;
+	private final Map<Hexagon, HexagonController> controllers;
+	private final Function<Hexagon, HexagonController> hexagonControllerFactory;
 
-	public HexagonControllerMap(HexagonMap<E> hexagonMap, Function<Hexagon, HexagonController> makeHexagonControllerFunction) {
+	public HexagonControllerMap(HexagonMap<E> hexagonMap, Function<Hexagon, HexagonController> hexagonControllerFactory) {
 		this.hexagonMap = hexagonMap;
-		this.makeHexagonControllerFunction = makeHexagonControllerFunction;
+		this.hexagonControllerFactory = hexagonControllerFactory;
 
-		controllers = new BiMap<>();
+		controllers = new HashMap<>();
 		hexagonMap.getAllHexagons().forEach(hexagon -> makeControllerForHexagon(hexagon));
 	}
 
@@ -33,7 +31,7 @@ public class HexagonControllerMap<E> extends Group {
 	 * @return Whether or not this map has a visual representation for the given hexagon
 	 */
 	boolean containsHexagon(Hexagon hexagon) {
-		return controllers.containsFirstValue(hexagon);
+		return controllers.containsKey(hexagon);
 	}
 
 	/**
@@ -41,7 +39,7 @@ public class HexagonControllerMap<E> extends Group {
 	 * @return The given controller, or null if the hexagon is not present on this map
 	 */
 	HexagonController getControllerOf(Hexagon hexagon) {
-		return controllers.getSecondValue(hexagon);
+		return controllers.get(hexagon);
 	}
 
 	/**
@@ -51,7 +49,7 @@ public class HexagonControllerMap<E> extends Group {
 	 */
 	public List<HexagonController> getControllerNeighborsOf(Hexagon hexagon) {
 		Set<Hexagon> hexes = hexagonMap.getHexagonNeighborsOf(hexagon);
-		return hexes.stream().map(neighborHexagon -> controllers.getSecondValue(neighborHexagon)).toList();
+		return hexes.stream().map(neighborHexagon -> controllers.get(neighborHexagon)).toList();
 	}
 
 	void centerSelf() {
@@ -59,7 +57,7 @@ public class HexagonControllerMap<E> extends Group {
 		float right = Integer.MIN_VALUE;
 		float bottom = Integer.MAX_VALUE;
 		float top = Integer.MIN_VALUE;
-		for (HexagonController controller : controllers.getSecondKeyset()) {
+		for (HexagonController controller : controllers.values()) {
 			this.addActor(controller);
 
 			if (controller.getX() < left) {
@@ -80,13 +78,13 @@ public class HexagonControllerMap<E> extends Group {
 		
 		float diffX = left; 
 		float diffY = bottom; 
-		controllers.getSecondKeyset().forEach(controller -> controller.moveBy(-diffX, -diffY));
+		controllers.values().forEach(controller -> controller.moveBy(-diffX, -diffY));
 	}
 
 	
 	private void makeControllerForHexagon(Hexagon hexagon) {
-		HexagonController controller = makeHexagonControllerFunction.apply(hexagon);
-		controllers.addPair(hexagon, controller);
+		HexagonController controller = hexagonControllerFactory.apply(hexagon);
+		controllers.put(hexagon, controller);
 		addActor(controller);
 	}
 

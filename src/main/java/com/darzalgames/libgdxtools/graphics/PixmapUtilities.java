@@ -26,7 +26,7 @@ public class PixmapUtilities {
 			return Color.CLEAR;
 		}
 		int pixel = map.getPixel(x, y);
-		return ColorTools.getColorFromPixmapInteger(pixel);
+		return new Color(pixel);
 	}
 
 

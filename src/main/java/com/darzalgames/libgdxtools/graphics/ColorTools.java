@@ -23,16 +23,6 @@ public class ColorTools {
 		int packedColorInt = componentsToRGBAIntegerBits(red, green, blue);
 		return new Color(packedColorInt);
 	}
-	
-	/**
-	 * @param colorInteger The pixel color in RGBA8888 format, typically returned from {@link com.badlogic.gdx.graphics.Pixmap#getPixel(int x, int y) getPixel(x, y)}
-	 * @return a proper LibGDX {@link Color}
-	 */
-	public static Color getColorFromPixmapInteger(int colorInteger) {
-		Color color = new Color(1, 1, 1, 1);
-		Color.rgba8888ToColor(color, colorInteger);
-		return color;
-	}
 
 	private static boolean componentsInvalid(final int red, final int green, final int blue) {
 		return red < MIN_COLOR_CHANNEL_VALUE || red > MAX_COLOR_CHANNEL_VALUE || green < MIN_COLOR_CHANNEL_VALUE || green > MAX_COLOR_CHANNEL_VALUE || blue < MIN_COLOR_CHANNEL_VALUE || blue > MAX_COLOR_CHANNEL_VALUE;

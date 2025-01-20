@@ -21,8 +21,9 @@ public class PixmapUtilities {
 	public static Color getPixelColorOnMap(float hitX, float hitY, Pixmap map) {
 		int x = (int)Math.floor(hitX);
 		int y = map.getHeight() - 1 - (int)Math.floor(hitY); // Actor Y is opposite to Pixmap Y, so we subtract.
-		if (x < 0 || x >= map.getWidth() || y < 0 || y >= map.getHeight()) {
-			// Juuuuuuust in case, otherwise getPixel() crashes. Honestly, if you're out of bounds of the mask, then you're definitely not in the hexagon.
+		boolean isOutOfBounds = x < 0 || x >= map.getWidth() || y < 0 || y >= map.getHeight();
+		if (isOutOfBounds) {
+			// We check out of bounds just in case, otherwise getPixel() crashes. If you're out of bounds, there's no correct color data anyway.
 			return Color.CLEAR;
 		}
 		int pixel = map.getPixel(x, y);

@@ -88,7 +88,7 @@ public class NavigableHexagonControllerMapTest {
 
 		HexagonMap<String> hexagonMap = new HexagonMap<>();
 		HexagonGridRectangular.makeGrid(3, 3).forEach(hex -> hexagonMap.put(hex, hex.toString()));
-		hexagonControllerMap = new HexagonControllerMap<>(hexagonMap, hex -> new HexagonController(hex) {
+		hexagonControllerMap = new HexagonControllerMap<>(hexagonMap, hex -> new HexagonController(hex, null) {
 			@Override
 			protected Interactable makeHexagonButton() {
 				return new BlankHexagonControllerForTesting();

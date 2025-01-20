@@ -16,9 +16,11 @@ public abstract class HexagonController extends Container<Actor> implements Inpu
 
 	protected final Hexagon hexagon;
 	private final Interactable interactable;
+	private final CustomHitbox hitBox;
 	
-	protected HexagonController(Hexagon hexagon) {
+	protected HexagonController(Hexagon hexagon, CustomHitbox hitBox) {
 		this.hexagon = hexagon;
+		this.hitBox = hitBox;
 		interactable = makeHexagonButton();
 		this.setActor(interactable.getView());
 		this.setSize(interactable.getView().getWidth(), interactable.getView().getHeight());
@@ -49,7 +51,7 @@ public abstract class HexagonController extends Container<Actor> implements Inpu
 			return null;
 		}
 
-		boolean isInsideHexagon = !CustomHitBox.isHit(HEXAGON_MASK_KEY, x, y);
+		boolean isInsideHexagon = !hitBox.isHit(x, y);
 		if (!isInsideHexagon) {
 			return null;
 		} else {

@@ -42,6 +42,11 @@ public class HexagonControllerMap<E> extends Group {
 		return controllers.get(hexagon);
 	}
 
+
+	public void unfocusAll() {
+		controllers.values().forEach(HexagonController::clearSelected);
+	}
+
 	/**
 	 * To be used to apply any visual effects to a hexagon's neighbors
 	 * @param hexagon The {@link Hexagon} whose visual neighbors you're looking for

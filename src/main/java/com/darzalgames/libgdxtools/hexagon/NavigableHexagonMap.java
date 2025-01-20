@@ -31,30 +31,27 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	@Override
 	public void consumeKeyInput(Input input) {
 		if (isInputAllowed()) {
-			if (input.equals(Input.ACCEPT)) {
-				getCurrentHexagonController().press();
-			} else {
-				HexagonDirection direction = InputOnHexagonGrid.getDirectionFromInput(input);
+			HexagonDirection direction = InputOnHexagonGrid.getDirectionFromInput(input);
+			if (direction != null) {
 				navigateToNeighborInDirection(direction);
+			} else {
+				getCurrentHexagonController().consumeKeyInput(input);
 			}
 		}
 	}
 
 	private void navigateToNeighborInDirection(HexagonDirection direction) {
-		if (direction != null) {
-			Hexagon neighborHexagon = HexagonDirection.getNeighborHexagon(currentHexagon, direction);
-			if (hexagonControllerMap.containsHexagon(neighborHexagon)) {
-				unfocusCurrentHexagon();
-				currentHexagon = neighborHexagon;
-				focusCurrent();
-			}
+		Hexagon neighborHexagon = HexagonDirection.getNeighborHexagon(currentHexagon, direction);
+		if (hexagonControllerMap.containsHexagon(neighborHexagon)) {
+			clearSelected();
+			currentHexagon = neighborHexagon;
+			focusCurrent();
 		}
 	}
 
 	@Override
 	public void gainFocus() {
 		selectDefault();
-		unfocusCurrentHexagon();
 		hexagonControllerMap.centerSelf();
 		centerSelf();
 	}
@@ -67,27 +64,23 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	@Override
 	public void focusCurrent() {
 		if (isInputAllowed()) {
-			getCurrentHexagonController().setButtonFocused(true);
+			getCurrentHexagonController().focusCurrent();
 		}
 	}
 
 	@Override
 	public void clearSelected() {
-		unfocusCurrentHexagon();
-	}
-
-	private void unfocusCurrentHexagon() {
-		getCurrentHexagonController().setButtonFocused(false);
+		getCurrentHexagonController().clearSelected();
 	}
 
 	@Override
 	public void selectDefault() {
 		currentHexagon = new Hexagon(0, 0);
-		focusCurrent();
 	}
 
 	@Override
 	public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
+		hexagonControllerMap.unfocusAll();
 		if (inputStrategyManager.showMouseExclusiveUI()) {
 			hexagonControllerMap.setTouchable(Touchable.enabled);
 		} else {

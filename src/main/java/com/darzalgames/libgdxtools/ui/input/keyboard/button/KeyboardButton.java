@@ -224,12 +224,12 @@ public class KeyboardButton implements VisibleInputConsumer {
 
 	@Override
 	public void gainFocus() {
-		setFocused(true);
+		focusCurrent();
 	}
 
 	@Override
 	public void loseFocus() {
-		setFocused(false);
+		clearSelected();
 	}
 
 	@Override

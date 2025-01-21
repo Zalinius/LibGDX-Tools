@@ -43,7 +43,7 @@ public class HexagonControllerMap<E> extends Group {
 	}
 
 
-	public void unfocusAll() {
+	void unfocusAll() {
 		controllers.values().forEach(HexagonController::clearSelected);
 	}
 

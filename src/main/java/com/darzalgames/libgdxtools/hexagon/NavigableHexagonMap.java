@@ -84,6 +84,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 		if (inputStrategyManager.showMouseExclusiveUI()) {
 			hexagonControllerMap.setTouchable(Touchable.enabled);
 		} else {
+			hexagonControllerMap.setTouchable(Touchable.disabled);
 			focusCurrent();	
 		}
 	}

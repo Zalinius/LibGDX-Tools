@@ -18,7 +18,7 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
@@ -28,7 +28,7 @@ public class WindowResizerSelectBox implements WindowResizerButton {
 	private static Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase());
 	private UniversalSelectBox selectBox;
 	private final Supplier<TextButton> textButtonSupplier;
-	private final InputStrategyManager inputStrategyManager;
+	private final InputStrategySwitcher inputStrategyManager;
 	
 	private WindowResizer windowResizer;
 	@Override
@@ -36,7 +36,7 @@ public class WindowResizerSelectBox implements WindowResizerButton {
 		this.windowResizer = windowResizer;
 	}
 
-	public WindowResizerSelectBox(Supplier<TextButton> textButtonSupplier, InputStrategyManager inputStrategyManager) {
+	public WindowResizerSelectBox(Supplier<TextButton> textButtonSupplier, InputStrategySwitcher inputStrategyManager) {
 		this.textButtonSupplier = textButtonSupplier;
 		this.inputStrategyManager = inputStrategyManager;
 	}

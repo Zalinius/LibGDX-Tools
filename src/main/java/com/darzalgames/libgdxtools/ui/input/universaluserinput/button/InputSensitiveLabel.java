@@ -4,13 +4,13 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputObserver;
 
 public class InputSensitiveLabel extends Label implements InputObserver {
 	
 	private final Supplier<String> labelTextSupplier;
-	private final InputStrategyManager inputStrategyManager;
+	private final InputStrategySwitcher inputStrategyManager;
 
 	/**
 	 * Creates a label that changes it's text when the input strategy changes
@@ -18,7 +18,7 @@ public class InputSensitiveLabel extends Label implements InputObserver {
 	 * @param style
 	 * @param inputStrategyManager
 	 */
-	protected InputSensitiveLabel(Supplier<String> labelTextSupplier, LabelStyle style, InputStrategyManager inputStrategyManager) {
+	protected InputSensitiveLabel(Supplier<String> labelTextSupplier, LabelStyle style, InputStrategySwitcher inputStrategyManager) {
 		super(labelTextSupplier.get(), style);
 		this.labelTextSupplier = labelTextSupplier;
 		this.inputStrategyManager = inputStrategyManager;
@@ -26,7 +26,7 @@ public class InputSensitiveLabel extends Label implements InputObserver {
 	}
 
 	@Override
-	public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
+	public void inputStrategyChanged(InputStrategySwitcher inputStrategyManager) {
 		this.setText(labelTextSupplier.get());
 	}
 	

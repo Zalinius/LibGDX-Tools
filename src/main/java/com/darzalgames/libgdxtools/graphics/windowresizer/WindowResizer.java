@@ -2,7 +2,7 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 
 import com.darzalgames.darzalcommon.data.Coordinate;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
@@ -25,7 +25,7 @@ public abstract class WindowResizer {
 	protected abstract void switchToBorderless();
 	protected abstract void switchToFullScreen();
 
-	private InputStrategyManager inputStrategyManager;
+	private InputStrategySwitcher inputStrategyManager;
 	private WindowResizerButton windowResizerButton;
 
 	/**
@@ -35,7 +35,7 @@ public abstract class WindowResizer {
 	 * @param inputStrategyManager
 	 * @param windowResizerButton
 	 */
-	public void initialize(InputStrategyManager inputStrategyManager, WindowResizerButton windowResizerButton) {
+	public void initialize(InputStrategySwitcher inputStrategyManager, WindowResizerButton windowResizerButton) {
 		this.inputStrategyManager = inputStrategyManager;
 		this.windowResizerButton = windowResizerButton;
 		windowResizerButton.setWindowResizer(this);

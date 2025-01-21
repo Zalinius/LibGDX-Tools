@@ -8,7 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Texture;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 /**
@@ -25,7 +25,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 	protected abstract List<Input> getTrackedInputs();
 	protected abstract Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor);
 
-	protected GamepadInputHandler(InputStrategyManager inputStrategyManager) {
+	protected GamepadInputHandler(InputStrategySwitcher inputStrategyManager) {
 		super(inputStrategyManager);
 		buttonStates = new HashMap<>();
 		getTrackedInputs().forEach(input -> buttonStates.put(input, ButtonState.NOT_HELD_DOWN));

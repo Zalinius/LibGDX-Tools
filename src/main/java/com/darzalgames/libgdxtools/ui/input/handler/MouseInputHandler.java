@@ -5,14 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class MouseInputHandler extends InputHandler {
 
 	/**
 	 * Listens for click events and changes into mouse mode correspondingly
 	 */
-	public MouseInputHandler(InputStrategyManager inputStrategyManager) {
+	public MouseInputHandler(InputStrategySwitcher inputStrategyManager) {
 		super(inputStrategyManager);
 		addListener(new InputListener() {
 			@Override

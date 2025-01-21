@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 public class UniversalSelectBox extends UniversalButton {
@@ -22,7 +22,7 @@ public class UniversalSelectBox extends UniversalButton {
 	private Consumer<String> action;
 
 	// TODO experiment with making a constructor that takes a list of buttons instead of making them?
-	public UniversalSelectBox(Collection<String> entries, TextButton textButton, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalSelectBox(Collection<String> entries, TextButton textButton, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
 		super(textButton, inputStrategyManager, soundInteractListener);
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,

@@ -25,7 +25,7 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.stage.UniversalInputStage;
 
@@ -37,13 +37,13 @@ public class UserInterfaceFactory {
 
 	protected static Runnable quitGameRunnable;
 	private static SkinManager skinManager;
-	protected static InputStrategyManager inputStrategyManager;
+	protected static InputStrategySwitcher inputStrategyManager;
 	private static Supplier<Float> flashesPerSecondSupplier;
 	protected static Runnable soundInteractListener;
 
 	protected UserInterfaceFactory() {}
 
-	public static void initialize(SkinManager skinManager, InputStrategyManager inputStrategyManager, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener) {
+	public static void initialize(SkinManager skinManager, InputStrategySwitcher inputStrategyManager, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener) {
 		UserInterfaceFactory.skinManager = skinManager;
 		UserInterfaceFactory.inputStrategyManager = inputStrategyManager;
 		quitGameRunnable = Gdx.app::exit;

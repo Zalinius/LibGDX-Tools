@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 public class StageWithBackground extends UniversalInputStage {
@@ -15,7 +15,7 @@ public class StageWithBackground extends UniversalInputStage {
 	 * @param viewport
 	 * @param backgroundTex
 	 */
-	public StageWithBackground(final Viewport viewport, Texture backgroundTex, InputStrategyManager inputStrategyManager) {
+	public StageWithBackground(final Viewport viewport, Texture backgroundTex, InputStrategySwitcher inputStrategyManager) {
 		super(viewport, inputStrategyManager);
 
 		background = new Image(backgroundTex);

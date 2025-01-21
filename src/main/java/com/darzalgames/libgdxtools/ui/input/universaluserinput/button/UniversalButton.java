@@ -13,7 +13,7 @@ import com.darzalgames.darzalcommon.strings.StringUtils;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
  * @author DarZal
@@ -30,18 +30,18 @@ public class UniversalButton implements VisibleInputConsumer {
 	private Alignment alignment;
 	private boolean wrap;
 	private boolean doesSoundOnInteract = true;
-	private final InputStrategyManager inputStrategyManager;
+	private final InputStrategySwitcher inputStrategyManager;
 	private final Runnable soundInteractListener;
 
-	public UniversalButton(TextButton button, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalButton(TextButton button, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
 		this(button, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 	}
 	
-	public UniversalButton(TextButton button, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) { 
+	public UniversalButton(TextButton button, Runnable runnable, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) { 
 		this(button, null, runnable, inputStrategyManager, soundInteractListener);
 	}
 	
-	public UniversalButton(TextButton button, Image image, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalButton(TextButton button, Image image, Runnable runnable, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
 		this.button = button;
 		this.labelSupplier = button::getLabel;
 		this.cellSupplier = button::getLabelCell;

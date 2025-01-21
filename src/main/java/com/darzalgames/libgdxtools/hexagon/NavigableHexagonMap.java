@@ -6,7 +6,7 @@ import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.*;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.stage.UniversalInputStage;
 
@@ -21,7 +21,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	private Hexagon currentHexagon;
 
 	/**
-	 * Be sure to register this object with the {@link InputStrategyManager}
+	 * Be sure to register this object with the {@link InputStrategySwitcher}
 	 * @param hexagonControllerMap The map of hexagon controllers to be navigated
 	 */
 	public NavigableHexagonMap(HexagonControllerMap<E> hexagonControllerMap) {
@@ -88,7 +88,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	}
 
 	@Override
-	public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
+	public void inputStrategyChanged(InputStrategySwitcher inputStrategyManager) {
 		if (inputStrategyManager.showMouseExclusiveUI()) {
 			hexagonControllerMap.setTouchable(Touchable.enabled);
 		} else {

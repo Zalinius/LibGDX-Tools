@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input;
+package com.darzalgames.libgdxtools.ui;
 
 import java.util.function.Supplier;
 
@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputObserver;
 
 public class CustomCursorImage extends Image implements DoesNotPause, InputObserver {
@@ -26,7 +26,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	 * @param cursorTexture
 	 * @param inputStrategyManager
 	 */
-	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, InputStrategyManager inputStrategyManager) {
+	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, InputStrategySwitcher inputStrategyManager) {
 		this(checkIsWindowed, cursorTexture, cursorTexture, inputStrategyManager);
 	}
 
@@ -37,7 +37,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	 * @param clickedCursorTexture The texture shown while the left mouse button is held down
 	 * @param inputStrategyManager
 	 */
-	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, Texture clickedCursorTexture, InputStrategyManager inputStrategyManager) {
+	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, Texture clickedCursorTexture, InputStrategySwitcher inputStrategyManager) {
 		super();
 		this.cursorTexture = cursorTexture;
 		this.clickedCursorTexture = clickedCursorTexture;
@@ -87,7 +87,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	}
 
 	@Override
-	public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
+	public void inputStrategyChanged(InputStrategySwitcher inputStrategyManager) {
 		setVisible(inputStrategyManager.showMouseExclusiveUI());
 	}
 

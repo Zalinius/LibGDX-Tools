@@ -21,11 +21,11 @@ import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
-import com.darzalgames.libgdxtools.ui.input.CustomCursorImage;
+import com.darzalgames.libgdxtools.ui.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.MouseInputHandler;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
@@ -61,7 +61,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected GameScreen currentScreen;
 	protected WindowResizer windowResizer;
 	protected List<DoesNotPause> actorsThatDoNotPause;
-	protected InputStrategyManager inputStrategyManager;
+	protected InputStrategySwitcher inputStrategyManager;
 	private MouseInputHandler mouseDetector;
 	
 	private boolean isQuitting = false;
@@ -154,8 +154,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	 * @return An InputStrategyManager, in case the base class wants to extend its functionality (e.g. Quest Giver adds
 	 * button hints, and more specific gamepad handling may be wanted in the future)
 	 */
-	protected InputStrategyManager makeInputStrategyManager() {
-		return new InputStrategyManager(new MouseInputStrategy(), new KeyboardInputStrategy());
+	protected InputStrategySwitcher makeInputStrategyManager() {
+		return new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
 	}
 
 	private void setUpInputPrioritizer() {

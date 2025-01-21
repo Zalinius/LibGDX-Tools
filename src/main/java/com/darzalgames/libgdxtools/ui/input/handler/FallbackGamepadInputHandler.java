@@ -11,7 +11,7 @@ import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Texture;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public abstract class FallbackGamepadInputHandler extends GamepadInputHandler implements ControllerListener {
 
@@ -20,7 +20,7 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 	private final Map<Input, AssetDescriptor<Texture>> glyphMappings;
 	protected abstract Map<Input, AssetDescriptor<Texture>> makeGlyphMappings();
 
-	protected FallbackGamepadInputHandler(InputStrategyManager inputStrategyManager) {
+	protected FallbackGamepadInputHandler(InputStrategySwitcher inputStrategyManager) {
 		super(inputStrategyManager);
 		Controllers.addListener(this); // receives events from all controllers
 		buttonMappings = makeButtonMappings();

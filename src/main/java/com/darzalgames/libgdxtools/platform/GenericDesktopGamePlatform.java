@@ -13,12 +13,12 @@ import com.darzalgames.libgdxtools.steam.SteamConnection;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public abstract class GenericDesktopGamePlatform implements GamePlatform {
 
 	@Override
-	public SteamStrategy getSteamStrategy(InputStrategyManager inputStrategyManager) {
+	public SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategyManager) {
 		Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler = () -> new SteamGamepadInputHandler(inputStrategyManager, null) {
 			// Don't be using this default does-nothing SteamGamepadInputHandler, this is mainly here for the LibGDXTools TestGame which isn't on Steam
 			@Override

@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public interface GamePlatform {
 
@@ -38,7 +38,7 @@ public interface GamePlatform {
 	 * @param inputStrategyManager The input strategy manager, so we can make the gamepad input handler
 	 * @return A SteamStrategy befitting the GamePlatform
 	 */
-	public SteamStrategy getSteamStrategy(InputStrategyManager inputStrategyManager);
+	public SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategyManager);
 
 	public default boolean needsQuitButton() {
 		return true;
@@ -53,7 +53,7 @@ public interface GamePlatform {
 	 */
 	public boolean isDevMode();
 
-	static Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandlerSupplier(InputStrategyManager inputStrategyManager) {
+	static Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandlerSupplier(InputStrategySwitcher inputStrategyManager) {
 		return () -> new FallbackGamepadInputHandler(inputStrategyManager) {
 			@Override
 			protected List<Input> getTrackedInputs() {

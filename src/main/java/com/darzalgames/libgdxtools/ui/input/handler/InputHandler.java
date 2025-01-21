@@ -4,16 +4,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
  * The base class for all kinds of input handlers (mouse, keyboard, gamepad)
  */
 public abstract class InputHandler extends Table implements DoesNotPause {
 	
-	protected final InputStrategyManager inputStrategyManager;
+	protected final InputStrategySwitcher inputStrategyManager;
 	
-	protected InputHandler(InputStrategyManager inputStrategyManager) {
+	protected InputHandler(InputStrategySwitcher inputStrategyManager) {
 		this.inputStrategyManager = inputStrategyManager;
 	}
 

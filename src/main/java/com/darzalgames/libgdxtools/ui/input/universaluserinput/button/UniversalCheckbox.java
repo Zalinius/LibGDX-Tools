@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class UniversalCheckbox extends UniversalButton {
 	
@@ -16,7 +16,7 @@ public class UniversalCheckbox extends UniversalButton {
 	private final String uncheckedLabel;
 	private final String checkedLabel;
 	
-	protected UniversalCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	protected UniversalCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
 		super(textButton, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 		this.uncheckedLabel = uncheckedLabel;
 		this.checkedLabel = checkedLabel;

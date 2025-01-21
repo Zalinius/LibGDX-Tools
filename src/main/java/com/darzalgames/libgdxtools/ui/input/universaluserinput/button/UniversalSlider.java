@@ -10,18 +10,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class UniversalSlider extends UniversalButton {
 
 	private final Slider slider;
 	private float previousValue;
 
-	public UniversalSlider(TextButton textButton, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalSlider(TextButton textButton, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
 		this(textButton, null, sliderStyle, consumer, inputStrategyManager, soundInteractListener);
 	}
 
-	public UniversalSlider(TextButton textButton, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalSlider(TextButton textButton, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
 		super(textButton, image, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle);
 		slider.addListener(new ChangeListener() {

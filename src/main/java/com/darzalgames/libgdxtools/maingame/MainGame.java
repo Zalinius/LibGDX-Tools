@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.darzalgames.darzalcommon.data.ListFactory;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
@@ -22,14 +21,16 @@ import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
-import com.darzalgames.libgdxtools.ui.input.*;
-import com.darzalgames.libgdxtools.ui.input.handler.*;
+import com.darzalgames.libgdxtools.ui.input.CustomCursorImage;
+import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
+import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
+import com.darzalgames.libgdxtools.ui.input.handler.MouseInputHandler;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.stage.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.stage.StageWithBackground;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.stage.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 import com.darzalgames.libgdxtools.ui.screen.PixelPerfectViewport;
 
@@ -166,7 +167,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		actorsThatDoNotPause.add(gamepadInputHandler);
 		cursorStage.addActor(getCustomCursor());
 		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler, inputStrategyManager);
-		GlyphFactory.initialize(ListFactory.of(gamepadInputHandler, keyboardInputHandler, mouseDetector));
 	}
 
 	protected final void changeScreen(GameScreen gameScreen) {

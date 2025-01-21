@@ -26,7 +26,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 	protected abstract Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor);
 
 	protected GamepadInputHandler(InputStrategyManager inputStrategyManager) {
-		super(inputStrategyManager, InputMethod.GAMEPAD);
+		super(inputStrategyManager);
 		buttonStates = new HashMap<>();
 		getTrackedInputs().forEach(input -> buttonStates.put(input, ButtonState.NOT_HELD_DOWN));
 	}

@@ -24,7 +24,7 @@ public abstract class KeyboardInputHandler extends InputHandler {
 	 * Sets up the listener for keyboard input, and maps various keybindings to others
 	 */
 	protected KeyboardInputHandler(InputStrategyManager inputStrategyManager) {
-		super(inputStrategyManager, InputMethod.KEYBOARD);
+		super(inputStrategyManager);
 		
 		keysToAllow = getKeyWhitelist();
 		buttonMappings = makeButtonMappings();

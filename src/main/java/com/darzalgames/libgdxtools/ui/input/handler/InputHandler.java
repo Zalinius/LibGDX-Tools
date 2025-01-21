@@ -12,26 +12,20 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 public abstract class InputHandler extends Table implements DoesNotPause {
 	
 	protected final InputStrategyManager inputStrategyManager;
-	private final InputMethod inputMethod;
 	
-	protected InputHandler(InputStrategyManager inputStrategyManager, InputMethod inputMethod) {
+	protected InputHandler(InputStrategyManager inputStrategyManager) {
 		this.inputStrategyManager = inputStrategyManager;
-		this.inputMethod = inputMethod;
 	}
 
 	@Override
 	public void actWhilePaused(float delta) {
 		act(delta);
 	}
-	
-	public InputMethod getInputMethod() {
-		return inputMethod;
-	}
 
 	public abstract Texture getGlyphForInput(Input input);
 	
 	void updateLatestInputMethod() {
-		GlyphFactory.setLatestInputMethod(inputMethod);
+		GlyphFactory.setLatestInputHandler(this);
 	}
 
 }

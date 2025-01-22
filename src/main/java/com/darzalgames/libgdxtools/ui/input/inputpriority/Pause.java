@@ -24,13 +24,8 @@ public class Pause extends Actor implements DoesNotPause {
 	 * @param pauseMenu The menu to show when the pause button is pressed.
 	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
 	 */
-	public Pause(Stage popUpStage, PauseMenu pauseMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
+	public Pause(Stage popUpStage, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
 		this.popUpStage = popUpStage;
-		pauseButton = pauseMenu.getButton();
-		popUpStage.addActor(pauseButton.getView());
-		pauseButton.getView().setPosition(3, GameInfo.getHeight() - pauseButton.getView().getHeight() - 3);
-		this.pauseMenu = pauseMenu;
-		pauseMenu.setPauseRunnable(this::pauseIfNeeded);
 		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
 		GamePauser.setPauseGameIfNeededRunnable(this::pauseIfNeeded);
 	}
@@ -47,15 +42,21 @@ public class Pause extends Actor implements DoesNotPause {
 		pauseButton.getView().toFront();
 	}
 
-
 	void pressPauseButton() {
 		pauseButton.consumeKeyInput(Input.ACCEPT);
 	}
 
+	public void setPauseMenu(PauseMenu pauseMenu) {
+		this.pauseMenu = pauseMenu;
+		pauseMenu.setPauseRunnable(this::pauseIfNeeded);
+		pauseButton = pauseMenu.getButton();
+		pauseButton.getView().setPosition(3, GameInfo.getHeight() - pauseButton.getView().getHeight() - 3);
+		popUpStage.addActor(pauseButton.getView());
+	}
 
 	public boolean isPaused() {
-		return pauseMenu.getStage() != null
-				|| doesCurrentInputConsumerPauseGame.get();
+		return pauseMenu != null && 
+				(pauseMenu.getStage() != null || doesCurrentInputConsumerPauseGame.get());
 	}
 
 	/**
@@ -73,8 +74,10 @@ public class Pause extends Actor implements DoesNotPause {
 	
 	@Override
 	public void act(float delta) {
-		popUpStage.addActor(pauseButton.getView());
-		pauseButton.getView().toFront();
+		if (pauseButton != null) {
+			popUpStage.addActor(pauseButton.getView());
+			pauseButton.getView().toFront();
+		}
 	}
 
 	@Override

@@ -65,7 +65,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected InputReceiver inputReceiver;
 	protected InputPriorityStack inputPriorityStack;
 	private ScrollingManager scrollingManager;
-	private Pause pause;
+	protected Pause pause;
 
 	private boolean isQuitting = false;
 
@@ -103,7 +103,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher, scrollingManager);
 		makeMainStageAndMouseStages();
 
-		setUpUserInterfaceFactory();
 		setUpInputPrioritizer();
 		setUpInputForAllStages();
 		actorsThatDoNotPause.add(inputStrategySwitcher);
@@ -158,9 +157,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		return new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
 	}
 
-	protected abstract void setUpUserInterfaceFactory();
-	protected abstract PauseMenu makePauseMenu();
-
 	private void setUpInputPrioritizer() {
 		// Set up input processing for all strategies
 		stage.addActor(inputStrategySwitcher);
@@ -172,7 +168,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		inputHandlerStage.addActor(keyboardInputHandler);
 		stage.setKeyboardFocus(keyboardInputHandler);
 		cursorStage.addActor(getCustomCursor());
-		InputSetup inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), makePauseMenu(), stage, popUpStage);
+		InputSetup inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), stage, popUpStage);
 		inputPriorityStack = inputSetup.getInputPriorityStack();
 		scrollingManager = inputSetup.getScrollingManager();
 		pause = inputSetup.getPause();

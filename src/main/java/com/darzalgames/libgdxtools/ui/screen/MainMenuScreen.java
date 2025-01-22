@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.screen;
 
 import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
 /**
@@ -13,10 +14,6 @@ public class MainMenuScreen extends GameScreen {
 	{
 		super(Runnables.nullRunnable());
 		addActor(mainMenu);
-	}
-	
-	@Override
-	public void gainFocus() {
-		show();
+		GameInfo.getInputPriorityStack().claimPriority(mainMenu);
 	}
 }

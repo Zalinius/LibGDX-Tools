@@ -66,6 +66,8 @@ public class TestGame extends MainGame {
 	@Override
 	protected void launchGame(boolean isNewSave) {
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
+		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable());
+		pause.setPauseMenu(new TestOptionsMenu(windowResizer::getModeSelectBox));
 		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override
@@ -183,16 +185,7 @@ public class TestGame extends MainGame {
 	protected WindowResizerButton makeWindowResizerButton() {
 		return UserInterfaceFactory.getWindowModeTextSelectBox();
 	}
-	@Override
-	protected void setUpUserInterfaceFactory() {
-		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable());
-	}
-
-	@Override
-	protected PauseMenu makePauseMenu() {
-		return new TestOptionsMenu(windowResizer::getModeSelectBox);
-	}
-
+	
 	private class TestOptionsMenu extends PauseMenu {
 
 		protected TestOptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox) {

@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.optionsmenu;
+package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -16,19 +16,20 @@ import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 
 /**
  * The base class for options menus (in-game versus when on the main menu)
  * @author DarZal
  */
-public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
+public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 	protected UniversalButton optionsButton;
 	private final Supplier<UniversalButton> makeWindowModeSelectBox;
 
 	private final String platformName;
+	
+	private Runnable pauseIfNeededRunnable;
 
 	/**
 	 * NOTE: Setting the position is important, otherwise the options menu will not open!<p>
@@ -78,7 +79,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	 */
 	protected abstract PopUp makeControlsPopUp();
 
-	protected OptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox, int bottomPadding) {
+	protected PauseMenu(Supplier<UniversalButton> makeWindowModeSelectBox, int bottomPadding) {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
 		this.platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
@@ -98,6 +99,10 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	public UniversalButton getButton() {
 		return optionsButton;
 	}
+	
+	void setPauseRunnable(Runnable runnable) {
+		pauseIfNeededRunnable = runnable;
+	}
 
 	/**
 	 * To be used by child classes to have buttons in the menu hide/show it (e.g. "return to main menu" should toggle screen visibility to false)
@@ -105,7 +110,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	 */
 	protected void toggleScreenVisibility(boolean show) {
 		if (show) {
-			InputPriorityManager.pauseIfNeeded();
+			pauseIfNeededRunnable.run();
 		} else {
 			hideThis();
 		}
@@ -197,7 +202,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		}
 
 		public UniversalButton getButton() {
-			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> InputPriorityManager.claimPriority(this));
+			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> GameInfo.getInputPriorityStack().claimPriority(this));
 		}
 
 		@Override

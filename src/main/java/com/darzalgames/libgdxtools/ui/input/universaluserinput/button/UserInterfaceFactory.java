@@ -25,9 +25,9 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
+import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.skinmanager.SkinManager;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.stage.UniversalInputStage;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 
 /**
  * @author DarZal
@@ -37,15 +37,15 @@ public class UserInterfaceFactory {
 
 	protected static Runnable quitGameRunnable;
 	private static SkinManager skinManager;
-	protected static InputStrategySwitcher inputStrategyManager;
+	protected static InputStrategySwitcher inputStrategySwitcher;
 	private static Supplier<Float> flashesPerSecondSupplier;
 	protected static Runnable soundInteractListener;
 
 	protected UserInterfaceFactory() {}
 
-	public static void initialize(SkinManager skinManager, InputStrategySwitcher inputStrategyManager, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener) {
+	public static void initialize(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener) {
 		UserInterfaceFactory.skinManager = skinManager;
-		UserInterfaceFactory.inputStrategyManager = inputStrategyManager;
+		UserInterfaceFactory.inputStrategySwitcher = inputStrategySwitcher;
 		quitGameRunnable = Gdx.app::exit;
 		UserInterfaceFactory.flashesPerSecondSupplier = flashesPerSecondSupplier;
 		UserInterfaceFactory.soundInteractListener = soundInteractListener;
@@ -73,7 +73,7 @@ public class UserInterfaceFactory {
 	 * @return
 	 */
 	public static Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
-		Label label = new InputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategyManager);
+		Label label = new InputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher);
 		label.setWrap(true);
 		return label;
 	}
@@ -93,7 +93,7 @@ public class UserInterfaceFactory {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
 		TextButton textButton = new TextButton(text, skinManager.getSneakyLableButtonStyle());
 		textButton.setName(text);
-		UniversalButton listableButton = new UniversalButton(textButton, null, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
+		UniversalButton listableButton = new UniversalButton(textButton, null, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		listableButton.setDisabled(true);
 		return listableButton;
 	}
@@ -129,7 +129,7 @@ public class UserInterfaceFactory {
 	private static UniversalButton makeButton(final String text, Image image, final Runnable runnable) {
 		TextButton textButton = makeLibGDXTextButton(text);
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		return new UniversalButton(textButton, image, runnable, inputStrategyManager, soundInteractListener);
+		return new UniversalButton(textButton, image, runnable, inputStrategySwitcher, soundInteractListener);
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class UserInterfaceFactory {
 	 */
 	protected static UniversalButton makeButton(final String text, final Runnable runnable, TextButtonStyle textButtonStyle) {
 		TextButton textButton = new TextButton(text, textButtonStyle);
-		return new UniversalButton(textButton, null, runnable, inputStrategyManager, soundInteractListener);
+		return new UniversalButton(textButton, null, runnable, inputStrategySwitcher, soundInteractListener);
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class UserInterfaceFactory {
 	public static UniversalSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
 		TextButton textButton = new TextButton(boxLabel + ":  ", skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		UniversalSelectBox keyboardSelectBox =  new UniversalSelectBox(entries, textButton, inputStrategyManager, soundInteractListener);
+		UniversalSelectBox keyboardSelectBox =  new UniversalSelectBox(entries, textButton, inputStrategySwitcher, soundInteractListener);
 		keyboardSelectBox.setAction(consumer);
 		return keyboardSelectBox;
 	}
@@ -173,17 +173,17 @@ public class UserInterfaceFactory {
 
 	public static UniversalSlider getSlider(String sliderLabel, Consumer<Float> consumer) {
 		UniversalButton textButton = getButton(sliderLabel, Runnables.nullRunnable());
-		return new UniversalSlider(textButton.getView(), skinManager.getSliderStyle(), consumer, inputStrategyManager, soundInteractListener);
+		return new UniversalSlider(textButton.getView(), skinManager.getSliderStyle(), consumer, inputStrategySwitcher, soundInteractListener);
 	}
 
 	public static UniversalCheckbox getCheckbox(String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer) {
 		UniversalButton textButton = getButton("", Runnables.nullRunnable());
-		return new UniversalCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategyManager, soundInteractListener);
+		return new UniversalCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategySwitcher, soundInteractListener);
 	}
 
 	public static UniversalButton getInGamesSettingsButton(Runnable onclick) {
 		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()); 
-		return new MouseOnlyButton(textButton, onclick, inputStrategyManager, soundInteractListener);
+		return new MouseOnlyButton(textButton, onclick, inputStrategySwitcher, soundInteractListener);
 	}
 
 	private static final String QUIT_GAME_KEY = "quit_game";
@@ -217,7 +217,8 @@ public class UserInterfaceFactory {
 	public static UniversalButton getQuitGameButtonWithWarning(Runnable runnable) {
 		Runnable quitWithConfirmation = () -> {
 			runnable.run();
-			new ConfirmationMenu("menu_warning", 
+			new ConfirmationMenu(
+					"menu_warning", 
 					QUIT_GAME_KEY, 
 					quitGameRunnable::run);
 		};
@@ -285,7 +286,7 @@ public class UserInterfaceFactory {
 	private static boolean shouldButtonFlash(Button button) {
 		return UniversalInputStage.isInTouchableBranch(button)
 				&& !button.isDisabled()
-				&& inputStrategyManager.shouldFlashButtons();
+				&& inputStrategySwitcher.shouldFlashButtons();
 	}
 
 	private static Action getChangeButtonStyleAfterDelayAction(Button button, ButtonStyle buttonStyle) {
@@ -318,7 +319,7 @@ public class UserInterfaceFactory {
 			makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 			return textButton;
 		};
-		return new WindowResizerSelectBox(supplier, inputStrategyManager);
+		return new WindowResizerSelectBox(supplier, inputStrategySwitcher);
 	}
 	
 	private static float computeDelay() {

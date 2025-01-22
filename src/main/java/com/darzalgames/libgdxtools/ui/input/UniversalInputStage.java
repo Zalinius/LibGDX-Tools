@@ -1,24 +1,26 @@
-package com.darzalgames.libgdxtools.ui.input.universaluserinput.stage;
+package com.darzalgames.libgdxtools.ui.input;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.ScrollingManager;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputObserver;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 public class UniversalInputStage extends Stage implements InputObserver {
 
 	private boolean mouseMode;
+	private ScrollingManager scrollingManager;
 
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
 	 * @param viewport
 	 */
-	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher) {
+	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher, ScrollingManager scrollingManager) {
 		super(viewport);
 		inputStrategySwitcher.register(this);
+		this.scrollingManager = scrollingManager;
 	}
 
 	@Override
@@ -35,7 +37,7 @@ public class UniversalInputStage extends Stage implements InputObserver {
 	
 	@Override
 	public boolean scrolled(float amountX, float amountY) {
-		InputPriorityManager.receiveScrollInput(amountY);
+		scrollingManager.receiveScrollInput(amountY);
 		return true;
 	}
 
@@ -73,8 +75,8 @@ public class UniversalInputStage extends Stage implements InputObserver {
 	}
 
 	@Override
-	public void inputStrategyChanged(InputStrategySwitcher inputStrategyManager) {
-		mouseMode = inputStrategyManager.showMouseExclusiveUI();
+	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
+		mouseMode = inputStrategySwitcher.showMouseExclusiveUI();
 	}
 
 	@Override

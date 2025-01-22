@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 public class UniversalSelectBox extends UniversalButton {
 
@@ -22,8 +22,8 @@ public class UniversalSelectBox extends UniversalButton {
 	private Consumer<String> action;
 
 	// TODO experiment with making a constructor that takes a list of buttons instead of making them?
-	public UniversalSelectBox(Collection<String> entries, TextButton textButton, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
-		super(textButton, inputStrategyManager, soundInteractListener);
+	public UniversalSelectBox(Collection<String> entries, TextButton textButton, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		super(textButton, inputStrategySwitcher, soundInteractListener);
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,
 		// sets that as the text in our display label (e.g. English), and calls the Consumer (which responds to the new entry, e.g. changing the game language and refreshing the main menu)
@@ -85,7 +85,7 @@ public class UniversalSelectBox extends UniversalButton {
 	}
 
 	private void showInnerOptionsPopUpMenu() {
-		InputPriorityManager.claimPriority(options);
+		GameInfo.getInputPriorityStack().claimPriority(options);
 		options.goTo(defaultEntry);
 	}
 

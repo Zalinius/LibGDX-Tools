@@ -14,20 +14,20 @@ class CustomCursorImageTest {
 
 	@Test
 	void isVisible_duringMouseStrategy_returnsTrue() throws Exception {
-		InputStrategySwitcher inputStrategyManager = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
-		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategyManager);
+		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
+		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategySwitcher);
 		
-		inputStrategyManager.setToMouseStrategy();
+		inputStrategySwitcher.setToMouseStrategy();
 
 		assertTrue(customCursor.isVisible());
 	}
 	
 	@Test
 	void isVisible_duringKeyboardStrategy_returnsFalse() throws Exception {
-		InputStrategySwitcher inputStrategyManager = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
-		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategyManager);
+		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
+		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategySwitcher);
 		
-		inputStrategyManager.setToKeyboardStrategy();
+		inputStrategySwitcher.setToKeyboardStrategy();
 
 		assertFalse(customCursor.isVisible());
 	}

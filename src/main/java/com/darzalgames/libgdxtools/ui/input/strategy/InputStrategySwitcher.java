@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputObserver;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputSubject;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSubject;
 
 /**
  * Tracks the current input strategy, and handles switching between them as needed.

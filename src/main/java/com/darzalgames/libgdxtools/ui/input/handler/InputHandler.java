@@ -11,10 +11,10 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
  */
 public abstract class InputHandler extends Table implements DoesNotPause {
 	
-	protected final InputStrategySwitcher inputStrategyManager;
+	protected final InputStrategySwitcher inputStrategySwitcher;
 	
-	protected InputHandler(InputStrategySwitcher inputStrategyManager) {
-		this.inputStrategyManager = inputStrategyManager;
+	protected InputHandler(InputStrategySwitcher inputStrategySwitcher) {
+		this.inputStrategySwitcher = inputStrategySwitcher;
 	}
 
 	@Override

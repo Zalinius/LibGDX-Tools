@@ -30,23 +30,23 @@ public class UniversalButton implements VisibleInputConsumer {
 	private Alignment alignment;
 	private boolean wrap;
 	private boolean doesSoundOnInteract = true;
-	private final InputStrategySwitcher inputStrategyManager;
+	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Runnable soundInteractListener;
 
-	public UniversalButton(TextButton button, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
-		this(button, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
+	public UniversalButton(TextButton button, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		this(button, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 	}
 	
-	public UniversalButton(TextButton button, Runnable runnable, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) { 
-		this(button, null, runnable, inputStrategyManager, soundInteractListener);
+	public UniversalButton(TextButton button, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) { 
+		this(button, null, runnable, inputStrategySwitcher, soundInteractListener);
 	}
 	
-	public UniversalButton(TextButton button, Image image, Runnable runnable, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalButton(TextButton button, Image image, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		this.button = button;
 		this.labelSupplier = button::getLabel;
 		this.cellSupplier = button::getLabelCell;
 		this.buttonRunnable = runnable;
-		this.inputStrategyManager = inputStrategyManager;
+		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.image = image;
 		this.wrap = true;
 		this.alignment = Alignment.CENTER;
@@ -122,7 +122,7 @@ public class UniversalButton implements VisibleInputConsumer {
 		if (!isFocused) {
 			event.setType(InputEvent.Type.exit);
 		}
-		else if (isFocused && inputStrategyManager.shouldFlashButtons()) {
+		else if (isFocused && inputStrategySwitcher.shouldFlashButtons()) {
 			event.setType(InputEvent.Type.enter);
 		}
 		else {

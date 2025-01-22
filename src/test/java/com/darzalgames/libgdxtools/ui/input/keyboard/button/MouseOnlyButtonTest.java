@@ -26,12 +26,12 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalB
 class MouseOnlyButtonTest {
 	
 	private static UniversalButton button;
-	private static InputStrategySwitcher inputStrategyManager;
+	private static InputStrategySwitcher inputStrategySwitcher;
 
 	@Test
 	void isVisible_duringMouseStrategy_returnsTrue() throws Exception {
 
-		inputStrategyManager.setToMouseStrategy();
+		inputStrategySwitcher.setToMouseStrategy();
 
 		assertTrue(button.getView().isVisible());
 	}
@@ -39,7 +39,7 @@ class MouseOnlyButtonTest {
 	@Test
 	void isVisible_duringKeyboardStrategy_returnsFalse() throws Exception {
 
-		inputStrategyManager.setToKeyboardStrategy();
+		inputStrategySwitcher.setToKeyboardStrategy();
 
 		assertFalse(button.getView().isVisible());
 	}
@@ -51,11 +51,11 @@ class MouseOnlyButtonTest {
 		Gdx.graphics = new MockGraphics();
 		Gdx.files = Mockito.mock(Files.class);
 		
-		inputStrategyManager = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
+		inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
 		TextButtonStyle textButtonStyle =  new TextButtonStyle();
 		textButtonStyle.font = new BitmapFont(new BitmapFontData(), new TextureRegion(), false);
 		TextButton textButton = new TextButton("", textButtonStyle);
-		button = new MouseOnlyButton(textButton, Runnables.nullRunnable(), inputStrategyManager, Runnables.nullRunnable())  {
+		button = new MouseOnlyButton(textButton, Runnables.nullRunnable(), inputStrategySwitcher, Runnables.nullRunnable())  {
 			@Override
 			public boolean shouldBeUnregistered() {
 				return false;

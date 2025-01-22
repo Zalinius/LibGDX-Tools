@@ -18,21 +18,17 @@ import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
-import com.darzalgames.libgdxtools.platform.DesktopGamePlatformHelper;
-import com.darzalgames.libgdxtools.platform.LinuxGamePlatform;
-import com.darzalgames.libgdxtools.platform.MacGamePlatform;
-import com.darzalgames.libgdxtools.platform.WindowsGamePlatform;
+import com.darzalgames.libgdxtools.platform.*;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.skinmanager.SkinManager;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.optionsmenu.OptionsMenu;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
 
 public class TestGame extends MainGame {
@@ -70,7 +66,6 @@ public class TestGame extends MainGame {
 	@Override
 	protected void launchGame(boolean isNewSave) {
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
-		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategyManager, () -> 2.5f, Runnables.nullRunnable());
 		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override
@@ -81,20 +76,13 @@ public class TestGame extends MainGame {
 				menu.setSpacing(1);
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 				add(menu.getView()).growX().align(Align.center);
-
-
-				// Options button
-				TestOptionsMenu optionsMenu = new TestOptionsMenu(windowResizer::getModeSelectBox);
-				addActor(optionsMenu.getButton().getView());
-				optionsMenu.getButton().getView().setPosition(3, GameInfo.getHeight() - optionsMenu.getButton().getView().getHeight() - 3);
-				InputPriorityManager.setPauseUI(optionsMenu);
 			}
 		}));
 	}
 
 	@Override
 	protected KeyboardInputHandler makeKeyboardInputHandler() {
-		return new KeyboardInputHandler(inputStrategyManager) {
+		return new KeyboardInputHandler(inputStrategySwitcher, inputReceiver) {
 			@Override
 			protected Input remapInputIfNecessary(Input input, int keycode) {
 				return input;
@@ -189,13 +177,28 @@ public class TestGame extends MainGame {
 		return menuButtons;
 	}
 
-	private static class TestOptionsMenu extends OptionsMenu {
+
+
+	@Override
+	protected WindowResizerButton makeWindowResizerButton() {
+		return UserInterfaceFactory.getWindowModeTextSelectBox();
+	}
+	@Override
+	protected void setUpUserInterfaceFactory() {
+		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable());
+	}
+
+	@Override
+	protected PauseMenu makePauseMenu() {
+		return new TestOptionsMenu(windowResizer::getModeSelectBox);
+	}
+
+	private class TestOptionsMenu extends PauseMenu {
 
 		protected TestOptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox) {
 			super(makeWindowModeSelectBox, 0);
 			optionsButton = UserInterfaceFactory.getInGamesSettingsButton(() -> toggleScreenVisibility(true));
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
-			InputPriorityManager.setPauseUI(this);
 		}
 
 		@Override
@@ -224,7 +227,7 @@ public class TestGame extends MainGame {
 
 		@Override protected UniversalButton makeReportBugButton() {return UserInterfaceFactory.getButton("One could report a bug here", Runnables.nullRunnable());}
 		@Override protected UniversalButton makeControlsButton() {
-			return UserInterfaceFactory.getButton("This is where one could theoretically view controls", () -> InputPriorityManager.claimPriority(makeControlsPopUp()));
+			return UserInterfaceFactory.getButton("This is where one could theoretically view controls", () -> inputPriorityStack.claimPriority(makeControlsPopUp()));
 		}
 
 		@Override
@@ -252,12 +255,6 @@ public class TestGame extends MainGame {
 			@Override public void filesDropped(String[] files) {/* notYetNeeded */}
 			@Override public void refreshRequested() {/* notYetNeeded */}
 		};
-	}
-
-
-	@Override
-	protected WindowResizerButton makeWindowResizerButton() {
-		return UserInterfaceFactory.getWindowModeTextSelectBox();
 	}
 
 }

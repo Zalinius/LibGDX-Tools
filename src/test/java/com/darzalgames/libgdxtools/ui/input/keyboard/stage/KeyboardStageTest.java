@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.stage.UniversalInputStage;
+import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 
 class KeyboardStageTest {
 

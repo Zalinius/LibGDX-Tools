@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority;
+package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 public interface InputSubject {
 	public void register(InputObserver obj);

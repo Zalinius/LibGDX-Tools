@@ -1,9 +1,9 @@
-package com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority;
+package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public interface InputObserver {
-	public void inputStrategyChanged(InputStrategySwitcher inputStrategyManager);
+	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher);
 	
 	/*
 	 * This is checked regularly by the observer list owner since an actor should be unregistered once it's

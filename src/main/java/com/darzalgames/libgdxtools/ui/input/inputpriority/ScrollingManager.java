@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority;
+package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import java.util.function.Consumer;
 
@@ -32,7 +32,7 @@ public class ScrollingManager extends Actor {
 	 * This can handle scrolling both from a mouse wheel or something more like a tablet or touchpad.
 	 * @param amount The amount of scrolling on the y-axis
 	 */
-	void receiveScrollInput(float amount) {
+	public void receiveScrollInput(float amount) {
 		// It seems the mouse wheel returns either 1 or -1, and a tablet returns any value between these two. 
 		// So, I'm using a threshold of 0.1f for the tablet/touchpad, and an input delay of 0.15f
 		if (Math.abs(amount) < 0.1f || timeSinceScroll > 0.15f) {

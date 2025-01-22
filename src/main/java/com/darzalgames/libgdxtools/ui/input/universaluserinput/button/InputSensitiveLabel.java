@@ -4,48 +4,48 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputObserver;
 
 public class InputSensitiveLabel extends Label implements InputObserver {
 	
 	private final Supplier<String> labelTextSupplier;
-	private final InputStrategySwitcher inputStrategyManager;
+	private final InputStrategySwitcher inputStrategySwitcher;
 
 	/**
 	 * Creates a label that changes it's text when the input strategy changes
-	 * @param labelTextSupplier supplies a string for what the label should say based on the current input method (using info from the inputStrategyManager, perhaps)
+	 * @param labelTextSupplier supplies a string for what the label should say based on the current input method (using info from the inputStrategySwitcher, perhaps)
 	 * @param style
-	 * @param inputStrategyManager
+	 * @param inputStrategySwitcher
 	 */
-	protected InputSensitiveLabel(Supplier<String> labelTextSupplier, LabelStyle style, InputStrategySwitcher inputStrategyManager) {
+	protected InputSensitiveLabel(Supplier<String> labelTextSupplier, LabelStyle style, InputStrategySwitcher inputStrategySwitcher) {
 		super(labelTextSupplier.get(), style);
 		this.labelTextSupplier = labelTextSupplier;
-		this.inputStrategyManager = inputStrategyManager;
-		inputStrategyManager.register(this);
+		this.inputStrategySwitcher = inputStrategySwitcher;
+		inputStrategySwitcher.register(this);
 	}
 
 	@Override
-	public void inputStrategyChanged(InputStrategySwitcher inputStrategyManager) {
+	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
 		this.setText(labelTextSupplier.get());
 	}
 	
 	@Override
 	public boolean remove() {
-		inputStrategyManager.unregister(this);
+		inputStrategySwitcher.unregister(this);
 		return super.remove();
 	}
 	
 	@Override
 	public void clear() {
-		inputStrategyManager.unregister(this);
+		inputStrategySwitcher.unregister(this);
 		super.clear();
 	}
 	
 	@Override
 	protected void setParent(Group parent) {
 		if (parent == null) {
-			inputStrategyManager.unregister(this);
+			inputStrategySwitcher.unregister(this);
 		}
 		super.setParent(parent);
 	}

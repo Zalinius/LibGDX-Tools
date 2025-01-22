@@ -28,7 +28,7 @@ public class WindowResizerSelectBox implements WindowResizerButton {
 	private static Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase());
 	private UniversalSelectBox selectBox;
 	private final Supplier<TextButton> textButtonSupplier;
-	private final InputStrategySwitcher inputStrategyManager;
+	private final InputStrategySwitcher inputStrategySwitcher;
 	
 	private WindowResizer windowResizer;
 	@Override
@@ -36,9 +36,9 @@ public class WindowResizerSelectBox implements WindowResizerButton {
 		this.windowResizer = windowResizer;
 	}
 
-	public WindowResizerSelectBox(Supplier<TextButton> textButtonSupplier, InputStrategySwitcher inputStrategyManager) {
+	public WindowResizerSelectBox(Supplier<TextButton> textButtonSupplier, InputStrategySwitcher inputStrategySwitcher) {
 		this.textButtonSupplier = textButtonSupplier;
-		this.inputStrategyManager = inputStrategyManager;
+		this.inputStrategySwitcher = inputStrategySwitcher;
 	}
 	
 	private static Collection<String> getEntries() {
@@ -123,7 +123,7 @@ public class WindowResizerSelectBox implements WindowResizerButton {
 
 	@Override
 	public UniversalButton getButton() {
-		selectBox = new UniversalSelectBox(getEntries(), textButtonSupplier.get(), inputStrategyManager, Runnables.nullRunnable());//TODO replace null runnable?
+		selectBox = new UniversalSelectBox(getEntries(), textButtonSupplier.get(), inputStrategySwitcher, Runnables.nullRunnable());//TODO replace null runnable?
 		
 		selectBox.setAction(selectedNewMode -> {
 			String previousMode = GameInfo.getPreferenceManager().other().getStringPrefValue(WindowResizer.SCREEN_MODE_KEY);

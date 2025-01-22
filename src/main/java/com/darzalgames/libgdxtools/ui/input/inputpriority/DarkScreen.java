@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority;
+package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;

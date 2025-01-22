@@ -5,12 +5,12 @@ import java.util.List;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 /**
  * It's a navigable menu, and it's a pop up!
@@ -46,7 +46,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	@Override
 	public void gainFocus() {
 		super.gainFocus();
-		InputPriorityManager.showPopup(this);
+		GameInfo.getInputPriorityStack().showPopup(this);
 		float startX = this.getX();
 		float startY = this.getY();
 		this.setY(getStage().getHeight());
@@ -56,7 +56,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	@Override
 	public void regainFocus() {
 		super.gainFocus();
-		InputPriorityManager.showPopup(this);
+		GameInfo.getInputPriorityStack().showPopup(this);
 	}
 	
 	

@@ -3,10 +3,10 @@ package com.darzalgames.libgdxtools.ui.input.popup;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 public abstract class SimplePopUp extends Table implements InputConsumer, PopUp {
 	
@@ -23,7 +23,7 @@ public abstract class SimplePopUp extends Table implements InputConsumer, PopUp 
 	 * Make the pop up visible and have it claim input priority
 	 */
 	public void showThis() {
-		InputPriorityManager.claimPriority(this);
+		GameInfo.getInputPriorityStack().claimPriority(this);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public abstract class SimplePopUp extends Table implements InputConsumer, PopUp 
 		float startY = this.getY();
 		this.setPosition(-getWidth(), -getHeight());
 		this.addAction(Actions.moveTo(startX, startY, 0.25f, Interpolation.circle));
-		InputPriorityManager.showPopup(this);
+		GameInfo.getInputPriorityStack().showPopup(this);
 	}
 	
 	@Override

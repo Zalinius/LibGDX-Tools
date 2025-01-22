@@ -16,8 +16,8 @@ public class UniversalCheckbox extends UniversalButton {
 	private final String uncheckedLabel;
 	private final String checkedLabel;
 	
-	protected UniversalCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
-		super(textButton, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
+	protected UniversalCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		super(textButton, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		this.uncheckedLabel = uncheckedLabel;
 		this.checkedLabel = checkedLabel;
 		box = new CheckBox(uncheckedLabel.length() > checkedLabel.length() ? uncheckedLabel : checkedLabel, style);

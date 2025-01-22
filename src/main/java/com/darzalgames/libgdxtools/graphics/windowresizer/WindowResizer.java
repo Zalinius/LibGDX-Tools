@@ -5,7 +5,6 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputPriorityManager;
 
 public abstract class WindowResizer {
 
@@ -25,18 +24,18 @@ public abstract class WindowResizer {
 	protected abstract void switchToBorderless();
 	protected abstract void switchToFullScreen();
 
-	private InputStrategySwitcher inputStrategyManager;
+	private InputStrategySwitcher inputStrategySwitcher;
 	private WindowResizerButton windowResizerButton;
 
 	/**
 	 * Initialize the WindowResizer, setting the window to the preferred mode based on the user's history
 	 * We do this in initialize() rather than a constructor because this object is created at the same time as the entire game,
 	 * and so LibGDX isn't ready to do any resizing yet
-	 * @param inputStrategyManager
+	 * @param inputStrategySwitcher
 	 * @param windowResizerButton
 	 */
-	public void initialize(InputStrategySwitcher inputStrategyManager, WindowResizerButton windowResizerButton) {
-		this.inputStrategyManager = inputStrategyManager;
+	public void initialize(InputStrategySwitcher inputStrategySwitcher, WindowResizerButton windowResizerButton) {
+		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.windowResizerButton = windowResizerButton;
 		windowResizerButton.setWindowResizer(this);
 		getModeSelectBox();
@@ -77,7 +76,7 @@ public abstract class WindowResizer {
 		currentScreenMode = screenMode;
 		GameInfo.getPreferenceManager().other().setStringPrefValue(SCREEN_MODE_KEY, currentScreenMode.name());
 
-		inputStrategyManager.saveCurrentStrategy();
+		inputStrategySwitcher.saveCurrentStrategy();
 		switch (currentScreenMode) {
 		case BORDERLESS:
 			switchToBorderless();
@@ -90,10 +89,10 @@ public abstract class WindowResizer {
 			break;
 		}
 		offerToRevert = offerToRevert && previousScreenMode != currentScreenMode; 
-		inputStrategyManager.revertToPreviousStrategy();
+		inputStrategySwitcher.revertToPreviousStrategy();
 		windowResizerButton.setSelected(currentScreenMode);
 		if (offerToRevert) {
-			InputPriorityManager.claimPriority(windowResizerButton.getRevertMenu());
+			GameInfo.getInputPriorityStack().claimPriority(windowResizerButton.getRevertMenu());
 		}
 	}
 

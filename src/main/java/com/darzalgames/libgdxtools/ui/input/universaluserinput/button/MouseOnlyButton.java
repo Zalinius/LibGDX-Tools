@@ -2,8 +2,8 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.InputObserver;
 
 
 /**
@@ -12,25 +12,25 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.inputpriority.Inp
  */
 public class MouseOnlyButton extends UniversalButton implements InputObserver {
 
-	public MouseOnlyButton(TextButton textButton, Runnable runnable, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
-		super(textButton, runnable, inputStrategyManager, soundInteractListener);
-		inputStrategyManager.register(this);
-		setVisibilityBasedOnCurrentInputStrategy(inputStrategyManager);
+	public MouseOnlyButton(TextButton textButton, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		super(textButton, runnable, inputStrategySwitcher, soundInteractListener);
+		inputStrategySwitcher.register(this);
+		setVisibilityBasedOnCurrentInputStrategy(inputStrategySwitcher);
 	}
 
-	public MouseOnlyButton(TextButton textButton, Image image, Runnable runnable, InputStrategySwitcher inputStrategyManager, Runnable soundInteractListener) {
-		super(textButton, image, runnable, inputStrategyManager, soundInteractListener);
-		inputStrategyManager.register(this);
-		setVisibilityBasedOnCurrentInputStrategy(inputStrategyManager);
+	public MouseOnlyButton(TextButton textButton, Image image, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		super(textButton, image, runnable, inputStrategySwitcher, soundInteractListener);
+		inputStrategySwitcher.register(this);
+		setVisibilityBasedOnCurrentInputStrategy(inputStrategySwitcher);
 	}
 
 	@Override
-	public void inputStrategyChanged(InputStrategySwitcher inputStrategyManager) {
-		setVisibilityBasedOnCurrentInputStrategy(inputStrategyManager);
+	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
+		setVisibilityBasedOnCurrentInputStrategy(inputStrategySwitcher);
 	}
 	
-	private void setVisibilityBasedOnCurrentInputStrategy(InputStrategySwitcher inputStrategyManager) {
-		this.getView().setVisible(inputStrategyManager.showMouseExclusiveUI());
+	private void setVisibilityBasedOnCurrentInputStrategy(InputStrategySwitcher inputStrategySwitcher) {
+		this.getView().setVisible(inputStrategySwitcher.showMouseExclusiveUI());
 	}
 
 	@Override

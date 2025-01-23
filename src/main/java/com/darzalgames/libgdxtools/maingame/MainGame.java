@@ -23,6 +23,7 @@ import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
+import com.darzalgames.libgdxtools.ui.input.UniversalInputStageWithBackground;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.MouseInputHandler;
@@ -131,7 +132,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		inputHandlerStage.addActor(mouseInputHandler);
 
 		// Set up main game stage
-		stage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher, scrollingManager);
+		stage = new UniversalInputStageWithBackground(new PixelPerfectViewport(width, height), getMainStageBackgroundTexture(), inputStrategySwitcher, scrollingManager);
 
 		cursorStage = new Stage(new ExtendViewport(width, height));
 	}
@@ -159,6 +160,12 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void setUpInputPrioritizer() {
 		// Set up input processing for all strategies
+		InputSetup inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), stage, popUpStage);
+		inputPriorityStack = inputSetup.getInputPriorityStack();
+		scrollingManager = inputSetup.getScrollingManager();
+		pause = inputSetup.getPause();
+		inputReceiver = inputSetup.getInputReceiver();
+		
 		stage.addActor(inputStrategySwitcher);
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
 		GamepadInputHandler gamepadInputHandler = steamStrategy.getGamepadInputHandler();
@@ -168,10 +175,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		inputHandlerStage.addActor(keyboardInputHandler);
 		stage.setKeyboardFocus(keyboardInputHandler);
 		cursorStage.addActor(getCustomCursor());
-		InputSetup inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), stage, popUpStage);
-		inputPriorityStack = inputSetup.getInputPriorityStack();
-		scrollingManager = inputSetup.getScrollingManager();
-		pause = inputSetup.getPause();
 	}
 
 	protected final void changeScreen(GameScreen gameScreen) {

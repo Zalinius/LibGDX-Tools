@@ -9,11 +9,18 @@ import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
  * @author DarZal
  */
 public class MainMenuScreen extends GameScreen {
-	
+
+	private final NavigableListMenu mainMenu;
+
 	public MainMenuScreen(NavigableListMenu mainMenu)
 	{
 		super(Runnables.nullRunnable());
 		addActor(mainMenu);
+		this.mainMenu = mainMenu;
+	}
+
+	@Override
+	public void gainFocus() {
 		GameInfo.getInputPriorityStack().claimPriority(mainMenu);
 	}
 }

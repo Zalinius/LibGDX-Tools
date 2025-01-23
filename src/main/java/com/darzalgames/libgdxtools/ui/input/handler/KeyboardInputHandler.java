@@ -37,7 +37,7 @@ public abstract class KeyboardInputHandler extends InputHandler {
 				
 				if (keysToAllow.contains(input)) {
 					updateLatestInputMethod();
-					inputReceiver.processKeyInput(input);	
+					inputReceiver.processKeyInput(input);
 					return true;
 				}
 				

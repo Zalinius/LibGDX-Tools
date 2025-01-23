@@ -111,7 +111,12 @@ public class InputPriorityStack extends ArrayDeque<InputConsumer> implements Inp
 	private Tuple<Actor, PopUp> getCurrentPopup() {
 		if (popUpStage.getRoot().getChildren().size > 0) {
 			Actor[] popups = popUpStage.getRoot().getChildren().toArray();
-			Optional<Actor> popupMatch = Arrays.stream(popups).filter(a -> isThisOnTop((InputConsumer)a)).findFirst(); 
+			Optional<Actor> popupMatch = Arrays.stream(popups).filter(a -> {
+				if (a instanceof InputConsumer) {
+					return isThisOnTop((InputConsumer)a);
+				}
+				return false;
+			}).findFirst(); 
 			if (popupMatch.isPresent()) {
 				// We are landing back on to a popup
 				Actor actor = popupMatch.get();

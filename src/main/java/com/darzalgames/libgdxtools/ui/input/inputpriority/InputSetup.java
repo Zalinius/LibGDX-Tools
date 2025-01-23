@@ -21,8 +21,10 @@ public class InputSetup {
 
 		pause = new Pause(popUpStage, inputPriorityStack::doesTopPauseGame);
 		pause.setClaimPriority(inputPriorityStack::claimPriority);
-		stage.addActor(pause);
 		inputReceiver.setPause(pause);
+
+		stage.addActor(pause);
+		stage.addActor(inputStrategySwitcher);
 	}
 
 

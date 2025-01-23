@@ -1,26 +1,27 @@
 package com.darzalgames.libgdxtools.ui.input;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.ScrollingManager;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class UniversalInputStage extends Stage implements InputObserver {
 
 	private boolean mouseMode;
-	private ScrollingManager scrollingManager;
+	private Consumer<Float> scrollingConsumer;
 
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
 	 * @param viewport
 	 */
-	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher, ScrollingManager scrollingManager) {
+	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher, Consumer<Float> scrollingConsumer) {
 		super(viewport);
 		inputStrategySwitcher.register(this);
-		this.scrollingManager = scrollingManager;
+		this.scrollingConsumer = scrollingConsumer;
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class UniversalInputStage extends Stage implements InputObserver {
 	
 	@Override
 	public boolean scrolled(float amountX, float amountY) {
-		scrollingManager.receiveScrollInput(amountY);
+		scrollingConsumer.accept(amountY);
 		return true;
 	}
 

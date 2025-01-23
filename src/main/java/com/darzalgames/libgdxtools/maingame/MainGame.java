@@ -100,11 +100,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		this.steamStrategy = gamePlatform.getSteamStrategy(inputStrategySwitcher, inputReceiver);
 
 		makeBackgroundStage();
-
-		popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher, scrollingManager);
+		makePopUpStage();
 		makeMainStageAndMouseStages();
 
-		setUpInputPrioritizer();
+		setUpInput();
 		setUpInputForAllStages();
 		actorsThatDoNotPause.add(inputStrategySwitcher);
 
@@ -125,14 +124,19 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		backgroundStage = new Stage(new ExtendViewport(width, height));
 		backgroundStage.addActor(new Image(backgroundTextureRegion));
 	}
-
+	
+	private void makePopUpStage() {
+		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
+		popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher, scroll -> scrollingManager.receiveScrollInput(scroll));
+	}
+	
 	private void makeMainStageAndMouseStages() {
 		inputHandlerStage = new Stage(new ScreenViewport());
 		mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
 		inputHandlerStage.addActor(mouseInputHandler);
 
 		// Set up main game stage
-		stage = new UniversalInputStageWithBackground(new PixelPerfectViewport(width, height), getMainStageBackgroundTexture(), inputStrategySwitcher, scrollingManager);
+		stage = new UniversalInputStageWithBackground(new PixelPerfectViewport(width, height), getMainStageBackgroundTexture(), inputStrategySwitcher, scroll -> scrollingManager.receiveScrollInput(scroll));
 
 		cursorStage = new Stage(new ExtendViewport(width, height));
 	}
@@ -158,7 +162,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		return new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
 	}
 
-	private void setUpInputPrioritizer() {
+	private void setUpInput() {
 		// Set up input processing for all strategies
 		InputSetup inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), stage, popUpStage);
 		inputPriorityStack = inputSetup.getInputPriorityStack();
@@ -166,7 +170,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		pause = inputSetup.getPause();
 		inputReceiver = inputSetup.getInputReceiver();
 		
-		stage.addActor(inputStrategySwitcher);
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
 		GamepadInputHandler gamepadInputHandler = steamStrategy.getGamepadInputHandler();
 		actorsThatDoNotPause.add(keyboardInputHandler);

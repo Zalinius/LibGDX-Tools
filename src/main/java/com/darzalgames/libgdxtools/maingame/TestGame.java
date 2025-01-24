@@ -25,6 +25,7 @@ import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
@@ -79,7 +80,7 @@ public class TestGame extends MainGame {
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 				add(menu.getView()).growX().align(Align.center);
 			}
-		}));
+		}, inputPriorityStack));
 	}
 
 	@Override
@@ -220,7 +221,7 @@ public class TestGame extends MainGame {
 
 		@Override protected UniversalButton makeReportBugButton() {return UserInterfaceFactory.getButton("One could report a bug here", Runnables.nullRunnable());}
 		@Override protected UniversalButton makeControlsButton() {
-			return UserInterfaceFactory.getButton("This is where one could theoretically view controls", () -> inputPriorityStack.claimPriority(makeControlsPopUp()));
+			return UserInterfaceFactory.getButton("This is where one could theoretically view controls", () -> Priority.claimPriority(makeControlsPopUp()));
 		}
 
 		@Override

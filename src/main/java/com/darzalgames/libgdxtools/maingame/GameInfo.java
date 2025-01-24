@@ -5,7 +5,6 @@ import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriorityStack;
 
 /**
  * Allows static access to the globally useful variables/managers from {@link MainGame}
@@ -57,9 +56,5 @@ public class GameInfo {
 	
 	public static SteamStrategy getSteamStrategy() { 
 		return game.getSteamStrategy();
-	}
-	
-	public static InputPriorityStack getInputPriorityStack() {
-		return game.getInputPriorityStack();
 	}
 }

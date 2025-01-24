@@ -24,10 +24,10 @@ public class InputReceiver {
 	private final boolean toggleWithF11;
 
 	/**
-	 * @param popUpStage The stage where pop ups are held, ensuring that they are in front of the rest of the game
 	 * @param toggleFullscreenRunnable A runnable that toggles between full screen and windowed mode
 	 * @param inputStrategySwitcher
 	 * @param toggleWithF11 Whether or not the current running version of the game toggles full screen with f11
+	 * @param inputPriorityStack
 	 */
 	public InputReceiver(Runnable toggleFullscreenRunnable, InputStrategySwitcher inputStrategySwitcher, boolean toggleWithF11, InputPriorityStack inputPriorityStack) {
 		this.toggleFullscreenRunnable = toggleFullscreenRunnable;

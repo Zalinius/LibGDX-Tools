@@ -280,8 +280,4 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		return steamStrategy;
 	}
 
-	@Override
-	public InputPriorityStack getInputPriorityStack() {
-		return inputPriorityStack;
-	}
 }

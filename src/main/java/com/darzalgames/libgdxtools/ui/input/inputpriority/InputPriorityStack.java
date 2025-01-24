@@ -1,8 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Optional;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,38 +11,64 @@ import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public class InputPriorityStack extends ArrayDeque<InputConsumer> implements InputObserver {
+public class InputPriorityStack implements InputObserver {
 
+	private final LimitedAccessDoubleStack stack;
 	private final DarkScreen darkScreen;
 	private final Stage popUpStage;
 
 	public InputPriorityStack(Stage popUpStage) {
 		this.popUpStage = popUpStage;
-		clearStackAndAddBlankConsumer();
+		stack = new LimitedAccessDoubleStack();
+		clearStackAndPushBlankConsumer();
 
 		// Set up the dark background screen that goes behind popups
 		darkScreen = new DarkScreen(popUpStage, () -> {
 			sendInputToTop(Input.BACK); 
 		});
+		
+		Priority.setInputPriorityStack(this);
 	}
 
 	/**
-	 * @param inputConsumer The thing to be put at the top of the input stack
+	 * PopUp objects must call {@link InputPriorityStack#claimPriorityForPopup(Actor)} instead
+	 * @param inputConsumer The thing to be put at the top of the input stack.
 	 */
-	public void claimPriority(InputConsumer inputConsumer) {
-		boolean thisIsDifferentFromTheTop = !isThisOnTop(inputConsumer);
+	void claimPriority(InputConsumer inputConsumer) {
+		boolean thisIsDifferentFromTheTop = !stack.isThisOnTop(inputConsumer);
 		if (thisIsDifferentFromTheTop) {
-			unFocusTop(peek());
-			push(inputConsumer);
-			focusTop(true);
+			Tuple<Actor, PopUp> popup = inputConsumer.getIfPopUp();
+			boolean isAPopup = popup != null;
+			if (isAPopup) {
+				claimPriorityForPopup(popup);
+			} else {
+				claimPriorityOnStack(inputConsumer, () -> stack.push(inputConsumer));
+			}
 		}
+	}
+
+	private void claimPriorityForPopup(Tuple<Actor, PopUp> actorPopup) {
+		darkScreen.remove();
+		Actor actor = actorPopup.e;
+		PopUp popup = actorPopup.f;
+		popUpStage.addActor(actor);
+		actor.toFront();
+		popup.addBackClickListenerIfCanDismiss();
+		darkScreen.fadeIn(actor.getZIndex(), popup.canDismiss());
+		claimPriorityOnStack(popup, () -> stack.push(new Tuple<>(actor, popup)));
+	}
+
+	private void claimPriorityOnStack(InputConsumer inputConsumer, Runnable claimPriority) {
+		unFocusTop();
+		claimPriority.run();
+		focusTop(true);
 	}
 
 	/**
 	 * @param inputConsumer The thing that wants to release its priority, this only works if the requester is currently at the top of the stack
 	 */
-	public void releasePriority(InputConsumer inputConsumer) {
-		if (isThisOnTop(inputConsumer)) {
+	void releasePriority(InputConsumer inputConsumer) {
+		if (stack.isThisOnTop(inputConsumer)) {
 			darkScreen.fadeOutAndRemove();
 			releasePriorityForTop();
 			darkScreen.fadeOutAndRemove();
@@ -53,24 +77,30 @@ public class InputPriorityStack extends ArrayDeque<InputConsumer> implements Inp
 	}	
 
 	void sendInputToTop(Input input) {
-		peek().consumeKeyInput(input); 
+		stack.getTop().consumeKeyInput(input); 
 	}
 
 	boolean doesTopPauseGame() {
-		return peek().isGamePausedWhileThisIsInFocus();
+		return stack.getTop().isGamePausedWhileThisIsInFocus();
+	}
+
+	// TODO Ideally this doesn't leave this class...? It's only used for handling pause-menu-specific behavior
+	public boolean isLandingOnPopup() {
+		return stack.isLandingOnPopup();
 	}
 
 	private void focusTop(boolean isFirstFocus) {
-		peek().setTouchable(Touchable.enabled);
+		stack.getTop().setTouchable(Touchable.enabled);
 		if (isFirstFocus) {
-			peek().gainFocus();				
+			stack.getTop().gainFocus();				
 		} else {
-			peek().regainFocus();
+			stack.getTop().regainFocus();
 		}
-		peek().focusCurrent();
+		stack.getTop().focusCurrent();
 	}
 
-	private void unFocusTop(InputConsumer top) {
+	private void unFocusTop() {
+		InputConsumer top = stack.getTop();
 		top.setTouchable(Touchable.disabled);
 		top.loseFocus();
 	}
@@ -78,80 +108,42 @@ public class InputPriorityStack extends ArrayDeque<InputConsumer> implements Inp
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
 		if (inputStrategySwitcher.shouldFlashButtons()) {
-			peek().selectDefault();
+			stack.getTop().selectDefault();
 		} else { // Mouse mode
-			peek().clearSelected();
+			stack.getTop().clearSelected();
 		}
 	}
-
 
 	/**
 	 * Used to completely clear the current input receivers (useful when changing game screens
 	 * to make sure any stray actors are TOTALLY cleared)
 	 */
 	public void clearChildren() {
-		clearStackAndAddBlankConsumer();
+		clearStackAndPushBlankConsumer();
 		darkScreen.remove();
-
 		popUpStage.clear();
 	}
 
 	void releasePriorityForTop() { 
-		unFocusTop(pop());
-		boolean isClosingPauseMenu = peek() instanceof PauseMenu; // TODO I kind of hate this but I'm not sure how else to connect these two classes
+		unFocusTop();
+		stack.popTop();
+		boolean isClosingPauseMenu = stack.getTop() instanceof PauseMenu; // TODO I kind of hate this but I'm not sure how else to connect these two classes
 		if (isClosingPauseMenu) {
-			peek().setTouchable(Touchable.enabled);
-			peek().focusCurrent();
+			stack.getTop().setTouchable(Touchable.enabled);
+			stack.getTop().focusCurrent();
 		} else {
 			focusTop(false);
 		}
 	}
-	// Comparing Actors with InputConsumers, it ain't pretty but it works.
-	// I wish that Actor were an interface so that InputConsumer could extend it, but alas.
-	private Tuple<Actor, PopUp> getCurrentPopup() {
-		if (popUpStage.getRoot().getChildren().size > 0) {
-			Actor[] popups = popUpStage.getRoot().getChildren().toArray();
-			Optional<Actor> popupMatch = Arrays.stream(popups).filter(a -> {
-				if (a instanceof InputConsumer) {
-					return isThisOnTop((InputConsumer)a);
-				}
-				return false;
-			}).findFirst(); 
-			if (popupMatch.isPresent()) {
-				// We are landing back on to a popup
-				Actor actor = popupMatch.get();
-				PopUp popUp = (PopUp)actor;
-				return new Tuple<>(actor, popUp);
-			}
-		}
-		return null;
-	}
-
-	boolean isLandingOnPopup() {
-		return getCurrentPopup() != null;
-	}
 
 	private boolean showDarkScreenIfLandingOnPopup() {
-		if (isLandingOnPopup()) {
-			Tuple<Actor, PopUp> actorPopUp = getCurrentPopup();
+		if (stack.isLandingOnPopup()) {
+			Tuple<Actor, PopUp> actorPopUp = stack.getCurrentPopup();
 			Actor actor = actorPopUp.e;
 			PopUp popUp = actorPopUp.f;
 			darkScreen.fadeIn(actor.getZIndex(), popUp.canDismiss());
 		}
 		return false;
-	}
-
-	/**
-	 * A pop up should request this when claiming input priority, since they're handled a bit differently
-	 * @param <A>
-	 * @param popup
-	 */
-	public <A extends Actor & PopUp> void showPopup(A popup) {
-		darkScreen.remove();
-		popUpStage.addActor(popup);
-		popup.toFront();
-		popup.addBackClickListenerIfCanDismiss();
-		darkScreen.fadeIn(popup.getZIndex(), popup.canDismiss());
 	}
 
 	/**
@@ -166,20 +158,73 @@ public class InputPriorityStack extends ArrayDeque<InputConsumer> implements Inp
 		return false;
 	}
 
-	private boolean isThisOnTop(InputConsumer inputConsumer) {
-		return inputConsumer.equals(peek());
-	}
 
-	private void clearStackAndAddBlankConsumer() {
-		clear();
-		add(new InputConsumer() {
+
+	private void clearStackAndPushBlankConsumer() {
+		stack.clear();
+		stack.push(new InputConsumer() {
 			@Override public void consumeKeyInput(Input input) {/*not needed*/}
 			@Override public void setTouchable(Touchable isTouchable)  {/*not needed*/}
 			@Override public void focusCurrent()  {/*not needed*/}
 			@Override public void clearSelected()  {/*not needed*/}
 			@Override public void selectDefault()  {/*not needed*/}
 			@Override public void loseFocus() {/*not needed*/}
+			@Override public String toString() { return "Blank base"; }
 		});
+	}
+
+	private class LimitedAccessDoubleStack {
+		private final ArrayDeque<InputConsumer> inputConsumerStack;
+		private final ArrayDeque<Tuple<Actor, PopUp>> popupInputConsumerStack;
+
+		public LimitedAccessDoubleStack() {
+			inputConsumerStack = new ArrayDeque<>();
+			popupInputConsumerStack = new ArrayDeque<>();
+		}
+
+		private void push(InputConsumer inputConsumer) {
+			inputConsumerStack.push(inputConsumer);
+			System.out.println(getTop() + " is on top");
+		}
+
+		private void push(Tuple<Actor, PopUp> actorPopup) {
+			Actor actor = actorPopup.e;
+			PopUp popup = actorPopup.f;
+			popupInputConsumerStack.push(new Tuple<>(actor, popup));
+			System.out.println(getTop() + " is on top");
+		}
+
+		private boolean isThisOnTop(InputConsumer inputConsumer) {
+			return inputConsumer.equals(getTop());
+		}
+
+		private InputConsumer getTop() {
+			if (!popupInputConsumerStack.isEmpty()) {
+				return popupInputConsumerStack.peek().f;
+			}
+			return inputConsumerStack.peek();
+		}
+
+		private void popTop() {
+			if (!popupInputConsumerStack.isEmpty()) {
+				popupInputConsumerStack.pop();
+			}
+			inputConsumerStack.pop();
+			System.out.println(getTop() + " is on top");
+		}
+
+		private boolean isLandingOnPopup() {
+			return !popupInputConsumerStack.isEmpty();
+		}
+
+		private Tuple<Actor, PopUp> getCurrentPopup() {
+			return popupInputConsumerStack.peek();
+		}
+
+		private void clear() {
+			inputConsumerStack.clear();
+			popupInputConsumerStack.clear();
+		}
 	}
 
 	// The compiler insists that we have one of these for proper de/serialization, it generated this number. (Not that this class should ever be serialized...)

@@ -1,9 +1,11 @@
 package com.darzalgames.libgdxtools.ui.input.popup;
 
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.darzalgames.darzalcommon.data.Tuple;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 
@@ -43,4 +45,11 @@ public interface PopUp extends InputConsumer {
 	// These are implemented by default in Actor, which all of our PopUp objects are.
 	public boolean addListener(EventListener listener);
 	public boolean removeListener(EventListener listener);
+	
+
+	@Override
+	default Tuple<Actor, PopUp> getIfPopUp() {
+		return new Tuple<>(getAsActor(), this);
+	}
+	public Actor getAsActor();
 }

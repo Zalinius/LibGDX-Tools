@@ -21,7 +21,6 @@ public class Pause extends Actor implements DoesNotPause {
 
 	/**
 	 * @param popUpStage
-	 * @param pauseMenu The menu to show when the pause button is pressed.
 	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
 	 */
 	public Pause(Stage popUpStage, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
@@ -46,6 +45,7 @@ public class Pause extends Actor implements DoesNotPause {
 		pauseButton.consumeKeyInput(Input.ACCEPT);
 	}
 
+	// TODO remove this....
 	public void setPauseMenu(PauseMenu pauseMenu) {
 		this.pauseMenu = pauseMenu;
 		pauseMenu.setPauseRunnable(this::pauseIfNeeded);

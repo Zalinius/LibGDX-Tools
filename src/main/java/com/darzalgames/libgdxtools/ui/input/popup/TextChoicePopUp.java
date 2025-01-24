@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
@@ -31,7 +31,7 @@ public class TextChoicePopUp extends ChoicePopUp {
 		this.secondChoiceKey = secondChoiceKey;
 		this.isWarning = isWarning;
 
-		GameInfo.getInputPriorityStack().claimPriority(this);
+		Priority.claimPriority(this);
 	}
 
 	@Override

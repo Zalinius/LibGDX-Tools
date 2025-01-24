@@ -1,7 +1,10 @@
 package com.darzalgames.libgdxtools.ui.input;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.darzalcommon.data.Tuple;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 
 /**
  * Anything that can be interacted with via user input
@@ -49,6 +52,10 @@ public interface InputConsumer {
 	 * If applicable, select a default object (e.g. the first button in a list, or the only intractable object in the current scene)
 	 */
 	public void selectDefault();
+	
+	public default Tuple<Actor, PopUp> getIfPopUp() {
+		return null;
+	}
 
 	/**
 	 * If this object is the topmost UI, is the game paused?
@@ -61,7 +68,7 @@ public interface InputConsumer {
 	 * A convenient shorthand for releasing priority
 	 */
 	public default void releasePriority() {
-		GameInfo.getInputPriorityStack().releasePriority(this);
+		Priority.releasePriority(this);
 	}
 
 	/**

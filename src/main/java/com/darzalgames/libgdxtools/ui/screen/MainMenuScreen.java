@@ -1,7 +1,8 @@
 package com.darzalgames.libgdxtools.ui.screen;
 
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriorityStack;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
 /**
@@ -12,15 +13,16 @@ public class MainMenuScreen extends GameScreen {
 
 	private final NavigableListMenu mainMenu;
 
-	public MainMenuScreen(NavigableListMenu mainMenu)
+	public MainMenuScreen(NavigableListMenu mainMenu, InputPriorityStack inputPriorityStack)
 	{
-		super(Runnables.nullRunnable());
+		super(Runnables.nullRunnable(), inputPriorityStack);
 		addActor(mainMenu);
 		this.mainMenu = mainMenu;
 	}
 
 	@Override
 	public void gainFocus() {
-		GameInfo.getInputPriorityStack().claimPriority(mainMenu);
+		Priority.claimPriority(mainMenu);
 	}
+	@Override public String toString() { return "Main menu SCREEN QG"; }
 }

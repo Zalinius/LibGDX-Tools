@@ -4,9 +4,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.darzalcommon.state.Endable;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriorityStack;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
 
 /**
  * @author DarZal
@@ -16,21 +17,23 @@ import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 public abstract class GameScreen extends Group implements Screen, Endable, InputConsumer {
 
 	private final Runnable leaveScreenRunnable;
+	private final InputPriorityStack inputPriorityStack;
 
-	protected GameScreen(Runnable leaveScreenRunnable) {
+	protected GameScreen(Runnable leaveScreenRunnable, InputPriorityStack inputPriorityStack) {
 		this.leaveScreenRunnable = leaveScreenRunnable;
+		this.inputPriorityStack = inputPriorityStack;
 	}
-	
+
 	@Override
 	public void show() {
-		GameInfo.getInputPriorityStack().claimPriority(this);
+		Priority.claimPriority(this);
 	}
-	
+
 	@Override
 	public void setTouchable(Touchable touchable) {
 		super.setTouchable(Touchable.childrenOnly);
 	}
-	
+
 	@Override
 	public final void render(float delta) {}
 
@@ -45,18 +48,18 @@ public abstract class GameScreen extends Group implements Screen, Endable, Input
 
 	@Override
 	public void hide() {
-		GameInfo.getInputPriorityStack().clearChildren();
+		inputPriorityStack.clearChildren();
 		releasePriority();
 	}
-    @Override
-    public void selectDefault() {}
-    @Override
-    public void clearSelected() {}
-    @Override
-    public void focusCurrent() {}
-    @Override
-    public void consumeKeyInput(Input input) {}
-	
+	@Override
+	public void selectDefault() {}
+	@Override
+	public void clearSelected() {}
+	@Override
+	public void focusCurrent() {}
+	@Override
+	public void consumeKeyInput(Input input) {}
+
 	@Override
 	public void end() {
 		leaveScreenRunnable.run();

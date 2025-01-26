@@ -10,7 +10,6 @@ import com.codedisaster.steamworks.*;
 import com.codedisaster.steamworks.SteamController.ActionOrigin;
 import com.darzalgames.darzalcommon.data.BiMap;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputReceiver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
@@ -35,8 +34,8 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 	
 	private final Map<AssetDescriptor<Texture>, Texture> existingGlyphs;
 
-	protected SteamGamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver, String actionsSetHandleKey) {
-		super(inputStrategySwitcher, inputReceiver);
+	protected SteamGamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, String actionsSetHandleKey) {
+		super(inputStrategySwitcher);
 		SteamControllerManager.initialize(this);
 		justDisconnected = false;
 

@@ -13,6 +13,7 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSubject;
 
 /**
  * Tracks the current input strategy, and handles switching between them as needed.
+ * @author DarZal
  */
 public class InputStrategySwitcher extends Actor implements InputStrategy, InputSubject, DoesNotPause {
 
@@ -31,20 +32,26 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 
 	/**
 	 * Switch to the keyboard strategy, if it's not already the current strategy
+	 * @return Whether or not the change happened
 	 */
-	public void setToKeyboardStrategy() {
+	public boolean setToKeyboardStrategy() {
 		if (currentInputStrategy != keyboardInputStrategy) {
 			changeStrategy(keyboardInputStrategy);
+			return true;
 		}
+		return false;
 	}
 
 	/**
 	 * Switch to the mouse strategy, if it's not already the current strategy
+	 * @return Whether or not the change happened
 	 */
-	public void setToMouseStrategy() {
+	public boolean setToMouseStrategy() {
 		if (currentInputStrategy != mouseInputStrategy) {
 			changeStrategy(mouseInputStrategy);
+			return true;
 		}
+		return false;
 	}
 
 	private void changeStrategy(InputStrategy newStrategy) {

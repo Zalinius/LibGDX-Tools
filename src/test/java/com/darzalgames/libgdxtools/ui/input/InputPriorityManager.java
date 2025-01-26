@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.inputpriority;
+package com.darzalgames.libgdxtools.ui.input;
 
 import java.util.*;
 
@@ -13,10 +13,10 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
-import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
@@ -27,7 +27,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalB
  * @author DarZal
  *
  */
-public class Priority {
+public class InputPriorityManager {
 
 	private static Deque<InputConsumer> inputConsumerStack = new ArrayDeque<>();
 	private static Image darkScreen;
@@ -47,7 +47,7 @@ public class Priority {
 
 	private static boolean toggleWithF11 = true;
 
-	private Priority() {}
+	private InputPriorityManager() {}
 
 	/**
 	 * It's essential to do this, there'll probably be a crash if you don't \_( ͡⟃ ͜ʖ ⟄)_/
@@ -59,11 +59,11 @@ public class Priority {
 	 */
 	public static void initialize(Stage mainStage, Stage popUpStage, Runnable toggleFullscreenRunnable,
 			GamepadInputHandler gamepadInputHandler, KeyboardInputHandler keyboardInputHandler, InputStrategySwitcher inputStrategySwitcher) {
-		Priority.popUpStage = popUpStage;
-		Priority.toggleFullscreenRunnable = toggleFullscreenRunnable;
-		Priority.gamepadInputHandler = gamepadInputHandler;
-		Priority.keyboardInputHandler = keyboardInputHandler;
-		Priority.inputStrategySwitcher = inputStrategySwitcher;
+		InputPriorityManager.popUpStage = popUpStage;
+		InputPriorityManager.toggleFullscreenRunnable = toggleFullscreenRunnable;
+		InputPriorityManager.gamepadInputHandler = gamepadInputHandler;
+		InputPriorityManager.keyboardInputHandler = keyboardInputHandler;
+		InputPriorityManager.inputStrategySwitcher = inputStrategySwitcher;
 
 		clearStackAndAddBlankConsumer();
 
@@ -89,7 +89,7 @@ public class Priority {
 
 			@Override
 			public boolean act(float delta) {
-				Priority.timeSinceScroll += delta;
+				InputPriorityManager.timeSinceScroll += delta;
 				return false;
 			}
 		}));
@@ -162,7 +162,7 @@ public class Priority {
 		if (popup.canDismiss()) {
 			popup.addListener(rightClickBack);
 		}
-		Priority.showDarkScreen(popup.getZIndex(), popup.canDismiss());
+		InputPriorityManager.showDarkScreen(popup.getZIndex(), popup.canDismiss());
 	}
 
 	private static float timeSinceScroll = 0;
@@ -225,7 +225,7 @@ public class Priority {
 		clearPauseButtonUI();
 		pauseButton = optionsMenu.getButton();
 		popUpStage.addActor(pauseButton.getView());
-		Priority.optionsMenu = optionsMenu;
+		InputPriorityManager.optionsMenu = optionsMenu;
 	}
 
 	private static void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
@@ -362,7 +362,7 @@ public class Priority {
 	}
 
 	public static void setToggleWithF11(boolean toggleWithF11) {
-		Priority.toggleWithF11 = toggleWithF11;
+		InputPriorityManager.toggleWithF11 = toggleWithF11;
 	}
 
 
@@ -370,7 +370,7 @@ public class Priority {
 
 		@Override
 		public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-			Priority.inputStrategyChanged(inputStrategySwitcher);
+			InputPriorityManager.inputStrategyChanged(inputStrategySwitcher);
 		}
 
 		@Override

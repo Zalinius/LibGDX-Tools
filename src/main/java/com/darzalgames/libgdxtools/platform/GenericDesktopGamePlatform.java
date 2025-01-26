@@ -13,14 +13,13 @@ import com.darzalgames.libgdxtools.steam.SteamConnection;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputReceiver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public abstract class GenericDesktopGamePlatform implements GamePlatform {
 
 	@Override
-	public SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
-		Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler = () -> new SteamGamepadInputHandler(inputStrategySwitcher, inputReceiver, null) {
+	public SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher) {
+		Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler = () -> new SteamGamepadInputHandler(inputStrategySwitcher, null) {
 			// Don't be using this default does-nothing SteamGamepadInputHandler, this is mainly here for the LibGDXTools TestGame which isn't on Steam
 			@Override
 			protected BiMap<SteamControllerDigitalActionHandle, Input> makeButtonMappings(SteamController steamController) {
@@ -43,7 +42,7 @@ public abstract class GenericDesktopGamePlatform implements GamePlatform {
 			}
 
 		};
-		return SteamConnection.initializeStrategy(GamePlatform.makeFallbackGamepadInputHandlerSupplier(inputStrategySwitcher, inputReceiver), makeSteamGamepadInputHandler);
+		return SteamConnection.initializeStrategy(GamePlatform.makeFallbackGamepadInputHandlerSupplier(inputStrategySwitcher), makeSteamGamepadInputHandler);
 	}
 	
 	@Override

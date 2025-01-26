@@ -68,7 +68,7 @@ public class TestGame extends MainGame {
 	protected void launchGame(boolean isNewSave) {
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable());
-		pause.setPauseMenu(new TestOptionsMenu(windowResizer::getModeSelectBox));
+		Priority.setPauseUI(new TestOptionsMenu(windowResizer::getModeSelectBox));
 		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override
@@ -80,12 +80,12 @@ public class TestGame extends MainGame {
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 				add(menu.getView()).growX().align(Align.center);
 			}
-		}, inputPriorityStack));
+		}));
 	}
 
 	@Override
 	protected KeyboardInputHandler makeKeyboardInputHandler() {
-		return new KeyboardInputHandler(inputStrategySwitcher, inputReceiver) {
+		return new KeyboardInputHandler(inputStrategySwitcher) {
 			@Override
 			protected Input remapInputIfNecessary(Input input, int keycode) {
 				return input;
@@ -249,11 +249,6 @@ public class TestGame extends MainGame {
 			@Override public void filesDropped(String[] files) {/* notYetNeeded */}
 			@Override public void refreshRequested() {/* notYetNeeded */}
 		};
-	}
-
-	@Override
-	protected Runnable drawConsole() {
-		return Runnables.nullRunnable();
 	}
 
 }

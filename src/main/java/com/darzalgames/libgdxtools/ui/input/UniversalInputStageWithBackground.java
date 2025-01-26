@@ -1,7 +1,5 @@
 package com.darzalgames.libgdxtools.ui.input;
 
-import java.util.function.Consumer;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -18,10 +16,9 @@ public class UniversalInputStageWithBackground extends UniversalInputStage {
 		 * @param viewport
 		 * @param backgroundTex
 		 * @param inputStrategySwitcher
-		 * @param scrollingConsumer
 		 */
-		public UniversalInputStageWithBackground(final Viewport viewport, Texture backgroundTex, InputStrategySwitcher inputStrategySwitcher, Consumer<Float> scrollingConsumer) {
-			super(viewport, inputStrategySwitcher, scrollingConsumer);
+		public UniversalInputStageWithBackground(final Viewport viewport, Texture backgroundTex, InputStrategySwitcher inputStrategySwitcher) {
+			super(viewport, inputStrategySwitcher);
 
 			background = new Image(backgroundTex);
 			UserInterfaceFactory.makeActorCentered(background);

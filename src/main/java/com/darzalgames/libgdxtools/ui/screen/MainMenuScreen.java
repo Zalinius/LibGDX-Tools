@@ -2,7 +2,6 @@ package com.darzalgames.libgdxtools.ui.screen;
 
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriorityStack;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
@@ -13,9 +12,9 @@ public class MainMenuScreen extends GameScreen {
 
 	private final NavigableListMenu mainMenu;
 
-	public MainMenuScreen(NavigableListMenu mainMenu, InputPriorityStack inputPriorityStack)
+	public MainMenuScreen(NavigableListMenu mainMenu)
 	{
-		super(Runnables.nullRunnable(), inputPriorityStack);
+		super(Runnables.nullRunnable());
 		this.mainMenu = mainMenu;
 		addActor(mainMenu);
 	}

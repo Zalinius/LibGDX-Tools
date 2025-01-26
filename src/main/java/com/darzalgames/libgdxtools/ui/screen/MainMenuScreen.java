@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.screen;
 
 import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
@@ -23,4 +24,13 @@ public class MainMenuScreen extends GameScreen {
 	public void gainFocus() {
 		InputPriorityManager.claimPriority(mainMenu);
 	}
+
+    @Override
+    public void selectDefault() {}
+    @Override
+    public void clearSelected() {}
+    @Override
+    public void focusCurrent() {}
+    @Override
+    public void consumeKeyInput(Input input) {}
 }

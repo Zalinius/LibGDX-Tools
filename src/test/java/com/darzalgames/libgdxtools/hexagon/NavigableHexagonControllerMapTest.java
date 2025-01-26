@@ -90,12 +90,7 @@ public class NavigableHexagonControllerMapTest {
 
 		HexagonMap<String> hexagonMap = new HexagonMap<>();
 		HexagonGridRectangular.makeGrid(3, 3).forEach(hex -> hexagonMap.put(hex, hex.toString()));
-		hexagonControllerMap = new HexagonControllerMap<>(hexagonMap, hex -> new HexagonController(hex, null) {
-			@Override
-			protected VisibleInputConsumer makeInputConsumer() {
-				return new BlankHexagonControllerForTesting();
-			}
-		});
+		hexagonControllerMap = new HexagonControllerMap<>(hexagonMap, hex -> new HexagonController(hex, null, hexagonController -> new BlankHexagonControllerForTesting()));
 		navigableHexagonMap = new NavigableHexagonMap<>(hexagonControllerMap);
 	}
 

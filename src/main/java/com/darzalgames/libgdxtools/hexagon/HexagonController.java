@@ -1,5 +1,7 @@
 package com.darzalgames.libgdxtools.hexagon;
 
+import java.util.function.Function;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.utils.Align;
@@ -10,23 +12,21 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
-public abstract class HexagonController extends Container<Actor> implements VisibleInputConsumer {
+public class HexagonController extends Container<Actor> implements VisibleInputConsumer {
 
 	protected final Hexagon hexagon;
 	private final VisibleInputConsumer inputConsumer;
 	private final CustomHitbox hitbox;
 
-	protected HexagonController(Hexagon hexagon, CustomHitbox hitBox) {
+	public HexagonController(Hexagon hexagon, CustomHitbox hitBox, Function<HexagonController, VisibleInputConsumer> makeInputConsumer) {
 		this.hexagon = hexagon;
 		this.hitbox = hitBox;
-		this.inputConsumer = makeInputConsumer();
+		this.inputConsumer = makeInputConsumer.apply(this);
 		this.setActor(inputConsumer.getView());
 		this.setSize(inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight());
 
 		setPositionOnScreen();
 	}
-
-	protected abstract VisibleInputConsumer makeInputConsumer();
 
 	@Override
 	public Actor hit(float x, float y, boolean touchable) {
@@ -73,6 +73,11 @@ public abstract class HexagonController extends Container<Actor> implements Visi
 	@Override
 	public Actor getView() {
 		return inputConsumer.getView();
+	}
+	
+	@Override
+	public String toString() {
+		return hexagon.toString() + " " + inputConsumer.toString();
 	}
 
 }

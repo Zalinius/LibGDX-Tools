@@ -5,10 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
+import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 
-public abstract class SimplePopUp extends Table implements InputConsumerWrapper, PopUp {
+public abstract class SimplePopUp extends Table implements InputConsumer, PopUp {
 	
 	protected abstract void setUpTable();
 	
@@ -44,10 +44,18 @@ public abstract class SimplePopUp extends Table implements InputConsumerWrapper,
 	
 	@Override
 	public void hideThis() {
-		InputPriorityManager.releasePriority(this);
+		releasePriority();
 		this.toFront();
 		this.addAction(Actions.sequence(
 				Actions.moveTo(-getWidth(), -getHeight(), 0.25f, Interpolation.circle),
 				new RunnableActionBest(super::remove)));
 	}
+	
+    @Override
+    public void selectDefault() {}
+    @Override
+    public void clearSelected() {}
+    @Override
+    public void focusCurrent() {}
+	
 }

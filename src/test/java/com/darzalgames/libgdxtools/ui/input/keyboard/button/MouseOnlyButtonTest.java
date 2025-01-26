@@ -23,9 +23,6 @@ import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
 
 class MouseOnlyButtonTest {
 	
-	// TODO Should I bother making similar tests for other Keyboard UI? Not sure how many times 
-	// we need to test that the InputStrategyManager's observer system works...
-	
 	private static KeyboardButton button;
 	private static InputStrategyManager inputStrategyManager;
 

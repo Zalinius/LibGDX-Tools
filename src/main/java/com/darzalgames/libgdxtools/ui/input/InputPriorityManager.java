@@ -64,7 +64,7 @@ public class InputPriorityManager {
 		InputPriorityManager.keyboardInputHandler = keyboardInputHandler;
 		InputPriorityManager.inputStrategyManager = inputStrategyManager;
 
-		inputConsumerStack.add((InputConsumerWrapper) isTouchable -> {/*not needed*/});
+		clearStackAndAddBlankConsumer();
 
 		// Set up the dark background screen that goes behind popups
 		darkScreen = new Image(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), GameInfo.getWidth(), GameInfo.getHeight()));
@@ -105,8 +105,7 @@ public class InputPriorityManager {
 	 */
 	public static void clearChildren() {
 		group.clearChildren(false);
-		inputConsumerStack.clear();
-		inputConsumerStack.add((InputConsumerWrapper) isTouchable -> {/*not needed*/});
+		clearStackAndAddBlankConsumer();
 		group.addActor(gamepadInputHandler);
 		group.addActor(keyboardInputHandler);
 		darkScreen.remove();
@@ -260,7 +259,7 @@ public class InputPriorityManager {
 	public static void hideDarkScreenForVeryExceptionalCircumstances() {
 		darkScreen.remove();
 	}
-	
+
 	public static void addSpecialButton(Input input, KeyboardButton button) {
 		specialButtons.put(input, button);
 	}
@@ -378,6 +377,17 @@ public class InputPriorityManager {
 			return false;
 		}
 
+	}
+	
+	private static void clearStackAndAddBlankConsumer() {
+		inputConsumerStack.clear();
+		inputConsumerStack.add(new InputConsumer() {
+			@Override public void consumeKeyInput(Input input) {/*not needed*/}
+			@Override public void setTouchable(Touchable isTouchable)  {/*not needed*/}
+			@Override public void focusCurrent()  {/*not needed*/}
+			@Override public void clearSelected()  {/*not needed*/}
+			@Override public void selectDefault()  {/*not needed*/}
+		});
 	}
 
 }

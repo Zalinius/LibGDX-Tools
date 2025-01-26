@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
+import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 
@@ -20,7 +20,7 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory
  * and any interactions with it.
  * @author DarZal
  */
-public class NavigableList implements InputConsumerWrapper {
+public class NavigableList implements InputConsumer {
 	private final Input backCode;	
 	private final Input forwardCode;
 	protected final LinkedList<KeyboardButton> allEntries;
@@ -228,6 +228,11 @@ public class NavigableList implements InputConsumerWrapper {
 		}
 	}
 
+	@Override
+	public void selectDefault() {
+		returnToFirst();
+	}
+	
 	@Override
 	public void clearSelected() {
 		interactableEntries.stream().forEach(e->e.setFocused(false));

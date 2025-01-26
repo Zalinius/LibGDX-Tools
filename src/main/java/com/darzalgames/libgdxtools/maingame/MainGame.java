@@ -9,6 +9,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -56,6 +57,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected abstract void launchGame(boolean isNewSave);
 	protected abstract WindowResizerButton makeWindowResizerButton();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
+	protected abstract Actor getConsole();
 	protected abstract void quitGame();
 
 	protected GameScreen currentScreen;
@@ -113,6 +115,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 		launchGame(isNewSave);
 		windowResizer.initialize(inputStrategySwitcher, makeWindowResizerButton());
+		inputHandlerStage.addActor(getConsole());
 	}
 
 	private void makeBackgroundStage() {

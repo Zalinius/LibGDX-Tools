@@ -1,5 +1,7 @@
 package com.darzalgames.libgdxtools.hexagon;
 
+import java.util.function.Function;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.utils.Align;
@@ -10,40 +12,22 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
-public abstract class HexagonController extends Container<Actor> implements VisibleInputConsumer {
-	
-	public static final String HEXAGON_MASK_KEY = "Hexagon";
+public class HexagonController extends Container<Actor> implements VisibleInputConsumer {
 
 	protected final Hexagon hexagon;
 	private final VisibleInputConsumer inputConsumer;
-	private final CustomHitbox hitBox;
-	
-	protected HexagonController(Hexagon hexagon, CustomHitbox hitBox) {
+	private final CustomHitbox hitbox;
+
+	public HexagonController(Hexagon hexagon, CustomHitbox hitBox, Function<HexagonController, VisibleInputConsumer> makeInputConsumer) {
 		this.hexagon = hexagon;
-		this.hitBox = hitBox;
-		this.inputConsumer = makeInputConsumer();
+		this.hitbox = hitBox;
+		this.inputConsumer = makeInputConsumer.apply(this);
 		this.setActor(inputConsumer.getView());
 		this.setSize(inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight());
-		
+
 		setPositionOnScreen();
 	}
 
-	protected abstract VisibleInputConsumer makeInputConsumer();
-
-	public void setButtonFocused(boolean focused) {
-		if (focused) {
-			inputConsumer.regainFocus();
-		} else {
-			inputConsumer.loseFocus();
-		}
-	}
-
-	
-	public void press() {
-		inputConsumer.consumeKeyInput(Input.ACCEPT);
-	}
-
-	
 	@Override
 	public Actor hit(float x, float y, boolean touchable) {
 		Actor hitActor = super.hit(x, y, touchable);
@@ -51,7 +35,7 @@ public abstract class HexagonController extends Container<Actor> implements Visi
 			return null;
 		}
 
-		boolean isInsideHexagon = !hitBox.isHit(x, y);
+		boolean isInsideHexagon = !hitbox.isHit(x, y);
 		if (!isInsideHexagon) {
 			return null;
 		} else {
@@ -68,32 +52,32 @@ public abstract class HexagonController extends Container<Actor> implements Visi
 
 	@Override
 	public void consumeKeyInput(Input input) {
-		// TODO Auto-generated method stub
-		
+		inputConsumer.consumeKeyInput(input);
 	}
 
 	@Override
 	public void focusCurrent() {
-		// TODO Auto-generated method stub
-		
+		inputConsumer.focusCurrent();
 	}
 
 	@Override
 	public void clearSelected() {
-		// TODO Auto-generated method stub
-		
+		inputConsumer.clearSelected();
 	}
 
 	@Override
 	public void selectDefault() {
-		// TODO Auto-generated method stub
-		
+		inputConsumer.selectDefault();
 	}
 
 	@Override
 	public Actor getView() {
-		// TODO Auto-generated method stub
-		return null;
+		return inputConsumer.getView();
+	}
+	
+	@Override
+	public String toString() {
+		return hexagon.toString() + " " + inputConsumer.toString();
 	}
 
 }

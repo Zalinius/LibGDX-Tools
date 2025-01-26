@@ -16,46 +16,41 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
  */
 public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> implements InputConsumer, InputObserver {
 
-	private final HexagonControllerMap<E> hexagonControllerMap;
 	private Hexagon currentHexagon;
 
 	/**
-	 * Be sure to register this object with the {@link InputStrategySwitcher}
+	 * Be sure to register this object with the {@link InputStrategyManager}
 	 * @param hexagonControllerMap The map of hexagon controllers to be navigated
 	 */
 	public NavigableHexagonMap(HexagonControllerMap<E> hexagonControllerMap) {
-		this.hexagonControllerMap = hexagonControllerMap;
 		this.setActor(hexagonControllerMap);
 	}
 
 	@Override
 	public void consumeKeyInput(Input input) {
 		if (isInputAllowed()) {
-			if (input.equals(Input.ACCEPT)) {
-				getCurrentHexagonController().press();
-			} else {
-				HexagonDirection direction = InputOnHexagonGrid.getDirectionFromInput(input);
+			HexagonDirection direction = InputOnHexagonGrid.getDirectionFromInput(input);
+			if (direction != null) {
 				navigateToNeighborInDirection(direction);
+			} else {
+				getCurrentHexagonController().consumeKeyInput(input);
 			}
 		}
 	}
 
 	private void navigateToNeighborInDirection(HexagonDirection direction) {
-		if (direction != null) {
-			Hexagon neighborHexagon = HexagonDirection.getNeighborHexagon(currentHexagon, direction);
-			if (hexagonControllerMap.containsHexagon(neighborHexagon)) {
-				unfocusCurrentHexagon();
-				currentHexagon = neighborHexagon;
-				focusCurrent();
-			}
+		Hexagon neighborHexagon = HexagonDirection.getNeighborHexagon(currentHexagon, direction);
+		if (getActor().containsHexagon(neighborHexagon)) {
+			clearSelected();
+			currentHexagon = neighborHexagon;
+			focusCurrent();
 		}
 	}
 
 	@Override
 	public void gainFocus() {
 		selectDefault();
-		unfocusCurrentHexagon();
-		hexagonControllerMap.centerSelf();
+		getActor().centerSelf();
 		centerSelf();
 	}
 
@@ -67,30 +62,27 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	@Override
 	public void focusCurrent() {
 		if (isInputAllowed()) {
-			getCurrentHexagonController().setButtonFocused(true);
+			getCurrentHexagonController().focusCurrent();
 		}
 	}
 
 	@Override
 	public void clearSelected() {
-		unfocusCurrentHexagon();
-	}
-
-	private void unfocusCurrentHexagon() {
-		getCurrentHexagonController().setButtonFocused(false);
+		getCurrentHexagonController().clearSelected();
 	}
 
 	@Override
 	public void selectDefault() {
 		currentHexagon = new Hexagon(0, 0);
-		focusCurrent();
 	}
 
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
+//		getActor().unfocusAll();
 		if (inputStrategySwitcher.showMouseExclusiveUI()) {
-			hexagonControllerMap.setTouchable(Touchable.enabled);
+			getActor().setTouchable(Touchable.enabled);
 		} else {
+			getActor().setTouchable(Touchable.disabled);
 			focusCurrent();	
 		}
 	}
@@ -109,7 +101,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	 * @return The visual representation of the currently selected hexagon (keyboard and gamepad)
 	 */
 	public HexagonController getCurrentHexagonController() {
-		return hexagonControllerMap.getControllerOf(currentHexagon);
+		return getActor().getControllerOf(currentHexagon);
 	}
 
 	private void centerSelf() {

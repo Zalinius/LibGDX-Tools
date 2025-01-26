@@ -13,7 +13,6 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSubject;
 
 /**
  * Tracks the current input strategy, and handles switching between them as needed.
- * @author DarZal
  */
 public class InputStrategySwitcher extends Actor implements InputStrategy, InputSubject, DoesNotPause {
 

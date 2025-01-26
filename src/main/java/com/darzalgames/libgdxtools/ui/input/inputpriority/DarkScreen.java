@@ -9,6 +9,9 @@ import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 
+/**
+ * The dark transparent screen which goes behind popups to "focus" them, and dismiss them when clicked
+ */
 class DarkScreen extends Image {
 
 	private final Stage popupStage;
@@ -32,7 +35,7 @@ class DarkScreen extends Image {
 		clearActions();
 		popupStage.addActor(this);
 		setZIndex(actorIndex);
-		// They used to be a 1 second delay here before setting the dark screen touchable, I'm not sure why.
+		// There used to be a 1 second delay here before setting the dark screen touchable, I'm not sure why.
 		setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled);
 		addAction(Actions.fadeIn(0.25f, Interpolation.circle));
 	}

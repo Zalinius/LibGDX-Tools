@@ -8,7 +8,6 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalB
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
- * @author DarZal
  * A pop up that offers two choices, and can respond differently based on which choice is made.
  * This is versatile: it can be used for dialog choices, menus, warnings, etc.
  */

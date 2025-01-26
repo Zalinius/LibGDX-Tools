@@ -17,7 +17,6 @@ import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 
 /**
- * @author DarZal
  * A class which holds a LibGDX {@link Skin} and provides convenient named accessors.
  */
 public class SkinManager {

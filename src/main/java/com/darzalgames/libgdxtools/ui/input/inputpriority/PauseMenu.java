@@ -20,7 +20,6 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterf
 
 /**
  * The base class for options menus (in-game versus when on the main menu)
- * @author DarZal
  */
 public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
@@ -184,7 +183,6 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 	/**
 	 * A sub-menu that opens up within this menu (e.g. a sub-menu for sound options)
-	 * @author DarZal
 	 */
 	protected class NestedMenu extends PopUpMenu implements DoesNotPause {
 

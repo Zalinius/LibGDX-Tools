@@ -6,14 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 import com.darzalgames.darzalcommon.hexagon.gridfactory.HexagonGridRectangular;
@@ -23,13 +21,30 @@ import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
-import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputOnHexagonGrid;
-import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
 public class NavigableHexagonControllerMapTest {
 
+	private NavigableHexagonMap<String> navigableHexagonMap;
+	private HexagonControllerMap<String> hexagonControllerMap;
+	@BeforeEach
+	private void setup() {
+		GameInfo.setMainGame(new SharesGameInformation() {
+			@Override public int getWidth() {return 0;}
+			@Override public int getHeight() {return 0;}
+			@Override public SaveManager getSaveManager() {return null;}
+			@Override public PreferenceManager getPreferenceManager() {return null;}
+			@Override public GamePlatform getGamePlatform() {return null;}
+			@Override public SteamStrategy getSteamStrategy() {return null;}
+		});
 
+		HexagonMap<String> hexagonMap = new HexagonMap<>();
+		HexagonGridRectangular.makeGrid(3, 3).forEach(hex -> hexagonMap.put(hex, hex.toString()));
+		hexagonControllerMap = new HexagonControllerMap<>(hexagonMap, hex -> new HexagonController(hex, null, hexagonController -> new BlankHexagonController()));
+		navigableHexagonMap = new NavigableHexagonMap<>(hexagonControllerMap);
+	}
+
+	
 	@Test
 	void focusCurrent_withDefault_focusesHexagon0x0() {
 
@@ -39,17 +54,7 @@ public class NavigableHexagonControllerMapTest {
 		assertEquals(0, navigableHexagonMap.getCurrentHexagonController().hexagon.getQ());
 		assertEquals(0, navigableHexagonMap.getCurrentHexagonController().hexagon.getR());
 	}
-
-	private static Stream<Arguments> directionToCoordinates() {
-		return Stream.of(
-				Arguments.of(InputOnHexagonGrid.UP_RELEASED, 0, -1),
-				Arguments.of(InputOnHexagonGrid.UP_LEFT, -1, 0),
-				Arguments.of(InputOnHexagonGrid.UP_RIGHT, 1, -1),
-				Arguments.of(InputOnHexagonGrid.DOWN_RELEASED, 0, 1),
-				Arguments.of(InputOnHexagonGrid.DOWN_LEFT, -1, 1),
-				Arguments.of(InputOnHexagonGrid.DOWN_RIGHT, 1, 0)
-				);
-	}
+	
 	@ParameterizedTest
 	@MethodSource("directionToCoordinates")
 	void consumeInput_withAllDirectionInputs_focusesCorrectHexagon(InputOnHexagonGrid input, int q, int r) {
@@ -61,8 +66,6 @@ public class NavigableHexagonControllerMapTest {
 		assertEquals(r, navigableHexagonMap.getCurrentHexagonController().hexagon.getR());
 	}
 
-	// TODO Make more tests like this for corner and edge hexagons?
-	// This is basically replicating the tests in HexagonMap... though I guess it proves that the controllers are there+connected like you'd expect
 	@Test
 	void getControllerNeighbors_of0x0_returnsCorrectHexagons() {
 		List<Hexagon> expectedNeighbors = List.of(new Hexagon(-1, 0), new Hexagon(-1, 1), new Hexagon(0, -1), new Hexagon(0, 1), new Hexagon(1, -1), new Hexagon(1, 0));
@@ -75,33 +78,14 @@ public class NavigableHexagonControllerMapTest {
 	}
 
 
-	private static NavigableHexagonMap<String> navigableHexagonMap;
-	private static HexagonControllerMap<String> hexagonControllerMap;
-	@BeforeAll
-	private static void setup() {
-		GameInfo.setMainGame(new SharesGameInformation() {
-			@Override public int getWidth() {return 0;}
-			@Override public int getHeight() {return 0;}
-			@Override public SaveManager getSaveManager() {return null;}
-			@Override public PreferenceManager getPreferenceManager() {return null;}
-			@Override public GamePlatform getGamePlatform() {return null;}
-			@Override public SteamStrategy getSteamStrategy() {return null;}
-		});
-
-		HexagonMap<String> hexagonMap = new HexagonMap<>();
-		HexagonGridRectangular.makeGrid(3, 3).forEach(hex -> hexagonMap.put(hex, hex.toString()));
-		hexagonControllerMap = new HexagonControllerMap<>(hexagonMap, hex -> new HexagonController(hex, null, hc -> new BlankHexagonControllerForTesting()));
-		navigableHexagonMap = new NavigableHexagonMap<>(hexagonControllerMap);
-	}
-
-	private static class BlankHexagonControllerForTesting implements VisibleInputConsumer {
-		@Override public Actor getView() {
-			return new Actor();
-		}
-		@Override public void consumeKeyInput(Input input) {}
-		@Override public void setTouchable(Touchable isTouchable) {}
-		@Override public void focusCurrent() {}
-		@Override public void clearSelected() {}
-		@Override public void selectDefault() {}
+	private static Stream<Arguments> directionToCoordinates() {
+		return Stream.of(
+				Arguments.of(InputOnHexagonGrid.UP_RELEASED, 0, -1),
+				Arguments.of(InputOnHexagonGrid.UP_LEFT, -1, 0),
+				Arguments.of(InputOnHexagonGrid.UP_RIGHT, 1, -1),
+				Arguments.of(InputOnHexagonGrid.DOWN_RELEASED, 0, 1),
+				Arguments.of(InputOnHexagonGrid.DOWN_LEFT, -1, 1),
+				Arguments.of(InputOnHexagonGrid.DOWN_RIGHT, 1, 0)
+				);
 	}
 }

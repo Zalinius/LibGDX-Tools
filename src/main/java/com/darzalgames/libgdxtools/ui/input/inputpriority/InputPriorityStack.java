@@ -22,7 +22,6 @@ public class InputPriorityStack implements InputObserver {
 		stack = new LimitedAccessDoubleStack();
 		clearStackAndPushBlankConsumer();
 
-		// Set up the dark background screen that goes behind popups
 		darkScreen = new DarkScreen(popUpStage, () -> {
 			sendInputToTop(Input.BACK); 
 		});

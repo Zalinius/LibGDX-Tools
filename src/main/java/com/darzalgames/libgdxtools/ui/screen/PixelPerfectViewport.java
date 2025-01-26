@@ -6,7 +6,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 /**
  * A viewport that scales along integer values to make the view as large as possible in the window
  * while keeping one "art" pixel consistent to another
- * @author DarZal
  * thanks https://gist.github.com/mgsx-dev/ff693b8d83e6d07f88b0aaf653407e5a
  */
 public class PixelPerfectViewport extends FitViewport {

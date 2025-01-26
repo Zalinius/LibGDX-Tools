@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Pool;
 
 /**
- * @author DarZal
  * This is basically all taken from the standard ParallelAction, but allows constructing with more than five actions at once (i.e. any number of actions)
  */
 public class ParallelActionBest extends Action {

@@ -18,7 +18,6 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterf
  * This class is not an Actor, it's the logical list of buttons held in a Table.
  * One of these is owned by a {@link NavigableListMenu}, which is responsible for any decorative elements around this,
  * and any interactions with it.
- * @author DarZal
  */
 public class NavigableList implements InputConsumer {
 	private final Input backCode;	

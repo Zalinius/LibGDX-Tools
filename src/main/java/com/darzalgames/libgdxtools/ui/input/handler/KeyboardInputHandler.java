@@ -12,7 +12,6 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.InputReceiver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
- * @author DarZal
  * This is the single entry point for keyboard input
  */
 public abstract class KeyboardInputHandler extends InputHandler {

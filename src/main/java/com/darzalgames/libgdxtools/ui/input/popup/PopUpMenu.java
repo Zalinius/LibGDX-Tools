@@ -15,7 +15,6 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterf
 
 /**
  * It's a navigable menu, and it's a pop up!
- * @author DarZal
  */
 public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 

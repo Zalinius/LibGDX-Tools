@@ -7,7 +7,6 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 
 /**
- * @author DarZal
  * A {@link UniversalButton} which will only be visible and intractable in mouse mode
  */
 public class MouseOnlyButton extends UniversalButton implements InputObserver {

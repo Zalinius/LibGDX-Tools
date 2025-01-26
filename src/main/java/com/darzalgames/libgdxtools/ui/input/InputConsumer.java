@@ -8,7 +8,6 @@ import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 
 /**
  * Anything that can be interacted with via user input
- * @author DarZal
  */
 public interface InputConsumer {
 	/**

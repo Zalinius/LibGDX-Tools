@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelegateAction;
 /**
  * Basically a copy of the regular RepeatAction, but which restarts instantly
  * and allows others to query the executedCount.
- * @author DarZal
  */
 public class InstantRepeatAction extends DelegateAction {
 	public static final int FOREVER = -1;

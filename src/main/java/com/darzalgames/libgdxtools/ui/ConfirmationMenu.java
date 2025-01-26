@@ -6,7 +6,6 @@ import com.darzalgames.libgdxtools.ui.input.popup.TextChoicePopUp;
 
 /**
  * A basic choice popup where the second button is a back button.
- * @author DarZal
  */
 public class ConfirmationMenu extends TextChoicePopUp {
 	

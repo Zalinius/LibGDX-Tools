@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Align;
 /**
  * A new alignment class that's easier to say, and which makes for better method arguments than the
  * LibGDX {@link Align} integers / bit flags (since any old integer could take their place as an argument)
- * @author DarZal
  */
 public enum Alignment {
 

@@ -12,8 +12,6 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterf
 
 /**
  * The actor that holds a {@link NavigableList} and handles how it looks and is interacted with.
- * @author DarZal
- *
  */
 public abstract class NavigableListMenu extends Table implements InputConsumer {
 	protected NavigableList menu;

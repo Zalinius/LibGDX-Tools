@@ -30,7 +30,6 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 
 /**
- * @author DarZal
  * The ONLY place where one should be making UI elements (buttons, labels, etc)
  */
 public class UserInterfaceFactory {

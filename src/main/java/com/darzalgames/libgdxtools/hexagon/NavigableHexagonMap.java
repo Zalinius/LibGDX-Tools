@@ -11,15 +11,14 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
  * Allows for navigation around a {@link HexagonControllerMap} using keyboard or gamepad
- * @author DarZal
- * @param <E>
+ * @param <E> The game-specific object associated with each {@link Hexagon} and {@link HexagonController}
  */
 public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> implements InputConsumer, InputObserver {
 
 	private Hexagon currentHexagon;
 
 	/**
-	 * Be sure to register this object with the {@link InputStrategyManager}
+	 * Be sure to register this object with the {@link InputStrategySwitcher}
 	 * @param hexagonControllerMap The map of hexagon controllers to be navigated
 	 */
 	public NavigableHexagonMap(HexagonControllerMap<E> hexagonControllerMap) {

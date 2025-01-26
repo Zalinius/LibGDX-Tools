@@ -4,13 +4,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public class UniversalInputStage extends Stage implements InputObserver {
+public class UniversalInputStage extends Stage {
 
-	private boolean mouseMode;
+	private final InputStrategySwitcher inputStrategySwitcher;
 
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
@@ -18,12 +17,12 @@ public class UniversalInputStage extends Stage implements InputObserver {
 	 */
 	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher) {
 		super(viewport);
-		inputStrategySwitcher.register(this);
+		this.inputStrategySwitcher = inputStrategySwitcher;
 	}
 
 	@Override
 	public void act(final float delta) {
-		if (mouseMode) {
+		if (!inputStrategySwitcher.shouldFlashButtons()) {
 			// if playing mouse-driven, use a normal stage
 			super.act(delta);
 		} else {
@@ -70,16 +69,5 @@ public class UniversalInputStage extends Stage implements InputObserver {
 			parent = parent.getParent();
 		}
 		return true;
-	}
-
-	@Override
-	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-		mouseMode = inputStrategySwitcher.showMouseExclusiveUI();
-		// TODO Our input strategies are pretty coy about whether or not they are Mouse Mode, but some classes like this one do just need to know...
-	}
-
-	@Override
-	public boolean shouldBeUnregistered() {
-		return false;
 	}
 }

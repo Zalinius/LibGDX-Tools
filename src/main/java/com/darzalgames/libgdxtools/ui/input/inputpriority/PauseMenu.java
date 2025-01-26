@@ -20,6 +20,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterf
 
 /**
  * The base class for options menus (in-game versus when on the main menu)
+ * @author DarZal
  */
 public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
@@ -27,8 +28,6 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	private final Supplier<UniversalButton> makeWindowModeSelectBox;
 
 	private final String platformName;
-	
-	private Runnable pauseIfNeededRunnable;
 
 	/**
 	 * NOTE: Setting the position is important, otherwise the options menu will not open!<p>
@@ -98,10 +97,6 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	public UniversalButton getButton() {
 		return optionsButton;
 	}
-	
-	void setPauseRunnable(Runnable runnable) {
-		pauseIfNeededRunnable = runnable;
-	}
 
 	/**
 	 * To be used by child classes to have buttons in the menu hide/show it (e.g. "return to main menu" should toggle screen visibility to false)
@@ -109,7 +104,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	 */
 	protected void toggleScreenVisibility(boolean show) {
 		if (show) {
-			pauseIfNeededRunnable.run();
+			Priority.pauseIfNeeded();
 		} else {
 			hideThis();
 		}
@@ -183,6 +178,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 	/**
 	 * A sub-menu that opens up within this menu (e.g. a sub-menu for sound options)
+	 * @author DarZal
 	 */
 	protected class NestedMenu extends PopUpMenu implements DoesNotPause {
 
@@ -220,4 +216,3 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		}
 	}
 }
-

@@ -68,7 +68,6 @@ public class TestGame extends MainGame {
 	protected void launchGame(boolean isNewSave) {
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable());
-		Priority.setPauseUI(new TestOptionsMenu(windowResizer::getModeSelectBox));
 		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override
@@ -79,6 +78,13 @@ public class TestGame extends MainGame {
 				menu.setSpacing(1);
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 				add(menu.getView()).growX().align(Align.center);
+
+
+				// Options button
+				TestOptionsMenu optionsMenu = new TestOptionsMenu(windowResizer::getModeSelectBox);
+				addActor(optionsMenu.getButton().getView());
+				optionsMenu.getButton().getView().setPosition(3, GameInfo.getHeight() - optionsMenu.getButton().getView().getHeight() - 3);
+				Priority.setPauseUI(optionsMenu);
 			}
 		}));
 	}
@@ -181,11 +187,6 @@ public class TestGame extends MainGame {
 	}
 
 
-
-	@Override
-	protected WindowResizerButton makeWindowResizerButton() {
-		return UserInterfaceFactory.getWindowModeTextSelectBox();
-	}
 	
 	private class TestOptionsMenu extends PauseMenu {
 
@@ -251,4 +252,9 @@ public class TestGame extends MainGame {
 		};
 	}
 
+	@Override
+	protected WindowResizerButton makeWindowResizerButton() {
+		return UserInterfaceFactory.getWindowModeTextSelectBox();
+	}
+	
 }

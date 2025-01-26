@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.popup;
 
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
@@ -58,8 +57,5 @@ public abstract class SimplePopUp extends Table implements InputConsumer, PopUp 
     public void clearSelected() {}
     @Override
     public void focusCurrent() {}
-    
-    @Override
-    public Actor getAsActor() { return this; }
 	
 }

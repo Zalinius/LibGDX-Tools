@@ -3,7 +3,6 @@ package com.darzalgames.libgdxtools.ui.input.popup;
 import java.util.List;
 
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
@@ -69,7 +68,4 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 		}
 		super.consumeKeyInput(input);
 	}
-    
-    @Override
-    public Actor getAsActor() { return this; }
 }

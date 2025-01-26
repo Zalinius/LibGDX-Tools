@@ -50,6 +50,5 @@ public abstract class GamepadInputHandler extends InputHandler {
 		inputStrategySwitcher.setToMouseStrategy();
 		Priority.pauseIfNeeded();
 	}
-	
 
 }

@@ -16,7 +16,6 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
  */
 public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> implements InputConsumer, InputObserver {
 
-	private final HexagonControllerMap<E> hexagonControllerMap;
 	private Hexagon currentHexagon;
 
 	/**
@@ -24,7 +23,6 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	 * @param hexagonControllerMap The map of hexagon controllers to be navigated
 	 */
 	public NavigableHexagonMap(HexagonControllerMap<E> hexagonControllerMap) {
-		this.hexagonControllerMap = hexagonControllerMap;
 		this.setActor(hexagonControllerMap);
 	}
 
@@ -42,7 +40,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 
 	private void navigateToNeighborInDirection(HexagonDirection direction) {
 		Hexagon neighborHexagon = HexagonDirection.getNeighborHexagon(currentHexagon, direction);
-		if (hexagonControllerMap.containsHexagon(neighborHexagon)) {
+		if (getActor().containsHexagon(neighborHexagon)) {
 			clearSelected();
 			currentHexagon = neighborHexagon;
 			focusCurrent();
@@ -52,7 +50,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	@Override
 	public void gainFocus() {
 		selectDefault();
-		hexagonControllerMap.centerSelf();
+		getActor().centerSelf();
 		centerSelf();
 	}
 
@@ -80,11 +78,11 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 
 	@Override
 	public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
-		hexagonControllerMap.unfocusAll();
+		getActor().unfocusAll();
 		if (inputStrategyManager.showMouseExclusiveUI()) {
-			hexagonControllerMap.setTouchable(Touchable.enabled);
+			getActor().setTouchable(Touchable.enabled);
 		} else {
-			hexagonControllerMap.setTouchable(Touchable.disabled);
+			getActor().setTouchable(Touchable.disabled);
 			focusCurrent();	
 		}
 	}
@@ -103,7 +101,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	 * @return The visual representation of the currently selected hexagon (keyboard and gamepad)
 	 */
 	public HexagonController getCurrentHexagonController() {
-		return hexagonControllerMap.getControllerOf(currentHexagon);
+		return getActor().getControllerOf(currentHexagon);
 	}
 
 	private void centerSelf() {

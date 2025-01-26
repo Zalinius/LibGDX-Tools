@@ -78,7 +78,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-//		getActor().unfocusAll();
+		getActor().unfocusAll();
 		if (inputStrategySwitcher.showMouseExclusiveUI()) {
 			getActor().setTouchable(Touchable.enabled);
 		} else {

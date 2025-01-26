@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -57,7 +58,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected abstract void launchGame(boolean isNewSave);
 	protected abstract WindowResizerButton makeWindowResizerButton();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
-	protected abstract Actor getConsole();
+	protected abstract Runnable drawConsole();
 	protected abstract void quitGame();
 
 	protected GameScreen currentScreen;
@@ -115,7 +116,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 		launchGame(isNewSave);
 		windowResizer.initialize(inputStrategySwitcher, makeWindowResizerButton());
-		inputHandlerStage.addActor(getConsole());
+		setUpDrawingConsole();
 	}
 
 	private void makeBackgroundStage() {
@@ -181,6 +182,15 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		inputHandlerStage.addActor(keyboardInputHandler);
 		stage.setKeyboardFocus(keyboardInputHandler);
 		cursorStage.addActor(getCustomCursor());
+	}
+	
+	private void setUpDrawingConsole() {
+		inputHandlerStage.addActor(new Actor() {
+			@Override
+			public void draw(Batch batch, float parentAlpha) {
+				drawConsole().run();
+			}
+		});
 	}
 
 	protected final void changeScreen(GameScreen gameScreen) {

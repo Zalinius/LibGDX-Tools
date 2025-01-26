@@ -184,14 +184,12 @@ public class InputPriorityStack implements InputObserver {
 
 		private void push(InputConsumer inputConsumer) {
 			inputConsumerStack.push(inputConsumer);
-			System.out.println(getTop() + " is on top");
 		}
 
 		private void push(Tuple<Actor, PopUp> actorPopup) {
 			Actor actor = actorPopup.e;
 			PopUp popup = actorPopup.f;
 			popupInputConsumerStack.push(new Tuple<>(actor, popup));
-			System.out.println(getTop() + " is on top");
 		}
 
 		private boolean isThisOnTop(InputConsumer inputConsumer) {
@@ -210,7 +208,6 @@ public class InputPriorityStack implements InputObserver {
 				popupInputConsumerStack.pop();
 			}
 			inputConsumerStack.pop();
-			System.out.println(getTop() + " is on top");
 		}
 
 		private boolean isLandingOnPopup() {

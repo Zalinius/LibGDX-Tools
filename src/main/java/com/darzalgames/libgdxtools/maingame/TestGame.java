@@ -10,7 +10,6 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.functional.Runnables;
@@ -252,10 +251,9 @@ public class TestGame extends MainGame {
 		};
 	}
 
-
 	@Override
-	protected Actor getConsole() {
-		return new Actor();
+	protected Runnable drawConsole() {
+		return Runnables.nullRunnable();
 	}
 
 }

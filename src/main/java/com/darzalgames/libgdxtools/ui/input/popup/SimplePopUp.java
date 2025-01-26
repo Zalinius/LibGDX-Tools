@@ -34,7 +34,7 @@ public abstract class SimplePopUp extends Table implements InputConsumer, PopUp 
 		float startY = this.getY();
 		this.setPosition(-getWidth(), -getHeight());
 		this.addAction(Actions.moveTo(startX, startY, 0.25f, Interpolation.circle));
-		Priority.claimPriority(this);
+		Priority.showPopup(this);
 	}
 	
 	@Override

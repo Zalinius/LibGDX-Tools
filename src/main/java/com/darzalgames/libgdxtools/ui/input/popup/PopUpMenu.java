@@ -53,6 +53,13 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	}
 	
 	@Override
+	public void regainFocus() {
+		super.gainFocus();
+		Priority.showPopup(this);
+	}
+
+
+	@Override
 	public void hideThis() {
 		releasePriority();
 		this.toFront();

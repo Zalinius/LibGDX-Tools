@@ -39,8 +39,8 @@ public abstract class GamepadInputHandler extends InputHandler {
 		if (LOG_INPUT) {
 			Gdx.app.log("GamepadInputHandler", "Just pressed:" + buttonKey);
 		}
-		inputReceiver.processKeyInput(buttonKey);
 		updateLatestInputMethod();
+		inputReceiver.processKeyInput(buttonKey);
 	}
 
 	protected final void justReleased(Input buttonKey) {

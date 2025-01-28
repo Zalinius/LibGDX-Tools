@@ -79,6 +79,11 @@ public class TestGame extends MainGame {
 				menu.setSpacing(1);
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 				add(menu.getView()).growX().align(Align.center);
+				
+                // Options button
+                TestOptionsMenu optionsMenu = new TestOptionsMenu(windowResizer::getModeSelectBox);
+                addActor(optionsMenu.getButton().getView());
+                optionsMenu.getButton().getView().setPosition(3, GameInfo.getHeight() - optionsMenu.getButton().getView().getHeight() - 3);
 			}
 		}, inputPriorityStack));
 	}

@@ -21,6 +21,7 @@
 			<exclude name="**/platform/GenericDesktopGamePlatform.java" />
 			<exclude name="**/platform/WindowsGamePlatform.java" />
 			<exclude name="**/platform/LinuxGamePlatform.java" />
+			<exclude name="**/platform/MacGamePlatform.java" />
 	</source>
 
 </module>

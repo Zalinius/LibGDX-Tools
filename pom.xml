@@ -5,7 +5,7 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.3.16</version>
+	<version>0.3.17</version>
 	<name>libGDX Tools</name>
 
 	<properties>
@@ -26,26 +26,6 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 			</plugin>
-
-			<!-- GWT Validation to ensure library is GWT compatible -->
-<!--			<plugin>-->
-<!--				<groupId>org.codehaus.mojo</groupId>-->
-<!--				<artifactId>gwt-maven-plugin</artifactId>-->
-<!--				<version>${gwt.maven.version}</version>-->
-<!--				<configuration>-->
-<!--					<strict>true</strict>-->
-<!--					<failOnError>true</failOnError>-->	
-<!--					<validateOnly>true</validateOnly>-->
-<!--				</configuration>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<goals>-->
-<!--							<goal>compile</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -70,6 +50,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -93,6 +74,26 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- GWT Validation to ensure library is GWT compatible -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<version>${gwt.maven.version}</version>
+				<configuration>
+					<strict>true</strict>
+					<failOnError>true</failOnError>
+					<validateOnly>true</validateOnly>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<phase>test</phase>
 					</execution>
 				</executions>
 			</plugin>
@@ -198,38 +199,20 @@
 			<version>${gwt.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
-		
-		
-		<!-- vvv HERE vvv -->
-
-<!--		<dependency>-->
-<!--			<groupId>com.badlogicgames.gdx-controllers</groupId>-->
-<!--			<artifactId>gdx-controllers-gwt</artifactId>-->
-<!--			<version>${libgdx.controllers.version}</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>com.badlogicgames.gdx-controllers</groupId>-->
-<!--			<artifactId>gdx-controllers-gwt</artifactId>-->
-<!--			<version>${libgdx.controllers.version}</version>-->
-<!--			<classifier>sources</classifier>-->
-<!--			<scope>provided</scope>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>com.github.tommyettinger</groupId>-->
-<!--			<artifactId>gdx-backend-gwt</artifactId>-->
-<!--			<version>${tommyettinger.version}</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>com.github.tommyettinger</groupId>-->
-<!--			<artifactId>gdx-backend-gwt</artifactId>-->
-<!--			<version>${tommyettinger.version}</version>-->
-<!--			<classifier>sources</classifier>-->
-<!--			<scope>provided</scope>-->
-<!--		</dependency>-->
-
-		<!-- ^^^ HERE ^^^ -->
-
+		<dependency>
+			<groupId>com.github.tommyettinger</groupId>
+			<artifactId>gdx-backend-gwt</artifactId>
+			<version>${tommyettinger.version}</version>
+			<classifier>sources</classifier>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.badlogicgames.gdx-controllers</groupId>
+			<artifactId>gdx-controllers-gwt</artifactId>
+			<version>${libgdx.controllers.version}</version>
+			<classifier>sources</classifier>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 </project>

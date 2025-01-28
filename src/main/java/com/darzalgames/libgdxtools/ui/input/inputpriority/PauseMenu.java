@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.optionsmenu;
+package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -12,21 +12,20 @@ import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 
 /**
  * The base class for options menus (in-game versus when on the main menu)
  * @author DarZal
  */
-public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
+public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
-	protected KeyboardButton optionsButton;
-	private final Supplier<KeyboardButton> makeWindowModeSelectBox;
+	protected UniversalButton optionsButton;
+	private final Supplier<UniversalButton> makeWindowModeSelectBox;
 
 	private final String platformName;
 
@@ -42,34 +41,34 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	/**
 	 * @return A button for players to report bugs (return null if you don't want this)
 	 */
-	protected abstract KeyboardButton makeReportBugButton();
+	protected abstract UniversalButton makeReportBugButton();
 
 	/**
 	 * @return A list of any game-specific options buttons (e.g. language, text speed, etc)
 	 */
-	protected abstract Collection<KeyboardButton> makeMiddleButtons();
+	protected abstract Collection<UniversalButton> makeMiddleButtons();
 
 	/**
 	 * @return An optional button to display controls (return null if you don't want this)
 	 */
-	protected abstract KeyboardButton makeControlsButton();
+	protected abstract UniversalButton makeControlsButton();
 
 	/**
 	 * @return An optional button that goes right above a quit button (e.g. in-game have a "return to main menu" button)
 	 * (return null if you don't want this)
 	 */
-	protected abstract KeyboardButton makeButtonAboveQuitButton();
+	protected abstract UniversalButton makeButtonAboveQuitButton();
 
 	/**
 	 * @return Make it however you like (return null if you don't want this)
 	 */
-	protected abstract KeyboardButton makeQuitButton();
+	protected abstract UniversalButton makeQuitButton();
 
 
 	/**
 	 * @return Make it however you like, a default will be provided otherwise
 	 */
-	protected KeyboardButton makeBackButton() {
+	protected UniversalButton makeBackButton() {
 		return UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
 	}
 
@@ -78,7 +77,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	 */
 	protected abstract PopUp makeControlsPopUp();
 
-	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox, int bottomPadding) {
+	protected PauseMenu(Supplier<UniversalButton> makeWindowModeSelectBox, int bottomPadding) {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
 		this.platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
@@ -95,7 +94,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	/**
 	 * @return The button that opens this options menu
 	 */
-	public KeyboardButton getButton() {
+	public UniversalButton getButton() {
 		return optionsButton;
 	}
 
@@ -105,7 +104,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	 */
 	protected void toggleScreenVisibility(boolean show) {
 		if (show) {
-			InputPriorityManager.pauseIfNeeded();
+			Priority.pauseIfNeeded();
 		} else {
 			hideThis();
 		}
@@ -122,32 +121,32 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		setUpBackground();
 
 		// ALL SELECTABLE MENU BUTTONS
-		List<KeyboardButton> menuButtons = new ArrayList<>();
+		List<UniversalButton> menuButtons = new ArrayList<>();
 		menuButtons.add(UserInterfaceFactory.getSpacer());
 
 		menuButtons.addAll(makeMiddleButtons());
 
-		KeyboardButton reportBugButton = makeReportBugButton();
+		UniversalButton reportBugButton = makeReportBugButton();
 		if (reportBugButton != null) {
 			menuButtons.add(reportBugButton);					
 		}
 
-		KeyboardButton controlsButton = makeControlsButton();
+		UniversalButton controlsButton = makeControlsButton();
 		menuButtons.add(controlsButton);					
 
 		// Window mode select box
-		KeyboardButton windowModeSelectBox = makeWindowModeSelectBox.get();
+		UniversalButton windowModeSelectBox = makeWindowModeSelectBox.get();
 		menuButtons.add(windowModeSelectBox);
 
-		KeyboardButton optionalButtonAboveQuit = makeButtonAboveQuitButton();
+		UniversalButton optionalButtonAboveQuit = makeButtonAboveQuitButton();
 		menuButtons.add(optionalButtonAboveQuit);
 
 		// Quit game button
-		KeyboardButton quitButton = makeQuitButton();
+		UniversalButton quitButton = makeQuitButton();
 		menuButtons.add(quitButton);
 
 		// Back button
-		KeyboardButton backButton = makeBackButton();
+		UniversalButton backButton = makeBackButton();
 		
 		menuButtons.add(UserInterfaceFactory.getSpacer());
 
@@ -185,7 +184,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 		private final String buttonKey;
 
-		public NestedMenu(final List<KeyboardButton> entries, String buttonKey) {
+		public NestedMenu(final List<UniversalButton> entries, String buttonKey) {
 			super(true, entries, "back_message");
 			this.buttonKey = buttonKey;
 		}
@@ -196,8 +195,8 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 			desiredHeight = 100;
 		}
 
-		public KeyboardButton getButton() {
-			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> InputPriorityManager.claimPriority(this));
+		public UniversalButton getButton() {
+			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> Priority.claimPriority(this));
 		}
 
 		@Override
@@ -217,4 +216,3 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		}
 	}
 }
-

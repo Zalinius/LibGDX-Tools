@@ -8,8 +8,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Texture;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
  * This is the entry point for gamepad input, and where we define all button mappings to game actions.
@@ -25,8 +25,8 @@ public abstract class GamepadInputHandler extends InputHandler {
 	protected abstract List<Input> getTrackedInputs();
 	protected abstract Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor);
 
-	protected GamepadInputHandler(InputStrategyManager inputStrategyManager) {
-		super(inputStrategyManager, InputMethod.GAMEPAD);
+	protected GamepadInputHandler(InputStrategySwitcher inputStrategySwitcher) {
+		super(inputStrategySwitcher, InputMethod.GAMEPAD);
 		buttonStates = new HashMap<>();
 		getTrackedInputs().forEach(input -> buttonStates.put(input, ButtonState.NOT_HELD_DOWN));
 	}
@@ -36,7 +36,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 			Gdx.app.log("GamepadInputHandler", "Just pressed:" + buttonKey);
 		}
 		setLatestInputMethod(this.inputMethod);
-		InputPriorityManager.processKeyInput(buttonKey);
+		Priority.processKeyInput(buttonKey);
 	}
 
 	protected final void justReleased(Input buttonKey) {
@@ -47,8 +47,8 @@ public abstract class GamepadInputHandler extends InputHandler {
 	}
 	
 	protected final void controllerDisconnected() {
-		inputStrategyManager.setToMouseStrategy();
-		InputPriorityManager.pauseIfNeeded();
+		inputStrategySwitcher.setToMouseStrategy();
+		Priority.pauseIfNeeded();
 	}
 
 }

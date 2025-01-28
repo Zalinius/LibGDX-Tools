@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,7 +17,6 @@ import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 
 /**
- * @author DarZal
  * A class which holds a LibGDX {@link Skin} and provides convenient named accessors.
  */
 public class SkinManager {

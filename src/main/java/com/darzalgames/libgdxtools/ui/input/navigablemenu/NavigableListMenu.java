@@ -7,13 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
  * The actor that holds a {@link NavigableList} and handles how it looks and is interacted with.
- * @author DarZal
- *
  */
 public abstract class NavigableListMenu extends Table implements InputConsumer {
 	protected NavigableList menu;
@@ -22,7 +20,7 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 		this(isVertical, new LinkedList<>());
 	}
 
-	protected NavigableListMenu(boolean isVertical, List<KeyboardButton> entries) {
+	protected NavigableListMenu(boolean isVertical, List<UniversalButton> entries) {
 		menu = new NavigableList(isVertical, entries);
 	}
 
@@ -52,11 +50,11 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	}
 
 	/**
-	 * Set the focus to a particular {@link KeyboardButton}
-	 * @param keyboardButton
+	 * Set the focus to a particular {@link UniversalButton}
+	 * @param UniversalButton
 	 */
-	public void goTo(KeyboardButton keyboardButton) {
-		menu.goTo(keyboardButton);
+	public void goTo(UniversalButton UniversalButton) {
+		menu.goTo(UniversalButton);
 	}
 
 	/**
@@ -117,7 +115,7 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	public void goTo(String entry) {
 		int nonInteractablesToIgnore = 0;
 		for (int i = 0; i < menu.allEntries.size(); i++) {
-			KeyboardButton thisEntry = menu.allEntries.get(i); 
+			UniversalButton thisEntry = menu.allEntries.get(i); 
 			if (thisEntry.doesTextMatch(entry)) {
 				menu.goTo(i - nonInteractablesToIgnore);
 				return;

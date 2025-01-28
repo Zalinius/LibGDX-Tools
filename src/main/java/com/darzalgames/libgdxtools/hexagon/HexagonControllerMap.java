@@ -13,8 +13,7 @@ import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 
 /**
  * Responsible for the visual representation and layout of a {@link HexagonMap}
- * @author DarZal
- * @param <E>
+ * @param <E> The game-specific object associated with each {@link Hexagon} and {@link HexagonController}
  */
 public class HexagonControllerMap<E> extends Group {
 

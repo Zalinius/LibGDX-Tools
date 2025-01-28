@@ -1,10 +1,10 @@
 package com.darzalgames.libgdxtools.ui.input;
 
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
 
 /**
  * Anything that can be interacted with via user input
- * @author DarZal
  */
 public interface InputConsumer {
 	/**
@@ -60,7 +60,7 @@ public interface InputConsumer {
 	 * A convenient shorthand for releasing priority
 	 */
 	public default void releasePriority() {
-		InputPriorityManager.releasePriority(this);
+		Priority.releasePriority(this);
 	}
 
 	/**

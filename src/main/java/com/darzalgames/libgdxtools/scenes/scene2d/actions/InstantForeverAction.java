@@ -7,8 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 /**
  * Almost entirely copied from the original RepeatAction implementation of a forever action,
  * this class will call act() on the action right after restart().
- * @author DarZal
- *
  */
 public class InstantForeverAction extends RepeatAction {
 	private int repeatCount;

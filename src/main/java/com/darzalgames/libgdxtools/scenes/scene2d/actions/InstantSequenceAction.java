@@ -9,8 +9,6 @@ import com.badlogic.gdx.utils.Pool;
 /**
  * Almost entirely copied from the original SequenceAction, this class will call act()
  * on the next action as soon as the first one ends.
- * @author DarZal
- *
  */
 public class InstantSequenceAction extends ParallelActionBest {
 

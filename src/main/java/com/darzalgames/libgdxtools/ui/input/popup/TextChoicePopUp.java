@@ -7,12 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.ui.Alignment;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
- * @author DarZal
  * A pop up that offers two choices, and can respond differently based on which choice is made.
  * This is versatile: it can be used for dialog choices, menus, warnings, etc.
  */
@@ -31,20 +30,20 @@ public class TextChoicePopUp extends ChoicePopUp {
 		this.secondChoiceKey = secondChoiceKey;
 		this.isWarning = isWarning;
 
-		InputPriorityManager.claimPriority(this);
+		Priority.claimPriority(this);
 	}
 
 	@Override
-	protected KeyboardButton getFirstChoiceButton() {
+	protected UniversalButton getFirstChoiceButton() {
 		return getChoiceButton(firstChoiceKey, firstChoiceRunnable);
 	}
 
 	@Override
-	protected KeyboardButton getSecondChoiceButton() {
+	protected UniversalButton getSecondChoiceButton() {
 		return getChoiceButton(secondChoiceKey, () -> getSecondChoiceRunnable().run());
 	}
 	
-	private KeyboardButton getChoiceButton(String key, Runnable toRun) {
+	private UniversalButton getChoiceButton(String key, Runnable toRun) {
 		Runnable chooseAndHideRunnable = () -> {
 			setChosenKey(key);
 			hideThis();

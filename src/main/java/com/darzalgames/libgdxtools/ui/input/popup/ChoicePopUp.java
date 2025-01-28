@@ -4,11 +4,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.data.ListFactory;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.Alignment;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
- * @author DarZal
  * A pop up that offers two choices, and can respond differently based on which choice is made.
  * This is versatile: it can be used for dialog choices, menus, warnings, etc.
  */
@@ -30,8 +29,8 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		desiredHeight = 106;
 	}
 
-	protected abstract KeyboardButton getFirstChoiceButton();
-	protected abstract KeyboardButton getSecondChoiceButton();
+	protected abstract UniversalButton getFirstChoiceButton();
+	protected abstract UniversalButton getSecondChoiceButton();
 
 	/**
 	 * What to do when the second choice is chosen. Sometimes this will be the same as the firstChoiceRunnable,
@@ -67,8 +66,8 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		}
 
 
-		KeyboardButton firstButton = getFirstChoiceButton(); 
-		KeyboardButton secondButton = getSecondChoiceButton();
+		UniversalButton firstButton = getFirstChoiceButton(); 
+		UniversalButton secondButton = getSecondChoiceButton();
 		if (isSecondButtonBack) {
 			menu.replaceContents(ListFactory.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
 		} else {

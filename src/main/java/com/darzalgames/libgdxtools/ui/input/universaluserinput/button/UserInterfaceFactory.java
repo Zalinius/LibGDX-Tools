@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -25,27 +25,26 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager.SkinManager;
-import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 
 /**
- * @author DarZal
  * The ONLY place where one should be making UI elements (buttons, labels, etc)
  */
 public class UserInterfaceFactory {
 
 	protected static Runnable quitGameRunnable;
 	private static SkinManager skinManager;
-	protected static InputStrategyManager inputStrategyManager;
+	protected static InputStrategySwitcher inputStrategySwitcher;
 	private static Supplier<Float> flashesPerSecondSupplier;
 	protected static Runnable soundInteractListener;
 
 	protected UserInterfaceFactory() {}
 
-	public static void initialize(SkinManager skinManager, InputStrategyManager inputStrategyManager, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener) {
+	public static void initialize(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener) {
 		UserInterfaceFactory.skinManager = skinManager;
-		UserInterfaceFactory.inputStrategyManager = inputStrategyManager;
+		UserInterfaceFactory.inputStrategySwitcher = inputStrategySwitcher;
 		quitGameRunnable = Gdx.app::exit;
 		UserInterfaceFactory.flashesPerSecondSupplier = flashesPerSecondSupplier;
 		UserInterfaceFactory.soundInteractListener = soundInteractListener;
@@ -73,7 +72,7 @@ public class UserInterfaceFactory {
 	 * @return
 	 */
 	public static Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
-		Label label = new InputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategyManager);
+		Label label = new InputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher);
 		label.setWrap(true);
 		return label;
 	}
@@ -89,11 +88,11 @@ public class UserInterfaceFactory {
 	 * @param text
 	 * @return
 	 */
-	public static KeyboardButton getListableLabel(final String text) {
+	public static UniversalButton getListableLabel(final String text) {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
 		TextButton textButton = new TextButton(text, skinManager.getSneakyLableButtonStyle());
 		textButton.setName(text);
-		KeyboardButton listableButton = new KeyboardButton(textButton, null, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
+		UniversalButton listableButton = new UniversalButton(textButton, null, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		listableButton.setDisabled(true);
 		return listableButton;
 	}
@@ -103,41 +102,41 @@ public class UserInterfaceFactory {
 	 * expand out to fill any available space in the menu
 	 * @return
 	 */
-	public static KeyboardButton getSpacer() {
-		KeyboardButton spacer = getListableLabel("");
+	public static UniversalButton getSpacer() {
+		UniversalButton spacer = getListableLabel("");
 		spacer.getView().setName("spacer");
 		return spacer;
 	}
 
-	public static boolean isSpacer(KeyboardButton button) {
+	public static boolean isSpacer(UniversalButton button) {
 		return button.getView().isDisabled() && button.isBlank();
 	}
 
 
-	public static KeyboardButton getButton(final String text, final Runnable runnable) {
+	public static UniversalButton getButton(final String text, final Runnable runnable) {
 		return makeButton(text, null, runnable);
 	}
 
-	public static KeyboardButton getButton(final Image image, final Runnable runnable) {
+	public static UniversalButton getButton(final Image image, final Runnable runnable) {
 		return makeButton("", image, runnable);
 	}
 
-	public static KeyboardButton getButton(final String text, Image image, final Runnable runnable) {
+	public static UniversalButton getButton(final String text, Image image, final Runnable runnable) {
 		return makeButton(text, image, runnable);
 	}
 
-	private static KeyboardButton makeButton(final String text, Image image, final Runnable runnable) {
+	private static UniversalButton makeButton(final String text, Image image, final Runnable runnable) {
 		TextButton textButton = makeLibGDXTextButton(text);
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		return new KeyboardButton(textButton, image, runnable, inputStrategyManager, soundInteractListener);
+		return new UniversalButton(textButton, image, runnable, inputStrategySwitcher, soundInteractListener);
 	}
 
 	/**
 	 * Make a button in a particular style, these are generally exceptional buttons (in Quest Giver this includes the play button, scenario map pips, etc)
 	 */
-	protected static KeyboardButton makeButton(final String text, final Runnable runnable, TextButtonStyle textButtonStyle) {
+	protected static UniversalButton makeButton(final String text, final Runnable runnable, TextButtonStyle textButtonStyle) {
 		TextButton textButton = new TextButton(text, textButtonStyle);
-		return new KeyboardButton(textButton, null, runnable, inputStrategyManager, soundInteractListener);
+		return new UniversalButton(textButton, null, runnable, inputStrategySwitcher, soundInteractListener);
 	}
 
 	/**
@@ -159,10 +158,10 @@ public class UserInterfaceFactory {
 				GameInfo.getHeight() / 2f - actor.getHeight() / 2f);
 	}
 
-	public static KeyboardSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
+	public static UniversalSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
 		TextButton textButton = new TextButton(boxLabel + ":  ", skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		KeyboardSelectBox keyboardSelectBox =  new KeyboardSelectBox(entries, textButton, inputStrategyManager, soundInteractListener);
+		UniversalSelectBox keyboardSelectBox =  new UniversalSelectBox(entries, textButton, inputStrategySwitcher, soundInteractListener);
 		keyboardSelectBox.setAction(consumer);
 		return keyboardSelectBox;
 	}
@@ -171,19 +170,19 @@ public class UserInterfaceFactory {
 		return skinManager.getUINinePatch();
 	}
 
-	public static KeyboardSlider getSlider(String sliderLabel, Consumer<Float> consumer) {
-		KeyboardButton textButton = getButton(sliderLabel, Runnables.nullRunnable());
-		return new KeyboardSlider(textButton.getView(), skinManager.getSliderStyle(), consumer, inputStrategyManager, soundInteractListener);
+	public static UniversalSlider getSlider(String sliderLabel, Consumer<Float> consumer) {
+		UniversalButton textButton = getButton(sliderLabel, Runnables.nullRunnable());
+		return new UniversalSlider(textButton.getView(), skinManager.getSliderStyle(), consumer, inputStrategySwitcher, soundInteractListener);
 	}
 
-	public static KeyboardCheckbox getCheckbox(String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer) {
-		KeyboardButton textButton = getButton("", Runnables.nullRunnable());
-		return new KeyboardCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategyManager, soundInteractListener);
+	public static UniversalCheckbox getCheckbox(String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer) {
+		UniversalButton textButton = getButton("", Runnables.nullRunnable());
+		return new UniversalCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategySwitcher, soundInteractListener);
 	}
 
-	public static KeyboardButton getInGamesSettingsButton(Runnable onclick) {
+	public static UniversalButton getInGamesSettingsButton(Runnable onclick) {
 		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()); 
-		return new MouseOnlyButton(textButton, onclick, inputStrategyManager, soundInteractListener);
+		return new MouseOnlyButton(textButton, onclick, inputStrategySwitcher, soundInteractListener);
 	}
 
 	private static final String QUIT_GAME_KEY = "quit_game";
@@ -192,14 +191,14 @@ public class UserInterfaceFactory {
 	 * @param buttonText
 	 * @return A quit button, with a default English text label if not otherwise to find
 	 */
-	public static KeyboardButton getQuitGameButton(String buttonText) {
+	public static UniversalButton getQuitGameButton(String buttonText) {
 		return getButton(buttonText, quitGameRunnable);
 	}
 
 	/**
 	 * @return A quit button, with a default English text label if not otherwise to find
 	 */
-	public static KeyboardButton getQuitGameButton() {
+	public static UniversalButton getQuitGameButton() {
 		return getQuitGameButton(getQuitButtonString());
 	}
 
@@ -214,10 +213,11 @@ public class UserInterfaceFactory {
 		return text;
 	}
 
-	public static KeyboardButton getQuitGameButtonWithWarning(Runnable runnable) {
+	public static UniversalButton getQuitGameButtonWithWarning(Runnable runnable) {
 		Runnable quitWithConfirmation = () -> {
 			runnable.run();
-			new ConfirmationMenu("menu_warning", 
+			new ConfirmationMenu(
+					"menu_warning", 
 					QUIT_GAME_KEY, 
 					quitGameRunnable::run);
 		};
@@ -229,7 +229,7 @@ public class UserInterfaceFactory {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				super.enter(event, x, y, pointer, fromActor);
-				if (KeyboardStage.isHoverEvent(pointer) && button.isTouchable()) {
+				if (UniversalInputStage.isHoverEvent(pointer) && button.isTouchable()) {
 					button.setStyle(mainButtonStyle);
 					if (shouldButtonFlash(button)) {
 						button.clearActions();
@@ -245,20 +245,20 @@ public class UserInterfaceFactory {
 			@Override
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 				super.exit(event, x, y, pointer, toActor);
-				if (KeyboardStage.isHoverEvent(pointer)) {
+				if (UniversalInputStage.isHoverEvent(pointer)) {
 					button.clearActions();
 					button.setStyle(mainButtonStyle);
 				}
 			}
 		});
 	}
-	protected static void makeSliderFlashing(KeyboardSlider keyboardSlider, SliderStyle mainStyle, SliderStyle flashedStyle) {
+	protected static void makeSliderFlashing(UniversalSlider keyboardSlider, SliderStyle mainStyle, SliderStyle flashedStyle) {
 		Button button = keyboardSlider.getView(); 
 		button.addListener(new ClickListener() {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				super.enter(event, x, y, pointer, fromActor);
-				if (KeyboardStage.isHoverEvent(pointer) && button.isTouchable()) {
+				if (UniversalInputStage.isHoverEvent(pointer) && button.isTouchable()) {
 					keyboardSlider.setSliderStyle(flashedStyle);
 					if (shouldButtonFlash(button)) {
 						button.clearActions();
@@ -274,7 +274,7 @@ public class UserInterfaceFactory {
 			@Override
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 				super.exit(event, x, y, pointer, toActor);
-				if (KeyboardStage.isHoverEvent(pointer)) {
+				if (UniversalInputStage.isHoverEvent(pointer)) {
 					button.clearActions();
 					keyboardSlider.setSliderStyle(mainStyle);
 				}
@@ -283,9 +283,9 @@ public class UserInterfaceFactory {
 	}
 
 	private static boolean shouldButtonFlash(Button button) {
-		return KeyboardStage.isInTouchableBranch(button)
+		return UniversalInputStage.isInTouchableBranch(button)
 				&& !button.isDisabled()
-				&& inputStrategyManager.shouldFlashButtons();
+				&& inputStrategySwitcher.shouldFlashButtons();
 	}
 
 	private static Action getChangeButtonStyleAfterDelayAction(Button button, ButtonStyle buttonStyle) {
@@ -300,7 +300,7 @@ public class UserInterfaceFactory {
 		return changeAfterDelay;
 	}
 
-	private static Action getChangeSliderStyleAfterDelayAction(KeyboardSlider keyboardSlider, SliderStyle sliderStyle) {
+	private static Action getChangeSliderStyleAfterDelayAction(UniversalSlider keyboardSlider, SliderStyle sliderStyle) {
 		RunnableAction change = Actions.run(() -> {
 			if (shouldButtonFlash(keyboardSlider.getView())) {
 				keyboardSlider.setSliderStyle(sliderStyle);
@@ -318,7 +318,7 @@ public class UserInterfaceFactory {
 			makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 			return textButton;
 		};
-		return new WindowResizerSelectBox(supplier, inputStrategyManager);
+		return new WindowResizerSelectBox(supplier, inputStrategySwitcher);
 	}
 	
 	private static float computeDelay() {

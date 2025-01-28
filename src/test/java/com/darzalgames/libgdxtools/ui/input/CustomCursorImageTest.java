@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.CustomCursorImage;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
 
@@ -13,20 +14,20 @@ class CustomCursorImageTest {
 
 	@Test
 	void isVisible_duringMouseStrategy_returnsTrue() throws Exception {
-		InputStrategyManager inputStrategyManager = new InputStrategyManager(new MouseInputStrategy(), new KeyboardInputStrategy());
-		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategyManager);
+		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
+		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategySwitcher);
 		
-		inputStrategyManager.setToMouseStrategy();
+		inputStrategySwitcher.setToMouseStrategy();
 
 		assertTrue(customCursor.isVisible());
 	}
 	
 	@Test
 	void isVisible_duringKeyboardStrategy_returnsFalse() throws Exception {
-		InputStrategyManager inputStrategyManager = new InputStrategyManager(new MouseInputStrategy(), new KeyboardInputStrategy());
-		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategyManager);
+		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
+		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategySwitcher);
 		
-		inputStrategyManager.setToKeyboardStrategy();
+		inputStrategySwitcher.setToKeyboardStrategy();
 
 		assertFalse(customCursor.isVisible());
 	}

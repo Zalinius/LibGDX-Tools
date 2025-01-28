@@ -6,20 +6,19 @@ import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.*;
-import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
  * Allows for navigation around a {@link HexagonControllerMap} using keyboard or gamepad
- * @author DarZal
- * @param <E>
+ * @param <E> The game-specific object associated with each {@link Hexagon} and {@link HexagonController}
  */
 public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> implements InputConsumer, InputObserver {
 
 	private Hexagon currentHexagon;
 
 	/**
-	 * Be sure to register this object with the {@link InputStrategyManager}
+	 * Be sure to register this object with the {@link InputStrategySwitcher}
 	 * @param hexagonControllerMap The map of hexagon controllers to be navigated
 	 */
 	public NavigableHexagonMap(HexagonControllerMap<E> hexagonControllerMap) {
@@ -77,9 +76,9 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	}
 
 	@Override
-	public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
+	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
 		getActor().unfocusAll();
-		if (inputStrategyManager.showMouseExclusiveUI()) {
+		if (inputStrategySwitcher.showMouseExclusiveUI()) {
 			getActor().setTouchable(Touchable.enabled);
 		} else {
 			getActor().setTouchable(Touchable.disabled);
@@ -94,7 +93,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	}
 
 	private boolean isInputAllowed() {
-		return KeyboardStage.isInTouchableBranch(this);
+		return UniversalInputStage.isInTouchableBranch(this);
 	}
 
 	/**

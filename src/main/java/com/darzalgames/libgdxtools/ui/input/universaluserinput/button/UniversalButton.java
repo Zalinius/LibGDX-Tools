@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.function.Supplier;
 
@@ -13,15 +13,14 @@ import com.darzalgames.darzalcommon.strings.StringUtils;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
- * @author DarZal
  * Our very own custom button class that works with keyboard input!
  * This is also the base class for other keyboard *buttons* such as checkboxes and sliders,
  * which allows them all to be put in a navigable menu together and treated the same
  */
-public class KeyboardButton implements VisibleInputConsumer {
+public class UniversalButton implements VisibleInputConsumer {
 	private TextButton button;
 	private Supplier<Label> labelSupplier;
 	private Supplier<Cell<Label>> cellSupplier;
@@ -30,23 +29,23 @@ public class KeyboardButton implements VisibleInputConsumer {
 	private Alignment alignment;
 	private boolean wrap;
 	private boolean doesSoundOnInteract = true;
-	private final InputStrategyManager inputStrategyManager;
+	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Runnable soundInteractListener;
 
-	public KeyboardButton(TextButton button, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
-		this(button, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
+	public UniversalButton(TextButton button, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		this(button, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 	}
 	
-	public KeyboardButton(TextButton button, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) { 
-		this(button, null, runnable, inputStrategyManager, soundInteractListener);
+	public UniversalButton(TextButton button, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) { 
+		this(button, null, runnable, inputStrategySwitcher, soundInteractListener);
 	}
 	
-	public KeyboardButton(TextButton button, Image image, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
+	public UniversalButton(TextButton button, Image image, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		this.button = button;
 		this.labelSupplier = button::getLabel;
 		this.cellSupplier = button::getLabelCell;
 		this.buttonRunnable = runnable;
-		this.inputStrategyManager = inputStrategyManager;
+		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.image = image;
 		this.wrap = true;
 		this.alignment = Alignment.CENTER;
@@ -81,7 +80,7 @@ public class KeyboardButton implements VisibleInputConsumer {
 	}
 
 	/**
-	 * This will play the interaction sound immediately if this button has {@link KeyboardButton#doesSoundOnInteract} set to true (generally the default)
+	 * This will play the interaction sound immediately if this button has {@link UniversalButton#doesSoundOnInteract} set to true (generally the default)
 	 */
 	protected void requestInteractSound() {
 		if (doesSoundOnInteract) {
@@ -122,7 +121,7 @@ public class KeyboardButton implements VisibleInputConsumer {
 		if (!isFocused) {
 			event.setType(InputEvent.Type.exit);
 		}
-		else if (isFocused && inputStrategyManager.shouldFlashButtons()) {
+		else if (isFocused && inputStrategySwitcher.shouldFlashButtons()) {
 			event.setType(InputEvent.Type.enter);
 		}
 		else {
@@ -224,12 +223,12 @@ public class KeyboardButton implements VisibleInputConsumer {
 
 	@Override
 	public void gainFocus() {
-		focusCurrent();
+		setFocused(true);
 	}
 
 	@Override
 	public void loseFocus() {
-		clearSelected();
+		setFocused(false);
 	}
 
 	@Override

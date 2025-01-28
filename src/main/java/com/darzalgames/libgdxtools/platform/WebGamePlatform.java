@@ -3,7 +3,7 @@ package com.darzalgames.libgdxtools.platform;
 import com.badlogic.gdx.files.FileHandle;
 import com.darzalgames.libgdxtools.steam.agnostic.DummySteamStrategy;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class WebGamePlatform implements GamePlatform {
 	
@@ -29,8 +29,8 @@ public class WebGamePlatform implements GamePlatform {
 	}
 	
 	@Override
-	public SteamStrategy getSteamStrategy(InputStrategyManager inputStrategyManager) {
-		return new DummySteamStrategy(GamePlatform.makeFallbackGamepadInputHandlerSupplier(inputStrategyManager).get());
+	public SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher) {
+		return new DummySteamStrategy(GamePlatform.makeFallbackGamepadInputHandlerSupplier(inputStrategySwitcher).get());
 	}
 
 	@Override

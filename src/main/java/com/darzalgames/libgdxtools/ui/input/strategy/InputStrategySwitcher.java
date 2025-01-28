@@ -8,21 +8,21 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
-import com.darzalgames.libgdxtools.ui.input.InputObserver;
-import com.darzalgames.libgdxtools.ui.input.InputSubject;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSubject;
 
 /**
  * Tracks the current input strategy, and handles switching between them as needed.
  * @author DarZal
  */
-public class InputStrategyManager extends Actor implements InputStrategy, InputSubject, DoesNotPause {
+public class InputStrategySwitcher extends Actor implements InputStrategy, InputSubject, DoesNotPause {
 
 	protected InputStrategy currentInputStrategy;
 	protected InputStrategy previousInputStrategy;
 	protected final InputStrategy mouseInputStrategy;
 	protected final InputStrategy keyboardInputStrategy;
 
-	public InputStrategyManager(InputStrategy mouseInputStrategy, InputStrategy keyboardInputStrategy) {
+	public InputStrategySwitcher(InputStrategy mouseInputStrategy, InputStrategy keyboardInputStrategy) {
 		this.mouseInputStrategy = mouseInputStrategy;
 		this.keyboardInputStrategy = keyboardInputStrategy;
 
@@ -87,14 +87,14 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 	}
 
 	/**
-	 * To be used before a call to {@link InputStrategyManager#revertToPreviousStrategy()}
+	 * To be used before a call to {@link InputStrategySwitcher#revertToPreviousStrategy()}
 	 */
 	public void saveCurrentStrategy() {
 		previousInputStrategy = currentInputStrategy;
 	}
 
 	/**
-	 * NOTE: before messing around with something that changes modes, it's essential to call {@link InputStrategyManager#saveCurrentStrategy()}
+	 * NOTE: before messing around with something that changes modes, it's essential to call {@link InputStrategySwitcher#saveCurrentStrategy()}
 	 * <p>
 	 * We revert to the previous input strategy after a very short delay.
 	 * This is used when swapping between full screen and windowed mode,
@@ -105,7 +105,7 @@ public class InputStrategyManager extends Actor implements InputStrategy, InputS
 		if (previousInputStrategy != null) {
 			DelayAction delayAction = new DelayAction(0.2f);
 			RunnableActionBest resetInputAction = new RunnableActionBest(() -> {
-				if (InputStrategyManager.this.previousInputStrategy == InputStrategyManager.this.keyboardInputStrategy) {
+				if (InputStrategySwitcher.this.previousInputStrategy == InputStrategySwitcher.this.keyboardInputStrategy) {
 					setToKeyboardStrategy();
 				}  else {
 					setToMouseStrategy();

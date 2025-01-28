@@ -2,10 +2,10 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 
 import com.darzalgames.darzalcommon.data.Coordinate;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSelectBox;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
 
 public abstract class WindowResizer {
 
@@ -25,18 +25,18 @@ public abstract class WindowResizer {
 	protected abstract void switchToBorderless();
 	protected abstract void switchToFullScreen();
 
-	private InputStrategyManager inputStrategyManager;
+	private InputStrategySwitcher inputStrategySwitcher;
 	private WindowResizerButton windowResizerButton;
 
 	/**
 	 * Initialize the WindowResizer, setting the window to the preferred mode based on the user's history
 	 * We do this in initialize() rather than a constructor because this object is created at the same time as the entire game,
 	 * and so LibGDX isn't ready to do any resizing yet
-	 * @param inputStrategyManager
+	 * @param inputStrategySwitcher
 	 * @param windowResizerButton
 	 */
-	public void initialize(InputStrategyManager inputStrategyManager, WindowResizerButton windowResizerButton) {
-		this.inputStrategyManager = inputStrategyManager;
+	public void initialize(InputStrategySwitcher inputStrategySwitcher, WindowResizerButton windowResizerButton) {
+		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.windowResizerButton = windowResizerButton;
 		windowResizerButton.setWindowResizer(this);
 		getModeSelectBox();
@@ -46,10 +46,10 @@ public abstract class WindowResizer {
 	}
 
 	/**
-	 * @return A {@link KeyboardButton} which, when pressed, opens a {@link KeyboardSelectBox select box} for changing the window mode
+	 * @return A {@link UniversalButton} which, when pressed, opens a {@link UniversalSelectBox select box} for changing the window mode
 	 */
-	public KeyboardButton getModeSelectBox() {
-		KeyboardButton button = windowResizerButton.getButton();
+	public UniversalButton getModeSelectBox() {
+		UniversalButton button = windowResizerButton.getButton();
 		if (currentScreenMode != null) {
 			windowResizerButton.setSelected(currentScreenMode);			
 		}
@@ -77,7 +77,7 @@ public abstract class WindowResizer {
 		currentScreenMode = screenMode;
 		GameInfo.getPreferenceManager().other().setStringPrefValue(SCREEN_MODE_KEY, currentScreenMode.name());
 
-		inputStrategyManager.saveCurrentStrategy();
+		inputStrategySwitcher.saveCurrentStrategy();
 		switch (currentScreenMode) {
 		case BORDERLESS:
 			switchToBorderless();
@@ -90,10 +90,10 @@ public abstract class WindowResizer {
 			break;
 		}
 		offerToRevert = offerToRevert && previousScreenMode != currentScreenMode; 
-		inputStrategyManager.revertToPreviousStrategy();
+		inputStrategySwitcher.revertToPreviousStrategy();
 		windowResizerButton.setSelected(currentScreenMode);
 		if (offerToRevert) {
-			InputPriorityManager.claimPriority(windowResizerButton.getRevertMenu());
+			Priority.claimPriority(windowResizerButton.getRevertMenu());
 		}
 	}
 

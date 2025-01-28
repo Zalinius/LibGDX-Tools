@@ -22,15 +22,15 @@ import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
-import com.darzalgames.libgdxtools.ui.input.CustomCursorImage;
+import com.darzalgames.libgdxtools.ui.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.input.GlyphFactory;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
+import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
+import com.darzalgames.libgdxtools.ui.input.UniversalInputStageWithBackground;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
-import com.darzalgames.libgdxtools.ui.input.keyboard.MouseDetector;
-import com.darzalgames.libgdxtools.ui.input.keyboard.stage.KeyboardStage;
-import com.darzalgames.libgdxtools.ui.input.keyboard.stage.StageWithBackground;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.handler.MouseInputHandler;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
@@ -50,7 +50,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected Stage popUpStage;
 	private Stage backgroundStage;
 	private Stage cursorStage;
-	private Stage mouseDetectorStage;
+	private Stage mouseInputHandlerStage;
 
 	protected abstract void initializeAssets();
 	protected abstract SaveManager makeSaveManager();
@@ -63,8 +63,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected GameScreen currentScreen;
 	protected WindowResizer windowResizer;
 	protected List<DoesNotPause> actorsThatDoNotPause;
-	protected InputStrategyManager inputStrategyManager;
-	private MouseDetector mouseDetector;
+	protected InputStrategySwitcher inputStrategySwitcher;
+	private MouseInputHandler mouseInputHandler;
 	
 	private boolean isQuitting = false;
 
@@ -94,8 +94,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	public final void create() {
 		initializeAssets();
 		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
-		inputStrategyManager = makeInputStrategyManager();
-		this.steamStrategy = gamePlatform.getSteamStrategy(inputStrategyManager);
+		inputStrategySwitcher = makeInputStrategySwitcher();
+		this.steamStrategy = gamePlatform.getSteamStrategy(inputStrategySwitcher);
 
 		makeBackgroundStage();
 		makePopUpStage();
@@ -103,14 +103,14 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 		setUpInputPrioritizer();
 		setUpInputForAllStages();
-		actorsThatDoNotPause.add(inputStrategyManager);
+		actorsThatDoNotPause.add(inputStrategySwitcher);
 
 		setUpBeforeLoadingSave();
 		saveManager = makeSaveManager();
 		boolean isNewSave = !saveManager.load();
 		
 		launchGame(isNewSave);
-		windowResizer.initialize(inputStrategyManager, makeWindowResizerButton());
+		windowResizer.initialize(inputStrategySwitcher, makeWindowResizerButton());
 	}
 
 	private void makeBackgroundStage() {
@@ -125,23 +125,23 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void makePopUpStage() {
 		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
-		popUpStage = new KeyboardStage(new PixelPerfectViewport(width, height), inputStrategyManager);
+		popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher);
 	}
 
 	private void makeMainStageAndMouseStages() {
-		mouseDetectorStage = new Stage(new ScreenViewport());
-		mouseDetector = new MouseDetector(inputStrategyManager);
-		mouseDetectorStage.addActor(mouseDetector);
+		mouseInputHandlerStage = new Stage(new ScreenViewport());
+		mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
+		mouseInputHandlerStage.addActor(mouseInputHandler);
 
 		// Set up main game stage
-		stage = new StageWithBackground(new PixelPerfectViewport(width, height), getMainStageBackgroundTexture(), inputStrategyManager);
+		stage = new UniversalInputStageWithBackground(new PixelPerfectViewport(width, height), getMainStageBackgroundTexture(), inputStrategySwitcher);
 
 		cursorStage = new Stage(new ExtendViewport(width, height));
 	}
 
 	private void setUpInputForAllStages() {
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(mouseDetectorStage);
+		inputMultiplexer.addProcessor(mouseInputHandlerStage);
 		inputMultiplexer.addProcessor(cursorStage);
 		inputMultiplexer.addProcessor(popUpStage);
 		inputMultiplexer.addProcessor(stage);
@@ -149,27 +149,27 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	protected CustomCursorImage getCustomCursor() {
-		return new CustomCursorImage(windowResizer::isWindowed, ColorTools.getDefaultCursor(), inputStrategyManager);
+		return new CustomCursorImage(windowResizer::isWindowed, ColorTools.getDefaultCursor(), inputStrategySwitcher);
 	}
 
 	/**
-	 * @return An InputStrategyManager, in case the base class wants to extend its functionality (e.g. Quest Giver adds
+	 * @return An InputStrategySwitcher, in case the base class wants to extend its functionality (e.g. Quest Giver adds
 	 * button hints, and more specific gamepad handling may be wanted in the future)
 	 */
-	protected InputStrategyManager makeInputStrategyManager() {
-		return new InputStrategyManager(new MouseInputStrategy(), new KeyboardInputStrategy());
+	protected InputStrategySwitcher makeInputStrategySwitcher() {
+		return new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
 	}
 
 	private void setUpInputPrioritizer() {
 		// Set up input processing for all strategies
-		stage.addActor(inputStrategyManager);
+		stage.addActor(inputStrategySwitcher);
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
 		GamepadInputHandler gamepadInputHandler = steamStrategy.getGamepadInputHandler();
 		actorsThatDoNotPause.add(keyboardInputHandler);
 		actorsThatDoNotPause.add(gamepadInputHandler);
 		cursorStage.addActor(getCustomCursor());
-		InputPriorityManager.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler, inputStrategyManager);
-		GlyphFactory.initialize(ListFactory.of(gamepadInputHandler, keyboardInputHandler, mouseDetector));
+		Priority.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler, inputStrategySwitcher);
+		GlyphFactory.initialize(ListFactory.of(gamepadInputHandler, keyboardInputHandler, mouseInputHandler));
 	}
 
 	protected final void changeScreen(GameScreen gameScreen) {
@@ -190,7 +190,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			backgroundStage.draw();
 
 			stage.getViewport().apply();
-			if (InputPriorityManager.isPaused()) {
+			if (Priority.isPaused()) {
 				stage.draw();
 				float delta = Gdx.graphics.getDeltaTime();
 				actorsThatDoNotPause.forEach(actor -> actor.actWhilePaused(delta));
@@ -207,9 +207,9 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			cursorStage.act();
 			cursorStage.draw();
 
-			mouseDetectorStage.getViewport().apply();
-			mouseDetectorStage.act();
-			mouseDetectorStage.draw();
+			mouseInputHandlerStage.getViewport().apply();
+			mouseInputHandlerStage.act();
+			mouseInputHandlerStage.draw();
 		}
 
 		steamStrategy.update();
@@ -234,8 +234,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		backgroundStage.getCamera().update();
 		stage.getViewport().update(width, height, true);
 		stage.getCamera().update();
-		mouseDetectorStage.getViewport().update(width, height, true);
-		mouseDetectorStage.getCamera().update();
+		mouseInputHandlerStage.getViewport().update(width, height, true);
+		mouseInputHandlerStage.getCamera().update();
 		popUpStage.getViewport().update(width, height, true);
 		popUpStage.getCamera().update();
 		cursorStage.getViewport().update(width, height, true);

@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input;
+package com.darzalgames.libgdxtools.ui;
 
 import java.util.function.Supplier;
 
@@ -11,7 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class CustomCursorImage extends Image implements DoesNotPause, InputObserver {
 
@@ -23,10 +24,10 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	 * An Image which follows the (hidden) cursor around, allowing you to keep the visible cursor the same pixel resolution regardless of window size.
 	 * @param checkIsWindowed A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
 	 * @param cursorTexture
-	 * @param inputStrategyManager
+	 * @param inputStrategySwitcher
 	 */
-	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, InputStrategyManager inputStrategyManager) {
-		this(checkIsWindowed, cursorTexture, cursorTexture, inputStrategyManager);
+	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, InputStrategySwitcher inputStrategySwitcher) {
+		this(checkIsWindowed, cursorTexture, cursorTexture, inputStrategySwitcher);
 	}
 
 	/**
@@ -34,9 +35,9 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	 * @param checkIsWindowed A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
 	 * @param cursorTexture
 	 * @param clickedCursorTexture The texture shown while the left mouse button is held down
-	 * @param inputStrategyManager
+	 * @param inputStrategySwitcher
 	 */
-	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, Texture clickedCursorTexture, InputStrategyManager inputStrategyManager) {
+	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, Texture clickedCursorTexture, InputStrategySwitcher inputStrategySwitcher) {
 		super();
 		this.cursorTexture = cursorTexture;
 		this.clickedCursorTexture = clickedCursorTexture;
@@ -47,7 +48,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 		}
 		setTouchable(Touchable.disabled);
 		this.checkIsWindowed = checkIsWindowed;
-		inputStrategyManager.register(this);
+		inputStrategySwitcher.register(this);
 	}
 	
 	private void setCursorImage(Texture texture) {
@@ -86,8 +87,8 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	}
 
 	@Override
-	public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
-		setVisible(inputStrategyManager.showMouseExclusiveUI());
+	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
+		setVisible(inputStrategySwitcher.showMouseExclusiveUI());
 	}
 
 	@Override

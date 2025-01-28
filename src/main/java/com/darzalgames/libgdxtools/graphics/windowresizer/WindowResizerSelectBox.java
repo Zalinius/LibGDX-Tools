@@ -18,17 +18,17 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardSelectBox;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 public class WindowResizerSelectBox implements WindowResizerButton {
 
 	private static Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase());
-	private KeyboardSelectBox selectBox;
+	private UniversalSelectBox selectBox;
 	private final Supplier<TextButton> textButtonSupplier;
-	private final InputStrategyManager inputStrategyManager;
+	private final InputStrategySwitcher inputStrategySwitcher;
 	
 	private WindowResizer windowResizer;
 	@Override
@@ -36,9 +36,9 @@ public class WindowResizerSelectBox implements WindowResizerButton {
 		this.windowResizer = windowResizer;
 	}
 
-	public WindowResizerSelectBox(Supplier<TextButton> textButtonSupplier, InputStrategyManager inputStrategyManager) {
+	public WindowResizerSelectBox(Supplier<TextButton> textButtonSupplier, InputStrategySwitcher inputStrategySwitcher) {
 		this.textButtonSupplier = textButtonSupplier;
-		this.inputStrategyManager = inputStrategyManager;
+		this.inputStrategySwitcher = inputStrategySwitcher;
 	}
 	
 	private static Collection<String> getEntries() {
@@ -122,8 +122,8 @@ public class WindowResizerSelectBox implements WindowResizerButton {
 	}
 
 	@Override
-	public KeyboardButton getButton() {
-		selectBox = new KeyboardSelectBox(getEntries(), textButtonSupplier.get(), inputStrategyManager, Runnables.nullRunnable());//TODO replace null runnable?
+	public UniversalButton getButton() {
+		selectBox = new UniversalSelectBox(getEntries(), textButtonSupplier.get(), inputStrategySwitcher, Runnables.nullRunnable());//TODO replace null runnable?
 		
 		selectBox.setAction(selectedNewMode -> {
 			String previousMode = GameInfo.getPreferenceManager().other().getStringPrefValue(WindowResizer.SCREEN_MODE_KEY);

@@ -8,7 +8,6 @@ import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 
 /**
  * Allows static access to the globally useful variables/managers from {@link MainGame}
- * @author DarZal
  */
 public class GameInfo {
 

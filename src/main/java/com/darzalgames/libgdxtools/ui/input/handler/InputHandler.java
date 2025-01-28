@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
  * @author DarZal
@@ -13,11 +13,11 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
  */
 public abstract class InputHandler extends Table implements DoesNotPause {
 	
-	protected final InputStrategyManager inputStrategyManager;
+	protected final InputStrategySwitcher inputStrategySwitcher;
 	protected final InputMethod inputMethod;
 	
-	protected InputHandler(InputStrategyManager inputStrategyManager, InputMethod inputMethod) {
-		this.inputStrategyManager = inputStrategyManager;
+	protected InputHandler(InputStrategySwitcher inputStrategySwitcher, InputMethod inputMethod) {
+		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.inputMethod = inputMethod;
 	}
 

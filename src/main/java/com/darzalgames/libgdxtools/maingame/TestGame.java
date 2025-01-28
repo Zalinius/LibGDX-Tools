@@ -18,21 +18,18 @@ import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
-import com.darzalgames.libgdxtools.platform.DesktopGamePlatformHelper;
-import com.darzalgames.libgdxtools.platform.LinuxGamePlatform;
-import com.darzalgames.libgdxtools.platform.MacGamePlatform;
-import com.darzalgames.libgdxtools.platform.WindowsGamePlatform;
+import com.darzalgames.libgdxtools.platform.*;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.*;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.skinmanager.SkinManager;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
-import com.darzalgames.libgdxtools.ui.optionsmenu.OptionsMenu;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
 
 public class TestGame extends MainGame {
@@ -70,7 +67,7 @@ public class TestGame extends MainGame {
 	@Override
 	protected void launchGame(boolean isNewSave) {
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
-		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategyManager, () -> 2.5f, Runnables.nullRunnable());
+		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable());
 		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override
@@ -87,14 +84,14 @@ public class TestGame extends MainGame {
 				TestOptionsMenu optionsMenu = new TestOptionsMenu(windowResizer::getModeSelectBox);
 				addActor(optionsMenu.getButton().getView());
 				optionsMenu.getButton().getView().setPosition(3, GameInfo.getHeight() - optionsMenu.getButton().getView().getHeight() - 3);
-				InputPriorityManager.setPauseUI(optionsMenu);
+				Priority.setPauseUI(optionsMenu);
 			}
 		}));
 	}
 
 	@Override
 	protected KeyboardInputHandler makeKeyboardInputHandler() {
-		return new KeyboardInputHandler(inputStrategyManager) {
+		return new KeyboardInputHandler(inputStrategySwitcher) {
 			@Override
 			protected Input remapInputIfNecessary(Input input, int keycode) {
 				return input;
@@ -143,14 +140,14 @@ public class TestGame extends MainGame {
 		return "com.darzalgames.libgdxtools.preferences";
 	}
 
-	protected static List<KeyboardButton> getMenuEntries() {
-		List<KeyboardButton> menuButtons = new ArrayList<>();
+	protected static List<UniversalButton> getMenuEntries() {
+		List<UniversalButton> menuButtons = new ArrayList<>();
 
-		KeyboardSlider basicSlider = UserInterfaceFactory.getSlider("Slider with a label", newValue -> {});
+		UniversalSlider basicSlider = UserInterfaceFactory.getSlider("Slider with a label", newValue -> {});
 		basicSlider.setSliderPosition(0.5f, false);
 		menuButtons.add(basicSlider);
 
-		KeyboardCheckbox focusMute = UserInterfaceFactory.getCheckbox(
+		UniversalCheckbox focusMute = UserInterfaceFactory.getCheckbox(
 				"I am NOT checked!",
 				"I am checked!",
 				isChecked -> {});
@@ -158,8 +155,8 @@ public class TestGame extends MainGame {
 		menuButtons.add(focusMute);
 
 		String sliderInfo = "The below slider is at ";
-		KeyboardButton sliderInfoLabel = UserInterfaceFactory.getListableLabel(sliderInfo + "0.5");
-		KeyboardSlider funSlider = UserInterfaceFactory.getSlider("", newValue -> sliderInfoLabel.updateText(sliderInfo + String.format("%.1f", newValue)));
+		UniversalButton sliderInfoLabel = UserInterfaceFactory.getListableLabel(sliderInfo + "0.5");
+		UniversalSlider funSlider = UserInterfaceFactory.getSlider("", newValue -> sliderInfoLabel.updateText(sliderInfo + String.format("%.1f", newValue)));
 		funSlider.setSliderPosition(0.5f, false);
 		menuButtons.add(sliderInfoLabel);
 		menuButtons.add(funSlider);
@@ -176,7 +173,7 @@ public class TestGame extends MainGame {
 		String fast = TextSupplier.getLine("option 2");
 		Supplier<String> textSpeedLabelSupplier = () -> (TextSupplier.getLine("An option select box")); 
 		Consumer<String> choiceResponder = selectedNewtextSpeed -> {};
-		KeyboardSelectBox textSpeedSelectBox = UserInterfaceFactory.getSelectBox( 
+		UniversalSelectBox textSpeedSelectBox = UserInterfaceFactory.getSelectBox( 
 				textSpeedLabelSupplier.get(),
 				List.of(instant, fast),
 				choiceResponder
@@ -189,13 +186,14 @@ public class TestGame extends MainGame {
 		return menuButtons;
 	}
 
-	private static class TestOptionsMenu extends OptionsMenu {
 
-		protected TestOptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox) {
+	
+	private class TestOptionsMenu extends PauseMenu {
+
+		protected TestOptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox) {
 			super(makeWindowModeSelectBox, 0);
 			optionsButton = UserInterfaceFactory.getInGamesSettingsButton(() -> toggleScreenVisibility(true));
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
-			InputPriorityManager.setPauseUI(this);
 		}
 
 		@Override
@@ -210,25 +208,25 @@ public class TestGame extends MainGame {
 		@Override protected String getGameVersion() {return "version goes here";}
 
 		@Override
-		protected Collection<KeyboardButton> makeMiddleButtons() {
+		protected Collection<UniversalButton> makeMiddleButtons() {
 			return new ArrayList<>();
 		}
 
 		@Override
-		protected KeyboardButton makeButtonAboveQuitButton() {return null;}
+		protected UniversalButton makeButtonAboveQuitButton() {return null;}
 
 		@Override
 		protected PopUp makeControlsPopUp() {
 			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", Runnables.nullRunnable());
 		}
 
-		@Override protected KeyboardButton makeReportBugButton() {return UserInterfaceFactory.getButton("One could report a bug here", Runnables.nullRunnable());}
-		@Override protected KeyboardButton makeControlsButton() {
-			return UserInterfaceFactory.getButton("This is where one could theoretically view controls", () -> InputPriorityManager.claimPriority(makeControlsPopUp()));
+		@Override protected UniversalButton makeReportBugButton() {return UserInterfaceFactory.getButton("One could report a bug here", Runnables.nullRunnable());}
+		@Override protected UniversalButton makeControlsButton() {
+			return UserInterfaceFactory.getButton("This is where one could theoretically view controls", () -> Priority.claimPriority(makeControlsPopUp()));
 		}
 
 		@Override
-		protected KeyboardButton makeQuitButton() {
+		protected UniversalButton makeQuitButton() {
 			return UserInterfaceFactory.getQuitGameButton();
 		}
 
@@ -254,10 +252,9 @@ public class TestGame extends MainGame {
 		};
 	}
 
-
 	@Override
 	protected WindowResizerButton makeWindowResizerButton() {
 		return UserInterfaceFactory.getWindowModeTextSelectBox();
 	}
-
+	
 }

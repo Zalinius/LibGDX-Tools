@@ -1,28 +1,28 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.stage;
+package com.darzalgames.libgdxtools.ui.input;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public class KeyboardStage extends Stage {
+public class UniversalInputStage extends Stage {
 
-	private final InputStrategyManager inputStrategyManager;
+	private final InputStrategySwitcher inputStrategySwitcher;
 
 	/**
-	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategyManager} input mode
+	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
 	 * @param viewport
 	 */
-	public KeyboardStage(Viewport viewport, InputStrategyManager inputStrategyManager) {
+	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher) {
 		super(viewport);
-		this.inputStrategyManager = inputStrategyManager;
+		this.inputStrategySwitcher = inputStrategySwitcher;
 	}
 
 	@Override
 	public void act(final float delta) {
-		if (!inputStrategyManager.shouldFlashButtons()) {
+		if (!inputStrategySwitcher.shouldFlashButtons()) {
 			// if playing mouse-driven, use a normal stage
 			super.act(delta);
 		} else {
@@ -34,7 +34,7 @@ public class KeyboardStage extends Stage {
 	
 	@Override
 	public boolean scrolled(float amountX, float amountY) {
-		InputPriorityManager.receiveScrollInput(amountY);
+		Priority.receiveScrollInput(amountY);
 		return true;
 	}
 

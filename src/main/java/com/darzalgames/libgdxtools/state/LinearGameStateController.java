@@ -2,9 +2,6 @@ package com.darzalgames.libgdxtools.state;
 
 /**
  * This class is a more simple GameStateController which doesn't really involve the player interacting with UI
- * 
- * @author DarZal
- *
  */
 public abstract class LinearGameStateController extends GameStateController {
 

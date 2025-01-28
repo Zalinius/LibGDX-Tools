@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input;
+package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import java.util.*;
 
@@ -13,12 +13,13 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
+import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
-import com.darzalgames.libgdxtools.ui.optionsmenu.OptionsMenu;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 /**
  * The amazing ultra big class that handles the input stack, handling which {@link InputConsumer}
@@ -26,14 +27,14 @@ import com.darzalgames.libgdxtools.ui.optionsmenu.OptionsMenu;
  * @author DarZal
  *
  */
-public class InputPriorityManager {
+public class Priority {
 
 	private static Deque<InputConsumer> inputConsumerStack = new ArrayDeque<>();
 	private static Image darkScreen;
 
-	private static KeyboardButton pauseButton;
-	private static OptionsMenu optionsMenu;
-	private static Map<Input, KeyboardButton> specialButtons = new HashMap<>();
+	private static UniversalButton pauseButton;
+	private static PauseMenu optionsMenu;
+	private static Map<Input, UniversalButton> specialButtons = new HashMap<>();
 
 	private static Stage popUpStage;
 
@@ -42,11 +43,11 @@ public class InputPriorityManager {
 
 	private static GamepadInputHandler gamepadInputHandler;
 	private static KeyboardInputHandler keyboardInputHandler;
-	private static InputStrategyManager inputStrategyManager;
+	private static InputStrategySwitcher inputStrategySwitcher;
 
 	private static boolean toggleWithF11 = true;
 
-	private InputPriorityManager() {}
+	private Priority() {}
 
 	/**
 	 * It's essential to do this, there'll probably be a crash if you don't \_( ͡⟃ ͜ʖ ⟄)_/
@@ -57,12 +58,12 @@ public class InputPriorityManager {
 	 * @param keyboardInputHandler The keyboard input handler to use
 	 */
 	public static void initialize(Stage mainStage, Stage popUpStage, Runnable toggleFullscreenRunnable,
-			GamepadInputHandler gamepadInputHandler, KeyboardInputHandler keyboardInputHandler, InputStrategyManager inputStrategyManager) {
-		InputPriorityManager.popUpStage = popUpStage;
-		InputPriorityManager.toggleFullscreenRunnable = toggleFullscreenRunnable;
-		InputPriorityManager.gamepadInputHandler = gamepadInputHandler;
-		InputPriorityManager.keyboardInputHandler = keyboardInputHandler;
-		InputPriorityManager.inputStrategyManager = inputStrategyManager;
+			GamepadInputHandler gamepadInputHandler, KeyboardInputHandler keyboardInputHandler, InputStrategySwitcher inputStrategySwitcher) {
+		Priority.popUpStage = popUpStage;
+		Priority.toggleFullscreenRunnable = toggleFullscreenRunnable;
+		Priority.gamepadInputHandler = gamepadInputHandler;
+		Priority.keyboardInputHandler = keyboardInputHandler;
+		Priority.inputStrategySwitcher = inputStrategySwitcher;
 
 		clearStackAndAddBlankConsumer();
 
@@ -88,15 +89,15 @@ public class InputPriorityManager {
 
 			@Override
 			public boolean act(float delta) {
-				InputPriorityManager.timeSinceScroll += delta;
+				Priority.timeSinceScroll += delta;
 				return false;
 			}
 		}));
 
 
 		// Enter the default strategy (mouse) during this initialization
-		inputStrategyManager.setToMouseStrategy();
-		inputStrategyManager.register(new InputChangeObserver());
+		inputStrategySwitcher.setToMouseStrategy();
+		inputStrategySwitcher.register(new InputChangeObserver());
 	}
 
 	/**
@@ -131,7 +132,7 @@ public class InputPriorityManager {
 		} else if (specialButtons.containsKey(input)) {
 			specialButtons.get(input).consumeKeyInput(Input.ACCEPT);
 		}
-		else if (!inputConsumerStack.isEmpty() && !inputStrategyManager.setToKeyboardStrategy()) {
+		else if (!inputConsumerStack.isEmpty() && !inputStrategySwitcher.setToKeyboardStrategy()) {
 			inputConsumerStack.peek().consumeKeyInput(input);
 		}		
 	}
@@ -161,7 +162,7 @@ public class InputPriorityManager {
 		if (popup.canDismiss()) {
 			popup.addListener(rightClickBack);
 		}
-		InputPriorityManager.showDarkScreen(popup.getZIndex(), popup.canDismiss());
+		Priority.showDarkScreen(popup.getZIndex(), popup.canDismiss());
 	}
 
 	private static float timeSinceScroll = 0;
@@ -180,7 +181,7 @@ public class InputPriorityManager {
 
 			if (Math.abs(amount) > 0.1f && hasFinishedScrolling) {
 				timeSinceScroll = 0;
-				inputStrategyManager.setToMouseStrategy();
+				inputStrategySwitcher.setToMouseStrategy();
 				inputConsumerStack.peek().consumeKeyInput(amount < 0 ? Input.SCROLL_UP : Input.SCROLL_DOWN);
 				hasFinishedScrolling = false;
 			}
@@ -220,16 +221,16 @@ public class InputPriorityManager {
 	 * @param optionsMenu The menu to show when the pause button is pressed.
 	 * This might be different depending on if you're on the main menu or in the game.
 	 */
-	public static void setPauseUI(OptionsMenu optionsMenu) {
+	public static void setPauseUI(PauseMenu optionsMenu) {
 		clearPauseButtonUI();
 		pauseButton = optionsMenu.getButton();
 		popUpStage.addActor(pauseButton.getView());
-		InputPriorityManager.optionsMenu = optionsMenu;
+		Priority.optionsMenu = optionsMenu;
 	}
 
-	private static void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
+	private static void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
 		if (!inputConsumerStack.isEmpty()) {
-			if (inputStrategyManager.shouldFlashButtons()) {
+			if (inputStrategySwitcher.shouldFlashButtons()) {
 				if (!inputConsumerStack.isEmpty()) {
 					inputConsumerStack.peek().selectDefault();
 				}
@@ -260,7 +261,7 @@ public class InputPriorityManager {
 		darkScreen.remove();
 	}
 
-	public static void addSpecialButton(Input input, KeyboardButton button) {
+	public static void addSpecialButton(Input input, UniversalButton button) {
 		specialButtons.put(input, button);
 	}
 
@@ -361,15 +362,15 @@ public class InputPriorityManager {
 	}
 
 	public static void setToggleWithF11(boolean toggleWithF11) {
-		InputPriorityManager.toggleWithF11 = toggleWithF11;
+		Priority.toggleWithF11 = toggleWithF11;
 	}
 
 
 	private static class InputChangeObserver implements InputObserver {
 
 		@Override
-		public void inputStrategyChanged(InputStrategyManager inputStrategyManager) {
-			InputPriorityManager.inputStrategyChanged(inputStrategyManager);
+		public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
+			Priority.inputStrategyChanged(inputStrategySwitcher);
 		}
 
 		@Override

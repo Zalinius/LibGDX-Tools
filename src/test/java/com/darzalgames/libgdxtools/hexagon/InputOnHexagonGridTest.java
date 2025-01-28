@@ -12,7 +12,7 @@ import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputOnHexagonGrid;
 
-class HexagonDirectionTest {
+class InputOnHexagonGridTest {
 
 	private static Stream<Arguments> inputToDirection() {
 		return Stream.of(

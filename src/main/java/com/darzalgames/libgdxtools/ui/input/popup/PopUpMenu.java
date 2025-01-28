@@ -7,14 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
  * It's a navigable menu, and it's a pop up!
- * @author DarZal
  */
 public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 
@@ -26,7 +25,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 		setUpDesiredSize();
 	}
 
-	protected PopUpMenu(boolean isVertical, List<KeyboardButton> entries, String finalButtonMessageKey) {
+	protected PopUpMenu(boolean isVertical, List<UniversalButton> entries, String finalButtonMessageKey) {
 		super(isVertical, entries);
 		menu.replaceContents(entries, makeFinalButton(finalButtonMessageKey)); // Because the final button calls this::hideThis, we make it after the call to super()
 		
@@ -39,14 +38,14 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 		desiredHeight = 100;
 	}
 	
-	private KeyboardButton makeFinalButton(String finalButtonMessageKey) {
+	private UniversalButton makeFinalButton(String finalButtonMessageKey) {
 		return UserInterfaceFactory.getButton(TextSupplier.getLine(finalButtonMessageKey), this::hideThis);
 	}
 
 	@Override
 	public void gainFocus() {
 		super.gainFocus();
-		InputPriorityManager.showPopup(this);
+		Priority.showPopup(this);
 		float startX = this.getX();
 		float startY = this.getY();
 		this.setY(getStage().getHeight());
@@ -56,10 +55,10 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	@Override
 	public void regainFocus() {
 		super.gainFocus();
-		InputPriorityManager.showPopup(this);
+		Priority.showPopup(this);
 	}
-	
-	
+
+
 	@Override
 	public void hideThis() {
 		releasePriority();

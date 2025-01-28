@@ -7,7 +7,6 @@ import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
 
 /**
  * The six directional inputs for a flat-top hexagon grid
- * @author DarZal
  */
 public class InputOnHexagonGrid extends Input {
 

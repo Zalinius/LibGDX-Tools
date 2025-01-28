@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
+import com.darzalgames.darzalcommon.functional.Consumers;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
@@ -33,21 +34,28 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinM
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
 
 public class TestGame extends MainGame {
+	
+	private final Consumer<TestGame> todo;
 
 	public static void main(String[] args) {
+		TestGame.testLauncher(args, Consumers.nullConsumer());
+	}
+
+	static void testLauncher(String[] args, Consumer<TestGame> todo) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		int width = 1280;
 		int height = 720;
 		config.setWindowedMode(width, height);
-		config.setTitle("Test LibGDXTools Game");
+		config.setTitle("Test LibGDXTools UI");
 		config.setWindowListener(makeWindowListener());
-		new Lwjgl3Application(new TestGame(width, height, args), config);
+		new Lwjgl3Application(new TestGame(width, height, args, todo), config);
 	}
 
 
-	public TestGame(int width, int height, String[] args) {
+	public TestGame(int width, int height, String[] args, Consumer<TestGame> todo) {
 		super(width/2, height/2, new WindowResizerDesktop(width, height),
 				DesktopGamePlatformHelper.getTypeFromArgs(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new));
+		this.todo = todo;
 	}
 
 	@Override
@@ -79,11 +87,6 @@ public class TestGame extends MainGame {
 				menu.setSpacing(1);
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 				add(menu.getView()).growX().align(Align.center);
-				
-                // Options button
-                TestOptionsMenu optionsMenu = new TestOptionsMenu(windowResizer::getModeSelectBox);
-                addActor(optionsMenu.getButton().getView());
-                optionsMenu.getButton().getView().setPosition(3, GameInfo.getHeight() - optionsMenu.getButton().getView().getHeight() - 3);
 			}
 		}, inputPriorityStack));
 	}
@@ -259,6 +262,11 @@ public class TestGame extends MainGame {
 	@Override
 	protected Runnable drawConsole() {
 		return Runnables.nullRunnable();
+	}
+
+	@Override
+	protected void afterLaunch() {
+		this.todo.accept(this);
 	}
 
 }

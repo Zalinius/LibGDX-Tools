@@ -84,6 +84,12 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	// TODO this can be removed once we figure out our long-standing goal of making Assets extendable
 	protected abstract String getPreferenceManagerName();
+	
+	
+	/**
+	 * Anything the game needs to do once launching and initialization is fully complete
+	 */
+	protected abstract void afterLaunch();
 
 
 	protected MainGame(int width, int height, WindowResizer windowResizer, GamePlatform gamePlatform) {
@@ -117,6 +123,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		launchGame(isNewSave);
 		windowResizer.initialize(inputStrategySwitcher, makeWindowResizerButton());
 		setUpDrawingConsole();
+		afterLaunch();
 	}
 
 	private void makeBackgroundStage() {

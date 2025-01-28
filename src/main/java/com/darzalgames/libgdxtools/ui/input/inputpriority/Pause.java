@@ -1,6 +1,5 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -8,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 public class Pause extends Actor implements DoesNotPause {
@@ -17,7 +15,6 @@ public class Pause extends Actor implements DoesNotPause {
 	private PauseMenu pauseMenu;
 	private Stage popUpStage;
 	private final Supplier<Boolean> doesCurrentInputConsumerPauseGame;
-	private Consumer<InputConsumer> claimPriority;
 
 	/**
 	 * @param popUpStage
@@ -27,10 +24,6 @@ public class Pause extends Actor implements DoesNotPause {
 		this.popUpStage = popUpStage;
 		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
 		GamePauser.setPauseGameIfNeededRunnable(this::pauseIfNeeded);
-	}
-	
-	void setClaimPriority(Consumer<InputConsumer> claimPriority) {
-		this.claimPriority = claimPriority;
 	}
 
 	void addPauseButtonToStage() {
@@ -45,18 +38,16 @@ public class Pause extends Actor implements DoesNotPause {
 		pauseButton.consumeKeyInput(Input.ACCEPT);
 	}
 
-	// TODO remove this....
+	// TODO remove this and only set the pause menu once....
 	public void setPauseMenu(PauseMenu pauseMenu) {
 		this.pauseMenu = pauseMenu;
-		pauseMenu.setPauseRunnable(this::pauseIfNeeded);
 		pauseButton = pauseMenu.getButton();
 		pauseButton.getView().setPosition(3, GameInfo.getHeight() - pauseButton.getView().getHeight() - 3);
 		popUpStage.addActor(pauseButton.getView());
 	}
 
 	public boolean isPaused() {
-		return pauseMenu != null && 
-				(pauseMenu.getStage() != null || doesCurrentInputConsumerPauseGame.get());
+		return doesCurrentInputConsumerPauseGame.get();
 	}
 
 	/**
@@ -69,7 +60,7 @@ public class Pause extends Actor implements DoesNotPause {
 	}
 
 	private void pause() {
-		claimPriority.accept(pauseMenu);	
+		Priority.claimPriority(pauseMenu);	
 	}
 	
 	@Override

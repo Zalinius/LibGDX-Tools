@@ -20,7 +20,6 @@ public class InputSetup {
 		scrollingManager = new ScrollingManager(inputReceiver::processScrollingInput);
 
 		pause = new Pause(popUpStage, inputPriorityStack::doesTopPauseGame);
-		pause.setClaimPriority(inputPriorityStack::claimPriority);
 		inputReceiver.setPause(pause);
 
 		stage.addActor(pause);

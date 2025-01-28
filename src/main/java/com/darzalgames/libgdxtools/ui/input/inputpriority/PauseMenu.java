@@ -28,8 +28,6 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 	private final String platformName;
 	
-	private Runnable pauseIfNeededRunnable;
-
 	/**
 	 * NOTE: Setting the position is important, otherwise the options menu will not open!<p>
 	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceFactory.makeActorCentered(this)} 
@@ -99,17 +97,13 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		return optionsButton;
 	}
 	
-	void setPauseRunnable(Runnable runnable) {
-		pauseIfNeededRunnable = runnable;
-	}
-
 	/**
 	 * To be used by child classes to have buttons in the menu hide/show it (e.g. "return to main menu" should toggle screen visibility to false)
 	 * @param show
 	 */
 	protected void toggleScreenVisibility(boolean show) {
 		if (show) {
-			pauseIfNeededRunnable.run();
+			GamePauser.pauseIfNeeded();
 		} else {
 			hideThis();
 		}

@@ -89,7 +89,7 @@ public class TestGame extends MainGame {
 
 				menu.setSpacing(1);
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
-				add(menu.getView()).growX().align(Align.center);
+				add(menu.getView()).grow().align(Align.center);
 			}
 		}, inputPriorityStack));
 	}
@@ -184,6 +184,8 @@ public class TestGame extends MainGame {
 				choiceResponder
 				);
 		menuButtons.add(exampleSelectBox);
+		
+		menuButtons.add(UserInterfaceFactory.getSpacer());
 
 		// Quit button
 		quitButton = UserInterfaceFactory.getQuitGameButton();
@@ -203,7 +205,7 @@ public class TestGame extends MainGame {
 
 		protected TestOptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox) {
 			super(makeWindowModeSelectBox, 0);
-			optionsButton = UserInterfaceFactory.getInGamesSettingsButton(() -> toggleScreenVisibility(true));
+			optionsButton = UserInterfaceFactory.getInGamesSettingsButton(() -> toggleScreenVisibility(!pause.isPaused()));
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 		}
 

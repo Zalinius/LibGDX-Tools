@@ -49,14 +49,8 @@ public class InputReceiver {
 		if (shouldToggleFullScreen) {
 			toggleFullscreenRunnable.run();
 		} else if (input == Input.PAUSE) {
-			boolean isInGame = !pause.isPaused(); // if we're not paused, then we're in game and should open the pause menu
-			boolean isOnBasePauseMenuAndNotNestedMenu = !isInGame && !inputPriorityStack.isLandingOnPopup(); // we're on the pause menu (and not in a nested pop up, like the quit warning)
-			// TODO Does the above condition even work? the pause menu is also a popup...
-			if (isInGame || isOnBasePauseMenuAndNotNestedMenu) { 
-				pause.pressPauseButton();
-			} else { // Don't try to enter keyboard mode when someone is just pressing escape/pause
-				inputPriorityStack.sendInputToTop(input);
-			}	
+			// Don't try to enter keyboard mode when someone is just pressing escape/pause, simply let the pause system consume the input
+			togglePause();
 		} else if (specialButtons.containsKey(input)) {
 			specialButtons.get(input).consumeKeyInput(Input.ACCEPT);
 		}
@@ -74,6 +68,15 @@ public class InputReceiver {
 	public void processScrollingInput(Input input) {
 		inputStrategySwitcher.setToMouseStrategy();
 		inputPriorityStack.sendInputToTop(input);
+	}
+
+	private void togglePause() {
+		boolean isInGame = !pause.isPaused(); // if we're not paused, then we're in-game and should open the pause menu
+		if (isInGame) { 
+			pause.pressPauseButton();
+		} else { 
+			inputPriorityStack.sendInputToTop(Input.PAUSE);
+		}
 	}
 
 }

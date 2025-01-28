@@ -125,8 +125,8 @@ public class InputPriorityStack implements InputObserver {
 
 	void releasePriorityForTop() { 
 		unFocusTop();
-		stack.popTop();
 		boolean isClosingPauseMenu = stack.getTop() instanceof PauseMenu; // TODO I kind of hate this but I'm not sure how else to connect these two classes
+		stack.popTop();
 		if (isClosingPauseMenu) {
 			stack.getTop().setTouchable(Touchable.enabled);
 			stack.getTop().focusCurrent();
@@ -205,8 +205,9 @@ public class InputPriorityStack implements InputObserver {
 		private void popTop() {
 			if (!popupInputConsumerStack.isEmpty()) {
 				popupInputConsumerStack.pop();
+			} else {
+				inputConsumerStack.pop();
 			}
-			inputConsumerStack.pop();
 		}
 
 		private boolean isLandingOnPopup() {

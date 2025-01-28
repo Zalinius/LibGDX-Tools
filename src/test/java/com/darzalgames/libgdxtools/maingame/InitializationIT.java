@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.maingame;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ import com.darzalgames.libgdxtools.platform.GamePlatform;
 class InitializationIT {
 	
 	private static final int SCREEN_MIDDLE_X = 640;
-	private static final int QUIT_BUTTON_Y = 550;
+	private static final int QUIT_BUTTON_Y = 700;
 
 	@Test
 	void launchGame_doesntThrowAnyExceptions() {
@@ -44,6 +45,18 @@ class InitializationIT {
 					clickMouse(10, 10);
 
 					assertTrue(app.pause.isPaused());
+
+					Gdx.app.exit();
+				});
+	}
+	@Test
+	void pressingEscapeTwice_pausesThenUnpausesTheGame() {
+		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+				app -> {
+					pressKey(Keys.ESCAPE);
+					assertTrue(app.pause.isPaused());
+					pressKey(Keys.ESCAPE);
+					assertFalse(app.pause.isPaused());
 
 					Gdx.app.exit();
 				});

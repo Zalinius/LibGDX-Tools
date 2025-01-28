@@ -19,18 +19,20 @@ public class MainMenuScreen extends GameScreen {
 		this.mainMenu = mainMenu;
 		addActor(mainMenu);
 	}
-	
+
 	@Override
 	public void gainFocus() {
 		Priority.claimPriority(mainMenu);
 	}
 
-    @Override
-    public void selectDefault() {}
-    @Override
-    public void clearSelected() {}
-    @Override
-    public void focusCurrent() {}
-    @Override
-    public void consumeKeyInput(Input input) {}
+	@Override
+	public void selectDefault() {}
+	@Override
+	public void clearSelected() {}
+	@Override
+	public void focusCurrent() {}
+	@Override
+	public void consumeKeyInput(Input input) {}
+
+	@Override public String toString() { return "Main menu SCREEN, but not the buttons themselves"; }
 }

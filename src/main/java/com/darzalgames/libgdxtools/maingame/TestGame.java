@@ -36,6 +36,9 @@ import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
 public class TestGame extends MainGame {
 	
 	private final Consumer<TestGame> todo;
+	
+	
+	protected UniversalButton quitButton;
 
 	public static void main(String[] args) {
 		TestGame.testLauncher(args, Consumers.nullConsumer());
@@ -142,7 +145,7 @@ public class TestGame extends MainGame {
 		return "com.darzalgames.libgdxtools.preferences";
 	}
 
-	protected static List<UniversalButton> getMenuEntries() {
+	protected List<UniversalButton> getMenuEntries() {
 		List<UniversalButton> menuButtons = new ArrayList<>();
 
 		UniversalSlider basicSlider = UserInterfaceFactory.getSlider("Slider with a label", newValue -> {});
@@ -173,17 +176,18 @@ public class TestGame extends MainGame {
 
 		String instant = TextSupplier.getLine("option 1");
 		String fast = TextSupplier.getLine("option 2");
-		Supplier<String> textSpeedLabelSupplier = () -> (TextSupplier.getLine("An option select box")); 
-		Consumer<String> choiceResponder = selectedNewtextSpeed -> {};
-		UniversalSelectBox textSpeedSelectBox = UserInterfaceFactory.getSelectBox( 
-				textSpeedLabelSupplier.get(),
+		Supplier<String> exampleSelectBoxLabelSupplier = () -> (TextSupplier.getLine("An option select box")); 
+		Consumer<String> choiceResponder = selectedValue -> {};
+		UniversalSelectBox exampleSelectBox = UserInterfaceFactory.getSelectBox( 
+				exampleSelectBoxLabelSupplier.get(),
 				List.of(instant, fast),
 				choiceResponder
 				);
-		menuButtons.add(textSpeedSelectBox);
+		menuButtons.add(exampleSelectBox);
 
 		// Quit button
-		menuButtons.add(UserInterfaceFactory.getQuitGameButton());
+		quitButton = UserInterfaceFactory.getQuitGameButton();
+		menuButtons.add(quitButton);
 
 		return menuButtons;
 	}

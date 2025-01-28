@@ -120,6 +120,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		saveManager = makeSaveManager();
 		boolean isNewSave = !saveManager.load();
 
+		inputStrategySwitcher.setToMouseStrategy();
 		launchGame(isNewSave);
 		windowResizer.initialize(inputStrategySwitcher, makeWindowResizerButton());
 		setUpDrawingConsole();

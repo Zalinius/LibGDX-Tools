@@ -26,7 +26,6 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 		this.keyboardInputStrategy = keyboardInputStrategy;
 
 		observers = new ArrayList<>();
-		setToMouseStrategy();
 	}
 
 	/**

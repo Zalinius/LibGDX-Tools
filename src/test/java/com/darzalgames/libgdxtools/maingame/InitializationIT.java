@@ -11,6 +11,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
 
 class InitializationIT {
+	
+	private static final int SCREEN_MIDDLE_X = 640;
+	private static final int QUIT_BUTTON_Y = 550;
 
 	@Test
 	void launchGame_doesntThrowAnyExceptions() {
@@ -50,10 +53,23 @@ class InitializationIT {
 	void clickingTheQuitButton_quitsTheGame() {
 		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
-					clickMouse(640, 550);
+					clickMouse(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
 				});
 		// We made it out of the game
 		assertTrue(true);
+	}
+
+	@Test
+	void hoveringTheQuitButtonWithTheMouse_putsItInFocus() {
+		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+				app -> {
+					app.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.stage.act(1/60f);
+
+					assertTrue(app.quitButton.getView().isOver());
+
+					Gdx.app.exit();
+				});
 	}
 
 	@Test

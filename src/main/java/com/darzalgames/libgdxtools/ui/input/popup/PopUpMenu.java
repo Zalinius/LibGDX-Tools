@@ -45,7 +45,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	@Override
 	public void gainFocus() {
 		super.gainFocus();
-		Priority.claimPriority(this);
+		Priority.showPopup(this);
 		float startX = this.getX();
 		float startY = this.getY();
 		this.setY(getStage().getHeight());

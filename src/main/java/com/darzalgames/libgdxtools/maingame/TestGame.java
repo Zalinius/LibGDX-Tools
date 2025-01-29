@@ -205,7 +205,7 @@ public class TestGame extends MainGame {
 
 		protected TestOptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox) {
 			super(makeWindowModeSelectBox, 0);
-			optionsButton = UserInterfaceFactory.getInGamesSettingsButton(() -> toggleScreenVisibility(!pause.isPaused()));
+			optionsButton = UserInterfaceFactory.getSettingsButton(pause, this::toggleScreenVisibility);
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 		}
 

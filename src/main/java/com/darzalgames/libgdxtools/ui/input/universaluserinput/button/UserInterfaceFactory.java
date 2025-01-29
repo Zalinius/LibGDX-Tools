@@ -26,6 +26,7 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 
@@ -180,9 +181,9 @@ public class UserInterfaceFactory {
 		return new UniversalCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategySwitcher, soundInteractListener);
 	}
 
-	public static UniversalButton getInGamesSettingsButton(Runnable onclick) {
+	public static UniversalButton getSettingsButton(Pause pause, Consumer<Boolean> toggleScreenVisibility) {
 		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()); 
-		return new MouseOnlyButton(textButton, onclick, inputStrategySwitcher, soundInteractListener);
+		return new MouseOnlyButton(textButton, () -> toggleScreenVisibility.accept(!pause.isPaused()), inputStrategySwitcher, soundInteractListener);
 	}
 
 	private static final String QUIT_GAME_KEY = "quit_game";

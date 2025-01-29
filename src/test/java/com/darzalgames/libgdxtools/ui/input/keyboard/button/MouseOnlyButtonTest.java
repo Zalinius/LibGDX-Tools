@@ -52,6 +52,7 @@ class MouseOnlyButtonTest {
 		Gdx.files = Mockito.mock(Files.class);
 		
 		inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
+		inputStrategySwitcher.setToMouseStrategy();
 		TextButtonStyle textButtonStyle =  new TextButtonStyle();
 		textButtonStyle.font = new BitmapFont(new BitmapFontData(), new TextureRegion(), false);
 		TextButton textButton = new TextButton("", textButtonStyle);

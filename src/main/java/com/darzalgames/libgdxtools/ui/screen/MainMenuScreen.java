@@ -10,7 +10,7 @@ import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
  */
 public class MainMenuScreen extends GameScreen {
 
-	private final NavigableListMenu mainMenu;
+	protected final NavigableListMenu mainMenu;
 
 	public MainMenuScreen(NavigableListMenu mainMenu, InputPriorityStack inputPriorityStack)
 	{

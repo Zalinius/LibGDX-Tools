@@ -11,7 +11,7 @@ public class InputSetup {
 	private ScrollingManager scrollingManager;
 	
 	
-	public InputSetup(InputStrategySwitcher inputStrategySwitcher, Runnable toggleFullscreenRunnable, boolean toggleWithF11, Stage stage, Stage popUpStage) {
+	public InputSetup(InputStrategySwitcher inputStrategySwitcher, PauseMenu pauseMenu, Runnable toggleFullscreenRunnable, boolean toggleWithF11, Stage stage, Stage popUpStage) {
 		inputPriorityStack = new InputPriorityStack(popUpStage);
 		inputStrategySwitcher.register(inputPriorityStack);
 		
@@ -19,7 +19,7 @@ public class InputSetup {
 
 		scrollingManager = new ScrollingManager(inputReceiver::processScrollingInput);
 
-		pause = new Pause(popUpStage, inputPriorityStack::doesTopPauseGame);
+		pause = new Pause(popUpStage, pauseMenu, inputPriorityStack::doesTopPauseGame);
 		inputReceiver.setPause(pause);
 
 		stage.addActor(pause);

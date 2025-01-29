@@ -62,7 +62,10 @@ public class TestGame extends MainGame {
 	}
 
 	@Override
-	protected void initializeAssets() {/* notYetNeeded */}
+	protected void initializeAssets() {
+		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
+		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable(), () -> pause.isPaused());
+	}
 	@Override
 	protected DesktopSaveManager makeSaveManager() {
 		return new DesktopSaveManager() {
@@ -77,9 +80,7 @@ public class TestGame extends MainGame {
 
 	@Override
 	protected void launchGame(boolean isNewSave) {
-		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
-		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable());
-		pause.setPauseMenu(new TestOptionsMenu(windowResizer::getModeSelectBox));
+		pause.showPauseButton(true);
 		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override
@@ -205,7 +206,7 @@ public class TestGame extends MainGame {
 
 		protected TestOptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox) {
 			super(makeWindowModeSelectBox, 0);
-			optionsButton = UserInterfaceFactory.getSettingsButton(pause, this::toggleScreenVisibility);
+			optionsButton = UserInterfaceFactory.getSettingsButton(this::toggleScreenVisibility);
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 		}
 
@@ -273,6 +274,11 @@ public class TestGame extends MainGame {
 	@Override
 	protected void afterLaunch() {
 		this.todo.accept(this);
+	}
+
+	@Override
+	protected PauseMenu makePauseMenu() {
+		return new TestOptionsMenu(windowResizer::getModeSelectBox);
 	}
 
 }

@@ -38,6 +38,9 @@ import com.darzalgames.libgdxtools.ui.screen.PixelPerfectViewport;
 
 public abstract class MainGame extends ApplicationAdapter implements SharesGameInformation {
 
+	private static final boolean DEBUG_PRINT_HIT = false; // Print the actor that the mouse is over each frame
+			
+			
 	// Values which are statically shared to the rest of the game by {@link GameInfo}
 	protected final int width;
 	protected final int height;
@@ -46,7 +49,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected final GamePlatform gamePlatform;
 	protected SteamStrategy steamStrategy;
 
-	protected Stage stage;
+	protected UniversalInputStage stage;
 	protected Stage popUpStage;
 	private Stage backgroundStage;
 	private Stage cursorStage;
@@ -84,7 +87,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	// TODO this can be removed once we figure out our long-standing goal of making Assets extendable
 	protected abstract String getPreferenceManagerName();
-	
+
+	protected abstract PauseMenu makePauseMenu();
 	
 	/**
 	 * Anything the game needs to do once launching and initialization is fully complete
@@ -103,9 +107,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	@Override
 	public final void create() {
+		inputStrategySwitcher = makeInputStrategySwitcher();
+		inputStrategySwitcher.setToMouseStrategy();
 		initializeAssets();
 		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
-		inputStrategySwitcher = makeInputStrategySwitcher();
 		this.steamStrategy = gamePlatform.getSteamStrategy(inputStrategySwitcher, inputReceiver);
 
 		makeBackgroundStage();
@@ -148,7 +153,11 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		inputHandlerStage.addActor(mouseInputHandler);
 
 		// Set up main game stage
-		stage = new UniversalInputStageWithBackground(new PixelPerfectViewport(width, height), getMainStageBackgroundTexture(), inputStrategySwitcher, scroll -> scrollingManager.receiveScrollInput(scroll));
+		stage = new UniversalInputStageWithBackground(
+				new PixelPerfectViewport(width, height),
+				getMainStageBackgroundTexture(),
+				inputStrategySwitcher, scroll -> scrollingManager.receiveScrollInput(scroll));
+		stage.setDebugPrintHit(DEBUG_PRINT_HIT);
 
 		cursorStage = new Stage(new ExtendViewport(width, height));
 	}
@@ -176,7 +185,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void setUpInput() {
 		// Set up input processing for all strategies
-		InputSetup inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), stage, popUpStage);
+		InputSetup inputSetup = new InputSetup(inputStrategySwitcher, makePauseMenu(), windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), stage, popUpStage);
 		inputPriorityStack = inputSetup.getInputPriorityStack();
 		scrollingManager = inputSetup.getScrollingManager();
 		pause = inputSetup.getPause();

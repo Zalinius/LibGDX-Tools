@@ -83,11 +83,6 @@ public class InputPriorityStack implements InputObserver {
 		return stack.getTop().isGamePausedWhileThisIsInFocus();
 	}
 
-	// TODO Ideally this doesn't leave this class...? It's only used for handling pause-menu-specific behavior
-	public boolean isLandingOnPopup() {
-		return stack.isLandingOnPopup();
-	}
-
 	private void focusTop(boolean isFirstFocus) {
 		stack.getTop().setTouchable(Touchable.enabled);
 		if (isFirstFocus) {
@@ -225,5 +220,6 @@ public class InputPriorityStack implements InputObserver {
 	}
 
 	// The compiler insists that we have one of these for proper de/serialization, it generated this number. (Not that this class should ever be serialized...)
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 8021674885789936648L;
 }

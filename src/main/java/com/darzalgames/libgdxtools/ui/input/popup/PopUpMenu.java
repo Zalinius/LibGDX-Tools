@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
@@ -46,7 +45,6 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	@Override
 	public void gainFocus() {
 		super.gainFocus();
-		Priority.claimPriority(this);
 		float startX = this.getX();
 		float startY = this.getY();
 		this.setY(getStage().getHeight());

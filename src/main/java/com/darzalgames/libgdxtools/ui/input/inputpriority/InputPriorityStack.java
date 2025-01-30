@@ -52,9 +52,9 @@ public class InputPriorityStack implements InputObserver {
 		PopUp popup = actorPopup.f;
 		popUpStage.addActor(actor);
 		actor.toFront();
-		popup.addBackClickListenerIfCanDismiss();
 		darkScreen.fadeIn(actor.getZIndex(), popup.canDismiss());
 		claimPriorityOnStack(popup, () -> stack.push(new Tuple<>(actor, popup)));
+		popup.addBackClickListenerIfCanDismiss();
 	}
 
 	private void claimPriorityOnStack(InputConsumer inputConsumer, Runnable claimPriority) {

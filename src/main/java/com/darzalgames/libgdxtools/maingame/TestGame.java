@@ -175,13 +175,13 @@ public class TestGame extends MainGame {
 		menuButtons.add(UserInterfaceFactory.getButton("Image Text button!", new Image(ColorTools.getColoredTexture(Color.CHARTREUSE, 50, 12)), 
 				() -> Gdx.app.log(logOrigin, "You pressed the image text button")));
 
-		String instant = TextSupplier.getLine("option 1");
-		String fast = TextSupplier.getLine("option 2");
+		String option1 = TextSupplier.getLine("option 1");
+		String option2 = TextSupplier.getLine("option 2");
 		Supplier<String> exampleSelectBoxLabelSupplier = () -> (TextSupplier.getLine("An option select box")); 
 		Consumer<String> choiceResponder = selectedValue -> {};
 		UniversalSelectBox exampleSelectBox = UserInterfaceFactory.getSelectBox( 
 				exampleSelectBoxLabelSupplier.get(),
-				List.of(instant, fast),
+				List.of(option1, option2),
 				choiceResponder
 				);
 		menuButtons.add(exampleSelectBox);

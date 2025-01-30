@@ -4,16 +4,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.darzalcommon.state.Endable;
-import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumer;
+import com.darzalgames.libgdxtools.ui.input.LogicalInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriorityStack;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
 /**
  * A distinct screen in the game (e.g. the main menu, a particular phase of gameplay) which handles making sure
- * its child actors are visible and can be interacted with, and ensures proper cleanup when the screen is left from. 
+ * its child actors are visible and can be interacted with, and ensures proper cleanup when the screen is departed from. 
+ * 
+ * We're ok to implement {@link LogicalInputConsumer} here because a GameScreen is always (so far) a wrapper for another InputConsumer,
+ * such as a {@link NavigableListMenu}. This class is just responsible for cleaning up between screens.
  */
-public abstract class GameScreen extends Group implements Screen, Endable, InputConsumer {
+public abstract class GameScreen extends Group implements Screen, Endable, LogicalInputConsumer {
 
 	private final Runnable leaveScreenRunnable;
 	private final InputPriorityStack inputPriorityStack;
@@ -58,13 +61,5 @@ public abstract class GameScreen extends Group implements Screen, Endable, Input
 
 	@Override
 	public final void dispose() {}
-	
-	/** We're ok to implement these here because a GameScreen is always (so far) a wrapper for another InputConsumer,
-	 * such as a NavigableListMenu. This class is just responsible for cleaning up between screens.
-	 */
-	@Override public void consumeKeyInput(Input input) {}
-	@Override public void focusCurrent() {}
-	@Override public void clearSelected() {}
-	@Override public void selectDefault() {}
 
 }

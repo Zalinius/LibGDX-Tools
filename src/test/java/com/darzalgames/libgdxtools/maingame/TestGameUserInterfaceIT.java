@@ -11,7 +11,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
 
-class UserInterfaceIT {
+class TestGameUserInterfaceIT {
 	
 	private static final int SCREEN_MIDDLE_X = 640;
 	

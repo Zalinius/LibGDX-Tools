@@ -55,15 +55,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private Stage cursorStage;
 	private Stage inputHandlerStage;
 
-	protected abstract void initializeAssets();
-	protected abstract SaveManager makeSaveManager();
-	protected abstract void setUpBeforeLoadingSave();
-	protected abstract void launchGame(boolean isNewSave);
-	protected abstract WindowResizerButton makeWindowResizerButton();
-	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
-	protected abstract Runnable drawConsole();
-	protected abstract void quitGame();
-
 	protected GameScreen currentScreen;
 	protected WindowResizer windowResizer;
 	protected List<DoesNotPause> actorsThatDoNotPause;
@@ -76,6 +67,18 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private boolean isQuitting = false;
 
+	protected abstract void initializeAssets();
+	// TODO this can be removed once we figure out our long-standing goal of making Assets extendable
+	protected abstract String getPreferenceManagerName();
+	
+	
+
+	protected abstract PauseMenu makePauseMenu();
+	protected abstract WindowResizerButton makeWindowResizerButton();
+	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
+	protected abstract Runnable drawConsole();
+	protected abstract SaveManager makeSaveManager();
+	protected abstract void setUpBeforeLoadingSave();
 	/**
 	 * @return The background texture to be used in the "gutters" around the game, visible when the window size doesn't match the game's fixed resolution
 	 */
@@ -84,16 +87,18 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	 * @return The fallback background texture to be used in the game area, visible when nothing else is covering it
 	 */
 	protected abstract Texture getMainStageBackgroundTexture();
-
-	// TODO this can be removed once we figure out our long-standing goal of making Assets extendable
-	protected abstract String getPreferenceManagerName();
-
-	protected abstract PauseMenu makePauseMenu();
-	
+	protected abstract void launchGame(boolean isNewSave);
 	/**
 	 * Anything the game needs to do once launching and initialization is fully complete
 	 */
 	protected abstract void afterLaunch();
+	
+	
+	/**
+	 * Shutdown game-specific objects like the music system, call dispose() on things, etc.
+	 */
+	protected abstract void quitGame();
+
 
 
 	protected MainGame(int width, int height, WindowResizer windowResizer, GamePlatform gamePlatform) {
@@ -107,8 +112,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	@Override
 	public final void create() {
-		inputStrategySwitcher = makeInputStrategySwitcher();
-		inputStrategySwitcher.setToMouseStrategy();
+		makeInputStrategySwitcher();
 		initializeAssets();
 		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
 		this.steamStrategy = gamePlatform.getSteamStrategy(inputStrategySwitcher, inputReceiver);
@@ -175,12 +179,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		return new CustomCursorImage(windowResizer::isWindowed, ColorTools.getDefaultCursor(), inputStrategySwitcher);
 	}
 
-	/**
-	 * @return An InputStrategyManager, in case the base class wants to extend its functionality (e.g. Quest Giver adds
-	 * button hints, and more specific gamepad handling may be wanted in the future)
-	 */
-	protected InputStrategySwitcher makeInputStrategySwitcher() {
-		return new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
+	private void makeInputStrategySwitcher() {
+		inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
 	}
 
 	private void setUpInput() {

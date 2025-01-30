@@ -24,7 +24,6 @@ public class UniversalInputStage extends Stage implements InputObserver {
 	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher, Consumer<Float> scrollingConsumer) {
 		super(viewport);
 		inputStrategySwitcher.register(this);
-		inputStrategyChanged(inputStrategySwitcher); // in case this class is too late for the initial broadcast of starting in mouse mode
 		this.scrollingConsumer = scrollingConsumer;
 		this.debugPrintHit = false;
 	}

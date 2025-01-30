@@ -69,32 +69,5 @@ public interface InputConsumer {
 	public default void releasePriority() {
 		Priority.releasePriority(this);
 	}
-
-	/**
-	 * These are for more logic-heavy objects which still need to be on the input stack,
-	 * but which don't themselves do much interaction with input. For example, in Quest Giver the WorldStateMachine
-	 * proceeds to the next state whenever it regains focus (i.e. the previous state released focus)
-	 * but doesn't itself have any UI or interactions with the player. Another example is the
-	 * SteamAchievement states which grant an achievement and immediately release focus.
-	 */
-	public static InputConsumer makeLogicalInputConsumer(Runnable onGainFocus) {
-		return new InputConsumer() {
-
-			@Override
-			public void gainFocus() {
-				onGainFocus.run();
-				releasePriority();
-			}
-
-			@Override public void setTouchable(Touchable isTouchable) {}
-
-			@Override public void selectDefault() {}
-
-			@Override public void focusCurrent() {}
-
-			@Override public void consumeKeyInput(Input input) {}
-
-			@Override public void clearSelected() {}
-		};
-	}
+	
 } 

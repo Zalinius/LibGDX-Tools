@@ -80,8 +80,8 @@ class TestGameUserInterfaceIT {
 	void hoveringTheQuitButtonWithTheMouse_putsItInFocus() {
 		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
-					app.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.stage.act(1/60f);
+					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.stage.act(1/60f);
 
 					assertTrue(app.quitButton.getView().isOver());
 
@@ -106,11 +106,11 @@ class TestGameUserInterfaceIT {
 		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
-					app.popUpStage.act(3); // Give time for the popup to slide in
+					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in
 					
 					// Check that the menu is NOT back in focus by hovering over the quit button
-					app.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.stage.act(1/60f);
+					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.stage.act(1/60f);
 					assertFalse(app.quitButton.getView().isOver());
 
 					Gdx.app.exit();
@@ -122,12 +122,12 @@ class TestGameUserInterfaceIT {
 		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
-					app.stage.act(3); // Give time for the popup to slide in
+					app.multipleStage.stage.act(3); // Give time for the popup to slide in
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Clicks on the dark screen to dismiss the popup
 
 					// Check that the menu is back in focus by hovering over the quit button
-					app.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.stage.act(1/60f);
+					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.stage.act(1/60f);
 					assertTrue(app.quitButton.getView().isOver());
 
 					Gdx.app.exit();
@@ -139,18 +139,18 @@ class TestGameUserInterfaceIT {
 		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
-					app.popUpStage.act(3); // Give time for the popup to slide in
+					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in
 					rightClickMouse(POPUP_BUTTON_X, POPUP_BUTTON_Y); // Right click on the popup to dismiss it
 					
 					// Check that the menu is back in focus by hovering over the quit button
-					app.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.stage.act(1/60f);
+					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.stage.act(1/60f);
 					assertTrue(app.quitButton.getView().isOver());
 
 					Gdx.app.exit();
 				});
 	}
-
+	
 	private void pressKey(int key) {
 		Gdx.input.getInputProcessor().keyDown(key);
 		Gdx.input.getInputProcessor().keyUp(key);

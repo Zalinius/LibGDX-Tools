@@ -24,10 +24,10 @@ public class Pause extends Actor {
 		this.popUpStage = popUpStage;
 		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
 		GamePauser.setPauseGameIfNeededRunnable(this::pauseIfNeeded);
-		
+
 		this.pauseMenu = pauseMenu;
 		pauseButton = pauseMenu.getButton();
-		
+
 		int padding = 1; // TODO Make this more customizable?
 		pauseButton.getView().setPosition(padding, GameInfo.getHeight() - pauseButton.getView().getHeight() - padding);
 		showPauseButton(false); // Only enable the button after the splash screen
@@ -44,6 +44,11 @@ public class Pause extends Actor {
 	}
 
 	public boolean isPaused() {
+		/**
+		 * TODO This system makes no distinction between a popup pausing the game versus the pause menu pausing the game
+		 * and so when you're on a popup which does pause the game, pressing escape does not open the pause menu
+		 * because we're already paused. (So in QG I had to set a lot of popups not to pause the game anymore, feels off...)
+		 */
 		return doesCurrentInputConsumerPauseGame.get();
 	}
 
@@ -56,7 +61,7 @@ public class Pause extends Actor {
 	private void pause() {
 		Priority.claimPriority(pauseMenu);	
 	}
-	
+
 	@Override
 	public void act(float delta) {
 		if (pauseButton != null) {

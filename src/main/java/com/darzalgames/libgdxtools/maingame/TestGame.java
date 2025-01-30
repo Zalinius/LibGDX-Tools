@@ -62,7 +62,7 @@ public class TestGame extends MainGame {
 	}
 
 	@Override
-	protected void initializeAssets() {
+	protected void initializeAssetsAndUserInterfaceFactory() {
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable(), () -> pause.isPaused());
 	}
@@ -92,12 +92,12 @@ public class TestGame extends MainGame {
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 				add(menu.getView()).grow().align(Align.center);
 			}
-		}, inputPriorityStack));
+		}, inputSetup.getInputPriorityStack()));
 	}
 
 	@Override
 	protected KeyboardInputHandler makeKeyboardInputHandler() {
-		return new KeyboardInputHandler(inputStrategySwitcher, inputReceiver) {
+		return new KeyboardInputHandler(inputStrategySwitcher, inputSetup.getInputReceiver()) {
 			@Override
 			protected Input remapInputIfNecessary(Input input, int keycode) {
 				return input;
@@ -267,7 +267,7 @@ public class TestGame extends MainGame {
 	}
 
 	@Override
-	protected Runnable drawConsole() {
+	protected Runnable getDrawConsoleRunnable() {
 		return Runnables.nullRunnable();
 	}
 

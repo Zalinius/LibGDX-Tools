@@ -11,6 +11,7 @@ public class MouseInputHandler extends InputHandler {
 
 	/**
 	 * Listens for click events and changes into mouse mode correspondingly
+	 * @param inputStrategySwitcher 
 	 */
 	public MouseInputHandler(InputStrategySwitcher inputStrategySwitcher) {
 		super(inputStrategySwitcher);

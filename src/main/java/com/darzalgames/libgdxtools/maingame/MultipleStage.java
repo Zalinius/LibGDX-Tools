@@ -5,38 +5,46 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
+import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 
 public class MultipleStage {
 
-	Stage stage;
-	protected Stage popUpStage;
+	private static boolean DEBUG_PRINT_HIT = false; // Print the actor that the mouse is over each frame
+
+	UniversalInputStage stage;
+	protected UniversalInputStage popUpStage;
 	private Stage backgroundStage;
 	private Stage cursorStage;
 	private Stage inputHandlerStage;
-	
+
 	private Pause pause;
 	protected List<DoesNotPause> actorsThatDoNotPause = new ArrayList<>();
 
 	public void addActorToMainStage(Actor actor) {
 		stage.addActor(actor);
 	}
-	
+
 	public void addActorThatDoesNotPause(DoesNotPause actor) {
 		actorsThatDoNotPause.add(actor);
 	}
-	
+
 	public void clearPopUpStage() {
 		popUpStage.clear();
 	}
 
 	void render() {
+		if (DEBUG_PRINT_HIT) {
+			doDebugPrinting();
+		}
+
 		backgroundStage.getViewport().apply();
 		backgroundStage.draw();
 
@@ -62,7 +70,7 @@ public class MultipleStage {
 		inputHandlerStage.act();
 		inputHandlerStage.draw();
 	}
-	
+
 	void resize (int width, int height) {
 		backgroundStage.getViewport().update(width, height, true);
 		backgroundStage.getCamera().update();
@@ -88,21 +96,21 @@ public class MultipleStage {
 	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, CustomCursorImage customCursorImage) {
 		inputHandlerStage.addActor(keyboardInputHandler);
 		actorsThatDoNotPause.add(keyboardInputHandler);
-		
+
 		inputHandlerStage.addActor(gamepadInputHandler);
 		actorsThatDoNotPause.add(gamepadInputHandler);
-		
+
 		stage.setKeyboardFocus(keyboardInputHandler);
-		
+
 		cursorStage.addActor(customCursorImage);
 	}
 
 
-	void setMainStage(Stage stage) {
+	void setMainStage(UniversalInputStage stage) {
 		this.stage = stage;
 	}
 
-	void setPopUpStage(Stage popUpStage) {
+	void setPopUpStage(UniversalInputStage popUpStage) {
 		this.popUpStage = popUpStage;
 	}
 
@@ -122,5 +130,22 @@ public class MultipleStage {
 		this.pause = pause;
 		addActorToMainStage(pause);
 	}
-	
+
+	private void doDebugPrinting() {
+		boolean hitPopUpStage = tryToPrintADebugHit(popUpStage);
+		if (!hitPopUpStage) {
+			tryToPrintADebugHit(stage);
+		}
+	}
+
+	private boolean tryToPrintADebugHit(Stage stage) {
+		Vector2 cursor = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+		Actor hitActor = stage.hit(cursor.x, cursor.y, true);
+		boolean hitSomething = hitActor != null;
+		if (hitSomething) {
+			System.out.println(stage.getRoot().getName() + ": " + hitActor);				
+		}
+		return hitSomething;
+	}
+
 }

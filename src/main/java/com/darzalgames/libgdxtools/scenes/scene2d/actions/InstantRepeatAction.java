@@ -48,7 +48,9 @@ public class InstantRepeatAction extends DelegateAction {
 		finished = false;
 	}
 
-	/** Sets the number of times to repeat. Can be set to {@link #FOREVER}. */
+	/** Sets the number of times to repeat. Can be set to {@link #FOREVER}. 
+	 * @param count 
+	 */
 	public void setTotalCount (int count) {
 		this.repeatCount = count;
 	}

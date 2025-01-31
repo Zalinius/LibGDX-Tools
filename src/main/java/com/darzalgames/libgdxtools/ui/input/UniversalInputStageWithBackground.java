@@ -16,7 +16,6 @@ public class UniversalInputStageWithBackground extends UniversalInputStage {
 		 * @param viewport
 		 * @param backgroundTex
 		 * @param inputStrategySwitcher
-		 * @param scrollingConsumer
 		 */
 		public UniversalInputStageWithBackground(final Viewport viewport, Texture backgroundTex, InputStrategySwitcher inputStrategySwitcher) {
 			super(viewport, inputStrategySwitcher);

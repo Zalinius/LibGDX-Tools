@@ -12,6 +12,9 @@ public class DesktopGamePlatformHelper {
 	/**
 	 * Determines the correct platform based on launch arguments
 	 * @param args java main arguments
+	 * @param makeWindowsPlatform 
+	 * @param makeLinuxPlatform 
+	 * @param makeMacPlatform 
 	 * @return The corresponding platform
 	 */
 	public static GamePlatform getTypeFromArgs(String[] args, Supplier<GamePlatform> makeWindowsPlatform, Supplier<GamePlatform> makeLinuxPlatform,

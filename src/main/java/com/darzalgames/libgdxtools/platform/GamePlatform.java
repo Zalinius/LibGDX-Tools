@@ -37,6 +37,7 @@ public interface GamePlatform {
 
 	/**
 	 * @param inputStrategySwitcher The input strategy manager, so we can make the gamepad input handler
+	 * @param inputReceiver 
 	 * @return A SteamStrategy befitting the GamePlatform
 	 */
 	public SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver);

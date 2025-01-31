@@ -19,7 +19,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterf
 
 
 /**
- * The base class for options menus (in-game versus when on the main menu)
+ * The base class for pause menus (in-game versus when on the main menu)
  */
 public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
@@ -29,7 +29,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	private final String platformName;
 	
 	/**
-	 * NOTE: Setting the position is important, otherwise the options menu will not open!<p>
+	 * NOTE: Setting the position is important, otherwise the pause menu will not open!<p>
 	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceFactory.makeActorCentered(this)} 
 	 */
 	protected abstract void setUpBackground();
@@ -91,7 +91,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	}
 
 	/**
-	 * @return The button that opens this options menu
+	 * @return The button that opens this pause menu
 	 */
 	public UniversalButton getButton() {
 		return optionsButton;

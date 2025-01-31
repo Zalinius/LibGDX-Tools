@@ -18,7 +18,8 @@ public class Pause extends Actor {
 
 	/**
 	 * @param popUpStage
-	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
+	 * @param pauseMenu 
+	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the pause menu do this)
 	 */
 	public Pause(Stage popUpStage, PauseMenu pauseMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
 		this.popUpStage = popUpStage;

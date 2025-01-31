@@ -57,7 +57,7 @@ public interface InputConsumer {
 	}
 
 	/**
-	 * If this object is the topmost UI, is the game paused?
+	 * @return If this object is the topmost UI, is the game paused?
 	 */
 	public default boolean isGamePausedWhileThisIsInFocus() {
 		return false;

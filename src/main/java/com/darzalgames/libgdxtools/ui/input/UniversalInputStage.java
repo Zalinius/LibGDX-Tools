@@ -1,7 +1,5 @@
 package com.darzalgames.libgdxtools.ui.input;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -12,16 +10,15 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class UniversalInputStage extends Stage implements InputObserver {
 
 	private boolean mouseMode;
-	private boolean debugPrintHit;
 
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
 	 * @param viewport
+	 * @param inputStrategySwitcher
 	 */
 	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher) {
 		super(viewport);
 		inputStrategySwitcher.register(this);
-		this.debugPrintHit = false;
 	}
 
 	@Override
@@ -33,13 +30,6 @@ public class UniversalInputStage extends Stage implements InputObserver {
 			// if playing keyboard-driven, skip all the stage's code to do with detecting and firing mouse enter/exit events,
 			// and just call act() on our actors like in Stage
 			getRoot().act(delta);
-		}
-		if (debugPrintHit) {
-			Vector2 cursor = this.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-			Actor hitActor = this.hit(cursor.x, cursor.y, true);
-			if (hitActor != null) {
-				System.out.println(hitActor);				
-			}
 		}
 	}
 
@@ -85,9 +75,5 @@ public class UniversalInputStage extends Stage implements InputObserver {
 	@Override
 	public boolean shouldBeUnregistered() {
 		return false;
-	}
-
-	public void setDebugPrintHit(boolean debugPrintHit) {
-		this.debugPrintHit = debugPrintHit;
 	}
 }

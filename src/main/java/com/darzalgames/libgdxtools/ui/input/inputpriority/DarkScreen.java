@@ -47,5 +47,10 @@ class DarkScreen extends Image {
 				Actions.removeActor(this)
 				));
 	}
+	
+	@Override
+	public String toString() {
+		return "Dark screen behind popups";
+	}
 
 }

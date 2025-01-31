@@ -34,8 +34,6 @@ import com.darzalgames.libgdxtools.ui.screen.PixelPerfectViewport;
 
 public abstract class MainGame extends ApplicationAdapter implements SharesGameInformation {
 
-	private static final boolean DEBUG_PRINT_HIT = false; // Print the actor that the mouse is over each frame
-
 
 	// Values which are statically shared to the rest of the game by {@link GameInfo}
 	protected final int width;
@@ -45,17 +43,19 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected final GamePlatform gamePlatform;
 	protected SteamStrategy steamStrategy;
 
+	// Objects created at initialization, but not widely shared
 	protected MultipleStage multipleStage;
-
-	protected GameScreen currentScreen;
+	protected InputSetup inputSetup;
 	protected WindowResizer windowResizer;
 	protected InputStrategySwitcher inputStrategySwitcher;
-	private MouseInputHandler mouseInputHandler;
-	protected InputSetup inputSetup;
 
+	
+	// Values which change during gameplay
+	protected GameScreen currentScreen;
 	private boolean isQuitting = false;
 
 
+	
 	// The setup process, in order that they are called
 	protected abstract void initializeAssetsAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName(); // TODO this can be removed once we figure out our long-standing goal of making Assets extendable
@@ -218,13 +218,14 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void makePopUpStage() {
 		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
-		Stage popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher);
+		UniversalInputStage popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher);
+		popUpStage.getRoot().setName("PopUp Stage");
 		multipleStage.setPopUpStage(popUpStage);
 	}
 
 	private void makeMainStageAndMouseStages() {
 		Stage inputHandlerStage = new Stage(new ScreenViewport());
-		mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
+		MouseInputHandler mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
 		inputHandlerStage.addActor(mouseInputHandler);
 		inputHandlerStage.addActor(new Actor() {
 			@Override
@@ -239,7 +240,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 				new PixelPerfectViewport(width, height),
 				getMainStageBackgroundTexture(),
 				inputStrategySwitcher);
-		stage.setDebugPrintHit(DEBUG_PRINT_HIT);
+		stage.getRoot().setName("Main Stage");
 		multipleStage.setMainStage(stage);
 
 		Stage cursorStage = new Stage(new ExtendViewport(width, height));

@@ -33,29 +33,29 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
 
-public class TestGame extends MainGame {
+public class SampleUserInterfaceGame extends MainGame {
 	
-	private final Consumer<TestGame> todo;
+	private final Consumer<SampleUserInterfaceGame> todo;
 	
 	
 	protected UniversalButton quitButton;
 
 	public static void main(String[] args) {
-		TestGame.testLauncher(args, Consumers.nullConsumer());
+		SampleUserInterfaceGame.testLauncher(args, Consumers.nullConsumer());
 	}
 
-	static void testLauncher(String[] args, Consumer<TestGame> todo) {
+	static void testLauncher(String[] args, Consumer<SampleUserInterfaceGame> todo) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		int width = 1280;
 		int height = 720;
 		config.setWindowedMode(width, height);
 		config.setTitle("Test LibGDXTools UI");
 		config.setWindowListener(makeWindowListener());
-		new Lwjgl3Application(new TestGame(width, height, args, todo), config);
+		new Lwjgl3Application(new SampleUserInterfaceGame(width, height, args, todo), config);
 	}
 
 
-	public TestGame(int width, int height, String[] args, Consumer<TestGame> todo) {
+	public SampleUserInterfaceGame(int width, int height, String[] args, Consumer<SampleUserInterfaceGame> todo) {
 		super(width/2, height/2, new WindowResizerDesktop(width, height),
 				DesktopGamePlatformHelper.getTypeFromArgs(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new));
 		this.todo = todo;

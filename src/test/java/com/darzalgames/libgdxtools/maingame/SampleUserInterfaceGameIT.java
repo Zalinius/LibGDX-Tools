@@ -11,7 +11,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
 
-class TestGameUserInterfaceIT {
+class SampleUserInterfaceGameIT {
 	
 	private static final int SCREEN_MIDDLE_X = 640;
 	
@@ -23,7 +23,7 @@ class TestGameUserInterfaceIT {
 	@Test
 	void launchGame_doesntThrowAnyExceptions() {
 		assertDoesNotThrow(
-				() -> TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+				() -> SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 						app -> {
 							Gdx.app.exit();
 						})
@@ -32,7 +32,7 @@ class TestGameUserInterfaceIT {
 
 	@Test
 	void pressingEscape_pausesTheGame() {
-		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					pressKey(Keys.ESCAPE);
 
@@ -44,7 +44,7 @@ class TestGameUserInterfaceIT {
 
 	@Test
 	void clickingTheOptionsButton_pausesTheGame() {
-		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					clickMouse(10, 10);
 
@@ -55,7 +55,7 @@ class TestGameUserInterfaceIT {
 	}
 	@Test
 	void pressingEscapeTwice_pausesThenUnpausesTheGame() {
-		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					pressKey(Keys.ESCAPE);
 					assertTrue(app.pause.isPaused());
@@ -68,7 +68,7 @@ class TestGameUserInterfaceIT {
 
 	@Test
 	void clickingTheQuitButton_quitsTheGame() {
-		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
 				});
@@ -78,7 +78,7 @@ class TestGameUserInterfaceIT {
 
 	@Test
 	void hoveringTheQuitButtonWithTheMouse_putsItInFocus() {
-		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
 					app.multipleStage.stage.act(1/60f);
@@ -91,7 +91,7 @@ class TestGameUserInterfaceIT {
 
 	@Test
 	void navigatingByKeyboard_andPressingTheQuitButton_wrapsAroundTheMenuAndQuitsTheGame() {
-		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					pressKey(Keys.DOWN); // Switch to keyboard mode
 					pressKey(Keys.UP); // Wrap around to the bottom of the menu
@@ -103,7 +103,7 @@ class TestGameUserInterfaceIT {
 	
 	@Test
 	void openingAPopup_putsTheMenuOutOfFocus() {
-		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
 					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in
@@ -119,7 +119,7 @@ class TestGameUserInterfaceIT {
 	
 	@Test
 	void openingAPopup_thenClickingTheDarkScreen_closesThePopup() {
-		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
 					app.multipleStage.stage.act(3); // Give time for the popup to slide in
@@ -136,7 +136,7 @@ class TestGameUserInterfaceIT {
 	
 	@Test
 	void openingAPopup_thenRightClickingIt_closesThePopup() {
-		TestGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
+		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
 					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in

@@ -64,7 +64,7 @@ public class SampleUserInterfaceGame extends MainGame {
 	@Override
 	protected void initializeAssetsAndUserInterfaceFactory() {
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
-		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable(), () -> pause.isPaused());
+		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable(), () -> inputSetup.getPause().isPaused());
 	}
 	@Override
 	protected DesktopSaveManager makeSaveManager() {
@@ -80,7 +80,7 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	@Override
 	protected void launchGame(boolean isNewSave) {
-		pause.showPauseButton(true);
+		inputSetup.getPause().showPauseButton(true);
 		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override

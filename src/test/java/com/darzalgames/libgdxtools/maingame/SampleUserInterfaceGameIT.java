@@ -36,7 +36,7 @@ class SampleUserInterfaceGameIT {
 				app -> {
 					pressKey(Keys.ESCAPE);
 
-					assertTrue(app.pause.isPaused());
+					assertTrue(app.inputSetup.getPause().isPaused());
 
 					Gdx.app.exit();
 				});
@@ -48,7 +48,7 @@ class SampleUserInterfaceGameIT {
 				app -> {
 					clickMouse(10, 10);
 
-					assertTrue(app.pause.isPaused());
+					assertTrue(app.inputSetup.getPause().isPaused());
 
 					Gdx.app.exit();
 				});
@@ -58,9 +58,9 @@ class SampleUserInterfaceGameIT {
 		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					pressKey(Keys.ESCAPE);
-					assertTrue(app.pause.isPaused());
+					assertTrue(app.inputSetup.getPause().isPaused());
 					pressKey(Keys.ESCAPE);
-					assertFalse(app.pause.isPaused());
+					assertFalse(app.inputSetup.getPause().isPaused());
 
 					Gdx.app.exit();
 				});

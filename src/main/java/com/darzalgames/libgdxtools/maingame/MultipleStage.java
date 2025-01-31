@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.maingame;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -10,6 +11,7 @@ import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 
 public class MultipleStage {
 
@@ -19,20 +21,27 @@ public class MultipleStage {
 	private Stage cursorStage;
 	private Stage inputHandlerStage;
 	
+	private Pause pause;
+	protected List<DoesNotPause> actorsThatDoNotPause = new ArrayList<>();
+
 	public void addActorToMainStage(Actor actor) {
 		stage.addActor(actor);
+	}
+	
+	public void addActorThatDoesNotPause(DoesNotPause actor) {
+		actorsThatDoNotPause.add(actor);
 	}
 	
 	public void clearPopUpStage() {
 		popUpStage.clear();
 	}
 
-	void render(boolean isPaused, List<DoesNotPause> actorsThatDoNotPause) {
+	void render() {
 		backgroundStage.getViewport().apply();
 		backgroundStage.draw();
 
 		stage.getViewport().apply();
-		if (isPaused) {
+		if (pause.isPaused()) {
 			stage.draw();
 			float delta = Gdx.graphics.getDeltaTime();
 			actorsThatDoNotPause.forEach(actor -> actor.actWhilePaused(delta));
@@ -76,11 +85,15 @@ public class MultipleStage {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
-	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, 
-			CustomCursorImage customCursorImage) {
-		inputHandlerStage.addActor(gamepadInputHandler);
+	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, CustomCursorImage customCursorImage) {
 		inputHandlerStage.addActor(keyboardInputHandler);
+		actorsThatDoNotPause.add(keyboardInputHandler);
+		
+		inputHandlerStage.addActor(gamepadInputHandler);
+		actorsThatDoNotPause.add(gamepadInputHandler);
+		
 		stage.setKeyboardFocus(keyboardInputHandler);
+		
 		cursorStage.addActor(customCursorImage);
 	}
 
@@ -103,6 +116,11 @@ public class MultipleStage {
 
 	void setInputHandlerStage(Stage inputHandlerStage) {
 		this.inputHandlerStage = inputHandlerStage;
+	}
+
+	void setPause(Pause pause) {
+		this.pause = pause;
+		addActorToMainStage(pause);
 	}
 	
 }

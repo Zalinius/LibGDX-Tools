@@ -1,7 +1,5 @@
 package com.darzalgames.libgdxtools.ui.input;
 
-import java.util.function.Consumer;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,17 +12,15 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class UniversalInputStage extends Stage implements InputObserver {
 
 	private boolean mouseMode;
-	private Consumer<Float> scrollingConsumer;
 	private boolean debugPrintHit;
 
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
 	 * @param viewport
 	 */
-	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher, Consumer<Float> scrollingConsumer) {
+	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher) {
 		super(viewport);
 		inputStrategySwitcher.register(this);
-		this.scrollingConsumer = scrollingConsumer;
 		this.debugPrintHit = false;
 	}
 
@@ -45,12 +41,6 @@ public class UniversalInputStage extends Stage implements InputObserver {
 				System.out.println(hitActor);				
 			}
 		}
-	}
-	
-	@Override
-	public boolean scrolled(float amountX, float amountY) {
-		scrollingConsumer.accept(amountY);
-		return true;
 	}
 
 	/*

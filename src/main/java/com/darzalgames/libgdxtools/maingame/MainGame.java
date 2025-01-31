@@ -1,8 +1,5 @@
 package com.darzalgames.libgdxtools.maingame;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
@@ -29,7 +25,6 @@ import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.MouseInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSetup;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardInputStrategy;
@@ -54,11 +49,9 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	protected GameScreen currentScreen;
 	protected WindowResizer windowResizer;
-	protected List<DoesNotPause> actorsThatDoNotPause;
 	protected InputStrategySwitcher inputStrategySwitcher;
 	private MouseInputHandler mouseInputHandler;
 	protected InputSetup inputSetup;
-	protected Pause pause;
 
 	private boolean isQuitting = false;
 
@@ -100,7 +93,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		this.windowResizer = windowResizer;
 		this.gamePlatform = gamePlatform;
 		multipleStage = new MultipleStage();
-		actorsThatDoNotPause = new ArrayList<>();
 		GameInfo.setMainGame(this);
 	}
 
@@ -148,7 +140,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	public final void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if (!isQuitting) {
-			multipleStage.render(pause.isPaused(), actorsThatDoNotPause);
+			multipleStage.render();
 		}
 
 		steamStrategy.update();
@@ -206,7 +198,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void makeInputStrategySwitcher() {
 		inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
-		actorsThatDoNotPause.add(inputStrategySwitcher);
+		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
 	}
 
 	private void makePreferenceManager() {
@@ -226,7 +218,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void makePopUpStage() {
 		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
-		Stage popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher, scroll -> inputSetup.getScrollingManager().receiveScrollInput(scroll));
+		Stage popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher);
 		multipleStage.setPopUpStage(popUpStage);
 	}
 
@@ -246,7 +238,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		UniversalInputStage stage = new UniversalInputStageWithBackground(
 				new PixelPerfectViewport(width, height),
 				getMainStageBackgroundTexture(),
-				inputStrategySwitcher, scroll -> inputSetup.getScrollingManager().receiveScrollInput(scroll));
+				inputStrategySwitcher);
 		stage.setDebugPrintHit(DEBUG_PRINT_HIT);
 		multipleStage.setMainStage(stage);
 
@@ -257,9 +249,9 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void setUpInput() {
 		// Set up input processing for all strategies
 		inputSetup = new InputSetup(inputStrategySwitcher, makePauseMenu(), windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), multipleStage.popUpStage);
-		pause = inputSetup.getPause();
-		multipleStage.addActorToMainStage(pause);
+		multipleStage.setPause(inputSetup.getPause());
 		multipleStage.addActorToMainStage(inputStrategySwitcher);
+		multipleStage.addActorToMainStage(inputSetup.getScrollingManager());
 	}
 
 	private void makeSteamStrategy() {
@@ -269,8 +261,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void makeKeyboardAndGamepadInputHandlers() {
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
 		GamepadInputHandler gamepadInputHandler = steamStrategy.getGamepadInputHandler();
-		actorsThatDoNotPause.add(keyboardInputHandler);
-		actorsThatDoNotPause.add(gamepadInputHandler);
 		multipleStage.setUpInputHandlersOnStages(keyboardInputHandler, gamepadInputHandler, getCustomCursor());
 	}
 

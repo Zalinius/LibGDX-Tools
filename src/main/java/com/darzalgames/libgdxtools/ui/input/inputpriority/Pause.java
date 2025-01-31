@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 public class Pause extends Actor {
@@ -40,10 +39,6 @@ public class Pause extends Actor {
 		pauseButton.getView().setVisible(show);
 	}
 
-	void pressPauseButton() {
-		pauseButton.consumeKeyInput(Input.ACCEPT);
-	}
-
 	public boolean isPaused() {
 		/**
 		 * TODO This system makes no distinction between a popup pausing the game versus the pause menu pausing the game
@@ -68,6 +63,7 @@ public class Pause extends Actor {
 		if (pauseButton != null) {
 			popUpStage.addActor(pauseButton.getView());
 			pauseButton.getView().toFront();
+			// TODO let the PauseMenu do these things to its button, remove the getter
 		}
 	}
 }

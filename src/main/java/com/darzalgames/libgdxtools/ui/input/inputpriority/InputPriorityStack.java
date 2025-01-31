@@ -11,6 +11,9 @@ import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
+/**
+ * Manages which input consumer (including popups) is in focus and receiving input
+ */
 public class InputPriorityStack implements InputObserver {
 
 	private final LimitedAccessDoubleStack stack;
@@ -29,10 +32,6 @@ public class InputPriorityStack implements InputObserver {
 		Priority.setInputPriorityStack(this);
 	}
 
-	/**
-	 * PopUp objects must call {@link InputPriorityStack#claimPriorityForPopup(Actor)} instead
-	 * @param inputConsumer The thing to be put at the top of the input stack.
-	 */
 	void claimPriority(InputConsumer inputConsumer) {
 		boolean thisIsDifferentFromTheTop = !stack.isThisOnTop(inputConsumer);
 		if (thisIsDifferentFromTheTop) {
@@ -109,8 +108,7 @@ public class InputPriorityStack implements InputObserver {
 	}
 
 	/**
-	 * Used to completely clear the current input receivers (useful when changing game screens
-	 * to make sure any stray actors are TOTALLY cleared)
+	 * Used to completely clear the current input consumers (useful when changing game screens to make sure any stray actors are TOTALLY cleared)
 	 */
 	public void clearChildren() {
 		clearStackAndPushBlankConsumer();

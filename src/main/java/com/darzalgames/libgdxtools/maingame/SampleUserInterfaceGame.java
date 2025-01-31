@@ -35,7 +35,7 @@ import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
 
 public class SampleUserInterfaceGame extends MainGame {
 	
-	private final Consumer<SampleUserInterfaceGame> todo;
+	private final Consumer<SampleUserInterfaceGame> toDoAfterLaunch;
 	
 	
 	protected UniversalButton quitButton;
@@ -54,11 +54,10 @@ public class SampleUserInterfaceGame extends MainGame {
 		new Lwjgl3Application(new SampleUserInterfaceGame(width, height, args, todo), config);
 	}
 
-
-	public SampleUserInterfaceGame(int width, int height, String[] args, Consumer<SampleUserInterfaceGame> todo) {
+	public SampleUserInterfaceGame(int width, int height, String[] args, Consumer<SampleUserInterfaceGame> toDoAfterLaunch) {
 		super(width/2, height/2, new WindowResizerDesktop(width, height),
 				DesktopGamePlatformHelper.getTypeFromArgs(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new));
-		this.todo = todo;
+		this.toDoAfterLaunch = toDoAfterLaunch;
 	}
 
 	@Override
@@ -273,7 +272,7 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	@Override
 	protected void afterLaunch() {
-		this.todo.accept(this);
+		this.toDoAfterLaunch.accept(this);
 	}
 
 	@Override

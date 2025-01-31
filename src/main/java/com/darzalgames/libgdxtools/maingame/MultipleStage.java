@@ -54,6 +54,7 @@ public class MultipleStage {
 
 		if (pause.isPaused()) {
 			stage.getViewport().apply();
+			// skip stage.act() while paused
 			stage.draw();
 			float delta = Gdx.graphics.getDeltaTime();
 			actorsThatDoNotPause.forEach(actor -> actor.actWhilePaused(delta));

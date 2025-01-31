@@ -4,13 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 /**
- * Handles the input stack, handling which {@link InputConsumer}
- * receives input, manages popups and the pause menu, an toggling full screen (f11).
+ * Receives and processes input from the various handlers, manages special inputs like ESC to pause and toggling full screen with F11.
  */
 public class InputReceiver {
 
@@ -73,7 +71,7 @@ public class InputReceiver {
 	private void togglePause() {
 		boolean isInGame = !pause.isPaused(); // if we're not paused, then we're in-game and should open the pause menu
 		if (isInGame) { 
-			pause.pressPauseButton();
+			GamePauser.pauseIfNeeded();
 		} else { 
 			inputPriorityStack.sendInputToTop(Input.PAUSE);
 		}

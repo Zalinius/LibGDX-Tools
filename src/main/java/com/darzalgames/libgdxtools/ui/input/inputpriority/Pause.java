@@ -4,13 +4,9 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 public class Pause extends Actor {
 
-	private UniversalButton pauseButton;
 	private PauseMenu pauseMenu;
 	private Stage popUpStage;
 	private final Supplier<Boolean> doesCurrentInputConsumerPauseGame;
@@ -26,25 +22,20 @@ public class Pause extends Actor {
 		GamePauser.setPauseGameIfNeededRunnable(this::pauseIfNeeded);
 
 		this.pauseMenu = pauseMenu;
-		pauseButton = pauseMenu.getButton();
 
-		int padding = 1; // TODO Make this more customizable?
-		pauseButton.getView().setPosition(padding, GameInfo.getHeight() - pauseButton.getView().getHeight() - padding);
-		showPauseButton(false); // Only enable the button after the splash screen
-		popUpStage.addActor(pauseButton.getView());
+		pauseMenu.positionPauseButton();
+		pauseMenu.addPauseButtonToStage(popUpStage);
 	}
 
 	public void showPauseButton(boolean show) {
-		pauseButton.setTouchable(show ? Touchable.enabled : Touchable.disabled);
-		pauseButton.getView().setVisible(show);
+		pauseMenu.showPauseButton(show);
+	}
+
+	boolean isPauseMenuOpen() {
+		return pauseMenu.getStage() != null;
 	}
 
 	public boolean isPaused() {
-		/**
-		 * TODO This system makes no distinction between a popup pausing the game versus the pause menu pausing the game
-		 * and so when you're on a popup which does pause the game, pressing escape does not open the pause menu
-		 * because we're already paused. (So in QG I had to set a lot of popups not to pause the game anymore, feels off...)
-		 */
 		return doesCurrentInputConsumerPauseGame.get();
 	}
 
@@ -55,15 +46,11 @@ public class Pause extends Actor {
 	}
 
 	private void pause() {
-		Priority.claimPriority(pauseMenu);	
+		Priority.claimPriority(pauseMenu);
 	}
 
 	@Override
 	public void act(float delta) {
-		if (pauseButton != null) {
-			popUpStage.addActor(pauseButton.getView());
-			pauseButton.getView().toFront();
-			// TODO let the PauseMenu do these things to its button, remove the getter
-		}
+		pauseMenu.addPauseButtonToStage(popUpStage);
 	}
 }

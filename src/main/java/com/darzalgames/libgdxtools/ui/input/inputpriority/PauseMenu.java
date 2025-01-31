@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -23,7 +24,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterf
  */
 public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
-	protected UniversalButton optionsButton;
+	protected UniversalButton pauseButton;
 	private final Supplier<UniversalButton> makeWindowModeSelectBox;
 
 	private final String platformName;
@@ -89,16 +90,10 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		desiredWidth = 250;
 		desiredHeight = 125;
 	}
-
-	/**
-	 * @return The button that opens this pause menu
-	 */
-	public UniversalButton getButton() {
-		return optionsButton;
-	}
 	
 	/**
-	 * To be used by child classes to have buttons in the menu hide/show it (e.g. "return to main menu" should toggle screen visibility to false)
+	 * To be used by child classes to have buttons in the menu hide/show it. E.g. pressing a button to change the 
+	 * language does toggleScreenVisibility(false), refreshes the menu, then does toggleScreenVisibility(true).
 	 * @param show
 	 */
 	protected void toggleScreenVisibility(boolean show) {
@@ -112,7 +107,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	@Override
 	public void regainFocus() {
 		focusCurrent();
-		optionsButton.setTouchable(Touchable.enabled);
+		pauseButton.setTouchable(Touchable.enabled);
 	}
 
 	@Override
@@ -173,6 +168,22 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	@Override
 	public boolean isGamePausedWhileThisIsInFocus() {
 		return true;
+	}
+	
+	protected void positionPauseButton() {
+		int padding = 3;
+		pauseButton.getView().setPosition(padding, GameInfo.getHeight() - pauseButton.getView().getHeight() - padding);
+		showPauseButton(false); // Only enable the button after the splash screen
+	}
+
+	protected void showPauseButton(boolean show) {
+		pauseButton.setTouchable(show ? Touchable.enabled : Touchable.disabled);
+		pauseButton.getView().setVisible(show);
+	}
+	
+	protected void addPauseButtonToStage(Stage stage) {
+		stage.addActor(pauseButton.getView());
+		pauseButton.getView().toFront();
 	}
 
 	/**

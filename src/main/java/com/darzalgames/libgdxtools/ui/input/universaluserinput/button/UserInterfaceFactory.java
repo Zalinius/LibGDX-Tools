@@ -183,11 +183,11 @@ public class UserInterfaceFactory {
 		return new UniversalCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategySwitcher, soundInteractListener);
 	}
 
-	public static UniversalButton getSettingsButton(Consumer<Boolean> toggleScreenVisibility) {
+	public static UniversalButton getSettingsButton(Consumer<Boolean> togglePauseScreenVisibility) {
 		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()){
 			@Override public String toString() { return "pause button"; }}; 
 		return new MouseOnlyButton(textButton, 
-				() -> toggleScreenVisibility.accept(!isPaused.get()),
+				() -> togglePauseScreenVisibility.accept(!isPaused.get()),
 				inputStrategySwitcher, soundInteractListener);
 	}
 

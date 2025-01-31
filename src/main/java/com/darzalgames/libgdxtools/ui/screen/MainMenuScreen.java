@@ -10,7 +10,7 @@ import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
  */
 public class MainMenuScreen extends GameScreen {
 
-	protected final NavigableListMenu mainMenu;
+	private final NavigableListMenu mainMenu;
 
 	public MainMenuScreen(NavigableListMenu mainMenu, InputPriorityStack inputPriorityStack)
 	{
@@ -22,6 +22,13 @@ public class MainMenuScreen extends GameScreen {
 	@Override
 	public void gainFocus() {
 		Priority.claimPriority(mainMenu);
+	}
+	
+	/**
+	 * Recreates the main menu buttons, useful when changing language or font
+	 */
+	public void refresh() {
+		mainMenu.regainFocus();
 	}
 
 	@Override public String toString() { return "Main menu SCREEN, but not the buttons themselves"; }

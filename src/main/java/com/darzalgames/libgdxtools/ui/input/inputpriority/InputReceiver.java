@@ -22,12 +22,12 @@ public class InputReceiver {
 	private final boolean toggleWithF11;
 
 	/**
-	 * @param toggleFullscreenRunnable A runnable that toggles between full screen and windowed mode
 	 * @param inputStrategySwitcher
-	 * @param toggleWithF11 Whether or not the current running version of the game toggles full screen with f11
 	 * @param inputPriorityStack
+	 * @param toggleFullscreenRunnable A runnable that toggles between full screen and windowed mode
+	 * @param toggleWithF11 Whether or not the current running version of the game toggles full screen with f11
 	 */
-	public InputReceiver(Runnable toggleFullscreenRunnable, InputStrategySwitcher inputStrategySwitcher, boolean toggleWithF11, InputPriorityStack inputPriorityStack) {
+	public InputReceiver(InputStrategySwitcher inputStrategySwitcher, InputPriorityStack inputPriorityStack, Runnable toggleFullscreenRunnable, boolean toggleWithF11) {
 		this.toggleFullscreenRunnable = toggleFullscreenRunnable;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.toggleWithF11 = toggleWithF11;
@@ -69,7 +69,7 @@ public class InputReceiver {
 	}
 
 	private void togglePause() {
-		boolean isInGame = !pause.isPaused(); // if we're not paused, then we're in-game and should open the pause menu
+		boolean isInGame = !pause.isPauseMenuOpen();
 		if (isInGame) { 
 			GamePauser.pauseIfNeeded();
 		} else { 

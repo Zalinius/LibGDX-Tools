@@ -1,7 +1,8 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
-import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.darzalgames.libgdxtools.ui.input.Input;
 
 public class ScrollingManager extends Actor {
@@ -12,14 +13,6 @@ public class ScrollingManager extends Actor {
 	public ScrollingManager(InputReceiver inputReceiver) {
 		this.timeSinceScroll = 0;
 		this.hasFinishedScrolling = true;
-		
-		addAction(Actions.forever(new Action() {
-			@Override
-			public boolean act(float delta) {
-				ScrollingManager.this.timeSinceScroll += delta;
-				return false;
-			}
-		}));
 		
 		addListener(new InputListener() {
 			@Override
@@ -43,6 +36,7 @@ public class ScrollingManager extends Actor {
 	@Override
 	public void act(float delta) {
 		super.act(delta);
+		this.timeSinceScroll += delta;
 		this.getStage().setScrollFocus(this);
 	}
 	

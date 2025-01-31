@@ -46,12 +46,17 @@ public class InputReceiver {
 	 */
 	public void processKeyInput(Input input) {
 		boolean shouldToggleFullScreen = input == Input.TOGGLE_FULLSCREEN && toggleWithF11;
+		boolean isScrolling = input == Input.SCROLL_UP || input == Input.SCROLL_DOWN;
 		if (shouldToggleFullScreen) {
 			toggleFullscreenRunnable.run();
-		} else if (input == Input.PAUSE) {
+		}else if (input == Input.PAUSE) {
 			// Don't try to enter keyboard mode when someone is just pressing escape/pause, simply let the pause system consume the input
 			togglePause();
-		} else if (specialButtons.containsKey(input)) {
+		} else if (isScrolling) {
+			inputStrategySwitcher.setToMouseStrategy();
+			inputPriorityStack.sendInputToTop(input);
+		}
+		else if (specialButtons.containsKey(input)) {
 			specialButtons.get(input).consumeKeyInput(Input.ACCEPT);
 		}
 		else if (inputStrategySwitcher.showMouseExclusiveUI()) {
@@ -63,11 +68,6 @@ public class InputReceiver {
 
 	public void addSpecialButton(Input input, UniversalButton button) {
 		specialButtons.put(input, button);
-	}
-
-	public void processScrollingInput(Input input) {
-		inputStrategySwitcher.setToMouseStrategy();
-		inputPriorityStack.sendInputToTop(input);
 	}
 
 	private void togglePause() {

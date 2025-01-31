@@ -1,7 +1,5 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
-import java.util.function.Consumer;
-
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -12,12 +10,12 @@ public class ScrollingManager extends Actor {
 	private float timeSinceScroll;
 	private boolean hasFinishedScrolling;
 	
-	private final Consumer<Input> processScrollingInput;
+	private final InputReceiver inputReceiver;
 	
-	public ScrollingManager(Consumer<Input> processScrollingInput) {
+	public ScrollingManager(InputReceiver inputReceiver) {
 		this.timeSinceScroll = 0;
 		this.hasFinishedScrolling = true;
-		this.processScrollingInput = processScrollingInput;
+		this.inputReceiver = inputReceiver;
 		
 		addAction(Actions.forever(new Action() {
 			@Override
@@ -41,7 +39,7 @@ public class ScrollingManager extends Actor {
 
 		if (Math.abs(amount) > 0.1f && hasFinishedScrolling) {
 			timeSinceScroll = 0;
-			processScrollingInput.accept(amount < 0 ? Input.SCROLL_UP : Input.SCROLL_DOWN);
+			inputReceiver.processKeyInput(amount < 0 ? Input.SCROLL_UP : Input.SCROLL_DOWN);
 			hasFinishedScrolling = false;
 		}
 	}

@@ -17,7 +17,7 @@ public class InputSetup {
 		
 		inputReceiver = new InputReceiver(toggleFullscreenRunnable, inputStrategySwitcher, toggleWithF11, inputPriorityStack);
 
-		scrollingManager = new ScrollingManager(inputReceiver::processScrollingInput);
+		scrollingManager = new ScrollingManager(inputReceiver);
 
 		pause = new Pause(popUpStage, pauseMenu, inputPriorityStack::doesTopPauseGame);
 		inputReceiver.setPause(pause);

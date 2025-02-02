@@ -72,8 +72,7 @@ class SampleUserInterfaceGameIT {
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
 				});
-		// We made it out of the game
-		assertTrue(true);
+		// We made it out of the game, otherwise the game window maintains focus and the test doesn't end
 	}
 
 	@Test
@@ -97,8 +96,7 @@ class SampleUserInterfaceGameIT {
 					pressKey(Keys.UP); // Wrap around to the bottom of the menu
 					pressKey(Keys.ENTER);
 				});
-		// We made it out of the game
-		assertTrue(true);
+		// We made it out of the game, otherwise the game window maintains focus and the test doesn't end
 	}
 	
 	@Test

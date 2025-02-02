@@ -32,7 +32,7 @@ public class InputPriorityStack implements InputObserver {
 			sendInputToTop(Input.BACK); 
 		});
 		
-		Priority.setInputPriorityStack(this);
+		InputPriority.setInputPriorityStack(this);
 	}
 
 	void claimPriority(InputConsumer inputConsumer) {

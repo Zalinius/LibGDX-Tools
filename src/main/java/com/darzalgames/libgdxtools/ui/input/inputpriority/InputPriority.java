@@ -2,7 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 
-public class Priority {
+public class InputPriority {
 
 	private static InputPriorityStack inputPriorityStack;
 
@@ -15,6 +15,6 @@ public class Priority {
 	}
 
 	static void setInputPriorityStack(InputPriorityStack inputPriorityStack) {
-		Priority.inputPriorityStack = inputPriorityStack;
+		InputPriority.inputPriorityStack = inputPriorityStack;
 	}
 }

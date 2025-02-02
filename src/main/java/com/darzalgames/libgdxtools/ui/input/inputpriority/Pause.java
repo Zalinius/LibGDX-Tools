@@ -44,7 +44,7 @@ public class Pause extends Actor {
 	}
 
 	private void pause() {
-		Priority.claimPriority(pauseMenu);
+		InputPriority.claimPriority(pauseMenu);
 	}
 
 	@Override

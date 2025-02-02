@@ -205,7 +205,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		}
 
 		public UniversalButton getButton() {
-			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> Priority.claimPriority(this));
+			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this));
 		}
 
 		@Override

@@ -3,7 +3,7 @@ package com.darzalgames.libgdxtools.ui.input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.darzalcommon.data.Tuple;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 
 /**
@@ -71,7 +71,7 @@ public interface InputConsumer {
 	 * A convenient shorthand for releasing priority
 	 */
 	public default void releasePriority() {
-		Priority.releasePriority(this);
+		InputPriority.releasePriority(this);
 	}
 	
 } 

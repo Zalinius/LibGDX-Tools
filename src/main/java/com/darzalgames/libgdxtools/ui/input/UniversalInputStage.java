@@ -13,8 +13,6 @@ public class UniversalInputStage extends Stage implements InputObserver {
 
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
-	 * @param viewport
-	 * @param inputStrategySwitcher
 	 */
 	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher) {
 		super(viewport);

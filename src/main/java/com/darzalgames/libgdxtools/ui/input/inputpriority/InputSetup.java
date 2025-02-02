@@ -11,11 +11,11 @@ public class InputSetup {
 	private ScrollingManager scrollingManager;
 	
 	
-	public InputSetup(InputStrategySwitcher inputStrategySwitcher, PauseMenu pauseMenu, Runnable toggleFullscreenRunnable, boolean toggleWithF11, Stage popUpStage) {
+	public InputSetup(InputStrategySwitcher inputStrategySwitcher, PauseMenu pauseMenu, Runnable toggleFullscreenRunnable, Stage popUpStage) {
 		inputPriorityStack = new InputPriorityStack(popUpStage, () -> pause.isPauseMenuOpen());
 		inputStrategySwitcher.register(inputPriorityStack);
 		
-		inputReceiver = new InputReceiver(inputStrategySwitcher, inputPriorityStack, toggleFullscreenRunnable, toggleWithF11);
+		inputReceiver = new InputReceiver(inputStrategySwitcher, inputPriorityStack, toggleFullscreenRunnable);
 
 		scrollingManager = new ScrollingManager(inputReceiver);
 

@@ -45,10 +45,6 @@ public interface GamePlatform {
 		return true;
 	}
 
-	public default boolean toggleFullScreenWithF11() {
-		return true;
-	}
-
 	/**
 	 * @return True if a developer is playing, false if a player is playing
 	 */

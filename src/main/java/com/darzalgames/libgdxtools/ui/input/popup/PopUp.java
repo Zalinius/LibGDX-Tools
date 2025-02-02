@@ -45,10 +45,14 @@ public interface PopUp extends InputConsumer {
 	// These are implemented by default in Actor, which all of our PopUp objects are.
 	public boolean addListener(EventListener listener);
 	public boolean removeListener(EventListener listener);
-	
 
 	@Override
-	default Tuple<Actor, PopUp> getIfPopUp() {
+	default boolean isPopUp() {
+		return true;
+	}
+	
+	@Override
+	default Tuple<Actor, PopUp> getPopUp() {
 		return new Tuple<>(getAsActor(), this);
 	}
 	public Actor getAsActor();

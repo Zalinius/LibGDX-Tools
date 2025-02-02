@@ -38,10 +38,9 @@ public class InputPriorityStack implements InputObserver {
 	void claimPriority(InputConsumer inputConsumer) {
 		boolean thisIsDifferentFromTheTop = !stack.isThisOnTop(inputConsumer);
 		if (thisIsDifferentFromTheTop) {
-			Tuple<Actor, PopUp> popup = inputConsumer.getIfPopUp();
-			boolean isAPopup = popup != null;
+			boolean isAPopup = inputConsumer.isPopUp();
 			if (isAPopup) {
-				claimPriorityForPopup(popup);
+				claimPriorityForPopup(inputConsumer.getPopUp());
 			} else {
 				claimPriorityOnStack(inputConsumer, () -> stack.push(inputConsumer));
 			}

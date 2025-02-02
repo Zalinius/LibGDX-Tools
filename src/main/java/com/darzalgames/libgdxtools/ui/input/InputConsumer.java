@@ -52,8 +52,12 @@ public interface InputConsumer {
 	 */
 	public void selectDefault();
 	
-	public default Tuple<Actor, PopUp> getIfPopUp() {
-		return null;
+	public default boolean isPopUp() {
+		return false;
+	}
+	
+	public default Tuple<Actor, PopUp> getPopUp() {
+		throw new UnsupportedOperationException(this.toString() + ": A base InputConsumer isn't necessarily a popup! Override isPopUp() & getPopUp() if this truly is one.");
 	}
 
 	/**

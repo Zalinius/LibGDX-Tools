@@ -14,10 +14,5 @@ public class GlyphFactory {
 	public static Texture getGlyphForInput(Input input) {
 		return latestInputHandler.getGlyphForInput(input);
 	}
-
-	// TODO Quest Giver needs to know this to show the keyboard controls on the main menu...
-	public static boolean isCurrentlyKeyboardInput() {
-		return latestInputHandler instanceof KeyboardInputHandler;
-	}
 	
 }

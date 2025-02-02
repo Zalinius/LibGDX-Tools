@@ -29,7 +29,7 @@ public class MouseOnlyButton extends UniversalButton implements InputObserver {
 	}
 	
 	private void setVisibilityBasedOnCurrentInputStrategy(InputStrategySwitcher inputStrategySwitcher) {
-		this.getView().setVisible(inputStrategySwitcher.showMouseExclusiveUI());
+		this.getView().setVisible(inputStrategySwitcher.isMouseMode());
 	}
 
 	@Override

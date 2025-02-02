@@ -9,5 +9,6 @@ public interface InputStrategy  {
 	/**
 	 * @return Whether or not to show mouse exclusive buttons, the cursor, etc. (probably the opposite answer as the above method)
 	 */
-	public boolean showMouseExclusiveUI();
+	public boolean isMouseMode();
+
 }

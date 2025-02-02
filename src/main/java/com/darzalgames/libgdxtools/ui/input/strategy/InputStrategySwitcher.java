@@ -19,22 +19,22 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 	private InputStrategy currentInputStrategy;
 	private InputStrategy previousInputStrategy;
 	private final InputStrategy mouseInputStrategy;
-	private final InputStrategy keyboardInputStrategy;
+	private final InputStrategy keyboardAndGamepadInputStrategy;
 
-	public InputStrategySwitcher(InputStrategy mouseInputStrategy, InputStrategy keyboardInputStrategy) {
+	public InputStrategySwitcher(InputStrategy mouseInputStrategy, InputStrategy keyboardAndGamepadInputStrategy) {
 		this.mouseInputStrategy = mouseInputStrategy;
-		this.keyboardInputStrategy = keyboardInputStrategy;
+		this.keyboardAndGamepadInputStrategy = keyboardAndGamepadInputStrategy;
 
 		observers = new ArrayList<>();
 		setToMouseStrategy();
 	}
 
 	/**
-	 * Switch to the keyboard strategy, if it's not already the current strategy
+	 * Switch to the keyboard/gamepad strategy, if it's not already the current strategy
 	 */
-	public void setToKeyboardStrategy() {
-		if (currentInputStrategy != keyboardInputStrategy) {
-			changeStrategy(keyboardInputStrategy);
+	public void setToKeyboardAndGamepadStrategy() {
+		if (currentInputStrategy != keyboardAndGamepadInputStrategy) {
+			changeStrategy(keyboardAndGamepadInputStrategy);
 		}
 	}
 
@@ -78,10 +78,10 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 	}
 
 	@Override
-	public boolean showMouseExclusiveUI() {
-		return currentInputStrategy.showMouseExclusiveUI();
+	public boolean isMouseMode() {
+		return currentInputStrategy.isMouseMode();
 	}
-
+	
 	/**
 	 * To be used before a call to {@link InputStrategySwitcher#revertToPreviousStrategy()}
 	 */
@@ -101,8 +101,8 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 		if (previousInputStrategy != null) {
 			DelayAction delayAction = new DelayAction(0.2f);
 			RunnableActionBest resetInputAction = new RunnableActionBest(() -> {
-				if (InputStrategySwitcher.this.previousInputStrategy == InputStrategySwitcher.this.keyboardInputStrategy) {
-					setToKeyboardStrategy();
+				if (InputStrategySwitcher.this.previousInputStrategy == InputStrategySwitcher.this.keyboardAndGamepadInputStrategy) {
+					setToKeyboardAndGamepadStrategy();
 				}  else {
 					setToMouseStrategy();
 				}

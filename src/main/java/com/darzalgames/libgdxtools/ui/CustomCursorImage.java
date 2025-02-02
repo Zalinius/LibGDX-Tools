@@ -88,7 +88,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-		setVisible(inputStrategySwitcher.showMouseExclusiveUI());
+		setVisible(inputStrategySwitcher.isMouseMode());
 	}
 
 	@Override

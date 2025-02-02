@@ -24,6 +24,7 @@ public class MouseInputHandler extends InputHandler {
 		});
 		this.setFillParent(true);
 		this.setTouchable(Touchable.enabled);
+		updateLatestInputMethod();
 	}
 
 	@Override

@@ -66,8 +66,7 @@ public class UniversalInputStage extends Stage implements InputObserver {
 
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-		mouseMode = inputStrategySwitcher.showMouseExclusiveUI();
-		// TODO Our input strategies are pretty coy about whether or not they are Mouse Mode, but some classes like this one do just need to know...
+		mouseMode = inputStrategySwitcher.isMouseMode();
 	}
 
 	@Override

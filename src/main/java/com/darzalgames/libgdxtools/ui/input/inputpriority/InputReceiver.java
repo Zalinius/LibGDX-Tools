@@ -57,8 +57,8 @@ public class InputReceiver {
 		else if (specialButtons.containsKey(input)) {
 			specialButtons.get(input).consumeKeyInput(Input.ACCEPT);
 		}
-		else if (inputStrategySwitcher.showMouseExclusiveUI()) {
-			inputStrategySwitcher.setToKeyboardStrategy();
+		else if (inputStrategySwitcher.isMouseMode()) {
+			inputStrategySwitcher.setToKeyboardAndGamepadStrategy();
 		} else {
 			inputPriorityStack.sendInputToTop(input);
 		}

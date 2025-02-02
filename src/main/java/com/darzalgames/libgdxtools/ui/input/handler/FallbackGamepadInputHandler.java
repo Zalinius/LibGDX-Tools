@@ -32,7 +32,7 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 
 	@Override
 	public void connected(Controller controller) {
-		inputStrategySwitcher.setToKeyboardStrategy();
+		inputStrategySwitcher.setToKeyboardAndGamepadStrategy();
 	}
 
 	@Override

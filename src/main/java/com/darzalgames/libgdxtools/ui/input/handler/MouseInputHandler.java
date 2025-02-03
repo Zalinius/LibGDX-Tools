@@ -13,17 +13,18 @@ public class MouseInputHandler extends InputHandler {
 	 * Listens for click events and changes into mouse mode correspondingly
 	 */
 	public MouseInputHandler(InputStrategySwitcher inputStrategySwitcher) {
-		super(inputStrategySwitcher, InputMethod.MOUSE);
+		super(inputStrategySwitcher);
 		addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				setLatestInputMethod(MouseInputHandler.this.inputMethod);
+				updateLatestInputMethod();
 				inputStrategySwitcher.setToMouseStrategy();
 				return false;
 			}
 		});
 		this.setFillParent(true);
 		this.setTouchable(Touchable.enabled);
+		updateLatestInputMethod();
 	}
 
 	@Override

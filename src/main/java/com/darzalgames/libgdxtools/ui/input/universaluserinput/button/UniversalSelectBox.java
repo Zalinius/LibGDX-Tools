@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.libgdxtools.ui.Alignment;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
@@ -85,7 +85,7 @@ public class UniversalSelectBox extends UniversalButton {
 	}
 
 	private void showInnerOptionsPopUpMenu() {
-		Priority.claimPriority(options);
+		InputPriority.claimPriority(options);
 		options.goTo(defaultEntry);
 	}
 

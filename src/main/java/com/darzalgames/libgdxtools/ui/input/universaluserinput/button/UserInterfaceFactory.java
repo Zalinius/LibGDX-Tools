@@ -39,15 +39,18 @@ public class UserInterfaceFactory {
 	protected static InputStrategySwitcher inputStrategySwitcher;
 	private static Supplier<Float> flashesPerSecondSupplier;
 	protected static Runnable soundInteractListener;
+	private static Supplier<Boolean> isPaused;
 
 	protected UserInterfaceFactory() {}
 
-	public static void initialize(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener) {
+	public static void initialize(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener,
+			Supplier<Boolean> isPaused) {
 		UserInterfaceFactory.skinManager = skinManager;
 		UserInterfaceFactory.inputStrategySwitcher = inputStrategySwitcher;
 		quitGameRunnable = Gdx.app::exit;
 		UserInterfaceFactory.flashesPerSecondSupplier = flashesPerSecondSupplier;
 		UserInterfaceFactory.soundInteractListener = soundInteractListener;
+		UserInterfaceFactory.isPaused = isPaused;
 	}
 
 	public static Label getLabel(final String text) {
@@ -180,9 +183,12 @@ public class UserInterfaceFactory {
 		return new UniversalCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategySwitcher, soundInteractListener);
 	}
 
-	public static UniversalButton getInGamesSettingsButton(Runnable onclick) {
-		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()); 
-		return new MouseOnlyButton(textButton, onclick, inputStrategySwitcher, soundInteractListener);
+	public static UniversalButton getSettingsButton(Consumer<Boolean> togglePauseScreenVisibility) {
+		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()){
+			@Override public String toString() { return "pause button"; }}; 
+		return new MouseOnlyButton(textButton, 
+				() -> togglePauseScreenVisibility.accept(!isPaused.get()),
+				inputStrategySwitcher, soundInteractListener);
 	}
 
 	private static final String QUIT_GAME_KEY = "quit_game";
@@ -213,9 +219,8 @@ public class UserInterfaceFactory {
 		return text;
 	}
 
-	public static UniversalButton getQuitGameButtonWithWarning(Runnable runnable) {
+	public static UniversalButton getQuitGameButtonWithWarning() {
 		Runnable quitWithConfirmation = () -> {
-			runnable.run();
 			new ConfirmationMenu(
 					"menu_warning", 
 					QUIT_GAME_KEY, 

@@ -13,45 +13,38 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSubject;
 
 /**
  * Tracks the current input strategy, and handles switching between them as needed.
- * @author DarZal
  */
 public class InputStrategySwitcher extends Actor implements InputStrategy, InputSubject, DoesNotPause {
 
-	protected InputStrategy currentInputStrategy;
-	protected InputStrategy previousInputStrategy;
-	protected final InputStrategy mouseInputStrategy;
-	protected final InputStrategy keyboardInputStrategy;
+	private InputStrategy currentInputStrategy;
+	private InputStrategy previousInputStrategy;
+	private final InputStrategy mouseInputStrategy;
+	private final InputStrategy keyboardAndGamepadInputStrategy;
 
-	public InputStrategySwitcher(InputStrategy mouseInputStrategy, InputStrategy keyboardInputStrategy) {
+	public InputStrategySwitcher(InputStrategy mouseInputStrategy, InputStrategy keyboardAndGamepadInputStrategy) {
 		this.mouseInputStrategy = mouseInputStrategy;
-		this.keyboardInputStrategy = keyboardInputStrategy;
+		this.keyboardAndGamepadInputStrategy = keyboardAndGamepadInputStrategy;
 
 		observers = new ArrayList<>();
 		setToMouseStrategy();
 	}
 
 	/**
-	 * Switch to the keyboard strategy, if it's not already the current strategy
-	 * @return Whether or not the change happened
+	 * Switch to the keyboard/gamepad strategy, if it's not already the current strategy
 	 */
-	public boolean setToKeyboardStrategy() {
-		if (currentInputStrategy != keyboardInputStrategy) {
-			changeStrategy(keyboardInputStrategy);
-			return true;
+	public void setToKeyboardAndGamepadStrategy() {
+		if (currentInputStrategy != keyboardAndGamepadInputStrategy) {
+			changeStrategy(keyboardAndGamepadInputStrategy);
 		}
-		return false;
 	}
 
 	/**
 	 * Switch to the mouse strategy, if it's not already the current strategy
-	 * @return Whether or not the change happened
 	 */
-	public boolean setToMouseStrategy() {
+	public void setToMouseStrategy() {
 		if (currentInputStrategy != mouseInputStrategy) {
 			changeStrategy(mouseInputStrategy);
-			return true;
 		}
-		return false;
 	}
 
 	private void changeStrategy(InputStrategy newStrategy) {
@@ -64,6 +57,9 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 	@Override
 	public void register(InputObserver obj) {
 		observers.add(obj);
+		// Let the new observer know right away what the current input strategy is, since they pretty much always need to know!
+		// e.g. The stage needs to know on initialization that everything starts in mouse mode; a newly created input-sensitive label uses the current strategy, etc.
+		obj.inputStrategyChanged(this);
 	}
 	@Override
 	public void unregister(InputObserver obj) {
@@ -82,10 +78,10 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 	}
 
 	@Override
-	public boolean showMouseExclusiveUI() {
-		return currentInputStrategy.showMouseExclusiveUI();
+	public boolean isMouseMode() {
+		return currentInputStrategy.isMouseMode();
 	}
-
+	
 	/**
 	 * To be used before a call to {@link InputStrategySwitcher#revertToPreviousStrategy()}
 	 */
@@ -105,8 +101,8 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 		if (previousInputStrategy != null) {
 			DelayAction delayAction = new DelayAction(0.2f);
 			RunnableActionBest resetInputAction = new RunnableActionBest(() -> {
-				if (InputStrategySwitcher.this.previousInputStrategy == InputStrategySwitcher.this.keyboardInputStrategy) {
-					setToKeyboardStrategy();
+				if (InputStrategySwitcher.this.previousInputStrategy == InputStrategySwitcher.this.keyboardAndGamepadInputStrategy) {
+					setToKeyboardAndGamepadStrategy();
 				}  else {
 					setToMouseStrategy();
 				}

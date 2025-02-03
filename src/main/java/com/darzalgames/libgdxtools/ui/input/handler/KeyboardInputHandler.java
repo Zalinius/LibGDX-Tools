@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputReceiver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
@@ -22,8 +22,8 @@ public abstract class KeyboardInputHandler extends InputHandler {
 	/**
 	 * Sets up the listener for keyboard input, and maps various keybindings to others
 	 */
-	protected KeyboardInputHandler(InputStrategySwitcher inputStrategySwitcher) {
-		super(inputStrategySwitcher, InputMethod.KEYBOARD);
+	protected KeyboardInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
+		super(inputStrategySwitcher);
 		
 		keysToAllow = getKeyWhitelist();
 		buttonMappings = makeButtonMappings();
@@ -35,8 +35,8 @@ public abstract class KeyboardInputHandler extends InputHandler {
 				input = remapInputIfNecessary(input, keycode);
 				
 				if (keysToAllow.contains(input)) {
-					setLatestInputMethod(KeyboardInputHandler.this.inputMethod);
-					Priority.processKeyInput(input);
+					updateLatestInputMethod();
+					inputReceiver.processKeyInput(input);
 					return true;
 				}
 				

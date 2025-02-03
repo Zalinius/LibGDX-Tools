@@ -1,20 +1,17 @@
 package com.darzalgames.libgdxtools.maingame;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.darzalgames.darzalcommon.data.ListFactory;
-import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
@@ -23,20 +20,21 @@ import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
-import com.darzalgames.libgdxtools.ui.input.GlyphFactory;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStageWithBackground;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.MouseInputHandler;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSetup;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardInputStrategy;
+import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardAndGamepadInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 import com.darzalgames.libgdxtools.ui.screen.PixelPerfectViewport;
 
 public abstract class MainGame extends ApplicationAdapter implements SharesGameInformation {
+
 
 	// Values which are statically shared to the rest of the game by {@link GameInfo}
 	protected final int width;
@@ -46,28 +44,23 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected final GamePlatform gamePlatform;
 	protected SteamStrategy steamStrategy;
 
-	protected Stage stage;
-	protected Stage popUpStage;
-	private Stage backgroundStage;
-	private Stage cursorStage;
-	private Stage mouseInputHandlerStage;
-
-	protected abstract void initializeAssets();
-	protected abstract SaveManager makeSaveManager();
-	protected abstract void setUpBeforeLoadingSave();
-	protected abstract void launchGame(boolean isNewSave);
-	protected abstract WindowResizerButton makeWindowResizerButton();
-	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
-	protected abstract void quitGame();
-
-	protected GameScreen currentScreen;
+	// Objects created at initialization, but not widely shared
+	protected MultipleStage multipleStage;
+	protected InputSetup inputSetup;
 	protected WindowResizer windowResizer;
-	protected List<DoesNotPause> actorsThatDoNotPause;
 	protected InputStrategySwitcher inputStrategySwitcher;
-	private MouseInputHandler mouseInputHandler;
+
 	
+	// Values which change during gameplay
+	protected GameScreen currentScreen;
 	private boolean isQuitting = false;
 
+
+	
+	// The setup process, in order that they are called
+	protected abstract void initializeAssetsAndUserInterfaceFactory();
+	protected abstract String getPreferenceManagerName(); // TODO this can be removed once we figure out our long-standing goal of making Assets extendable
+	protected abstract WindowResizerButton makeWindowResizerButton();
 	/**
 	 * @return The background texture to be used in the "gutters" around the game, visible when the window size doesn't match the game's fixed resolution
 	 */
@@ -76,9 +69,23 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	 * @return The fallback background texture to be used in the game area, visible when nothing else is covering it
 	 */
 	protected abstract Texture getMainStageBackgroundTexture();
+	protected abstract Runnable getDrawConsoleRunnable();
+	protected abstract PauseMenu makePauseMenu();
+	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
+	protected abstract SaveManager makeSaveManager();
+	protected abstract void setUpBeforeLoadingSave();
+	protected abstract void launchGame(boolean isNewSave);
+	/**
+	 * Anything the game needs to do once launching and initialization is fully complete
+	 */
+	protected abstract void afterLaunch();
 
-	// TODO this can be removed once we figure out our long-standing goal of making Assets extendable
-	protected abstract String getPreferenceManagerName();
+
+	/**
+	 * Shutdown game-specific objects like the music system, call dispose() on things, etc.
+	 */
+	protected abstract void quitGame();
+
 
 
 	protected MainGame(int width, int height, WindowResizer windowResizer, GamePlatform gamePlatform) {
@@ -86,90 +93,32 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		this.height = height;
 		this.windowResizer = windowResizer;
 		this.gamePlatform = gamePlatform;
-		actorsThatDoNotPause = new ArrayList<>();
 		GameInfo.setMainGame(this);
 	}
 
 	@Override
 	public final void create() {
-		initializeAssets();
-		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
-		inputStrategySwitcher = makeInputStrategySwitcher();
-		this.steamStrategy = gamePlatform.getSteamStrategy(inputStrategySwitcher);
+		makeInputStrategySwitcher();
+		initializeAssetsAndUserInterfaceFactory();
+		makePreferenceManager();
+		initializeWindowResizer();
 
-		makeBackgroundStage();
-		makePopUpStage();
-		makeMainStageAndMouseStages();
+		makeAllStages();
 
-		setUpInputPrioritizer();
-		setUpInputForAllStages();
-		actorsThatDoNotPause.add(inputStrategySwitcher);
+		setUpInput();
+
 
 		setUpBeforeLoadingSave();
 		saveManager = makeSaveManager();
 		boolean isNewSave = !saveManager.load();
-		
 		launchGame(isNewSave);
-		windowResizer.initialize(inputStrategySwitcher, makeWindowResizerButton());
+
+		afterLaunch();
 	}
 
-	private void makeBackgroundStage() {
-		// Set up background texture + stage (fills gutters with a repeating pattern when the window size doesn't match the game)
-		Texture backgroundTexture = getBackgroundStageTexture();
-		backgroundTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-		TextureRegion backgroundTextureRegion = new TextureRegion(backgroundTexture);
-		backgroundTextureRegion.setRegion(0, 0, (float)backgroundTexture.getWidth(), (float)backgroundTexture.getHeight());
-		backgroundStage = new Stage(new ExtendViewport(width, height));
-		backgroundStage.addActor(new Image(backgroundTextureRegion));
-	}
-
-	private void makePopUpStage() {
-		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
-		popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher);
-	}
-
-	private void makeMainStageAndMouseStages() {
-		mouseInputHandlerStage = new Stage(new ScreenViewport());
-		mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
-		mouseInputHandlerStage.addActor(mouseInputHandler);
-
-		// Set up main game stage
-		stage = new UniversalInputStageWithBackground(new PixelPerfectViewport(width, height), getMainStageBackgroundTexture(), inputStrategySwitcher);
-
-		cursorStage = new Stage(new ExtendViewport(width, height));
-	}
-
-	private void setUpInputForAllStages() {
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(mouseInputHandlerStage);
-		inputMultiplexer.addProcessor(cursorStage);
-		inputMultiplexer.addProcessor(popUpStage);
-		inputMultiplexer.addProcessor(stage);
-		Gdx.input.setInputProcessor(inputMultiplexer);
-	}
 
 	protected CustomCursorImage getCustomCursor() {
 		return new CustomCursorImage(windowResizer::isWindowed, ColorTools.getDefaultCursor(), inputStrategySwitcher);
-	}
-
-	/**
-	 * @return An InputStrategySwitcher, in case the base class wants to extend its functionality (e.g. Quest Giver adds
-	 * button hints, and more specific gamepad handling may be wanted in the future)
-	 */
-	protected InputStrategySwitcher makeInputStrategySwitcher() {
-		return new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardInputStrategy());
-	}
-
-	private void setUpInputPrioritizer() {
-		// Set up input processing for all strategies
-		stage.addActor(inputStrategySwitcher);
-		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
-		GamepadInputHandler gamepadInputHandler = steamStrategy.getGamepadInputHandler();
-		actorsThatDoNotPause.add(keyboardInputHandler);
-		actorsThatDoNotPause.add(gamepadInputHandler);
-		cursorStage.addActor(getCustomCursor());
-		Priority.initialize(stage, popUpStage, windowResizer::toggleWindow, gamepadInputHandler, keyboardInputHandler, inputStrategySwitcher);
-		GlyphFactory.initialize(ListFactory.of(gamepadInputHandler, keyboardInputHandler, mouseInputHandler));
 	}
 
 	protected final void changeScreen(GameScreen gameScreen) {
@@ -178,7 +127,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			currentScreen.remove();
 		}
 		currentScreen = gameScreen;
-		stage.addActor(currentScreen);
+		multipleStage.stage.addActor(currentScreen);
 		currentScreen.show();
 	}
 
@@ -186,30 +135,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	public final void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if (!isQuitting) {
-			backgroundStage.getViewport().apply();
-			backgroundStage.draw();
-
-			stage.getViewport().apply();
-			if (Priority.isPaused()) {
-				stage.draw();
-				float delta = Gdx.graphics.getDeltaTime();
-				actorsThatDoNotPause.forEach(actor -> actor.actWhilePaused(delta));
-			} else {
-				stage.act();
-				stage.draw();
-			}
-
-			popUpStage.getViewport().apply();
-			popUpStage.act();
-			popUpStage.draw();
-
-			cursorStage.getViewport().apply();
-			cursorStage.act();
-			cursorStage.draw();
-
-			mouseInputHandlerStage.getViewport().apply();
-			mouseInputHandlerStage.act();
-			mouseInputHandlerStage.draw();
+			multipleStage.render();
 		}
 
 		steamStrategy.update();
@@ -230,16 +156,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	@Override
 	public final void resize (int width, int height) {
-		backgroundStage.getViewport().update(width, height, true);
-		backgroundStage.getCamera().update();
-		stage.getViewport().update(width, height, true);
-		stage.getCamera().update();
-		mouseInputHandlerStage.getViewport().update(width, height, true);
-		mouseInputHandlerStage.getCamera().update();
-		popUpStage.getViewport().update(width, height, true);
-		popUpStage.getCamera().update();
-		cursorStage.getViewport().update(width, height, true);
-		cursorStage.getCamera().update();
+		multipleStage.resize(width, height);
 	}
 
 	@Override
@@ -271,4 +188,107 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	public SteamStrategy getSteamStrategy() {
 		return steamStrategy;
 	}
+
+
+
+	private void makeInputStrategySwitcher() {
+		inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardAndGamepadInputStrategy());
+	}
+
+	private void makePreferenceManager() {
+		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
+	}
+	
+	private void makeAllStages() {
+		UniversalInputStage mainStage = makeMainStage();
+		UniversalInputStage popUpStage = makePopUpStage();
+		Stage backgroundStage = makeBackgroundStage();
+		Stage cursorStage = makeCursorStage();
+		Stage inputHandlerStage = makeInputHandlerStage();
+		multipleStage = new MultipleStage(mainStage, popUpStage, backgroundStage, cursorStage, inputHandlerStage);
+	}
+
+	private Stage makeBackgroundStage() {
+		// Set up background texture + stage (fills gutters with a repeating pattern when the window size doesn't match the game)
+		Texture backgroundTexture = getBackgroundStageTexture();
+		backgroundTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+		TextureRegion backgroundTextureRegion = new TextureRegion(backgroundTexture);
+		backgroundTextureRegion.setRegion(0, 0, (float)backgroundTexture.getWidth(), (float)backgroundTexture.getHeight());
+		Stage backgroundStage = new Stage(new ExtendViewport(width, height));
+		backgroundStage.addActor(new Image(backgroundTextureRegion));
+		return backgroundStage;
+	}
+
+	private UniversalInputStage makePopUpStage() {
+		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
+		UniversalInputStage popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher);
+		popUpStage.getRoot().setName("PopUp Stage");
+		return popUpStage;
+	}
+	
+	private Stage makeInputHandlerStage() {
+		Stage inputHandlerStage = new Stage(new ScreenViewport());
+		MouseInputHandler mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
+		inputHandlerStage.addActor(mouseInputHandler);
+		inputHandlerStage.addActor(new Actor() {
+			@Override
+			public void draw(Batch batch, float parentAlpha) {
+				getDrawConsoleRunnable().run();
+			}
+		});
+		return inputHandlerStage;
+	}
+
+	private UniversalInputStage makeMainStage() {
+		// Set up main game stage
+		UniversalInputStage stage = new UniversalInputStageWithBackground(
+				new PixelPerfectViewport(width, height),
+				getMainStageBackgroundTexture(),
+				inputStrategySwitcher);
+		stage.getRoot().setName("Main Stage");
+		return stage;
+	}
+	
+	private Stage makeCursorStage() {
+		Stage cursorStage = new Stage(new ExtendViewport(width, height));
+		cursorStage.addActor(getCustomCursor());
+		return cursorStage;
+	}
+
+	private void setUpInput() {
+		// Set up input processing for all strategies
+		inputSetup = new InputSetup(inputStrategySwitcher, makePauseMenu(), windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), multipleStage.popUpStage);
+		multipleStage.setPause(inputSetup.getPause());
+		multipleStage.stage.addActor(inputStrategySwitcher);
+		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
+		multipleStage.stage.addActor(inputSetup.getScrollingManager());
+
+		setUpCatchKeys();
+		makeSteamStrategy();
+		makeKeyboardAndGamepadInputHandlers();
+	}
+	
+	private void setUpCatchKeys() {
+		Gdx.input.setCatchKey(Input.Keys.DOWN, true);
+		Gdx.input.setCatchKey(Input.Keys.UP, true);
+		Gdx.input.setCatchKey(Input.Keys.LEFT, true);
+		Gdx.input.setCatchKey(Input.Keys.RIGHT, true);
+		// TODO F11 in browser?
+		// itch.io handles catching mouse scrolling and spacebar while the game is in focus
+	}
+	
+	private void makeSteamStrategy() {
+		this.steamStrategy = gamePlatform.getSteamStrategy(inputStrategySwitcher, inputSetup.getInputReceiver());
+	}
+
+	private void makeKeyboardAndGamepadInputHandlers() {
+		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
+		GamepadInputHandler gamepadInputHandler = steamStrategy.getGamepadInputHandler();
+		multipleStage.setUpInputHandlersOnStages(keyboardInputHandler, gamepadInputHandler);
+	}
+
+	private void initializeWindowResizer() {
+		windowResizer.initialize(inputStrategySwitcher, makeWindowResizerButton());
+	}
+
 }

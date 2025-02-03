@@ -4,25 +4,24 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public class UniversalInputStage extends Stage {
+public class UniversalInputStage extends Stage implements InputObserver {
 
-	private final InputStrategySwitcher inputStrategySwitcher;
+	private boolean mouseMode;
 
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
-	 * @param viewport
 	 */
 	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher) {
 		super(viewport);
-		this.inputStrategySwitcher = inputStrategySwitcher;
+		inputStrategySwitcher.register(this);
 	}
 
 	@Override
 	public void act(final float delta) {
-		if (!inputStrategySwitcher.shouldFlashButtons()) {
+		if (mouseMode) {
 			// if playing mouse-driven, use a normal stage
 			super.act(delta);
 		} else {
@@ -30,12 +29,6 @@ public class UniversalInputStage extends Stage {
 			// and just call act() on our actors like in Stage
 			getRoot().act(delta);
 		}
-	}
-	
-	@Override
-	public boolean scrolled(float amountX, float amountY) {
-		Priority.receiveScrollInput(amountY);
-		return true;
 	}
 
 	/*
@@ -69,5 +62,15 @@ public class UniversalInputStage extends Stage {
 			parent = parent.getParent();
 		}
 		return true;
+	}
+
+	@Override
+	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
+		mouseMode = inputStrategySwitcher.isMouseMode();
+	}
+
+	@Override
+	public boolean shouldBeUnregistered() {
+		return false;
 	}
 }

@@ -1,7 +1,10 @@
 package com.darzalgames.libgdxtools.ui.input;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.darzalcommon.data.Tuple;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
+import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 
 /**
  * Anything that can be interacted with via user input
@@ -48,9 +51,17 @@ public interface InputConsumer {
 	 * If applicable, select a default object (e.g. the first button in a list, or the only intractable object in the current scene)
 	 */
 	public void selectDefault();
+	
+	public default boolean isPopUp() {
+		return false;
+	}
+	
+	public default Tuple<Actor, PopUp> getPopUp() {
+		throw new UnsupportedOperationException(this.toString() + ": A base InputConsumer isn't necessarily a popup! Override isPopUp() & getPopUp() if this truly is one.");
+	}
 
 	/**
-	 * If this object is the topmost UI, is the game paused?
+	 * @return If this object is the topmost UI, is the game paused?
 	 */
 	public default boolean isGamePausedWhileThisIsInFocus() {
 		return false;
@@ -60,34 +71,7 @@ public interface InputConsumer {
 	 * A convenient shorthand for releasing priority
 	 */
 	public default void releasePriority() {
-		Priority.releasePriority(this);
+		InputPriority.releasePriority(this);
 	}
-
-	/**
-	 * These are for more logic-heavy objects which still need to be on the input stack,
-	 * but which don't themselves do much interaction with input. For example, in Quest Giver the WorldStateMachine
-	 * proceeds to the next state whenever it regains focus (i.e. the previous state released focus)
-	 * but doesn't itself have any UI or interactions with the player. Another example is the
-	 * SteamAchievement states which grant an achievement and immediately release focus.
-	 */
-	public static InputConsumer makeLogicalInputConsumer(Runnable onGainFocus) {
-		return new InputConsumer() {
-
-			@Override
-			public void gainFocus() {
-				onGainFocus.run();
-				releasePriority();
-			}
-
-			@Override public void setTouchable(Touchable isTouchable) {}
-
-			@Override public void selectDefault() {}
-
-			@Override public void focusCurrent() {}
-
-			@Override public void consumeKeyInput(Input input) {}
-
-			@Override public void clearSelected() {}
-		};
-	}
+	
 } 

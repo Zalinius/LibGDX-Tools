@@ -1,6 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.strategy;
 
-public class KeyboardInputStrategy implements InputStrategy {
+public class KeyboardAndGamepadInputStrategy implements InputStrategy {
 	
 	@Override
 	public boolean shouldFlashButtons() {
@@ -8,7 +8,7 @@ public class KeyboardInputStrategy implements InputStrategy {
 	}
 
 	@Override
-	public boolean showMouseExclusiveUI() {
+	public boolean isMouseMode() {
 		return false;
 	}
 

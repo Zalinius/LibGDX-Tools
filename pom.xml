@@ -5,7 +5,7 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.3.16</version>
+	<version>0.4.0</version>
 	<name>libGDX Tools</name>
 
 	<properties>
@@ -57,19 +57,19 @@
 					</argLine>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.0.0-M7</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+<!--			<plugin>-->
+<!--		        <groupId>org.apache.maven.plugins</groupId>-->
+<!--		        <artifactId>maven-failsafe-plugin</artifactId>-->
+<!--		        <version>3.5.2</version>-->
+<!--		        <executions>-->
+<!--		          <execution>-->
+<!--		            <goals>-->
+<!--		              <goal>integration-test</goal>-->
+<!--		              <goal>verify</goal>-->
+<!--		            </goals>-->
+<!--		          </execution>-->
+<!--		        </executions>-->
+<!--      		</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>

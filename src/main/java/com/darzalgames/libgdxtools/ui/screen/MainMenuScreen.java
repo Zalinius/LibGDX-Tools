@@ -1,8 +1,8 @@
 package com.darzalgames.libgdxtools.ui.screen;
 
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriorityStack;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
 /**
@@ -10,26 +10,26 @@ import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
  */
 public class MainMenuScreen extends GameScreen {
 
-	private NavigableListMenu mainMenu;
+	private final NavigableListMenu mainMenu;
 
-	public MainMenuScreen(NavigableListMenu mainMenu)
+	public MainMenuScreen(NavigableListMenu mainMenu, InputPriorityStack inputPriorityStack)
 	{
-		super(Runnables.nullRunnable());
+		super(Runnables.nullRunnable(), inputPriorityStack);
 		this.mainMenu = mainMenu;
 		addActor(mainMenu);
 	}
-	
+
 	@Override
 	public void gainFocus() {
-		Priority.claimPriority(mainMenu);
+		InputPriority.claimPriority(mainMenu);
+	}
+	
+	/**
+	 * Recreates the main menu buttons, useful when changing language or font
+	 */
+	public void refresh() {
+		mainMenu.regainFocus();
 	}
 
-    @Override
-    public void selectDefault() {}
-    @Override
-    public void clearSelected() {}
-    @Override
-    public void focusCurrent() {}
-    @Override
-    public void consumeKeyInput(Input input) {}
+	@Override public String toString() { return "Main menu SCREEN, but not the buttons themselves"; }
 }

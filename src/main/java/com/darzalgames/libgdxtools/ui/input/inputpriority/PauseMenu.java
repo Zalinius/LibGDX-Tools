@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -19,18 +20,17 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterf
 
 
 /**
- * The base class for options menus (in-game versus when on the main menu)
- * @author DarZal
+ * The base class for pause menus (in-game versus when on the main menu)
  */
 public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
-	protected UniversalButton optionsButton;
+	protected UniversalButton pauseButton;
 	private final Supplier<UniversalButton> makeWindowModeSelectBox;
 
 	private final String platformName;
-
+	
 	/**
-	 * NOTE: Setting the position is important, otherwise the options menu will not open!<p>
+	 * NOTE: Setting the position is important, otherwise the pause menu will not open!<p>
 	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceFactory.makeActorCentered(this)} 
 	 */
 	protected abstract void setUpBackground();
@@ -90,21 +90,15 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		desiredWidth = 250;
 		desiredHeight = 125;
 	}
-
+	
 	/**
-	 * @return The button that opens this options menu
-	 */
-	public UniversalButton getButton() {
-		return optionsButton;
-	}
-
-	/**
-	 * To be used by child classes to have buttons in the menu hide/show it (e.g. "return to main menu" should toggle screen visibility to false)
+	 * To be used by child classes to have buttons in the menu hide/show it. E.g. pressing a button to change the 
+	 * language does toggleScreenVisibility(false), refreshes the menu, then does toggleScreenVisibility(true).
 	 * @param show
 	 */
 	protected void toggleScreenVisibility(boolean show) {
 		if (show) {
-			Priority.pauseIfNeeded();
+			GamePauser.pauseIfNeeded();
 		} else {
 			hideThis();
 		}
@@ -113,7 +107,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	@Override
 	public void regainFocus() {
 		focusCurrent();
-		optionsButton.setTouchable(Touchable.enabled);
+		pauseButton.setTouchable(Touchable.enabled);
 	}
 
 	@Override
@@ -175,10 +169,25 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	public boolean isGamePausedWhileThisIsInFocus() {
 		return true;
 	}
+	
+	protected void positionPauseButton() {
+		int padding = 3;
+		pauseButton.getView().setPosition(padding, GameInfo.getHeight() - pauseButton.getView().getHeight() - padding);
+		showPauseButton(false); // Only enable the button after the splash screen
+	}
+
+	protected void showPauseButton(boolean show) {
+		pauseButton.setTouchable(show ? Touchable.enabled : Touchable.disabled);
+		pauseButton.getView().setVisible(show);
+	}
+	
+	protected void addPauseButtonToStage(Stage stage) {
+		stage.addActor(pauseButton.getView());
+		pauseButton.getView().toFront();
+	}
 
 	/**
 	 * A sub-menu that opens up within this menu (e.g. a sub-menu for sound options)
-	 * @author DarZal
 	 */
 	protected class NestedMenu extends PopUpMenu implements DoesNotPause {
 
@@ -196,7 +205,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		}
 
 		public UniversalButton getButton() {
-			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> Priority.claimPriority(this));
+			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this));
 		}
 
 		@Override
@@ -216,3 +225,4 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		}
 	}
 }
+

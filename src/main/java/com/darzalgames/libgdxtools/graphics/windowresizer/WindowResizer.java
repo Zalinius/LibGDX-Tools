@@ -2,7 +2,7 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 
 import com.darzalgames.darzalcommon.data.Coordinate;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Priority;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
@@ -93,7 +93,7 @@ public abstract class WindowResizer {
 		inputStrategySwitcher.revertToPreviousStrategy();
 		windowResizerButton.setSelected(currentScreenMode);
 		if (offerToRevert) {
-			Priority.claimPriority(windowResizerButton.getRevertMenu());
+			InputPriority.claimPriority(windowResizerButton.getRevertMenu());
 		}
 	}
 

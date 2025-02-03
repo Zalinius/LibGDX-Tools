@@ -8,7 +8,7 @@ public class MouseInputStrategy implements InputStrategy {
 	}
 
 	@Override
-	public boolean showMouseExclusiveUI() {
+	public boolean isMouseMode() {
 		return true;
 	}
 

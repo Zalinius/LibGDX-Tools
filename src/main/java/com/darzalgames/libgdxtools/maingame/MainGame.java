@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.maingame;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -262,10 +263,20 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
 		multipleStage.stage.addActor(inputSetup.getScrollingManager());
 
+		setUpCatchKeys();
 		makeSteamStrategy();
 		makeKeyboardAndGamepadInputHandlers();
 	}
-
+	
+	private void setUpCatchKeys() {
+		Gdx.input.setCatchKey(Input.Keys.DOWN, true);
+		Gdx.input.setCatchKey(Input.Keys.UP, true);
+		Gdx.input.setCatchKey(Input.Keys.LEFT, true);
+		Gdx.input.setCatchKey(Input.Keys.RIGHT, true);
+		// TODO F11 in browser?
+		// itch.io handles catching mouse scrolling and spacebar while the game is in focus
+	}
+	
 	private void makeSteamStrategy() {
 		this.steamStrategy = gamePlatform.getSteamStrategy(inputStrategySwitcher, inputSetup.getInputReceiver());
 	}

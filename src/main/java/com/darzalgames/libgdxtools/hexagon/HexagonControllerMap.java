@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -54,7 +53,7 @@ public class HexagonControllerMap<E> extends Group {
 	 */
 	public List<HexagonController> getControllerNeighborsOf(Hexagon hexagon) {
 		Set<Hexagon> hexes = hexagonMap.getHexagonNeighborsOf(hexagon);
-		return hexes.stream().map(neighborHexagon -> hexagonMap.getValueAt(neighborHexagon).f).collect(Collectors.toList());
+		return hexes.stream().map(neighborHexagon -> hexagonMap.getValueAt(neighborHexagon).f).toList();
 	}
 
 	void centerSelf() {

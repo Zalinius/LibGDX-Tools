@@ -19,15 +19,18 @@ public class InputReceiver {
 	private Map<Input, UniversalButton> specialButtons = new HashMap<>();
 
 	private Runnable toggleFullscreenRunnable;
+	private final boolean toggleWithF11;
 
 	/**
 	 * @param inputStrategySwitcher
 	 * @param inputPriorityStack
 	 * @param toggleFullscreenRunnable A runnable that toggles between full screen and windowed mode
+	 * @param toggleWithF11 Whether or not the current running version of the game toggles full screen with f11
 	 */
-	public InputReceiver(InputStrategySwitcher inputStrategySwitcher, InputPriorityStack inputPriorityStack, Runnable toggleFullscreenRunnable) {
+	public InputReceiver(InputStrategySwitcher inputStrategySwitcher, InputPriorityStack inputPriorityStack, Runnable toggleFullscreenRunnable, boolean toggleWithF11) {
 		this.toggleFullscreenRunnable = toggleFullscreenRunnable;
 		this.inputStrategySwitcher = inputStrategySwitcher;
+		this.toggleWithF11 = toggleWithF11;
 
 		this.inputPriorityStack = inputPriorityStack;
 	}
@@ -40,21 +43,21 @@ public class InputReceiver {
 	 * @param input The input to pass into the system: this can be from the user (keyboard, controller), or simulated input
 	 */
 	public void processKeyInput(Input input) {
-		boolean isTogglingFullScreen = input == Input.TOGGLE_FULLSCREEN;
-		boolean isPausing = input == Input.PAUSE;
+		boolean shouldToggleFullScreen = input == Input.TOGGLE_FULLSCREEN && toggleWithF11;
 		boolean isScrolling = input == Input.SCROLL_UP || input == Input.SCROLL_DOWN;
-		
-		if (isTogglingFullScreen) {
+		if (shouldToggleFullScreen) {
 			toggleFullscreenRunnable.run();
-		} else if (isPausing) {
+		}else if (input == Input.PAUSE) {
 			// Don't try to enter keyboard mode when someone is just pressing escape/pause, simply let the pause system consume the input
 			togglePause();
 		} else if (isScrolling) {
 			inputStrategySwitcher.setToMouseStrategy();
 			inputPriorityStack.sendInputToTop(input);
-		} else if (specialButtons.containsKey(input)) {
+		}
+		else if (specialButtons.containsKey(input)) {
 			specialButtons.get(input).consumeKeyInput(Input.ACCEPT);
-		} else if (inputStrategySwitcher.isMouseMode()) {
+		}
+		else if (inputStrategySwitcher.isMouseMode()) {
 			inputStrategySwitcher.setToKeyboardAndGamepadStrategy();
 		} else {
 			inputPriorityStack.sendInputToTop(input);

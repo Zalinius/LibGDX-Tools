@@ -19,6 +19,11 @@ public class WebGamePlatform implements GamePlatform {
 	}
 	
 	@Override
+	public boolean toggleFullScreenWithF11() {
+		return false;
+	}
+	
+	@Override
 	public FileHandle getSaveFileLocation(String fullGameAndSaveName) {
 		// TODO Auto-generated method stub
 		return null;

@@ -2,7 +2,6 @@ package com.darzalgames.libgdxtools.maingame;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -50,13 +49,13 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected WindowResizer windowResizer;
 	protected InputStrategySwitcher inputStrategySwitcher;
 
-
+	
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
 	private boolean isQuitting = false;
 
 
-
+	
 	// The setup process, in order that they are called
 	protected abstract void initializeAssetsAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName(); // TODO this can be removed once we figure out our long-standing goal of making Assets extendable
@@ -198,7 +197,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void makePreferenceManager() {
 		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
 	}
-
+	
 	private void makeAllStages() {
 		UniversalInputStage mainStage = makeMainStage();
 		UniversalInputStage popUpStage = makePopUpStage();
@@ -225,7 +224,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		popUpStage.getRoot().setName("PopUp Stage");
 		return popUpStage;
 	}
-
+	
 	private Stage makeInputHandlerStage() {
 		Stage inputHandlerStage = new Stage(new ScreenViewport());
 		MouseInputHandler mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
@@ -248,7 +247,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		stage.getRoot().setName("Main Stage");
 		return stage;
 	}
-
+	
 	private Stage makeCursorStage() {
 		Stage cursorStage = new Stage(new ExtendViewport(width, height));
 		cursorStage.addActor(getCustomCursor());
@@ -257,24 +256,14 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void setUpInput() {
 		// Set up input processing for all strategies
-		inputSetup = new InputSetup(inputStrategySwitcher, makePauseMenu(), windowResizer::toggleWindow, multipleStage.popUpStage);
+		inputSetup = new InputSetup(inputStrategySwitcher, makePauseMenu(), windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), multipleStage.popUpStage);
 		multipleStage.setPause(inputSetup.getPause());
 		multipleStage.stage.addActor(inputStrategySwitcher);
 		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
 		multipleStage.stage.addActor(inputSetup.getScrollingManager());
 
-		setUpCatchKeys();
 		makeSteamStrategy();
 		makeKeyboardAndGamepadInputHandlers();
-	}
-
-	private void setUpCatchKeys() {
-		Gdx.input.setCatchKey(Input.Keys.DOWN, true);
-		Gdx.input.setCatchKey(Input.Keys.UP, true);
-		Gdx.input.setCatchKey(Input.Keys.LEFT, true);
-		Gdx.input.setCatchKey(Input.Keys.RIGHT, true);
-		Gdx.input.setCatchKey(Input.Keys.F11, true);
-		// itch.io handles catching mouse scrolling and spacebar while the game is in focus
 	}
 
 	private void makeSteamStrategy() {

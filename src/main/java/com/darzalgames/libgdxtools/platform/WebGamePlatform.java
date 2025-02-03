@@ -15,7 +15,7 @@ public class WebGamePlatform implements GamePlatform {
 	
 	@Override
 	public boolean supportsBorderlessFullscreen() {
-		return false;//TODO or does it??
+		return false;
 	}
 	
 	@Override
@@ -25,7 +25,6 @@ public class WebGamePlatform implements GamePlatform {
 	
 	@Override
 	public FileHandle getSaveFileLocation(String fullGameAndSaveName) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

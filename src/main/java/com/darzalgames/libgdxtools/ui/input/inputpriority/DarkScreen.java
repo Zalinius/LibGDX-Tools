@@ -31,10 +31,12 @@ class DarkScreen extends Image {
 		});
 	}
 
-	void fadeIn(int actorIndex, boolean isTouchable) {
+	void fadeIn(Actor actorPopup, boolean isTouchable) {
 		clearActions();
 		popupStage.addActor(this);
+		int actorIndex = actorPopup.getZIndex();
 		setZIndex(actorIndex);
+		actorPopup.setZIndex(actorIndex+1);
 		// There used to be a 1 second delay here before setting the dark screen touchable, I'm not sure why.
 		setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled);
 		addAction(Actions.fadeIn(0.25f, Interpolation.circle));
@@ -47,7 +49,7 @@ class DarkScreen extends Image {
 				Actions.removeActor(this)
 				));
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Dark screen behind popups";

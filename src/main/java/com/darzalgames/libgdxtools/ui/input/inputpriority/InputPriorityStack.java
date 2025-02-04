@@ -53,7 +53,7 @@ public class InputPriorityStack implements InputObserver {
 		PopUp popup = actorPopup.f;
 		popUpStage.addActor(actor);
 		actor.toFront();
-		darkScreen.fadeIn(actor.getZIndex(), popup.canDismiss());
+		darkScreen.fadeIn(actor, popup.canDismiss());
 		claimPriorityOnStack(popup, () -> stack.push(new Tuple<>(actor, popup)));
 		popup.addBackClickListenerIfCanDismiss();
 	}
@@ -135,7 +135,7 @@ public class InputPriorityStack implements InputObserver {
 			Tuple<Actor, PopUp> actorPopUp = stack.getCurrentPopup();
 			Actor actor = actorPopUp.e;
 			PopUp popUp = actorPopUp.f;
-			darkScreen.fadeIn(actor.getZIndex(), popUp.canDismiss());
+			darkScreen.fadeIn(actor, popUp.canDismiss());
 		}
 		return false;
 	}

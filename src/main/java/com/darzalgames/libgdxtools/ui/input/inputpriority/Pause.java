@@ -17,7 +17,7 @@ public class Pause extends Actor {
 	public Pause(Stage popUpStage, PauseMenu pauseMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
 		this.popUpStage = popUpStage;
 		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
-		GamePauser.setPauseGameIfNeededRunnable(this::pauseIfNeeded);
+		GamePauser.setPauseGameRunnable(this::pause);
 
 		this.pauseMenu = pauseMenu;
 
@@ -35,12 +35,6 @@ public class Pause extends Actor {
 
 	public boolean isPaused() {
 		return doesCurrentInputConsumerPauseGame.get();
-	}
-
-	private void pauseIfNeeded() {
-		if (!isPaused()) {
-			pause();
-		}
 	}
 
 	private void pause() {

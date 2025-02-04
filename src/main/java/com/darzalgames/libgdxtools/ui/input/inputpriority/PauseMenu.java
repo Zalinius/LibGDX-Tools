@@ -98,7 +98,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	 */
 	protected void toggleScreenVisibility(boolean show) {
 		if (show) {
-			GamePauser.pauseIfNeeded();
+			GamePauser.pause();
 		} else {
 			hideThis();
 		}

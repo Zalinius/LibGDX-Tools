@@ -2,16 +2,16 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 public class GamePauser {
 
-	private static Runnable pauseGameIfNeededRunnable;
+	private static Runnable pauseGameRunnable;
 
-	public static void setPauseGameIfNeededRunnable(Runnable pauseGameIfNeededRunnable) {
-		GamePauser.pauseGameIfNeededRunnable = pauseGameIfNeededRunnable;
+	public static void setPauseGameRunnable(Runnable pauseGameRunnable) {
+		GamePauser.pauseGameRunnable = pauseGameRunnable;
 	}
 
 	/**
 	 * Will show the pause menu if the game is not already paused
 	 */
-	public static void pauseIfNeeded() {
-		pauseGameIfNeededRunnable.run();
+	public static void pause() {
+		pauseGameRunnable.run();
 	}
 }

@@ -71,7 +71,7 @@ public class InputReceiver {
 	private void togglePause() {
 		boolean isInGame = !pause.isPauseMenuOpen();
 		if (isInGame) { 
-			GamePauser.pauseIfNeeded();
+			GamePauser.pause();
 		} else { 
 			inputPriorityStack.sendInputToTop(Input.PAUSE);
 		}

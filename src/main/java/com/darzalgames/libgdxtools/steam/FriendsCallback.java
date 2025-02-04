@@ -17,7 +17,7 @@ public class FriendsCallback implements SteamFriendsCallback {
 	@Override
 	public void onGameOverlayActivated(boolean active) {
 		if (active) {
-			GamePauser.pauseIfNeeded();
+			GamePauser.pause();
 		}
 	}
 

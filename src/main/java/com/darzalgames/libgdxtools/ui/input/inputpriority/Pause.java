@@ -17,7 +17,7 @@ public class Pause extends Actor {
 	public Pause(Stage popUpStage, PauseMenu pauseMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
 		this.popUpStage = popUpStage;
 		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
-		GamePauser.setPauseGameIfNeededRunnable(this::pause);
+		GamePauser.setPauseGameRunnable(this::pause);
 
 		this.pauseMenu = pauseMenu;
 

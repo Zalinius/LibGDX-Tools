@@ -52,7 +52,7 @@ public abstract class GamepadInputHandler extends InputHandler {
 	
 	protected final void controllerDisconnected() {
 		inputStrategySwitcher.setToMouseStrategy();
-		GamePauser.pauseIfNeeded();
+		GamePauser.pause();
 	}
 	
 

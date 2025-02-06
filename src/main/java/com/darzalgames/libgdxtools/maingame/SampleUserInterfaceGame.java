@@ -11,6 +11,7 @@ import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.functional.Consumers;
 import com.darzalgames.darzalcommon.functional.Runnables;
@@ -25,10 +26,12 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
+import com.darzalgames.libgdxtools.ui.input.popup.ChoicePopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
+import com.darzalgames.libgdxtools.ui.input.popup.SimplePopUp;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
@@ -37,7 +40,7 @@ public class SampleUserInterfaceGame extends MainGame {
 	
 	private final Consumer<SampleUserInterfaceGame> toDoAfterLaunch;
 	
-	
+	protected UniversalButton regainFocusPopup;
 	protected UniversalButton quitButton;
 
 	public static void main(String[] args) {
@@ -184,6 +187,42 @@ public class SampleUserInterfaceGame extends MainGame {
 				choiceResponder
 				);
 		menuButtons.add(exampleSelectBox);
+
+		ChoicePopUp choicePopup = new ChoicePopUp(this::showInnerPopUp, true, true) {
+			
+			boolean showedRegainFocusPopup = false;
+			
+			@Override
+			public void regainFocus() {
+				if (!showedRegainFocusPopup) {
+					showRegainFocusPopup();
+					showedRegainFocusPopup = true;
+				}
+			}
+
+			@Override
+			protected UniversalButton getFirstChoiceButton() {
+				return UserInterfaceFactory.getButton("Click to go deeper!", SampleUserInterfaceGame.this::showInnerPopUp);
+			}
+			
+			@Override
+			protected UniversalButton getSecondChoiceButton() {
+				return UserInterfaceFactory.getButton("Goodbye!", this::hideThis);
+			}
+
+			@Override
+			protected Runnable getSecondChoiceRunnable() {
+				return this::hideThis;
+			}
+
+			@Override
+			protected Table getMessage() {
+				return new Table();
+			}
+		};
+		UniversalButton popUpButton = UserInterfaceFactory.getButton("Open a popup!", () -> InputPriority.claimPriority(choicePopup));
+		menuButtons.add(popUpButton);
+		
 		
 		menuButtons.add(UserInterfaceFactory.getSpacer());
 
@@ -192,6 +231,30 @@ public class SampleUserInterfaceGame extends MainGame {
 		menuButtons.add(quitButton);
 
 		return menuButtons;
+	}
+
+	private void showInnerPopUp() {
+		SimplePopUp innerPopup = new SimplePopUp() {
+			@Override
+			protected void setUpTable() {
+				UniversalButton popup = UserInterfaceFactory.getButton("Goodbye!", this::hideThis);
+				popup.getView().setSize(180, 100);
+				UserInterfaceFactory.makeActorCentered(popup.getView());
+				addActor(popup.getView());
+			}};
+		InputPriority.claimPriority(innerPopup);
+	}
+
+	private void showRegainFocusPopup() {
+		SimplePopUp innerPopup = new SimplePopUp() {
+			@Override
+			protected void setUpTable() {
+				regainFocusPopup = UserInterfaceFactory.getButton("You Made It!", this::hideThis);
+				regainFocusPopup.getView().setSize(200, 130);
+				UserInterfaceFactory.makeActorCentered(regainFocusPopup.getView());
+				addActor(regainFocusPopup.getView());
+			}};
+		InputPriority.claimPriority(innerPopup);
 	}
 
 

@@ -23,6 +23,20 @@ public class GameInfo {
 	}
 	
 	/**
+	 * @return The name of the game
+	 */
+	public static String getGameName() {
+		return game.getGameName();
+	}
+	
+	/**
+	 * @return The semantic version of the game, possibly appended with the edition, e.g. <b>1.0.3-demo</b>
+	 */
+	public static String getGameVersion() {
+		return game.getGameVersion();
+	}
+	
+	/**
 	 * @return The width (in art "pixels") of the logical game window
 	 */
 	public static int getWidth() {

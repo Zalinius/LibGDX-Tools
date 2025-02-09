@@ -23,7 +23,7 @@ import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.InputOnHexagonGrid;
 
-public class NavigableHexagonControllerMapTest {
+class NavigableHexagonControllerMapTest {
 
 	private NavigableHexagonMap<String> navigableHexagonMap;
 	private HexagonControllerMap<String> hexagonControllerMap;
@@ -36,6 +36,8 @@ public class NavigableHexagonControllerMapTest {
 			@Override public PreferenceManager getPreferenceManager() {return null;}
 			@Override public GamePlatform getGamePlatform() {return null;}
 			@Override public SteamStrategy getSteamStrategy() {return null;}
+			@Override public String getGameName() {return null;}
+			@Override public String getGameVersion() {return null;}			
 		});
 
 		HexagonMap<String> hexagonMap = new HexagonMap<>();

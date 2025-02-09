@@ -7,8 +7,12 @@ import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 
 public interface SharesGameInformation {
 
+	public String getGameName();
+	public String getGameVersion();
+	
 	public int getWidth();
 	public int getHeight();
+
 	public SaveManager getSaveManager();
 	public PreferenceManager getPreferenceManager();
 	public GamePlatform getGamePlatform();

@@ -342,5 +342,15 @@ public class SampleUserInterfaceGame extends MainGame {
 	protected PauseMenu makePauseMenu() {
 		return new TestOptionsMenu(windowResizer::getModeSelectBox);
 	}
+	
+	@Override
+	public String getGameName() {
+		return "Test LibGDXTools UI";
+	}
+
+	@Override
+	public String getGameVersion() {
+		return "game version";
+	}
 
 }

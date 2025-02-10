@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
-class BlankHexagonController implements VisibleInputConsumer {
+public class BlankHexagonController implements VisibleInputConsumer {
 	@Override public Actor getView() {
 		return new Actor();
 	}

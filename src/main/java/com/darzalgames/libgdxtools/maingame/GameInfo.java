@@ -8,7 +8,6 @@ import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 
 /**
  * Allows static access to the globally useful variables/managers from {@link MainGame}
- * @author DarZal
  */
 public class GameInfo {
 
@@ -21,6 +20,20 @@ public class GameInfo {
 	 */
 	public static void setMainGame(SharesGameInformation game) {
 		GameInfo.game = game;
+	}
+	
+	/**
+	 * @return The name of the game
+	 */
+	public static String getGameName() {
+		return game.getGameName();
+	}
+	
+	/**
+	 * @return The semantic version of the game, possibly appended with the edition, e.g. <b>1.0.3-demo</b>
+	 */
+	public static String getGameVersion() {
+		return game.getGameVersion();
 	}
 	
 	/**

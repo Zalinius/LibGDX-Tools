@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 import com.github.tommyettinger.textra.TypingLabel;
 
 public class Textbox extends Table {

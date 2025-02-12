@@ -1,14 +1,14 @@
 package com.darzalgames.libgdxtools.ui.input.popup;
 
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
+import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 
-public abstract class SimplePopUp extends Table implements InputConsumerWrapper, PopUp {
+public abstract class SimplePopUp extends Table implements InputConsumer, PopUp {
 	
 	protected abstract void setUpTable();
 	
@@ -19,13 +19,6 @@ public abstract class SimplePopUp extends Table implements InputConsumerWrapper,
 		}
 	}
 
-	/**
-	 * Make the pop up visible and have it claim input priority
-	 */
-	public void showThis() {
-		InputPriorityManager.claimPriority(this);
-	}
-
 	@Override
 	public void gainFocus() {
 		clear();
@@ -34,7 +27,6 @@ public abstract class SimplePopUp extends Table implements InputConsumerWrapper,
 		float startY = this.getY();
 		this.setPosition(-getWidth(), -getHeight());
 		this.addAction(Actions.moveTo(startX, startY, 0.25f, Interpolation.circle));
-		InputPriorityManager.showPopup(this);
 	}
 	
 	@Override
@@ -44,10 +36,21 @@ public abstract class SimplePopUp extends Table implements InputConsumerWrapper,
 	
 	@Override
 	public void hideThis() {
-		InputPriorityManager.releasePriority(this);
+		releasePriority();
 		this.toFront();
 		this.addAction(Actions.sequence(
 				Actions.moveTo(-getWidth(), -getHeight(), 0.25f, Interpolation.circle),
 				new RunnableActionBest(super::remove)));
 	}
+	
+    @Override
+    public void selectDefault() {}
+    @Override
+    public void clearSelected() {}
+    @Override
+    public void focusCurrent() {}
+    
+    @Override
+    public Actor getAsActor() { return this; }
+	
 }

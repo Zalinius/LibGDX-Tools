@@ -10,9 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
+import com.darzalgames.libgdxtools.ui.input.LogicalInputConsumer;
 
-public class DialogueScene extends Group implements InputConsumerWrapper {
+public class DialogueScene extends Group implements LogicalInputConsumer {
 
 	private final Supplier<Boolean> shouldDoInstantTextSupplier;
 	private final TextboxFastForwarder textboxFastForwarder;
@@ -55,7 +55,9 @@ public class DialogueScene extends Group implements InputConsumerWrapper {
 
 	@Override
 	public void consumeKeyInput(final Input input) {
-		if (this.getActions().isEmpty() && (input == Input.ACCEPT || textboxFastForwarder.isSkipping())) {
+		if (input == Input.SKIP && !textboxFastForwarder.isSkipping()) {
+			textboxFastForwarder.pressSkipButton();
+		} else if (this.getActions().isEmpty() && (input == Input.ACCEPT || textboxFastForwarder.isSkipping())) {
 			if (currentTextbox != null && !currentTextbox.hasEnded()) {
 				// If the text in the text box is currently spooling, we cancel that and show the full message right away
 				currentTextbox.skipTextSpool();

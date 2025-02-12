@@ -17,22 +17,21 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
-import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardInputStrategy;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardAndGamepadInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.MouseOnlyButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 class MouseOnlyButtonTest {
 	
-	// TODO Should I bother making similar tests for other Keyboard UI? Not sure how many times 
-	// we need to test that the InputStrategyManager's observer system works...
-	
-	private static KeyboardButton button;
-	private static InputStrategyManager inputStrategyManager;
+	private static UniversalButton button;
+	private static InputStrategySwitcher inputStrategySwitcher;
 
 	@Test
 	void isVisible_duringMouseStrategy_returnsTrue() throws Exception {
 
-		inputStrategyManager.setToMouseStrategy();
+		inputStrategySwitcher.setToMouseStrategy();
 
 		assertTrue(button.getView().isVisible());
 	}
@@ -40,7 +39,7 @@ class MouseOnlyButtonTest {
 	@Test
 	void isVisible_duringKeyboardStrategy_returnsFalse() throws Exception {
 
-		inputStrategyManager.setToKeyboardStrategy();
+		inputStrategySwitcher.setToKeyboardAndGamepadStrategy();
 
 		assertFalse(button.getView().isVisible());
 	}
@@ -52,11 +51,12 @@ class MouseOnlyButtonTest {
 		Gdx.graphics = new MockGraphics();
 		Gdx.files = Mockito.mock(Files.class);
 		
-		inputStrategyManager = new InputStrategyManager(new MouseInputStrategy(), new KeyboardInputStrategy());
+		inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardAndGamepadInputStrategy());
+		inputStrategySwitcher.setToMouseStrategy();
 		TextButtonStyle textButtonStyle =  new TextButtonStyle();
 		textButtonStyle.font = new BitmapFont(new BitmapFontData(), new TextureRegion(), false);
 		TextButton textButton = new TextButton("", textButtonStyle);
-		button = new MouseOnlyButton(textButton, Runnables.nullRunnable(), inputStrategyManager, Runnables.nullRunnable())  {
+		button = new MouseOnlyButton(textButton, Runnables.nullRunnable(), inputStrategySwitcher, Runnables.nullRunnable())  {
 			@Override
 			public boolean shouldBeUnregistered() {
 				return false;

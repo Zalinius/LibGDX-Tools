@@ -10,23 +10,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumerWrapper;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.InputConsumer;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
  * This class is not an Actor, it's the logical list of buttons held in a Table.
  * One of these is owned by a {@link NavigableListMenu}, which is responsible for any decorative elements around this,
  * and any interactions with it.
- * @author DarZal
  */
-public class NavigableList implements InputConsumerWrapper {
+public class NavigableList implements InputConsumer {
 	private final Input backCode;	
 	private final Input forwardCode;
-	protected final LinkedList<KeyboardButton> allEntries;
-	private LinkedList<KeyboardButton> interactableEntries;
-	private KeyboardButton finalButton;
-	private KeyboardButton currentButton = null;
+	protected final LinkedList<UniversalButton> allEntries;
+	private LinkedList<UniversalButton> interactableEntries;
+	private UniversalButton finalButton;
+	private UniversalButton currentButton = null;
 	private int currentEntryIndex;
 	protected final Table table;
 	private boolean isVertical;
@@ -39,7 +38,7 @@ public class NavigableList implements InputConsumerWrapper {
 
 	private final List<Consumer<Input>> extraKeyListeners;
 
-	NavigableList(boolean isVertical, final List<KeyboardButton> entries) {
+	NavigableList(boolean isVertical, final List<UniversalButton> entries) {
 		this.backCode = (isVertical ? Input.UP : Input.LEFT);
 		this.forwardCode = (isVertical ? Input.DOWN : Input.RIGHT);
 		this.allEntries = new LinkedList<>(entries);
@@ -55,7 +54,7 @@ public class NavigableList implements InputConsumerWrapper {
 		setRefreshPageRunnable(this::defaultRefreshPage);
 	}
 
-	public void replaceContents(final List<KeyboardButton> newEntries) { 
+	public void replaceContents(final List<UniversalButton> newEntries) { 
 		replaceContents(newEntries, null);
 	}
 
@@ -63,7 +62,7 @@ public class NavigableList implements InputConsumerWrapper {
 	 * @param newEntries The new entries to be held in this list, excluding a special finalButton (see next line). This can include spacers, which will not be interactable
 	 * @param finalButton The button that will be pressed when the player presses *back*
 	 */
-	public void replaceContents(final List<KeyboardButton> newEntries, KeyboardButton finalButton) {
+	public void replaceContents(final List<UniversalButton> newEntries, UniversalButton finalButton) {
 		allEntries.clear();
 		allEntries.addAll(newEntries);
 		setFinalButton(finalButton);
@@ -72,7 +71,7 @@ public class NavigableList implements InputConsumerWrapper {
 		refreshPage();
 	}
 
-	protected void setFinalButton(KeyboardButton finalButton) {
+	protected void setFinalButton(UniversalButton finalButton) {
 		this.finalButton = finalButton;
 		if (finalButton != null && !finalButton.isBlank()) {
 			this.allEntries.add(finalButton);
@@ -109,7 +108,7 @@ public class NavigableList implements InputConsumerWrapper {
 		}
 		table.align(tableAlignment.getAlignment());
 
-		for (KeyboardButton entry : allEntries) {
+		for (UniversalButton entry : allEntries) {
 			if(isVertical()) {
 				table.row();
 			}
@@ -219,15 +218,20 @@ public class NavigableList implements InputConsumerWrapper {
 		}
 	}
 
-	public void goTo(KeyboardButton keyboardButton) {
+	public void goTo(UniversalButton UniversalButton) {
 		for (int i = 0; i < interactableEntries.size(); i++) {
-			KeyboardButton entry = interactableEntries.get(i);
-			if (entry.equals(keyboardButton)) {
+			UniversalButton entry = interactableEntries.get(i);
+			if (entry.equals(UniversalButton)) {
 				goTo(i);
 			}
 		}
 	}
 
+	@Override
+	public void selectDefault() {
+		returnToFirst();
+	}
+	
 	@Override
 	public void clearSelected() {
 		interactableEntries.stream().forEach(e->e.setFocused(false));
@@ -274,7 +278,7 @@ public class NavigableList implements InputConsumerWrapper {
 	public float getPrefHeight() {
 		if(isVertical()) {
 			float total = spacing;
-			for (KeyboardButton entry : allEntries) {
+			for (UniversalButton entry : allEntries) {
 				Button button = entry.getView();
 				total += button.getMinHeight();
 				total += spacing;

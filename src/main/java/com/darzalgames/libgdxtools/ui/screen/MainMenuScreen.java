@@ -1,26 +1,35 @@
 package com.darzalgames.libgdxtools.ui.screen;
 
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriorityStack;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
 /**
  * Essentially a wrapper for the main menu (a highly-custom class which extends {@link NavigableListMenu}) which handles initialization and cleanup
- * @author DarZal
  */
 public class MainMenuScreen extends GameScreen {
 
-	private NavigableListMenu mainMenu;
-	
-	public MainMenuScreen(NavigableListMenu mainMenu)
+	private final NavigableListMenu mainMenu;
+
+	public MainMenuScreen(NavigableListMenu mainMenu, InputPriorityStack inputPriorityStack)
 	{
-		super(Runnables.nullRunnable());
+		super(Runnables.nullRunnable(), inputPriorityStack);
 		this.mainMenu = mainMenu;
 		addActor(mainMenu);
 	}
-	
+
 	@Override
 	public void gainFocus() {
-		InputPriorityManager.claimPriority(mainMenu);
+		InputPriority.claimPriority(mainMenu);
 	}
+	
+	/**
+	 * Recreates the main menu buttons, useful when changing language or font
+	 */
+	public void refresh() {
+		mainMenu.regainFocus();
+	}
+
+	@Override public String toString() { return "Main menu SCREEN, but not the buttons themselves"; }
 }

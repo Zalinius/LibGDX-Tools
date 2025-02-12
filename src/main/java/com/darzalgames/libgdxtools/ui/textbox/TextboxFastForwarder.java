@@ -4,18 +4,16 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputPriorityManager;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.KeyboardButton;
-import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 public class TextboxFastForwarder {
 
-	private KeyboardButton fastForwardButton;
+	private UniversalButton fastForwardButton;
 	private boolean isSkipping = false;
 
 	public TextboxFastForwarder() {
 		fastForwardButton = UserInterfaceFactory.getFastForwardButton(() -> { this.setSkipping(!isSkipping); });
-		InputPriorityManager.addSpecialButton(Input.SKIP, fastForwardButton);
 
 		Button button = fastForwardButton.getView();
 		button.setPosition(GameInfo.getWidth() - button.getWidth() - 2, GameInfo.getHeight() - button.getHeight() - 2);
@@ -25,7 +23,11 @@ public class TextboxFastForwarder {
 		this.isSkipping = isSkipping;
 	}
 	
-	public KeyboardButton getButton() {
+	void pressSkipButton() {
+		fastForwardButton.consumeKeyInput(Input.ACCEPT);
+	}
+	
+	public UniversalButton getButton() {
 		return fastForwardButton;
 	}
 	

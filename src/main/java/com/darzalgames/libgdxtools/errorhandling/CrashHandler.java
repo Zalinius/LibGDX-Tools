@@ -1,38 +1,60 @@
 package com.darzalgames.libgdxtools.errorhandling;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
-import java.lang.Thread.UncaughtExceptionHandler;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
+public abstract class CrashHandler {
+	
+	
+	public void handleException(Exception exception, String[] programArguments) throws Exception {
+		CrashReport crashReport = buildCrashReport(exception, programArguments);
+		String status = reportCrash(crashReport);
+		logCrashReportStatus(status);
 
-public class CrashHandler implements UncaughtExceptionHandler {
-
-	@Override
-	public void uncaughtException(Thread thread, Throwable e) {
-		String gameName = tryGetString(GameInfo::getGameName);
-		String gameVersion = tryGetString(GameInfo::getGameVersion);
-		String platform = tryGetString(() -> GameInfo.getGamePlatform().getPlatformName());
-		Instant instant = Instant.now();
+		throw exception;
+	}
+	
+	/**
+	 * @param crashReport
+	 * @return The result of the crash reporting
+	 */
+	public abstract String reportCrash(CrashReport crashReport);
+	
+	/**
+	 * @param status What the result of reporting the crash was
+	 */
+	public abstract void logCrashReportStatus(String status);
+	
+	
+	public static CrashReport buildCrashReport(Exception exception, String[] args) {
+		Properties gameProperties = getGameProperties("data/game.properties");
+		String gameName = gameProperties.getProperty("gameName");
+		String gameVersion = gameProperties.getProperty("version");
+		String platform = tryGetString(() -> args[0]);
+		Instant utcTime = Instant.now();
 		UUID id = UUID.randomUUID();
-		String stackTrace = getStackTrace(e);
+		String stackTrace = getStackTraceString(exception);
+		return new CrashReport(gameName, gameVersion, platform, utcTime, id, stackTrace);
+	}
+	
+	public static Properties getGameProperties(String propertiesFile) {
+		Properties gameProperties = new Properties();
+
+		try {
+			String propertiesPath = Thread.currentThread().getContextClassLoader().getResource(propertiesFile).getPath();
+			gameProperties.load(new FileInputStream(propertiesPath));
+		} catch (Exception e) {
+			System.err.println("Couldn't find or open properties file: " + propertiesFile + "(" + e.getMessage() + ")");
+		}
 		
-		CrashReport crashReport = new CrashReport(gameName, gameVersion, platform, instant, id, stackTrace);
-		String crashReportFileName = "crash-" + instant.toString() + ".err.txt";
-		FileHandle crashReportFile = tryGetReportingFileHandle(crashReportFileName, gameName);
-		String crashReportJson = crashReport.toJson();
-		
-		crashReportFile.writeString(crashReportJson, false);
-		Gdx.app.error("CRASH", "crash report written to " + crashReportFile.file().getAbsolutePath());
-		e.printStackTrace();
-		throw new RuntimeException(e);
+		return gameProperties;
 	}
 	
 	public static String tryGetString(Supplier<String> stringGetter) {
@@ -43,35 +65,18 @@ public class CrashHandler implements UncaughtExceptionHandler {
 		catch (Exception e) {
 			//swallow the exception, since we are already handling a game crash
 		}
-		
 		return string;
 	}
 	
-	public static String getStackTrace(Throwable e) {
+	public static String getStackTraceString(Exception exception) {
 	    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    final String utf8 = StandardCharsets.UTF_8.name();
+	    final Charset utf8 = StandardCharsets.UTF_8;
 	    String data = null;
 	    try (PrintStream ps = new PrintStream(baos, true, utf8)) {
-	    	e.printStackTrace(ps);
+	    	exception.printStackTrace(ps);
 		    data = baos.toString(utf8);
-	    } catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
+	    }
 	    return data;
 	}
-	
-	public static FileHandle tryGetReportingFileHandle(String crashReportFileName, String gameName) {
-		FileHandle crashReportFile = Gdx.files.local(crashReportFileName);
-		
-		try {
-			String crashReportFileLocalPath = gameName + "/" + GameInfo.getSteamStrategy().getSteamID() + "/" + crashReportFileName;
-			crashReportFile = GameInfo.getGamePlatform().getSaveFileLocation(crashReportFileLocalPath);
-		} catch (Exception e) {
-			//swallow the exception, since we are already handling a game crash
-		}
-		
-		return crashReportFile;
-	}
-	
 	
 }

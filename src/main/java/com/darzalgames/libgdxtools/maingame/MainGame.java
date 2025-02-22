@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
@@ -95,8 +94,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		this.windowResizer = windowResizer;
 		this.gamePlatform = gamePlatform;
 		GameInfo.setMainGame(this);
-		Thread.setDefaultUncaughtExceptionHandler(new CrashHandler());
-		Thread.currentThread().setUncaughtExceptionHandler(new CrashHandler());
 	}
 
 	@Override

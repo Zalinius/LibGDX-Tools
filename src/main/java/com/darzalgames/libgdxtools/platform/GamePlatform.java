@@ -1,6 +1,9 @@
 package com.darzalgames.libgdxtools.platform;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -40,7 +43,7 @@ public interface GamePlatform {
 	 * @return A SteamStrategy befitting the GamePlatform
 	 */
 	public SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver);
-
+	
 	public default boolean needsQuitButton() {
 		return true;
 	}

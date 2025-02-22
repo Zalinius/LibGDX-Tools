@@ -17,13 +17,17 @@ public class CrashReport {
 	
 	private final String stackTrace;
 	
-	public CrashReport(String gameName, String gameVersion, String platformName, Instant time, UUID id, String stackTrace) {
+	private final transient Instant timeInstant;
+	
+	public CrashReport(String gameName, String gameVersion, String platformName, Instant utcTime, UUID id, String stackTrace) {
 		this.gameName = gameName;
 		this.gameVersion = gameVersion;
 		this.platformName = platformName;
-		this.time = time.toString();
+		this.time = utcTime.toString();
 		this.id = id.toString();
 		this.stackTrace = stackTrace;
+		
+		this.timeInstant = utcTime;
 	}
 	
 	public String toJson() {
@@ -50,5 +54,9 @@ public class CrashReport {
 	}
 	public String getStackTrace() {
 		return stackTrace;
+	}
+	
+	public Instant getInstant() {
+		return timeInstant;
 	}
 }

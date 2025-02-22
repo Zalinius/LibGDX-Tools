@@ -8,8 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class CrashHandler {
@@ -17,25 +15,22 @@ public abstract class CrashHandler {
 	
 	public void handleException(Exception exception, String[] programArguments) throws Exception {
 		CrashReport crashReport = buildCrashReport(exception, programArguments);
+		String status = reportCrash(crashReport);
+		logCrashReportStatus(status);
 
-		Function<CrashReport, String> errorReportConsumer = getCrashReportConsumer();
-		Consumer<String> errorLogConsumer = getErrorLogConsumer();
-
-		String errorReportingResult = errorReportConsumer.apply(crashReport);
-		errorLogConsumer.accept(errorReportingResult);
-		
 		throw exception;
 	}
 	
 	/**
-	 * @return A function that consumers an error report, and then returns a string detailing what happened
+	 * @param crashReport
+	 * @return The result of the crash reporting
 	 */
-	public abstract Function<CrashReport, String> getCrashReportConsumer();
+	public abstract String reportCrash(CrashReport crashReport);
 	
 	/**
-	 * @return A function that consumers an error log, and then returns true if it successfuly consumed the log
+	 * @param status What the result of reporting the crash was
 	 */
-	public abstract Consumer<String> getErrorLogConsumer();
+	public abstract void logCrashReportStatus(String status);
 	
 	
 	public static CrashReport buildCrashReport(Exception exception, String[] args) {

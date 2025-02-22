@@ -3,8 +3,6 @@ package com.darzalgames.libgdxtools.errorhandling;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZoneId;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import com.darzalgames.darzalcommon.time.FileFriendlyTimeFormatter;
 
@@ -12,8 +10,7 @@ public class DesktopCrashHandler extends CrashHandler {
 	
 
 	@Override
-	public Function<CrashReport, String> getCrashReportConsumer() {
-		return (crashReport) -> {
+	public String reportCrash(CrashReport crashReport) {
 			String localTime = FileFriendlyTimeFormatter.dateTimeFileFriendlyFormat(crashReport.getInstant(), ZoneId.systemDefault());
 			String crashReportFileName = "crash-" + localTime + ".err.txt";
 			String crashReportJson = crashReport.toJson();
@@ -28,12 +25,11 @@ public class DesktopCrashHandler extends CrashHandler {
 			}
 
 			return "Wrote crash report to file: " + crashReportFileName;
-		};
 	}
 
 	@Override
-	public Consumer<String> getErrorLogConsumer() {
-		return string -> System.err.println(string);
+	public void logCrashReportStatus(String status) {
+		System.err.println(status);
 	}
 	
 }

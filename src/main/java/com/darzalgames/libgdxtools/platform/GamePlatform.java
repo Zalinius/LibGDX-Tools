@@ -1,6 +1,9 @@
 package com.darzalgames.libgdxtools.platform;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -8,7 +11,6 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
@@ -42,8 +44,6 @@ public interface GamePlatform {
 	 */
 	public SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver);
 	
-	public CrashHandler getCrashTool();
-
 	public default boolean needsQuitButton() {
 		return true;
 	}

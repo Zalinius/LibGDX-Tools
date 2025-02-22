@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.platform;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
 import com.darzalgames.libgdxtools.steam.agnostic.DummySteamStrategy;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputReceiver;
@@ -37,11 +36,6 @@ public class WebGamePlatform implements GamePlatform {
 	@Override
 	public String getPlatformName() {
 		return GamePlatform.WEB;
-	}
-	
-	@Override
-	public CrashHandler getCrashTool() {
-		return null;
 	}
 	
 	@Override

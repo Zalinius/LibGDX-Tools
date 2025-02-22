@@ -47,7 +47,7 @@ public class CrashReport {
 		return platformName;
 	}
 	public String getTime() {
-		return time.toString();
+		return time;
 	}
 	public String getId() {
 		return id;

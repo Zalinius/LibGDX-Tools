@@ -15,7 +15,6 @@ public class DesktopCrashHandler extends CrashHandler {
 			String crashReportFileName = "crash-" + localTime + ".err.txt";
 			String crashReportJson = crashReport.toJson();
 			
-			;
 			try(FileWriter fileWriter = new FileWriter(crashReportFileName)){
 				fileWriter.write(crashReportJson);
 			} catch (IOException e) {

@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.errorhandling;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -46,10 +47,9 @@ public abstract class CrashHandler {
 	
 	public static Properties getGameProperties(String propertiesFile) {
 		Properties gameProperties = new Properties();
-
-		try {
-			String propertiesPath = Thread.currentThread().getContextClassLoader().getResource(propertiesFile).getPath();
-			gameProperties.load(new FileInputStream(propertiesPath));
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		try (InputStream inputStream = cl.getResourceAsStream(propertiesFile)) {
+			gameProperties.load(inputStream);
 		} catch (Exception e) {
 			System.err.println("Couldn't find or open properties file: " + propertiesFile + "(" + e.getMessage() + ")");
 		}

@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.codedisaster.steamworks.SteamController;
 import com.codedisaster.steamworks.SteamControllerDigitalActionHandle;
 import com.darzalgames.darzalcommon.data.BiMap;
+import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
+import com.darzalgames.libgdxtools.errorhandling.DesktopCrashHandler;
 import com.darzalgames.libgdxtools.steam.SteamConnection;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
@@ -44,6 +46,11 @@ public abstract class GenericDesktopGamePlatform implements GamePlatform {
 
 		};
 		return SteamConnection.initializeStrategy(GamePlatform.makeFallbackGamepadInputHandlerSupplier(inputStrategySwitcher, inputReceiver), makeSteamGamepadInputHandler);
+	}
+	
+	@Override
+	public CrashHandler getCrashTool() {
+		return new DesktopCrashHandler();
 	}
 	
 	@Override

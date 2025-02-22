@@ -8,6 +8,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
@@ -40,6 +41,8 @@ public interface GamePlatform {
 	 * @return A SteamStrategy befitting the GamePlatform
 	 */
 	public SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver);
+	
+	public CrashHandler getCrashTool();
 
 	public default boolean needsQuitButton() {
 		return true;

@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
  * The dark transparent screen which goes behind popups to "focus" them, and dismiss them when clicked
@@ -17,7 +18,9 @@ class DarkScreen extends Image {
 	private final Stage popupStage;
 
 	public DarkScreen(Stage popupStage, Runnable onClick) {
-		super(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), GameInfo.getWidth(), GameInfo.getHeight()));
+		super(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), 1, 1));
+		this.setSize(GameInfo.getWidth()*50, GameInfo.getHeight()*50);
+		UserInterfaceFactory.makeActorCentered(this);
 
 		this.popupStage = popupStage;
 

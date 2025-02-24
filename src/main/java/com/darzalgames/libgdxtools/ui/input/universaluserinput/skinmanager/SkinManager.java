@@ -28,19 +28,19 @@ public class SkinManager {
 	protected static final String UI_BORDERED_NINE = "uiBorderedNine";
 
 	// LabelStyle
-	protected static final String DEFAULT_LABEL = "defaultLabelStyle";
+	protected static final String DEFAULT_LABEL = "default";
 	protected static final String FLAVOR_TEXT_LABEL = "flavorTextLabelStyle";
 	protected static final String WARNING_LABEL = "warningLabelStyle";
 	protected static final String LABEL_WITH_BACKGROUND = "labelWithBackgroundStyle";
 
 	// SliderStyle
-	protected static final String SLIDER = "sliderStyle";
+	protected static final String SLIDER = "default-horizontal";
 
 	// CheckboxStyle
-	protected static final String CHECKBOX = "checkboxStyle";
+	protected static final String CHECKBOX = "default";
 
 	// TextButtonStyle
-	protected static final String TEXT_BUTTON = "textButtonStyle";
+	protected static final String TEXT_BUTTON = "default";
 	protected static final String FLASHED_TEXT_BUTTON = "flashedTextButtonStyle";
 	protected static final String SNEAKY_LABEL_BUTTON = "sneakyLabelButtonStyle";
 	protected static final String BLANK_BUTTON = "blankButtonStyle";

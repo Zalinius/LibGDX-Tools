@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
@@ -221,9 +222,13 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private UniversalInputStage makePopUpStage() {
 		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
-		UniversalInputStage popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher);
+		UniversalInputStage popUpStage = new UniversalInputStage(makeDefaultViewport(), inputStrategySwitcher);
 		popUpStage.getRoot().setName("PopUp Stage");
 		return popUpStage;
+	}
+	
+	protected Viewport makeDefaultViewport() {
+		return new PixelPerfectViewport(width, height);
 	}
 	
 	private Stage makeInputHandlerStage() {
@@ -242,7 +247,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private UniversalInputStage makeMainStage() {
 		// Set up main game stage
 		UniversalInputStage stage = new UniversalInputStageWithBackground(
-				new PixelPerfectViewport(width, height),
+				makeDefaultViewport(),
 				getMainStageBackgroundTexture(),
 				inputStrategySwitcher);
 		stage.getRoot().setName("Main Stage");

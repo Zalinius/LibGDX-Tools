@@ -157,7 +157,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT.getAlignment());
 		versionTable.setTouchable(Touchable.disabled);
 		addActor(versionTable);
-		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom() + 4).padRight(getPadRight());
+		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom()).padRight(getPadRight());
 	}
 
 	@Override

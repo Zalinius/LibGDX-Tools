@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
@@ -216,8 +215,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		@Override
 		protected void setUpTable() {
 			setSize(desiredWidth, desiredHeight);
-			NinePatchDrawable back = UserInterfaceFactory.getUIBorderedNine();
-			background(back);
+			background(UserInterfaceFactory.getUIBorderedNine());
 			UserInterfaceFactory.makeActorCentered(this);
 
 			menu.setAlignment(Alignment.CENTER, Alignment.TOP);

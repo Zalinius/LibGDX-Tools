@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
@@ -40,13 +39,14 @@ public class UniversalSelectBox extends UniversalButton {
 			@Override
 			protected void setUpTable() {
 				menu.setAlignment(Alignment.LEFT, Alignment.LEFT);
-				NinePatchDrawable background = UserInterfaceFactory.getUIBorderedNine(); 
-				this.setBackground(background);
-				add(menu.getView()).left();
+				menu.getView().setBackground(UserInterfaceFactory.getUIBorderedNine());
+				options.add(menu.getView()).left();
 				
 				float longestWidth = 0;
 				for (Iterator<UniversalButton> iterator = entryButtons.iterator(); iterator.hasNext();) {
-					TextButton button = iterator.next().getView(); 
+					UniversalButton universalButton = iterator.next();
+					universalButton.setWrap(false);
+					TextButton button = universalButton.getView(); 
 					if (button.getWidth() > longestWidth) {
 						longestWidth = button.getWidth();
 					}
@@ -54,9 +54,8 @@ public class UniversalSelectBox extends UniversalButton {
 				if (menu.getFinalButtonWidth() > longestWidth) {
 					longestWidth = menu.getFinalButtonWidth();
 				}
-				options.setWidth(longestWidth + background.getPatch().getLeftWidth() + background.getPatch().getRightWidth());
-				options.setHeight(options.getPrefHeight() + background.getPatch().getBottomHeight() + background.getPatch().getTopHeight());				
-				options.setPosition(textButton.getRight(), textButton.getTop());
+				options.pack();
+				UserInterfaceFactory.makeActorCentered(options);
 			}
 		};
 

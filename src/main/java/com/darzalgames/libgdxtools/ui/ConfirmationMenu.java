@@ -21,6 +21,8 @@ public class ConfirmationMenu extends TextChoicePopUp {
 
 	@Override
 	protected void setUpDesiredSize() {
+		// TODO These numbers are a bit too deeply buried to be hardcoded...
+		// TODO Also I'd like to be able to use a ten patch here, I don't see why I shouldn't be able to!
 		desiredWidth = 275;
 		desiredHeight = 100;
 	}

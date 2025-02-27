@@ -1,12 +1,12 @@
 package com.darzalgames.libgdxtools.errorhandling;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -16,8 +16,8 @@ public abstract class CrashHandler {
 	
 	public void handleException(Exception exception, String[] programArguments) throws Exception {
 		CrashReport crashReport = buildCrashReport(exception, programArguments);
-		String status = reportCrash(crashReport);
-		logCrashReportStatus(status);
+		List<String> statuses = reportCrash(crashReport);
+		logCrashReportStatus(statuses);
 
 		throw exception;
 	}
@@ -26,12 +26,12 @@ public abstract class CrashHandler {
 	 * @param crashReport
 	 * @return The result of the crash reporting
 	 */
-	public abstract String reportCrash(CrashReport crashReport);
+	public abstract List<String> reportCrash(CrashReport crashReport);
 	
 	/**
-	 * @param status What the result of reporting the crash was
+	 * @param statuses What the results of reporting the crash was
 	 */
-	public abstract void logCrashReportStatus(String status);
+	public abstract void logCrashReportStatus(List<String> statuses);
 	
 	
 	public static CrashReport buildCrashReport(Exception exception, String[] args) {

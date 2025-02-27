@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
  * The actor that holds a {@link NavigableList} and handles how it looks and is interacted with.
@@ -120,7 +120,7 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 				menu.goTo(i - nonInteractablesToIgnore);
 				return;
 			}
-			else if (thisEntry.getView().isDisabled() || UserInterfaceFactory.isSpacer(thisEntry)) {
+			else if (thisEntry.getView().isDisabled() || MainGame.getUserInterfaceFactory().isSpacer(thisEntry)) {
 				nonInteractablesToIgnore++;
 			}
 		}

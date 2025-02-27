@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -17,8 +17,8 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class CustomCursorImage extends Image implements DoesNotPause, InputObserver {
 
 	private final Supplier<Boolean> checkIsWindowed;
-	private final Texture cursorTexture;
-	private final Texture clickedCursorTexture;
+	private final TextureRegion cursorTexture;
+	private final TextureRegion clickedCursorTexture;
 
 	/**
 	 * An Image which follows the (hidden) cursor around, allowing you to keep the visible cursor the same pixel resolution regardless of window size.
@@ -26,7 +26,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	 * @param cursorTexture
 	 * @param inputStrategySwitcher
 	 */
-	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, InputStrategySwitcher inputStrategySwitcher) {
+	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, TextureRegion cursorTexture, InputStrategySwitcher inputStrategySwitcher) {
 		this(checkIsWindowed, cursorTexture, cursorTexture, inputStrategySwitcher);
 	}
 
@@ -37,7 +37,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	 * @param clickedCursorTexture The texture shown while the left mouse button is held down
 	 * @param inputStrategySwitcher
 	 */
-	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, Texture clickedCursorTexture, InputStrategySwitcher inputStrategySwitcher) {
+	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, TextureRegion cursorTexture, TextureRegion clickedCursorTexture, InputStrategySwitcher inputStrategySwitcher) {
 		super();
 		this.cursorTexture = cursorTexture;
 		this.clickedCursorTexture = clickedCursorTexture;
@@ -51,7 +51,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 		inputStrategySwitcher.register(this);
 	}
 	
-	private void setCursorImage(Texture texture) {
+	private void setCursorImage(TextureRegion texture) {
 		setDrawable(new Image(texture).getDrawable());
 		pack();
 	}

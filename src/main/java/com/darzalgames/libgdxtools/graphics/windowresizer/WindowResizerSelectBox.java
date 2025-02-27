@@ -15,13 +15,13 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 public class WindowResizerSelectBox implements WindowResizerButton {
 
@@ -92,7 +92,7 @@ public class WindowResizerSelectBox implements WindowResizerButton {
 		protected void setUpTable() {
 			super.setUpTable();
 			IntFunction<String> makeCountdownString = count -> TextSupplier.getLine("screen_mode_revert", count);
-			revertCountdown = UserInterfaceFactory.getFlavorTextLabel(makeCountdownString.apply(10));
+			revertCountdown = MainGame.getUserInterfaceFactory().getFlavorTextLabel(makeCountdownString.apply(10));
 			revertCountdown.setAlignment(Align.center);
 			row();
 			add(revertCountdown).growX();

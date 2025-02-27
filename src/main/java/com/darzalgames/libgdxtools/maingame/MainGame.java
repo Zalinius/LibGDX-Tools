@@ -31,6 +31,7 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardAndGamepadInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 import com.darzalgames.libgdxtools.ui.screen.PixelPerfectViewport;
 
@@ -55,11 +56,14 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
 	private boolean isQuitting = false;
+	
+
+	protected static UserInterfaceFactory userInterfaceFactory;
 
 
 	
 	// The setup process, in order that they are called
-	protected abstract void initializeAssetsAndUserInterfaceFactory();
+	protected abstract UserInterfaceFactory initializeAssetsAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName(); // TODO this can be removed once we figure out our long-standing goal of making Assets extendable
 	protected abstract WindowResizerButton makeWindowResizerButton();
 	/**
@@ -81,6 +85,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	 */
 	protected abstract void afterLaunch();
 
+	protected void reactToResize(int width, int height) {}
+
 
 	/**
 	 * Shutdown game-specific objects like the music system, call dispose() on things, etc.
@@ -100,7 +106,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	@Override
 	public final void create() {
 		makeInputStrategySwitcher();
-		initializeAssetsAndUserInterfaceFactory();
+		MainGame.userInterfaceFactory = initializeAssetsAndUserInterfaceFactory();
 		makePreferenceManager();
 		initializeWindowResizer();
 
@@ -119,7 +125,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 
 	protected CustomCursorImage getCustomCursor() {
-		return new CustomCursorImage(windowResizer::isWindowed, ColorTools.getDefaultCursor(), inputStrategySwitcher);
+		return new CustomCursorImage(windowResizer::isWindowed, new TextureRegion(ColorTools.getDefaultCursor()), inputStrategySwitcher);
 	}
 
 	protected final void changeScreen(GameScreen gameScreen) {
@@ -158,6 +164,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	@Override
 	public final void resize (int width, int height) {
 		multipleStage.resize(width, height);
+		reactToResize(width, height);
 	}
 
 	@Override
@@ -190,8 +197,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		return steamStrategy;
 	}
 
-
-
+	public static UserInterfaceFactory getUserInterfaceFactory() {
+		return userInterfaceFactory;
+	}
+	
 	private void makeInputStrategySwitcher() {
 		inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardAndGamepadInputStrategy());
 	}

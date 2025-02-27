@@ -6,11 +6,11 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
+import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
  * It's a navigable menu, and it's a pop up!
@@ -39,7 +39,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	}
 	
 	private UniversalButton makeFinalButton(String finalButtonMessageKey) {
-		return UserInterfaceFactory.getButton(TextSupplier.getLine(finalButtonMessageKey), this::hideThis);
+		return MainGame.getUserInterfaceFactory().getButton(TextSupplier.getLine(finalButtonMessageKey), this::hideThis);
 	}
 
 	@Override

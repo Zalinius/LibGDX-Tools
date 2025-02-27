@@ -1,6 +1,6 @@
 package com.darzalgames.libgdxtools.errorhandling;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Instant;
 import java.util.UUID;

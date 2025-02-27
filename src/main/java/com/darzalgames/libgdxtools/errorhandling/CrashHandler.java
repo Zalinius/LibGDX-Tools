@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.errorhandling;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.Charset;

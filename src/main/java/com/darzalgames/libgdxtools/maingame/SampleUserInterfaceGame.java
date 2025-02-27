@@ -64,10 +64,12 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	@Override
-	protected void initializeAssetsAndUserInterfaceFactory() {
+	protected UserInterfaceFactory initializeAssetsAndUserInterfaceFactory() {	
+		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable(), () -> inputSetup.getPause().isPaused());;
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
-		UserInterfaceFactory.initialize(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable(), () -> inputSetup.getPause().isPaused());
+		return factory;
 	}
+	
 	@Override
 	protected DesktopSaveManager makeSaveManager() {
 		return new DesktopSaveManager() {
@@ -151,11 +153,11 @@ public class SampleUserInterfaceGame extends MainGame {
 	protected List<UniversalButton> getMenuEntries() {
 		List<UniversalButton> menuButtons = new ArrayList<>();
 
-		UniversalSlider basicSlider = UserInterfaceFactory.getSlider("Slider with a label", newValue -> {});
+		UniversalSlider basicSlider = MainGame.getUserInterfaceFactory().getSlider("Slider with a label", newValue -> {});
 		basicSlider.setSliderPosition(0.5f, false);
 		menuButtons.add(basicSlider);
 
-		UniversalCheckbox focusMute = UserInterfaceFactory.getCheckbox(
+		UniversalCheckbox focusMute = MainGame.getUserInterfaceFactory().getCheckbox(
 				"I am NOT checked!",
 				"I am checked!",
 				isChecked -> {});
@@ -163,25 +165,25 @@ public class SampleUserInterfaceGame extends MainGame {
 		menuButtons.add(focusMute);
 
 		String sliderInfo = "The below slider is at ";
-		UniversalButton sliderInfoLabel = UserInterfaceFactory.getListableLabel(sliderInfo + "0.5");
-		UniversalSlider funSlider = UserInterfaceFactory.getSlider("", newValue -> sliderInfoLabel.updateText(sliderInfo + String.format("%.1f", newValue)));
+		UniversalButton sliderInfoLabel = MainGame.getUserInterfaceFactory().getListableLabel(sliderInfo + "0.5");
+		UniversalSlider funSlider = MainGame.getUserInterfaceFactory().getSlider("", newValue -> sliderInfoLabel.updateText(sliderInfo + String.format("%.1f", newValue)));
 		funSlider.setSliderPosition(0.5f, false);
 		menuButtons.add(sliderInfoLabel);
 		menuButtons.add(funSlider);
 
 		String logOrigin = "LibGDXTools Test Game";
-		menuButtons.add(UserInterfaceFactory.getButton("Text button!", () -> Gdx.app.log(logOrigin, "You pressed the text button")));
+		menuButtons.add(MainGame.getUserInterfaceFactory().getButton("Text button!", () -> Gdx.app.log(logOrigin, "You pressed the text button")));
 
-		menuButtons.add(UserInterfaceFactory.getButton(new Image(ColorTools.getColoredTexture(Color.GOLD, 50, 12)), () -> Gdx.app.log(logOrigin, "You pressed the image button")));
+		menuButtons.add(MainGame.getUserInterfaceFactory().getButton(new Image(ColorTools.getColoredTexture(Color.GOLD, 50, 12)), () -> Gdx.app.log(logOrigin, "You pressed the image button")));
 
-		menuButtons.add(UserInterfaceFactory.getButton("Image Text button!", new Image(ColorTools.getColoredTexture(Color.CHARTREUSE, 50, 12)), 
+		menuButtons.add(MainGame.getUserInterfaceFactory().getButton("Image Text button!", new Image(ColorTools.getColoredTexture(Color.CHARTREUSE, 50, 12)), 
 				() -> Gdx.app.log(logOrigin, "You pressed the image text button")));
 
 		String option1 = TextSupplier.getLine("option 1");
 		String option2 = TextSupplier.getLine("option 2");
 		Supplier<String> exampleSelectBoxLabelSupplier = () -> (TextSupplier.getLine("An option select box")); 
 		Consumer<String> choiceResponder = selectedValue -> {};
-		UniversalSelectBox exampleSelectBox = UserInterfaceFactory.getSelectBox( 
+		UniversalSelectBox exampleSelectBox = MainGame.getUserInterfaceFactory().getSelectBox( 
 				exampleSelectBoxLabelSupplier.get(),
 				List.of(option1, option2),
 				choiceResponder
@@ -202,12 +204,12 @@ public class SampleUserInterfaceGame extends MainGame {
 
 			@Override
 			protected UniversalButton getFirstChoiceButton() {
-				return UserInterfaceFactory.getButton("Click to go deeper!", SampleUserInterfaceGame.this::showInnerPopUp);
+				return MainGame.getUserInterfaceFactory().getButton("Click to go deeper!", SampleUserInterfaceGame.this::showInnerPopUp);
 			}
 			
 			@Override
 			protected UniversalButton getSecondChoiceButton() {
-				return UserInterfaceFactory.getButton("Goodbye!", this::hideThis);
+				return MainGame.getUserInterfaceFactory().getButton("Goodbye!", this::hideThis);
 			}
 
 			@Override
@@ -220,14 +222,14 @@ public class SampleUserInterfaceGame extends MainGame {
 				return new Table();
 			}
 		};
-		UniversalButton popUpButton = UserInterfaceFactory.getButton("Open a popup!", () -> InputPriority.claimPriority(choicePopup));
+		UniversalButton popUpButton = MainGame.getUserInterfaceFactory().getButton("Open a popup!", () -> InputPriority.claimPriority(choicePopup));
 		menuButtons.add(popUpButton);
 		
 		
-		menuButtons.add(UserInterfaceFactory.getSpacer());
+		menuButtons.add(MainGame.getUserInterfaceFactory().getSpacer());
 
 		// Quit button
-		quitButton = UserInterfaceFactory.getQuitGameButton();
+		quitButton = MainGame.getUserInterfaceFactory().getQuitGameButton();
 		menuButtons.add(quitButton);
 
 		return menuButtons;
@@ -237,9 +239,9 @@ public class SampleUserInterfaceGame extends MainGame {
 		SimplePopUp innerPopup = new SimplePopUp() {
 			@Override
 			protected void setUpTable() {
-				UniversalButton popup = UserInterfaceFactory.getButton("Goodbye!", this::hideThis);
+				UniversalButton popup = MainGame.getUserInterfaceFactory().getButton("Goodbye!", this::hideThis);
 				popup.getView().setSize(180, 100);
-				UserInterfaceFactory.makeActorCentered(popup.getView());
+				MainGame.getUserInterfaceFactory().makeActorCentered(popup.getView());
 				addActor(popup.getView());
 			}};
 		InputPriority.claimPriority(innerPopup);
@@ -249,9 +251,9 @@ public class SampleUserInterfaceGame extends MainGame {
 		SimplePopUp innerPopup = new SimplePopUp() {
 			@Override
 			protected void setUpTable() {
-				regainFocusPopup = UserInterfaceFactory.getButton("You Made It!", this::hideThis);
+				regainFocusPopup = MainGame.getUserInterfaceFactory().getButton("You Made It!", this::hideThis);
 				regainFocusPopup.getView().setSize(200, 130);
-				UserInterfaceFactory.makeActorCentered(regainFocusPopup.getView());
+				MainGame.getUserInterfaceFactory().makeActorCentered(regainFocusPopup.getView());
 				addActor(regainFocusPopup.getView());
 			}};
 		InputPriority.claimPriority(innerPopup);
@@ -261,14 +263,14 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	@Override
 	protected WindowResizerButton makeWindowResizerButton() {
-		return UserInterfaceFactory.getWindowModeTextSelectBox();
+		return MainGame.getUserInterfaceFactory().getWindowModeTextSelectBox();
 	}
 	
 	private class TestOptionsMenu extends PauseMenu {
 
 		protected TestOptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox) {
 			super(makeWindowModeSelectBox, 0);
-			pauseButton = UserInterfaceFactory.getSettingsButton(this::toggleScreenVisibility);
+			pauseButton = MainGame.getUserInterfaceFactory().getSettingsButton(this::toggleScreenVisibility);
 			pauseButton.getView().setWidth(pauseButton.getView().getHeight());
 		}
 
@@ -276,7 +278,7 @@ public class SampleUserInterfaceGame extends MainGame {
 		protected void setUpBackground() {
 			this.setBackground(new Image(ColorTools.getColoredTexture(Color.BROWN, 1)).getDrawable());
 			this.setSize(500, 300);
-			UserInterfaceFactory.makeActorCentered(this);
+			MainGame.getUserInterfaceFactory().makeActorCentered(this);
 		}
 
 		@Override protected Alignment getEntryAlignment() {return Alignment.CENTER;}
@@ -296,14 +298,14 @@ public class SampleUserInterfaceGame extends MainGame {
 			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", Runnables.nullRunnable());
 		}
 
-		@Override protected UniversalButton makeReportBugButton() {return UserInterfaceFactory.getButton("One could report a bug here", Runnables.nullRunnable());}
+		@Override protected UniversalButton makeReportBugButton() {return MainGame.getUserInterfaceFactory().getButton("One could report a bug here", Runnables.nullRunnable());}
 		@Override protected UniversalButton makeControlsButton() {
-			return UserInterfaceFactory.getButton("This is where one could theoretically view controls", () -> InputPriority.claimPriority(makeControlsPopUp()));
+			return MainGame.getUserInterfaceFactory().getButton("This is where one could theoretically view controls", () -> InputPriority.claimPriority(makeControlsPopUp()));
 		}
 
 		@Override
 		protected UniversalButton makeQuitButton() {
-			return UserInterfaceFactory.getQuitGameButton();
+			return MainGame.getUserInterfaceFactory().getQuitGameButton();
 		}
 
 	}

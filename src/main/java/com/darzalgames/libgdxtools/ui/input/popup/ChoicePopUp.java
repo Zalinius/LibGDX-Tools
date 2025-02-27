@@ -3,9 +3,9 @@ package com.darzalgames.libgdxtools.ui.input.popup;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.data.ListFactory;
 import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
  * A pop up that offers two choices, and can respond differently based on which choice is made.
@@ -52,13 +52,13 @@ public abstract class ChoicePopUp extends PopUpMenu {
 
 	protected void setSizeAndBackground() {
 		setSize(desiredWidth, desiredHeight);
-		background(UserInterfaceFactory.getUIBorderedNine());
+		background(MainGame.getUserInterfaceFactory().getUIBorderedNine());
 	}
 
 	@Override
 	protected void setUpTable() {
 		setSizeAndBackground();
-		UserInterfaceFactory.makeActorCentered(this);
+		MainGame.getUserInterfaceFactory().makeActorCentered(this);
 
 		add(getMessage()).grow();
 		if (addRowAfterMessage) {

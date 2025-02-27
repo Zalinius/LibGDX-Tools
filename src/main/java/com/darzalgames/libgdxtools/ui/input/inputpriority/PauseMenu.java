@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
@@ -30,7 +31,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	
 	/**
 	 * NOTE: Setting the position is important, otherwise the pause menu will not open!<p>
-	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceFactory.makeActorCentered(this)} 
+	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) MainGame.getUserInterfaceFactory().makeActorCentered(this)} 
 	 */
 	protected abstract void setUpBackground();
 	protected abstract Alignment getEntryAlignment();
@@ -68,7 +69,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	 * @return Make it however you like, a default will be provided otherwise
 	 */
 	protected UniversalButton makeBackButton() {
-		return UserInterfaceFactory.getButton(TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
+		return MainGame.getUserInterfaceFactory().getButton(TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
 	}
 
 	/**
@@ -115,7 +116,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 		// ALL SELECTABLE MENU BUTTONS
 		List<UniversalButton> menuButtons = new ArrayList<>();
-		menuButtons.add(UserInterfaceFactory.getSpacer());
+		menuButtons.add(MainGame.getUserInterfaceFactory().getSpacer());
 
 		menuButtons.addAll(makeMiddleButtons());
 
@@ -141,7 +142,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		// Back button
 		UniversalButton backButton = makeBackButton();
 		
-		menuButtons.add(UserInterfaceFactory.getSpacer());
+		menuButtons.add(MainGame.getUserInterfaceFactory().getSpacer());
 
 		menuButtons.removeIf(Objects::isNull);
 
@@ -152,7 +153,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		// Set up the version tag to be in its own inner table, so that the actual buttons can still reach the bottom of the main table
 		Table versionTable = new Table();
 		versionTable.setFillParent(true);
-		Label versionLabel = UserInterfaceFactory.getFlavorTextLabel(getGameVersion() + platformName);
+		Label versionLabel = MainGame.getUserInterfaceFactory().getFlavorTextLabel(getGameVersion() + platformName);
 		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT.getAlignment());
 		versionTable.setTouchable(Touchable.disabled);
 		addActor(versionTable);
@@ -204,7 +205,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		}
 
 		public UniversalButton getButton() {
-			return UserInterfaceFactory.getButton(TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this));
+			return MainGame.getUserInterfaceFactory().getButton(TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this));
 		}
 
 		@Override
@@ -215,8 +216,8 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		@Override
 		protected void setUpTable() {
 			setSize(desiredWidth, desiredHeight);
-			background(UserInterfaceFactory.getUIBorderedNine());
-			UserInterfaceFactory.makeActorCentered(this);
+			background(MainGame.getUserInterfaceFactory().getUIBorderedNine());
+			MainGame.getUserInterfaceFactory().makeActorCentered(this);
 
 			menu.setAlignment(Alignment.CENTER, Alignment.TOP);
 			add(menu.getView()).growX().top();

@@ -1,13 +1,13 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
@@ -20,13 +20,12 @@ public class UniversalSelectBox extends UniversalButton {
 	private String defaultEntry;
 	private Consumer<String> action;
 
-	// TODO experiment with making a constructor that takes a list of buttons instead of making them?
 	public UniversalSelectBox(Collection<String> entries, TextButton textButton, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		super(textButton, inputStrategySwitcher, soundInteractListener);
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,
 		// sets that as the text in our display label (e.g. English), and calls the Consumer (which responds to the new entry, e.g. changing the game language and refreshing the main menu)
-		List<UniversalButton> entryButtons = entries.stream().map(entry -> UserInterfaceFactory.getButton(entry,
+		List<UniversalButton> entryButtons = entries.stream().map(entry -> MainGame.getUserInterfaceFactory().getButton(entry,
 				() -> {
 					options.hideThis();
 					setSelected(entry);
@@ -39,27 +38,15 @@ public class UniversalSelectBox extends UniversalButton {
 			@Override
 			protected void setUpTable() {
 				menu.setAlignment(Alignment.LEFT, Alignment.LEFT);
-				menu.getView().setBackground(UserInterfaceFactory.getUIBorderedNine());
+				menu.getView().setBackground(MainGame.getUserInterfaceFactory().getUIBorderedNine());
 				options.add(menu.getView()).left();
-				
-				float longestWidth = 0;
-				for (Iterator<UniversalButton> iterator = entryButtons.iterator(); iterator.hasNext();) {
-					UniversalButton universalButton = iterator.next();
-					universalButton.setWrap(false);
-					TextButton button = universalButton.getView(); 
-					if (button.getWidth() > longestWidth) {
-						longestWidth = button.getWidth();
-					}
-				}
-				if (menu.getFinalButtonWidth() > longestWidth) {
-					longestWidth = menu.getFinalButtonWidth();
-				}
 				options.pack();
-				UserInterfaceFactory.makeActorCentered(options);
+				System.out.println(options.getHeight());
+				MainGame.getUserInterfaceFactory().makeActorCentered(options);
 			}
 		};
 
-		displayLabel = UserInterfaceFactory.getLabel("");
+		displayLabel = MainGame.getUserInterfaceFactory().getLabel("");
 		displayLabel.setWrap(false);
 		textButton.add(displayLabel);
 		this.setButtonRunnable(this::showInnerOptionsPopUpMenu);

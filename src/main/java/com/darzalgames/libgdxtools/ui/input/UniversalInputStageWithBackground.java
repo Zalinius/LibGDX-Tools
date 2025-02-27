@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 public class UniversalInputStageWithBackground extends UniversalInputStage {
 
@@ -21,7 +21,7 @@ public class UniversalInputStageWithBackground extends UniversalInputStage {
 			super(viewport, inputStrategySwitcher);
 
 			background = new Image(backgroundTex);
-			UserInterfaceFactory.makeActorCentered(background);
+			MainGame.getUserInterfaceFactory().makeActorCentered(background);
 			background.setTouchable(Touchable.disabled);
 			addActor(background);
 		}

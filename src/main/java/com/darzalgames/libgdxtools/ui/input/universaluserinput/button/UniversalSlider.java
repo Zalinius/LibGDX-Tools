@@ -23,7 +23,12 @@ public class UniversalSlider extends UniversalButton {
 
 	public UniversalSlider(TextButton textButton, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		super(textButton, image, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
-		slider = new Slider(0, 1, 0.1f, false, sliderStyle);
+		slider = new Slider(0, 1, 0.1f, false, sliderStyle) {
+			@Override
+			public float getPrefWidth() {
+				return Math.max(super.getPrefWidth(), this.getBackgroundDrawable().getMinWidth());
+			}
+		};
 		slider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {

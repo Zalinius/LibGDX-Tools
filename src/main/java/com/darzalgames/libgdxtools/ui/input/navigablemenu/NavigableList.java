@@ -301,4 +301,8 @@ public class NavigableList implements InputConsumer {
 		return isVertical;
 	}
 
+	public int getSpacing() {
+		return spacing;
+	}
+
 }

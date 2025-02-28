@@ -41,7 +41,6 @@ public class UniversalSelectBox extends UniversalButton {
 				menu.getView().setBackground(MainGame.getUserInterfaceFactory().getUIBorderedNine());
 				options.add(menu.getView()).left();
 				options.pack();
-				System.out.println(options.getHeight());
 				MainGame.getUserInterfaceFactory().makeActorCentered(options);
 			}
 		};

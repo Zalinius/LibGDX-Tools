@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
@@ -50,7 +51,17 @@ public class UniversalSlider extends UniversalButton {
 			}
 		});
 	}
-
+	@Override
+	public void setFocused(boolean isFocused) {
+		super.setFocused(isFocused);
+		InputListener inputListener = (InputListener) slider.getListeners().get(0);
+		if (isFocused) {
+			inputListener.enter(null, 0, 0, -1, slider);	
+		} else {
+			inputListener.exit(null, 0, 0, -1, slider);
+		}
+		
+	}
 	public void setSliderStyle(SliderStyle sliderStyle) {
 		slider.setStyle(sliderStyle);
 	}

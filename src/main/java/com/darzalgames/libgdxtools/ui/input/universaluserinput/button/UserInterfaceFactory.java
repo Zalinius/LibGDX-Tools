@@ -35,7 +35,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinM
 public class UserInterfaceFactory {
 
 	protected Runnable quitGameRunnable;
-	private SkinManager skinManager;
+	protected SkinManager skinManager;
 	protected InputStrategySwitcher inputStrategySwitcher;
 	private Supplier<Float> flashesPerSecondSupplier;
 	protected Runnable soundInteractListener;

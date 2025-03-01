@@ -30,13 +30,6 @@ public class CrashReport {
 		this.timeInstant = utcTime;
 	}
 	
-	public String toJson() {
-		Json json = new Json();
-		json.setOutputType(OutputType.json);
-		
-		return json.prettyPrint(this);
-	}
-	
 	public String getGameName() {
 		return gameName;
 	}
@@ -59,4 +52,27 @@ public class CrashReport {
 	public Instant getInstant() {
 		return timeInstant;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Game:     ").append(gameName).append('\n');
+		sb.append("Version:  ").append(gameVersion).append('\n');
+		sb.append("Platform: ").append(platformName).append('\n');
+		sb.append("Time    : ").append(time).append('\n');
+		sb.append("ID      : ").append(id).append('\n');
+		sb.append("Trace   : ").append(stackTrace).append('\n');
+		
+		return sb.toString();
+	}
+	
+	public String toJson() {
+		Json json = new Json();
+		json.setOutputType(OutputType.json);
+		
+		return json.prettyPrint(this);
+	}
+	
+
+	
 }

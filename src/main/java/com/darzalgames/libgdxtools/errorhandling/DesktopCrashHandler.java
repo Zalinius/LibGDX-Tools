@@ -25,7 +25,12 @@ public class DesktopCrashHandler extends CrashHandler {
 			
 			List<String> reportingStatuses = new ArrayList<>();
 			reportingStatuses.add(reportCrashToFile(crashReportFileName, crashReportJson));
-			reportingStatuses.add(reportCrashToDarBot5000(crashReport.getGameName(), crashReportFileNameAnonymous, crashReportJson));
+			
+			Runnable reportCrashOnline = () -> {
+				String status = reportCrashToDarBot5000(crashReport.getGameName(), crashReportFileNameAnonymous, crashReportJson);
+				reportingStatuses.add(status);
+			};
+			DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, reportCrashOnline);
 
 			return reportingStatuses;
 	}
@@ -50,7 +55,7 @@ public class DesktopCrashHandler extends CrashHandler {
 
 	}
 	
-	private String reportCrashToDarBot5000(String gameName, String crashReportFileName, String crashReportJson) {
+	public static String reportCrashToDarBot5000(String gameName, String crashReportFileName, String crashReportJson) {
 		gameName = gameName.toLowerCase().replace(' ', '-');
 		String urlString = "https://api.darzalgames.com/crash/" + gameName + "/" + crashReportFileName;
 		
@@ -62,8 +67,8 @@ public class DesktopCrashHandler extends CrashHandler {
 					.POST(HttpRequest.BodyPublishers.ofString(crashReportJson))
 					.build();
 			
-			httpClient.send(httpRequest, HttpResponse.BodyHandlers.discarding());
-			
+			HttpResponse<Void> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.discarding());
+			System.out.println("Response: " + response.toString());
 		} catch (IOException | InterruptedException e) {
 			System.err.println("Couldn't send crash report to: " + urlString);
 			System.err.println("Error json:\n" + crashReportJson);

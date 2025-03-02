@@ -35,27 +35,34 @@ public class DesktopCrashPopup extends JFrame {
 		crashPopup.setVisible(true);
 	}
 	
+	public static final double PADDING_TO_HEIGHT_RATIO = 0.025;
+	public static final double FONT_TO_HEIGHT_RATIO = 0.015;
+	public static final int BASE_HEIGHT = 800; // in pixels
+	
 	public DesktopCrashPopup(CrashReport crashReport, Runnable sendErrorReport) {
 		
 		super(crashReport.getGameName() + " - crash reporting");
-        setSize(1000, 750);
+        setSize(BASE_HEIGHT, BASE_HEIGHT);
+        setLocationRelativeTo(null);
         setResizable(true);
-        BorderLayout borderLayout = new BorderLayout(20, 20);
+        BorderLayout borderLayout = new BorderLayout(getSmallPadding(), getSmallPadding());
         setLayout(borderLayout);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
         String reportFileLocation = "REPLACEME";
         
         JPanel informationPanel = new JPanel();
-        Border topPadding = BorderFactory.createEmptyBorder(20, 50, 0, 50);
+        Border topPadding = BorderFactory.createEmptyBorder(getSmallPadding(), getLargePadding(), 0, getLargePadding());
         informationPanel.setBorder(topPadding);
         BoxLayout boxLayout = new BoxLayout(informationPanel, BoxLayout.Y_AXIS);
         informationPanel.setLayout(boxLayout);
-        JLabel situationLabel = new JLabel("Unfortunately the game has crashed :(", JLabel.CENTER);
+        
+        JLabel situationLabel = makeLabel("Unfortunately the game has crashed :(");
+        situationLabel.setFont(getRegularFont());
         informationPanel.add(situationLabel);
-        JLabel crashReportFileLabel = new JLabel("The following report was saved to: " + reportFileLocation);
+        JLabel crashReportFileLabel = makeLabel("The following report was saved to: " + reportFileLocation);
         informationPanel.add(crashReportFileLabel);
-        JLabel crashReportHeader = new JLabel("Crash Report:");
+        JLabel crashReportHeader = makeLabel("Crash Report:");
         informationPanel.add(crashReportHeader);
         add(informationPanel, BorderLayout.NORTH);
 
@@ -69,21 +76,21 @@ public class DesktopCrashPopup extends JFrame {
         
         JTextArea crashReportArea = new JTextArea(crString);
 //        JTextArea crashReportArea = new JTextArea(crashReport.toString());
-        crashReportArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
+        crashReportArea.setFont(getMonoSpaceFont());
         crashReportArea.setEditable(false);
         crashReportArea.setLineWrap(true);
         crashReportArea.setWrapStyleWord(true);
         
         JScrollPane crashReportScrollPane = new JScrollPane(crashReportArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        crashReportScrollPane.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
+        crashReportScrollPane.setBorder(BorderFactory.createEmptyBorder(0, getLargePadding(), 0, getLargePadding()));
 
         add(crashReportScrollPane, BorderLayout.CENTER);
         
         
         JPanel buttonPanel = new JPanel();
-        Border buttonPadding = BorderFactory.createEmptyBorder(10, 50, 30, 50);
+        Border buttonPadding = BorderFactory.createEmptyBorder(getSmallPadding(), getLargePadding(), getLargePadding(), getLargePadding());
         buttonPanel.setBorder(buttonPadding);
-        buttonPanel.setLayout(new GridLayout(1, 3, 20, 20));
+        buttonPanel.setLayout(new GridLayout(1, 3, getSmallPadding(), 0));
 
         JButton buttonSendReport = new JButton("Send report to DarZal Games");
         buttonSendReport.setBackground(Color.ORANGE);
@@ -135,8 +142,37 @@ public class DesktopCrashPopup extends JFrame {
 				thread.start();
 			}
 		}
+	}
+	
+	private int getSmallPadding() {
+		return (int) (PADDING_TO_HEIGHT_RATIO * getHeight());
+	}
+
+	private int getLargePadding() {
+		return 2 * getSmallPadding();
+	}
+	
+	private Font getRegularFont() {
+		int size = (int) (FONT_TO_HEIGHT_RATIO * getHeight());
+		return new Font(Font.SANS_SERIF, Font.BOLD, size);
 		
-		
+	}
+	
+	private Font getMonoSpaceFont() {
+		int size = (int) (FONT_TO_HEIGHT_RATIO * getHeight());
+		return new Font(Font.MONOSPACED, Font.PLAIN, size);
+	}
+	
+	private JLabel makeLabel(String text) {
+		JLabel jLabel = new JLabel(text);
+		jLabel.setFont(getRegularFont());
+		return jLabel;
+	}
+
+	private JLabel makeLabel(String text, int alignment) {
+		JLabel jLabel = new JLabel(text, alignment);
+		jLabel.setFont(getRegularFont());
+		return jLabel;
 	}
 
 }

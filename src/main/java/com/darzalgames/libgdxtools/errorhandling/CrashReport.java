@@ -56,8 +56,8 @@ public class CrashReport {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Game:     ").append(gameName).append('\n');
-		sb.append("Version:  ").append(gameVersion).append('\n');
+		sb.append("Game    : ").append(gameName).append('\n');
+		sb.append("Version : ").append(gameVersion).append('\n');
 		sb.append("Platform: ").append(platformName).append('\n');
 		sb.append("Time    : ").append(time).append('\n');
 		sb.append("ID      : ").append(id).append('\n');

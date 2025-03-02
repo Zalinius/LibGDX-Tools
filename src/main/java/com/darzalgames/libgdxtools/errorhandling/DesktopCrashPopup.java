@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.errorhandling;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -12,11 +13,18 @@ import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
+
+import com.darzalgames.darzalcommon.functional.Do;
+import com.darzalgames.darzalcommon.functional.Runnables;
 
 public class DesktopCrashPopup extends JFrame {
 	
@@ -28,6 +36,7 @@ public class DesktopCrashPopup extends JFrame {
 	}
 	
 	public DesktopCrashPopup(CrashReport crashReport, Runnable sendErrorReport) {
+		
 		super(crashReport.getGameName() + " - crash reporting");
         setSize(1000, 750);
         setResizable(true);
@@ -35,21 +44,45 @@ public class DesktopCrashPopup extends JFrame {
         setLayout(borderLayout);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
-        JLabel situationLabel = new JLabel("Unfortunately the game has crashed :(", JLabel.CENTER);
-        add(situationLabel, BorderLayout.NORTH);
+        String reportFileLocation = "REPLACEME";
         
-        JTextArea crashReportArea = new JTextArea(crashReport.toString());
+        JPanel informationPanel = new JPanel();
+        Border topPadding = BorderFactory.createEmptyBorder(20, 50, 0, 50);
+        informationPanel.setBorder(topPadding);
+        BoxLayout boxLayout = new BoxLayout(informationPanel, BoxLayout.Y_AXIS);
+        informationPanel.setLayout(boxLayout);
+        JLabel situationLabel = new JLabel("Unfortunately the game has crashed :(", JLabel.CENTER);
+        informationPanel.add(situationLabel);
+        JLabel crashReportFileLabel = new JLabel("The following report was saved to: " + reportFileLocation);
+        informationPanel.add(crashReportFileLabel);
+        JLabel crashReportHeader = new JLabel("Crash Report:");
+        informationPanel.add(crashReportHeader);
+        add(informationPanel, BorderLayout.NORTH);
+
+        String crString = crashReport.toString();
+        for (int i = 0; i < 100; i++) {
+			crString += "\n" + i + " some text and stuff";
+			if(i % 10 == 0) {
+				crString += "\n" + i + " some text and stuff and a really long line that will have to wrap around to the next line because it is so darn long you know what I mean?";
+			}
+		}
+        
+        JTextArea crashReportArea = new JTextArea(crString);
+//        JTextArea crashReportArea = new JTextArea(crashReport.toString());
+        crashReportArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
         crashReportArea.setEditable(false);
-        crashReportArea.setCursor(null);
-        crashReportArea.setOpaque(false);  
-        crashReportArea.setFocusable(false);
         crashReportArea.setLineWrap(true);
         crashReportArea.setWrapStyleWord(true);
+        
+        JScrollPane crashReportScrollPane = new JScrollPane(crashReportArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        crashReportScrollPane.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
 
-        add(crashReportArea, BorderLayout.CENTER);
+        add(crashReportScrollPane, BorderLayout.CENTER);
         
         
         JPanel buttonPanel = new JPanel();
+        Border buttonPadding = BorderFactory.createEmptyBorder(10, 50, 30, 50);
+        buttonPanel.setBorder(buttonPadding);
         buttonPanel.setLayout(new GridLayout(1, 3, 20, 20));
 
         JButton buttonSendReport = new JButton("Send report to DarZal Games");

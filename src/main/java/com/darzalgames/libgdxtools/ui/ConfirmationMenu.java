@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.ui;
 
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.darzalgames.libgdxtools.ui.input.popup.TextChoicePopUp;
 
 /**
@@ -9,7 +8,7 @@ import com.darzalgames.libgdxtools.ui.input.popup.TextChoicePopUp;
  */
 public class ConfirmationMenu extends TextChoicePopUp {
 	
-	public static NinePatch confirmationBackground;
+	public static BaseDrawable confirmationBackground;
 
 	public ConfirmationMenu(String messageKey, String confirmButtonTextKey, Runnable confirmButtonRunnable) {
 		this(messageKey, confirmButtonTextKey, "back_message", confirmButtonRunnable);
@@ -21,21 +20,18 @@ public class ConfirmationMenu extends TextChoicePopUp {
 
 	@Override
 	protected void setUpDesiredSize() {
-		// TODO These numbers are a bit too deeply buried to be hardcoded...
-		// TODO Also I'd like to be able to use a ten patch here, I don't see why I shouldn't be able to!
 		desiredWidth = 275;
 		desiredHeight = 100;
 	}
 	
-	public static void setConfirmationBackground(NinePatch confirmationBackground) {
+	public static void setConfirmationBackground(BaseDrawable confirmationBackground) {
 		ConfirmationMenu.confirmationBackground = confirmationBackground;
 	}
 
 	@Override
 	protected void setSizeAndBackground() {
 		setSize(desiredWidth, desiredHeight);
-        NinePatchDrawable back = new NinePatchDrawable(confirmationBackground);
-		background(back);
+		background(confirmationBackground);
 	}
 	
 }

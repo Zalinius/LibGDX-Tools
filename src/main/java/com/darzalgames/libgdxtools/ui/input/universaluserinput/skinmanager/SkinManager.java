@@ -50,7 +50,7 @@ public class SkinManager {
 	public SkinManager(Skin skin) {
 		super();
 		this.skin = skin;
-		ConfirmationMenu.setConfirmationBackground(skin.get(CONFIRMATION_MENU_BACKGROUND, NinePatch.class));
+		setConfirmationMenuBackground();
 	}
 	
 	/**
@@ -159,6 +159,10 @@ public class SkinManager {
 	}
 	public TextButtonStyle getSettingsButtonStyle() {
 		return getTextButtonStyle(SETTINGS_BUTTON);
+	}
+	
+	protected void setConfirmationMenuBackground() {
+		ConfirmationMenu.setConfirmationBackground(new NinePatchDrawable(skin.get(CONFIRMATION_MENU_BACKGROUND, NinePatch.class)));
 	}
 
 }

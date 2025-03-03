@@ -41,6 +41,8 @@ public class UserInterfaceFactory {
 	protected Runnable soundInteractListener;
 	private Supplier<Boolean> isPaused;
 
+	private final String QUIT_GAME_KEY = "quit_game";
+
 	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener,
 			Supplier<Boolean> isPaused) {
 		this.skinManager = skinManager;
@@ -188,8 +190,6 @@ public class UserInterfaceFactory {
 				() -> togglePauseScreenVisibility.accept(!isPaused.get()),
 				inputStrategySwitcher, soundInteractListener);
 	}
-
-	private final String QUIT_GAME_KEY = "quit_game";
 
 	/**
 	 * @param buttonText

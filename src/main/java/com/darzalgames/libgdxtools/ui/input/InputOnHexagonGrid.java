@@ -10,7 +10,7 @@ import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
  */
 public class InputOnHexagonGrid extends Input {
 
-	private static final Map<Input, HexagonDirection> inputToDirection = new HashMap<>();
+	private static final Map<Input, HexagonDirection> inputToDirection = initializeMapWithInputAliases();
 
 	public static final InputOnHexagonGrid UP_RELEASED = new InputOnHexagonGrid(-1, "UP_RELEASED", HexagonDirection.TOP);
 	public static final InputOnHexagonGrid DOWN_RELEASED = new InputOnHexagonGrid(-1, "DOWN_RELEASED", HexagonDirection.BOTTOM);
@@ -32,6 +32,13 @@ public class InputOnHexagonGrid extends Input {
 		return inputToDirection.get(input);
 	}
 	
+	private static HashMap<Input, HexagonDirection> initializeMapWithInputAliases() {
+		HashMap<Input, HexagonDirection> map = new HashMap<>();
+		map.put(Input.DOWN, HexagonDirection.BOTTOM);
+		map.put(Input.UP, HexagonDirection.TOP);
+		return map;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		// These are needed for menu navigation!
@@ -39,12 +46,12 @@ public class InputOnHexagonGrid extends Input {
 				|| (this == Input.UP && obj == InputOnHexagonGrid.UP_RELEASED)) {
 			return true;
 		}
-		
+
 		if ((this == InputOnHexagonGrid.DOWN_RELEASED && obj == Input.DOWN)
 				|| (this == Input.DOWN && obj == InputOnHexagonGrid.DOWN_RELEASED)) {
 			return true;
 		}
-		
+
 		return super.equals(obj);
 	}
 }

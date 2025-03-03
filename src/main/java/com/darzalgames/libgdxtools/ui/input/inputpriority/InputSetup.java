@@ -12,7 +12,7 @@ public class InputSetup {
 	
 	
 	public InputSetup(InputStrategySwitcher inputStrategySwitcher, PauseMenu pauseMenu, Runnable toggleFullscreenRunnable, boolean toggleWithF11, Stage popUpStage) {
-		inputPriorityStack = new InputPriorityStack(popUpStage, () -> pause.isPauseMenuOpen());
+		inputPriorityStack = new InputPriorityStack(popUpStage, pauseMenu);
 		inputStrategySwitcher.register(inputPriorityStack);
 		
 		inputReceiver = new InputReceiver(inputStrategySwitcher, inputPriorityStack, toggleFullscreenRunnable, toggleWithF11);

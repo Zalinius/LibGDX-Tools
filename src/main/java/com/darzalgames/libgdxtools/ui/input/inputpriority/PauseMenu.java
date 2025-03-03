@@ -106,6 +106,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 	@Override
 	public void regainFocus() {
+		menu.refreshPage();
 		focusCurrent();
 		pauseButton.setTouchable(Touchable.enabled);
 	}

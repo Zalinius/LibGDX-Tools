@@ -20,7 +20,14 @@ public class UniversalCheckbox extends UniversalButton {
 		super(textButton, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		this.uncheckedLabel = uncheckedLabel;
 		this.checkedLabel = checkedLabel;
-		box = new CheckBox(uncheckedLabel.length() > checkedLabel.length() ? uncheckedLabel : checkedLabel, style);
+		box = new CheckBox(uncheckedLabel.length() > checkedLabel.length() ? uncheckedLabel : checkedLabel, style) {
+			@Override
+			public void act(float delta) {
+				super.act(delta);
+				this.setStyle(this.getStyle());
+				setSize(getPrefWidth(), getPrefHeight());
+			}
+		};
 		box.getImageCell().padRight(3);
 
 		textButton.clearChildren();

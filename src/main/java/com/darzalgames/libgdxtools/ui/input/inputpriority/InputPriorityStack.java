@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import java.util.ArrayDeque;
-import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,11 +19,11 @@ public class InputPriorityStack implements InputObserver {
 	private final LimitedAccessDoubleStack stack;
 	private final DarkScreen darkScreen;
 	private final Stage popUpStage;
-	private final Supplier<Boolean> isPauseMenuOpen;
+	private final PauseMenu pauseMenu;
 
-	public InputPriorityStack(Stage popUpStage, Supplier<Boolean> isPauseMenuOpen) {
+	public InputPriorityStack(Stage popUpStage, PauseMenu pauseMenu) {
 		this.popUpStage = popUpStage;
-		this.isPauseMenuOpen = isPauseMenuOpen;
+		this.pauseMenu = pauseMenu;
 		stack = new LimitedAccessDoubleStack();
 		clearStackAndPushBlankConsumer();
 
@@ -119,8 +118,8 @@ public class InputPriorityStack implements InputObserver {
 	}
 
 	private void releasePriorityForTop() { 
+		boolean isClosingPauseMenu = stack.isThisOnTop(pauseMenu);
 		unFocusTop();
-		boolean isClosingPauseMenu = isPauseMenuOpen.get();
 		stack.popTop();
 		if (isClosingPauseMenu) {
 			stack.getTop().setTouchable(Touchable.enabled);

@@ -114,7 +114,7 @@ public class NavigableList implements InputConsumer {
 			}
 			entry.setAlignment(entryAlignment);
 			Button button = entry.getView();
-			table.add(button).prefWidth(button.getWidth());
+			table.add(button);
 			if (MainGame.getUserInterfaceFactory().isSpacer(entry)) {
 				interactableEntries.remove(entry);
 				if (isVertical()) {

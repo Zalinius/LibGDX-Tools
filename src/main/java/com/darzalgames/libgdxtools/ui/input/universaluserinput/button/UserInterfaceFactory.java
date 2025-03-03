@@ -75,13 +75,29 @@ public class UserInterfaceFactory {
 	 * @return
 	 */
 	public Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
-		Label label = new InputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher);
+		Label label = new InputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher) {
+			@Override
+			public void act(float delta) {
+				super.act(delta);
+				this.setStyle(this.getStyle());
+				this.invalidateHierarchy();
+				this.layout();
+			}
+		};
 		label.setWrap(true);
 		return label;
 	}
 
 	protected Label getLabel(final String text, LabelStyle labelStyle) {
-		Label label = new Label(text, labelStyle);
+		Label label = new Label(text, labelStyle) {
+			@Override
+			public void act(float delta) {
+				super.act(delta);
+				this.setStyle(this.getStyle());
+				this.invalidateHierarchy();
+				this.layout();
+			}
+		};
 		label.setWrap(true);
 		return label;
 	}
@@ -93,7 +109,7 @@ public class UserInterfaceFactory {
 	 */
 	public UniversalButton getListableLabel(final String text) {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
-		TextButton textButton = new TextButton(text, skinManager.getSneakyLableButtonStyle());
+		TextButton textButton = makeLibGDXTextButton(text, skinManager.getSneakyLableButtonStyle());
 		textButton.setName(text);
 		UniversalButton listableButton = new UniversalButton(textButton, null, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		listableButton.setDisabled(true);
@@ -138,17 +154,22 @@ public class UserInterfaceFactory {
 	 * Make a button in a particular style, these are generally exceptional buttons (in Quest Giver this includes the play button, scenario map pips, etc)
 	 */
 	protected UniversalButton makeButton(final String text, final Runnable runnable, TextButtonStyle textButtonStyle) {
-		TextButton textButton = new TextButton(text, textButtonStyle);
+		TextButton textButton = makeLibGDXTextButton(text, textButtonStyle);
 		return new UniversalButton(textButton, null, runnable, inputStrategySwitcher, soundInteractListener);
 	}
 
-	/**
-	 * Make a LIBGDX textbutton, only to be used inside nested buttons (e.g. checkboxes and sliders)
-	 * @param text
-	 * @return
-	 */
+	private TextButton makeLibGDXTextButton(final String text, TextButtonStyle textButtonStyle) {
+		return new TextButton(text, textButtonStyle) {
+			@Override
+			public void act(float delta) {
+				super.act(delta);
+				this.setStyle(this.getStyle());
+				setSize(getPrefWidth(), getPrefHeight());
+			}
+		};
+	}
 	private TextButton makeLibGDXTextButton(final String text) {
-		return new TextButton(text, skinManager.getTextButtonStyle());
+		return makeLibGDXTextButton(text, skinManager.getTextButtonStyle());
 	}
 
 	/*
@@ -162,7 +183,7 @@ public class UserInterfaceFactory {
 	}
 
 	public UniversalSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
-		TextButton textButton = new TextButton(boxLabel + ":  ", skinManager.getTextButtonStyle()); 
+		TextButton textButton = makeLibGDXTextButton(boxLabel + ":  ", skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 		UniversalSelectBox keyboardSelectBox =  new UniversalSelectBox(entries, textButton, inputStrategySwitcher, soundInteractListener);
 		keyboardSelectBox.setAction(consumer);
@@ -186,9 +207,9 @@ public class UserInterfaceFactory {
 	public UniversalButton getSettingsButton(Consumer<Boolean> togglePauseScreenVisibility) {
 		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()){
 			@Override public String toString() { return "pause button"; }}; 
-		return new MouseOnlyButton(textButton, 
-				() -> togglePauseScreenVisibility.accept(!isPaused.get()),
-				inputStrategySwitcher, soundInteractListener);
+			return new MouseOnlyButton(textButton, 
+					() -> togglePauseScreenVisibility.accept(!isPaused.get()),
+					inputStrategySwitcher, soundInteractListener);
 	}
 
 	/**
@@ -316,14 +337,16 @@ public class UserInterfaceFactory {
 	}
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {
-		Supplier<TextButton> supplier = () -> {
-			TextButton textButton = new TextButton(TextSupplier.getLine("window_mode_label") + ":  ", skinManager.getTextButtonStyle()); 
-			makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-			return textButton;
-		};
-		return new WindowResizerSelectBox(supplier, inputStrategySwitcher);
+		return getWindowModeTextSelectBox(null, null);
 	}
-	
+
+	public WindowResizerSelectBox getWindowModeTextSelectBox(Supplier<Integer> confirmationMenuDesiredWidth, Supplier<Integer> confirmationMenuDesiredHeight) {
+		TextButton textButton = makeLibGDXTextButton(TextSupplier.getLine("window_mode_label") + ":  ", skinManager.getTextButtonStyle()); 
+		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
+		return new WindowResizerSelectBox(textButton, inputStrategySwitcher, soundInteractListener, confirmationMenuDesiredWidth, confirmationMenuDesiredHeight);
+
+	}
+
 	private float computeDelay() {
 		return 1f/flashesPerSecondSupplier.get();
 	}

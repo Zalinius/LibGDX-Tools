@@ -47,7 +47,7 @@ public class UniversalButton implements VisibleInputConsumer {
 		this.buttonRunnable = runnable;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.image = image;
-		this.wrap = true;
+//		this.wrap = true;
 		this.alignment = Alignment.CENTER;
 		this.soundInteractListener = soundInteractListener;
 

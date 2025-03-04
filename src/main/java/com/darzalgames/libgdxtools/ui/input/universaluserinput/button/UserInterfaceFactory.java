@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -21,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
@@ -91,11 +91,11 @@ public class UserInterfaceFactory {
 	protected Label getLabel(final String text, LabelStyle labelStyle) {
 		Label label = new Label(text, labelStyle) {
 			@Override
-			public void act(float delta) {
-				super.act(delta);
+			public void draw(Batch batch, float parentAlpha) {
 				this.setStyle(this.getStyle());
 				this.invalidateHierarchy();
 				this.layout();
+				super.draw(batch, parentAlpha);
 			}
 		};
 		label.setWrap(true);
@@ -159,27 +159,10 @@ public class UserInterfaceFactory {
 	}
 
 	private TextButton makeLibGDXTextButton(final String text, TextButtonStyle textButtonStyle) {
-		return new TextButton(text, textButtonStyle) {
-			@Override
-			public void act(float delta) {
-				super.act(delta);
-				this.setStyle(this.getStyle());
-				setSize(getPrefWidth(), getPrefHeight());
-			}
-		};
+		return new TextButton(text, textButtonStyle);
 	}
 	private TextButton makeLibGDXTextButton(final String text) {
 		return makeLibGDXTextButton(text, skinManager.getTextButtonStyle());
-	}
-
-	/*
-	 * If ever this isn't behaving as you'd expect, make sure your actor is in a group the size of the
-	 * screen or straight on the stage, not nested in some container that's smaller than the screen
-	 * since it will be drawn in the parent's coordinate system.
-	 */
-	public void makeActorCentered(final Actor actor) {
-		actor.setPosition(GameInfo.getWidth() / 2f - actor.getWidth() / 2f,
-				GameInfo.getHeight() / 2f - actor.getHeight() / 2f);
 	}
 
 	public UniversalSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
@@ -337,13 +320,9 @@ public class UserInterfaceFactory {
 	}
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {
-		return getWindowModeTextSelectBox(null, null);
-	}
-
-	public WindowResizerSelectBox getWindowModeTextSelectBox(Supplier<Integer> confirmationMenuDesiredWidth, Supplier<Integer> confirmationMenuDesiredHeight) {
 		TextButton textButton = makeLibGDXTextButton(TextSupplier.getLine("window_mode_label") + ":  ", skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		return new WindowResizerSelectBox(textButton, inputStrategySwitcher, soundInteractListener, confirmationMenuDesiredWidth, confirmationMenuDesiredHeight);
+		return new WindowResizerSelectBox(textButton, inputStrategySwitcher, soundInteractListener);
 
 	}
 

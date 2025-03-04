@@ -35,19 +35,6 @@ public class GameInfo {
 	public static String getGameVersion() {
 		return game.getGameVersion();
 	}
-	
-	/**
-	 * @return The width (in art "pixels") of the logical game window
-	 */
-	public static int getWidth() {
-		return game.getWidth();
-	}
-	/**
-	 * @return The height (in art "pixels") of the logical game window
-	 */
-	public static int getHeight() {
-		return game.getHeight();
-	}
 
 	/**
 	 * @return Gets the {@link PreferenceManager}, useful to access the more specific preference managers (such as sound, or more temporary "other" managers)

@@ -16,27 +16,17 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalB
  * It's a navigable menu, and it's a pop up!
  */
 public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
-
-	protected int desiredWidth;
-	protected int desiredHeight;
 	
 	protected PopUpMenu(boolean isVertical) {
 		super(isVertical);
-		setUpDesiredSize();
 	}
 
 	protected PopUpMenu(boolean isVertical, List<UniversalButton> entries, String finalButtonMessageKey) {
 		super(isVertical, entries);
 		menu.replaceContents(entries, makeFinalButton(finalButtonMessageKey)); // Because the final button calls this::hideThis, we make it after the call to super()
-		
-		setUpDesiredSize();
 	}
 
-	/** The height and width the menu background should be, override if you don't like the default  */
-	protected void setUpDesiredSize() {
-		desiredWidth = 200;
-		desiredHeight = 100;
-	}
+	protected abstract void setUpDesiredSize();
 	
 	private UniversalButton makeFinalButton(String finalButtonMessageKey) {
 		return MainGame.getUserInterfaceFactory().getButton(TextSupplier.getLine(finalButtonMessageKey), this::hideThis);
@@ -70,4 +60,11 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
     
     @Override
     public Actor getAsActor() { return this; }
+
+	
+	@Override
+	public void resizeUI() {
+		setUpDesiredSize();
+		menu.resizeUI();
+	}
 }

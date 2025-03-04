@@ -14,4 +14,5 @@ public class BlankHexagonController implements VisibleInputConsumer {
 	@Override public void focusCurrent() {}
 	@Override public void clearSelected() {}
 	@Override public void selectDefault() {}
+	@Override public void resizeUI() {}
 }

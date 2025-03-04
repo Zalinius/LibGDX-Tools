@@ -13,6 +13,7 @@ import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
@@ -29,11 +30,6 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 	private final String platformName;
 	
-	/**
-	 * NOTE: Setting the position is important, otherwise the pause menu will not open!<p>
-	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) MainGame.getUserInterfaceFactory().makeActorCentered(this)} 
-	 */
-	protected abstract void setUpBackground();
 	protected abstract Alignment getEntryAlignment();
 	protected abstract Alignment getMenuAlignment();
 	protected abstract String getGameVersion();
@@ -81,15 +77,27 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
 		this.platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
-		setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight());
+		setBounds(0, 0, UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight());
 		defaults().padBottom(bottomPadding);
 	}
-
+	
+	/**
+	 * NOTE: Setting the position here is important, otherwise the pause menu will not open!<p>
+	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceSizer.makeActorCentered(this)} 
+	 */
+	protected void setUpBackground() {
+		this.setBackground(MainGame.getUserInterfaceFactory().getUIBorderedNine());
+		UserInterfaceSizer.makeActorCentered(this);
+	}
+	
 	@Override
 	protected void setUpDesiredSize() {
-		desiredWidth = 250;
-		desiredHeight = 125;
+		UserInterfaceSizer.sizeToPercentage(this, 0.75f);
+		if (this.getActions().isEmpty()) {
+			UserInterfaceSizer.makeActorCentered(this);
+		}
 	}
+
 	
 	/**
 	 * To be used by child classes to have buttons in the menu hide/show it. E.g. pressing a button to change the 
@@ -102,6 +110,13 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		} else {
 			hideThis();
 		}
+	}
+	
+	@Override
+	public void gainFocus() {
+		setUpDesiredSize();
+		UserInterfaceSizer.makeActorCentered(this);
+		super.gainFocus();
 	}
 
 	@Override
@@ -171,10 +186,14 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		return true;
 	}
 	
-	protected void positionPauseButton() {
-		int padding = 3;
-		pauseButton.getView().setPosition(padding, GameInfo.getHeight() - pauseButton.getView().getHeight() - padding);
-		showPauseButton(false); // Only enable the button after the splash screen
+	private void positionPauseButton() {
+		float padding = UserInterfaceSizer.getHeightPercentage(0.01f);
+		pauseButton.getView().setPosition(padding, UserInterfaceSizer.getCurrentHeight() - pauseButton.getView().getHeight() - padding);
+
+		pauseButton.getView().setWidth(UserInterfaceSizer.getWidthPercentage(0.05f));
+		pauseButton.getView().setHeight(pauseButton.getView().getWidth());
+		// TODO  handling this, since this is called every frame now
+//		showPauseButton(false); // Only enable the button after the splash screen
 	}
 
 	protected void showPauseButton(boolean show) {
@@ -185,6 +204,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	protected void addPauseButtonToStage(Stage stage) {
 		stage.addActor(pauseButton.getView());
 		pauseButton.getView().toFront();
+		positionPauseButton();
 	}
 
 	/**
@@ -198,13 +218,16 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 			super(true, entries, "back_message");
 			this.buttonKey = buttonKey;
 		}
-
+		
 		@Override
 		protected void setUpDesiredSize() {
-			desiredWidth = 252;
-			desiredHeight = 100;
+			menu.setSpacing(PauseMenu.this.menu.getSpacing());
+			UserInterfaceSizer.sizeToPercentage(this, 0.5f);
+			if (this.getActions().isEmpty()) {
+				UserInterfaceSizer.makeActorCentered(this);
+			}
 		}
-
+		
 		public UniversalButton getButton() {
 			return MainGame.getUserInterfaceFactory().getButton(TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this));
 		}
@@ -216,12 +239,12 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 		@Override
 		protected void setUpTable() {
-			setSize(desiredWidth, desiredHeight);
+			setUpDesiredSize();
 			background(MainGame.getUserInterfaceFactory().getUIBorderedNine());
-			MainGame.getUserInterfaceFactory().makeActorCentered(this);
 
 			menu.setAlignment(Alignment.CENTER, Alignment.TOP);
 			add(menu.getView()).growX().top();
+			UserInterfaceSizer.makeActorCentered(this);
 		}
 	}
 }

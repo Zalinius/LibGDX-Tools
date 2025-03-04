@@ -151,6 +151,10 @@ public class InputPriorityStack implements InputObserver {
 		return false;
 	}
 
+	public void resizeStackUI() {
+		stack.resizeUI();
+	}
+
 
 
 	private void clearStackAndPushBlankConsumer() {
@@ -163,6 +167,7 @@ public class InputPriorityStack implements InputObserver {
 			@Override public void selectDefault()  {/*not needed*/}
 			@Override public void loseFocus() {/*not needed*/}
 			@Override public String toString() { return "Blank base"; }
+			@Override public void resizeUI() {/*not needed*/}
 		});
 	}
 
@@ -180,9 +185,7 @@ public class InputPriorityStack implements InputObserver {
 		}
 
 		private void push(Tuple<Actor, PopUp> actorPopup) {
-			Actor actor = actorPopup.e;
-			PopUp popup = actorPopup.f;
-			popupInputConsumerStack.push(new Tuple<>(actor, popup));
+			popupInputConsumerStack.push(actorPopup);
 		}
 
 		private boolean isThisOnTop(InputConsumer inputConsumer) {
@@ -215,6 +218,11 @@ public class InputPriorityStack implements InputObserver {
 		private void clear() {
 			inputConsumerStack.clear();
 			popupInputConsumerStack.clear();
+		}
+
+		private void resizeUI() {
+			inputConsumerStack.forEach(InputConsumer::resizeUI);
+			popupInputConsumerStack.forEach(actorPopup -> actorPopup.f.resizeUI());
 		}
 	}
 

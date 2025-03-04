@@ -97,6 +97,11 @@ public class NavigableList implements InputConsumer {
 	public void refreshPage() {
 		refreshPageRunnable.run();
 	}
+	
+	@Override
+	public void resizeUI() {
+		allEntries.forEach(UniversalButton::resizeUI);
+	}
 
 	public void defaultRefreshPage() {
 		table.clearChildren();

@@ -15,7 +15,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalB
  * A pop up that offers two choices, and can respond differently based on which choice is made.
  * This is versatile: it can be used for dialog choices, menus, warnings, etc.
  */
-public class TextChoicePopUp extends ChoicePopUp {
+public abstract class TextChoicePopUp extends ChoicePopUp {
 
 	protected final String messageKey;
 	private final String firstChoiceKey;

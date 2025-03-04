@@ -1,14 +1,14 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 
 /**
  * The dark transparent screen which goes behind popups to "focus" them, and dismiss them when clicked
@@ -19,9 +19,7 @@ class DarkScreen extends Image {
 
 	public DarkScreen(Stage popupStage, Runnable onClick) {
 		super(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), 1, 1));
-		this.setSize(GameInfo.getWidth()*50, GameInfo.getHeight()*50);
-		MainGame.getUserInterfaceFactory().makeActorCentered(this);
-
+		
 		this.popupStage = popupStage;
 
 		addListener(new InputListener() {
@@ -32,6 +30,13 @@ class DarkScreen extends Image {
 				return true;
 			}
 		});
+	}
+	
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
+		this.setSize(UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight());
+		UserInterfaceSizer.makeActorCentered(this);
+		super.draw(batch, parentAlpha);
 	}
 
 	void fadeIn(Actor actorPopup, boolean isTouchable) {

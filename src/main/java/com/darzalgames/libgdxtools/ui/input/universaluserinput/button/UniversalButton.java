@@ -47,7 +47,6 @@ public class UniversalButton implements VisibleInputConsumer {
 		this.buttonRunnable = runnable;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.image = image;
-//		this.wrap = true;
 		this.alignment = Alignment.CENTER;
 		this.soundInteractListener = soundInteractListener;
 
@@ -243,5 +242,11 @@ public class UniversalButton implements VisibleInputConsumer {
 
 	@Override
 	public void selectDefault() {}
+
+	@Override
+	public void resizeUI() {
+		button.setStyle(button.getStyle());
+		button.setSize(button.getPrefWidth(), button.getPrefHeight());
+	}
 
 }

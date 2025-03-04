@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.data.Tuple;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMath;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
@@ -45,7 +45,7 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 
 	private void setPositionOnScreen() {
 		Tuple<Float, Float> hexagonPosition =  HexagonMath.getScreenPositionOnStage(hexagon.getQ(), hexagon.getR(),
-				inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight(), GameInfo.getHeight());
+				inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight(), UserInterfaceSizer.getCurrentHeight());
 		this.setOrigin(Align.center);
 		this.setPosition(hexagonPosition.e, hexagonPosition.f);
 	}
@@ -78,6 +78,12 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 	@Override
 	public String toString() {
 		return hexagon.toString() + " " + inputConsumer.toString();
+	}
+
+	@Override
+	public void resizeUI() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

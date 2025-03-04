@@ -30,8 +30,6 @@ class NavigableHexagonControllerMapTest {
 	@BeforeEach
 	private void setup() {
 		GameInfo.setMainGame(new SharesGameInformation() {
-			@Override public int getWidth() {return 0;}
-			@Override public int getHeight() {return 0;}
 			@Override public SaveManager getSaveManager() {return null;}
 			@Override public PreferenceManager getPreferenceManager() {return null;}
 			@Override public GamePlatform getGamePlatform() {return null;}

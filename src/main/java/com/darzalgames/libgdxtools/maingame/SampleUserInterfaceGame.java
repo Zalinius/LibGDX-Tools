@@ -10,8 +10,11 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.functional.Consumers;
 import com.darzalgames.darzalcommon.functional.Runnables;
@@ -24,6 +27,7 @@ import com.darzalgames.libgdxtools.platform.*;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
@@ -58,7 +62,7 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	public SampleUserInterfaceGame(int width, int height, String[] args, Consumer<SampleUserInterfaceGame> toDoAfterLaunch) {
-		super(width/2, height/2, new WindowResizerDesktop(width, height),
+		super(new WindowResizerDesktop(width, height),
 				DesktopGamePlatformHelper.getTypeFromArgs(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new));
 		this.toDoAfterLaunch = toDoAfterLaunch;
 	}
@@ -90,12 +94,16 @@ public class SampleUserInterfaceGame extends MainGame {
 			@Override
 			protected void setUpTable() {
 				defaults().align(Align.bottom);
-				setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight() - 25f);
+				// TODO make functions for this, e.g. UserInterfaceSizer.getCurrentWidth()
+				setBounds(0, 0, UserInterfaceSizer.getWidthPercentage(1), UserInterfaceSizer.getHeightPercentage(1) - 25f);
 
 				menu.setSpacing(1);
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 				add(menu.getView()).grow().align(Align.center);
 			}
+
+			@Override
+			public void resizeUI() {}
 		}, inputSetup.getInputPriorityStack()));
 	}
 
@@ -136,13 +144,8 @@ public class SampleUserInterfaceGame extends MainGame {
 	protected void quitGame() {/* notYetNeeded */}
 
 	@Override
-	protected Texture getBackgroundStageTexture() {
-		return ColorTools.getColoredTexture(Color.PINK, 100);
-	}
-
-	@Override
-	protected Texture getMainStageBackgroundTexture() {
-		return ColorTools.getColoredTexture(Color.LIGHT_GRAY, width, height);
+	protected BaseDrawable getMainStageBackground() {
+		return new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.LIGHT_GRAY, 3), 1, 1, 1, 1));
 	}
 
 	@Override
@@ -221,6 +224,11 @@ public class SampleUserInterfaceGame extends MainGame {
 			protected Table getMessage() {
 				return new Table();
 			}
+
+			@Override
+			protected void setUpDesiredSize() {
+				UserInterfaceSizer.sizeToPercentage(this, 0.5f);
+			}
 		};
 		UniversalButton popUpButton = MainGame.getUserInterfaceFactory().getButton("Open a popup!", () -> InputPriority.claimPriority(choicePopup));
 		menuButtons.add(popUpButton);
@@ -241,9 +249,13 @@ public class SampleUserInterfaceGame extends MainGame {
 			protected void setUpTable() {
 				UniversalButton popup = MainGame.getUserInterfaceFactory().getButton("Goodbye!", this::hideThis);
 				popup.getView().setSize(180, 100);
-				MainGame.getUserInterfaceFactory().makeActorCentered(popup.getView());
+				UserInterfaceSizer.makeActorCentered(popup.getView());
 				addActor(popup.getView());
-			}};
+			}
+
+			@Override
+			public void resizeUI() {}
+			};
 		InputPriority.claimPriority(innerPopup);
 	}
 
@@ -253,9 +265,13 @@ public class SampleUserInterfaceGame extends MainGame {
 			protected void setUpTable() {
 				regainFocusPopup = MainGame.getUserInterfaceFactory().getButton("You Made It!", this::hideThis);
 				regainFocusPopup.getView().setSize(200, 130);
-				MainGame.getUserInterfaceFactory().makeActorCentered(regainFocusPopup.getView());
+				UserInterfaceSizer.makeActorCentered(regainFocusPopup.getView());
 				addActor(regainFocusPopup.getView());
-			}};
+			}
+
+			@Override
+			public void resizeUI() {}
+			};
 		InputPriority.claimPriority(innerPopup);
 	}
 
@@ -278,7 +294,7 @@ public class SampleUserInterfaceGame extends MainGame {
 		protected void setUpBackground() {
 			this.setBackground(new Image(ColorTools.getColoredTexture(Color.BROWN, 1)).getDrawable());
 			this.setSize(500, 300);
-			MainGame.getUserInterfaceFactory().makeActorCentered(this);
+			UserInterfaceSizer.makeActorCentered(this);
 		}
 
 		@Override protected Alignment getEntryAlignment() {return Alignment.CENTER;}
@@ -306,6 +322,12 @@ public class SampleUserInterfaceGame extends MainGame {
 		@Override
 		protected UniversalButton makeQuitButton() {
 			return MainGame.getUserInterfaceFactory().getQuitGameButton();
+		}
+
+		@Override
+		public void resizeUI() {
+			// TODO Auto-generated method stub
+			
 		}
 
 	}

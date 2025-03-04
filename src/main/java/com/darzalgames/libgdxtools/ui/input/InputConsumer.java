@@ -73,5 +73,10 @@ public interface InputConsumer {
 	public default void releasePriority() {
 		InputPriority.releasePriority(this);
 	}
+
+	/**
+	 * Called every frame, objects should resize their UI in case the window/font have changed size
+	 */
+	public void resizeUI();
 	
 } 

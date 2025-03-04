@@ -7,31 +7,28 @@ import com.darzalgames.libgdxtools.ui.input.popup.TextChoicePopUp;
  * A basic choice popup where the second button is a back button.
  */
 public class ConfirmationMenu extends TextChoicePopUp {
-	
+
 	public static BaseDrawable confirmationBackground;
 
 	public ConfirmationMenu(String messageKey, String confirmButtonTextKey, Runnable confirmButtonRunnable) {
 		this(messageKey, confirmButtonTextKey, "back_message", confirmButtonRunnable);
 	}
-	
+
 	public ConfirmationMenu(String messageKey, String confirmButtonTextKey, String backButtonTextKey, Runnable confirmButtonRunnable) {
 		super(messageKey, confirmButtonTextKey, confirmButtonRunnable, backButtonTextKey, false, true, true);
 	}
 
-	@Override
-	protected void setUpDesiredSize() {
-		desiredWidth = 275;
-		desiredHeight = 100;
-	}
-	
 	public static void setConfirmationBackground(BaseDrawable confirmationBackground) {
 		ConfirmationMenu.confirmationBackground = confirmationBackground;
 	}
 
 	@Override
-	protected void setSizeAndBackground() {
-		setSize(desiredWidth, desiredHeight);
+	protected void setUpDesiredSize() {
+		UserInterfaceSizer.sizeToPercentage(this, 0.4f, 0.3f);
 		background(confirmationBackground);
+		if (this.getActions().isEmpty()) {
+			UserInterfaceSizer.makeActorCentered(this);
+		}
 	}
-	
+
 }

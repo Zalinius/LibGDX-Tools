@@ -5,6 +5,7 @@ import com.darzalgames.darzalcommon.data.ListFactory;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 /**
@@ -21,12 +22,6 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		super(isVertical);
 		this.firstChoiceRunnable = firstChoiceRunnable;
 		this.isSecondButtonBack = isSecondButtonBack;
-	}
-
-	@Override
-	protected void setUpDesiredSize() {
-		desiredWidth = 200;
-		desiredHeight = 106;
 	}
 
 	protected abstract UniversalButton getFirstChoiceButton();
@@ -50,15 +45,11 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	 */
 	protected void setChosenKey(String chosenKey) {}
 
-	protected void setSizeAndBackground() {
-		setSize(desiredWidth, desiredHeight);
-		background(MainGame.getUserInterfaceFactory().getUIBorderedNine());
-	}
-
 	@Override
 	protected void setUpTable() {
-		setSizeAndBackground();
-		MainGame.getUserInterfaceFactory().makeActorCentered(this);
+		setUpDesiredSize();
+		background(MainGame.getUserInterfaceFactory().getUIBorderedNine());
+		UserInterfaceSizer.makeActorCentered(this);
 
 		add(getMessage()).grow();
 		if (addRowAfterMessage) {

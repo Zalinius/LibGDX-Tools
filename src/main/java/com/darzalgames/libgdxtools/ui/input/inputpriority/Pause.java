@@ -21,7 +21,6 @@ public class Pause extends Actor {
 
 		this.pauseMenu = pauseMenu;
 
-		pauseMenu.positionPauseButton();
 		pauseMenu.addPauseButtonToStage(popUpStage);
 	}
 

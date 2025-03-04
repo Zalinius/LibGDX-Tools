@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
@@ -41,7 +42,13 @@ public class UniversalSelectBox extends UniversalButton {
 				menu.getView().setBackground(MainGame.getUserInterfaceFactory().getUIBorderedNine());
 				options.add(menu.getView()).left();
 				options.pack();
-				MainGame.getUserInterfaceFactory().makeActorCentered(options);
+				UserInterfaceSizer.makeActorCentered(options);
+			}
+			@Override
+			protected void setUpDesiredSize() {
+				if (this.getActions().isEmpty()) {
+					UserInterfaceSizer.makeActorCentered(options);
+				}
 			}
 		};
 

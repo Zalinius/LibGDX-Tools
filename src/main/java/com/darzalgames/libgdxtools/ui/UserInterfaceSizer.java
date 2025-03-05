@@ -23,12 +23,27 @@ public class UserInterfaceSizer {
 	}
 
 	/**
-	 * @param actor The actor to resize
+	 * @param actor The SQUARE actor to resize
 	 * @param percent The percentage of the world/stage WIDTH and HEIGHT that this actor should occupy [0-1]
 	 */
-	public static void sizeToPercentage(Actor actor, float percent) {
+	public static void sizeSquareActorToPercentage(Actor actor, float percent) {
 		sizeToPercentage(actor, percent, percent);
 	}
+	
+	/**
+	 * @param actor The actor to resize, maintaining aspect ratio
+	 * @param percent The percentage of the world/stage WIDTH or HEIGHT (minimum) that this actor should occupy [0-1]
+	 */
+	public static void sizeToPercentage(Actor actor, float percent) {
+		float multiplierWidth = getWidthPercentage(percent);
+		float multiplierHeight = getHeightPercentage(percent);
+		if (multiplierWidth <= multiplierHeight) {
+			actor.setSize(multiplierWidth, multiplierWidth * (actor.getHeight()/actor.getWidth()));
+		} else {
+			actor.setSize(multiplierHeight * (actor.getWidth()/actor.getHeight()), multiplierHeight);
+		}
+	}
+	
 	
 	/**
 	 * @return The percentage of the stage's WIDTH [0-1], useful for things like padding

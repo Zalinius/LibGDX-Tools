@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.popup;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.darzalgames.darzalcommon.data.ListFactory;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.maingame.MainGame;
@@ -44,11 +45,15 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	 * @param chosenKey The key that was chosen
 	 */
 	protected void setChosenKey(String chosenKey) {}
+	
+	protected BaseDrawable getBackgroundDrawable() {
+		return MainGame.getUserInterfaceFactory().getUIBorderedNine();
+	}
 
 	@Override
 	protected void setUpTable() {
 		setUpDesiredSize();
-		background(MainGame.getUserInterfaceFactory().getUIBorderedNine());
+		background(getBackgroundDrawable());
 		UserInterfaceSizer.makeActorCentered(this);
 
 		add(getMessage()).grow();

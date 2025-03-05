@@ -121,6 +121,18 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		private void revertMode() {
 			windowResizer.revertMode();
 		}
+		@Override
+		public void gainFocus() {
+			super.gainFocus();
+			this.clearActions();
+		}
+		
+		@Override
+		public void hideThis() {
+			super.hideThis();
+			this.remove();
+		}
+		
 	}
 
 	@Override

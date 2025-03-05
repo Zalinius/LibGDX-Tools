@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
@@ -37,7 +38,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 		super.gainFocus();
 		float startX = this.getX();
 		float startY = this.getY();
-		this.setY(getStage().getHeight());
+		this.setY(UserInterfaceSizer.getCurrentHeight());
 		this.addAction(Actions.moveTo(startX, startY, 0.25f, Interpolation.circle));
 	}
 	
@@ -46,7 +47,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 		releasePriority();
 		this.toFront();
 		this.addAction(Actions.sequence(
-				Actions.moveTo(getX(), getStage().getHeight(), 0.25f, Interpolation.circle),
+				Actions.moveTo(getX(), UserInterfaceSizer.getCurrentHeight(), 0.25f, Interpolation.circle),
 				new RunnableActionBest(super::remove)));
 	}
 	

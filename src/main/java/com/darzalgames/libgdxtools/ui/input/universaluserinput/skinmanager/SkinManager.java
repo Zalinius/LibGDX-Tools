@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
-import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 
 /**
  * A class which holds a LibGDX {@link Skin} and provides convenient named accessors.
@@ -50,7 +49,6 @@ public class SkinManager {
 	public SkinManager(Skin skin) {
 		super();
 		this.skin = skin;
-		setConfirmationMenuBackground();
 	}
 	
 	/**
@@ -127,6 +125,9 @@ public class SkinManager {
 	public BaseDrawable getUINinePatch() {
 		return skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
 	}
+	public BaseDrawable getConfirmationMenuBackground() {
+		return skin.get(CONFIRMATION_MENU_BACKGROUND, NinePatchDrawable.class);
+	}
 	public LabelStyle getDefaultLableStyle() {
 		return getLabelStyle(DEFAULT_LABEL);
 	}
@@ -159,10 +160,6 @@ public class SkinManager {
 	}
 	public TextButtonStyle getSettingsButtonStyle() {
 		return getTextButtonStyle(SETTINGS_BUTTON);
-	}
-	
-	protected void setConfirmationMenuBackground() {
-		ConfirmationMenu.setConfirmationBackground(new NinePatchDrawable(skin.get(CONFIRMATION_MENU_BACKGROUND, NinePatch.class)));
 	}
 
 }

@@ -227,7 +227,7 @@ public class SampleUserInterfaceGame extends MainGame {
 
 			@Override
 			protected void setUpDesiredSize() {
-				UserInterfaceSizer.sizeToPercentage(this, 0.5f);
+				UserInterfaceSizer.sizeSquareActorToPercentage(this, 0.5f);
 			}
 		};
 		UniversalButton popUpButton = MainGame.getUserInterfaceFactory().getButton("Open a popup!", () -> InputPriority.claimPriority(choicePopup));

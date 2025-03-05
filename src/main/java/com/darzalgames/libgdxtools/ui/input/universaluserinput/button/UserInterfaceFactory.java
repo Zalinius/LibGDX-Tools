@@ -176,6 +176,9 @@ public class UserInterfaceFactory {
 	public BaseDrawable getUIBorderedNine() {
 		return skinManager.getUINinePatch();
 	}
+	public BaseDrawable getConfirmationMenuBackground() {
+		return skinManager.getConfirmationMenuBackground();
+	}
 
 	public UniversalSlider getSlider(String sliderLabel, Consumer<Float> consumer) {
 		UniversalButton textButton = getButton(sliderLabel, Runnables.nullRunnable());

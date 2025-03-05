@@ -41,19 +41,16 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 		super();
 		this.cursorTexture = cursorTexture;
 		this.clickedCursorTexture = clickedCursorTexture;
-		if (cursorTexture != null) {
-			setCursorImage(cursorTexture);
-			pack();
-			Gdx.graphics.setSystemCursor(SystemCursor.None);		
-		}
+		Gdx.graphics.setSystemCursor(SystemCursor.None);	
 		setTouchable(Touchable.disabled);
 		this.checkIsWindowed = checkIsWindowed;
 		inputStrategySwitcher.register(this);
 	}
-	
+
 	private void setCursorImage(TextureRegion texture) {
 		setDrawable(new Image(texture).getDrawable());
 		pack();
+		UserInterfaceSizer.sizeToPercentage(this, 0.05f);
 	}
 
 	@Override
@@ -75,10 +72,8 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 		}
 		Vector2 position = getStage().screenToStageCoordinates(new Vector2(x, y));
 		setPosition(position.x, position.y - getHeight());
-		
-		if (cursorTexture != null) {
-			setCursorImage(Gdx.input.isButtonPressed(Buttons.LEFT) ? clickedCursorTexture : cursorTexture);
-		}
+
+		setCursorImage(Gdx.input.isButtonPressed(Buttons.LEFT) ? clickedCursorTexture : cursorTexture);
 	}
 
 	@Override

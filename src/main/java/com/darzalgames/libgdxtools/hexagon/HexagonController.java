@@ -24,8 +24,7 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 		this.inputConsumer = makeInputConsumer.apply(this);
 		this.setActor(inputConsumer.getView());
 		this.setSize(inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight());
-
-		setPositionOnScreen();
+		this.setOrigin(Align.center);
 	}
 
 	@Override
@@ -46,7 +45,6 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 	private void setPositionOnScreen() {
 		Tuple<Float, Float> hexagonPosition =  HexagonMath.getScreenPositionOnStage(hexagon.getQ(), hexagon.getR(),
 				inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight(), UserInterfaceSizer.getCurrentHeight());
-		this.setOrigin(Align.center);
 		this.setPosition(hexagonPosition.e, hexagonPosition.f);
 	}
 
@@ -82,8 +80,7 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 
 	@Override
 	public void resizeUI() {
-		// TODO Auto-generated method stub
-		
+		setPositionOnScreen();
 	}
 
 }

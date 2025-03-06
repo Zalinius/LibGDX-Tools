@@ -100,4 +100,9 @@ public class HexagonControllerMap<E> extends Group {
 		return hexagonMap.getAllHexagons().stream().map(hex -> hexagonMap.getValueAt(hex).f);
 	}
 
+	public void resizeUI() {
+		getAllControllers().forEach(HexagonController::resizeUI);
+		centerSelf();
+	}
+
 }

@@ -41,13 +41,13 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 		super();
 		this.cursorTexture = cursorTexture;
 		this.clickedCursorTexture = clickedCursorTexture;
-		Gdx.graphics.setSystemCursor(SystemCursor.None);	
-		setTouchable(Touchable.disabled);
 		this.checkIsWindowed = checkIsWindowed;
+		setTouchable(Touchable.disabled);
 		inputStrategySwitcher.register(this);
 	}
 
 	private void setCursorImage(TextureRegion texture) {
+		Gdx.graphics.setSystemCursor(SystemCursor.None);
 		setDrawable(new Image(texture).getDrawable());
 		pack();
 		UserInterfaceSizer.sizeToPercentage(this, 0.05f);

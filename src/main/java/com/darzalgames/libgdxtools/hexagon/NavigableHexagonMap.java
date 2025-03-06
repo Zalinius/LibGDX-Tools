@@ -49,15 +49,8 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	@Override
 	public void gainFocus() {
 		selectDefault();
-		getActor().centerSelf();
-		centerSelf();
 	}
-
-	@Override
-	public void regainFocus() {
-		selectDefault();
-	}
-
+	
 	@Override
 	public void focusCurrent() {
 		if (isInputAllowed()) {
@@ -109,8 +102,8 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 
 	@Override
 	public void resizeUI() {
-		// TODO Auto-generated method stub
-		
+		getActor().resizeUI();
+		centerSelf();
 	}
 
 }

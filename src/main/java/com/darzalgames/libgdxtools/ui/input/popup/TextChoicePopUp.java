@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.popup;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -59,8 +60,8 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 
 	@Override
 	protected Table getMessage() {
-		Function<String, Label> labelFunction = isWarning ? MainGame.getUserInterfaceFactory()::getWarningLabel : MainGame.getUserInterfaceFactory()::getLabelWithBackground;
-		Label label = labelFunction.apply(TextSupplier.getLine(messageKey));
+		Function<Supplier<String>, Label> labelFunction = isWarning ? MainGame.getUserInterfaceFactory()::getWarningLabel : MainGame.getUserInterfaceFactory()::getLabelWithBackground;
+		Label label = labelFunction.apply(() -> TextSupplier.getLine(messageKey));
 		label.setAlignment(Alignment.CENTER.getAlignment());
 		Table table = new Table();
 		table.add(label).grow();

@@ -5,17 +5,18 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -53,20 +54,20 @@ public class UserInterfaceFactory {
 		this.quitGameRunnable = Gdx.app::exit;
 	}
 
-	public Label getLabel(final String text) {
-		return getLabel(text, skinManager.getDefaultLableStyle());
+	public UniversalLabel getLabel(final Supplier<String> textSupplier) {
+		return getLabel(textSupplier, skinManager.getDefaultLableStyle());
 	}
 
-	public Label getFlavorTextLabel(final String text) {
-		return getLabel(text, skinManager.getFlavorTextLableStyle());
+	public UniversalLabel getFlavorTextLabel(final Supplier<String> textSupplier) {
+		return getLabel(textSupplier, skinManager.getFlavorTextLableStyle());
 	}
 
-	public Label getWarningLabel(final String text) {
-		return getLabel(text, skinManager.getWarningLableStyle());
+	public UniversalLabel getWarningLabel(final Supplier<String> textSupplier) {
+		return getLabel(textSupplier, skinManager.getWarningLableStyle());
 	}
 
-	public Label getLabelWithBackground(final String text) {
-		return getLabel(text, skinManager.getLabelWithBackgroundStyle());
+	public UniversalLabel getLabelWithBackground(final Supplier<String> textSupplier) {
+		return getLabel(textSupplier, skinManager.getLabelWithBackgroundStyle());
 	}
 
 	/**
@@ -74,32 +75,12 @@ public class UserInterfaceFactory {
 	 * @param textSupplier
 	 * @return
 	 */
-	public Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
-		Label label = new InputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher) {
-			@Override
-			public void act(float delta) {
-				super.act(delta);
-				this.setStyle(this.getStyle());
-				this.invalidateHierarchy();
-				this.layout();
-			}
-		};
-		label.setWrap(true);
-		return label;
+	public UniversalLabel getInputSensitiveLabelWithBackground(Supplier<String> textSupplier) {
+		return new UniversalInputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher);
 	}
 
-	protected Label getLabel(final String text, LabelStyle labelStyle) {
-		Label label = new Label(text, labelStyle) {
-			@Override
-			public void draw(Batch batch, float parentAlpha) {
-				this.setStyle(this.getStyle());
-				this.invalidateHierarchy();
-				this.layout();
-				super.draw(batch, parentAlpha);
-			}
-		};
-		label.setWrap(true);
-		return label;
+	protected UniversalLabel getLabel(final Supplier<String> textSupplier, LabelStyle labelStyle) {
+		return new UniversalLabel(textSupplier, labelStyle);
 	}
 
 	/**

@@ -18,7 +18,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class UniversalSelectBox extends UniversalButton {
 
 	private PopUpMenu options;
-	private Label displayLabel;
+	private UniversalLabel displayLabel;
 	private Supplier<String> defaultEntry;
 	private Consumer<String> action;
 
@@ -54,7 +54,7 @@ public class UniversalSelectBox extends UniversalButton {
 			}
 		};
 
-		displayLabel = MainGame.getUserInterfaceFactory().getLabel("");
+		displayLabel = MainGame.getUserInterfaceFactory().getLabel(() -> "");
 		displayLabel.setWrap(false);
 		textButton.add(displayLabel);
 		this.setButtonRunnable(this::showInnerOptionsPopUpMenu);
@@ -88,7 +88,7 @@ public class UniversalSelectBox extends UniversalButton {
 	@Override
 	public void resizeUI() {
 		super.resizeUI();
-		displayLabel.setText(defaultEntry.get());
+		displayLabel.setTextSupplier(defaultEntry);
 		displayLabel.layout();
 	}
 	

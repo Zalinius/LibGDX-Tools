@@ -7,7 +7,6 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.functional.Runnables;
@@ -20,6 +19,7 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalLabel;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
 
 public class WindowResizerSelectBox extends UniversalSelectBox implements WindowResizerButton {
@@ -81,7 +81,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 	
 	private class WindowRevertCountdownConfirmationMenu extends ConfirmationMenu {
 
-		private Label revertCountdown;
+		private UniversalLabel revertCountdown;
 
 		private WindowRevertCountdownConfirmationMenu() {
 			super("screen_mode_accept", 
@@ -99,15 +99,15 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		protected void setUpTable() {
 			super.setUpTable();
 			IntFunction<String> makeCountdownString = count -> TextSupplier.getLine("screen_mode_revert", count);
-			revertCountdown = MainGame.getUserInterfaceFactory().getFlavorTextLabel(makeCountdownString.apply(10));
+			revertCountdown = MainGame.getUserInterfaceFactory().getFlavorTextLabel(() -> makeCountdownString.apply(10));
 			revertCountdown.setAlignment(Align.center);
 			row();
 			add(revertCountdown).growX();
 
 			InstantRepeatAction repeatAction = new InstantRepeatAction();
-			repeatAction.setTotalCount(10);
+			repeatAction.setTotalCount(11);
 			DelayAction delayAction = new DelayAction(1);
-			delayAction.setAction(new RunnableActionBest(() -> revertCountdown.setText(makeCountdownString.apply(repeatAction.getRemainingCount() -1))));
+			delayAction.setAction(new RunnableActionBest(() -> revertCountdown.setTextSupplier(() -> makeCountdownString.apply(repeatAction.getRemainingCount() -1))));
 			repeatAction.setAction(delayAction);
 
 			SequenceAction sequenceAction = new SequenceAction(repeatAction, new RunnableActionBest(getSecondChoiceRunnable()));

@@ -3,13 +3,11 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public class InputSensitiveLabel extends Label implements InputObserver {
+public class UniversalInputSensitiveLabel extends UniversalLabel implements InputObserver {
 	
-	private final Supplier<String> labelTextSupplier;
 	private final InputStrategySwitcher inputStrategySwitcher;
 
 	/**
@@ -18,16 +16,15 @@ public class InputSensitiveLabel extends Label implements InputObserver {
 	 * @param style
 	 * @param inputStrategySwitcher
 	 */
-	protected InputSensitiveLabel(Supplier<String> labelTextSupplier, LabelStyle style, InputStrategySwitcher inputStrategySwitcher) {
-		super(labelTextSupplier.get(), style);
-		this.labelTextSupplier = labelTextSupplier;
+	protected UniversalInputSensitiveLabel(Supplier<String> labelTextSupplier, LabelStyle style, InputStrategySwitcher inputStrategySwitcher) {
+		super(labelTextSupplier, style);
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		inputStrategySwitcher.register(this);
 	}
 
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-		this.setText(labelTextSupplier.get());
+		this.setText(textSupplier.get());
 	}
 	
 	@Override

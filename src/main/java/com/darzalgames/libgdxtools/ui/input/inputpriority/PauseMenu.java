@@ -173,12 +173,12 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		versionTable.setTouchable(Touchable.disabled);
 		addActor(versionTable);
 		
-		Label authors = MainGame.getUserInterfaceFactory().getFlavorTextLabel(TextSupplier.getLine("authors_label"));
+		Label authors = MainGame.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("authors_label"));
 		authors.setAlignment(Align.topLeft);
 		versionTable.add(authors).grow().top().left().padTop(getPadTop()).padLeft(getPadLeft());
 		versionTable.row();
 		
-		Label versionLabel = MainGame.getUserInterfaceFactory().getFlavorTextLabel(getGameVersion() + platformName);
+		Label versionLabel = MainGame.getUserInterfaceFactory().getFlavorTextLabel(() -> getGameVersion() + platformName);
 		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT.getAlignment());
 		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom()).padRight(getPadRight());
 	}

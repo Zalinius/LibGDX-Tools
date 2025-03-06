@@ -42,6 +42,7 @@ class DarkScreen extends Image {
 	void fadeIn(Actor actorPopup, boolean isTouchable) {
 		clearActions();
 		popupStage.addActor(this);
+		this.setSize(UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight()); // Set full screen size immediately so tests can click it in the same frame
 		int actorIndex = actorPopup.getZIndex();
 		setZIndex(actorIndex);
 		actorPopup.setZIndex(actorIndex+1);

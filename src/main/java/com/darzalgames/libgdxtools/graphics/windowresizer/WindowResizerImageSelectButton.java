@@ -11,7 +11,7 @@ public abstract class WindowResizerImageSelectButton extends UniversalButton imp
 
 	protected WindowResizerImageSelectButton(TextButton button, Image image, Runnable runnable,
 			InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(button, image, runnable, inputStrategySwitcher, soundInteractListener);
+		super(button, () -> "", image, runnable, inputStrategySwitcher, soundInteractListener);
 	}
 
 	@Override

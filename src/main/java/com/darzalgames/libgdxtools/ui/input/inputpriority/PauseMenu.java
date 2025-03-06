@@ -65,7 +65,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	 * @return Make it however you like, a default will be provided otherwise
 	 */
 	protected UniversalButton makeBackButton() {
-		return MainGame.getUserInterfaceFactory().getButton(TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
+		return MainGame.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
 	}
 
 	/**
@@ -234,7 +234,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		}
 
 		public UniversalButton getButton() {
-			return MainGame.getUserInterfaceFactory().getButton(TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this));
+			return MainGame.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this));
 		}
 
 		@Override

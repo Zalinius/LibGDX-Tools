@@ -3,7 +3,7 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
-import java.util.stream.Collectors;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
@@ -32,8 +32,8 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		this.windowResizer = windowResizer;
 	}
 	
-	public WindowResizerSelectBox(TextButton textButton, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(getEntries(), textButton, inputStrategySwitcher, soundInteractListener);
+	public WindowResizerSelectBox(TextButton textButton, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		super(getEntries(), textButton, textSupplier, inputStrategySwitcher, soundInteractListener);
 		
 		this.setAction(selectedNewMode -> {
 			String previousMode = GameInfo.getPreferenceManager().other().getStringPrefValue(WindowResizer.SCREEN_MODE_KEY);
@@ -43,17 +43,22 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		});
 	}
 	
-	private static Collection<String> getEntries() {
+	private static Collection<Supplier<String>> getEntries() {
 		List<ScreenMode> allModes = new ArrayList<>(Arrays.asList(ScreenMode.values()));
 		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
-		return allModes.stream().map(mode -> windowModeOptionTranslator.apply(mode)).collect(Collectors.toList());
+		// I couldn't convince a stream to understand this haha
+		Collection<Supplier<String>> result = new ArrayList<>();
+		for (ScreenMode screenMode : allModes) {
+			result.add(() -> windowModeOptionTranslator.apply(screenMode));
+		}
+		return result;
 	}
 
 	@Override
 	public void setSelected(ScreenMode screenMode) {
-		this.setSelected(windowModeOptionTranslator.apply(screenMode));			
+		this.setSelected(() -> windowModeOptionTranslator.apply(screenMode));			
 	}
 
 	@Override

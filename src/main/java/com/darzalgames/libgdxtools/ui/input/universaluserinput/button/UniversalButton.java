@@ -22,6 +22,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
  */
 public class UniversalButton implements VisibleInputConsumer {
 	private TextButton button;
+	private Supplier<String> textSupplier;
 	private Supplier<Label> labelSupplier;
 	private Supplier<Cell<Label>> cellSupplier;
 	private Runnable buttonRunnable;
@@ -32,16 +33,17 @@ public class UniversalButton implements VisibleInputConsumer {
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Runnable soundInteractListener;
 
-	public UniversalButton(TextButton button, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		this(button, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
+	public UniversalButton(TextButton button, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		this(button, textSupplier, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 	}
-	
-	public UniversalButton(TextButton button, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) { 
-		this(button, null, runnable, inputStrategySwitcher, soundInteractListener);
+
+	public UniversalButton(TextButton button, Supplier<String> textSupplier, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) { 
+		this(button, textSupplier, null, runnable, inputStrategySwitcher, soundInteractListener);
 	}
-	
-	public UniversalButton(TextButton button, Image image, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+
+	public UniversalButton(TextButton button, Supplier<String> textSupplier, Image image, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		this.button = button;
+		this.textSupplier = textSupplier;
 		this.labelSupplier = button::getLabel;
 		this.cellSupplier = button::getLabelCell;
 		this.buttonRunnable = runnable;
@@ -59,12 +61,12 @@ public class UniversalButton implements VisibleInputConsumer {
 
 			button.add(image).padRight(sidePadding);
 			button.add(label);
-			
+
 			button.setWidth(startWidth + image.getWidth() + sidePadding);
 		}
-		
+
 		labelSupplier.get().setTouchable(Touchable.disabled);
-		
+
 
 		button.addListener(new ChangeListener() {
 			@Override
@@ -86,7 +88,7 @@ public class UniversalButton implements VisibleInputConsumer {
 			soundInteractListener.run();
 		}
 	}
-	
+
 	@Override
 	public TextButton getView() {
 		labelSupplier.get().setWrap(wrap);
@@ -126,7 +128,7 @@ public class UniversalButton implements VisibleInputConsumer {
 		else {
 			event.setType(null); // Since the events are pooled I think they can come with a type?! (the type of the last event it was used for?)
 		}
-		
+
 		if (event.getType() != null) {
 			event.setStage(button.getStage());
 			event.setStageX(0);
@@ -165,7 +167,7 @@ public class UniversalButton implements VisibleInputConsumer {
 	public boolean isBlank() {
 		return StringUtils.isBlank(labelSupplier.get().getText().toString()) && image == null;
 	}
-	
+
 	/**
 	 * Useful for trying to navigate to a particular button in a menu based on its text
 	 * (e.g. defaulting to the current setting in a drop-down menu via string matching)
@@ -173,7 +175,7 @@ public class UniversalButton implements VisibleInputConsumer {
 	 * @return Whether or not this button has text that matches the supplied value
 	 */
 	public boolean doesTextMatch(String value) {
-		return labelSupplier.get().getText().toString().equalsIgnoreCase(value);
+		return textSupplier.get().equalsIgnoreCase(value);
 	}
 
 	/**
@@ -201,14 +203,14 @@ public class UniversalButton implements VisibleInputConsumer {
 	public void setWrap(boolean wrap) {
 		this.wrap = wrap;
 	}
-	
+
 	/**
 	 * Update both the button's text and image in one go
-	 * @param newText
+	 * @param textSupplier
 	 * @param image
 	 */
-	public void updateLabels(final String newText, final Image image) {
-		updateText(newText);
+	public void updateLabels(Supplier<String> textSupplier, final Image image) {
+		this.textSupplier = textSupplier;
 		this.image.setDrawable(image.getDrawable());
 	}
 
@@ -247,6 +249,9 @@ public class UniversalButton implements VisibleInputConsumer {
 	public void resizeUI() {
 		button.setStyle(button.getStyle());
 		button.setSize(button.getPrefWidth(), button.getPrefHeight());
+		if (textSupplier != null) {
+			updateText(textSupplier.get());
+		}
 	}
 
 }

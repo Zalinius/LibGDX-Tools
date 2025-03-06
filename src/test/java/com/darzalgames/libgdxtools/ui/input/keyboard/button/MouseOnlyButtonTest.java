@@ -56,7 +56,7 @@ class MouseOnlyButtonTest {
 		TextButtonStyle textButtonStyle =  new TextButtonStyle();
 		textButtonStyle.font = new BitmapFont(new BitmapFontData(), new TextureRegion(), false);
 		TextButton textButton = new TextButton("", textButtonStyle);
-		button = new MouseOnlyButton(textButton, Runnables.nullRunnable(), inputStrategySwitcher, Runnables.nullRunnable())  {
+		button = new MouseOnlyButton(textButton, () -> "", Runnables.nullRunnable(), inputStrategySwitcher, Runnables.nullRunnable())  {
 			@Override
 			public boolean shouldBeUnregistered() {
 				return false;

@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -18,12 +19,12 @@ public class UniversalSlider extends UniversalButton {
 	private final Slider slider;
 	private float previousValue;
 
-	public UniversalSlider(TextButton textButton, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		this(textButton, null, sliderStyle, consumer, inputStrategySwitcher, soundInteractListener);
+	public UniversalSlider(TextButton textButton, Supplier<String> textSupplier, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		this(textButton, textSupplier, null, sliderStyle, consumer, inputStrategySwitcher, soundInteractListener);
 	}
 
-	public UniversalSlider(TextButton textButton, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(textButton, image, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
+	public UniversalSlider(TextButton textButton, Supplier<String> textSupplier, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		super(textButton, textSupplier, image, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle) {
 			@Override
 			public float getPrefWidth() {

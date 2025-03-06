@@ -156,30 +156,30 @@ public class SampleUserInterfaceGame extends MainGame {
 	protected List<UniversalButton> getMenuEntries() {
 		List<UniversalButton> menuButtons = new ArrayList<>();
 
-		UniversalSlider basicSlider = MainGame.getUserInterfaceFactory().getSlider("Slider with a label", newValue -> {});
+		UniversalSlider basicSlider = MainGame.getUserInterfaceFactory().getSlider(() -> "Slider with a label", newValue -> {});
 		basicSlider.setSliderPosition(0.5f, false);
 		menuButtons.add(basicSlider);
 
 		UniversalCheckbox focusMute = MainGame.getUserInterfaceFactory().getCheckbox(
-				"I am NOT checked!",
-				"I am checked!",
+				() -> "I am NOT checked!",
+				() -> "I am checked!",
 				isChecked -> {});
 		focusMute.initializeAsChecked(true);
 		menuButtons.add(focusMute);
 
 		String sliderInfo = "The below slider is at ";
 		UniversalButton sliderInfoLabel = MainGame.getUserInterfaceFactory().getListableLabel(sliderInfo + "0.5");
-		UniversalSlider funSlider = MainGame.getUserInterfaceFactory().getSlider("", newValue -> sliderInfoLabel.updateText(sliderInfo + String.format("%.1f", newValue)));
+		UniversalSlider funSlider = MainGame.getUserInterfaceFactory().getSlider(() -> "", newValue -> sliderInfoLabel.updateText(sliderInfo + String.format("%.1f", newValue)));
 		funSlider.setSliderPosition(0.5f, false);
 		menuButtons.add(sliderInfoLabel);
 		menuButtons.add(funSlider);
 
 		String logOrigin = "LibGDXTools Test Game";
-		menuButtons.add(MainGame.getUserInterfaceFactory().getButton("Text button!", () -> Gdx.app.log(logOrigin, "You pressed the text button")));
+		menuButtons.add(MainGame.getUserInterfaceFactory().getButton(() -> "Text button!", () -> Gdx.app.log(logOrigin, "You pressed the text button")));
 
 		menuButtons.add(MainGame.getUserInterfaceFactory().getButton(new Image(ColorTools.getColoredTexture(Color.GOLD, 50, 12)), () -> Gdx.app.log(logOrigin, "You pressed the image button")));
 
-		menuButtons.add(MainGame.getUserInterfaceFactory().getButton("Image Text button!", new Image(ColorTools.getColoredTexture(Color.CHARTREUSE, 50, 12)), 
+		menuButtons.add(MainGame.getUserInterfaceFactory().getButton(() -> "Image Text button!", new Image(ColorTools.getColoredTexture(Color.CHARTREUSE, 50, 12)), 
 				() -> Gdx.app.log(logOrigin, "You pressed the image text button")));
 
 		String option1 = TextSupplier.getLine("option 1");
@@ -187,8 +187,8 @@ public class SampleUserInterfaceGame extends MainGame {
 		Supplier<String> exampleSelectBoxLabelSupplier = () -> (TextSupplier.getLine("An option select box")); 
 		Consumer<String> choiceResponder = selectedValue -> {};
 		UniversalSelectBox exampleSelectBox = MainGame.getUserInterfaceFactory().getSelectBox( 
-				exampleSelectBoxLabelSupplier.get(),
-				List.of(option1, option2),
+				exampleSelectBoxLabelSupplier,
+				List.of(() -> option1, () -> option2),
 				choiceResponder
 				);
 		menuButtons.add(exampleSelectBox);
@@ -207,12 +207,12 @@ public class SampleUserInterfaceGame extends MainGame {
 
 			@Override
 			protected UniversalButton getFirstChoiceButton() {
-				return MainGame.getUserInterfaceFactory().getButton("Click to go deeper!", SampleUserInterfaceGame.this::showInnerPopUp);
+				return MainGame.getUserInterfaceFactory().getButton(() -> "Click to go deeper!", SampleUserInterfaceGame.this::showInnerPopUp);
 			}
 			
 			@Override
 			protected UniversalButton getSecondChoiceButton() {
-				return MainGame.getUserInterfaceFactory().getButton("Goodbye!", this::hideThis);
+				return MainGame.getUserInterfaceFactory().getButton(() -> "Goodbye!", this::hideThis);
 			}
 
 			@Override
@@ -230,7 +230,7 @@ public class SampleUserInterfaceGame extends MainGame {
 				UserInterfaceSizer.sizeSquareActorToPercentage(this, 0.25f);
 			}
 		};
-		UniversalButton popUpButton = MainGame.getUserInterfaceFactory().getButton("Open a popup!", () -> InputPriority.claimPriority(choicePopup));
+		UniversalButton popUpButton = MainGame.getUserInterfaceFactory().getButton(() -> "Open a popup!", () -> InputPriority.claimPriority(choicePopup));
 		menuButtons.add(popUpButton);
 		
 		
@@ -247,7 +247,7 @@ public class SampleUserInterfaceGame extends MainGame {
 		SimplePopUp innerPopup = new SimplePopUp() {
 			@Override
 			protected void setUpTable() {
-				UniversalButton popup = MainGame.getUserInterfaceFactory().getButton("Goodbye!", this::hideThis);
+				UniversalButton popup = MainGame.getUserInterfaceFactory().getButton(() -> "Goodbye!", this::hideThis);
 				popup.getView().setSize(180, 100);
 				UserInterfaceSizer.makeActorCentered(popup.getView());
 				addActor(popup.getView());
@@ -263,7 +263,7 @@ public class SampleUserInterfaceGame extends MainGame {
 		SimplePopUp innerPopup = new SimplePopUp() {
 			@Override
 			protected void setUpTable() {
-				regainFocusPopup = MainGame.getUserInterfaceFactory().getButton("You Made It!", this::hideThis);
+				regainFocusPopup = MainGame.getUserInterfaceFactory().getButton(() -> "You Made It!", this::hideThis);
 				regainFocusPopup.getView().setSize(200, 130);
 				UserInterfaceSizer.makeActorCentered(regainFocusPopup.getView());
 				addActor(regainFocusPopup.getView());
@@ -314,9 +314,9 @@ public class SampleUserInterfaceGame extends MainGame {
 			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", Runnables.nullRunnable());
 		}
 
-		@Override protected UniversalButton makeReportBugButton() {return MainGame.getUserInterfaceFactory().getButton("One could report a bug here", Runnables.nullRunnable());}
+		@Override protected UniversalButton makeReportBugButton() {return MainGame.getUserInterfaceFactory().getButton(() -> "One could report a bug here", Runnables.nullRunnable());}
 		@Override protected UniversalButton makeControlsButton() {
-			return MainGame.getUserInterfaceFactory().getButton("This is where one could theoretically view controls", () -> InputPriority.claimPriority(makeControlsPopUp()));
+			return MainGame.getUserInterfaceFactory().getButton(() -> "This is where one could theoretically view controls", () -> InputPriority.claimPriority(makeControlsPopUp()));
 		}
 
 		@Override

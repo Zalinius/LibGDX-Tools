@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -13,14 +14,15 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class UniversalCheckbox extends UniversalButton {
 	
 	private final CheckBox box;
-	private final String uncheckedLabel;
-	private final String checkedLabel;
+	private final Supplier<String> uncheckedLabel;
+	private final Supplier<String> checkedLabel;
 	
-	public UniversalCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(textButton, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
+	public UniversalCheckbox(TextButton textButton, Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		super(textButton, () -> "", Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		this.uncheckedLabel = uncheckedLabel;
 		this.checkedLabel = checkedLabel;
-		box = new CheckBox(uncheckedLabel.length() > checkedLabel.length() ? uncheckedLabel : checkedLabel, style) {
+		// TODO what the heck is this length check?!
+		box = new CheckBox(uncheckedLabel.get().length() > checkedLabel.get().length() ? uncheckedLabel.get() : checkedLabel.get(), style) {
 			@Override
 			public void act(float delta) {
 				super.act(delta);
@@ -62,7 +64,13 @@ public class UniversalCheckbox extends UniversalButton {
 		box.setProgrammaticChangeEvents(false);
 		box.setChecked(shouldBeChecked);
 		box.setProgrammaticChangeEvents(false);
-		box.setText(box.isChecked() ? checkedLabel : uncheckedLabel);
+		box.setText(box.isChecked() ? checkedLabel.get() : uncheckedLabel.get());
+	}
+	
+	@Override
+	public void resizeUI() {
+		super.resizeUI();
+		box.setText(box.isChecked() ? checkedLabel.get() : uncheckedLabel.get());
 	}
 
 }

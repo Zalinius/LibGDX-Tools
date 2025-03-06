@@ -57,7 +57,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 	}
 
 	@Override
-	public void setSelected(ScreenMode screenMode) {
+	public void setSelectedScreenMode(ScreenMode screenMode) {
 		this.setSelected(() -> windowModeOptionTranslator.apply(screenMode));			
 	}
 
@@ -88,6 +88,12 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 					"accept_control",
 					"revert_message",
 					Runnables.nullRunnable());
+		}
+		
+		@Override
+		protected boolean slidesInAndOut() {
+			// Since the window is resized as this popup comes/goes, it's tricky to center its animation so we don't do it
+			return false;
 		}
 		
 		@Override
@@ -125,17 +131,6 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 
 		private void revertMode() {
 			windowResizer.revertMode();
-		}
-		@Override
-		public void gainFocus() {
-			super.gainFocus();
-			this.clearActions();
-		}
-		
-		@Override
-		public void hideThis() {
-			super.hideThis();
-			this.remove();
 		}
 		
 	}

@@ -40,10 +40,11 @@ public abstract class TextSupplier {
 		List<String> names = new ArrayList<>();
 		names.addAll(namesUnsorted);
 		Collections.sort(names);
-		List<Supplier<String>> allNameSupplier = new ArrayList<>();
-		for (String name : names) {
-			allNameSupplier.add(() -> name);
-		}
+		
+		List<Supplier<String>> allNameSupplier = names.stream().map(name -> {
+			Supplier<String> supplier = () -> name;
+			return supplier;
+		}).collect(Collectors.toList());
 		return allNameSupplier;
 	}
 	/**

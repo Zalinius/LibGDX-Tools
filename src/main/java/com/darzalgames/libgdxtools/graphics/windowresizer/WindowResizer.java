@@ -51,7 +51,7 @@ public abstract class WindowResizer {
 	public UniversalButton getModeSelectBox() {
 		UniversalButton button = windowResizerButton.getButton();
 		if (currentScreenMode != null) {
-			windowResizerButton.setSelected(currentScreenMode);			
+			windowResizerButton.setSelectedScreenMode(currentScreenMode);			
 		}
 		return button;
 	}
@@ -91,7 +91,7 @@ public abstract class WindowResizer {
 		}
 		offerToRevert = offerToRevert && previousScreenMode != currentScreenMode; 
 		inputStrategySwitcher.revertToPreviousStrategy();
-		windowResizerButton.setSelected(currentScreenMode);
+		windowResizerButton.setSelectedScreenMode(currentScreenMode);
 		if (offerToRevert) {
 			InputPriority.claimPriority(windowResizerButton.getRevertMenu());
 		}

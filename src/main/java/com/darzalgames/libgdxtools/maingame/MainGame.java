@@ -143,7 +143,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		inputSetup.getInputPriorityStack().resizeStackUI();
 
 		if (inputSetup.getPause().isPaused()) {
-			// Lets the game UI behind the options(resize) menu update the UI sizing
+			// Lets the game UI behind the options menu update the UI sizing
 			multipleStage.stage.act(0);
 		}
 	}

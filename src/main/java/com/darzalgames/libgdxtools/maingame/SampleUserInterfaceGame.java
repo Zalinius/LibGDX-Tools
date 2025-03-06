@@ -94,8 +94,6 @@ public class SampleUserInterfaceGame extends MainGame {
 			@Override
 			protected void setUpTable() {
 				defaults().align(Align.bottom);
-				// TODO make functions for this, e.g. UserInterfaceSizer.getCurrentWidth()
-				setBounds(0, 0, UserInterfaceSizer.getWidthPercentage(1), UserInterfaceSizer.getHeightPercentage(1) - 25f);
 
 				menu.setSpacing(1);
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
@@ -103,7 +101,9 @@ public class SampleUserInterfaceGame extends MainGame {
 			}
 
 			@Override
-			public void resizeUI() {}
+			public void resizeUI() {
+				setBounds(0, 0, UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight() - 25f);
+			}
 		}, inputSetup.getInputPriorityStack()));
 	}
 

@@ -67,7 +67,7 @@ public class UserInterfaceSizer {
 	}
 	
 	/**
-	 * @return The current WITH of the game screen. Note: this can change at any moment!
+	 * @return The current WIDTH of the game screen. Note: this can change at any moment!
 	 */
 	public static float getCurrentWidth() {
 		return getWidthPercentage(1);

@@ -18,7 +18,6 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 
 /**
@@ -84,7 +83,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 	/**
 	 * NOTE: Setting the position here is important, otherwise the pause menu will not open!<p>
-	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceSizer.makeActorCentered(this)} 
+	 * e.g. call {@link UserInterfaceSizer#makeActorCentered(Actor) UserInterfaceSizer.makeActorCentered(this)} 
 	 */
 	protected void setUpBackground() {
 		this.setBackground(MainGame.getUserInterfaceFactory().getUIBorderedNine());

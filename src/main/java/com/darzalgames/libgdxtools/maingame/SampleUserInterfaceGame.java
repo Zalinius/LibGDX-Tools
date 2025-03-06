@@ -168,7 +168,7 @@ public class SampleUserInterfaceGame extends MainGame {
 		menuButtons.add(focusMute);
 
 		String sliderInfo = "The below slider is at ";
-		UniversalButton sliderInfoLabel = MainGame.getUserInterfaceFactory().getListableLabel(sliderInfo + "0.5");
+		UniversalButton sliderInfoLabel = MainGame.getUserInterfaceFactory().getListableLabel(() -> sliderInfo + "0.5");
 		UniversalSlider funSlider = MainGame.getUserInterfaceFactory().getSlider(() -> "", newValue -> sliderInfoLabel.updateText(sliderInfo + String.format("%.1f", newValue)));
 		funSlider.setSliderPosition(0.5f, false);
 		menuButtons.add(sliderInfoLabel);

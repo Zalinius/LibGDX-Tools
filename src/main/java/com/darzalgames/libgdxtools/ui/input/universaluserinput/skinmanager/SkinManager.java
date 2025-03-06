@@ -61,11 +61,11 @@ public class SkinManager {
 		
 		NinePatchDrawable darkGrayNinePatch = new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.DARK_GRAY, size), 1, 1, 1, 1));
 		skin.add(UI_BORDERED_NINE, darkGrayNinePatch);
-		skin.add(CONFIRMATION_MENU_BACKGROUND, new NinePatch(ColorTools.getColoredTexture(Color.PINK, size), 1, 1, 1, 1));
+		skin.add(CONFIRMATION_MENU_BACKGROUND, new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.PINK, size), 1, 1, 1, 1)));
 
 		BitmapFont defaultFont = new BitmapFont();
 		skin.add("default", defaultFont);
-		
+
 		skin.add(DEFAULT_LABEL, new LabelStyle(defaultFont, Color.BLACK));
 		skin.add(FLAVOR_TEXT_LABEL, new LabelStyle(defaultFont, Color.CHARTREUSE));
 		skin.add(WARNING_LABEL, new LabelStyle(defaultFont, Color.FIREBRICK));

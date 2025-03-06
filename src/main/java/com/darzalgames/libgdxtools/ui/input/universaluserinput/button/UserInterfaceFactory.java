@@ -85,14 +85,14 @@ public class UserInterfaceFactory {
 
 	/**
 	 * Makes a label which can be listed among other buttons, but isn't interactable
-	 * @param textKey
+	 * @param textSupplier
 	 * @return
 	 */
-	public UniversalButton getListableLabel(String textKey) {
+	public UniversalButton getListableLabel(Supplier<String> textSupplier) {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
-		TextButton textButton = makeLibGDXTextButton(TextSupplier.getLine(textKey), skinManager.getSneakyLableButtonStyle());
-		textButton.setName(TextSupplier.getLine(textKey));
-		UniversalButton listableButton = new UniversalButton(textButton, null, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
+		TextButton textButton = makeLibGDXTextButton(textSupplier.get(), skinManager.getSneakyLableButtonStyle());
+		textButton.setName(textSupplier.get());
+		UniversalButton listableButton = new UniversalButton(textButton, textSupplier, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		listableButton.setDisabled(true);
 		return listableButton;
 	}
@@ -103,7 +103,7 @@ public class UserInterfaceFactory {
 	 * @return
 	 */
 	public UniversalButton getSpacer() {
-		UniversalButton spacer = getListableLabel("");
+		UniversalButton spacer = getListableLabel(() -> "");
 		spacer.getView().setName("spacer");
 		return spacer;
 	}

@@ -249,9 +249,7 @@ public class UniversalButton implements VisibleInputConsumer {
 	public void resizeUI() {
 		button.setStyle(button.getStyle());
 		button.setSize(button.getPrefWidth(), button.getPrefHeight());
-		if (textSupplier != null) {
-			updateText(textSupplier.get());
-		}
+		updateText(textSupplier.get());
 	}
 
 }

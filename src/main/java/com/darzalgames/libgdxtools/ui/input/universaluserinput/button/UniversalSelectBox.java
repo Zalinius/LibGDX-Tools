@@ -89,6 +89,8 @@ public class UniversalSelectBox extends UniversalButton {
 	public void resizeUI() {
 		super.resizeUI();
 		displayLabel.setTextSupplier(defaultEntry);
+		TextButton thisButton = this.getView();
+		displayLabel.setColor(thisButton.getClickListener().isOver() ? thisButton.getStyle().overFontColor : thisButton.getStyle().fontColor);
 		displayLabel.layout();
 	}
 	

@@ -10,7 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
@@ -28,7 +30,21 @@ public class UniversalSlider extends UniversalButton {
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle) {
 			@Override
 			public float getPrefWidth() {
-				return Math.max(super.getPrefWidth(), this.getBackgroundDrawable().getMinWidth());
+				return UserInterfaceSizer.getWidthPercentage(0.2f);
+			}
+
+			@Override
+			public float getPrefHeight() {
+				return UserInterfaceSizer.getHeightPercentage(0.05f);
+			}
+
+			@Override
+			protected Drawable getKnobDrawable() {
+				Drawable k = super.getKnobDrawable();
+				float min = UserInterfaceSizer.getMinimumPercentage(0.075f);
+				k.setMinWidth(min); // Assumes square knob
+				k.setMinHeight(min);
+				return k;
 			}
 		};
 		slider.addListener(new ChangeListener() {
@@ -52,6 +68,7 @@ public class UniversalSlider extends UniversalButton {
 			}
 		});
 	}
+
 	@Override
 	public void setFocused(boolean isFocused) {
 		super.setFocused(isFocused);
@@ -61,7 +78,7 @@ public class UniversalSlider extends UniversalButton {
 		} else {
 			inputListener.exit(null, 0, 0, -1, slider);
 		}
-		
+
 	}
 	public void setSliderStyle(SliderStyle sliderStyle) {
 		slider.setStyle(sliderStyle);

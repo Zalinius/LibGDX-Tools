@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class UniversalCheckbox extends UniversalButton {
@@ -22,16 +24,25 @@ public class UniversalCheckbox extends UniversalButton {
 		super(textButton, Suppliers.emptyString(), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		this.uncheckedLabel = uncheckedLabel;
 		this.checkedLabel = checkedLabel;
-		// TODO what the heck is this length check?!
-		box = new CheckBox(uncheckedLabel.get().length() > checkedLabel.get().length() ? uncheckedLabel.get() : checkedLabel.get(), style) {
+		
+		// YOU MUST SET THE MIN WIDTH & HEIGHT OF THIS DRAWABLE FOR RESIZING TO WORK
+		float originalWidth = style.checkboxOff.getMinWidth();
+		float originalHeight = style.checkboxOff.getMinHeight();
+		
+		// It doesn't matter which label we initialize with, as the button resizes every frame based on the contents
+		box = new CheckBox(uncheckedLabel.get(), style) {
 			@Override
-			public void act(float delta) {
-				super.act(delta);
+			public void draw(Batch batch, float parentAlpha) {
 				this.setStyle(this.getStyle());
-				setSize(getPrefWidth(), getPrefHeight());
+				float minimum = 0.05f;
+				UserInterfaceSizer.scaleToMinimumPercentage(getStyle().checkboxOn, minimum, originalWidth, originalHeight);
+				UserInterfaceSizer.scaleToMinimumPercentage(getStyle().checkboxOff, minimum, originalWidth, originalHeight);
+				UserInterfaceSizer.scaleToMinimumPercentage(getStyle().checkboxOnOver, minimum, originalWidth, originalHeight);
+				UserInterfaceSizer.scaleToMinimumPercentage(getStyle().checkboxOver, minimum, originalWidth, originalHeight);
+				super.draw(batch, parentAlpha);
 			}
 		};
-		box.getImageCell().padRight(3);
+		box.getImageCell().padRight(UserInterfaceSizer.getWidthPercentage(0.01f));
 
 		textButton.clearChildren();
 		textButton.setWidth(textButton.getWidth() + box.getPrefWidth());

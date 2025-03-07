@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public class UserInterfaceSizer {
 	
@@ -42,6 +43,21 @@ public class UserInterfaceSizer {
 		} else {
 			actor.setSize(multiplierHeight * (actor.getWidth()/actor.getHeight()), multiplierHeight);
 		}
+	}	
+	/**
+	 * @param drawable The drawable to set minimum width and height, maintaining aspect ratio, typically an image
+	 * @param percent The percentage of the world/stage WIDTH or HEIGHT (minimum) that this actor should occupy [0-1]
+	 */
+	public static void scaleToMinimumPercentage(Drawable drawable, float percent, float originalWidth, float originalHeight) {
+		float multiplierWidth = getWidthPercentage(percent);
+		float multiplierHeight = getHeightPercentage(percent);
+		if (multiplierWidth <= multiplierHeight) {
+			drawable.setMinWidth(multiplierWidth);
+			drawable.setMinHeight(multiplierWidth * (originalHeight/originalWidth));
+		} else {
+			drawable.setMinWidth(multiplierHeight * (originalWidth/originalHeight));
+			drawable.setMinHeight(multiplierHeight);
+		}
 	}
 	
 	
@@ -57,6 +73,12 @@ public class UserInterfaceSizer {
 	 */
 	public static float getHeightPercentage(float percentage) {
 		return stage.getViewport().getWorldHeight()*percentage;
+	}	
+	/**
+	 * @return The percentage of the stage's HEIGHT or WIDTH [0-1], whatever is smaller
+	 */
+	public static float getMinimumPercentage(float percentage) {
+		return Math.min(getHeightPercentage(percentage), getWidthPercentage(percentage));
 	}
 	
 	/**

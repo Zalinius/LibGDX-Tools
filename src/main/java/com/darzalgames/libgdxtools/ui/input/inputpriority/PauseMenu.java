@@ -193,9 +193,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	private void positionPauseButton() {
 		float padding = UserInterfaceSizer.getHeightPercentage(0.01f);
 		pauseButton.getView().setPosition(padding, UserInterfaceSizer.getCurrentHeight() - pauseButton.getView().getHeight() - padding);
-
-		float size = Math.min(UserInterfaceSizer.getWidthPercentage(0.08f), UserInterfaceSizer.getHeightPercentage(0.08f));
-		pauseButton.getView().setSize(size, size);
+		UserInterfaceSizer.scaleToMinimumPercentage(pauseButton.getView(), 0.08f);
 	}
 
 	protected void showPauseButton(boolean show) {

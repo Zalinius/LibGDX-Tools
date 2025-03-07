@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
@@ -48,12 +50,8 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
-		// I couldn't convince a stream to understand this haha
-		Collection<Supplier<String>> result = new ArrayList<>();
-		for (ScreenMode screenMode : allModes) {
-			result.add(() -> windowModeOptionTranslator.apply(screenMode));
-		}
-		return result;
+		Stream<Supplier<String>> result = allModes.stream().map(mode -> (() -> windowModeOptionTranslator.apply(mode)));
+		return result.collect(Collectors.toList());
 	}
 
 	@Override

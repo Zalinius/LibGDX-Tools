@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
@@ -41,11 +42,8 @@ public abstract class TextSupplier {
 		names.addAll(namesUnsorted);
 		Collections.sort(names);
 		
-		List<Supplier<String>> allNameSupplier = names.stream().map(name -> {
-			Supplier<String> supplier = () -> name;
-			return supplier;
-		}).collect(Collectors.toList());
-		return allNameSupplier;
+		Stream<Supplier<String>> allNameSupplier = names.stream().map(name -> (() -> name));
+		return allNameSupplier.collect(Collectors.toList());
 	}
 	/**
 	 * @return The current language's display name, in the current locale

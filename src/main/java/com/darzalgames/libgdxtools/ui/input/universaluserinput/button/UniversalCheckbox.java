@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class UniversalCheckbox extends UniversalButton {
@@ -18,7 +19,7 @@ public class UniversalCheckbox extends UniversalButton {
 	private final Supplier<String> checkedLabel;
 	
 	public UniversalCheckbox(TextButton textButton, Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(textButton, () -> "", Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
+		super(textButton, Suppliers.emptyString(), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		this.uncheckedLabel = uncheckedLabel;
 		this.checkedLabel = checkedLabel;
 		// TODO what the heck is this length check?!

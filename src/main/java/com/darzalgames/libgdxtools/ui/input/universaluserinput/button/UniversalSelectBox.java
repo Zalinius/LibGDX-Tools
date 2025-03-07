@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
@@ -54,7 +55,7 @@ public class UniversalSelectBox extends UniversalButton {
 			}
 		};
 
-		displayLabel = MainGame.getUserInterfaceFactory().getLabel(() -> "");
+		displayLabel = MainGame.getUserInterfaceFactory().getLabel(Suppliers.emptyString());
 		displayLabel.setWrap(false);
 		textButton.add(displayLabel);
 		this.setButtonRunnable(this::showInnerOptionsPopUpMenu);

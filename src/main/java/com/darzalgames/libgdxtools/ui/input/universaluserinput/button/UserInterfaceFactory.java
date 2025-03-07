@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
@@ -103,7 +104,7 @@ public class UserInterfaceFactory {
 	 * @return
 	 */
 	public UniversalButton getSpacer() {
-		UniversalButton spacer = getListableLabel(() -> "");
+		UniversalButton spacer = getListableLabel(Suppliers.emptyString());
 		spacer.getView().setName("spacer");
 		return spacer;
 	}
@@ -118,7 +119,7 @@ public class UserInterfaceFactory {
 	}
 
 	public UniversalButton getButton(final Image image, final Runnable runnable) {
-		return makeButton(() -> "", image, runnable);
+		return makeButton(Suppliers.emptyString(), image, runnable);
 	}
 
 	public UniversalButton getButton(Supplier<String> textKey, Image image, final Runnable runnable) {
@@ -167,14 +168,14 @@ public class UserInterfaceFactory {
 	}
 
 	public UniversalCheckbox getCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer) {
-		UniversalButton textButton = getButton(() -> "", Runnables.nullRunnable());
+		UniversalButton textButton = getButton(Suppliers.emptyString(), Runnables.nullRunnable());
 		return new UniversalCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategySwitcher, soundInteractListener);
 	}
 
 	public UniversalButton getSettingsButton(Consumer<Boolean> togglePauseScreenVisibility) {
 		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()){
 			@Override public String toString() { return "pause button"; }}; 
-			return new MouseOnlyButton(textButton, () -> "",
+			return new MouseOnlyButton(textButton, Suppliers.emptyString(),
 					() -> togglePauseScreenVisibility.accept(!isPaused.get()),
 					inputStrategySwitcher, soundInteractListener);
 	}

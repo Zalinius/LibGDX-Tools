@@ -3,6 +3,8 @@ package com.darzalgames.libgdxtools.errorhandling;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -23,26 +25,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
-import com.darzalgames.darzalcommon.functional.Do;
-import com.darzalgames.darzalcommon.functional.Runnables;
-
 public class DesktopCrashPopup extends JFrame {
 	
 	public static void main(String[] args) {
 		JFrame.setDefaultLookAndFeelDecorated(false);
-		CrashReport crashReport = new CrashReport("Test Game", "1.0.1", "linux", Instant.now(), UUID.randomUUID(), CrashHandler.getStackTraceString(new RuntimeException("Test Exception lol")));
-		DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, ()-> DesktopCrashHandler.reportCrashToDarBot5000(crashReport.getGameName(), "file", crashReport.toJson()));
+		CrashReport crashReport = new CrashReport("Test Game", "1.0.1", "linux", Instant.now(), UUID.randomUUID(), CrashHandler.getStackTraceArray(new RuntimeException("Test Exception lol")));
+		DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, ()-> DesktopCrashHandler.reportCrashToDarBot5000(crashReport.getGameName(), "file.err.json", crashReport.toJson()));
 		crashPopup.setVisible(true);
 	}
 	
 	public static final double PADDING_TO_HEIGHT_RATIO = 0.025;
 	public static final double FONT_TO_HEIGHT_RATIO = 0.015;
-	public static final int BASE_HEIGHT = 800; // in pixels
+	public static final double SCREEN_TO_HEIGHT_RATIO = 0.75;
 	
 	public DesktopCrashPopup(CrashReport crashReport, Runnable sendErrorReport) {
-		
 		super(crashReport.getGameName() + " - crash reporting");
-        setSize(BASE_HEIGHT, BASE_HEIGHT);
+		int initialWindowHeight = getInitialWindowHeight();
+        setSize(initialWindowHeight, initialWindowHeight);
         setLocationRelativeTo(null);
         setResizable(true);
         BorderLayout borderLayout = new BorderLayout(getSmallPadding(), getSmallPadding());
@@ -57,7 +56,7 @@ public class DesktopCrashPopup extends JFrame {
         BoxLayout boxLayout = new BoxLayout(informationPanel, BoxLayout.Y_AXIS);
         informationPanel.setLayout(boxLayout);
         
-        JLabel situationLabel = makeLabel("Unfortunately the game has crashed :(");
+        JLabel situationLabel = makeLabel("Unfortunately " + crashReport.getGameName() + " has crashed :(");
         situationLabel.setFont(getRegularFont());
         informationPanel.add(situationLabel);
         JLabel crashReportFileLabel = makeLabel("The following report was saved to: " + reportFileLocation);
@@ -93,17 +92,20 @@ public class DesktopCrashPopup extends JFrame {
         buttonPanel.setLayout(new GridLayout(1, 3, getSmallPadding(), 0));
 
         JButton buttonSendReport = new JButton("Send report to DarZal Games");
+        buttonSendReport.setFont(getRegularFont());
         buttonSendReport.setBackground(Color.ORANGE);
 		Runnable sendcallbackRunnable = () -> {
 			buttonSendReport.setEnabled(false);
 			buttonSendReport.setText("Sending . . .");
-			sendErrorReport.run();				
-			buttonSendReport.setText("SENT!");
+			sendErrorReport.run();
+			buttonSendReport.setText("SENT!  thanks c:");
+			buttonSendReport.setBackground(Color.GREEN);
 		};
 		buttonSendReport.addActionListener(new SingleUseThreadedAction(sendcallbackRunnable));
 
 		
 		JButton buttonCopy = new JButton("Copy crash report");
+		buttonCopy.setFont(getRegularFont());
 		buttonCopy.addActionListener(e -> {
 			copyTextToClipboard(crashReport.toString());
 			buttonCopy.setText("Copied!");
@@ -111,6 +113,7 @@ public class DesktopCrashPopup extends JFrame {
 
 		
         JButton buttonClose = new JButton("Exit");
+        buttonClose.setFont(getRegularFont());
         buttonClose.addActionListener(e -> System.exit(1));
         
         buttonPanel.add(buttonSendReport);
@@ -168,11 +171,10 @@ public class DesktopCrashPopup extends JFrame {
 		jLabel.setFont(getRegularFont());
 		return jLabel;
 	}
-
-	private JLabel makeLabel(String text, int alignment) {
-		JLabel jLabel = new JLabel(text, alignment);
-		jLabel.setFont(getRegularFont());
-		return jLabel;
+	
+	private int getInitialWindowHeight() {
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		return (int) (SCREEN_TO_HEIGHT_RATIO * gd.getDisplayMode().getHeight());
 	}
 
 }

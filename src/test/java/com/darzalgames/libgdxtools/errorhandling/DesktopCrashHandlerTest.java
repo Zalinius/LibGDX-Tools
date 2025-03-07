@@ -1,8 +1,6 @@
 package com.darzalgames.libgdxtools.errorhandling;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.Supplier;
 
@@ -25,6 +23,18 @@ public class DesktopCrashHandlerTest {
 		Supplier<String> supplier = () -> "testString";
 
 		assertEquals("testString", CrashHandler.tryGetString(supplier));
+	}
+	
+	@Test
+	void getStackTraceArray() throws Exception {
+		RuntimeException exception = new RuntimeException("Test Exception");
+
+		String[] stackTraceArray = CrashHandler.getStackTraceArray(exception);
+		
+		assertEquals(exception.getStackTrace().length + 1, stackTraceArray.length);
+		for (int i = 0; i < stackTraceArray.length; i++) {
+			assertTrue(stackTraceArray[i].equals(stackTraceArray[i].trim()));
+		}
 	}
 
 }

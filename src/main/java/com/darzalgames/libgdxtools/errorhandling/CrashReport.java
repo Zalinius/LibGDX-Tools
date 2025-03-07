@@ -15,11 +15,11 @@ public class CrashReport {
 	private final String time;
 	private final String id;
 	
-	private final String stackTrace;
+	private final String[] stackTrace;
 	
 	private final transient Instant timeInstant;
 	
-	public CrashReport(String gameName, String gameVersion, String platformName, Instant utcTime, UUID id, String stackTrace) {
+	public CrashReport(String gameName, String gameVersion, String platformName, Instant utcTime, UUID id, String[] stackTrace) {
 		this.gameName = gameName;
 		this.gameVersion = gameVersion;
 		this.platformName = platformName;
@@ -45,7 +45,7 @@ public class CrashReport {
 	public String getId() {
 		return id;
 	}
-	public String getStackTrace() {
+	public String[] getStackTrace() {
 		return stackTrace;
 	}
 	
@@ -61,7 +61,11 @@ public class CrashReport {
 		sb.append("Platform: ").append(platformName).append('\n');
 		sb.append("Time    : ").append(time).append('\n');
 		sb.append("ID      : ").append(id).append('\n');
-		sb.append("Trace   : ").append(stackTrace).append('\n');
+		
+		sb.append("Trace   : ").append(stackTrace[0]).append('\n');
+		for (int i = 1; i < stackTrace.length; i++) {
+			sb.append("            ").append(stackTrace[i]).append("\n");
+		}
 		
 		return sb.toString();
 	}

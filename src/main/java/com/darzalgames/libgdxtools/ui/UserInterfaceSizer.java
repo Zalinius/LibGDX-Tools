@@ -14,27 +14,27 @@ public class UserInterfaceSizer {
 	}
 
 	/**
-	 * @param actor The actor to resize
+	 * @param actor The actor to size, typically a nine/ten patch
+	 * @param proportion The percentage of the world/stage WIDTH and HEIGHT that this actor should occupy [0-1]
+	 */
+	public static void sizeToPercentage(Actor actor, float proportion) {
+		sizeToPercentage(actor, proportion, proportion);
+	}
+	
+	/**
+	 * @param actor The actor to size, typically a nine/ten patch
 	 * @param width The percentage of the world/stage WIDTH that this actor should occupy [0-1]
 	 * @param height The percentage of the world/stage HEIGHT that this actor should occupy [0-1]
 	 */
 	public static void sizeToPercentage(Actor actor, float width, float height) {
 		actor.setSize(stage.getViewport().getWorldWidth()*width, stage.getViewport().getWorldHeight()*height);
 	}
-
-	/**
-	 * @param actor The SQUARE actor to resize
-	 * @param percent The percentage of the world/stage WIDTH and HEIGHT that this actor should occupy [0-1]
-	 */
-	public static void sizeSquareActorToPercentage(Actor actor, float percent) {
-		sizeToPercentage(actor, percent, percent);
-	}
 	
 	/**
-	 * @param actor The actor to resize, maintaining aspect ratio
+	 * @param actor The actor to resize, maintaining aspect ratio, typically an image
 	 * @param percent The percentage of the world/stage WIDTH or HEIGHT (minimum) that this actor should occupy [0-1]
 	 */
-	public static void sizeToPercentage(Actor actor, float percent) {
+	public static void scaleToMinimumPercentage(Actor actor, float percent) {
 		float multiplierWidth = getWidthPercentage(percent);
 		float multiplierHeight = getHeightPercentage(percent);
 		if (multiplierWidth <= multiplierHeight) {

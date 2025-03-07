@@ -50,7 +50,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 		Gdx.graphics.setSystemCursor(SystemCursor.None);
 		setDrawable(new Image(texture).getDrawable());
 		pack();
-		UserInterfaceSizer.sizeToPercentage(this, 0.05f);
+		UserInterfaceSizer.scaleToMinimumPercentage(this, 0.05f);
 	}
 
 	@Override

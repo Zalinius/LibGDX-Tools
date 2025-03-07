@@ -229,7 +229,7 @@ public class SampleUserInterfaceGame extends MainGame {
 
 			@Override
 			protected void setUpDesiredSize() {
-				UserInterfaceSizer.sizeSquareActorToPercentage(this, 0.25f);
+				UserInterfaceSizer.sizeToPercentage(this, 0.25f);
 			}
 		};
 		UniversalButton popUpButton = MainGame.getUserInterfaceFactory().getButton(() -> "Open a popup!", () -> InputPriority.claimPriority(choicePopup));
@@ -290,13 +290,6 @@ public class SampleUserInterfaceGame extends MainGame {
 			super(makeWindowModeSelectBox, 0);
 			pauseButton = MainGame.getUserInterfaceFactory().getSettingsButton(this::toggleScreenVisibility);
 			pauseButton.getView().setWidth(pauseButton.getView().getHeight());
-		}
-
-		@Override
-		protected void setUpBackground() {
-			this.setBackground(new Image(ColorTools.getColoredTexture(Color.BROWN, 1)).getDrawable());
-			this.setSize(500, 300);
-			UserInterfaceSizer.makeActorCentered(this);
 		}
 
 		@Override protected Alignment getEntryAlignment() {return Alignment.CENTER;}

@@ -61,12 +61,6 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	protected abstract UniversalButton makeQuitButton();
 
 
-	/**
-	 * @return Make it however you like, a default will be provided otherwise
-	 */
-	protected UniversalButton makeBackButton() {
-		return MainGame.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
-	}
 
 	/**
 	 * @return A PopUp that explains the control schemes
@@ -81,18 +75,10 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		defaults().padBottom(bottomPadding);
 	}
 
-	/**
-	 * NOTE: Setting the position here is important, otherwise the pause menu will not open!<p>
-	 * e.g. call {@link UserInterfaceSizer#makeActorCentered(Actor) UserInterfaceSizer.makeActorCentered(this)} 
-	 */
-	protected void setUpBackground() {
-		this.setBackground(MainGame.getUserInterfaceFactory().getUIBorderedNine());
-		UserInterfaceSizer.makeActorCentered(this);
-	}
 
 	@Override
 	protected void setUpDesiredSize() {
-		UserInterfaceSizer.sizeSquareActorToPercentage(this, 0.75f);
+		UserInterfaceSizer.sizeToPercentage(this, 0.75f);
 		if (this.getActions().isEmpty()) {
 			UserInterfaceSizer.makeActorCentered(this);
 		}
@@ -115,13 +101,11 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	@Override
 	public void gainFocus() {
 		setUpDesiredSize();
-		UserInterfaceSizer.makeActorCentered(this);
 		super.gainFocus();
 	}
 
 	@Override
 	public void regainFocus() {
-		menu.refreshPage();
 		focusCurrent();
 		pauseButton.setTouchable(Touchable.enabled);
 	}
@@ -183,6 +167,19 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom()).padRight(getPadRight());
 	}
 
+	/**
+	 * NOTE: Setting the position here is important, otherwise the pause menu will not open!<p>
+	 * e.g. call {@link UserInterfaceSizer#makeActorCentered(Actor) UserInterfaceSizer.makeActorCentered(this)} 
+	 */
+	private void setUpBackground() {
+		this.setBackground(MainGame.getUserInterfaceFactory().getUIBorderedNine());
+		UserInterfaceSizer.makeActorCentered(this);
+	}
+	
+	private UniversalButton makeBackButton() {
+		return MainGame.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
+	}
+	
 	@Override
 	public void actWhilePaused(float delta) {
 		act(delta);
@@ -227,7 +224,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		@Override
 		protected void setUpDesiredSize() {
 			menu.setSpacing(PauseMenu.this.menu.getSpacing());
-			UserInterfaceSizer.sizeSquareActorToPercentage(this, 0.5f);
+			UserInterfaceSizer.sizeToPercentage(this, 0.5f);
 			if (this.getActions().isEmpty()) {
 				UserInterfaceSizer.makeActorCentered(this);
 			}

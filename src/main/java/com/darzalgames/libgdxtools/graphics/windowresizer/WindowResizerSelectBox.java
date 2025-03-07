@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.graphics.windowresizer;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -25,8 +24,6 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalL
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
 
 public class WindowResizerSelectBox extends UniversalSelectBox implements WindowResizerButton {
-
-	private static Function<ScreenMode, String> windowModeOptionTranslator = mode -> TextSupplier.getLine(mode.name().toLowerCase());
 	
 	private WindowResizer windowResizer;
 	@Override
@@ -50,20 +47,20 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
-		Stream<Supplier<String>> result = allModes.stream().map(mode -> (() -> windowModeOptionTranslator.apply(mode)));
+		Stream<Supplier<String>> result = allModes.stream().map(mode -> (() -> translateWindowModeOption(mode)));
 		return result.collect(Collectors.toList());
 	}
 
 	@Override
 	public void setSelectedScreenMode(ScreenMode screenMode) {
-		this.setSelected(() -> windowModeOptionTranslator.apply(screenMode));			
+		this.setSelected(() -> translateWindowModeOption(screenMode));			
 	}
 
 	@Override
 	public ScreenMode getModeFromPreference(String screenMode) {
 		ScreenMode preferredMode = ScreenMode.BORDERLESS;
 		for (int i = 0; i < ScreenMode.values().length; i++) {
-			String translatedPref = windowModeOptionTranslator.apply(ScreenMode.values()[i]);
+			String translatedPref = translateWindowModeOption(ScreenMode.values()[i]);
 			if (screenMode.equalsIgnoreCase(ScreenMode.values()[i].name()) //English
 					|| screenMode.equalsIgnoreCase(translatedPref)) { //French
 				preferredMode = ScreenMode.values()[i];
@@ -90,7 +87,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		
 		@Override
 		protected boolean slidesInAndOut() {
-			// Since the window is resized as this popup comes/goes, it's tricky to center its animation so we don't do it
+			// Since the window is resized as this popup comes/goes, it's tricky to center its animation so we don't do it: it appears instantly instead of sliding in/out
 			return false;
 		}
 		
@@ -136,5 +133,9 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 	@Override
 	public UniversalButton getButton() {
 		return this;
+	}
+
+	private static String translateWindowModeOption(ScreenMode screenMode) {
+		return TextSupplier.getLine(screenMode.name().toLowerCase());
 	}
 }

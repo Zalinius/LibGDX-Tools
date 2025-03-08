@@ -34,11 +34,6 @@ public class UniversalSlider extends UniversalButton {
 			}
 
 			@Override
-			public float getPrefHeight() {
-				return UserInterfaceSizer.getHeightPercentage(0.05f);
-			}
-
-			@Override
 			protected Drawable getKnobDrawable() {
 				Drawable k = super.getKnobDrawable();
 				float min = UserInterfaceSizer.getMinimumPercentage(0.075f);

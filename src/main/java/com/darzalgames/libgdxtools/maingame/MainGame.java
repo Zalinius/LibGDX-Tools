@@ -124,6 +124,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			currentScreen.hide();
 			currentScreen.remove();
 		}
+		multipleStage.stage.clear(); // TODO is there a reason not to do this?
+		multipleStage.popUpStage.clear(); // TODO is there a reason not to do this?
 		currentScreen = gameScreen;
 		multipleStage.stage.addActor(currentScreen);
 		currentScreen.show();

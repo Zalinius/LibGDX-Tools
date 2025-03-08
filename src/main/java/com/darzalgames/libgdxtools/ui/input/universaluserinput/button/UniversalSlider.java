@@ -36,7 +36,7 @@ public class UniversalSlider extends UniversalButton {
 			@Override
 			protected Drawable getKnobDrawable() {
 				Drawable k = super.getKnobDrawable();
-				float min = UserInterfaceSizer.getMinimumPercentage(0.075f);
+				float min = UserInterfaceSizer.getMinimumPercentage(0.05f);
 				k.setMinWidth(min); // Assumes square knob
 				k.setMinHeight(min);
 				return k;

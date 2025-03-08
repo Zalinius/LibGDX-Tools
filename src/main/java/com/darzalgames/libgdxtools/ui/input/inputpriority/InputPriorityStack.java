@@ -114,7 +114,6 @@ public class InputPriorityStack implements InputObserver {
 	public void clearChildren() {
 		clearStackAndPushBlankConsumer();
 		darkScreen.remove();
-		popUpStage.clear();
 	}
 
 	private void releasePriorityForTop() { 

@@ -17,7 +17,6 @@ public class UniversalInputStageWithBackground extends UniversalInputStage {
 			super(viewport, inputStrategySwitcher);
 
 			this.addBackgroundToStage = addBackgroundToStage;
-			addBackgroundToStage.accept(this);
 		}
 
 

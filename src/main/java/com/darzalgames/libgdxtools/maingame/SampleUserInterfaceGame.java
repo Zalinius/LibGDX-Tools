@@ -148,10 +148,10 @@ public class SampleUserInterfaceGame extends MainGame {
 	@Override
 	protected Consumer<Stage> makeAddBackgroundToStageRunnable() {
 		return stage -> {
-			NinePatchDrawable black = new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.LIGHT_GRAY, 3), 1, 1, 1, 1));
-			Image blackImage = new Image(black);
-			blackImage.setFillParent(true);
-			stage.addActor(blackImage);
+			NinePatchDrawable gray = new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.LIGHT_GRAY, 3), 1, 1, 1, 1));
+			Image grayImage = new Image(gray);
+			grayImage.setFillParent(true);
+			stage.addActor(grayImage);
 		};
 	}
 

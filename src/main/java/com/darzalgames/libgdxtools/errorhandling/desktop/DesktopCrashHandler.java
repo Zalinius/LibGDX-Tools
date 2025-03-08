@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.errorhandling.desktop;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
@@ -26,23 +27,26 @@ public class DesktopCrashHandler extends CrashHandler {
 	@Override
 	public List<ReportStatus> reportCrash(CrashReport crashReport) {
 			String localTime = FileFriendlyTimeFormatter.dateTimeFileFriendlyFormat(crashReport.getInstant(), ZoneId.systemDefault());
-			String crashReportFileName = "crash-" + localTime + ".err.txt";
+			String crashReportLocalFileName = "crash-" + localTime + ".err.txt";
+			File crashReportLocalFile = new File(crashReportLocalFileName);
+			
 			String universalTime = FileFriendlyTimeFormatter.dateTimeFileFriendlyFormat(crashReport.getInstant());
-			String crashReportFileNameAnonymous = "crash-" + universalTime + ".err.json";
+			String crashReportWebName = "crash-" + universalTime + ".err.json";
+
 			String crashReportJson = crashReport.toJson();
 			
 			List<ReportStatus> reportingStatuses = new ArrayList<>();
-			reportingStatuses.add(reportCrashToFile(crashReportFileName, crashReportJson));
+			reportingStatuses.add(reportCrashToFile(crashReportLocalFile, crashReportJson));
 			
 			Supplier<ReportStatus> reportCrashOnline = () -> {
-				ReportStatus status = reportCrashToDarBot5000(crashReport.getGameName(), crashReportFileNameAnonymous, crashReportJson);
+				ReportStatus status = reportCrashToDarBot5000(crashReport.getGameName(), crashReportWebName, crashReportJson);
 				reportingStatuses.add(status);
 				return status;
 			};
 
 			JFrame.setDefaultLookAndFeelDecorated(false);
 			CrashReportLanguage language = CrashReportLanguage.getLanguageFromCode(Locale.getDefault().getLanguage());
-			DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, reportCrashOnline, crashReportFileName, language.getLocalization());
+			DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, reportCrashOnline, crashReportLocalFile.getAbsolutePath(), language.getLocalization());
 			crashPopup.setVisible(true);
 
 			return reportingStatuses;
@@ -55,16 +59,16 @@ public class DesktopCrashHandler extends CrashHandler {
 	}
 	
 	
-	private ReportStatus reportCrashToFile(String crashReportFileName, String crashReportJson) {
-		try(FileWriter fileWriter = new FileWriter(crashReportFileName)){
+	private ReportStatus reportCrashToFile(File crashReportFile, String crashReportJson) {
+		try(FileWriter fileWriter = new FileWriter(crashReportFile)){
 			fileWriter.write(crashReportJson);
 		} catch (IOException e) {
-			System.err.println("Couldn't write crash report to file: " + crashReportFileName);
+			System.err.println("Couldn't write crash report to file: " + crashReportFile.getName());
 			System.err.println("Error json:\n" + crashReportJson);
 			e.printStackTrace();
-			return new ReportStatus(false, "FAILED", "Did not write crash report to file: " + crashReportFileName);
+			return new ReportStatus(false, "FAILED", "Did not write crash report to file: " + crashReportFile.getAbsolutePath());
 		}
-		return new ReportStatus(true, "SUCCESS", "Wrote crash report to file: " + crashReportFileName);
+		return new ReportStatus(true, "SUCCESS", "Wrote crash report to file: " + crashReportFile.getAbsolutePath());
 	}
 	
 	public static ReportStatus reportCrashToDarBot5000(String gameName, String crashReportFileName, String crashReportJson) {

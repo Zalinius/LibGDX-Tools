@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.errorhandling.desktop;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -60,27 +62,25 @@ public class DesktopCrashPopup extends JFrame {
         JPanel informationPanel = new JPanel();
         Border topPadding = BorderFactory.createEmptyBorder(getSmallPadding(), getLargePadding(), 0, getLargePadding());
         informationPanel.setBorder(topPadding);
-        BoxLayout boxLayout = new BoxLayout(informationPanel, BoxLayout.Y_AXIS);
-        informationPanel.setLayout(boxLayout);
+        GridLayout gridLayout = new GridLayout(3, 1);
+        informationPanel.setLayout(gridLayout);
         
         JLabel situationLabel = makeLabel(crashLocalization.getReportSituationLabelString(crashReport.getGameName()));
         situationLabel.setFont(getRegularFont());
         informationPanel.add(situationLabel);
-        JLabel crashReportFileLabel = makeLabel(crashLocalization.getReportFileLabelString(localCrashReportFile));
-        informationPanel.add(crashReportFileLabel);
+        JTextArea crashReportFileArea = new JTextArea(crashLocalization.getReportFileLabelString(localCrashReportFile));
+        crashReportFileArea.setFont(getRegularFont());
+        crashReportFileArea.setOpaque(false);
+        crashReportFileArea.setEditable(false);
+        crashReportFileArea.setLineWrap(true);
+        crashReportFileArea.setWrapStyleWord(true);
+        informationPanel.add(crashReportFileArea);
         JLabel crashReportHeader = makeLabel(crashLocalization.getReportHeaderLabelString());
         informationPanel.add(crashReportHeader);
+        
         add(informationPanel, BorderLayout.NORTH);
 
-        String crString = crashReport.toString();
-        for (int i = 0; i < 100; i++) {
-			crString += "\n" + i + " some text and stuff";
-			if(i % 10 == 0) {
-				crString += "\n" + i + " some text and stuff and a really long line that will have to wrap around to the next line because it is so darn long you know what I mean?";
-			}
-		}
-        
-        JTextArea crashReportArea = new JTextArea(crString);
+        JTextArea crashReportArea = new JTextArea(crashReport.toString());
         crashReportArea.setFont(getMonoSpaceFont());
         crashReportArea.setEditable(false);
         crashReportArea.setLineWrap(true);
@@ -179,7 +179,7 @@ public class DesktopCrashPopup extends JFrame {
 	}
 	
 	private JLabel makeLabel(String text) {
-		JLabel jLabel = new JLabel(text);
+		JLabel jLabel = new JLabel(text, JLabel.LEFT);
 		jLabel.setFont(getRegularFont());
 		return jLabel;
 	}

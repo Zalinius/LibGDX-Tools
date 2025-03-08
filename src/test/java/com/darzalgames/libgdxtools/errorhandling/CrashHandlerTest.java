@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Test;
 
-public class DesktopCrashHandlerTest {
+public class CrashHandlerTest {
 
 	@Test
 	void tryGetString_returnsNullAndSwallowsExceptionWhenExceptionThrown() throws Exception {

@@ -12,7 +12,7 @@
 	<source path="libgdxtools">
 			<exclude name="**/preferences/DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA.java" />
 			<exclude name="**/maingame/SampleUserInterfaceGame.java" />
-			<exclude name="**/errorhandling/**" />
+			<exclude name="**/errorhandling/desktop/**" />
 			<exclude name="**/steam/*" />
 			<exclude name="**/ui/input/handler/SteamControllerManager.java" />
 			<exclude name="**/ui/input/handler/SteamGamepadInputHandler.java" />

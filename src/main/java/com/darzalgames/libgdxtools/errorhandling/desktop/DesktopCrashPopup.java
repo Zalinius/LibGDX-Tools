@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.errorhandling;
+package com.darzalgames.libgdxtools.errorhandling.desktop;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,8 +12,10 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.Instant;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -25,12 +27,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
+import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
+import com.darzalgames.libgdxtools.errorhandling.CrashLocalization;
+import com.darzalgames.libgdxtools.errorhandling.CrashReport;
+import com.darzalgames.libgdxtools.errorhandling.CrashReportLanguage;
+import com.darzalgames.libgdxtools.errorhandling.ReportStatus;
+
 public class DesktopCrashPopup extends JFrame {
 	
 	public static void main(String[] args) {
 		JFrame.setDefaultLookAndFeelDecorated(false);
 		CrashReport crashReport = new CrashReport("Test Game", "1.0.1", "linux", Instant.now(), UUID.randomUUID(), CrashHandler.getStackTraceArray(new RuntimeException("Test Exception lol")));
-		DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, ()-> DesktopCrashHandler.reportCrashToDarBot5000(crashReport.getGameName(), "file.err.json", crashReport.toJson()));
+		CrashReportLanguage language = CrashReportLanguage.getLanguageFromCode(Locale.getDefault().getLanguage());
+		DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, ()-> DesktopCrashHandler.reportCrashToDarBot5000(crashReport.getGameName(), "file.err.json", crashReport.toJson()), "localfile.err.json", language.getLocalization());
 		crashPopup.setVisible(true);
 	}
 	
@@ -38,8 +47,8 @@ public class DesktopCrashPopup extends JFrame {
 	public static final double FONT_TO_HEIGHT_RATIO = 0.015;
 	public static final double SCREEN_TO_HEIGHT_RATIO = 0.75;
 	
-	public DesktopCrashPopup(CrashReport crashReport, Runnable sendErrorReport) {
-		super(crashReport.getGameName() + " - crash reporting");
+	public DesktopCrashPopup(CrashReport crashReport, Supplier<ReportStatus> sendErrorReport, String localCrashReportFile, CrashLocalization crashLocalization) {
+		super(crashLocalization.getTitleSuffixString(crashReport.getGameName()));
 		int initialWindowHeight = getInitialWindowHeight();
         setSize(initialWindowHeight, initialWindowHeight);
         setLocationRelativeTo(null);
@@ -48,20 +57,18 @@ public class DesktopCrashPopup extends JFrame {
         setLayout(borderLayout);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
-        String reportFileLocation = "REPLACEME";
-        
         JPanel informationPanel = new JPanel();
         Border topPadding = BorderFactory.createEmptyBorder(getSmallPadding(), getLargePadding(), 0, getLargePadding());
         informationPanel.setBorder(topPadding);
         BoxLayout boxLayout = new BoxLayout(informationPanel, BoxLayout.Y_AXIS);
         informationPanel.setLayout(boxLayout);
         
-        JLabel situationLabel = makeLabel("Unfortunately " + crashReport.getGameName() + " has crashed :(");
+        JLabel situationLabel = makeLabel(crashLocalization.getReportSituationLabelString(crashReport.getGameName()));
         situationLabel.setFont(getRegularFont());
         informationPanel.add(situationLabel);
-        JLabel crashReportFileLabel = makeLabel("The following report was saved to: " + reportFileLocation);
+        JLabel crashReportFileLabel = makeLabel(crashLocalization.getReportFileLabelString(localCrashReportFile));
         informationPanel.add(crashReportFileLabel);
-        JLabel crashReportHeader = makeLabel("Crash Report:");
+        JLabel crashReportHeader = makeLabel(crashLocalization.getReportHeaderLabelString());
         informationPanel.add(crashReportHeader);
         add(informationPanel, BorderLayout.NORTH);
 
@@ -74,7 +81,6 @@ public class DesktopCrashPopup extends JFrame {
 		}
         
         JTextArea crashReportArea = new JTextArea(crString);
-//        JTextArea crashReportArea = new JTextArea(crashReport.toString());
         crashReportArea.setFont(getMonoSpaceFont());
         crashReportArea.setEditable(false);
         crashReportArea.setLineWrap(true);
@@ -91,28 +97,34 @@ public class DesktopCrashPopup extends JFrame {
         buttonPanel.setBorder(buttonPadding);
         buttonPanel.setLayout(new GridLayout(1, 3, getSmallPadding(), 0));
 
-        JButton buttonSendReport = new JButton("Send report to DarZal Games");
+        JButton buttonSendReport = new JButton(crashLocalization.getSendButtonString());
         buttonSendReport.setFont(getRegularFont());
         buttonSendReport.setBackground(Color.ORANGE);
 		Runnable sendcallbackRunnable = () -> {
 			buttonSendReport.setEnabled(false);
-			buttonSendReport.setText("Sending . . .");
-			sendErrorReport.run();
-			buttonSendReport.setText("SENT!  thanks c:");
-			buttonSendReport.setBackground(Color.GREEN);
+			buttonSendReport.setText(crashLocalization.getSendingButtonString());
+			ReportStatus reportStatus = sendErrorReport.get();
+			if(reportStatus.isSuccessful()) {
+				buttonSendReport.setText(crashLocalization.getSentSuccessButtonString());
+				buttonSendReport.setBackground(Color.GREEN);				
+			}
+			else {
+				buttonSendReport.setText(crashLocalization.getSentFailedButtonString(reportStatus.getShortMessage()));
+				buttonSendReport.setBackground(Color.RED.darker());
+			}
 		};
 		buttonSendReport.addActionListener(new SingleUseThreadedAction(sendcallbackRunnable));
 
 		
-		JButton buttonCopy = new JButton("Copy crash report");
+		JButton buttonCopy = new JButton(crashLocalization.getCopyButtonString());
 		buttonCopy.setFont(getRegularFont());
 		buttonCopy.addActionListener(e -> {
 			copyTextToClipboard(crashReport.toString());
-			buttonCopy.setText("Copied!");
+			buttonCopy.setText(crashLocalization.getCopiedButtonString());
 		});
 
 		
-        JButton buttonClose = new JButton("Exit");
+        JButton buttonClose = new JButton(crashLocalization.getExitButtonString());
         buttonClose.setFont(getRegularFont());
         buttonClose.addActionListener(e -> System.exit(1));
         

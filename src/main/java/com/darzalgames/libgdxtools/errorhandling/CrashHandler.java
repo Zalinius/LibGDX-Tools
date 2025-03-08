@@ -16,7 +16,7 @@ public abstract class CrashHandler {
 	
 	public void handleException(Exception exception, String[] programArguments) throws Exception {
 		CrashReport crashReport = buildCrashReport(exception, programArguments);
-		List<String> statuses = reportCrash(crashReport);
+		List<ReportStatus> statuses = reportCrash(crashReport);
 		logCrashReportStatus(statuses);
 
 		throw exception;
@@ -26,12 +26,12 @@ public abstract class CrashHandler {
 	 * @param crashReport
 	 * @return The result of the crash reporting
 	 */
-	public abstract List<String> reportCrash(CrashReport crashReport);
+	public abstract List<ReportStatus> reportCrash(CrashReport crashReport);
 	
 	/**
 	 * @param statuses What the results of reporting the crash was
 	 */
-	public abstract void logCrashReportStatus(List<String> statuses);
+	public abstract void logCrashReportStatus(List<ReportStatus> statuses);
 	
 	
 	public static CrashReport buildCrashReport(Exception exception, String[] args) {

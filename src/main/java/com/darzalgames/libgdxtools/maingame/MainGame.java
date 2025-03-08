@@ -1,5 +1,7 @@
 package com.darzalgames.libgdxtools.maingame;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
@@ -63,9 +64,9 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected abstract WindowResizerButton makeWindowResizerButton();
 
 	/**
-	 * @return The fallback background texture to be used in the game area, visible when nothing else is covering it
+	 * @return The fallback background to be used in the game area, visible when nothing else is covering it
 	 */
-	protected abstract BaseDrawable getMainStageBackground();
+	protected abstract Consumer<Stage> makeAddBackgroundToStageRunnable();
 	protected abstract Runnable getDrawConsoleRunnable();
 	protected abstract PauseMenu makePauseMenu();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
@@ -232,7 +233,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		// Set up main game stage
 		UniversalInputStage stage = new UniversalInputStageWithBackground(
 				new ScreenViewport(),
-				getMainStageBackground(),
+				makeAddBackgroundToStageRunnable(),
 				inputStrategySwitcher);
 		stage.getRoot().setName("Main Stage");
 		return stage;

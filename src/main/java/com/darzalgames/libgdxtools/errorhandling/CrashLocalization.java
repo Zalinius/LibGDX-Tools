@@ -21,8 +21,8 @@ public class CrashLocalization {
 	public static final CrashLocalization FRENCH_CRASH_LOCALIZATION = new CrashLocalization(
 			"{game} - rapport d'erreur",
 			"Malheureusement, {game} a rencontré une erreur :(",
-			"Le rapport suivant a été sauvegardé à: {file}",
-			"Rapport d'erreur:",
+			"Le rapport suivant a été sauvegardé à : {file}",
+			"Rapport d'erreur :",
 			
 			"Envoyer à Jeux DarZal",
 			"En cours d'envoi . . .", 

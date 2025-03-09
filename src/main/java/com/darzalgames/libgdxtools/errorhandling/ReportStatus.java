@@ -23,7 +23,7 @@ public class ReportStatus {
 	
 	@Override
 	public String toString() {
-		return shortMessage + " - " + getLongMessage();
+		return shortMessage + " - " + longMessage;
 	}
 
 }

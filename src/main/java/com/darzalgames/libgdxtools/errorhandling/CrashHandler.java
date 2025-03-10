@@ -41,7 +41,7 @@ public abstract class CrashHandler {
 		String platform = tryGetString(() -> args[0]);
 		Instant utcTime = Instant.now();
 		UUID id = UUID.randomUUID();
-		String[] stackTrace = getStackTraceArray(exception);
+		String[] stackTrace = getMessageAndStackTraceArray(exception);
 		return new CrashReport(gameName, gameVersion, platform, utcTime, id, stackTrace);
 	}
 	
@@ -68,7 +68,7 @@ public abstract class CrashHandler {
 		return string;
 	}
 	
-	public static String[] getStackTraceArray(Exception exception) {
+	public static String[] getMessageAndStackTraceArray(Exception exception) {
 	    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    final Charset utf8 = StandardCharsets.UTF_8;
 	    String data = null;

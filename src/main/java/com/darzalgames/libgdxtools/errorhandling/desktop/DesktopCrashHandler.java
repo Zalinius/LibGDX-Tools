@@ -18,8 +18,8 @@ import javax.swing.JFrame;
 
 import com.darzalgames.darzalcommon.time.FileFriendlyTimeFormatter;
 import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
+import com.darzalgames.libgdxtools.errorhandling.CrashLocalization;
 import com.darzalgames.libgdxtools.errorhandling.CrashReport;
-import com.darzalgames.libgdxtools.errorhandling.CrashReportLanguage;
 import com.darzalgames.libgdxtools.errorhandling.ReportStatus;
 
 public class DesktopCrashHandler extends CrashHandler {
@@ -45,8 +45,8 @@ public class DesktopCrashHandler extends CrashHandler {
 			};
 
 			JFrame.setDefaultLookAndFeelDecorated(false);
-			CrashReportLanguage language = CrashReportLanguage.getLanguageFromCode(Locale.getDefault().getLanguage());
-			DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, reportCrashOnline, crashReportLocalFile.getAbsolutePath(), language.getLocalization());
+			CrashLocalization crashLocalization = CrashLocalization.getLocalizationFromCode(Locale.getDefault().getLanguage());
+			DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, reportCrashOnline, crashReportLocalFile.getAbsolutePath(), crashLocalization);
 			crashPopup.setVisible(true);
 
 			return reportingStatuses;

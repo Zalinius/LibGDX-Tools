@@ -1,5 +1,7 @@
 package com.darzalgames.libgdxtools.errorhandling;
 
+import java.util.Set;
+
 public class CrashLocalization {
 	
 	public static final CrashLocalization ENGLISH_CRASH_LOCALIZATION = new CrashLocalization(
@@ -34,6 +36,19 @@ public class CrashLocalization {
 			
 			"Quitter");
 
+	
+	public static CrashLocalization getLocalizationFromCode(String languageCode) {
+		Set<String> frenchLanguageCodes = Set.of("fr", "fra", "fre");
+		
+		if(frenchLanguageCodes.contains(languageCode)) {
+			return FRENCH_CRASH_LOCALIZATION;
+		}
+		else {
+			return ENGLISH_CRASH_LOCALIZATION;
+		}
+	}
+
+	
 	
 	private final String titleSuffixString;
 	private final String reportSituationLabelString;

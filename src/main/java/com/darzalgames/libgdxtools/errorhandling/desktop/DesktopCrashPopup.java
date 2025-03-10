@@ -2,7 +2,6 @@ package com.darzalgames.libgdxtools.errorhandling.desktop;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -19,8 +18,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,22 +29,25 @@ import javax.swing.border.Border;
 import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
 import com.darzalgames.libgdxtools.errorhandling.CrashLocalization;
 import com.darzalgames.libgdxtools.errorhandling.CrashReport;
-import com.darzalgames.libgdxtools.errorhandling.CrashReportLanguage;
 import com.darzalgames.libgdxtools.errorhandling.ReportStatus;
 
+@SuppressWarnings("serial") // Same-version serialization only
 public class DesktopCrashPopup extends JFrame {
 	
 	public static void main(String[] args) {
 		JFrame.setDefaultLookAndFeelDecorated(false);
-		CrashReport crashReport = new CrashReport("Test Game", "1.0.1", "linux", Instant.now(), UUID.randomUUID(), CrashHandler.getStackTraceArray(new RuntimeException("Test Exception lol")));
-		CrashReportLanguage language = CrashReportLanguage.getLanguageFromCode(Locale.getDefault().getLanguage());
-		DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, ()-> DesktopCrashHandler.reportCrashToDarBot5000(crashReport.getGameName(), "file.err.json", crashReport.toJson()), "localfile.err.json", language.getLocalization());
+		CrashReport crashReport = new CrashReport("Test Game", "1.0.1", "linux", Instant.now(), UUID.randomUUID(), CrashHandler.getMessageAndStackTraceArray(new RuntimeException("Test Exception lol")));
+		CrashLocalization crashLocalization = CrashLocalization.getLocalizationFromCode(Locale.getDefault().getLanguage());
+		DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, ()-> DesktopCrashHandler.reportCrashToDarBot5000(crashReport.getGameName(), "file.err.json", crashReport.toJson()), "localfile.err.json", crashLocalization);
 		crashPopup.setVisible(true);
+		crashPopup.requestFocusOnSendButton();
 	}
 	
 	public static final double PADDING_TO_HEIGHT_RATIO = 0.025;
 	public static final double FONT_TO_HEIGHT_RATIO = 0.015;
 	public static final double SCREEN_TO_HEIGHT_RATIO = 0.75;
+	
+	private final JButton buttonSendReport;
 	
 	public DesktopCrashPopup(CrashReport crashReport, Supplier<ReportStatus> sendErrorReport, String localCrashReportFile, CrashLocalization crashLocalization) {
 		super(crashLocalization.getTitleSuffixString(crashReport.getGameName()));
@@ -97,7 +97,7 @@ public class DesktopCrashPopup extends JFrame {
         buttonPanel.setBorder(buttonPadding);
         buttonPanel.setLayout(new GridLayout(1, 3, getSmallPadding(), 0));
 
-        JButton buttonSendReport = new JButton(crashLocalization.getSendButtonString());
+        this.buttonSendReport = new JButton(crashLocalization.getSendButtonString());
         buttonSendReport.setFont(getRegularFont());
         buttonSendReport.setBackground(Color.ORANGE);
 		Runnable sendcallbackRunnable = () -> {
@@ -114,7 +114,6 @@ public class DesktopCrashPopup extends JFrame {
 			}
 		};
 		buttonSendReport.addActionListener(new SingleUseThreadedAction(sendcallbackRunnable));
-
 		
 		JButton buttonCopy = new JButton(crashLocalization.getCopyButtonString());
 		buttonCopy.setFont(getRegularFont());
@@ -133,6 +132,11 @@ public class DesktopCrashPopup extends JFrame {
         buttonPanel.add(buttonClose);
 		
 		add(buttonPanel, BorderLayout.SOUTH);
+		
+	}
+	
+	public void requestFocusOnSendButton() {
+		buttonSendReport.requestFocusInWindow();
 	}
 	
 	private void copyTextToClipboard(String text) {

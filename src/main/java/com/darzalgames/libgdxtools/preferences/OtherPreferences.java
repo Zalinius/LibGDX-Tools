@@ -38,4 +38,14 @@ public class OtherPreferences {
 		preferenceManager.savePrefValue(key, value);
 	}
 
+	public float getFloatPrefValue(final String key) {
+		return preferenceManager.getFloatPrefValue(key);
+	}
+	public float getFloatPrefValue(final String key, float defaultValue) {
+		return preferenceManager.getFloatPrefValue(key, defaultValue);
+	}
+	public void setFloatPrefValue(String key, Float value) {
+		preferenceManager.savePrefValue(key, value);
+	}
+
 }

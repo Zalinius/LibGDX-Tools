@@ -78,7 +78,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 	@Override
 	protected void setUpDesiredSize() {
-		UserInterfaceSizer.sizeToPercentage(this, 0.75f);
+		UserInterfaceSizer.sizeToPercentage(this, 0.75f, 0.85f);
 		if (this.getActions().isEmpty()) {
 			UserInterfaceSizer.makeActorCentered(this);
 		}

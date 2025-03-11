@@ -33,7 +33,7 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 			return null;
 		}
 
-		boolean isInsideHexagon = !hitbox.isHit(x, y);
+		boolean isInsideHexagon = !hitbox.isHit(x, y, this.getWidth(), this.getHeight());
 		if (!isInsideHexagon) {
 			return null;
 		} else {
@@ -43,8 +43,9 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 
 	private void setPositionOnScreen() {
 		Tuple<Float, Float> hexagonPosition =  HexagonMath.getScreenPositionOnStage(hexagon.getQ(), hexagon.getR(),
-				inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight(), UserInterfaceSizer.getCurrentHeight());
+				this.getWidth(), this.getHeight(), UserInterfaceSizer.getCurrentHeight());
 		this.setPosition(hexagonPosition.e, hexagonPosition.f);
+		inputConsumer.getView().setPosition(0, 0);
 	}
 
 	@Override

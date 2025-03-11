@@ -10,19 +10,24 @@ public class CustomHitbox {
 	private Pixmap maskMap;
 
 	/**
-	 * @param maskTexture The texture (or related mask texture) that represents the visual clickable actor. NOTE: this needs to be the same size as the actor!
+	 * @param maskTexture The texture (or related mask texture) that represents the visual clickable actor.
 	 */
 	public CustomHitbox(Texture maskTexture) {
 		maskMap = PixmapUtilities.convertTextureToPixelMap(maskTexture);
 	}
 
 	/**
+	 * NOTE: the map texture needs to be the same proportions as the actor for this!
 	 * @param hitX The x value provided in Actor's hit()
 	 * @param hitY The y value provided in Actor's hit()
+	 * @param scaledWidth
+	 * @param scaledHeight
 	 * @return Whether or not this position is a "hit" on the custom hitbox
 	 */
-	public boolean isHit(float hitX, float hitY) {
-		Color pixelColor = PixmapUtilities.getPixelColorOnMap(hitX, hitY, maskMap);
+	public boolean isHit(float hitX, float hitY, float scaledWidth, float scaledHeight) {
+		float scaledHitX = (hitX * maskMap.getWidth()) / scaledWidth;
+		float scaledHitY = (hitY * maskMap.getHeight()) / scaledHeight;
+		Color pixelColor = PixmapUtilities.getPixelColorOnMap(scaledHitX, scaledHitY, maskMap);
 		return pixelColor.a <= 0;
 	}
 

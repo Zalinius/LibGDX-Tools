@@ -4,7 +4,6 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
-import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.*;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
@@ -96,14 +95,9 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 		return getActor().getControllerOf(currentHexagon);
 	}
 
-	private void centerSelf() {
-		this.setPosition(UserInterfaceSizer.getCurrentWidth() / 2f - this.getWidth() / 2, UserInterfaceSizer.getCurrentHeight() / 2f - this.getHeight() / 2);
-	}
-
 	@Override
 	public void resizeUI() {
 		getActor().resizeUI();
-		centerSelf();
 	}
 
 }

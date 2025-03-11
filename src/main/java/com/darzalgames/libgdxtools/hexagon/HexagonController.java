@@ -23,7 +23,6 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 		this.hitbox = hitBox;
 		this.inputConsumer = makeInputConsumer.apply(this);
 		this.setActor(inputConsumer.getView());
-		this.setSize(inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight());
 		this.setOrigin(Align.center);
 	}
 
@@ -80,6 +79,8 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 
 	@Override
 	public void resizeUI() {
+		inputConsumer.resizeUI();
+		setSize(inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight());
 		setPositionOnScreen();
 	}
 

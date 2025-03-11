@@ -71,7 +71,6 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
 		this.platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
-		setBounds(0, 0, UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight());
 		defaults().padBottom(bottomPadding);
 	}
 

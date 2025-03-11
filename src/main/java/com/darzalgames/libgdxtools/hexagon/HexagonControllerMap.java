@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.darzalgames.darzalcommon.data.Tuple;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMap;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 
 /**
  * Responsible for the visual representation and layout of a {@link HexagonMap}
@@ -87,6 +88,7 @@ public class HexagonControllerMap<E> extends Group {
 		float diffX = left; 
 		float diffY = bottom; 
 		getAllControllers().forEach(controller -> controller.moveBy(-diffX, -diffY));
+		UserInterfaceSizer.makeActorCentered(this);
 	}
 
 	

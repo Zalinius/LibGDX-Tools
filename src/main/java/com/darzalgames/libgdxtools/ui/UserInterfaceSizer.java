@@ -99,8 +99,8 @@ public class UserInterfaceSizer {
 	 * @param actor The given actor will be centered on screen, call this every frame to stay centered
 	 */
 	public static void makeActorCentered(final Actor actor) {
-		actor.setPosition(getCurrentWidth()/2f - actor.getWidth() / 2f,
-				getCurrentHeight()/2f - actor.getHeight() / 2f);
+		actor.setPosition(getCurrentWidth()/2f - (actor.getWidth()*actor.getScaleX()) / 2f,
+				getCurrentHeight()/2f - (actor.getHeight()*actor.getScaleY()) / 2f);
 	}
 	
 

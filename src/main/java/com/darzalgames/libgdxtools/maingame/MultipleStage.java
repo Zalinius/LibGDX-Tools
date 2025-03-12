@@ -43,7 +43,7 @@ public class MultipleStage {
 		popUpStage.clear();
 	}
 
-	void render() {
+	void render(Runnable furtherRendering) {
 		if (SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR) {
 			doDebugPrinting();
 		}
@@ -57,6 +57,7 @@ public class MultipleStage {
 		} else {
 			updateAndDrawStage(stage);
 		}
+		furtherRendering.run();
 
 		updateAndDrawStage(popUpStage);
 		updateAndDrawStage(cursorStage);

@@ -2,10 +2,11 @@ package com.darzalgames.libgdxtools.maingame;
 
 import java.util.function.Consumer;
 
+import org.lwjgl.opengl.GL20;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -133,10 +134,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	@Override
 	public final void render () {
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		if (!isQuitting) {
 			resizeUI();
-			multipleStage.render();
+			multipleStage.render(this::renderInternal);
 		}
 
 		steamStrategy.update();
@@ -150,6 +151,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			multipleStage.stage.act(0);
 		}
 	}
+	
+	protected void renderInternal() {}
 	
 	@Override
 	public final void dispose() {

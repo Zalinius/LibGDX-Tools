@@ -1,12 +1,12 @@
 package com.darzalgames.libgdxtools.errorhandling;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -16,8 +16,8 @@ public abstract class CrashHandler {
 	
 	public void handleException(Exception exception, String[] programArguments) throws Exception {
 		CrashReport crashReport = buildCrashReport(exception, programArguments);
-		String status = reportCrash(crashReport);
-		logCrashReportStatus(status);
+		List<ReportStatus> statuses = reportCrash(crashReport);
+		logCrashReportStatus(statuses);
 
 		throw exception;
 	}
@@ -26,12 +26,12 @@ public abstract class CrashHandler {
 	 * @param crashReport
 	 * @return The result of the crash reporting
 	 */
-	public abstract String reportCrash(CrashReport crashReport);
+	public abstract List<ReportStatus> reportCrash(CrashReport crashReport);
 	
 	/**
-	 * @param status What the result of reporting the crash was
+	 * @param statuses What the results of reporting the crash was
 	 */
-	public abstract void logCrashReportStatus(String status);
+	public abstract void logCrashReportStatus(List<ReportStatus> statuses);
 	
 	
 	public static CrashReport buildCrashReport(Exception exception, String[] args) {
@@ -41,7 +41,7 @@ public abstract class CrashHandler {
 		String platform = tryGetString(() -> args[0]);
 		Instant utcTime = Instant.now();
 		UUID id = UUID.randomUUID();
-		String stackTrace = getStackTraceString(exception);
+		String[] stackTrace = getMessageAndStackTraceArray(exception);
 		return new CrashReport(gameName, gameVersion, platform, utcTime, id, stackTrace);
 	}
 	
@@ -68,7 +68,7 @@ public abstract class CrashHandler {
 		return string;
 	}
 	
-	public static String getStackTraceString(Exception exception) {
+	public static String[] getMessageAndStackTraceArray(Exception exception) {
 	    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    final Charset utf8 = StandardCharsets.UTF_8;
 	    String data = null;
@@ -76,7 +76,12 @@ public abstract class CrashHandler {
 	    	exception.printStackTrace(ps);
 		    data = baos.toString(utf8);
 	    }
-	    return data;
+	    
+	    String[] stackTraceArray = data.split("\n");
+	    for (int i = 0; i < stackTraceArray.length; i++) {
+			stackTraceArray[i] = stackTraceArray[i].trim();
+		}
+	    return stackTraceArray;
 	}
 	
 }

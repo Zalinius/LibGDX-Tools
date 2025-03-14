@@ -21,6 +21,7 @@ import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
 import com.darzalgames.libgdxtools.errorhandling.CrashLocalization;
 import com.darzalgames.libgdxtools.errorhandling.CrashReport;
 import com.darzalgames.libgdxtools.errorhandling.ReportStatus;
+import com.darzalgames.libgdxtools.platform.GamePlatform;
 
 public class DesktopCrashHandler extends CrashHandler {
 
@@ -43,13 +44,20 @@ public class DesktopCrashHandler extends CrashHandler {
 				reportingStatuses.add(status);
 				return status;
 			};
-
-			JFrame.setDefaultLookAndFeelDecorated(false);
-			CrashLocalization crashLocalization = CrashLocalization.getLocalizationFromCode(Locale.getDefault().getLanguage());
-			DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, reportCrashOnline, crashReportLocalFile.getAbsolutePath(), crashLocalization);
-			crashPopup.setVisible(true);
+			
+			if(shouldHavePopup(crashReport)) {
+				JFrame.setDefaultLookAndFeelDecorated(false);
+				CrashLocalization crashLocalization = CrashLocalization.getLocalizationFromCode(Locale.getDefault().getLanguage());
+				DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, reportCrashOnline, crashReportLocalFile.getAbsolutePath(), crashLocalization);
+				crashPopup.setVisible(true);
+				crashPopup.requestFocusOnSendButton();
+			}
 
 			return reportingStatuses;
+	}
+
+	private boolean shouldHavePopup(CrashReport crashReport) {
+		return !GamePlatform.MAC.equalsIgnoreCase(crashReport.getPlatformName());
 	}
 
 	@Override

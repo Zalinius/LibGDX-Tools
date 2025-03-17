@@ -85,4 +85,8 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 		setPositionOnScreen();
 	}
 
+	public Hexagon getHexagon() {
+		return hexagon;
+	}
+
 }

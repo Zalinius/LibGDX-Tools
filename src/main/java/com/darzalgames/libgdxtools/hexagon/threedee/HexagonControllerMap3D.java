@@ -44,6 +44,10 @@ public class HexagonControllerMap3D<E> {
 	void unfocusAll() {
 		getAllControllers().forEach(HexagonController3D::clearSelected);
 	}
+	
+	void highlightMousedOverHexagon() {
+		getAllControllers().forEach(HexagonController3D::highlightIfMouseIsOver);
+	}
 
 	/**
 	 * To be used to apply any visual effects to a hexagon's neighbors

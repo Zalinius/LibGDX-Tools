@@ -38,7 +38,9 @@ public abstract class HexagonController3D implements InputConsumer {
 		Tuple<Float, Float> screenCoords = HexagonMath.getScreenPosition(hexagon.getQ(), hexagon.getR(), 1 + getPadding(), 1f/HEXAGON_HEIGHT_TO_WIDTH_RATIO + getPadding());
 		Vector3 newPos = new Vector3(screenCoords.e, 0f, screenCoords.f);
 		hexagonRing.transform.setToTranslation(newPos);
-		
+	}
+	
+	protected void highlightIfMouseIsOver() {
 		if (mouseIsOver(hexagonRing)) {
 			focusCurrent();
 		}

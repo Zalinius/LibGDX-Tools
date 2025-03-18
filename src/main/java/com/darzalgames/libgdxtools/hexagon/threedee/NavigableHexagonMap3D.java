@@ -18,6 +18,7 @@ public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 	private Hexagon currentHexagon;
 	private HexagonControllerMap3D<E> hexagonControllerMap;
 	private boolean isMouseMode;
+	private boolean isFocused;
 
 	/**
 	 * Be sure to register this object with the {@link InputStrategySwitcher}
@@ -52,6 +53,17 @@ public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 	@Override
 	public void gainFocus() {
 		selectDefault();
+		regainFocus();
+	}
+	
+	@Override
+	public void loseFocus() {
+		isFocused = false;
+	}
+	
+	@Override
+	public void regainFocus() {
+		isFocused = true;
 	}
 
 	@Override
@@ -89,9 +101,7 @@ public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 	}
 
 	private boolean isInputAllowed() {
-		// TODO  this
-		return true;
-		//		return UniversalInputStage.isInTouchableBranch(this);
+		return isFocused;
 	}
 
 	/**
@@ -103,8 +113,9 @@ public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 
 	@Override
 	public void resizeUI() {
-		if (isMouseMode) {
+		if (isMouseMode && isInputAllowed()) {
 			hexagonControllerMap.unfocusAll();
+			hexagonControllerMap.highlightMousedOverHexagon();
 		}
 		hexagonControllerMap.resizeUI();
 	}

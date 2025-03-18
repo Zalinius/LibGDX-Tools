@@ -14,9 +14,10 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
  * @param <E> The game-specific object associated with each {@link Hexagon} and {@link HexagonController3D}
  */
 public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
-	
+
 	private Hexagon currentHexagon;
 	private HexagonControllerMap3D<E> hexagonControllerMap;
+	private boolean isMouseMode;
 
 	/**
 	 * Be sure to register this object with the {@link InputStrategySwitcher}
@@ -52,7 +53,7 @@ public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 	public void gainFocus() {
 		selectDefault();
 	}
-	
+
 	@Override
 	public void focusCurrent() {
 		if (isInputAllowed()) {
@@ -73,7 +74,8 @@ public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
 		hexagonControllerMap.unfocusAll();
-		if (!inputStrategySwitcher.isMouseMode()) {
+		isMouseMode = inputStrategySwitcher.isMouseMode();
+		if (!isMouseMode) {
 			focusCurrent();	
 		}
 	}
@@ -83,13 +85,13 @@ public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 	public boolean shouldBeUnregistered() {
 		// TODO  this
 		return false;
-//		return this.getStage() == null;
+		//		return this.getStage() == null;
 	}
 
 	private boolean isInputAllowed() {
 		// TODO  this
 		return true;
-//		return UniversalInputStage.isInTouchableBranch(this);
+		//		return UniversalInputStage.isInTouchableBranch(this);
 	}
 
 	/**
@@ -101,6 +103,9 @@ public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 
 	@Override
 	public void resizeUI() {
+		if (isMouseMode) {
+			hexagonControllerMap.unfocusAll();
+		}
 		hexagonControllerMap.resizeUI();
 	}
 

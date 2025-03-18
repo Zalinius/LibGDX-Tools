@@ -13,20 +13,22 @@ import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 public abstract class HexagonController3D implements InputConsumer {
 
 	public static final float HEXAGON_HEIGHT_TO_WIDTH_RATIO = 1.1547005f;
-	
+
 	private final Attribute notSelected;
 	private final Attribute highlighted;
 
 	protected final Hexagon hexagon;
 	private ModelInstance hexagonRing;
 
+
 	public HexagonController3D(Hexagon hexagon, Attribute notSelected, Attribute highlighted, ModelInstance hexagonRing) {
 		this.hexagon = hexagon;
 		this.notSelected = notSelected;
 		this.highlighted = highlighted;
 		this.hexagonRing = hexagonRing;
+
 	}
-	
+
 	protected float getPadding() {
 		return 0.1f;
 	}
@@ -36,7 +38,13 @@ public abstract class HexagonController3D implements InputConsumer {
 		Tuple<Float, Float> screenCoords = HexagonMath.getScreenPosition(hexagon.getQ(), hexagon.getR(), 1 + getPadding(), 1f/HEXAGON_HEIGHT_TO_WIDTH_RATIO + getPadding());
 		Vector3 newPos = new Vector3(screenCoords.e, 0f, screenCoords.f);
 		hexagonRing.transform.setToTranslation(newPos);
+		
+		if (mouseIsOver(hexagonRing)) {
+			focusCurrent();
+		}
 	}
+
+	protected abstract boolean mouseIsOver(ModelInstance hexagonRing2);
 
 	@Override
 	public void focusCurrent() {
@@ -60,10 +68,14 @@ public abstract class HexagonController3D implements InputConsumer {
 		// TODO Auto-generated method stub
 	}
 
-	
+
 	@Override
 	public String toString() {
 		return hexagon.toString() + " 3D controller";
+	}
+
+	protected final Vector3 getCurrentPosition() {
+		return hexagonRing.transform.getTranslation(new Vector3());
 	}
 
 }

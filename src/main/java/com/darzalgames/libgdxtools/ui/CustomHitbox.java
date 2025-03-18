@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.hexagon;
+package com.darzalgames.libgdxtools.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;

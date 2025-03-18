@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.hexagon;
+package com.darzalgames.libgdxtools.hexagon.twodee;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

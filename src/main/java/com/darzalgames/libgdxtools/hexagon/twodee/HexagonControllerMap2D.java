@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.hexagon;
+package com.darzalgames.libgdxtools.hexagon.twodee;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,13 +15,13 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 
 /**
  * Responsible for the visual representation and layout of a {@link HexagonMap}
- * @param <E> The game-specific object associated with each {@link Hexagon} and {@link HexagonController}
+ * @param <E> The game-specific object associated with each {@link Hexagon} and {@link HexagonController2D}
  */
-public class HexagonControllerMap<E> extends Group {
+public class HexagonControllerMap2D<E> extends Group {
 
-	private final HexagonMap<Tuple<E, HexagonController>> hexagonMap;
+	private final HexagonMap<Tuple<E, HexagonController2D>> hexagonMap;
 
-	public HexagonControllerMap(HexagonMap<E> hexagonMap, Function<Hexagon, HexagonController> hexagonControllerFactory) {
+	public HexagonControllerMap2D(HexagonMap<E> hexagonMap, Function<Hexagon, HexagonController2D> hexagonControllerFactory) {
 		this.hexagonMap = new HexagonMap<>();
 
 		hexagonMap.getAllHexagons().forEach(hexagon -> makeControllerForHexagon(hexagonControllerFactory, hexagon, hexagonMap.getValueAt(hexagon)));
@@ -39,21 +39,21 @@ public class HexagonControllerMap<E> extends Group {
 	 * @param hexagon The {@link Hexagon} whose visual representation you're looking for. Call {@link #containsHexagon} first to check it exists.
 	 * @return The given controller, or null if the hexagon is not present on this map
 	 */
-	HexagonController getControllerOf(Hexagon hexagon) {
+	HexagonController2D getControllerOf(Hexagon hexagon) {
 		return hexagonMap.getValueAt(hexagon).f;
 	}
 
 
 	void unfocusAll() {
-		getAllControllers().forEach(HexagonController::clearSelected);
+		getAllControllers().forEach(HexagonController2D::clearSelected);
 	}
 
 	/**
 	 * To be used to apply any visual effects to a hexagon's neighbors
 	 * @param hexagon The {@link Hexagon} whose visual neighbors you're looking for
-	 * @return A list of the neighboring {@link HexagonController} objects
+	 * @return A list of the neighboring {@link HexagonController2D} objects
 	 */
-	public List<HexagonController> getControllerNeighborsOf(Hexagon hexagon) {
+	public List<HexagonController2D> getControllerNeighborsOf(Hexagon hexagon) {
 		Set<Hexagon> hexes = hexagonMap.getHexagonNeighborsOf(hexagon);
 		return hexes.stream().map(neighborHexagon -> hexagonMap.getValueAt(neighborHexagon).f).collect(Collectors.toList());
 	}
@@ -64,9 +64,9 @@ public class HexagonControllerMap<E> extends Group {
 		float bottom = Integer.MAX_VALUE;
 		float top = Integer.MIN_VALUE;
 		
-		Iterator<HexagonController> hexagonControllerIterator = getAllControllers().iterator();
+		Iterator<HexagonController2D> hexagonControllerIterator = getAllControllers().iterator();
 		while (hexagonControllerIterator.hasNext()) {
-			HexagonController controller = hexagonControllerIterator.next();
+			HexagonController2D controller = hexagonControllerIterator.next();
 			this.addActor(controller);
 
 			if (controller.getX() < left) {
@@ -92,18 +92,18 @@ public class HexagonControllerMap<E> extends Group {
 	}
 
 	
-	private void makeControllerForHexagon(Function<Hexagon, HexagonController> hexagonControllerFactory, Hexagon hexagon, E e) {
-		HexagonController controller = hexagonControllerFactory.apply(hexagon);
+	private void makeControllerForHexagon(Function<Hexagon, HexagonController2D> hexagonControllerFactory, Hexagon hexagon, E e) {
+		HexagonController2D controller = hexagonControllerFactory.apply(hexagon);
 		hexagonMap.put(hexagon, new Tuple<>(e, controller));
 		addActor(controller);
 	}
 	
-	private Stream<HexagonController> getAllControllers() {
+	private Stream<HexagonController2D> getAllControllers() {
 		return hexagonMap.getAllHexagons().stream().map(hex -> hexagonMap.getValueAt(hex).f);
 	}
 
 	public void resizeUI() {
-		getAllControllers().forEach(HexagonController::resizeUI);
+		getAllControllers().forEach(HexagonController2D::resizeUI);
 		centerSelf();
 	}
 

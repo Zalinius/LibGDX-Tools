@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.hexagon;
+package com.darzalgames.libgdxtools.hexagon.twodee;
 
 import java.util.function.Function;
 
@@ -8,17 +8,18 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.data.Tuple;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMath;
+import com.darzalgames.libgdxtools.ui.CustomHitbox;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
-public class HexagonController extends Container<Actor> implements VisibleInputConsumer {
+public class HexagonController2D extends Container<Actor> implements VisibleInputConsumer {
 
 	protected final Hexagon hexagon;
 	private final VisibleInputConsumer inputConsumer;
 	private final CustomHitbox hitbox;
 
-	public HexagonController(Hexagon hexagon, CustomHitbox hitBox, Function<HexagonController, VisibleInputConsumer> makeInputConsumer) {
+	public HexagonController2D(Hexagon hexagon, CustomHitbox hitBox, Function<HexagonController2D, VisibleInputConsumer> makeInputConsumer) {
 		this.hexagon = hexagon;
 		this.hitbox = hitBox;
 		this.inputConsumer = makeInputConsumer.apply(this);

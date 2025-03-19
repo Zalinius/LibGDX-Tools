@@ -18,7 +18,7 @@ public abstract class HexagonController3D implements InputConsumer {
 	private final Attribute highlighted;
 
 	protected final Hexagon hexagon;
-	private ModelInstance hexagonRing;
+	protected ModelInstance hexagonRing;
 
 
 	public HexagonController3D(Hexagon hexagon, Attribute notSelected, Attribute highlighted, ModelInstance hexagonRing) {
@@ -36,17 +36,9 @@ public abstract class HexagonController3D implements InputConsumer {
 	@Override
 	public void resizeUI() {
 		Tuple<Float, Float> screenCoords = HexagonMath.getScreenPosition(hexagon.getQ(), hexagon.getR(), 1 + getPadding(), 1f/HEXAGON_HEIGHT_TO_WIDTH_RATIO + getPadding());
-		Vector3 newPos = new Vector3(screenCoords.e, 0f, screenCoords.f);
+		Vector3 newPos = new Vector3(screenCoords.e, 0, screenCoords.f);
 		hexagonRing.transform.setToTranslation(newPos);
 	}
-	
-	protected void highlightIfMouseIsOver() {
-		if (mouseIsOver(hexagonRing)) {
-			focusCurrent();
-		}
-	}
-
-	protected abstract boolean mouseIsOver(ModelInstance hexagonRing2);
 
 	@Override
 	public void focusCurrent() {

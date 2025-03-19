@@ -17,10 +17,10 @@ import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 public class HexagonControllerMap3D<E> {
 
 	private final HexagonMap<Tuple<E, HexagonController3D>> hexagonMap;
-
+		
 	public HexagonControllerMap3D(HexagonMap<E> hexagonMap, Function<Hexagon, HexagonController3D> hexagonControllerFactory) {
 		this.hexagonMap = new HexagonMap<>();
-
+		
 		hexagonMap.getAllHexagons().forEach(hexagon -> makeControllerForHexagon(hexagonControllerFactory, hexagon, hexagonMap.getValueAt(hexagon)));
 	}
 
@@ -44,10 +44,6 @@ public class HexagonControllerMap3D<E> {
 	void unfocusAll() {
 		getAllControllers().forEach(HexagonController3D::clearSelected);
 	}
-	
-	void highlightMousedOverHexagon() {
-		getAllControllers().forEach(HexagonController3D::highlightIfMouseIsOver);
-	}
 
 	/**
 	 * To be used to apply any visual effects to a hexagon's neighbors
@@ -58,11 +54,6 @@ public class HexagonControllerMap3D<E> {
 		Set<Hexagon> hexes = hexagonMap.getHexagonNeighborsOf(hexagon);
 		return hexes.stream().map(neighborHexagon -> hexagonMap.getValueAt(neighborHexagon).f).collect(Collectors.toList());
 	}
-
-	void centerSelf() {
-		
-	}
-
 	
 	private void makeControllerForHexagon(Function<Hexagon, HexagonController3D> hexagonControllerFactory, Hexagon hexagon, E e) {
 		HexagonController3D controller = hexagonControllerFactory.apply(hexagon);
@@ -75,7 +66,6 @@ public class HexagonControllerMap3D<E> {
 
 	public void resizeUI() {
 		getAllControllers().forEach(HexagonController3D::resizeUI);
-		centerSelf();
 	}
 
 }

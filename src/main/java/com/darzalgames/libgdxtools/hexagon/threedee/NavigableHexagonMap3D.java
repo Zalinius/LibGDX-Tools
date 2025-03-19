@@ -16,7 +16,8 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 
 	private Hexagon currentHexagon;
-	private HexagonControllerMap3D<E> hexagonControllerMap;
+	private final HexagonControllerMap3D<E> hexagonControllerMap;
+	private final Runnable focusCurrentHexagonUnderMouse;
 	private boolean isMouseMode;
 	private boolean isFocused;
 
@@ -24,8 +25,10 @@ public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 	 * Be sure to register this object with the {@link InputStrategySwitcher}
 	 * @param hexagonControllerMap The map of hexagon controllers to be navigated
 	 */
-	public NavigableHexagonMap3D(HexagonControllerMap3D<E> hexagonControllerMap, InputStrategySwitcher inputStrategySwitcher) {
+	public NavigableHexagonMap3D(HexagonControllerMap3D<E> hexagonControllerMap, InputStrategySwitcher inputStrategySwitcher,
+			Runnable focusCurrentHexagonUnderMouse) {
 		this.hexagonControllerMap = hexagonControllerMap;
+		this.focusCurrentHexagonUnderMouse = focusCurrentHexagonUnderMouse;
 		inputStrategySwitcher.register(this);
 	}
 
@@ -115,7 +118,7 @@ public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 	public void resizeUI() {
 		if (isMouseMode && isInputAllowed()) {
 			hexagonControllerMap.unfocusAll();
-			hexagonControllerMap.highlightMousedOverHexagon();
+			focusCurrentHexagonUnderMouse.run();
 		}
 		hexagonControllerMap.resizeUI();
 	}

@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardAndGamepadInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
@@ -56,7 +57,7 @@ class MouseOnlyButtonTest {
 		TextButtonStyle textButtonStyle =  new TextButtonStyle();
 		textButtonStyle.font = new BitmapFont(new BitmapFontData(), new TextureRegion(), false);
 		TextButton textButton = new TextButton("", textButtonStyle);
-		button = new MouseOnlyButton(textButton, Runnables.nullRunnable(), inputStrategySwitcher, Runnables.nullRunnable())  {
+		button = new MouseOnlyButton(textButton, Suppliers.emptyString(), Runnables.nullRunnable(), inputStrategySwitcher, Runnables.nullRunnable())  {
 			@Override
 			public boolean shouldBeUnregistered() {
 				return false;

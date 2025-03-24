@@ -73,4 +73,12 @@ public class UniversalInputStage extends Stage implements InputObserver {
 	public boolean shouldBeUnregistered() {
 		return false;
 	}
+	
+	@Override
+	public void unfocusAll() {
+		setScrollFocus(null);
+		// Never clear keyboard focus in our games
+		// setKeyboardFocus(null);
+		cancelTouchFocus();
+	}
 }

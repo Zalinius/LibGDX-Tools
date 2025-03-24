@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.hexagon;
+package com.darzalgames.libgdxtools.hexagon.twodee;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -14,4 +14,5 @@ public class BlankHexagonController implements VisibleInputConsumer {
 	@Override public void focusCurrent() {}
 	@Override public void clearSelected() {}
 	@Override public void selectDefault() {}
+	@Override public void resizeUI() {}
 }

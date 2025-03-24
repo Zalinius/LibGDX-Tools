@@ -1,36 +1,29 @@
 package com.darzalgames.libgdxtools.ui.input;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import java.util.function.Consumer;
+
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 public class UniversalInputStageWithBackground extends UniversalInputStage {
 
-		private Image background;
+		private Consumer<Stage> addBackgroundToStage;
 
 		/**
-		 * Creates a stage that will ensure that the supplied background texture is always present
-		 * @param viewport
-		 * @param backgroundTex
-		 * @param inputStrategySwitcher
+		 * Creates a stage that will ensure that the supplied background is always present
 		 */
-		public UniversalInputStageWithBackground(final Viewport viewport, Texture backgroundTex, InputStrategySwitcher inputStrategySwitcher) {
+		public UniversalInputStageWithBackground(final Viewport viewport, Consumer<Stage> addBackgroundToStage, InputStrategySwitcher inputStrategySwitcher) {
 			super(viewport, inputStrategySwitcher);
 
-			background = new Image(backgroundTex);
-			UserInterfaceFactory.makeActorCentered(background);
-			background.setTouchable(Touchable.disabled);
-			addActor(background);
+			this.addBackgroundToStage = addBackgroundToStage;
 		}
 
 
 		@Override
 		public void clear() {
 			super.clear();
-			addActor(background); // Always keep the background
+			addBackgroundToStage.accept(this); // Always keep the background
 		}
 
 }

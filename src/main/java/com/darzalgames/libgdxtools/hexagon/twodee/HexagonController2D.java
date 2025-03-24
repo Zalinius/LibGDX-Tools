@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.hexagon;
+package com.darzalgames.libgdxtools.hexagon.twodee;
 
 import java.util.function.Function;
 
@@ -8,24 +8,23 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.data.Tuple;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMath;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.ui.CustomHitbox;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
-public class HexagonController extends Container<Actor> implements VisibleInputConsumer {
+public class HexagonController2D extends Container<Actor> implements VisibleInputConsumer {
 
 	protected final Hexagon hexagon;
 	private final VisibleInputConsumer inputConsumer;
 	private final CustomHitbox hitbox;
 
-	public HexagonController(Hexagon hexagon, CustomHitbox hitBox, Function<HexagonController, VisibleInputConsumer> makeInputConsumer) {
+	public HexagonController2D(Hexagon hexagon, CustomHitbox hitBox, Function<HexagonController2D, VisibleInputConsumer> makeInputConsumer) {
 		this.hexagon = hexagon;
 		this.hitbox = hitBox;
 		this.inputConsumer = makeInputConsumer.apply(this);
 		this.setActor(inputConsumer.getView());
-		this.setSize(inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight());
-
-		setPositionOnScreen();
+		this.setOrigin(Align.center);
 	}
 
 	@Override
@@ -35,7 +34,7 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 			return null;
 		}
 
-		boolean isInsideHexagon = !hitbox.isHit(x, y);
+		boolean isInsideHexagon = !hitbox.isHit(x, y, this.getWidth(), this.getHeight());
 		if (!isInsideHexagon) {
 			return null;
 		} else {
@@ -45,9 +44,9 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 
 	private void setPositionOnScreen() {
 		Tuple<Float, Float> hexagonPosition =  HexagonMath.getScreenPositionOnStage(hexagon.getQ(), hexagon.getR(),
-				inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight(), GameInfo.getHeight());
-		this.setOrigin(Align.center);
+				this.getWidth(), this.getHeight(), UserInterfaceSizer.getCurrentHeight());
 		this.setPosition(hexagonPosition.e, hexagonPosition.f);
+		inputConsumer.getView().setPosition(0, 0);
 	}
 
 	@Override
@@ -78,6 +77,17 @@ public class HexagonController extends Container<Actor> implements VisibleInputC
 	@Override
 	public String toString() {
 		return hexagon.toString() + " " + inputConsumer.toString();
+	}
+
+	@Override
+	public void resizeUI() {
+		inputConsumer.resizeUI();
+		setSize(inputConsumer.getView().getWidth(), inputConsumer.getView().getHeight());
+		setPositionOnScreen();
+	}
+
+	public Hexagon getHexagon() {
+		return hexagon;
 	}
 
 }

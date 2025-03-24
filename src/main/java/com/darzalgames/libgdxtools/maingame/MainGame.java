@@ -1,16 +1,16 @@
 package com.darzalgames.libgdxtools.maingame;
 
+import java.util.function.Consumer;
+
+import org.lwjgl.opengl.GL20;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
@@ -20,6 +20,7 @@ import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStageWithBackground;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
@@ -30,15 +31,13 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardAndGamepadInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
-import com.darzalgames.libgdxtools.ui.screen.PixelPerfectViewport;
 
 public abstract class MainGame extends ApplicationAdapter implements SharesGameInformation {
 
 
 	// Values which are statically shared to the rest of the game by {@link GameInfo}
-	protected final int width;
-	protected final int height;
 	protected SaveManager saveManager;
 	protected PreferenceManager preferenceManager;
 	protected final GamePlatform gamePlatform;
@@ -54,21 +53,21 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
 	private boolean isQuitting = false;
+	
+
+	protected static UserInterfaceFactory userInterfaceFactory;
 
 
 	
 	// The setup process, in order that they are called
-	protected abstract void initializeAssetsAndUserInterfaceFactory();
+	protected abstract UserInterfaceFactory initializeAssetsAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName(); // TODO this can be removed once we figure out our long-standing goal of making Assets extendable
 	protected abstract WindowResizerButton makeWindowResizerButton();
+
 	/**
-	 * @return The background texture to be used in the "gutters" around the game, visible when the window size doesn't match the game's fixed resolution
+	 * @return The fallback background to be used in the game area, visible when nothing else is covering it
 	 */
-	protected abstract Texture getBackgroundStageTexture();
-	/**
-	 * @return The fallback background texture to be used in the game area, visible when nothing else is covering it
-	 */
-	protected abstract Texture getMainStageBackgroundTexture();
+	protected abstract Consumer<Stage> makeAddBackgroundToStageRunnable();
 	protected abstract Runnable getDrawConsoleRunnable();
 	protected abstract PauseMenu makePauseMenu();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
@@ -80,6 +79,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	 */
 	protected abstract void afterLaunch();
 
+	protected void reactToResize(int width, int height) {}
+
 
 	/**
 	 * Shutdown game-specific objects like the music system, call dispose() on things, etc.
@@ -88,9 +89,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 
 
-	protected MainGame(int width, int height, WindowResizer windowResizer, GamePlatform gamePlatform) {
-		this.width = width;
-		this.height = height;
+	protected MainGame(WindowResizer windowResizer, GamePlatform gamePlatform) {
 		this.windowResizer = windowResizer;
 		this.gamePlatform = gamePlatform;
 		GameInfo.setMainGame(this);
@@ -99,7 +98,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	@Override
 	public final void create() {
 		makeInputStrategySwitcher();
-		initializeAssetsAndUserInterfaceFactory();
+		MainGame.userInterfaceFactory = initializeAssetsAndUserInterfaceFactory();
 		makePreferenceManager();
 		initializeWindowResizer();
 
@@ -118,7 +117,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 
 	protected CustomCursorImage getCustomCursor() {
-		return new CustomCursorImage(windowResizer::isWindowed, ColorTools.getDefaultCursor(), inputStrategySwitcher);
+		return new CustomCursorImage(windowResizer::isWindowed, new TextureRegion(ColorTools.getDefaultCursor()), inputStrategySwitcher);
 	}
 
 	protected final void changeScreen(GameScreen gameScreen) {
@@ -126,6 +125,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			currentScreen.hide();
 			currentScreen.remove();
 		}
+		multipleStage.stage.clear(); // TODO is there a reason not to do this?
+		multipleStage.popUpStage.clear(); // TODO is there a reason not to do this?
 		currentScreen = gameScreen;
 		multipleStage.stage.addActor(currentScreen);
 		currentScreen.show();
@@ -133,14 +134,26 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	@Override
 	public final void render () {
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		if (!isQuitting) {
-			multipleStage.render();
+			resizeUI();
+			multipleStage.render(this::renderInternal);
 		}
 
 		steamStrategy.update();
 	}
 
+	protected void resizeUI() {
+		inputSetup.getInputPriorityStack().resizeStackUI();
+
+		if (inputSetup.getPause().isPaused()) {
+			// Lets the game UI behind the options menu update the UI sizing
+			multipleStage.stage.act(0);
+		}
+	}
+	
+	protected void renderInternal() {}
+	
 	@Override
 	public final void dispose() {
 		isQuitting = true;
@@ -157,16 +170,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	@Override
 	public final void resize (int width, int height) {
 		multipleStage.resize(width, height);
-	}
-
-	@Override
-	public int getWidth() {
-		return width;
-	}
-
-	@Override
-	public int getHeight() {
-		return height;
+		reactToResize(width, height);
 	}
 
 	@Override
@@ -189,8 +193,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		return steamStrategy;
 	}
 
-
-
+	public static UserInterfaceFactory getUserInterfaceFactory() {
+		return userInterfaceFactory;
+	}
+	
 	private void makeInputStrategySwitcher() {
 		inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardAndGamepadInputStrategy());
 	}
@@ -202,26 +208,15 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void makeAllStages() {
 		UniversalInputStage mainStage = makeMainStage();
 		UniversalInputStage popUpStage = makePopUpStage();
-		Stage backgroundStage = makeBackgroundStage();
 		Stage cursorStage = makeCursorStage();
 		Stage inputHandlerStage = makeInputHandlerStage();
-		multipleStage = new MultipleStage(mainStage, popUpStage, backgroundStage, cursorStage, inputHandlerStage);
-	}
-
-	private Stage makeBackgroundStage() {
-		// Set up background texture + stage (fills gutters with a repeating pattern when the window size doesn't match the game)
-		Texture backgroundTexture = getBackgroundStageTexture();
-		backgroundTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-		TextureRegion backgroundTextureRegion = new TextureRegion(backgroundTexture);
-		backgroundTextureRegion.setRegion(0, 0, (float)backgroundTexture.getWidth(), (float)backgroundTexture.getHeight());
-		Stage backgroundStage = new Stage(new ExtendViewport(width, height));
-		backgroundStage.addActor(new Image(backgroundTextureRegion));
-		return backgroundStage;
+		UserInterfaceSizer.setStage(mainStage);
+		multipleStage = new MultipleStage(mainStage, popUpStage, cursorStage, inputHandlerStage);
 	}
 
 	private UniversalInputStage makePopUpStage() {
 		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
-		UniversalInputStage popUpStage = new UniversalInputStage(new PixelPerfectViewport(width, height), inputStrategySwitcher);
+		UniversalInputStage popUpStage = new UniversalInputStage(new ScreenViewport(), inputStrategySwitcher);
 		popUpStage.getRoot().setName("PopUp Stage");
 		return popUpStage;
 	}
@@ -242,15 +237,15 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private UniversalInputStage makeMainStage() {
 		// Set up main game stage
 		UniversalInputStage stage = new UniversalInputStageWithBackground(
-				new PixelPerfectViewport(width, height),
-				getMainStageBackgroundTexture(),
+				new ScreenViewport(),
+				makeAddBackgroundToStageRunnable(),
 				inputStrategySwitcher);
 		stage.getRoot().setName("Main Stage");
 		return stage;
 	}
 	
 	private Stage makeCursorStage() {
-		Stage cursorStage = new Stage(new ExtendViewport(width, height));
+		Stage cursorStage = new Stage(new ScreenViewport());
 		cursorStage.addActor(getCustomCursor());
 		return cursorStage;
 	}

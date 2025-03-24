@@ -31,11 +31,27 @@ public class InputOnHexagonGrid extends Input {
 	public static HexagonDirection getDirectionFromInput(Input input) {
 		return inputToDirection.get(input);
 	}
-
+	
 	private static HashMap<Input, HexagonDirection> initializeMapWithInputAliases() {
 		HashMap<Input, HexagonDirection> map = new HashMap<>();
 		map.put(Input.DOWN, HexagonDirection.BOTTOM);
 		map.put(Input.UP, HexagonDirection.TOP);
 		return map;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		// These are needed for menu navigation!
+		if ((this == InputOnHexagonGrid.UP_RELEASED && obj == Input.UP)
+				|| (this == Input.UP && obj == InputOnHexagonGrid.UP_RELEASED)) {
+			return true;
+		}
+
+		if ((this == InputOnHexagonGrid.DOWN_RELEASED && obj == Input.DOWN)
+				|| (this == Input.DOWN && obj == InputOnHexagonGrid.DOWN_RELEASED)) {
+			return true;
+		}
+
+		return super.equals(obj);
 	}
 }

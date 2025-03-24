@@ -5,8 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.darzalcommon.state.Endable;
 import com.darzalgames.libgdxtools.ui.input.LogicalInputConsumer;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriorityStack;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriorityStack;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
 /**

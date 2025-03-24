@@ -2,7 +2,9 @@ package com.darzalgames.libgdxtools.internationalization;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
@@ -34,12 +36,14 @@ public abstract class TextSupplier {
 	/**
 	 * @return All supported languages in alphabetical order, written in their own locales
 	 */
-	public static List<String> getAllDisplayNames() {
+	public static List<Supplier<String>> getAllDisplayNames() {
 		Set<String> namesUnsorted = bundleManager.displayNames.getFirstKeySet();
 		List<String> names = new ArrayList<>();
 		names.addAll(namesUnsorted);
 		Collections.sort(names);
-		return names;
+		
+		Stream<Supplier<String>> allNameSupplier = names.stream().map(name -> (() -> name));
+		return allNameSupplier.collect(Collectors.toList());
 	}
 	/**
 	 * @return The current language's display name, in the current locale

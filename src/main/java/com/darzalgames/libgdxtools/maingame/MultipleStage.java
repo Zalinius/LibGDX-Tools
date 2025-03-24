@@ -20,17 +20,15 @@ public class MultipleStage {
 
 	public UniversalInputStage stage;
 	public UniversalInputStage popUpStage;
-	private Stage backgroundStage;
 	private Stage cursorStage;
 	private Stage inputHandlerStage;
 
 	private Pause pause;
 	private List<DoesNotPause> actorsThatDoNotPause;
 
-	public MultipleStage(UniversalInputStage stage, UniversalInputStage popUpStage, Stage backgroundStage, Stage cursorStage, Stage inputHandlerStage) {
+	public MultipleStage(UniversalInputStage stage, UniversalInputStage popUpStage, Stage cursorStage, Stage inputHandlerStage) {
 		this.stage = stage;
 		this.popUpStage = popUpStage;
-		this.backgroundStage = backgroundStage;
 		this.cursorStage = cursorStage;
 		this.inputHandlerStage = inputHandlerStage;
 		this.actorsThatDoNotPause = new ArrayList<>();
@@ -45,12 +43,10 @@ public class MultipleStage {
 		popUpStage.clear();
 	}
 
-	void render() {
+	void render(Runnable furtherRendering) {
 		if (SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR) {
 			doDebugPrinting();
 		}
-
-		updateAndDrawStage(backgroundStage);
 
 		if (pause.isPaused()) {
 			stage.getViewport().apply();
@@ -61,6 +57,7 @@ public class MultipleStage {
 		} else {
 			updateAndDrawStage(stage);
 		}
+		furtherRendering.run();
 
 		updateAndDrawStage(popUpStage);
 		updateAndDrawStage(cursorStage);
@@ -74,7 +71,6 @@ public class MultipleStage {
 	}
 
 	void resize(int width, int height) {
-		resizeStage(width, height, backgroundStage);
 		resizeStage(width, height, stage);
 		resizeStage(width, height, inputHandlerStage);
 		resizeStage(width, height, popUpStage);
@@ -98,7 +94,7 @@ public class MultipleStage {
 
 	void setPause(Pause pause) {
 		this.pause = pause;
-		stage.addActor(pause);
+		inputHandlerStage.addActor(pause);
 	}
 
 	private void setUpInputMultiplexerForAllStages() {

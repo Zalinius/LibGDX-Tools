@@ -10,11 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
-import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 
 /**
  * A class which holds a LibGDX {@link Skin} and provides convenient named accessors.
@@ -28,19 +25,19 @@ public class SkinManager {
 	protected static final String UI_BORDERED_NINE = "uiBorderedNine";
 
 	// LabelStyle
-	protected static final String DEFAULT_LABEL = "defaultLabelStyle";
+	protected static final String DEFAULT_LABEL = "default";
 	protected static final String FLAVOR_TEXT_LABEL = "flavorTextLabelStyle";
 	protected static final String WARNING_LABEL = "warningLabelStyle";
 	protected static final String LABEL_WITH_BACKGROUND = "labelWithBackgroundStyle";
 
 	// SliderStyle
-	protected static final String SLIDER = "sliderStyle";
+	protected static final String SLIDER = "default-horizontal";
 
 	// CheckboxStyle
-	protected static final String CHECKBOX = "checkboxStyle";
+	protected static final String CHECKBOX = "default";
 
 	// TextButtonStyle
-	protected static final String TEXT_BUTTON = "textButtonStyle";
+	protected static final String TEXT_BUTTON = "default";
 	protected static final String FLASHED_TEXT_BUTTON = "flashedTextButtonStyle";
 	protected static final String SNEAKY_LABEL_BUTTON = "sneakyLabelButtonStyle";
 	protected static final String BLANK_BUTTON = "blankButtonStyle";
@@ -52,7 +49,6 @@ public class SkinManager {
 	public SkinManager(Skin skin) {
 		super();
 		this.skin = skin;
-		ConfirmationMenu.setConfirmationBackground(skin.get(CONFIRMATION_MENU_BACKGROUND, NinePatch.class));
 	}
 	
 	/**
@@ -65,11 +61,12 @@ public class SkinManager {
 		
 		NinePatchDrawable darkGrayNinePatch = new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.DARK_GRAY, size), 1, 1, 1, 1));
 		skin.add(UI_BORDERED_NINE, darkGrayNinePatch);
-		skin.add(CONFIRMATION_MENU_BACKGROUND, new NinePatch(ColorTools.getColoredTexture(Color.PINK, size), 1, 1, 1, 1));
+		skin.add(CONFIRMATION_MENU_BACKGROUND, new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.PINK, size), 1, 1, 1, 1)));
 
 		BitmapFont defaultFont = new BitmapFont();
+		defaultFont.setColor(Color.BLACK);
 		skin.add("default", defaultFont);
-		
+
 		skin.add(DEFAULT_LABEL, new LabelStyle(defaultFont, Color.BLACK));
 		skin.add(FLAVOR_TEXT_LABEL, new LabelStyle(defaultFont, Color.CHARTREUSE));
 		skin.add(WARNING_LABEL, new LabelStyle(defaultFont, Color.FIREBRICK));
@@ -92,11 +89,15 @@ public class SkinManager {
 		Drawable buttonHighlighted = new Image(ColorTools.getColoredTexture(Color.GRAY, size)).getDrawable();
 		TextButtonStyle textButtonStyle = new TextButtonStyle(buttonNOTHighlighted, null, null, defaultFont);
 		textButtonStyle.over = buttonHighlighted;
+		textButtonStyle.fontColor = Color.LIGHT_GRAY;
+		textButtonStyle.overFontColor = Color.WHITE;
 		textButtonStyle.focused = buttonHighlighted;
 		textButtonStyle.disabledFontColor = Color.FIREBRICK;
 		skin.add(TEXT_BUTTON, textButtonStyle);
 		TextButtonStyle flashedTextButtonStyle = new TextButtonStyle(buttonHighlighted, null, null, defaultFont);
 		flashedTextButtonStyle.over = buttonNOTHighlighted;
+		textButtonStyle.fontColor = Color.LIGHT_GRAY;
+		flashedTextButtonStyle.overFontColor = Color.WHITE;
 		flashedTextButtonStyle.focused = buttonNOTHighlighted;
 		skin.add(FLASHED_TEXT_BUTTON, flashedTextButtonStyle);
 		TextButtonStyle sneakyLabelButtonStyle = new TextButtonStyle(new Image(ColorTools.getColoredTexture(Color.CLEAR, size)).getDrawable(), null, null, defaultFont);
@@ -126,8 +127,11 @@ public class SkinManager {
 		return skin.get(style, SliderStyle.class);
 	}
 
-	public NinePatchDrawable getUINinePatch() {
+	public BaseDrawable getUINinePatch() {
 		return skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
+	}
+	public BaseDrawable getConfirmationMenuBackground() {
+		return skin.get(CONFIRMATION_MENU_BACKGROUND, NinePatchDrawable.class);
 	}
 	public LabelStyle getDefaultLableStyle() {
 		return getLabelStyle(DEFAULT_LABEL);

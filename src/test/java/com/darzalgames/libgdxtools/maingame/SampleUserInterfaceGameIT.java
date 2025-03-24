@@ -16,11 +16,13 @@ class SampleUserInterfaceGameIT {
 	private static final int SCREEN_MIDDLE_X = 640;
 	private static final int SCREEN_MIDDLE_Y = 360;
 	
-	private static final int SELECT_BOX_BUTTON_Y = 350;
-	private static final int SELECT_BOX_POPUP_BUTTON_X = 990;
-	private static final int SELECT_BOX_POPUP_BUTTON_Y = 240;
-	private static final int NESTING_POPUP_BUTTON_Y = 390;
-	private static final int QUIT_BUTTON_Y = 700;
+	private static final int SELECT_BOX_BUTTON_Y = 170;
+	private static final int SELECT_BOX_POPUP_BUTTON_X = 675;
+	private static final int SELECT_BOX_POPUP_BUTTON_Y = 345;
+	private static final int NESTING_POPUP_BUTTON_Y = 198;
+	private static final int NESTED_POPUP_DEEPER_BUTTON_Y = 380;
+	private static final int QUIT_BUTTON_Y = 710;
+	private static final int OFFCENTER_X = 100;
 
 	@Test
 	void launchGame_doesntThrowAnyExceptions() {
@@ -48,6 +50,7 @@ class SampleUserInterfaceGameIT {
 	void clickingTheOptionsButton_pausesTheGame() {
 		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
+					app.inputSetup.getPause().act(3); // Give time for the pause button to be put in place
 					clickMouse(10, 10);
 
 					assertTrue(app.inputSetup.getPause().isPaused());
@@ -122,8 +125,7 @@ class SampleUserInterfaceGameIT {
 		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
-					app.multipleStage.stage.act(3); // Give time for the popup to slide in
-					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Clicks on the dark screen to dismiss the popup
+					clickMouse(OFFCENTER_X, SCREEN_MIDDLE_Y); // Clicks on the dark screen to dismiss the popup
 
 					// Check that the menu is back in focus by hovering over the quit button
 					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
@@ -164,7 +166,7 @@ class SampleUserInterfaceGameIT {
 					 */
 					clickMouse(SCREEN_MIDDLE_X, NESTING_POPUP_BUTTON_Y); // Click to open the first popup
 					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in
-					clickMouse(SCREEN_MIDDLE_X, SCREEN_MIDDLE_Y); // Click to go deeper
+					clickMouse(SCREEN_MIDDLE_X, NESTED_POPUP_DEEPER_BUTTON_Y); // Click to go deeper
 					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in
 					clickMouse(SCREEN_MIDDLE_X, SCREEN_MIDDLE_Y); // Click to dismiss deeper popup
 					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide out

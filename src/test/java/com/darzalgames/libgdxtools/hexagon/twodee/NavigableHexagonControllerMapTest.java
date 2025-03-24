@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.hexagon;
+package com.darzalgames.libgdxtools.hexagon.twodee;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,6 +15,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 import com.darzalgames.darzalcommon.hexagon.gridfactory.HexagonGridRectangular;
+import com.darzalgames.libgdxtools.hexagon.twodee.HexagonController2D;
+import com.darzalgames.libgdxtools.hexagon.twodee.HexagonControllerMap2D;
+import com.darzalgames.libgdxtools.hexagon.twodee.NavigableHexagonMap2D;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.SharesGameInformation;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
@@ -25,13 +28,11 @@ import com.darzalgames.libgdxtools.ui.input.InputOnHexagonGrid;
 
 class NavigableHexagonControllerMapTest {
 
-	private NavigableHexagonMap<String> navigableHexagonMap;
-	private HexagonControllerMap<String> hexagonControllerMap;
+	private NavigableHexagonMap2D<String> navigableHexagonMap;
+	private HexagonControllerMap2D<String> hexagonControllerMap;
 	@BeforeEach
 	private void setup() {
 		GameInfo.setMainGame(new SharesGameInformation() {
-			@Override public int getWidth() {return 0;}
-			@Override public int getHeight() {return 0;}
 			@Override public SaveManager getSaveManager() {return null;}
 			@Override public PreferenceManager getPreferenceManager() {return null;}
 			@Override public GamePlatform getGamePlatform() {return null;}
@@ -42,8 +43,8 @@ class NavigableHexagonControllerMapTest {
 
 		HexagonMap<String> hexagonMap = new HexagonMap<>();
 		HexagonGridRectangular.makeGrid(3, 3).forEach(hex -> hexagonMap.put(hex, hex.toString()));
-		hexagonControllerMap = new HexagonControllerMap<>(hexagonMap, hex -> new HexagonController(hex, null, hexagonController -> new BlankHexagonController()));
-		navigableHexagonMap = new NavigableHexagonMap<>(hexagonControllerMap);
+		hexagonControllerMap = new HexagonControllerMap2D<>(hexagonMap, hex -> new HexagonController2D(hex, null, hexagonController -> new BlankHexagonController()));
+		navigableHexagonMap = new NavigableHexagonMap2D<>(hexagonControllerMap);
 	}
 
 	
@@ -72,7 +73,7 @@ class NavigableHexagonControllerMapTest {
 	void getControllerNeighbors_of0x0_returnsCorrectHexagons() {
 		List<Hexagon> expectedNeighbors = List.of(new Hexagon(-1, 0), new Hexagon(-1, 1), new Hexagon(0, -1), new Hexagon(0, 1), new Hexagon(1, -1), new Hexagon(1, 0));
 
-		List<HexagonController> neighborControllers = hexagonControllerMap.getControllerNeighborsOf(new Hexagon(0,0));
+		List<HexagonController2D> neighborControllers = hexagonControllerMap.getControllerNeighborsOf(new Hexagon(0,0));
 		List<Hexagon> neighborHexagons = neighborControllers.stream().map(controller -> controller.hexagon).toList();
 
 		assertEquals(expectedNeighbors.size(), neighborHexagons.size());

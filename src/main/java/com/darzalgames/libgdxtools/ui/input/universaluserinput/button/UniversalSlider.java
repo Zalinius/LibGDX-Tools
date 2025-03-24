@@ -1,14 +1,18 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
@@ -17,13 +21,27 @@ public class UniversalSlider extends UniversalButton {
 	private final Slider slider;
 	private float previousValue;
 
-	public UniversalSlider(TextButton textButton, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		this(textButton, null, sliderStyle, consumer, inputStrategySwitcher, soundInteractListener);
+	public UniversalSlider(TextButton textButton, Supplier<String> textSupplier, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		this(textButton, textSupplier, null, sliderStyle, consumer, inputStrategySwitcher, soundInteractListener);
 	}
 
-	public UniversalSlider(TextButton textButton, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(textButton, image, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
-		slider = new Slider(0, 1, 0.1f, false, sliderStyle);
+	public UniversalSlider(TextButton textButton, Supplier<String> textSupplier, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		super(textButton, textSupplier, image, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
+		slider = new Slider(0, 1, 0.1f, false, sliderStyle) {
+			@Override
+			public float getPrefWidth() {
+				return UserInterfaceSizer.getWidthPercentage(0.2f);
+			}
+
+			@Override
+			protected Drawable getKnobDrawable() {
+				Drawable k = super.getKnobDrawable();
+				float min = UserInterfaceSizer.getMinimumPercentage(0.05f);
+				k.setMinWidth(min); // Assumes square knob
+				k.setMinHeight(min);
+				return k;
+			}
+		};
 		slider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -46,6 +64,17 @@ public class UniversalSlider extends UniversalButton {
 		});
 	}
 
+	@Override
+	public void setFocused(boolean isFocused) {
+		super.setFocused(isFocused);
+		InputListener inputListener = (InputListener) slider.getListeners().get(0);
+		if (isFocused) {
+			inputListener.enter(null, 0, 0, -1, slider);	
+		} else {
+			inputListener.exit(null, 0, 0, -1, slider);
+		}
+
+	}
 	public void setSliderStyle(SliderStyle sliderStyle) {
 		slider.setStyle(sliderStyle);
 	}

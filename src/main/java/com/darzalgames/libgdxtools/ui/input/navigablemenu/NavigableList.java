@@ -8,11 +8,11 @@ import java.util.function.Consumer;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
  * This class is not an Actor, it's the logical list of buttons held in a Table.
@@ -97,6 +97,11 @@ public class NavigableList implements InputConsumer {
 	public void refreshPage() {
 		refreshPageRunnable.run();
 	}
+	
+	@Override
+	public void resizeUI() {
+		allEntries.forEach(UniversalButton::resizeUI);
+	}
 
 	public void defaultRefreshPage() {
 		table.clearChildren();
@@ -114,8 +119,8 @@ public class NavigableList implements InputConsumer {
 			}
 			entry.setAlignment(entryAlignment);
 			Button button = entry.getView();
-			table.add(button).prefWidth(button.getWidth());
-			if (UserInterfaceFactory.isSpacer(entry)) {
+			table.add(button);
+			if (MainGame.getUserInterfaceFactory().isSpacer(entry)) {
 				interactableEntries.remove(entry);
 				if (isVertical()) {
 					table.getCell(button).expandY();
@@ -299,6 +304,10 @@ public class NavigableList implements InputConsumer {
 
 	public boolean isVertical() {
 		return isVertical;
+	}
+
+	public int getSpacing() {
+		return spacing;
 	}
 
 }

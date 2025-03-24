@@ -1,19 +1,18 @@
-package com.darzalgames.libgdxtools.hexagon;
+package com.darzalgames.libgdxtools.hexagon.twodee;
 
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
-import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.*;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
- * Allows for navigation around a {@link HexagonControllerMap} using keyboard or gamepad
- * @param <E> The game-specific object associated with each {@link Hexagon} and {@link HexagonController}
+ * Allows for navigation around a {@link HexagonControllerMap2D} using keyboard or gamepad
+ * @param <E> The game-specific object associated with each {@link Hexagon} and {@link HexagonController2D}
  */
-public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> implements InputConsumer, InputObserver {
+public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E>> implements InputConsumer, InputObserver {
 
 	private Hexagon currentHexagon;
 
@@ -21,7 +20,7 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	 * Be sure to register this object with the {@link InputStrategySwitcher}
 	 * @param hexagonControllerMap The map of hexagon controllers to be navigated
 	 */
-	public NavigableHexagonMap(HexagonControllerMap<E> hexagonControllerMap) {
+	public NavigableHexagonMap2D(HexagonControllerMap2D<E> hexagonControllerMap) {
 		this.setActor(hexagonControllerMap);
 	}
 
@@ -49,15 +48,8 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	@Override
 	public void gainFocus() {
 		selectDefault();
-		getActor().centerSelf();
-		centerSelf();
 	}
-
-	@Override
-	public void regainFocus() {
-		selectDefault();
-	}
-
+	
 	@Override
 	public void focusCurrent() {
 		if (isInputAllowed()) {
@@ -99,12 +91,13 @@ public class NavigableHexagonMap<E> extends Container<HexagonControllerMap<E>> i
 	/**
 	 * @return The visual representation of the currently selected hexagon (keyboard and gamepad)
 	 */
-	public HexagonController getCurrentHexagonController() {
+	public HexagonController2D getCurrentHexagonController() {
 		return getActor().getControllerOf(currentHexagon);
 	}
 
-	private void centerSelf() {
-		this.setPosition(GameInfo.getWidth() / 2f - this.getWidth() / 2, GameInfo.getHeight() / 2f - this.getHeight() / 2);
+	@Override
+	public void resizeUI() {
+		getActor().resizeUI();
 	}
 
 }

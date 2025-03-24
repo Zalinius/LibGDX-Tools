@@ -64,6 +64,7 @@ public class SkinManager {
 		skin.add(CONFIRMATION_MENU_BACKGROUND, new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.PINK, size), 1, 1, 1, 1)));
 
 		BitmapFont defaultFont = new BitmapFont();
+		defaultFont.setColor(Color.BLACK);
 		skin.add("default", defaultFont);
 
 		skin.add(DEFAULT_LABEL, new LabelStyle(defaultFont, Color.BLACK));
@@ -88,11 +89,15 @@ public class SkinManager {
 		Drawable buttonHighlighted = new Image(ColorTools.getColoredTexture(Color.GRAY, size)).getDrawable();
 		TextButtonStyle textButtonStyle = new TextButtonStyle(buttonNOTHighlighted, null, null, defaultFont);
 		textButtonStyle.over = buttonHighlighted;
+		textButtonStyle.fontColor = Color.LIGHT_GRAY;
+		textButtonStyle.overFontColor = Color.WHITE;
 		textButtonStyle.focused = buttonHighlighted;
 		textButtonStyle.disabledFontColor = Color.FIREBRICK;
 		skin.add(TEXT_BUTTON, textButtonStyle);
 		TextButtonStyle flashedTextButtonStyle = new TextButtonStyle(buttonHighlighted, null, null, defaultFont);
 		flashedTextButtonStyle.over = buttonNOTHighlighted;
+		textButtonStyle.fontColor = Color.LIGHT_GRAY;
+		flashedTextButtonStyle.overFontColor = Color.WHITE;
 		flashedTextButtonStyle.focused = buttonNOTHighlighted;
 		skin.add(FLASHED_TEXT_BUTTON, flashedTextButtonStyle);
 		TextButtonStyle sneakyLabelButtonStyle = new TextButtonStyle(new Image(ColorTools.getColoredTexture(Color.CLEAR, size)).getDrawable(), null, null, defaultFont);

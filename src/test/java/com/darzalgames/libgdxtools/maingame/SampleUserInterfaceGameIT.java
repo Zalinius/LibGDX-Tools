@@ -50,6 +50,7 @@ class SampleUserInterfaceGameIT {
 	void clickingTheOptionsButton_pausesTheGame() {
 		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS}, 
 				app -> {
+					app.inputSetup.getPause().act(3); // Give time for the pause button to be put in place
 					clickMouse(10, 10);
 
 					assertTrue(app.inputSetup.getPause().isPaused());

@@ -112,7 +112,9 @@ public class UserInterfaceSizer {
 
 	public static void setScaling(float scaling) {
 		UserInterfaceSizer.scaling = scaling;
-		updateFont.run();
+		if (updateFont != null) {
+			updateFont.run();
+		}
 		GameInfo.getPreferenceManager().other().setFloatPrefValue(USER_INTERFACE_SCALING_PREFERENCE_KEY, scaling);
 	}
 

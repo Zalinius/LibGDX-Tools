@@ -21,7 +21,6 @@ public class Pause extends Actor {
 
 		this.pauseMenu = pauseMenu;
 
-		pauseMenu.addPauseButtonToStage(popUpStage);
 		showPauseButton(false); // Only enable the button after the splash screen
 	}
 

@@ -98,9 +98,8 @@ public class NavigableHexagonMap3D<E> implements InputConsumer, InputObserver {
 
 	@Override
 	public boolean shouldBeUnregistered() {
-		// TODO  this
+		// TODO  this... used to be : return this.getStage() == null;
 		return false;
-		//		return this.getStage() == null;
 	}
 
 	private boolean isInputAllowed() {

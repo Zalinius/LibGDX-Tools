@@ -23,14 +23,6 @@ public class MainMenuScreen extends GameScreen {
 	public void gainFocus() {
 		InputPriority.claimPriority(mainMenu);
 	}
-	
-	/**
-	 * Recreates the main menu buttons, useful when changing language or font
-	 */
-	public void refresh() {
-		// TODO no longer needed, presumably?? Or does QG still need this?
-		mainMenu.regainFocus();
-	}
 
 	@Override public String toString() { return "Main menu SCREEN, but not the buttons themselves"; }
 

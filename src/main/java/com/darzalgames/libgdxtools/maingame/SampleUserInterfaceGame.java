@@ -324,12 +324,6 @@ public class SampleUserInterfaceGame extends MainGame {
 			return MainGame.getUserInterfaceFactory().getQuitGameButton();
 		}
 
-		@Override
-		public void resizeUI() {
-			// TODO Auto-generated method stub
-			
-		}
-
 	}
 
 	private static Lwjgl3WindowListener makeWindowListener() {

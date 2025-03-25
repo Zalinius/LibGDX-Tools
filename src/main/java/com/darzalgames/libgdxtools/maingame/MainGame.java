@@ -135,6 +135,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	@Override
 	public final void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		
+		// LibGDX 1.13 gives us this, I think the boolean at the end lets us toggle applying AA? NOTE: the number of samples must still be set in the launch config
+		// ScreenUtils.clear (float r, float g, float b, float a, boolean clearDepth, boolean applyAntialiasing) {
+
 		if (!isQuitting) {
 			resizeUI();
 			multipleStage.render(this::renderInternal);

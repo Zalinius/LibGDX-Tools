@@ -55,8 +55,8 @@ public class UniversalSelectBox extends UniversalButton {
 					longestWidth = menu.getFinalButtonWidth();
 				}
 				options.setWidth(longestWidth + background.getPatch().getLeftWidth() + background.getPatch().getRightWidth());
-				options.setHeight(options.getPrefHeight() + background.getPatch().getBottomHeight() + background.getPatch().getTopHeight());				
-				options.setPosition(textButton.getRight(), textButton.getTop());
+				options.setHeight(options.getPrefHeight() + background.getPatch().getBottomHeight() + background.getPatch().getTopHeight());
+				UserInterfaceFactory.makeActorCentered(options);
 			}
 		};
 

@@ -10,7 +10,6 @@ public class UserInterfaceSizer {
 	private static Stage stage;
 	private static float scaling = 1;
 	private static Runnable updateFont;
-	public static String USER_INTERFACE_SCALING_PREFERENCE_KEY = "userInterfaceScaling";
 
 	/**
 	 * @param actor The actor to size, typically a nine/ten patch
@@ -107,7 +106,7 @@ public class UserInterfaceSizer {
 
 	public static void setStage(Stage stage) {
 		UserInterfaceSizer.stage = stage;
-		setScaling(GameInfo.getPreferenceManager().other().getFloatPrefValue(USER_INTERFACE_SCALING_PREFERENCE_KEY, 1));
+		setScaling(GameInfo.getPreferenceManager().graphics().getUserInterfaceScaling());
 	}
 
 	public static void setScaling(float scaling) {
@@ -115,7 +114,7 @@ public class UserInterfaceSizer {
 		if (updateFont != null) {
 			updateFont.run();
 		}
-		GameInfo.getPreferenceManager().other().setFloatPrefValue(USER_INTERFACE_SCALING_PREFERENCE_KEY, scaling);
+		GameInfo.getPreferenceManager().graphics().setUserInterfaceScaling(scaling);
 	}
 
 	public static void setUpdateFont(Runnable updateFont) {

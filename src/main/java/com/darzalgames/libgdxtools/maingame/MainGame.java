@@ -2,8 +2,6 @@ package com.darzalgames.libgdxtools.maingame;
 
 import java.util.function.Consumer;
 
-import org.lwjgl.opengl.GL20;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
@@ -134,10 +133,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	@Override
 	public final void render () {
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		
-		// LibGDX 1.13 gives us this, I think the boolean at the end lets us toggle applying AA? NOTE: the number of samples must still be set in the launch config
-		// ScreenUtils.clear (float r, float g, float b, float a, boolean clearDepth, boolean applyAntialiasing) {
+		ScreenUtils.clear(0, 0, 0, 1, true);
 
 		if (!isQuitting) {
 			resizeUI();

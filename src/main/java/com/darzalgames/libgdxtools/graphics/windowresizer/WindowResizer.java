@@ -15,8 +15,7 @@ public abstract class WindowResizer {
 		WINDOWED,
 	}
 
-	protected static final String SCREEN_MODE_KEY = "screenMode";
-
+	
 	protected ScreenMode currentScreenMode;
 	private ScreenMode previousScreenMode;
 
@@ -40,7 +39,7 @@ public abstract class WindowResizer {
 		this.windowResizerButton = windowResizerButton;
 		windowResizerButton.setWindowResizer(this);
 		getModeSelectBox();
-		String preferredModeString = GameInfo.getPreferenceManager().other().getStringPrefValue(SCREEN_MODE_KEY, ScreenMode.FULLSCREEN.name());
+		String preferredModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
 		setMode(windowResizerButton.getModeFromPreference(preferredModeString), false);
 		previousScreenMode = currentScreenMode;
 	}
@@ -75,7 +74,7 @@ public abstract class WindowResizer {
 	protected void setMode(ScreenMode screenMode, boolean offerToRevert) {
 		previousScreenMode = currentScreenMode;
 		currentScreenMode = screenMode;
-		GameInfo.getPreferenceManager().other().setStringPrefValue(SCREEN_MODE_KEY, currentScreenMode.name());
+		GameInfo.getPreferenceManager().graphics().setPreferredScreenMode(currentScreenMode.name());
 
 		inputStrategySwitcher.saveCurrentStrategy();
 		switch (currentScreenMode) {

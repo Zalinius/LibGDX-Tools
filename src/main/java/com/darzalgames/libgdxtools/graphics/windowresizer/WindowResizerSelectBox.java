@@ -35,7 +35,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		super(getEntries(), textButton, textSupplier, inputStrategySwitcher, soundInteractListener);
 		
 		this.setAction(selectedNewMode -> {
-			String previousMode = GameInfo.getPreferenceManager().other().getStringPrefValue(WindowResizer.SCREEN_MODE_KEY);
+			String previousMode = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
 			if (!selectedNewMode.equalsIgnoreCase(previousMode)) {
 				windowResizer.setMode(getModeFromPreference(selectedNewMode), true);
 			}

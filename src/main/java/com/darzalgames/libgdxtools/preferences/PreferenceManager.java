@@ -21,6 +21,10 @@ public class PreferenceManager {
 		return new SoundPreference(this);
 	}
 	
+	public GraphicsPreference graphics() {
+		return new GraphicsPreference(this);
+	}
+	
 	public OtherPreferences other() {
 		return new OtherPreferences(this);
 	}

@@ -127,6 +127,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		multipleStage.stage.clear(); // TODO is there a reason not to do this?
 		multipleStage.popUpStage.clear(); // TODO is there a reason not to do this?
 		currentScreen = gameScreen;
+		multipleStage.stage.addActor(inputSetup.getScrollingManager());
 		multipleStage.stage.addActor(currentScreen);
 		currentScreen.show();
 	}
@@ -225,6 +226,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		Stage inputHandlerStage = new Stage(new ScreenViewport());
 		MouseInputHandler mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
 		inputHandlerStage.addActor(mouseInputHandler);
+		inputHandlerStage.addActor(inputStrategySwitcher);
 		inputHandlerStage.addActor(new Actor() {
 			@Override
 			public void draw(Batch batch, float parentAlpha) {
@@ -254,9 +256,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		// Set up input processing for all strategies
 		inputSetup = new InputSetup(inputStrategySwitcher, makePauseMenu(), windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), multipleStage.popUpStage);
 		multipleStage.setPause(inputSetup.getPause());
-		multipleStage.stage.addActor(inputStrategySwitcher);
 		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
-		multipleStage.stage.addActor(inputSetup.getScrollingManager());
 
 		setUpCatchKeys();
 		makeSteamStrategy();

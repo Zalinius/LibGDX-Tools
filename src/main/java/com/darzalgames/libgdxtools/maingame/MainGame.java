@@ -225,6 +225,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		Stage inputHandlerStage = new Stage(new ScreenViewport());
 		MouseInputHandler mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
 		inputHandlerStage.addActor(mouseInputHandler);
+		inputHandlerStage.addActor(inputStrategySwitcher);
 		inputHandlerStage.addActor(new Actor() {
 			@Override
 			public void draw(Batch batch, float parentAlpha) {
@@ -254,9 +255,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		// Set up input processing for all strategies
 		inputSetup = new InputSetup(inputStrategySwitcher, makePauseMenu(), windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), multipleStage.popUpStage);
 		multipleStage.setPause(inputSetup.getPause());
-		multipleStage.stage.addActor(inputStrategySwitcher);
 		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
-		multipleStage.stage.addActor(inputSetup.getScrollingManager());
 
 		setUpCatchKeys();
 		makeSteamStrategy();
@@ -279,7 +278,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void makeKeyboardAndGamepadInputHandlers() {
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
 		GamepadInputHandler gamepadInputHandler = steamStrategy.getGamepadInputHandler();
-		multipleStage.setUpInputHandlersOnStages(keyboardInputHandler, gamepadInputHandler);
+		multipleStage.setUpInputHandlersOnStages(keyboardInputHandler, gamepadInputHandler, inputSetup.getScrollingManager());
 	}
 
 	private void initializeWindowResizer() {

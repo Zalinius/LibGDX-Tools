@@ -3,9 +3,10 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.ui.input.Input;
 
-public class ScrollingManager extends Actor {
+public class ScrollingManager extends Actor implements DoesNotPause {
 
 	private float timeSinceScroll;
 	private boolean hasFinishedScrolling;
@@ -38,6 +39,11 @@ public class ScrollingManager extends Actor {
 		super.act(delta);
 		this.timeSinceScroll += delta;
 		this.getStage().setScrollFocus(this);
+	}
+
+	@Override
+	public void actWhilePaused(float delta) {
+		act(delta);
 	}
 	
 }

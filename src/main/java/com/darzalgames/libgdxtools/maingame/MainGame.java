@@ -127,7 +127,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		multipleStage.stage.clear(); // TODO is there a reason not to do this?
 		multipleStage.popUpStage.clear(); // TODO is there a reason not to do this?
 		currentScreen = gameScreen;
-		multipleStage.stage.addActor(inputSetup.getScrollingManager());
 		multipleStage.stage.addActor(currentScreen);
 		currentScreen.show();
 	}
@@ -279,7 +278,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void makeKeyboardAndGamepadInputHandlers() {
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
 		GamepadInputHandler gamepadInputHandler = steamStrategy.getGamepadInputHandler();
-		multipleStage.setUpInputHandlersOnStages(keyboardInputHandler, gamepadInputHandler);
+		multipleStage.setUpInputHandlersOnStages(keyboardInputHandler, gamepadInputHandler, inputSetup.getScrollingManager());
 	}
 
 	private void initializeWindowResizer() {

@@ -13,6 +13,7 @@ import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.ScrollingManager;
 
 public class MultipleStage {
 
@@ -82,13 +83,16 @@ public class MultipleStage {
 		stageToResize.getCamera().update();
 	}
 
-	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler) {
+	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, ScrollingManager scrollingManager) {
 		inputHandlerStage.addActor(keyboardInputHandler);
 		actorsThatDoNotPause.add(keyboardInputHandler);
 
 		inputHandlerStage.addActor(gamepadInputHandler);
 		actorsThatDoNotPause.add(gamepadInputHandler);
-
+		
+		inputHandlerStage.addActor(scrollingManager);
+		actorsThatDoNotPause.add(scrollingManager);
+		
 		stage.setKeyboardFocus(keyboardInputHandler);
 	}
 

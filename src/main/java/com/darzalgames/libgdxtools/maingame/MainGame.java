@@ -26,7 +26,7 @@ import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.MouseInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSetup;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardAndGamepadInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
@@ -68,7 +68,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	 */
 	protected abstract Consumer<Stage> makeAddBackgroundToStageRunnable();
 	protected abstract Runnable getDrawConsoleRunnable();
-	protected abstract PauseMenu makePauseMenu();
+	protected abstract OptionsMenu makePauseMenu();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 	protected abstract SaveManager makeSaveManager();
 	protected abstract void setUpBeforeLoadingSave();
@@ -215,7 +215,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	private UniversalInputStage makePopUpStage() {
-		// The pause menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
+		// The options menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
 		UniversalInputStage popUpStage = new UniversalInputStage(new ScreenViewport(), inputStrategySwitcher);
 		popUpStage.getRoot().setName("PopUp Stage");
 		return popUpStage;

@@ -9,7 +9,7 @@ public class GamePauser {
 	}
 
 	/**
-	 * Will show the pause menu if the game is not already paused
+	 * Will show the options menu if the game is not already paused
 	 */
 	public static void pause() {
 		pauseGameRunnable.run();

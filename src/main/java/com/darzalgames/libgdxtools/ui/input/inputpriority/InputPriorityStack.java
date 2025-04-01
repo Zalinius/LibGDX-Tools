@@ -19,9 +19,9 @@ public class InputPriorityStack implements InputObserver {
 	private final LimitedAccessDoubleStack stack;
 	private final DarkScreen darkScreen;
 	private final Stage popUpStage;
-	private final PauseMenu pauseMenu;
+	private final OptionsMenu pauseMenu;
 
-	public InputPriorityStack(Stage popUpStage, PauseMenu pauseMenu) {
+	public InputPriorityStack(Stage popUpStage, OptionsMenu pauseMenu) {
 		this.popUpStage = popUpStage;
 		this.pauseMenu = pauseMenu;
 		stack = new LimitedAccessDoubleStack();

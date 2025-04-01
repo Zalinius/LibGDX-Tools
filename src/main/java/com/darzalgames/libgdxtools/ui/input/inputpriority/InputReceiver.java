@@ -69,7 +69,7 @@ public class InputReceiver {
 	}
 
 	private void togglePause() {
-		boolean isInGame = !pause.isPauseMenuOpen();
+		boolean isInGame = !pause.isOptionsMenuOpen();
 		if (isInGame) { 
 			GamePauser.pause();
 		} else { 

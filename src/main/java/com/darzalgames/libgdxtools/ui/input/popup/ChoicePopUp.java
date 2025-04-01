@@ -47,7 +47,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	protected void setChosenKey(String chosenKey) {}
 	
 	protected BaseDrawable getBackgroundDrawable() {
-		return MainGame.getUserInterfaceFactory().getUIBorderedNine();
+		return MainGame.getUserInterfaceFactory().getUIBorderedPatch();
 	}
 
 	@Override

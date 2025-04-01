@@ -155,7 +155,7 @@ public class UserInterfaceFactory {
 		return keyboardSelectBox;
 	}
 
-	public BaseDrawable getUIBorderedNine() {
+	public BaseDrawable getUIBorderedPatch() {
 		return skinManager.getUINinePatch();
 	}
 	public BaseDrawable getConfirmationMenuBackground() {
@@ -172,11 +172,11 @@ public class UserInterfaceFactory {
 		return new UniversalCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategySwitcher, soundInteractListener);
 	}
 
-	public UniversalButton getSettingsButton(Consumer<Boolean> togglePauseScreenVisibility) {
+	public UniversalButton getSettingsButton(Consumer<Boolean> toggleOptionsScreenVisibility) {
 		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()){
-			@Override public String toString() { return "pause button"; }}; 
+			@Override public String toString() { return "options button"; }}; 
 			return new MouseOnlyButton(textButton, Suppliers.emptyString(),
-					() -> togglePauseScreenVisibility.accept(!isPaused.get()),
+					() -> toggleOptionsScreenVisibility.accept(!isPaused.get()),
 					inputStrategySwitcher, soundInteractListener);
 	}
 

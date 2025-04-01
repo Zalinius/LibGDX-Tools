@@ -32,7 +32,7 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.PauseMenu;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.ChoicePopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -89,7 +89,7 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	@Override
 	protected void launchGame(boolean isNewSave) {
-		inputSetup.getPause().showPauseButton(true);
+		inputSetup.getPause().showOptionsButton(true);
 		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override
@@ -289,12 +289,12 @@ public class SampleUserInterfaceGame extends MainGame {
 		return MainGame.getUserInterfaceFactory().getWindowModeTextSelectBox();
 	}
 	
-	private class TestOptionsMenu extends PauseMenu {
+	private class TestOptionsMenu extends OptionsMenu {
 
 		protected TestOptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox) {
 			super(makeWindowModeSelectBox, 0);
-			pauseButton = MainGame.getUserInterfaceFactory().getSettingsButton(this::toggleScreenVisibility);
-			pauseButton.getView().setWidth(pauseButton.getView().getHeight());
+			optionsButton = MainGame.getUserInterfaceFactory().getSettingsButton(this::toggleScreenVisibility);
+			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 		}
 
 		@Override protected Alignment getEntryAlignment() {return Alignment.CENTER;}
@@ -357,7 +357,7 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	@Override
-	protected PauseMenu makePauseMenu() {
+	protected OptionsMenu makePauseMenu() {
 		return new TestOptionsMenu(windowResizer::getModeSelectBox);
 	}
 	

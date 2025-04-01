@@ -7,29 +7,29 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class Pause extends Actor {
 
-	private PauseMenu pauseMenu;
+	private OptionsMenu optionsMenu;
 	private Stage popUpStage;
 	private final Supplier<Boolean> doesCurrentInputConsumerPauseGame;
 
 	/**
 	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the pause menu do this)
 	 */
-	public Pause(Stage popUpStage, PauseMenu pauseMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
+	public Pause(Stage popUpStage, OptionsMenu pauseMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
 		this.popUpStage = popUpStage;
 		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
 		GamePauser.setPauseGameRunnable(this::pause);
 
-		this.pauseMenu = pauseMenu;
+		this.optionsMenu = pauseMenu;
 
-		showPauseButton(false); // Only enable the button after the splash screen
+		showOptionsButton(false); // Only enable the button after the splash screen
 	}
 
-	public void showPauseButton(boolean show) {
-		pauseMenu.showPauseButton(show);
+	public void showOptionsButton(boolean show) {
+		optionsMenu.showOptionsButton(show);
 	}
 
-	boolean isPauseMenuOpen() {
-		return pauseMenu.getStage() != null;
+	boolean isOptionsMenuOpen() {
+		return optionsMenu.getStage() != null;
 	}
 
 	public boolean isPaused() {
@@ -37,11 +37,11 @@ public class Pause extends Actor {
 	}
 
 	private void pause() {
-		InputPriority.claimPriority(pauseMenu);
+		InputPriority.claimPriority(optionsMenu);
 	}
 
 	@Override
 	public void act(float delta) {
-		pauseMenu.addPauseButtonToStage(popUpStage);
+		optionsMenu.addOptionsButtonToStage(popUpStage);
 	}
 }

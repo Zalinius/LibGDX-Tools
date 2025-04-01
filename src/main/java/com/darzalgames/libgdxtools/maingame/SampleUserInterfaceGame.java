@@ -293,7 +293,7 @@ public class SampleUserInterfaceGame extends MainGame {
 
 		protected TestOptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox) {
 			super(makeWindowModeSelectBox, 0);
-			optionsButton = MainGame.getUserInterfaceFactory().getSettingsButton(this::toggleScreenVisibility);
+			optionsButton = MainGame.getUserInterfaceFactory().getOptionsButton(this::toggleScreenVisibility);
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 		}
 
@@ -357,7 +357,7 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	@Override
-	protected OptionsMenu makePauseMenu() {
+	protected OptionsMenu makeOptionsMenu() {
 		return new TestOptionsMenu(windowResizer::getModeSelectBox);
 	}
 	

@@ -19,11 +19,11 @@ public class InputPriorityStack implements InputObserver {
 	private final LimitedAccessDoubleStack stack;
 	private final DarkScreen darkScreen;
 	private final Stage popUpStage;
-	private final OptionsMenu pauseMenu;
+	private final OptionsMenu optionsMenu;
 
-	public InputPriorityStack(Stage popUpStage, OptionsMenu pauseMenu) {
+	public InputPriorityStack(Stage popUpStage, OptionsMenu optionsMenu) {
 		this.popUpStage = popUpStage;
-		this.pauseMenu = pauseMenu;
+		this.optionsMenu = optionsMenu;
 		stack = new LimitedAccessDoubleStack();
 		clearStackAndPushBlankConsumer();
 
@@ -117,10 +117,10 @@ public class InputPriorityStack implements InputObserver {
 	}
 
 	private void releasePriorityForTop() { 
-		boolean isClosingPauseMenu = stack.isThisOnTop(pauseMenu);
+		boolean isClosingOptionsMenu = stack.isThisOnTop(optionsMenu);
 		unFocusTop();
 		stack.popTop();
-		if (isClosingPauseMenu) {
+		if (isClosingOptionsMenu) {
 			stack.getTop().setTouchable(Touchable.enabled);
 			stack.getTop().focusCurrent();
 		} else {

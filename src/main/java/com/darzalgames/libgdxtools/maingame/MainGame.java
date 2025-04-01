@@ -68,7 +68,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	 */
 	protected abstract Consumer<Stage> makeAddBackgroundToStageRunnable();
 	protected abstract Runnable getDrawConsoleRunnable();
-	protected abstract OptionsMenu makePauseMenu();
+	protected abstract OptionsMenu makeOptionsMenu();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 	protected abstract SaveManager makeSaveManager();
 	protected abstract void setUpBeforeLoadingSave();
@@ -253,7 +253,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void setUpInput() {
 		// Set up input processing for all strategies
-		inputSetup = new InputSetup(inputStrategySwitcher, makePauseMenu(), windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), multipleStage.popUpStage);
+		inputSetup = new InputSetup(inputStrategySwitcher, makeOptionsMenu(), windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), multipleStage.popUpStage);
 		multipleStage.setPause(inputSetup.getPause());
 		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
 

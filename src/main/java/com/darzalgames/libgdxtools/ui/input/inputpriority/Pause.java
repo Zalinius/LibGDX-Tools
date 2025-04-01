@@ -12,14 +12,14 @@ public class Pause extends Actor {
 	private final Supplier<Boolean> doesCurrentInputConsumerPauseGame;
 
 	/**
-	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the pause menu do this)
+	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
 	 */
-	public Pause(Stage popUpStage, OptionsMenu pauseMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
+	public Pause(Stage popUpStage, OptionsMenu optionsMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
 		this.popUpStage = popUpStage;
 		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
 		GamePauser.setPauseGameRunnable(this::pause);
 
-		this.optionsMenu = pauseMenu;
+		this.optionsMenu = optionsMenu;
 
 		showOptionsButton(false); // Only enable the button after the splash screen
 	}

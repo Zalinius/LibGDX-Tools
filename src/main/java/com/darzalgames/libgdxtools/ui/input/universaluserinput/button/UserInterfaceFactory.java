@@ -172,7 +172,7 @@ public class UserInterfaceFactory {
 		return new UniversalCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategySwitcher, soundInteractListener);
 	}
 
-	public UniversalButton getSettingsButton(Consumer<Boolean> toggleOptionsScreenVisibility) {
+	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility) {
 		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()){
 			@Override public String toString() { return "options button"; }}; 
 			return new MouseOnlyButton(textButton, Suppliers.emptyString(),

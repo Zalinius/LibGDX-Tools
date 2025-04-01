@@ -171,7 +171,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	 * e.g. call {@link UserInterfaceSizer#makeActorCentered(Actor) UserInterfaceSizer.makeActorCentered(this)} 
 	 */
 	private void setUpBackground() {
-		this.setBackground(MainGame.getUserInterfaceFactory().getUIBorderedPatch());
+		this.setBackground(MainGame.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 		UserInterfaceSizer.makeActorCentered(this);
 	}
 	
@@ -239,7 +239,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		@Override
 		protected void setUpTable() {
 			setUpDesiredSize();
-			background(MainGame.getUserInterfaceFactory().getUIBorderedPatch());
+			background(MainGame.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 
 			menu.setAlignment(Alignment.CENTER, Alignment.TOP);
 			add(menu.getView()).growX().top();

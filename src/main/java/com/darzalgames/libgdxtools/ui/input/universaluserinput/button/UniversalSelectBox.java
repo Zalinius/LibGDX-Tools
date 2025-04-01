@@ -42,7 +42,7 @@ public class UniversalSelectBox extends UniversalButton {
 			@Override
 			protected void setUpTable() {
 				menu.setAlignment(Alignment.LEFT, Alignment.LEFT);
-				menu.getView().setBackground(MainGame.getUserInterfaceFactory().getUIBorderedPatch());
+				menu.getView().setBackground(MainGame.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 				options.add(menu.getView()).left();
 				options.pack();
 				UserInterfaceSizer.makeActorCentered(options);

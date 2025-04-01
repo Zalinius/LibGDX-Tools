@@ -155,7 +155,7 @@ public class UserInterfaceFactory {
 		return keyboardSelectBox;
 	}
 
-	public BaseDrawable getUIBorderedPatch() {
+	public BaseDrawable getDefaultBackgroundDrawable() {
 		return skinManager.getUINinePatch();
 	}
 	public BaseDrawable getConfirmationMenuBackground() {

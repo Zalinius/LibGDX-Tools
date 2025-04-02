@@ -21,11 +21,11 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalB
 
 
 /**
- * The base class for pause menus (in-game versus when on the main menu)
+ * The base class for options menus (in-game versus when on the main menu)
  */
-public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
+public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
-	protected UniversalButton pauseButton;
+	protected UniversalButton optionsButton;
 	private final Supplier<UniversalButton> makeWindowModeSelectBox;
 
 	private final String platformName;
@@ -67,7 +67,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	 */
 	protected abstract PopUp makeControlsPopUp();
 
-	protected PauseMenu(Supplier<UniversalButton> makeWindowModeSelectBox, int bottomPadding) {
+	protected OptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox, int bottomPadding) {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
 		this.platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
@@ -106,7 +106,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	@Override
 	public void regainFocus() {
 		focusCurrent();
-		pauseButton.setTouchable(Touchable.enabled);
+		optionsButton.setTouchable(Touchable.enabled);
 	}
 
 	@Override
@@ -167,11 +167,11 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	}
 
 	/**
-	 * NOTE: Setting the position here is important, otherwise the pause menu will not open!<p>
+	 * NOTE: Setting the position here is important, otherwise the options menu will not open!<p>
 	 * e.g. call {@link UserInterfaceSizer#makeActorCentered(Actor) UserInterfaceSizer.makeActorCentered(this)} 
 	 */
 	private void setUpBackground() {
-		this.setBackground(MainGame.getUserInterfaceFactory().getUIBorderedNine());
+		this.setBackground(MainGame.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 		UserInterfaceSizer.makeActorCentered(this);
 	}
 	
@@ -189,21 +189,21 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		return true;
 	}
 
-	private void positionPauseButton() {
+	private void positionOptionsButton() {
 		float padding = UserInterfaceSizer.getHeightPercentage(0.01f);
-		pauseButton.getView().setPosition(padding, UserInterfaceSizer.getCurrentHeight() - pauseButton.getView().getHeight() - padding);
-		UserInterfaceSizer.scaleToMinimumPercentage(pauseButton.getView(), 0.08f);
+		optionsButton.getView().setPosition(padding, UserInterfaceSizer.getCurrentHeight() - optionsButton.getView().getHeight() - padding);
+		UserInterfaceSizer.scaleToMinimumPercentage(optionsButton.getView(), 0.08f);
 	}
 
-	protected void showPauseButton(boolean show) {
-		pauseButton.setTouchable(show ? Touchable.enabled : Touchable.disabled);
-		pauseButton.getView().setVisible(show);
+	protected void showOptionsButton(boolean show) {
+		optionsButton.setTouchable(show ? Touchable.enabled : Touchable.disabled);
+		optionsButton.getView().setVisible(show);
 	}
 
-	protected void addPauseButtonToStage(Stage stage) {
-		stage.addActor(pauseButton.getView());
-		pauseButton.getView().toFront();
-		positionPauseButton();
+	protected void addOptionsButtonToStage(Stage stage) {
+		stage.addActor(optionsButton.getView());
+		optionsButton.getView().toFront();
+		positionOptionsButton();
 	}
 
 	/**
@@ -220,7 +220,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 		@Override
 		protected void setUpDesiredSize() {
-			menu.setSpacing(PauseMenu.this.menu.getSpacing());
+			menu.setSpacing(OptionsMenu.this.menu.getSpacing());
 			UserInterfaceSizer.sizeToPercentage(this, 0.5f);
 			if (this.getActions().isEmpty()) {
 				UserInterfaceSizer.makeActorCentered(this);
@@ -239,7 +239,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		@Override
 		protected void setUpTable() {
 			setUpDesiredSize();
-			background(MainGame.getUserInterfaceFactory().getUIBorderedNine());
+			background(MainGame.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 
 			menu.setAlignment(Alignment.CENTER, Alignment.TOP);
 			add(menu.getView()).growX().top();

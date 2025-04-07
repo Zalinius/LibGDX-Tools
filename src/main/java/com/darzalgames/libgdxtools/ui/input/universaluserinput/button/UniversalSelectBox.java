@@ -7,7 +7,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
@@ -23,7 +22,7 @@ public class UniversalSelectBox extends UniversalButton {
 	private Supplier<String> defaultEntry;
 	private Consumer<String> action;
 
-	public UniversalSelectBox(Collection<Supplier<String>> entries, TextButton textButton, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+	public UniversalSelectBox(Collection<Supplier<String>> entries, BasicButton textButton, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		super(textButton, textSupplier, inputStrategySwitcher, soundInteractListener);
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,
@@ -61,7 +60,7 @@ public class UniversalSelectBox extends UniversalButton {
 		this.setButtonRunnable(this::showInnerOptionsPopUpMenu);
 		this.setWrap(false);
 		
-		setSelected(() -> entryButtons.get(0).getView().getText().toString());
+		setSelected(() -> entryButtons.get(0).getButton().getButtonText());
 	}
 
 	/**
@@ -71,7 +70,7 @@ public class UniversalSelectBox extends UniversalButton {
 	 */
 	public void setSelected(Supplier<String> entry) {
 		defaultEntry = entry;
-		TextButton view = this.getView();
+		BasicButton view = this.getButton();
 		Label label = view.getLabel();
 		view.getLabelCell().padRight(3);
 		view.setWidth(view.getLabelCell().getPadRight() + label.getWidth() + displayLabel.getPrefWidth());
@@ -90,8 +89,8 @@ public class UniversalSelectBox extends UniversalButton {
 	public void resizeUI() {
 		super.resizeUI();
 		displayLabel.setTextSupplier(defaultEntry);
-		TextButton thisButton = this.getView();
-		displayLabel.setColor(thisButton.getClickListener().isOver() ? thisButton.getStyle().overFontColor : thisButton.getStyle().fontColor);
+		BasicButton thisButton = this.getButton();
+		displayLabel.setColor(thisButton.isOver() ? thisButton.getStyle().overFontColor : thisButton.getStyle().fontColor);
 		displayLabel.layout();
 	}
 	

@@ -120,7 +120,7 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 				menu.goTo(i - nonInteractablesToIgnore);
 				return;
 			}
-			else if (thisEntry.getView().isDisabled() || MainGame.getUserInterfaceFactory().isSpacer(thisEntry)) {
+			else if (thisEntry.getButton().isDisabled() || MainGame.getUserInterfaceFactory().isSpacer(thisEntry)) {
 				nonInteractablesToIgnore++;
 			}
 		}

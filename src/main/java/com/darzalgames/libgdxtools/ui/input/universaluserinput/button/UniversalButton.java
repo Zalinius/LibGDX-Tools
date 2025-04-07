@@ -5,7 +5,9 @@ import java.util.function.Supplier;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Pools;
 import com.darzalgames.darzalcommon.functional.Runnables;
@@ -21,7 +23,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
  * which allows them all to be put in a navigable menu together and treated the same
  */
 public class UniversalButton implements VisibleInputConsumer {
-	private TextButton button;
+	private BasicButton button;
 	private Supplier<String> textSupplier;
 	private Supplier<Label> labelSupplier;
 	private Supplier<Cell<Label>> cellSupplier;
@@ -33,15 +35,15 @@ public class UniversalButton implements VisibleInputConsumer {
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Runnable soundInteractListener;
 
-	public UniversalButton(TextButton button, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+	public UniversalButton(BasicButton button, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		this(button, textSupplier, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 	}
 
-	public UniversalButton(TextButton button, Supplier<String> textSupplier, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) { 
+	public UniversalButton(BasicButton button, Supplier<String> textSupplier, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) { 
 		this(button, textSupplier, null, runnable, inputStrategySwitcher, soundInteractListener);
 	}
 
-	public UniversalButton(TextButton button, Supplier<String> textSupplier, Image image, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+	public UniversalButton(BasicButton button, Supplier<String> textSupplier, Image image, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		this.button = button;
 		this.textSupplier = textSupplier;
 		this.labelSupplier = button::getLabel;
@@ -65,8 +67,8 @@ public class UniversalButton implements VisibleInputConsumer {
 			button.setWidth(startWidth + image.getWidth() + sidePadding);
 		}
 
-		labelSupplier.get().setTouchable(Touchable.disabled);
-
+		//		labelSupplier.get().setTouchable(Touchable.disabled);
+		// TODO  deal with this / is it even necessary?
 
 		button.addListener(new ChangeListener() {
 			@Override
@@ -90,12 +92,16 @@ public class UniversalButton implements VisibleInputConsumer {
 	}
 
 	@Override
-	public TextButton getView() {
+	public Actor getView() {
 		labelSupplier.get().setWrap(wrap);
 		labelSupplier.get().setAlignment(alignment.getAlignment(), alignment.getAlignment());
 		if (cellSupplier.get() != null) {
 			cellSupplier.get().grow();
 		}
+		return button.getView();
+	}
+
+	public BasicButton getButton() {
 		return button;
 	}
 
@@ -133,7 +139,7 @@ public class UniversalButton implements VisibleInputConsumer {
 			event.setStage(button.getStage());
 			event.setStageX(0);
 			event.setStageY(0);
-			event.setRelatedActor(button);
+			event.setRelatedActor(button.getView());
 			event.setPointer(-1);
 			button.fire(event);
 			Pools.free(event);
@@ -250,6 +256,10 @@ public class UniversalButton implements VisibleInputConsumer {
 		button.setStyle(button.getStyle());
 		button.setSize(button.getPrefWidth(), button.getPrefHeight());
 		updateText(textSupplier.get());
+	}
+
+	public boolean isDisabled() {
+		return button.isDisabled();
 	}
 
 }

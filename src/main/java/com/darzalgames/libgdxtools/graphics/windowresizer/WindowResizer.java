@@ -48,7 +48,7 @@ public abstract class WindowResizer {
 	 * @return A {@link UniversalButton} which, when pressed, opens a {@link UniversalSelectBox select box} for changing the window mode
 	 */
 	public UniversalButton getModeSelectBox() {
-		UniversalButton button = windowResizerButton.getButton();
+		UniversalButton button = windowResizerButton.getWindowResizerButton();
 		if (currentScreenMode != null) {
 			windowResizerButton.setSelectedScreenMode(currentScreenMode);			
 		}

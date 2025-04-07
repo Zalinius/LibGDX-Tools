@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
@@ -27,7 +27,7 @@ public class NavigableList implements InputConsumer {
 	private UniversalButton finalButton;
 	private UniversalButton currentButton = null;
 	private int currentEntryIndex;
-	protected final Table table;
+	protected Table table;
 	private boolean isVertical;
 	private boolean pressButtonOnEntryChanged;
 	private Alignment entryAlignment;
@@ -47,10 +47,9 @@ public class NavigableList implements InputConsumer {
 		this.pressButtonOnEntryChanged = false; 
 		this.entryAlignment = Alignment.CENTER;
 		this.tableAlignment = Alignment.TOP_LEFT;
-		table = new Table();
 
 		extraKeyListeners = new ArrayList<>();
-		
+
 		setRefreshPageRunnable(this::defaultRefreshPage);
 	}
 
@@ -82,7 +81,7 @@ public class NavigableList implements InputConsumer {
 	public boolean hasFinalButton() {
 		return finalButton != null;
 	}
-	
+
 	public float getFinalButtonWidth() {
 		if (hasFinalButton()) {
 			return finalButton.getView().getWidth();
@@ -93,17 +92,18 @@ public class NavigableList implements InputConsumer {
 	public Table getView() {
 		return table;
 	}
-	
+
 	public void refreshPage() {
 		refreshPageRunnable.run();
 	}
-	
+
 	@Override
 	public void resizeUI() {
 		allEntries.forEach(UniversalButton::resizeUI);
 	}
 
 	public void defaultRefreshPage() {
+		table = new Table();
 		table.clearChildren();
 		table.clear();
 		table.defaults().expandX().spaceTop(spacing).spaceBottom(spacing).align(entryAlignment.getAlignment());
@@ -118,7 +118,7 @@ public class NavigableList implements InputConsumer {
 				table.row();
 			}
 			entry.setAlignment(entryAlignment);
-			Button button = entry.getView();
+			Actor button = entry.getView();
 			table.add(button);
 			if (MainGame.getUserInterfaceFactory().isSpacer(entry)) {
 				interactableEntries.remove(entry);
@@ -128,7 +128,7 @@ public class NavigableList implements InputConsumer {
 					table.getCell(button).expandX();
 				}
 			}
-			if (button.isDisabled()) {
+			if (entry.getButton().isDisabled()) {
 				interactableEntries.remove(entry);				
 			}
 		}
@@ -194,7 +194,7 @@ public class NavigableList implements InputConsumer {
 
 		extraKeyListeners.forEach(listener -> listener.accept(input));
 	}
-	
+
 	public void returnToFirst() {
 		goTo(0);
 	}
@@ -236,7 +236,7 @@ public class NavigableList implements InputConsumer {
 	public void selectDefault() {
 		returnToFirst();
 	}
-	
+
 	@Override
 	public void clearSelected() {
 		interactableEntries.stream().forEach(e->e.setFocused(false));
@@ -261,7 +261,7 @@ public class NavigableList implements InputConsumer {
 	public void setSpacing(int spacing) {
 		this.spacing = spacing;
 	}
-	
+
 	public void setAlignment(Alignment entryAlignment, Alignment tableAlignment) {
 		this.entryAlignment = entryAlignment;
 		this.tableAlignment = tableAlignment;
@@ -284,13 +284,12 @@ public class NavigableList implements InputConsumer {
 		if(isVertical()) {
 			float total = spacing;
 			for (UniversalButton entry : allEntries) {
-				Button button = entry.getView();
-				total += button.getMinHeight();
+				total += entry.getButton().getMinHeight();
 				total += spacing;
 			}
 			return total;
 		} else {
-			return allEntries.get(0).getView().getMinHeight();
+			return allEntries.get(0).getButton().getMinHeight();
 		}
 	}
 

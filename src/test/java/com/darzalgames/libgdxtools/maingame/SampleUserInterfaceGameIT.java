@@ -87,7 +87,7 @@ class SampleUserInterfaceGameIT {
 					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
 					app.multipleStage.stage.act(1/60f);
 
-					assertTrue(app.quitButton.getView().isOver());
+					assertTrue(app.quitButton.getButton().isOver());
 
 					Gdx.app.exit();
 				});
@@ -114,7 +114,7 @@ class SampleUserInterfaceGameIT {
 					// Check that the menu is NOT back in focus by hovering over the quit button
 					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
 					app.multipleStage.stage.act(1/60f);
-					assertFalse(app.quitButton.getView().isOver());
+					assertFalse(app.quitButton.getButton().isOver());
 
 					Gdx.app.exit();
 				});
@@ -130,7 +130,7 @@ class SampleUserInterfaceGameIT {
 					// Check that the menu is back in focus by hovering over the quit button
 					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
 					app.multipleStage.stage.act(1/60f);
-					assertTrue(app.quitButton.getView().isOver());
+					assertTrue(app.quitButton.getButton().isOver());
 
 					Gdx.app.exit();
 				});
@@ -147,7 +147,7 @@ class SampleUserInterfaceGameIT {
 					// Check that the menu is back in focus by hovering over the quit button
 					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
 					app.multipleStage.stage.act(1/60f);
-					assertTrue(app.quitButton.getView().isOver());
+					assertTrue(app.quitButton.getButton().isOver());
 
 					Gdx.app.exit();
 				});
@@ -173,7 +173,7 @@ class SampleUserInterfaceGameIT {
 					
 					app.multipleStage.popUpStage.mouseMoved(SCREEN_MIDDLE_X, SCREEN_MIDDLE_Y);
 					app.multipleStage.popUpStage.act(1/60f);
-					assertTrue(app.regainFocusPopup.getView().isOver());
+					assertTrue(app.regainFocusPopup.getButton().isOver());
 
 					Gdx.app.exit();
 				});

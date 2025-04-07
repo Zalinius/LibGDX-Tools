@@ -11,12 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -91,7 +89,7 @@ public class UserInterfaceFactory {
 	 */
 	public UniversalButton getListableLabel(Supplier<String> textSupplier) {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
-		TextButton textButton = makeLibGDXTextButton(textSupplier.get(), skinManager.getSneakyLableButtonStyle());
+		BasicButton textButton = makeLibGDXTextButton(textSupplier.get(), skinManager.getSneakyLableButtonStyle());
 		textButton.setName(textSupplier.get());
 		UniversalButton listableButton = new UniversalButton(textButton, textSupplier, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		listableButton.setDisabled(true);
@@ -110,7 +108,7 @@ public class UserInterfaceFactory {
 	}
 
 	public boolean isSpacer(UniversalButton button) {
-		return button.getView().isDisabled() && button.isBlank();
+		return button.isDisabled() && button.isBlank();
 	}
 
 
@@ -127,7 +125,7 @@ public class UserInterfaceFactory {
 	}
 
 	private UniversalButton makeButton(Supplier<String> textKey, Image image, final Runnable runnable) {
-		TextButton textButton = makeLibGDXTextButton(textKey.get());
+		BasicButton textButton = makeLibGDXTextButton(textKey.get());
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 		return new UniversalButton(textButton, textKey, image, runnable, inputStrategySwitcher, soundInteractListener);
 	}
@@ -136,19 +134,19 @@ public class UserInterfaceFactory {
 	 * Make a button in a particular style, these are generally exceptional buttons (in Quest Giver this includes the play button, scenario map pips, etc)
 	 */
 	protected UniversalButton makeButton(final String text, final Runnable runnable, TextButtonStyle textButtonStyle) {
-		TextButton textButton = makeLibGDXTextButton(text, textButtonStyle);
+		BasicButton textButton = makeLibGDXTextButton(text, textButtonStyle);
 		return new UniversalButton(textButton, null, runnable, inputStrategySwitcher, soundInteractListener);
 	}
 
-	private TextButton makeLibGDXTextButton(final String text, TextButtonStyle textButtonStyle) {
-		return new TextButton(text, textButtonStyle);
+	private BasicButton makeLibGDXTextButton(final String text, TextButtonStyle textButtonStyle) {
+		return new MyTextButton(text, textButtonStyle);
 	}
-	private TextButton makeLibGDXTextButton(final String text) {
+	private BasicButton makeLibGDXTextButton(final String text) {
 		return makeLibGDXTextButton(text, skinManager.getTextButtonStyle());
 	}
 
 	public UniversalSelectBox getSelectBox(Supplier<String> boxLabel, Collection<Supplier<String>> entries, Consumer<String> consumer) {
-		TextButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getTextButtonStyle()); 
+		BasicButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 		UniversalSelectBox keyboardSelectBox =  new UniversalSelectBox(entries, textButton, boxLabel, inputStrategySwitcher, soundInteractListener);
 		keyboardSelectBox.setAction(consumer);
@@ -164,16 +162,16 @@ public class UserInterfaceFactory {
 
 	public UniversalSlider getSlider(Supplier<String> textKey, Consumer<Float> consumer) {
 		UniversalButton textButton = getButton(textKey, Runnables.nullRunnable());
-		return new UniversalSlider(textButton.getView(), textKey, skinManager.getSliderStyle(), consumer, inputStrategySwitcher, soundInteractListener);
+		return new UniversalSlider(textButton.getButton(), textKey, skinManager.getSliderStyle(), consumer, inputStrategySwitcher, soundInteractListener);
 	}
 
 	public UniversalCheckbox getCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer) {
 		UniversalButton textButton = getButton(Suppliers.emptyString(), Runnables.nullRunnable());
-		return new UniversalCheckbox(textButton.getView(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategySwitcher, soundInteractListener);
+		return new UniversalCheckbox(textButton.getButton(), uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), inputStrategySwitcher, soundInteractListener);
 	}
 
 	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility) {
-		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()){
+		BasicButton textButton = new MyTextButton("", skinManager.getSettingsButtonStyle()){
 			@Override public String toString() { return "options button"; }}; 
 			return new MouseOnlyButton(textButton, Suppliers.emptyString(),
 					() -> toggleOptionsScreenVisibility.accept(!isPaused.get()),
@@ -216,7 +214,7 @@ public class UserInterfaceFactory {
 		return getButton(getQuitButtonString(), quitWithConfirmation);
 	}
 
-	protected void makeBackgroundFlashing(Button button, ButtonStyle mainButtonStyle, ButtonStyle flashedButtonStyle) {
+	protected void makeBackgroundFlashing(BasicButton button, ButtonStyle mainButtonStyle, ButtonStyle flashedButtonStyle) {
 		button.addListener(new ClickListener() {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -245,7 +243,7 @@ public class UserInterfaceFactory {
 		});
 	}
 	protected void makeSliderFlashing(UniversalSlider keyboardSlider, SliderStyle mainStyle, SliderStyle flashedStyle) {
-		Button button = keyboardSlider.getView(); 
+		BasicButton button = keyboardSlider.getButton(); 
 		button.addListener(new ClickListener() {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -274,13 +272,13 @@ public class UserInterfaceFactory {
 		});
 	}
 
-	private boolean shouldButtonFlash(Button button) {
-		return UniversalInputStage.isInTouchableBranch(button)
+	private boolean shouldButtonFlash(BasicButton button) {
+		return UniversalInputStage.isInTouchableBranch(button.getView())
 				&& !button.isDisabled()
 				&& inputStrategySwitcher.shouldFlashButtons();
 	}
 
-	private Action getChangeButtonStyleAfterDelayAction(Button button, ButtonStyle buttonStyle) {
+	private Action getChangeButtonStyleAfterDelayAction(BasicButton button, ButtonStyle buttonStyle) {
 		RunnableAction change = Actions.run(() -> {
 			if (shouldButtonFlash(button)) {
 				button.setStyle(buttonStyle);
@@ -294,7 +292,7 @@ public class UserInterfaceFactory {
 
 	private Action getChangeSliderStyleAfterDelayAction(UniversalSlider keyboardSlider, SliderStyle sliderStyle) {
 		RunnableAction change = Actions.run(() -> {
-			if (shouldButtonFlash(keyboardSlider.getView())) {
+			if (shouldButtonFlash(keyboardSlider.getButton())) {
 				keyboardSlider.setSliderStyle(sliderStyle);
 			}
 		});
@@ -306,7 +304,7 @@ public class UserInterfaceFactory {
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {
 		Supplier<String> textSupplier = () -> TextSupplier.getLine("window_mode_label");
-		TextButton textButton = makeLibGDXTextButton(textSupplier.get(), skinManager.getTextButtonStyle()); 
+		BasicButton textButton = makeLibGDXTextButton(textSupplier.get(), skinManager.getTextButtonStyle()); 
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 		return new WindowResizerSelectBox(textButton, textSupplier, inputStrategySwitcher, soundInteractListener);
 	}

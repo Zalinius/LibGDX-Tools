@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.darzalgames.darzalcommon.functional.Runnables;
@@ -21,11 +20,11 @@ public class UniversalSlider extends UniversalButton {
 	private final Slider slider;
 	private float previousValue;
 
-	public UniversalSlider(TextButton textButton, Supplier<String> textSupplier, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+	public UniversalSlider(BasicButton textButton, Supplier<String> textSupplier, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		this(textButton, textSupplier, null, sliderStyle, consumer, inputStrategySwitcher, soundInteractListener);
 	}
 
-	public UniversalSlider(TextButton textButton, Supplier<String> textSupplier, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+	public UniversalSlider(BasicButton textButton, Supplier<String> textSupplier, Image image, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		super(textButton, textSupplier, image, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle) {
 			@Override

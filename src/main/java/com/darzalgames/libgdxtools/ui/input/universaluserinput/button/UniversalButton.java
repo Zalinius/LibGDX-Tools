@@ -164,6 +164,7 @@ public class UniversalButton implements VisibleInputConsumer {
 	 * @param newText
 	 */
 	public void updateText(String newText) {
+		textSupplier = () -> newText;
 		labelSupplier.get().setText(newText);
 	}
 
@@ -171,7 +172,7 @@ public class UniversalButton implements VisibleInputConsumer {
 	 * @return Whether or not the button is blank
 	 */
 	public boolean isBlank() {
-		return StringUtils.isBlank(labelSupplier.get().getText().toString()) && image == null;
+		return StringUtils.isBlank(textSupplier.get().toString()) && image == null;
 	}
 
 	/**

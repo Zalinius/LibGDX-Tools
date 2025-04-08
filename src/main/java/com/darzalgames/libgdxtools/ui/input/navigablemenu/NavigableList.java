@@ -103,7 +103,9 @@ public class NavigableList implements InputConsumer {
 	}
 
 	public void defaultRefreshPage() {
-		table = new Table();
+		if (table == null) {
+			table = new Table();
+		}
 		table.clearChildren();
 		table.clear();
 		table.defaults().expandX().spaceTop(spacing).spaceBottom(spacing).align(entryAlignment.getAlignment());
@@ -215,7 +217,7 @@ public class NavigableList implements InputConsumer {
 	public void goTo(final int index) {
 		if (currentEntryIndex != index) {
 			currentEntryIndex = index;
-			refreshPage();
+			changedEntries();
 		}
 
 		if (!pressButtonOnEntryChanged) {
@@ -246,6 +248,9 @@ public class NavigableList implements InputConsumer {
 
 	@Override
 	public void setTouchable(Touchable isTouchable) {
+		if (table == null) {
+			table = new Table();
+		}
 		table.setTouchable(isTouchable);
 		interactableEntries.forEach(entry -> entry.setTouchable(isTouchable));
 	}

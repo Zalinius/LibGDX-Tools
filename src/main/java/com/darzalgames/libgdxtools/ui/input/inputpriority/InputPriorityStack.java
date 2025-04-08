@@ -84,12 +84,12 @@ public class InputPriorityStack implements InputObserver {
 	}
 
 	private void focusTop(boolean isFirstFocus) {
-		stack.getTop().setTouchable(Touchable.enabled);
 		if (isFirstFocus) {
 			stack.getTop().gainFocus();				
 		} else {
 			stack.getTop().regainFocus();
 		}
+		stack.getTop().setTouchable(Touchable.enabled);
 		stack.getTop().focusCurrent();
 	}
 

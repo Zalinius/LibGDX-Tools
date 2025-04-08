@@ -102,6 +102,7 @@ public class NavigableList implements InputConsumer {
 		allEntries.forEach(UniversalButton::resizeUI);
 	}
 
+	// TODO because of the Table this can't be called during testing, which means we can't test keyboard skipping the spacers & disabled buttons. This could be problematic for "auto-play" testing in the future...
 	public void defaultRefreshPage() {
 		if (table == null) {
 			table = new Table();
@@ -143,7 +144,7 @@ public class NavigableList implements InputConsumer {
 	private void findCurrentButton() {
 		if (!interactableEntries.isEmpty()) {
 			if (currentEntryIndex >= interactableEntries.size() || currentEntryIndex < 0) {
-				// this can happen between days when contents are refreshed but this object itself isn't
+				// this can happen between days in Quest Giver when contents are refreshed but this object itself isn't
 				currentEntryIndex = 0;
 			}
 			currentButton = interactableEntries.get(currentEntryIndex);

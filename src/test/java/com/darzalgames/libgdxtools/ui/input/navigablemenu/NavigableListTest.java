@@ -34,7 +34,7 @@ public class NavigableListTest {
 		assertTrue(buttonOne.getButton().isOver());
 		assertFalse(buttonTwo.getButton().isOver());
 	}
-	
+
 	@Test
 	void consumeKeyInput_downFromTop_focusesSecond() {
 		List<UniversalButton> entries = new ArrayList<>();
@@ -49,6 +49,72 @@ public class NavigableListTest {
 		
 		assertFalse(buttonOne.getButton().isOver());
 		assertTrue(buttonTwo.getButton().isOver());
+	}
+	
+	@Test
+	void consumeKeyInput_downFromTopThenUpAgain_focusesFirst() {
+		List<UniversalButton> entries = new ArrayList<>();
+		UniversalButton buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		UniversalButton buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		NavigableList navigableList = new NavigableList(true, entries);
+		navigableList.selectDefault();
+
+		navigableList.consumeKeyInput(Input.DOWN);
+		navigableList.consumeKeyInput(Input.UP);
+		
+		assertTrue(buttonOne.getButton().isOver());
+		assertFalse(buttonTwo.getButton().isOver());
+	}
+	
+	@Test
+	void consumeKeyInput_downFromTopTwice_loopsBackToFocusFirst() {
+		List<UniversalButton> entries = new ArrayList<>();
+		UniversalButton buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		UniversalButton buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		NavigableList navigableList = new NavigableList(true, entries);
+		navigableList.selectDefault();
+
+		navigableList.consumeKeyInput(Input.DOWN);
+		navigableList.consumeKeyInput(Input.DOWN);
+		
+		assertTrue(buttonOne.getButton().isOver());
+		assertFalse(buttonTwo.getButton().isOver());
+	}
+
+	@Test
+	void consumeKeyInput_horizontalListGoRight_focusesSecond() {
+		List<UniversalButton> entries = new ArrayList<>();
+		UniversalButton buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		UniversalButton buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		NavigableList navigableList = new NavigableList(false, entries);
+		navigableList.selectDefault();
+		
+		navigableList.consumeKeyInput(Input.RIGHT);
+		
+		assertFalse(buttonOne.getButton().isOver());
+		assertTrue(buttonTwo.getButton().isOver());
+	}
+
+	@Test
+	void consumeKeyInput_horizontalListGoDown_doesntMoveFocus() {
+		List<UniversalButton> entries = new ArrayList<>();
+		UniversalButton buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		UniversalButton buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		NavigableList navigableList = new NavigableList(true, entries);
+		navigableList.selectDefault();
+		
+		navigableList.consumeKeyInput(Input.RIGHT);
+		
+		assertTrue(buttonOne.getButton().isOver());
+		assertFalse(buttonTwo.getButton().isOver());
 	}
 	
 	@Test
@@ -225,6 +291,57 @@ public class NavigableListTest {
 		navigableList.consumeKeyInput(Input.BACK);
 		
 		assertTrue(finalButtonPressed.get());
+	}
+	
+	@Test
+	void consumeKeyInput_backWithoutFinalButton_pressesNothing() {
+		List<UniversalButton> entries = new ArrayList<>();
+		UniversalButton buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		UniversalButton buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		UniversalButton buttonThree = makeTestButton();
+		entries.add(buttonThree);
+		NavigableList navigableList = new NavigableList(true, entries);
+		
+		navigableList.consumeKeyInput(Input.BACK);
+
+		assertTrue(buttonOne.getButton().isOver());
+		assertFalse(buttonTwo.getButton().isOver());
+		assertFalse(buttonThree.getButton().isOver());
+	}
+	
+	@Test
+	void focusCurrent_focusesCurrentButton() {
+		List<UniversalButton> entries = new ArrayList<>();
+		UniversalButton buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		UniversalButton buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		NavigableList navigableList = new NavigableList(true, entries);
+		navigableList.selectDefault();
+		
+		navigableList.focusCurrent();
+		
+		assertTrue(buttonOne.getButton().isOver());
+		assertFalse(buttonTwo.getButton().isOver());
+	}	
+	
+	@Test
+	void clearSelected_leavesNoButtonFocused() {
+		List<UniversalButton> entries = new ArrayList<>();
+		UniversalButton buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		UniversalButton buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		NavigableList navigableList = new NavigableList(true, entries);
+		navigableList.selectDefault();
+		
+		navigableList.focusCurrent();
+		navigableList.clearSelected();
+		
+		assertFalse(buttonOne.getButton().isOver());
+		assertFalse(buttonTwo.getButton().isOver());
 	}
 
 

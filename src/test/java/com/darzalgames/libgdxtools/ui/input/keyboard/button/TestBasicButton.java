@@ -186,4 +186,22 @@ public class TestBasicButton implements BasicButton {
 		return 0;
 	}
 
+	@Override
+	public float getHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void addActor(Actor actor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean removeActor(Actor actor) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

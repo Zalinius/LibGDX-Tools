@@ -23,10 +23,12 @@ public interface BasicButton {
 	TextButtonStyle getStyle();
 	void setStyle(ButtonStyle style);
 
-	float getWidth();
 	void setWidth(float width);
+	float getWidth();
 	float getPrefWidth();
 	float getPrefHeight();
+	float getMinHeight();
+	float getHeight();
 	void setSize(float prefWidth, float prefHeight);
 
 	void setName(String string);
@@ -36,10 +38,11 @@ public interface BasicButton {
 	void addAction(Action action);
 	boolean addListener(EventListener eventListener);
 	<T extends Actor> Cell<T> add(@Null T actor);
+	void addActor(Actor actor);
+	boolean removeActor(Actor actor);
 	Actor getView();
 	Stage getStage();
 	Label getLabel();
 	Cell<Label> getLabelCell();
 	String getButtonText();
-	float getMinHeight();
 }

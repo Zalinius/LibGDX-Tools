@@ -67,9 +67,6 @@ public class UniversalButton implements VisibleInputConsumer {
 			button.setWidth(startWidth + image.getWidth() + sidePadding);
 		}
 
-		//		labelSupplier.get().setTouchable(Touchable.disabled);
-		// TODO  deal with this / is it even necessary?
-
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(final ChangeEvent event, final Actor actor) {

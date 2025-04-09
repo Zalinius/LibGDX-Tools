@@ -13,6 +13,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.BasicButto
 
 /**
  * A minimalist re-implementation of a LibGDX Button, but without graphics (for testing)
+ * I'm adding functionality as needed for testing so there are many empty methods, especially those to do with visual layout
  */
 public class TestBasicButton implements BasicButton {
 	
@@ -76,49 +77,41 @@ public class TestBasicButton implements BasicButton {
 
 	@Override
 	public TextButtonStyle getStyle() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setStyle(ButtonStyle style) {
-		// TODO Auto-generated method stub
+	public void setStyle(ButtonStyle style) {	 
 		
 	}
 
 	@Override
-	public float getWidth() {
-		// TODO Auto-generated method stub
+	public float getWidth() {	 
 		return 0;
 	}
 
 	@Override
-	public void setWidth(float width) {
-		// TODO Auto-generated method stub
+	public void setWidth(float width) {		 
 		
 	}
 
 	@Override
-	public float getPrefWidth() {
-		// TODO Auto-generated method stub
+	public float getPrefWidth() {		 
 		return 0;
 	}
 
 	@Override
-	public float getPrefHeight() {
-		// TODO Auto-generated method stub
+	public float getPrefHeight() {		 
 		return 0;
 	}
 
 	@Override
-	public void setSize(float prefWidth, float prefHeight) {
-		// TODO Auto-generated method stub
+	public void setSize(float prefWidth, float prefHeight) {		 
 		
 	}
 
 	@Override
-	public void setName(String string) {
-		// TODO Auto-generated method stub
+	public void setName(String string) {		 
 		
 	}
 
@@ -128,6 +121,9 @@ public class TestBasicButton implements BasicButton {
 			InputEvent inputEvent = (InputEvent)event;
 			isOver = inputEvent.getType().equals(InputEvent.Type.enter);
 		}
+		
+		// ---------------------------------------------------------------
+		// Below here is copied from LibGDX button
 		if (event.getStage() == null) event.setStage(getStage());
 		event.setTarget(this.getView());
 
@@ -167,13 +163,9 @@ public class TestBasicButton implements BasicButton {
 		}
 	}
 	
-	/** Notifies this actor's listeners of the event. The event is not propagated to any ascendants. The event
-	 * {@link Event#setTarget(Actor) target} must be set before calling this method. Before notifying the listeners, this actor is
-	 * set as the {@link Event#getListenerActor() listener actor}. If this actor is not in the stage, the stage must be set before
-	 * calling this method.
-	 * @param capture If true, the capture listeners will be notified instead of the regular listeners.
-	 * @return true if the event was {@link Event#cancel() cancelled}. */
 	private boolean notify (Event event) {
+		// ---------------------------------------------------------------
+		// Below here is copied from LibGDX button
 		if (event.getTarget() == null) throw new IllegalArgumentException("The event target cannot be null.");
 
 		DelayedRemovalArray<EventListener> listeners = this.listeners;
@@ -197,20 +189,17 @@ public class TestBasicButton implements BasicButton {
 	}
 
 	@Override
-	public void clearActions() {
-		// TODO Auto-generated method stub
+	public void clearActions() {		 
 		
 	}
 
 	@Override
-	public void clearChildren() {
-		// TODO Auto-generated method stub
+	public void clearChildren() {		 
 		
 	}
 
 	@Override
-	public void addAction(Action action) {
-		// TODO Auto-generated method stub
+	public void addAction(Action action) {		 
 		
 	}
 
@@ -225,8 +214,7 @@ public class TestBasicButton implements BasicButton {
 	}
 
 	@Override
-	public <T extends Actor> Cell<T> add(T actor) {
-		// TODO Auto-generated method stub
+	public <T extends Actor> Cell<T> add(T actor) {		 
 		return null;
 	}
 
@@ -236,26 +224,22 @@ public class TestBasicButton implements BasicButton {
 	}
 
 	@Override
-	public Stage getStage() {
-		// TODO Auto-generated method stub
+	public Stage getStage() {		 
 		return null;
 	}
 
 	@Override
-	public Label getLabel() {
-		// TODO Auto-generated method stub
+	public Label getLabel() {		 
 		return null;
 	}
 
 	@Override
-	public Cell<Label> getLabelCell() {
-		// TODO Auto-generated method stub
+	public Cell<Label> getLabelCell() {		 
 		return null;
 	}
 
 	@Override
-	public String getButtonText() {
-		// TODO Auto-generated method stub
+	public String getButtonText() {	 
 		return null;
 	}
 
@@ -266,19 +250,16 @@ public class TestBasicButton implements BasicButton {
 
 	@Override
 	public float getHeight() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void addActor(Actor actor) {
-		// TODO Auto-generated method stub
-		
+		 		
 	}
 
 	@Override
-	public boolean removeActor(Actor actor) {
-		// TODO Auto-generated method stub
+	public boolean removeActor(Actor actor) {		 
 		return false;
 	}
 

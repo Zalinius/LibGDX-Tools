@@ -13,6 +13,7 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
  * This class is not an Actor, it's the logical list of buttons held in a Table.
@@ -23,7 +24,7 @@ public class NavigableList implements InputConsumer {
 	private final Input backCode;	
 	private final Input forwardCode;
 	protected final LinkedList<UniversalButton> allEntries;
-	private LinkedList<UniversalButton> interactableEntries;
+	protected List<UniversalButton> interactableEntries;
 	private UniversalButton finalButton;
 	private UniversalButton currentButton = null;
 	private int currentEntryIndex;
@@ -42,7 +43,7 @@ public class NavigableList implements InputConsumer {
 		this.backCode = (isVertical ? Input.UP : Input.LEFT);
 		this.forwardCode = (isVertical ? Input.DOWN : Input.RIGHT);
 		this.allEntries = new LinkedList<>(entries);
-		this.interactableEntries = new LinkedList<>(entries);
+		filterInteractableEntities();
 		this.isVertical = isVertical; 
 		this.pressButtonOnEntryChanged = false; 
 		this.entryAlignment = Alignment.CENTER;
@@ -64,17 +65,24 @@ public class NavigableList implements InputConsumer {
 	public void replaceContents(final List<UniversalButton> newEntries, UniversalButton finalButton) {
 		allEntries.clear();
 		allEntries.addAll(newEntries);
+		filterInteractableEntities();
 		setFinalButton(finalButton);
-		interactableEntries.clear();
-		interactableEntries.addAll(allEntries);
 		refreshPage();
+	}
+
+	private void filterInteractableEntities() {
+		interactableEntries = allEntries.stream().filter(NavigableList::isInteractable).toList();
+	}
+
+	private static boolean isInteractable(UniversalButton entry) {
+		return !UserInterfaceFactory.isSpacer(entry) && !entry.getButton().isDisabled();
 	}
 
 	protected void setFinalButton(UniversalButton finalButton) {
 		this.finalButton = finalButton;
 		if (finalButton != null && !finalButton.isBlank()) {
 			this.allEntries.add(finalButton);
-			this.interactableEntries.add(finalButton);
+			filterInteractableEntities();
 		}
 	}
 
@@ -124,15 +132,11 @@ public class NavigableList implements InputConsumer {
 			Actor button = entry.getView();
 			table.add(button);
 			if (MainGame.getUserInterfaceFactory().isSpacer(entry)) {
-				interactableEntries.remove(entry);
 				if (isVertical()) {
 					table.getCell(button).expandY();
 				} else {
 					table.getCell(button).expandX();
 				}
-			}
-			if (entry.getButton().isDisabled()) {
-				interactableEntries.remove(entry);				
 			}
 		}
 

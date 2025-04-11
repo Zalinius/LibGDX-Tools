@@ -16,7 +16,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 public class NavigableListTest {
-	
+
 	@Test
 	void selectDefault_onlyFirstButtonIsFocused() {
 		List<UniversalButton> entries = new ArrayList<>();
@@ -349,6 +349,78 @@ public class NavigableListTest {
 	}	
 	
 	@Test
+	void replaceContents_withSpacer_filtersTheSpacerInInteractableEntities() {
+		List<UniversalButton> entries = new ArrayList<>();
+		UniversalButton buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		entries.add(makeTestSpacer());
+		UniversalButton buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		NavigableList navigableList = new NavigableList(true, entries);
+		
+
+		assertEquals(3, navigableList.allEntries.size());
+		assertEquals(2, navigableList.interactableEntries.size());
+	}	
+	
+	
+	
+	@Test
+	void consumeInput_downWithSpacer_skipsSpacer() {
+		List<UniversalButton> entries = new ArrayList<>();
+		UniversalButton buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		entries.add(makeTestSpacer());
+		UniversalButton buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		NavigableList navigableList = new NavigableList(true, entries);
+		navigableList.selectDefault();
+
+		navigableList.consumeKeyInput(Input.DOWN);
+
+		assertFalse(buttonOne.getButton().isOver());
+		assertTrue(buttonTwo.getButton().isOver());
+	}		
+	
+	@Test
+	void consumeInput_downPastSpacer_wrapsAround() {
+		List<UniversalButton> entries = new ArrayList<>();
+		UniversalButton buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		entries.add(makeTestSpacer());
+		UniversalButton buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		NavigableList navigableList = new NavigableList(true, entries);
+		navigableList.selectDefault();
+
+		navigableList.consumeKeyInput(Input.DOWN);
+		navigableList.consumeKeyInput(Input.DOWN);
+
+		assertTrue(buttonOne.getButton().isOver());
+		assertFalse(buttonTwo.getButton().isOver());
+	}	
+	
+	@Test
+	void consumeInput_downWithDisabledButton_skipsDisabledButton() {
+		List<UniversalButton> entries = new ArrayList<>();
+		UniversalButton buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		UniversalButton buttonTwo = makeTestButton();
+		buttonTwo.setDisabled(true);
+		entries.add(buttonTwo);
+		UniversalButton buttonThree = makeTestButton();
+		entries.add(buttonThree);
+		NavigableList navigableList = new NavigableList(true, entries);
+		navigableList.selectDefault();
+
+		navigableList.consumeKeyInput(Input.DOWN);
+
+		assertFalse(buttonOne.getButton().isOver());
+		assertFalse(buttonTwo.getButton().isOver());
+		assertTrue(buttonThree.getButton().isOver());
+	}
+	
+	@Test
 	void consumeKeyInput_back_pressesFinalButton() {
 		AtomicBoolean finalButtonPressed = new AtomicBoolean();
 		finalButtonPressed.set(false);
@@ -465,9 +537,15 @@ public class NavigableListTest {
 	public static void setUp() {
 		inputStrategySwitcher = makeInputStrategySwitcher();
 	}
-	
+
 	private static UniversalButton makeTestButton() {
 		return new UniversalButton(new TestBasicButton(), () -> "", inputStrategySwitcher, Runnables.nullRunnable());
+	}
+	
+	private static UniversalButton makeTestSpacer() {
+		UniversalButton spacer = new UniversalButton(new TestBasicButton(), () -> "", inputStrategySwitcher, Runnables.nullRunnable());
+		spacer.setDisabled(true);
+		return spacer;
 	}
 	
 	private static InputStrategySwitcher makeInputStrategySwitcher() {

@@ -256,8 +256,4 @@ public class UniversalButton implements VisibleInputConsumer {
 		updateText(textSupplier.get());
 	}
 
-	public boolean isDisabled() {
-		return button.isDisabled();
-	}
-
 }

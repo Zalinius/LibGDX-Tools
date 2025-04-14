@@ -97,6 +97,9 @@ public class NavigableList implements InputConsumer {
 	}
 
 	public Table getView() {
+		if (table == null) {
+			table = new Table();
+		}
 		return table;
 	}
 

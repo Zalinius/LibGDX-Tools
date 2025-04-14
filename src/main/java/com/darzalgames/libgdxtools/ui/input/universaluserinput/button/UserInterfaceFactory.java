@@ -157,7 +157,7 @@ public class UserInterfaceFactory {
 
 	public UniversalSlider getSlider(Supplier<String> textKey, Consumer<Float> consumer) {
 		UniversalButton textButton = getButton(textKey, Runnables.nullRunnable());
-		return new UniversalSlider(textButton.getButton(), textKey, skinManager.getSliderStyle(), consumer, inputStrategySwitcher, soundInteractListener);
+		return new UniversalSlider(textButton.getButton(), textKey, skinManager.getSliderStyle(), consumer, inputStrategySwitcher, soundInteractListener, 0.01f);
 	}
 
 	public UniversalCheckbox getCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer) {

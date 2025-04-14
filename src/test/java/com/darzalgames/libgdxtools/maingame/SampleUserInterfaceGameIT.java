@@ -16,11 +16,11 @@ class SampleUserInterfaceGameIT {
 	private static final int SCREEN_MIDDLE_X = 640;
 	private static final int SCREEN_MIDDLE_Y = 360;
 	
-	private static final int SELECT_BOX_BUTTON_Y = 170;
+	private static final int SELECT_BOX_BUTTON_Y = 195;
 	private static final int SELECT_BOX_POPUP_BUTTON_X = 675;
 	private static final int SELECT_BOX_POPUP_BUTTON_Y = 345;
-	private static final int NESTING_POPUP_BUTTON_Y = 198;
-	private static final int NESTED_POPUP_DEEPER_BUTTON_Y = 380;
+	private static final int NESTING_POPUP_BUTTON_Y = 210;
+	private static final int NESTED_POPUP_DEEPER_BUTTON_Y = 350;
 	private static final int QUIT_BUTTON_Y = 710;
 	private static final int OFFCENTER_X = 100;
 
@@ -168,7 +168,7 @@ class SampleUserInterfaceGameIT {
 					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in
 					clickMouse(SCREEN_MIDDLE_X, NESTED_POPUP_DEEPER_BUTTON_Y); // Click to go deeper
 					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in
-					clickMouse(SCREEN_MIDDLE_X, SCREEN_MIDDLE_Y); // Click to dismiss deeper popup
+					clickMouse(SCREEN_MIDDLE_X, NESTED_POPUP_DEEPER_BUTTON_Y); // Click to dismiss deeper popup
 					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide out
 					
 					app.multipleStage.popUpStage.mouseMoved(SCREEN_MIDDLE_X, SCREEN_MIDDLE_Y);

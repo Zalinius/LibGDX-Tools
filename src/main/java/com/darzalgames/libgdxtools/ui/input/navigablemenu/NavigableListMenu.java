@@ -77,6 +77,7 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	@Override
 	public void gainFocus() {
 		clear();
+		menu.defaultRefreshPage();
 		setUpTable();
 		selectDefault();
 	}

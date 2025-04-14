@@ -1,16 +1,16 @@
 package com.darzalgames.libgdxtools.graphics.windowresizer;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.BasicButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 public abstract class WindowResizerImageSelectButton extends UniversalButton implements WindowResizerButton {
 
 	protected WindowResizer windowResizer;
 
-	protected WindowResizerImageSelectButton(TextButton button, Image image, Runnable runnable,
+	protected WindowResizerImageSelectButton(BasicButton button, Image image, Runnable runnable,
 			InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		super(button, Suppliers.emptyString(), image, runnable, inputStrategySwitcher, soundInteractListener);
 	}
@@ -21,7 +21,7 @@ public abstract class WindowResizerImageSelectButton extends UniversalButton imp
 	}
 
 	@Override
-	public UniversalButton getButton() {
+	public UniversalButton getWindowResizerButton() {
 		return this;
 	}
 	

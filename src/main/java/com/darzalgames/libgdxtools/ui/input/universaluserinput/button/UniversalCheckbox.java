@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
@@ -20,8 +19,8 @@ public class UniversalCheckbox extends UniversalButton {
 	private final Supplier<String> uncheckedLabel;
 	private final Supplier<String> checkedLabel;
 
-	public UniversalCheckbox(TextButton textButton, Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(textButton, Suppliers.emptyString(), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
+	public UniversalCheckbox(BasicButton basicButton, Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		super(basicButton, Suppliers.emptyString(), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 		this.uncheckedLabel = uncheckedLabel;
 		this.checkedLabel = checkedLabel;
 
@@ -47,14 +46,14 @@ public class UniversalCheckbox extends UniversalButton {
 		};
 		box.getImageCell().padRight(UserInterfaceSizer.getWidthPercentage(0.01f));
 
-		textButton.clearChildren();
-		textButton.setWidth(textButton.getWidth() + box.getPrefWidth());
-		textButton.add(box).center().growX();
-		textButton.addListener(new ChangeListener() {
+		basicButton.clearChildren();
+		basicButton.setWidth(basicButton.getWidth() + box.getPrefWidth());
+		basicButton.add(box).center().growX();
+		basicButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				initializeAsChecked(!box.isChecked());
-				textButton.setChecked(false);
+				basicButton.setChecked(false);
 				consumer.accept(box.isChecked());
 				UniversalCheckbox.this.setFocused(true);
 			}

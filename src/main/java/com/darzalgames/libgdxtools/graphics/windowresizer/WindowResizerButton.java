@@ -10,7 +10,7 @@ public interface WindowResizerButton {
 	
 	public void setSelectedScreenMode(ScreenMode currentScreenMode);
 
-	public UniversalButton getButton();
+	public UniversalButton getWindowResizerButton();
 	public InputConsumer getRevertMenu();
 	
 	public default ScreenMode getModeFromPreference(String screenMode) {

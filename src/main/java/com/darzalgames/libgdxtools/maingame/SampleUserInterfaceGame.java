@@ -96,7 +96,7 @@ public class SampleUserInterfaceGame extends MainGame {
 			protected void setUpTable() {
 				defaults().align(Align.bottom);
 				setBounds(0, 0, UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight() - 25f);
-
+				
 				menu.setSpacing(1);
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 				add(menu.getView()).grow().align(Align.center);

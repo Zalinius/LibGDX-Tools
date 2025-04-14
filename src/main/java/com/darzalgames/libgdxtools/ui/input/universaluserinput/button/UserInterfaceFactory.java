@@ -107,11 +107,6 @@ public class UserInterfaceFactory {
 		return spacer;
 	}
 
-	public static boolean isSpacer(UniversalButton button) {
-		return button.getButton().isDisabled() && button.isBlank();
-	}
-
-
 	public UniversalButton getButton(Supplier<String> textKey, final Runnable runnable) {
 		return makeButton(textKey, null, runnable);
 	}

@@ -8,12 +8,11 @@ import java.util.function.Consumer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.BasicButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 /**
  * This class is not an Actor, it's the logical list of buttons held in a Table.
@@ -75,7 +74,7 @@ public class NavigableList implements InputConsumer {
 	}
 
 	private static boolean isInteractable(UniversalButton entry) {
-		return !UserInterfaceFactory.isSpacer(entry) && !entry.getButton().isDisabled();
+		return !BasicButton.isSpacer(entry) && !entry.getButton().isDisabled();
 	}
 
 	protected void setFinalButton(UniversalButton finalButton) {
@@ -110,7 +109,6 @@ public class NavigableList implements InputConsumer {
 		allEntries.forEach(UniversalButton::resizeUI);
 	}
 
-	// TODO because of the Table this can't be called during testing, which means we can't test keyboard skipping the spacers & disabled buttons. This could be problematic for "auto-play" testing in the future...
 	public void defaultRefreshPage() {
 		if (table == null) {
 			table = new Table();
@@ -131,7 +129,7 @@ public class NavigableList implements InputConsumer {
 			entry.setAlignment(entryAlignment);
 			Actor button = entry.getView();
 			table.add(button);
-			if (MainGame.getUserInterfaceFactory().isSpacer(entry)) {
+			if (BasicButton.isSpacer(entry)) {
 				if (isVertical()) {
 					table.getCell(button).expandY();
 				} else {

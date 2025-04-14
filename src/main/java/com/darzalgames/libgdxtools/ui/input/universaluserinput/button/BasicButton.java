@@ -9,6 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Null;
 
 public interface BasicButton {
+	
+	public static boolean isSpacer(UniversalButton button) {
+		return button.getButton().isDisabled() && button.isBlank();
+	}
 
 	boolean isTouchable();
 	boolean isChecked();

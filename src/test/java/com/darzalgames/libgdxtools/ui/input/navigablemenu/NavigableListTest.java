@@ -13,6 +13,7 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.keyboard.button.TestBasicButton;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.BasicButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 public class NavigableListTest {
@@ -545,6 +546,7 @@ public class NavigableListTest {
 	private static UniversalButton makeTestSpacer() {
 		UniversalButton spacer = new UniversalButton(new TestBasicButton(), () -> "", inputStrategySwitcher, Runnables.nullRunnable());
 		spacer.setDisabled(true);
+		assertTrue(BasicButton.isSpacer(spacer));
 		return spacer;
 	}
 	

@@ -26,6 +26,6 @@ public class GraphicsPreference {
 	}
 
 	public void setPreferredScreenMode(String preferredScreenMode) {
-		preferenceManager.getStringPrefValue(SCREEN_MODE_KEY, preferredScreenMode);
+		preferenceManager.savePrefValue(SCREEN_MODE_KEY, preferredScreenMode);
 	}
 }

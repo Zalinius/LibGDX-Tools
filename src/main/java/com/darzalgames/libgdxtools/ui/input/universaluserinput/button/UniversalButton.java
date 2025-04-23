@@ -165,7 +165,9 @@ public class UniversalButton implements VisibleInputConsumer {
 	 */
 	public void updateText(String newText) {
 		textSupplier = () -> newText;
-		labelSupplier.get().setText(newText);
+		if (labelSupplier.get() != null) {
+			labelSupplier.get().setText(newText);
+		}
 	}
 
 	/**

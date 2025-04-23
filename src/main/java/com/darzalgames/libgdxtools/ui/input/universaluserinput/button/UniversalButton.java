@@ -90,8 +90,11 @@ public class UniversalButton implements VisibleInputConsumer {
 
 	@Override
 	public Actor getView() {
-		labelSupplier.get().setWrap(wrap);
-		labelSupplier.get().setAlignment(alignment.getAlignment(), alignment.getAlignment());
+		Label label = labelSupplier.get();
+		if (label != null) {
+			label.setWrap(wrap);
+			label.setAlignment(alignment.getAlignment(), alignment.getAlignment());
+		}
 		if (cellSupplier.get() != null) {
 			cellSupplier.get().grow();
 		}

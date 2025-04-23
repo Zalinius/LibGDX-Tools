@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -14,8 +15,8 @@ public class UniversalInputStage extends Stage implements InputObserver {
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
 	 */
-	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher) {
-		super(viewport);
+	public UniversalInputStage(Viewport viewport, InputStrategySwitcher inputStrategySwitcher, SpriteBatch spriteBatch) {
+		super(viewport, spriteBatch);
 		inputStrategySwitcher.register(this);
 	}
 

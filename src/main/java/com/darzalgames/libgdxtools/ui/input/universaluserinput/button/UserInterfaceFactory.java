@@ -39,7 +39,7 @@ public class UserInterfaceFactory {
 	protected InputStrategySwitcher inputStrategySwitcher;
 	private Supplier<Float> flashesPerSecondSupplier;
 	protected Runnable soundInteractListener;
-	private Supplier<Boolean> isPaused;
+	protected Supplier<Boolean> isPaused;
 
 	private final String QUIT_GAME_KEY = "quit_game";
 

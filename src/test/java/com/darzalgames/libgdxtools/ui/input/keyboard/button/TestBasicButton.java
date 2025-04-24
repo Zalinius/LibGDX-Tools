@@ -9,8 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.Pools;
-import com.darzalgames.darzalcommon.functional.Suppliers;
-import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.BasicButton;
 
 /**
@@ -232,17 +230,17 @@ public class TestBasicButton implements BasicButton {
 
 	@Override
 	public Label getLabel() {		 
-		return MainGame.getUserInterfaceFactory().getLabel(Suppliers.emptyString());
+		return null;
 	}
 
 	@Override
 	public Cell<Label> getLabelCell() {		 
-		return new Cell<>();
+		return null;
 	}
 
 	@Override
 	public String getButtonText() {	 
-		return getLabel().getText().toString();
+		return null;
 	}
 
 	@Override

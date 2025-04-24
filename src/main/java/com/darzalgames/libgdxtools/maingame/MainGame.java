@@ -22,6 +22,7 @@ import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
+import com.darzalgames.libgdxtools.ui.input.OptionalDrawStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStageWithBackground;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
@@ -212,8 +213,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void makeAllStages() {
 		UniversalInputStage mainStage = makeMainStage();
 		UniversalInputStage popUpStage = makePopUpStage();
-		Stage cursorStage = makeCursorStage();
-		Stage inputHandlerStage = makeInputHandlerStage();
+		OptionalDrawStage cursorStage = makeCursorStage();
+		OptionalDrawStage inputHandlerStage = makeInputHandlerStage();
 		UserInterfaceSizer.setStage(mainStage);
 		multipleStage = new MultipleStage(mainStage, popUpStage, cursorStage, inputHandlerStage);
 	}
@@ -225,8 +226,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		return popUpStage;
 	}
 	
-	private Stage makeInputHandlerStage() {
-		Stage inputHandlerStage = new Stage(new ScreenViewport(), spriteBatchSupplier.get());
+	private OptionalDrawStage makeInputHandlerStage() {
+		OptionalDrawStage inputHandlerStage = new OptionalDrawStage(new ScreenViewport(), spriteBatchSupplier.get());
 		MouseInputHandler mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
 		inputHandlerStage.addActor(mouseInputHandler);
 		inputHandlerStage.addActor(inputStrategySwitcher);
@@ -250,8 +251,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		return stage;
 	}
 	
-	private Stage makeCursorStage() {
-		Stage cursorStage = new Stage(new ScreenViewport(), spriteBatchSupplier.get());
+	private OptionalDrawStage makeCursorStage() {
+		OptionalDrawStage cursorStage = new OptionalDrawStage(new ScreenViewport(), spriteBatchSupplier.get());
 		cursorStage.addActor(getCustomCursor());
 		return cursorStage;
 	}

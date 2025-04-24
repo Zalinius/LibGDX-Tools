@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
+import com.darzalgames.libgdxtools.ui.input.OptionalDrawStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
@@ -21,15 +22,13 @@ public class MultipleStage {
 
 	public UniversalInputStage stage;
 	public UniversalInputStage popUpStage;
-	private Stage cursorStage;
-	private Stage inputHandlerStage;
+	private OptionalDrawStage cursorStage;
+	private OptionalDrawStage inputHandlerStage;
 
 	private Pause pause;
 	private List<DoesNotPause> actorsThatDoNotPause;
 
-	private boolean shouldRender;
-
-	public MultipleStage(UniversalInputStage stage, UniversalInputStage popUpStage, Stage cursorStage, Stage inputHandlerStage) {
+	public MultipleStage(UniversalInputStage stage, UniversalInputStage popUpStage, OptionalDrawStage cursorStage, OptionalDrawStage inputHandlerStage) {
 		this.stage = stage;
 		this.popUpStage = popUpStage;
 		this.cursorStage = cursorStage;
@@ -40,7 +39,10 @@ public class MultipleStage {
 	}
 
 	public void setShouldRender(boolean shouldRender) {
-		this.shouldRender = shouldRender;
+		stage.setShouldDraw(shouldRender);
+		popUpStage.setShouldDraw(shouldRender);
+		cursorStage.setShouldDraw(shouldRender);
+		inputHandlerStage.setShouldDraw(shouldRender);
 	}
 
 	public void addActorThatDoesNotPause(DoesNotPause actor) {
@@ -57,11 +59,8 @@ public class MultipleStage {
 		}
 
 		if (pause.isPaused()) {
-			stage.getViewport().apply();
 			// skip stage.act() while paused
-			if (shouldRender) {
-				stage.draw();
-			}
+			stage.draw();
 			float delta = Gdx.graphics.getDeltaTime();
 			actorsThatDoNotPause.forEach(actor -> actor.actWhilePaused(delta));
 		} else {
@@ -76,10 +75,7 @@ public class MultipleStage {
 
 	private void updateAndDrawStage(Stage stageToUpdate) {
 		stageToUpdate.act();
-		if (shouldRender) {
-			stageToUpdate.getViewport().apply();
-			stageToUpdate.draw();
-		}
+		stageToUpdate.draw();
 	}
 
 	void resize(int width, int height) {

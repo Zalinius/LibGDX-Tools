@@ -154,8 +154,6 @@ public class InputPriorityStack implements InputObserver {
 		stack.resizeUI();
 	}
 
-
-
 	private void clearStackAndPushBlankConsumer() {
 		stack.clear();
 		stack.push(new InputConsumer() {

@@ -27,6 +27,8 @@ public class MultipleStage {
 	private Pause pause;
 	private List<DoesNotPause> actorsThatDoNotPause;
 
+	private boolean shouldRender;
+
 	public MultipleStage(UniversalInputStage stage, UniversalInputStage popUpStage, Stage cursorStage, Stage inputHandlerStage) {
 		this.stage = stage;
 		this.popUpStage = popUpStage;
@@ -34,6 +36,11 @@ public class MultipleStage {
 		this.inputHandlerStage = inputHandlerStage;
 		this.actorsThatDoNotPause = new ArrayList<>();
 		setUpInputMultiplexerForAllStages();
+		setShouldRender(true);
+	}
+
+	public void setShouldRender(boolean shouldRender) {
+		this.shouldRender = shouldRender;
 	}
 
 	public void addActorThatDoesNotPause(DoesNotPause actor) {
@@ -44,7 +51,7 @@ public class MultipleStage {
 		popUpStage.clear();
 	}
 
-	void render(Runnable furtherRendering) {
+	void update(Runnable furtherRendering) {
 		if (SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR) {
 			doDebugPrinting();
 		}
@@ -52,7 +59,9 @@ public class MultipleStage {
 		if (pause.isPaused()) {
 			stage.getViewport().apply();
 			// skip stage.act() while paused
-			stage.draw();
+			if (shouldRender) {
+				stage.draw();
+			}
 			float delta = Gdx.graphics.getDeltaTime();
 			actorsThatDoNotPause.forEach(actor -> actor.actWhilePaused(delta));
 		} else {
@@ -64,11 +73,13 @@ public class MultipleStage {
 		updateAndDrawStage(cursorStage);
 		updateAndDrawStage(inputHandlerStage);
 	}
-	
-	private static void updateAndDrawStage(Stage stageToUpdate) {
-		stageToUpdate.getViewport().apply();
+
+	private void updateAndDrawStage(Stage stageToUpdate) {
 		stageToUpdate.act();
-		stageToUpdate.draw();
+		if (shouldRender) {
+			stageToUpdate.getViewport().apply();
+			stageToUpdate.draw();
+		}
 	}
 
 	void resize(int width, int height) {
@@ -77,7 +88,7 @@ public class MultipleStage {
 		resizeStage(width, height, popUpStage);
 		resizeStage(width, height, cursorStage);
 	}
-	
+
 	private static void resizeStage(int width, int height, Stage stageToResize) {
 		stageToResize.getViewport().update(width, height, true);
 		stageToResize.getCamera().update();
@@ -89,10 +100,10 @@ public class MultipleStage {
 
 		inputHandlerStage.addActor(gamepadInputHandler);
 		actorsThatDoNotPause.add(gamepadInputHandler);
-		
+
 		inputHandlerStage.addActor(scrollingManager);
 		actorsThatDoNotPause.add(scrollingManager);
-		
+
 		stage.setKeyboardFocus(keyboardInputHandler);
 	}
 

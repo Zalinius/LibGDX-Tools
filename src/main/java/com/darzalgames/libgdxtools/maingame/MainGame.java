@@ -141,7 +141,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 		if (!isQuitting) {
 			resizeUI();
-			multipleStage.render(this::renderInternal);
+			multipleStage.update(this::renderInternal);
 		}
 
 		steamStrategy.update();

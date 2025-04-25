@@ -7,14 +7,12 @@ import org.junit.jupiter.api.Test;
 
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardAndGamepadInputStrategy;
-import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
 
 class CustomCursorImageTest {
 
 	@Test
 	void isVisible_duringMouseStrategy_returnsTrue() throws Exception {
-		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardAndGamepadInputStrategy());
+		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher();
 		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategySwitcher);
 		
 		inputStrategySwitcher.setToMouseStrategy();
@@ -24,7 +22,7 @@ class CustomCursorImageTest {
 	
 	@Test
 	void isVisible_duringKeyboardStrategy_returnsFalse() throws Exception {
-		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardAndGamepadInputStrategy());
+		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher();
 		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategySwitcher);
 		
 		inputStrategySwitcher.setToKeyboardAndGamepadStrategy();

@@ -551,7 +551,7 @@ public class NavigableListTest {
 	}
 	
 	private static InputStrategySwitcher makeInputStrategySwitcher() {
-		return new InputStrategySwitcher(null, null) {
+		return new InputStrategySwitcher() {
 			@Override
 			public boolean shouldFlashButtons() {
 				return true;

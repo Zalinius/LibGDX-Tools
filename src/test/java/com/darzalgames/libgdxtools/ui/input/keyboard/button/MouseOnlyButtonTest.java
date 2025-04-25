@@ -18,8 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardAndGamepadInputStrategy;
-import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.MouseOnlyButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.MyTextButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
@@ -52,7 +50,7 @@ class MouseOnlyButtonTest {
 		Gdx.graphics = new MockGraphics();
 		Gdx.files = Mockito.mock(Files.class);
 		
-		inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardAndGamepadInputStrategy());
+		inputStrategySwitcher = new InputStrategySwitcher();
 		inputStrategySwitcher.setToMouseStrategy();
 		TextButtonStyle textButtonStyle =  new TextButtonStyle();
 		textButtonStyle.font = new BitmapFont(new BitmapFontData(), new TextureRegion(), false);

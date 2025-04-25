@@ -29,8 +29,6 @@ import com.darzalgames.libgdxtools.ui.input.handler.MouseInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSetup;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.strategy.KeyboardAndGamepadInputStrategy;
-import com.darzalgames.libgdxtools.ui.input.strategy.MouseInputStrategy;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 
@@ -201,7 +199,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	private void makeInputStrategySwitcher() {
-		inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardAndGamepadInputStrategy());
+		inputStrategySwitcher = new InputStrategySwitcher();
 	}
 
 	private void makePreferenceManager() {

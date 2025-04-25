@@ -20,9 +20,9 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 	private final InputStrategy mouseInputStrategy;
 	private final InputStrategy keyboardAndGamepadInputStrategy;
 
-	public InputStrategySwitcher(InputStrategy mouseInputStrategy, InputStrategy keyboardAndGamepadInputStrategy) {
-		this.mouseInputStrategy = mouseInputStrategy;
-		this.keyboardAndGamepadInputStrategy = keyboardAndGamepadInputStrategy;
+	public InputStrategySwitcher() {
+		mouseInputStrategy = new MouseInputStrategy();
+		keyboardAndGamepadInputStrategy = new KeyboardAndGamepadInputStrategy();
 
 		observers = new ArrayList<>();
 		setToMouseStrategy();

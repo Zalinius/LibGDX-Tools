@@ -14,11 +14,11 @@ public class SteamConnection {
 
 	private static final String STEAM_CONNECTED = "[STEAM]";
 	private static final String STEAM_NOT_CONNECTED = "[STEAM (NOT CONNECTED)]";
-	
+
 	private static boolean steamInitialized;
 
 	private SteamConnection() {}
-	
+
 	public static SteamStrategy initializeStrategy(
 			Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandler,
 			Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler) {
@@ -28,6 +28,7 @@ public class SteamConnection {
 			if(steamInitialized) {
 				ConnectedSteamStrategy connectedSteamStrategy = new ConnectedSteamStrategy(makeSteamGamepadInputHandler.get());
 				connectedSteamStrategy.initialize();
+				Gdx.app.log(STEAM_CONNECTED, "Steam initialized");
 				return connectedSteamStrategy;
 			}
 			else {
@@ -39,7 +40,7 @@ public class SteamConnection {
 			return new DummySteamStrategy(makeFallbackGamepadInputHandler.get());
 		}
 	}
-	
+
 	/**
 	 * @return True if steam is running and initialized
 	 */

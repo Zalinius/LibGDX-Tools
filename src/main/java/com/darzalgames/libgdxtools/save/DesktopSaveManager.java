@@ -6,7 +6,7 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 public interface DesktopSaveManager extends SaveManager {
 
 	/**
-	 * @param gameName The name of the game, spaces are okay 
+	 * @param gameName The name of the game, spaces are okay
 	 * @return The actively-used save game file, named and pathed using the game's name
 	 */
 	default FileHandle getSaveFile(String gameName) {
@@ -14,7 +14,7 @@ public interface DesktopSaveManager extends SaveManager {
 	}
 
 	/**
-	 * @param gameName The name of the game, spaces are okay 
+	 * @param gameName The name of the game, spaces are okay
 	 * @return The BACKUP save game file, named and pathed using the game's name
 	 */
 	default FileHandle getBackupSaveFile(String gameName) {

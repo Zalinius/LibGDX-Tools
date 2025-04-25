@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -55,7 +54,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	 */
 	public List<HexagonController2D> getControllerNeighborsOf(Hexagon hexagon) {
 		Set<Hexagon> hexes = hexagonMap.getHexagonNeighborsOf(hexagon);
-		return hexes.stream().map(neighborHexagon -> hexagonMap.getValueAt(neighborHexagon).f).collect(Collectors.toList());
+		return hexes.stream().map(neighborHexagon -> hexagonMap.getValueAt(neighborHexagon).f).toList();
 	}
 
 	void centerSelf() {
@@ -63,11 +62,11 @@ public class HexagonControllerMap2D<E> extends Group {
 		float right = Integer.MIN_VALUE;
 		float bottom = Integer.MAX_VALUE;
 		float top = Integer.MIN_VALUE;
-		
+
 		Iterator<HexagonController2D> hexagonControllerIterator = getAllControllers().iterator();
 		while (hexagonControllerIterator.hasNext()) {
 			HexagonController2D controller = hexagonControllerIterator.next();
-			this.addActor(controller);
+			addActor(controller);
 
 			if (controller.getX() < left) {
 				left = controller.getX();
@@ -82,22 +81,22 @@ public class HexagonControllerMap2D<E> extends Group {
 				top = controller.getTop();
 			}
 		}
-		
-		this.setSize(right - left, top - bottom);
-		
-		float diffX = left; 
-		float diffY = bottom; 
+
+		setSize(right - left, top - bottom);
+
+		float diffX = left;
+		float diffY = bottom;
 		getAllControllers().forEach(controller -> controller.moveBy(-diffX, -diffY));
 		UserInterfaceSizer.makeActorCentered(this);
 	}
 
-	
+
 	private void makeControllerForHexagon(Function<Hexagon, HexagonController2D> hexagonControllerFactory, Hexagon hexagon, E e) {
 		HexagonController2D controller = hexagonControllerFactory.apply(hexagon);
 		hexagonMap.put(hexagon, new Tuple<>(e, controller));
 		addActor(controller);
 	}
-	
+
 	private Stream<HexagonController2D> getAllControllers() {
 		return hexagonMap.getAllHexagons().stream().map(hex -> hexagonMap.getValueAt(hex).f);
 	}

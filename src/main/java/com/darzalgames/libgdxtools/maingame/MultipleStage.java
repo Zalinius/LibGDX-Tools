@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
+import com.darzalgames.libgdxtools.ui.input.OptionalDrawStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
@@ -21,19 +22,27 @@ public class MultipleStage {
 
 	public UniversalInputStage stage;
 	public UniversalInputStage popUpStage;
-	private Stage cursorStage;
-	private Stage inputHandlerStage;
+	private OptionalDrawStage cursorStage;
+	private OptionalDrawStage inputHandlerStage;
 
 	private Pause pause;
 	private List<DoesNotPause> actorsThatDoNotPause;
 
-	public MultipleStage(UniversalInputStage stage, UniversalInputStage popUpStage, Stage cursorStage, Stage inputHandlerStage) {
+	public MultipleStage(UniversalInputStage stage, UniversalInputStage popUpStage, OptionalDrawStage cursorStage, OptionalDrawStage inputHandlerStage) {
 		this.stage = stage;
 		this.popUpStage = popUpStage;
 		this.cursorStage = cursorStage;
 		this.inputHandlerStage = inputHandlerStage;
 		this.actorsThatDoNotPause = new ArrayList<>();
 		setUpInputMultiplexerForAllStages();
+		setShouldRender(true);
+	}
+
+	public void setShouldRender(boolean shouldRender) {
+		stage.setShouldDraw(shouldRender);
+		popUpStage.setShouldDraw(shouldRender);
+		cursorStage.setShouldDraw(shouldRender);
+		inputHandlerStage.setShouldDraw(shouldRender);
 	}
 
 	public void addActorThatDoesNotPause(DoesNotPause actor) {
@@ -44,13 +53,12 @@ public class MultipleStage {
 		popUpStage.clear();
 	}
 
-	void render(Runnable furtherRendering) {
+	void update(Runnable furtherRendering) {
 		if (SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR) {
 			doDebugPrinting();
 		}
 
 		if (pause.isPaused()) {
-			stage.getViewport().apply();
 			// skip stage.act() while paused
 			stage.draw();
 			float delta = Gdx.graphics.getDeltaTime();
@@ -64,9 +72,8 @@ public class MultipleStage {
 		updateAndDrawStage(cursorStage);
 		updateAndDrawStage(inputHandlerStage);
 	}
-	
-	private static void updateAndDrawStage(Stage stageToUpdate) {
-		stageToUpdate.getViewport().apply();
+
+	private void updateAndDrawStage(Stage stageToUpdate) {
 		stageToUpdate.act();
 		stageToUpdate.draw();
 	}
@@ -77,7 +84,7 @@ public class MultipleStage {
 		resizeStage(width, height, popUpStage);
 		resizeStage(width, height, cursorStage);
 	}
-	
+
 	private static void resizeStage(int width, int height, Stage stageToResize) {
 		stageToResize.getViewport().update(width, height, true);
 		stageToResize.getCamera().update();
@@ -89,10 +96,10 @@ public class MultipleStage {
 
 		inputHandlerStage.addActor(gamepadInputHandler);
 		actorsThatDoNotPause.add(gamepadInputHandler);
-		
+
 		inputHandlerStage.addActor(scrollingManager);
 		actorsThatDoNotPause.add(scrollingManager);
-		
+
 		stage.setKeyboardFocus(keyboardInputHandler);
 	}
 

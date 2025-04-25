@@ -2,7 +2,6 @@ package com.darzalgames.libgdxtools.ui.input.strategy;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
@@ -53,7 +52,7 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 	}
 
 
-	private List<InputObserver> observers;
+	private final List<InputObserver> observers;
 	@Override
 	public void register(InputObserver obj) {
 		observers.add(obj);
@@ -63,11 +62,11 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 	}
 	@Override
 	public void unregister(InputObserver obj) {
-		observers.remove(obj);		
+		observers.remove(obj);
 	}
 	@Override
 	public void notifyObservers() {
-		List<InputObserver> toRemove = observers.stream().filter(InputObserver::shouldBeUnregistered).collect(Collectors.toList());
+		List<InputObserver> toRemove = observers.stream().filter(InputObserver::shouldBeUnregistered).toList();
 		observers.removeAll(toRemove);
 		observers.stream().forEach(observer -> observer.inputStrategyChanged(this));
 	}
@@ -81,7 +80,7 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 	public boolean isMouseMode() {
 		return currentInputStrategy.isMouseMode();
 	}
-	
+
 	/**
 	 * To be used before a call to {@link InputStrategySwitcher#revertToPreviousStrategy()}
 	 */
@@ -108,7 +107,7 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 				}
 			});
 			delayAction.setAction(resetInputAction);
-			this.addAction(delayAction);
+			addAction(delayAction);
 		}
 	}
 

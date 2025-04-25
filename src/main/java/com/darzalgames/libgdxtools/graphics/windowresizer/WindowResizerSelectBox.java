@@ -3,7 +3,6 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 import java.util.*;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
@@ -31,7 +30,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 	public WindowResizerSelectBox(BasicButton textButton, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		super(getEntries(), textButton, textSupplier, inputStrategySwitcher, soundInteractListener);
 
-		this.setAction(selectedNewMode -> {
+		setAction(selectedNewMode -> {
 			String previousMode = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
 			if (!selectedNewMode.equalsIgnoreCase(previousMode)) {
 				windowResizer.setMode(getModeFromPreference(selectedNewMode), true);
@@ -45,12 +44,12 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
 		Stream<Supplier<String>> result = allModes.stream().map(mode -> (() -> translateWindowModeOption(mode)));
-		return result.collect(Collectors.toList());
+		return result.toList();
 	}
 
 	@Override
 	public void setSelectedScreenMode(ScreenMode screenMode) {
-		this.setSelected(() -> translateWindowModeOption(screenMode));			
+		setSelected(() -> translateWindowModeOption(screenMode));
 	}
 
 	@Override
@@ -76,7 +75,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		private UniversalLabel revertCountdown;
 
 		private WindowRevertCountdownConfirmationMenu() {
-			super("screen_mode_accept", 
+			super("screen_mode_accept",
 					"accept_control",
 					"revert_message",
 					Runnables.nullRunnable());
@@ -115,8 +114,8 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 
 		@Override
 		protected Runnable getSecondChoiceRunnable() {
-			return () -> { 
-				revertMode(); 
+			return () -> {
+				revertMode();
 				hideThis();
 			};
 		}

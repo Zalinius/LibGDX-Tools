@@ -3,7 +3,6 @@ package com.darzalgames.libgdxtools.internationalization;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.badlogic.gdx.files.FileHandle;
@@ -38,12 +37,11 @@ public abstract class TextSupplier {
 	 */
 	public static List<Supplier<String>> getAllDisplayNames() {
 		Set<String> namesUnsorted = bundleManager.displayNames.getFirstKeySet();
-		List<String> names = new ArrayList<>();
-		names.addAll(namesUnsorted);
+		List<String> names = new ArrayList<>(namesUnsorted);
 		Collections.sort(names);
-		
+
 		Stream<Supplier<String>> allNameSupplier = names.stream().map(name -> (() -> name));
-		return allNameSupplier.collect(Collectors.toList());
+		return allNameSupplier.toList();
 	}
 	/**
 	 * @return The current language's display name, in the current locale
@@ -59,10 +57,10 @@ public abstract class TextSupplier {
 		return selectedNewLanguage -> {
 			TextSupplier.useLanguageFromDisplayName(selectedNewLanguage);
 			GameInfo.getSaveManager().save();
-		}; 
+		};
 	}
 
-	/** 
+	/**
 	 * ONLY TO BE USED BY THE {@link DesktopSaveManager}
 	 * @return The language string for the current locale, this string ain't pretty (e.g. since English is the default bundle, it returns "", French is "fr")
 	 */
@@ -75,17 +73,17 @@ public abstract class TextSupplier {
 		// maybe use this some day? locale.toLanguageTag());
 		String optionalCountry = locale.getCountry();
 		if (!StringUtils.isBlank(optionalCountry)) {
-			base += "_" + optionalCountry; 
+			base += "_" + optionalCountry;
 		}
 		return base;
 	}
 
-	/** 
+	/**
 	 * Only to be used when loading a save, otherwise use TextSupplier.getLanguageChoiceResponder()
 	 * @param languageCode
 	 */
 	public static void useLanguage(String languageCode) {
-		List<Locale> match = bundleManager.displayNames.getSecondKeyset().stream().filter(loc -> getFormattedLocaleForSave(loc).equalsIgnoreCase(languageCode)).collect(Collectors.toList());
+		List<Locale> match = bundleManager.displayNames.getSecondKeyset().stream().filter(loc -> getFormattedLocaleForSave(loc).equalsIgnoreCase(languageCode)).toList();
 		if (!match.isEmpty()) {
 			bundleManager.locale = match.get(0);
 		} else {
@@ -105,13 +103,13 @@ public abstract class TextSupplier {
 
 	/**
 	 * Set whether or not to throw exceptions if a key is missing (generally yes during validation, and no during actual gameplay)
-	 * @param throwExceptions 
+	 * @param throwExceptions
 	 */
 	public static void setThrowExceptions(boolean throwExceptions) {
 		bundleManager.throwExceptions = throwExceptions;
 	}
 
-	/** 
+	/**
 	 * Only to be used during validation, otherwise use TextSupplier.getLanguageChoiceResponder()
 	 * @param languageDisplayName
 	 */

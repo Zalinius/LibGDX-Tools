@@ -5,17 +5,17 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class InputSetup {
 
-	private InputPriorityStack inputPriorityStack;
-	private InputReceiver inputReceiver;
-	private Pause pause;
-	private ScrollingManager scrollingManager;
-	
-	
-	public InputSetup(InputStrategySwitcher inputStrategySwitcher, OptionsMenu optionsMenu, Runnable toggleFullscreenRunnable, boolean toggleWithF11, Stage popUpStage) {
+	private final InputPriorityStack inputPriorityStack;
+	private final InputReceiver inputReceiver;
+	private final Pause pause;
+	private final ScrollingManager scrollingManager;
+
+
+	public InputSetup(InputStrategySwitcher inputStrategySwitcher, OptionsMenu optionsMenu, Runnable toggleFullscreenRunnable, Stage popUpStage) {
 		inputPriorityStack = new InputPriorityStack(popUpStage, optionsMenu);
 		inputStrategySwitcher.register(inputPriorityStack);
-		
-		inputReceiver = new InputReceiver(inputStrategySwitcher, inputPriorityStack, toggleFullscreenRunnable, toggleWithF11);
+
+		inputReceiver = new InputReceiver(inputStrategySwitcher, inputPriorityStack, toggleFullscreenRunnable);
 
 		scrollingManager = new ScrollingManager(inputReceiver);
 
@@ -39,6 +39,6 @@ public class InputSetup {
 	public InputReceiver getInputReceiver() {
 		return inputReceiver;
 	}
-	
-	
+
+
 }

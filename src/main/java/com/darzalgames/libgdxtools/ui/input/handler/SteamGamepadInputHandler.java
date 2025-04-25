@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -30,9 +29,9 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 	protected float currentY = 0;
 	protected static final float INPUT_REPEAT_DELAY = 0.25f;
 	protected float inputRepeatTimer = INPUT_REPEAT_DELAY;
-	
+
 	protected boolean darkMode = false;
-	
+
 	private final Map<AssetDescriptor<Texture>, Texture> existingGlyphs;
 
 	protected SteamGamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver, String actionsSetHandleKey) {
@@ -42,7 +41,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 		// TODO maybe some day add support for multiple action sets
 		this.actionsSetHandleKey = actionsSetHandleKey;
-		
+
 		existingGlyphs = new HashMap<>();
 
 		Gdx.app.log("GamepadInputHandler", "Using STEAM gamepad input handling.");
@@ -50,7 +49,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 	public void setSteamController(SteamController steamController) {
 		this.steamController = steamController;
-		this.actionsSetHandle = steamController.getActionSetHandle(actionsSetHandleKey);	
+		actionsSetHandle = steamController.getActionSetHandle(actionsSetHandleKey);
 		buttonMappings = makeButtonMappings(steamController);
 
 	}
@@ -85,10 +84,10 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 	}
 
 	private void checkForControllerJustDisconnected(SteamControllerHandle[] handlesOut) {
-		if (activeController != null 
+		if (activeController != null
 				&& !Arrays.asList(handlesOut).contains(activeController)
 				&& !justDisconnected) {
-			this.controllerDisconnected();
+			controllerDisconnected();
 			justDisconnected = true;
 			activeController = null;
 		} else {
@@ -126,15 +125,13 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 				Input input = buttonMappings.getSecondValue(actionHandle);
 				ButtonState latestState = buttonStates.get(input);
 				if (isCurrentlyPressedAccordingToPoling) {
-					if (latestState.equals(ButtonState.NOT_HELD_DOWN)) {
+					if (ButtonState.NOT_HELD_DOWN.equals(latestState)) {
 						justPressed(input);
 						changeButtonState(actionHandle, ButtonState.HELD_DOWN);
 					}
-				} else {
-					if (latestState.equals(ButtonState.HELD_DOWN)) {
-						justReleased(input);
-						changeButtonState(actionHandle, ButtonState.NOT_HELD_DOWN);
-					} 
+				} else if (ButtonState.HELD_DOWN.equals(latestState)) {
+					justReleased(input);
+					changeButtonState(actionHandle, ButtonState.NOT_HELD_DOWN);
 				}
 			}
 		}
@@ -149,7 +146,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 			steamController.getAnalogActionData(steamControllerHandle, analogActionHandle, analogActionData);
 			currentX = analogActionData.getX();
 			currentY = analogActionData.getY();
-			sendAxisInput();		
+			sendAxisInput();
 		}
 	}
 
@@ -179,7 +176,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 	@Override
 	public Texture getGlyphForInput(Input input) {
 		SteamControllerDigitalActionHandle handle = buttonMappings.getFirstValue(input);
-		ActionOrigin[] originsOut = new ActionOrigin[50]; // I think people would be hard pressed to map the same action to 50 different buttons 
+		ActionOrigin[] originsOut = new ActionOrigin[50]; // I think people would be hard pressed to map the same action to 50 different buttons
 
 		if (activeController == null) {
 			return null;
@@ -190,7 +187,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 				handle,
 				originsOut);
 
-		ActionOrigin action = originsOut[0]; 
+		ActionOrigin action = originsOut[0];
 
 		if (action == null) { // Check for analog joystick movement
 			SteamControllerAnalogActionHandle handle2 = steamController.getAnalogActionHandle("move"); //note: you have to name the joystick "move" in each app's game_actions_#####.vdf file
@@ -201,11 +198,11 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 			// Prioritize left stick when several joysticks/dpads are available
 			List<ActionOrigin> origins = Arrays.asList(originsOut);
-			origins = origins.stream().filter(o -> o != null).collect(Collectors.toList());
+			origins = origins.stream().filter(o -> o != null).toList();
 			Comparator<ActionOrigin> comparator = Comparator.<ActionOrigin, Boolean>comparing(s -> s.toString().toLowerCase().contains("left") && s.toString().contains("stick")).reversed()
-			        .thenComparing(Comparator.naturalOrder());
+					.thenComparing(Comparator.naturalOrder());
 			origins.sort(comparator);
-			
+
 			action = origins.get(0);
 		}
 
@@ -228,7 +225,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 		if (darkMode) {
 			absolutePath = absolutePath.replace("\\light\\", "\\dark\\");
-			absolutePath = absolutePath.replace("\\knockout\\", "\\dark\\");			
+			absolutePath = absolutePath.replace("\\knockout\\", "\\dark\\");
 		}
 
 		AssetDescriptor<Texture> descriptor = new AssetDescriptor<>(absolutePath, Texture.class);

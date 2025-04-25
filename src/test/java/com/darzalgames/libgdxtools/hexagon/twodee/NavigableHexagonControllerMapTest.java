@@ -15,9 +15,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 import com.darzalgames.darzalcommon.hexagon.gridfactory.HexagonGridRectangular;
-import com.darzalgames.libgdxtools.hexagon.twodee.HexagonController2D;
-import com.darzalgames.libgdxtools.hexagon.twodee.HexagonControllerMap2D;
-import com.darzalgames.libgdxtools.hexagon.twodee.NavigableHexagonMap2D;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.SharesGameInformation;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
@@ -38,7 +35,7 @@ class NavigableHexagonControllerMapTest {
 			@Override public GamePlatform getGamePlatform() {return null;}
 			@Override public SteamStrategy getSteamStrategy() {return null;}
 			@Override public String getGameName() {return null;}
-			@Override public String getGameVersion() {return null;}			
+			@Override public String getGameVersion() {return null;}
 		});
 
 		HexagonMap<String> hexagonMap = new HexagonMap<>();
@@ -47,7 +44,7 @@ class NavigableHexagonControllerMapTest {
 		navigableHexagonMap = new NavigableHexagonMap2D<>(hexagonControllerMap);
 	}
 
-	
+
 	@Test
 	void focusCurrent_withDefault_focusesHexagon0x0() {
 
@@ -57,7 +54,7 @@ class NavigableHexagonControllerMapTest {
 		assertEquals(0, navigableHexagonMap.getCurrentHexagonController().hexagon.getQ());
 		assertEquals(0, navigableHexagonMap.getCurrentHexagonController().hexagon.getR());
 	}
-	
+
 	@ParameterizedTest
 	@MethodSource("directionToCoordinates")
 	void consumeInput_withAllDirectionInputs_focusesCorrectHexagon(InputOnHexagonGrid input, int q, int r) {

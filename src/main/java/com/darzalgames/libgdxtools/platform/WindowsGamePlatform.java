@@ -14,7 +14,7 @@ public class WindowsGamePlatform extends GenericDesktopGamePlatform {
 
 	@Override
 	public FileHandle getSaveFileLocation(String fullGameAndSaveName) {
-		return Gdx.files.absolute(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/My Games/"+ fullGameAndSaveName);
+		return Gdx.files.absolute(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/My Games/" + fullGameAndSaveName);
 	}
 
 	@Override

@@ -16,43 +16,37 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public interface GamePlatform {
 
-	public static final String WINDOWS = "Windows";
-	public static final String LINUX = "Linux";
-	public static final String MAC = "Mac";
-	public static final String WEB = "Web";
-	
-	public String getPlatformName();
+	String WINDOWS = "Windows";
+	String LINUX = "Linux";
+	String MAC = "Mac";
+
+	/**
+	 * @return The platform name
+	 */
+	String getPlatformName();
 
 	/**
 	 * @return True if the active game platform supports borderless fullsreen
 	 */
-	public boolean supportsBorderlessFullscreen();
+	boolean supportsBorderlessFullscreen();
 
 	/**
 	 * Return the correct directory for save files based on the platform
 	 * @param fullGameAndSaveName The subpath and name of the desired save file
 	 * @return A libgdx file handle to the save file
 	 */
-	public FileHandle getSaveFileLocation(String fullGameAndSaveName);
+	FileHandle getSaveFileLocation(String fullGameAndSaveName);
 
 	/**
 	 * @param inputStrategySwitcher The input strategy manager, so we can make the gamepad input handler
 	 * @return A SteamStrategy befitting the GamePlatform
 	 */
-	public SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver);
-	
-	public default boolean needsQuitButton() {
-		return true;
-	}
-
-	public default boolean toggleFullScreenWithF11() {
-		return true;
-	}
+	SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver);
 
 	/**
 	 * @return True if a developer is playing, false if a player is playing
 	 */
-	public boolean isDevMode();
+	boolean isDevMode();
 
 	static Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandlerSupplier(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
 		return () -> new FallbackGamepadInputHandler(inputStrategySwitcher, inputReceiver) {

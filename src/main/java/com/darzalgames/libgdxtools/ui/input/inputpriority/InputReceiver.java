@@ -12,25 +12,22 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalB
  */
 public class InputReceiver {
 
-	private InputPriorityStack inputPriorityStack;
-	private InputStrategySwitcher inputStrategySwitcher;
+	private final InputPriorityStack inputPriorityStack;
+	private final InputStrategySwitcher inputStrategySwitcher;
 	private Pause pause;
 
-	private Map<Input, UniversalButton> specialButtons = new HashMap<>();
+	private final Map<Input, UniversalButton> specialButtons = new HashMap<>();
 
-	private Runnable toggleFullscreenRunnable;
-	private final boolean toggleWithF11;
+	private final Runnable toggleFullscreenRunnable;
 
 	/**
 	 * @param inputStrategySwitcher
 	 * @param inputPriorityStack
 	 * @param toggleFullscreenRunnable A runnable that toggles between full screen and windowed mode
-	 * @param toggleWithF11 Whether or not the current running version of the game toggles full screen with f11
 	 */
-	public InputReceiver(InputStrategySwitcher inputStrategySwitcher, InputPriorityStack inputPriorityStack, Runnable toggleFullscreenRunnable, boolean toggleWithF11) {
+	public InputReceiver(InputStrategySwitcher inputStrategySwitcher, InputPriorityStack inputPriorityStack, Runnable toggleFullscreenRunnable) {
 		this.toggleFullscreenRunnable = toggleFullscreenRunnable;
 		this.inputStrategySwitcher = inputStrategySwitcher;
-		this.toggleWithF11 = toggleWithF11;
 
 		this.inputPriorityStack = inputPriorityStack;
 	}
@@ -43,8 +40,9 @@ public class InputReceiver {
 	 * @param input The input to pass into the system: this can be from the user (keyboard, controller), or simulated input
 	 */
 	public void processKeyInput(Input input) {
-		boolean shouldToggleFullScreen = input == Input.TOGGLE_FULLSCREEN && toggleWithF11;
+		boolean shouldToggleFullScreen = input == Input.TOGGLE_FULLSCREEN;
 		boolean isScrolling = input == Input.SCROLL_UP || input == Input.SCROLL_DOWN;
+
 		if (shouldToggleFullScreen) {
 			toggleFullscreenRunnable.run();
 		}else if (input == Input.PAUSE) {
@@ -70,9 +68,9 @@ public class InputReceiver {
 
 	private void togglePause() {
 		boolean isInGame = !pause.isOptionsMenuOpen();
-		if (isInGame) { 
+		if (isInGame) {
 			GamePauser.pause();
-		} else { 
+		} else {
 			inputPriorityStack.sendInputToTop(Input.PAUSE);
 		}
 	}

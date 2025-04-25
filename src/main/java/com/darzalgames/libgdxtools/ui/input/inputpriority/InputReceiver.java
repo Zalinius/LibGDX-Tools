@@ -24,7 +24,6 @@ public class InputReceiver {
 	 * @param inputStrategySwitcher
 	 * @param inputPriorityStack
 	 * @param toggleFullscreenRunnable A runnable that toggles between full screen and windowed mode
-	 * @param toggleWithF11 Whether or not the current running version of the game toggles full screen with f11
 	 */
 	public InputReceiver(InputStrategySwitcher inputStrategySwitcher, InputPriorityStack inputPriorityStack, Runnable toggleFullscreenRunnable) {
 		this.toggleFullscreenRunnable = toggleFullscreenRunnable;

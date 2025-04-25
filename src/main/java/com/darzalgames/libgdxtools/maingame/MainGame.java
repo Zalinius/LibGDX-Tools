@@ -4,8 +4,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -46,22 +44,22 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected SteamStrategy steamStrategy;
 
 	// Objects created at initialization, but not widely shared
-	private Supplier<SpriteBatch> spriteBatchSupplier;
+	private final Supplier<SpriteBatch> spriteBatchSupplier;
 	protected MultipleStage multipleStage;
 	protected InputSetup inputSetup;
 	protected WindowResizer windowResizer;
 	protected InputStrategySwitcher inputStrategySwitcher;
 
-	
+
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
 	private boolean isQuitting = false;
-	
+
 
 	protected static UserInterfaceFactory userInterfaceFactory;
 
 
-	
+
 	// The setup process, in order that they are called
 	protected abstract UserInterfaceFactory initializeAssetsAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName(); // TODO this can be removed once we figure out our long-standing goal of making Assets extendable
@@ -156,9 +154,9 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			multipleStage.stage.act(0);
 		}
 	}
-	
+
 	protected void renderInternal() {}
-	
+
 	@Override
 	public final void dispose() {
 		isQuitting = true;
@@ -201,15 +199,15 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	public static UserInterfaceFactory getUserInterfaceFactory() {
 		return userInterfaceFactory;
 	}
-	
+
 	private void makeInputStrategySwitcher() {
 		inputStrategySwitcher = new InputStrategySwitcher(new MouseInputStrategy(), new KeyboardAndGamepadInputStrategy());
 	}
 
 	private void makePreferenceManager() {
-		this.preferenceManager = new PreferenceManager(getPreferenceManagerName());
+		preferenceManager = new PreferenceManager(getPreferenceManagerName());
 	}
-	
+
 	private void makeAllStages() {
 		UniversalInputStage mainStage = makeMainStage();
 		UniversalInputStage popUpStage = makePopUpStage();
@@ -225,7 +223,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		popUpStage.getRoot().setName("PopUp Stage");
 		return popUpStage;
 	}
-	
+
 	private OptionalDrawStage makeInputHandlerStage() {
 		OptionalDrawStage inputHandlerStage = new OptionalDrawStage(new ScreenViewport(), spriteBatchSupplier.get());
 		MouseInputHandler mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
@@ -250,7 +248,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		stage.getRoot().setName("Main Stage");
 		return stage;
 	}
-	
+
 	private OptionalDrawStage makeCursorStage() {
 		OptionalDrawStage cursorStage = new OptionalDrawStage(new ScreenViewport(), spriteBatchSupplier.get());
 		cursorStage.addActor(getCustomCursor());
@@ -259,26 +257,16 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void setUpInput() {
 		// Set up input processing for all strategies
-		inputSetup = new InputSetup(inputStrategySwitcher, makeOptionsMenu(), windowResizer::toggleWindow, gamePlatform.toggleFullScreenWithF11(), multipleStage.popUpStage);
+		inputSetup = new InputSetup(inputStrategySwitcher, makeOptionsMenu(), windowResizer::toggleWindow, multipleStage.popUpStage);
 		multipleStage.setPause(inputSetup.getPause());
 		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
 
-		setUpCatchKeys();
 		makeSteamStrategy();
 		makeKeyboardAndGamepadInputHandlers();
 	}
-	
-	private void setUpCatchKeys() {
-		Gdx.input.setCatchKey(Input.Keys.DOWN, true);
-		Gdx.input.setCatchKey(Input.Keys.UP, true);
-		Gdx.input.setCatchKey(Input.Keys.LEFT, true);
-		Gdx.input.setCatchKey(Input.Keys.RIGHT, true);
-		// TODO F11 in browser?
-		// itch.io handles catching mouse scrolling and spacebar while the game is in focus
-	}
-	
+
 	private void makeSteamStrategy() {
-		this.steamStrategy = gamePlatform.getSteamStrategy(inputStrategySwitcher, inputSetup.getInputReceiver());
+		steamStrategy = gamePlatform.getSteamStrategy(inputStrategySwitcher, inputSetup.getInputReceiver());
 	}
 
 	private void makeKeyboardAndGamepadInputHandlers() {

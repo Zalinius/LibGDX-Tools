@@ -9,6 +9,8 @@ import java.util.function.Supplier;
  */
 public class DesktopGamePlatformHelper {
 
+	private DesktopGamePlatformHelper() {}
+
 	/**
 	 * Determines the correct platform based on launch arguments
 	 * @param args java main arguments

@@ -43,14 +43,6 @@ public interface GamePlatform {
 	 */
 	SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver);
 
-	default boolean needsQuitButton() {
-		return true;
-	}
-
-	default boolean toggleFullScreenWithF11() {
-		return true;
-	}
-
 	/**
 	 * @return True if a developer is playing, false if a player is playing
 	 */

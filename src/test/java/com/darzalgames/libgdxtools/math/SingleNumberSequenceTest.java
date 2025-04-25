@@ -13,7 +13,7 @@ class SingleNumberSequenceTest {
 	void next_returnsSameNumber() throws Exception {
 		SingleNumberSequence singleNumberSequence = new SingleNumberSequence(NUMBER);
 
-		Integer result = singleNumberSequence.next();
+		int result = singleNumberSequence.next();
 
 		assertEquals(NUMBER, result);
 	}
@@ -40,7 +40,7 @@ class SingleNumberSequenceTest {
 	void next_withUpperBound_returnsSameNumber() throws Exception {
 		SingleNumberSequence singleNumberSequence = new SingleNumberSequence(NUMBER);
 
-		Integer result = singleNumberSequence.next(NUMBER * 2);
+		int result = singleNumberSequence.next(NUMBER * 2);
 
 		assertEquals(NUMBER, result);
 	}
@@ -58,7 +58,7 @@ class SingleNumberSequenceTest {
 	void next_withBothBounds_returnsSameNumber() throws Exception {
 		SingleNumberSequence singleNumberSequence = new SingleNumberSequence(NUMBER);
 
-		Integer result = singleNumberSequence.next(NUMBER / 2, NUMBER * 2);
+		int result = singleNumberSequence.next(NUMBER / 2, NUMBER * 2);
 
 		assertEquals(NUMBER, result);
 	}

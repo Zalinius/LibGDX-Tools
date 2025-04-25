@@ -34,23 +34,22 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinM
  */
 public class UserInterfaceFactory {
 
-	protected Runnable quitGameRunnable;
-	protected SkinManager skinManager;
-	protected InputStrategySwitcher inputStrategySwitcher;
-	private Supplier<Float> flashesPerSecondSupplier;
-	protected Runnable soundInteractListener;
-	protected Supplier<Boolean> isPaused;
+	private final Runnable quitGameRunnable;
+	private final SkinManager skinManager;
+	private final InputStrategySwitcher inputStrategySwitcher;
+	private final Supplier<Float> flashesPerSecondSupplier;
+	private final Runnable soundInteractListener;
+	private final Supplier<Boolean> isPaused;
 
 	private final String QUIT_GAME_KEY = "quit_game";
 
-	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener,
-			Supplier<Boolean> isPaused) {
+	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener, Supplier<Boolean> isPaused) {
 		this.skinManager = skinManager;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.flashesPerSecondSupplier = flashesPerSecondSupplier;
 		this.soundInteractListener = soundInteractListener;
 		this.isPaused = isPaused;
-		this.quitGameRunnable = Gdx.app::exit;
+		quitGameRunnable = Gdx.app::exit;
 	}
 
 	public UniversalLabel getLabel(final Supplier<String> textSupplier) {
@@ -136,14 +135,15 @@ public class UserInterfaceFactory {
 	private BasicButton makeLibGDXTextButton(final String text, TextButtonStyle textButtonStyle) {
 		return new MyTextButton(text, textButtonStyle);
 	}
+
 	private BasicButton makeLibGDXTextButton(final String text) {
 		return makeLibGDXTextButton(text, skinManager.getTextButtonStyle());
 	}
 
 	public UniversalSelectBox getSelectBox(Supplier<String> boxLabel, Collection<Supplier<String>> entries, Consumer<String> consumer) {
-		BasicButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getTextButtonStyle()); 
+		BasicButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getTextButtonStyle());
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		UniversalSelectBox keyboardSelectBox =  new UniversalSelectBox(entries, textButton, boxLabel, inputStrategySwitcher, soundInteractListener);
+		UniversalSelectBox keyboardSelectBox = new UniversalSelectBox(entries, textButton, boxLabel, inputStrategySwitcher, soundInteractListener);
 		keyboardSelectBox.setAction(consumer);
 		return keyboardSelectBox;
 	}
@@ -151,6 +151,7 @@ public class UserInterfaceFactory {
 	public BaseDrawable getDefaultBackgroundDrawable() {
 		return skinManager.getUINinePatch();
 	}
+
 	public BaseDrawable getConfirmationMenuBackground() {
 		return skinManager.getConfirmationMenuBackground();
 	}
@@ -166,8 +167,8 @@ public class UserInterfaceFactory {
 	}
 
 	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility) {
-		BasicButton textButton = new MyTextButton("", skinManager.getSettingsButtonStyle()){
-			@Override public String toString() { return "options button"; }}; 
+		BasicButton textButton = new MyTextButton("", skinManager.getSettingsButtonStyle()) {
+			@Override public String toString() { return "options button"; }};
 			return new MouseOnlyButton(textButton, Suppliers.emptyString(),
 					() -> toggleOptionsScreenVisibility.accept(!isPaused.get()),
 					inputStrategySwitcher, soundInteractListener);
@@ -202,8 +203,8 @@ public class UserInterfaceFactory {
 	public UniversalButton getQuitGameButtonWithWarning() {
 		Runnable quitWithConfirmation = () -> {
 			new ConfirmationMenu(
-					"menu_warning", 
-					QUIT_GAME_KEY, 
+					"menu_warning",
+					QUIT_GAME_KEY,
 					quitGameRunnable::run);
 		};
 		return getButton(getQuitButtonString(), quitWithConfirmation);
@@ -237,8 +238,9 @@ public class UserInterfaceFactory {
 			}
 		});
 	}
+
 	protected void makeSliderFlashing(UniversalSlider keyboardSlider, SliderStyle mainStyle, SliderStyle flashedStyle) {
-		BasicButton button = keyboardSlider.getButton(); 
+		BasicButton button = keyboardSlider.getButton();
 		button.addListener(new ClickListener() {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -299,12 +301,24 @@ public class UserInterfaceFactory {
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {
 		Supplier<String> textSupplier = () -> TextSupplier.getLine("window_mode_label");
-		BasicButton textButton = makeLibGDXTextButton(textSupplier.get(), skinManager.getTextButtonStyle()); 
+		BasicButton textButton = makeLibGDXTextButton(textSupplier.get(), skinManager.getTextButtonStyle());
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 		return new WindowResizerSelectBox(textButton, textSupplier, inputStrategySwitcher, soundInteractListener);
 	}
 
 	private float computeDelay() {
-		return 1f/flashesPerSecondSupplier.get();
+		return 1f / flashesPerSecondSupplier.get();
+	}
+
+	protected InputStrategySwitcher getInputStrategySwitcher() {
+		return inputStrategySwitcher;
+	}
+
+	protected Runnable getSoundInteractListener() {
+		return soundInteractListener;
+	}
+
+	protected Supplier<Boolean> getIsPausedSupplier() {
+		return isPaused;
 	}
 }

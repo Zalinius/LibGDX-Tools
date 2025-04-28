@@ -19,7 +19,7 @@ class DarkScreen extends Image {
 
 	public DarkScreen(Stage popupStage, Runnable onClick) {
 		super(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), 1, 1));
-		
+
 		this.popupStage = popupStage;
 
 		addListener(new InputListener() {
@@ -31,18 +31,17 @@ class DarkScreen extends Image {
 			}
 		});
 	}
-	
+
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		this.setSize(UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight());
-		UserInterfaceSizer.makeActorCentered(this);
+		UserInterfaceSizer.scaleToFillScreenAndMakeCentered(this);
 		super.draw(batch, parentAlpha);
 	}
 
 	void fadeIn(Actor actorPopup, boolean isTouchable) {
 		clearActions();
 		popupStage.addActor(this);
-		this.setSize(UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight()); // Set full screen size immediately so tests can click it in the same frame
+		UserInterfaceSizer.scaleToFillScreenAndMakeCentered(this); // Set full screen size immediately so tests can click it in the same frame
 		int actorIndex = actorPopup.getZIndex();
 		setZIndex(actorIndex);
 		actorPopup.setZIndex(actorIndex+1);

@@ -30,6 +30,7 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSetup;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.screen.Fader;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 
 public abstract class MainGame extends ApplicationAdapter implements SharesGameInformation {
@@ -146,6 +147,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	protected void resizeUI() {
 		inputSetup.getInputPriorityStack().resizeStackUI();
+		Fader.resizeUI();
 
 		if (inputSetup.getPause().isPaused()) {
 			// Lets the game UI behind the options menu update the UI sizing
@@ -213,6 +215,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		OptionalDrawStage inputHandlerStage = makeInputHandlerStage();
 		UserInterfaceSizer.setStage(mainStage);
 		multipleStage = new MultipleStage(mainStage, popUpStage, cursorStage, inputHandlerStage);
+		Fader.initialize(popUpStage);
 	}
 
 	private UniversalInputStage makePopUpStage() {

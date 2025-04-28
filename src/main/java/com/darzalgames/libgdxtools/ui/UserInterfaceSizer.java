@@ -40,7 +40,16 @@ public class UserInterfaceSizer {
 		} else {
 			actor.setSize(multiplierHeight * (actor.getWidth()/actor.getHeight()), multiplierHeight);
 		}
-	}	
+	}
+
+	/**
+	 * @param actor The actor which will be resized to fill the screen and centered
+	 */
+	public static void scaleToFillScreenAndMakeCentered(Actor actor) {
+		actor.setSize(UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight());
+		UserInterfaceSizer.makeActorCentered(actor);
+	}
+
 	/**
 	 * @param drawable The drawable to set minimum width and height, maintaining aspect ratio, typically an image
 	 * @param percent The percentage of the world/stage WIDTH or HEIGHT (minimum) that this actor should occupy [0-1]
@@ -72,7 +81,7 @@ public class UserInterfaceSizer {
 	public static float getHeightPercentage(float percentage) {
 		float maximum = getCurrentHeight();
 		return Math.min(maximum, getCurrentHeight()*percentage*scaling);
-	}	
+	}
 	/**
 	 * @return The percentage of the stage's HEIGHT or WIDTH [0-1], whatever is smaller
 	 */
@@ -101,7 +110,7 @@ public class UserInterfaceSizer {
 		actor.setPosition(getCurrentWidth()/2f - (actor.getWidth()*actor.getScaleX()) / 2f,
 				getCurrentHeight()/2f - (actor.getHeight()*actor.getScaleY()) / 2f);
 	}
-	
+
 
 
 	public static void setStage(Stage stage) {

@@ -28,10 +28,10 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	private final Supplier<UniversalButton> makeWindowModeSelectBox;
 
 	private final String platformName;
-	
+
 	/**
 	 * NOTE: Setting the position is important, otherwise the pause menu will not open!<p>
-	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceFactory.makeActorCentered(this)} 
+	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceFactory.makeActorCentered(this)}
 	 */
 	protected abstract void setUpBackground();
 	protected abstract Alignment getEntryAlignment();
@@ -80,7 +80,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	protected PauseMenu(Supplier<UniversalButton> makeWindowModeSelectBox, int bottomPadding) {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
-		this.platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
+		platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
 		setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight());
 		defaults().padBottom(bottomPadding);
 	}
@@ -90,16 +90,17 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		desiredWidth = 250;
 		desiredHeight = 125;
 	}
-	
+
 	/**
-	 * To be used by child classes to have buttons in the menu hide/show it. E.g. pressing a button to change the 
+	 * To be used by child classes to have buttons in the menu hide/show it. E.g. pressing a button to change the
 	 * language does toggleScreenVisibility(false), refreshes the menu, then does toggleScreenVisibility(true).
 	 * @param show
 	 */
 	protected void toggleScreenVisibility(boolean show) {
-		if (show) {
+		boolean isShowing = getStage() != null;
+		if (show || !isShowing) {
 			GamePauser.pause();
-		} else {
+		} else if (isShowing) {
 			hideThis();
 		}
 	}
@@ -122,11 +123,11 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 		UniversalButton reportBugButton = makeReportBugButton();
 		if (reportBugButton != null) {
-			menuButtons.add(reportBugButton);					
+			menuButtons.add(reportBugButton);
 		}
 
 		UniversalButton controlsButton = makeControlsButton();
-		menuButtons.add(controlsButton);					
+		menuButtons.add(controlsButton);
 
 		// Window mode select box
 		UniversalButton windowModeSelectBox = makeWindowModeSelectBox.get();
@@ -141,7 +142,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 
 		// Back button
 		UniversalButton backButton = makeBackButton();
-		
+
 		menuButtons.add(UserInterfaceFactory.getSpacer());
 
 		menuButtons.removeIf(Objects::isNull);
@@ -164,12 +165,12 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 	public void actWhilePaused(float delta) {
 		act(delta);
 	}
-	
+
 	@Override
 	public boolean isGamePausedWhileThisIsInFocus() {
 		return true;
 	}
-	
+
 	protected void positionPauseButton() {
 		int padding = 3;
 		pauseButton.getView().setPosition(padding, GameInfo.getHeight() - pauseButton.getView().getHeight() - padding);
@@ -180,7 +181,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		pauseButton.setTouchable(show ? Touchable.enabled : Touchable.disabled);
 		pauseButton.getView().setVisible(show);
 	}
-	
+
 	protected void addPauseButtonToStage(Stage stage) {
 		stage.addActor(pauseButton.getView());
 		pauseButton.getView().toFront();

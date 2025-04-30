@@ -1,7 +1,7 @@
 package com.darzalgames.libgdxtools.ui;
 
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
-import com.darzalgames.libgdxtools.maingame.MainGame;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.popup.TextChoicePopUp;
 
 /**
@@ -19,7 +19,7 @@ public class ConfirmationMenu extends TextChoicePopUp {
 	
 	@Override
 	protected BaseDrawable getBackgroundDrawable() {
-		return MainGame.getUserInterfaceFactory().getConfirmationMenuBackground();
+		return GameInfo.getUserInterfaceFactory().getConfirmationMenuBackground();
 	}
 
 	@Override

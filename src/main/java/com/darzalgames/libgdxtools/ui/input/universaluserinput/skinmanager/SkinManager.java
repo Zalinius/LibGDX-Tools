@@ -19,7 +19,7 @@ import com.darzalgames.libgdxtools.graphics.ColorTools;
 public class SkinManager {
 
 	protected final Skin skin;
-	
+
 	// NinePatch
 	protected static final String CONFIRMATION_MENU_BACKGROUND = "confirmationMenuBackground";
 	protected static final String UI_BORDERED_NINE = "uiBorderedNine";
@@ -50,22 +50,22 @@ public class SkinManager {
 		super();
 		this.skin = skin;
 	}
-	
+
 	/**
 	 * @return the default (very basic) skin
 	 */
 	public static Skin getDefaultSkin() {
 		Skin skin = new Skin();
-		
+
 		int size = 4;
-		
+
 		NinePatchDrawable darkGrayNinePatch = new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.DARK_GRAY, size), 1, 1, 1, 1));
 		skin.add(UI_BORDERED_NINE, darkGrayNinePatch);
 		skin.add(CONFIRMATION_MENU_BACKGROUND, new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.PINK, size), 1, 1, 1, 1)));
 
 		BitmapFont defaultFont = new BitmapFont();
 		defaultFont.setColor(Color.BLACK);
-		skin.add("default", defaultFont);
+		skin.add(DEFAULT_LABEL, defaultFont);
 
 		skin.add(DEFAULT_LABEL, new LabelStyle(defaultFont, Color.BLACK));
 		skin.add(FLAVOR_TEXT_LABEL, new LabelStyle(defaultFont, Color.CHARTREUSE));
@@ -84,7 +84,7 @@ public class SkinManager {
 		checkboxStyle.checkboxOn = skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
 		checkboxStyle.checkboxOff = darkGrayNinePatch;
 		skin.add(CHECKBOX, checkboxStyle);
-		
+
 		Drawable buttonNOTHighlighted = new Image(ColorTools.getColoredTexture(Color.WHITE, size)).getDrawable();
 		Drawable buttonHighlighted = new Image(ColorTools.getColoredTexture(Color.GRAY, size)).getDrawable();
 		TextButtonStyle textButtonStyle = new TextButtonStyle(buttonNOTHighlighted, null, null, defaultFont);
@@ -110,10 +110,10 @@ public class SkinManager {
 		settingsButtonStyle.over = new TextureRegionDrawable(settingsHighlightedIcon);
 		settingsButtonStyle.focused = new TextureRegionDrawable(settingsHighlightedIcon);
 		skin.add(SETTINGS_BUTTON, settingsButtonStyle);
-		
+
 		return skin;
 	}
-	
+
 	protected LabelStyle getLabelStyle(String style) {
 		return skin.get(style, LabelStyle.class);
 	}

@@ -51,10 +51,10 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 
 	/**
 	 * Set the focus to a particular {@link UniversalButton}
-	 * @param UniversalButton
+	 * @param universalButton
 	 */
-	public void goTo(UniversalButton UniversalButton) {
-		menu.goTo(UniversalButton);
+	public void goTo(UniversalButton universalButton) {
+		menu.goTo(universalButton);
 	}
 
 	/**

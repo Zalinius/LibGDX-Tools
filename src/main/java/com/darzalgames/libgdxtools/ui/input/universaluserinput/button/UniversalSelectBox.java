@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.darzalgames.darzalcommon.functional.Suppliers;
-import com.darzalgames.libgdxtools.maingame.MainGame;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
@@ -26,7 +26,7 @@ public class UniversalSelectBox extends UniversalButton {
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,
 		// sets that as the text in our display label (e.g. English), and calls the Consumer (which responds to the new entry, e.g. changing the game language and refreshing the main menu)
-		List<UniversalButton> entryButtons = entries.stream().map(entry -> MainGame.getUserInterfaceFactory().getButton(
+		List<UniversalButton> entryButtons = entries.stream().map(entry -> GameInfo.getUserInterfaceFactory().getButton(
 				entry,
 				() -> {
 					options.hideThis();
@@ -40,7 +40,7 @@ public class UniversalSelectBox extends UniversalButton {
 			@Override
 			protected void setUpTable() {
 				menu.setAlignment(Alignment.LEFT, Alignment.LEFT);
-				menu.getView().setBackground(MainGame.getUserInterfaceFactory().getDefaultBackgroundDrawable());
+				menu.getView().setBackground(GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 				options.add(menu.getView()).left();
 				options.pack();
 				UserInterfaceSizer.makeActorCentered(options);
@@ -53,7 +53,7 @@ public class UniversalSelectBox extends UniversalButton {
 			}
 		};
 
-		displayLabel = MainGame.getUserInterfaceFactory().getLabel(Suppliers.emptyString());
+		displayLabel = GameInfo.getUserInterfaceFactory().getLabel(Suppliers.emptyString());
 		displayLabel.setWrap(false);
 		textButton.add(displayLabel);
 		setButtonRunnable(this::showInnerOptionsPopUpMenu);

@@ -4,15 +4,17 @@ import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 
 public interface SharesGameInformation {
 
-	public String getGameName();
-	public String getGameVersion();
+	String getGameName();
+	String getGameVersion();
 
-	public SaveManager getSaveManager();
-	public PreferenceManager getPreferenceManager();
-	public GamePlatform getGamePlatform();
-	public SteamStrategy getSteamStrategy();
-	
+	SaveManager getSaveManager();
+	PreferenceManager getPreferenceManager();
+	GamePlatform getGamePlatform();
+	SteamStrategy getSteamStrategy();
+	UserInterfaceFactory getUserInterfaceFactory();
+
 }

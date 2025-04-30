@@ -1,12 +1,6 @@
 package com.darzalgames.libgdxtools.errorhandling.desktop;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
@@ -17,19 +11,10 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 import javax.swing.border.Border;
 
-import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
-import com.darzalgames.libgdxtools.errorhandling.CrashLocalization;
-import com.darzalgames.libgdxtools.errorhandling.CrashReport;
-import com.darzalgames.libgdxtools.errorhandling.ReportStatus;
+import com.darzalgames.libgdxtools.errorhandling.*;
 
 @SuppressWarnings("serial") // Same-version serialization only
 public class DesktopCrashPopup extends JFrame {

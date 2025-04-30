@@ -1,9 +1,11 @@
 package com.darzalgames.libgdxtools.hexagon.twodee;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -32,6 +34,21 @@ class InputOnHexagonGridTest {
 		HexagonDirection direction = InputOnHexagonGrid.getDirectionFromInput(input);
 
 		assertEquals(expectedDirection, direction);
+	}
+
+	@Test
+	void hashCode_onUpAndUpReleased_isEqual() {
+		assertEquals(Input.UP.hashCode(), InputOnHexagonGrid.UP_RELEASED.hashCode());
+	}
+
+	@Test
+	void hashCode_onDownAndDownReleased_isEqual() {
+		assertEquals(Input.DOWN.hashCode(), InputOnHexagonGrid.DOWN_RELEASED.hashCode());
+	}
+
+	@Test
+	void hashCode_onUpAndDownReleased_isNotEqual() {
+		assertNotEquals(Input.UP.hashCode(), InputOnHexagonGrid.DOWN_RELEASED.hashCode());
 	}
 
 }

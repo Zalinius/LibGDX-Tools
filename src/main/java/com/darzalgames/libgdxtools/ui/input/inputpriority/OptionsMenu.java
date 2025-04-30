@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.maingame.MainGame;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -115,7 +114,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 		// ALL SELECTABLE MENU BUTTONS
 		List<UniversalButton> menuButtons = new ArrayList<>();
-		menuButtons.add(MainGame.getUserInterfaceFactory().getSpacer());
+		menuButtons.add(GameInfo.getUserInterfaceFactory().getSpacer());
 
 		menuButtons.addAll(makeMiddleButtons());
 
@@ -141,7 +140,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		// Back button
 		UniversalButton backButton = makeBackButton();
 
-		menuButtons.add(MainGame.getUserInterfaceFactory().getSpacer());
+		menuButtons.add(GameInfo.getUserInterfaceFactory().getSpacer());
 
 		menuButtons.removeIf(Objects::isNull);
 
@@ -156,12 +155,12 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		versionTable.setTouchable(Touchable.disabled);
 		addActor(versionTable);
 		
-		Label authors = MainGame.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("authors_label"));
+		Label authors = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("authors_label"));
 		authors.setAlignment(Align.topLeft);
 		versionTable.add(authors).grow().top().left().padTop(getPadTop()).padLeft(getPadLeft());
 		versionTable.row();
 		
-		Label versionLabel = MainGame.getUserInterfaceFactory().getFlavorTextLabel(() -> getGameVersion() + platformName);
+		Label versionLabel = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> getGameVersion() + platformName);
 		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT.getAlignment());
 		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom()).padRight(getPadRight());
 	}
@@ -171,12 +170,12 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	 * e.g. call {@link UserInterfaceSizer#makeActorCentered(Actor) UserInterfaceSizer.makeActorCentered(this)} 
 	 */
 	private void setUpBackground() {
-		this.setBackground(MainGame.getUserInterfaceFactory().getDefaultBackgroundDrawable());
+		this.setBackground(GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 		UserInterfaceSizer.makeActorCentered(this);
 	}
 	
 	private UniversalButton makeBackButton() {
-		return MainGame.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
+		return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
 	}
 	
 	@Override
@@ -228,7 +227,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		}
 
 		public UniversalButton getButton() {
-			return MainGame.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this));
+			return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this));
 		}
 
 		@Override
@@ -239,7 +238,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		@Override
 		protected void setUpTable() {
 			setUpDesiredSize();
-			background(MainGame.getUserInterfaceFactory().getDefaultBackgroundDrawable());
+			background(GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 
 			menu.setAlignment(Alignment.CENTER, Alignment.TOP);
 			add(menu.getView()).growX().top();

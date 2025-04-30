@@ -18,22 +18,22 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.ScrollingManager;
 
 public class MultipleStage {
 
-	private static boolean SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR = false;
+	private static final boolean SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR = false;
 
-	public UniversalInputStage stage;
-	public UniversalInputStage popUpStage;
-	private OptionalDrawStage cursorStage;
-	private OptionalDrawStage inputHandlerStage;
+	private final UniversalInputStage stage;
+	private final UniversalInputStage popUpStage;
+	private final OptionalDrawStage cursorStage;
+	private final OptionalDrawStage inputHandlerStage;
 
 	private Pause pause;
-	private List<DoesNotPause> actorsThatDoNotPause;
+	private final List<DoesNotPause> actorsThatDoNotPause;
 
 	public MultipleStage(UniversalInputStage stage, UniversalInputStage popUpStage, OptionalDrawStage cursorStage, OptionalDrawStage inputHandlerStage) {
 		this.stage = stage;
 		this.popUpStage = popUpStage;
 		this.cursorStage = cursorStage;
 		this.inputHandlerStage = inputHandlerStage;
-		this.actorsThatDoNotPause = new ArrayList<>();
+		actorsThatDoNotPause = new ArrayList<>();
 		setUpInputMultiplexerForAllStages();
 		setShouldRender(true);
 	}
@@ -129,9 +129,18 @@ public class MultipleStage {
 		Actor hitActor = stage.hit(cursor.x, cursor.y, true);
 		boolean hitSomething = hitActor != null;
 		if (hitSomething) {
-			System.out.println(stage.getRoot().getName() + ": " + hitActor);				
+			Gdx.app.log("Stage", stage.getRoot().getName() + ": " + hitActor);
 		}
 		return hitSomething;
 	}
+
+	public UniversalInputStage getStage() {
+		return stage;
+	}
+
+	protected UniversalInputStage getPopUpStage() {
+		return popUpStage;
+	}
+
 
 }

@@ -9,10 +9,12 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 /**
  * The base class for all kinds of input handlers (mouse, keyboard, gamepad)
  */
+
+// TODO could this be an Actor instead of a Table? What actors get added to this??
 public abstract class InputHandler extends Table implements DoesNotPause {
-	
+
 	protected final InputStrategySwitcher inputStrategySwitcher;
-	
+
 	protected InputHandler(InputStrategySwitcher inputStrategySwitcher) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
 	}
@@ -23,7 +25,7 @@ public abstract class InputHandler extends Table implements DoesNotPause {
 	}
 
 	public abstract Texture getGlyphForInput(Input input);
-	
+
 	void updateLatestInputMethod() {
 		GlyphFactory.setLatestInputHandler(this);
 	}

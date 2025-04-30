@@ -3,20 +3,23 @@ package com.darzalgames.libgdxtools.steam.agnostic;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 
+/**
+ * Used when Steam isn't connected (e.g. running a dev build or one off of itch.io)
+ */
 public class DummySteamStrategy implements SteamStrategy {
-	
-	private FallbackGamepadInputHandler gamepadInputHandler;
+
+	private final FallbackGamepadInputHandler gamepadInputHandler;
 
 	public DummySteamStrategy(FallbackGamepadInputHandler gamepadInputHandler) {
 		this.gamepadInputHandler = gamepadInputHandler;
 	}
 
 	@Override
-	public void update() {}
-	
+	public void update() { /* Dummy strategy does nothing */ }
+
 	@Override
-	public void dispose() {}
-	
+	public void dispose() { /* Dummy strategy does nothing */ }
+
 	@Override
 	public int getStat(String stat) {
 		return -1;
@@ -26,23 +29,23 @@ public class DummySteamStrategy implements SteamStrategy {
 	public long getGlobalStat(String stat) {
 		return -1;
 	}
-	
+
 	@Override
-	public void setStat(String stat, int val) {}
-	
+	public void setStat(String stat, int val) { /* Dummy strategy does nothing */ }
+
 	@Override
 	public String getSteamID() {
 		return "dev";
 	}
-	
+
 	@Override
-	public void giveAchievement(String achievement) {}
-	
+	public void giveAchievement(String achievement) { /* Dummy strategy does nothing */ }
+
 	@Override
-	public void setRichPresentsVariable(String key, String value) {}
-	
+	public void setRichPresentsVariable(String key, String value) { /* Dummy strategy does nothing */ }
+
 	@Override
-	public void setRichPresents(String key) {}
+	public void setRichPresents(String key) { /* Dummy strategy does nothing */ }
 
 	@Override
 	public GamepadInputHandler getGamepadInputHandler() {

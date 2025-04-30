@@ -70,7 +70,6 @@ public abstract class TextSupplier {
 
 	public static String getFormattedLocaleForSave(Locale locale) {
 		String base = locale.getLanguage();
-		// maybe use this some day? locale.toLanguageTag());
 		String optionalCountry = locale.getCountry();
 		if (!StringUtils.isBlank(optionalCountry)) {
 			base += "_" + optionalCountry;

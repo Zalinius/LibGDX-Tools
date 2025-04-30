@@ -4,13 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class CrashLocalizationTest {
-	
+class CrashLocalizationTest {
+
 	@Test
 	void getLocaleLanguage_supportedLanguage_returnsCorrectLanguage() throws Exception {
 		assertEquals(CrashLocalization.ENGLISH_CRASH_LOCALIZATION, CrashLocalization.getLocalizationFromCode("en"));
 		assertEquals(CrashLocalization.ENGLISH_CRASH_LOCALIZATION, CrashLocalization.getLocalizationFromCode("eng"));
-		
+
 		assertEquals(CrashLocalization.FRENCH_CRASH_LOCALIZATION, CrashLocalization.getLocalizationFromCode("fr"));
 		assertEquals(CrashLocalization.FRENCH_CRASH_LOCALIZATION, CrashLocalization.getLocalizationFromCode("fra"));
 		assertEquals(CrashLocalization.FRENCH_CRASH_LOCALIZATION, CrashLocalization.getLocalizationFromCode("fre"));

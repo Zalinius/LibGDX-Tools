@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
-import com.darzalgames.libgdxtools.maingame.MainGame;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
@@ -50,7 +50,7 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 			hideThis();
 			toRun.run();
 		};
-		return MainGame.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(key), chooseAndHideRunnable);
+		return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(key), chooseAndHideRunnable);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 
 	@Override
 	protected Table getMessage() {
-		Function<Supplier<String>, Label> labelFunction = isWarning ? MainGame.getUserInterfaceFactory()::getWarningLabel : MainGame.getUserInterfaceFactory()::getLabelWithBackground;
+		Function<Supplier<String>, Label> labelFunction = isWarning ? GameInfo.getUserInterfaceFactory()::getWarningLabel : GameInfo.getUserInterfaceFactory()::getLabelWithBackground;
 		Label label = labelFunction.apply(() -> TextSupplier.getLine(messageKey));
 		label.setAlignment(Alignment.CENTER.getAlignment());
 		Table table = new Table();

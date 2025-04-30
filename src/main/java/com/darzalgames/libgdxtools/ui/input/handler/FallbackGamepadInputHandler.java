@@ -37,7 +37,7 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 
 	@Override
 	public void disconnected(Controller controller) {
-		this.controllerDisconnected();
+		controllerDisconnected();
 	}
 
 	@Override
@@ -62,8 +62,7 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 
 	@Override
 	public boolean axisMoved(Controller controller, int axisCode, float value) {
-		// TODO Set this up to handle diagonal axis input?
-		Input inputKey = Input.NONE;			
+		Input inputKey = Input.NONE;
 		if (isXAxis(axisCode, controller)) {
 			inputKey = (value > 0 ? Input.RIGHT : Input.LEFT);
 		}

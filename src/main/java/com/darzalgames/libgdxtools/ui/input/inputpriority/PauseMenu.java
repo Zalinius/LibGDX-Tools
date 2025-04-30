@@ -100,7 +100,7 @@ public abstract class PauseMenu extends PopUpMenu implements DoesNotPause {
 		boolean isShowing = getStage() != null;
 		if (show || !isShowing) {
 			GamePauser.pause();
-		} else if (isShowing) {
+		} else {
 			hideThis();
 		}
 	}

@@ -21,7 +21,7 @@ import com.darzalgames.darzalcommon.time.FileFriendlyTimeFormatter;
 import com.darzalgames.libgdxtools.errorhandling.*;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
 
-public class DesktopCrashHandler implements CrashHandler {
+public class DesktopCrashHandler extends CrashHandler {
 
 	@Override
 	public List<ReportStatus> reportCrash(CrashReport crashReport) {

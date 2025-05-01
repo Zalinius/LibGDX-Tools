@@ -12,9 +12,9 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
-public interface CrashHandler {
+public abstract class CrashHandler {
 
-	default void handleException(Exception exception, String[] programArguments) throws Exception {
+	public final void handleException(Exception exception, String[] programArguments) throws Exception {
 		CrashReport crashReport = buildCrashReport(exception, programArguments);
 		List<ReportStatus> statuses = reportCrash(crashReport);
 		logCrashReportStatus(statuses);
@@ -26,12 +26,12 @@ public interface CrashHandler {
 	 * @param crashReport
 	 * @return The result of the crash reporting
 	 */
-	List<ReportStatus> reportCrash(CrashReport crashReport);
+	protected abstract List<ReportStatus> reportCrash(CrashReport crashReport);
 
 	/**
 	 * @param statuses What the results of reporting the crash was
 	 */
-	void logCrashReportStatus(List<ReportStatus> statuses);
+	protected abstract void logCrashReportStatus(List<ReportStatus> statuses);
 
 
 	static CrashReport buildCrashReport(Exception exception, String[] args) {
@@ -45,7 +45,7 @@ public interface CrashHandler {
 		return new CrashReport(gameName, gameVersion, platform, utcTime, id, stackTrace);
 	}
 
-	static Properties getGameProperties(String propertiesFile) {
+	public static Properties getGameProperties(String propertiesFile) {
 		Properties gameProperties = new Properties();
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		try (InputStream inputStream = cl.getResourceAsStream(propertiesFile)) {
@@ -57,7 +57,7 @@ public interface CrashHandler {
 		return gameProperties;
 	}
 
-	static String tryGetString(Supplier<String> stringGetter) {
+	public static String tryGetString(Supplier<String> stringGetter) {
 		String string = null;
 		try {
 			string = stringGetter.get();
@@ -68,7 +68,7 @@ public interface CrashHandler {
 		return string;
 	}
 
-	static String[] getMessageAndStackTraceArray(Exception exception) {
+	public static String[] getMessageAndStackTraceArray(Exception exception) {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		final Charset utf8 = StandardCharsets.UTF_8;
 		String data = null;

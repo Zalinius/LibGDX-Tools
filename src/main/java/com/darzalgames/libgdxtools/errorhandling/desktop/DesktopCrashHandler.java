@@ -80,8 +80,7 @@ public class DesktopCrashHandler implements CrashHandler {
 		gameName = gameName.toLowerCase().replace(' ', '-');
 		String urlString = "https://api.darzalgames.com/crash/" + gameName + "/" + crashReportFileName;
 		HttpResponse<Void> response;
-		try {
-			HttpClient httpClient = HttpClient.newHttpClient();
+		try (HttpClient httpClient = HttpClient.newHttpClient()) {
 			HttpRequest httpRequest = HttpRequest.newBuilder()
 					.uri(URI.create(urlString))
 					.header("Content-Type", "application/json")

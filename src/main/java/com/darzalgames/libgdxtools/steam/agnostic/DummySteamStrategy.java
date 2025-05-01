@@ -1,5 +1,7 @@
 package com.darzalgames.libgdxtools.steam.agnostic;
 
+import com.darzalgames.libgdxtools.steam.stats.StatsController;
+import com.darzalgames.libgdxtools.steam.stats.StatsControllerFactory;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 
@@ -19,27 +21,10 @@ public class DummySteamStrategy implements SteamStrategy {
 
 	@Override
 	public void dispose() { /* Dummy strategy does nothing */ }
-
-	@Override
-	public int getStat(String stat) {
-		return -1;
-	}
-
-	@Override
-	public long getGlobalStat(String stat) {
-		return -1;
-	}
-
-	@Override
-	public void setStat(String stat, int val) { /* Dummy strategy does nothing */ }
-
 	@Override
 	public String getSteamID() {
 		return "dev";
 	}
-
-	@Override
-	public void giveAchievement(String achievement) { /* Dummy strategy does nothing */ }
 
 	@Override
 	public void setRichPresentsVariable(String key, String value) { /* Dummy strategy does nothing */ }
@@ -50,5 +35,10 @@ public class DummySteamStrategy implements SteamStrategy {
 	@Override
 	public GamepadInputHandler getGamepadInputHandler() {
 		return gamepadInputHandler;
+	}
+
+	@Override
+	public StatsController getStatsController() {
+		return StatsControllerFactory.buildDummy();
 	}
 }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
@@ -59,8 +60,8 @@ public class DesktopCrashHandler implements CrashHandler {
 
 	@Override
 	public void logCrashReportStatus(List<ReportStatus> statuses) {
-		System.err.println("Crash reporting statuses: " + statuses.size());
-		statuses.forEach(status -> System.err.println("  " + status));
+		logError("Crash reporting statuses: " + statuses.size());
+		statuses.forEach(status -> logError("  " + status));
 	}
 
 
@@ -68,8 +69,8 @@ public class DesktopCrashHandler implements CrashHandler {
 		try(FileWriter fileWriter = new FileWriter(crashReportFile)){
 			fileWriter.write(crashReportJson);
 		} catch (IOException e) {
-			System.err.println("Couldn't write crash report to file: " + crashReportFile.getName());
-			System.err.println("Error json:\n" + crashReportJson);
+			logError("Couldn't write crash report to file: " + crashReportFile.getName());
+			logError("Error json:\n" + crashReportJson);
 			e.printStackTrace();
 			return new ReportStatus(false, "FAILED", "Did not write crash report to file: " + crashReportFile.getAbsolutePath());
 		}
@@ -90,8 +91,8 @@ public class DesktopCrashHandler implements CrashHandler {
 
 			response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.discarding());
 		} catch (IOException | InterruptedException e) {
-			System.err.println("Couldn't send crash report to: " + urlString);
-			System.err.println("Error json:\n" + crashReportJson);
+			logError("Couldn't send crash report to: " + urlString);
+			logError("Error json:\n" + crashReportJson);
 			e.printStackTrace();
 			return new ReportStatus(false, "ERR", "Did not send crash report to DarBot 5000: " + crashReportFileName);
 		}
@@ -111,6 +112,10 @@ public class DesktopCrashHandler implements CrashHandler {
 	public static final int HTTP_CODE_FAMILY_SIZE = 100;
 	public static boolean isHttpCodeSuccess(int httpCode) {
 		return httpCode / HTTP_CODE_FAMILY_SIZE == HTTP_SUCCESS_PREFIX;
+	}
+
+	private static void logError(String errorMessage) {
+		Logger.getGlobal().severe(errorMessage);
 	}
 
 }

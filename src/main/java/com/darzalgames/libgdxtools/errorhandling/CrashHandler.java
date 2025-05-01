@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.function.Supplier;
-
-import com.badlogic.gdx.Gdx;
+import java.util.logging.Logger;
 
 public interface CrashHandler {
 
@@ -52,7 +51,7 @@ public interface CrashHandler {
 		try (InputStream inputStream = cl.getResourceAsStream(propertiesFile)) {
 			gameProperties.load(inputStream);
 		} catch (Exception e) {
-			Gdx.app.error("CrashHandler", "Couldn't find or open properties file: " + propertiesFile + "(" + e.getMessage() + ")");
+			Logger.getGlobal().severe("Couldn't find or open properties file: " + propertiesFile + "(" + e.getMessage() + ")");
 		}
 
 		return gameProperties;

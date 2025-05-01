@@ -1,9 +1,9 @@
 package com.darzalgames.libgdxtools.steam;
 
 import com.codedisaster.steamworks.*;
+import com.darzalgames.libgdxtools.statistics.StatsController;
+import com.darzalgames.libgdxtools.statistics.StatsControllerFactory;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
-import com.darzalgames.libgdxtools.steam.stats.StatsController;
-import com.darzalgames.libgdxtools.steam.stats.StatsControllerFactory;
 import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
 
 public class ConnectedSteamStrategy implements SteamStrategy {

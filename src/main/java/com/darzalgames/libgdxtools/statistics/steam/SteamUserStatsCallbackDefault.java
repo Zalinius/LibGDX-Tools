@@ -1,9 +1,9 @@
-package com.darzalgames.libgdxtools.steam.stats;
+package com.darzalgames.libgdxtools.statistics.steam;
 
 import com.badlogic.gdx.Gdx;
 import com.codedisaster.steamworks.*;
 
-class SteamUserStatsCallbackDefault implements SteamUserStatsCallback {
+public class SteamUserStatsCallbackDefault implements SteamUserStatsCallback {
 
 	private SteamUserStats userStats;
 

@@ -1,9 +1,10 @@
-package com.darzalgames.libgdxtools.steam.stats;
+package com.darzalgames.libgdxtools.statistics.steam;
 
 import com.codedisaster.steamworks.SteamUserStats;
 import com.codedisaster.steamworks.SteamUserStatsCallback;
+import com.darzalgames.libgdxtools.statistics.StatsController;
 
-class SteamUserStatsAdaptor extends SteamUserStats implements StatsController {
+public class SteamUserStatsAdaptor extends SteamUserStats implements StatsController {
 
 	public SteamUserStatsAdaptor(SteamUserStatsCallback callback) {
 		super(callback);

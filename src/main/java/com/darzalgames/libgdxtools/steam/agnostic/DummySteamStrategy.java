@@ -1,7 +1,7 @@
 package com.darzalgames.libgdxtools.steam.agnostic;
 
-import com.darzalgames.libgdxtools.steam.stats.StatsController;
-import com.darzalgames.libgdxtools.steam.stats.StatsControllerFactory;
+import com.darzalgames.libgdxtools.statistics.StatsController;
+import com.darzalgames.libgdxtools.statistics.StatsControllerFactory;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 

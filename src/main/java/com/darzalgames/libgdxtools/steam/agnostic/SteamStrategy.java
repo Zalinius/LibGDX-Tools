@@ -1,6 +1,6 @@
 package com.darzalgames.libgdxtools.steam.agnostic;
 
-import com.darzalgames.libgdxtools.steam.stats.StatsController;
+import com.darzalgames.libgdxtools.statistics.StatsController;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 
 public interface SteamStrategy {

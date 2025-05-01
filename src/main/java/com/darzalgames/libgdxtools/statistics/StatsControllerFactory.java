@@ -1,4 +1,7 @@
-package com.darzalgames.libgdxtools.steam.stats;
+package com.darzalgames.libgdxtools.statistics;
+
+import com.darzalgames.libgdxtools.statistics.steam.SteamUserStatsAdaptor;
+import com.darzalgames.libgdxtools.statistics.steam.SteamUserStatsCallbackDefault;
 
 public class StatsControllerFactory {
 

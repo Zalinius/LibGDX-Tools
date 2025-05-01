@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.steam.stats;
+package com.darzalgames.libgdxtools.statistics;
 
 public interface StatsController {
 

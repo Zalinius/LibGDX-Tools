@@ -7,6 +7,9 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 
 public class UserInterfaceSizer {
 
+	private UserInterfaceSizer() {
+	}
+
 	private static Stage stage;
 	private static float scaling = 1;
 	private static Runnable updateFont;

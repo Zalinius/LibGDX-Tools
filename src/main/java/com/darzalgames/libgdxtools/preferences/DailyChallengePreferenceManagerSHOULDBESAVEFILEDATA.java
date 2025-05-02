@@ -5,8 +5,10 @@ import java.time.temporal.ChronoUnit;
 
 import com.badlogic.gdx.Preferences;
 
-// Next time you want to have a daily challenge, salvage this code to be used as safe file data, not as a preference!
-@Deprecated
+/**
+ * @deprecated Next time we want to have a daily challenge, salvage this code to be used as safe file data, not as a preference!
+ */
+@Deprecated(forRemoval=true)
 public class DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA extends PreferenceManager {
 
 	private static final String DAILY_DAY_KEY =   "dailyChallengeDay";
@@ -17,7 +19,7 @@ public class DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA extends Prefere
 	 */
 	protected DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA(final String preferencePrefix) {
 		super(preferencePrefix);
-	}	
+	}
 	public DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA(final Preferences preferencesFile) {
 		super(preferencesFile);
 	}

@@ -27,10 +27,8 @@ public class InputPriorityStack implements InputObserver {
 		stack = new LimitedAccessDoubleStack();
 		clearStackAndPushBlankConsumer();
 
-		darkScreen = new DarkScreen(popUpStage, () -> {
-			sendInputToTop(Input.BACK); 
-		});
-		
+		darkScreen = new DarkScreen(popUpStage, () -> sendInputToTop(Input.BACK));
+
 		InputPriority.setInputPriorityStack(this);
 	}
 
@@ -41,7 +39,7 @@ public class InputPriorityStack implements InputObserver {
 			if (isAPopup) {
 				claimPriorityForPopup(inputConsumer.getPopUp());
 			} else {
-				claimPriorityOnStack(inputConsumer, () -> stack.push(inputConsumer));
+				claimPriorityOnStack(() -> stack.push(inputConsumer));
 			}
 		}
 	}
@@ -53,11 +51,11 @@ public class InputPriorityStack implements InputObserver {
 		popUpStage.addActor(actor);
 		actor.toFront();
 		darkScreen.fadeIn(actor, popup.canDismiss());
-		claimPriorityOnStack(popup, () -> stack.push(new Tuple<>(actor, popup)));
+		claimPriorityOnStack(() -> stack.push(new Tuple<>(actor, popup)));
 		popup.addBackClickListenerIfCanDismiss();
 	}
 
-	private void claimPriorityOnStack(InputConsumer inputConsumer, Runnable claimPriority) {
+	private void claimPriorityOnStack(Runnable claimPriority) {
 		unFocusTop();
 		claimPriority.run();
 		focusTop(true);
@@ -73,10 +71,10 @@ public class InputPriorityStack implements InputObserver {
 			darkScreen.fadeOutAndRemove();
 			showDarkScreenIfLandingOnPopup();
 		}
-	}	
+	}
 
 	void sendInputToTop(Input input) {
-		stack.getTop().consumeKeyInput(input); 
+		stack.getTop().consumeKeyInput(input);
 	}
 
 	boolean doesTopPauseGame() {
@@ -85,7 +83,7 @@ public class InputPriorityStack implements InputObserver {
 
 	private void focusTop(boolean isFirstFocus) {
 		if (isFirstFocus) {
-			stack.getTop().gainFocus();				
+			stack.getTop().gainFocus();
 		} else {
 			stack.getTop().regainFocus();
 		}
@@ -116,7 +114,7 @@ public class InputPriorityStack implements InputObserver {
 		darkScreen.remove();
 	}
 
-	private void releasePriorityForTop() { 
+	private void releasePriorityForTop() {
 		boolean isClosingOptionsMenu = stack.isThisOnTop(optionsMenu);
 		unFocusTop();
 		stack.popTop();

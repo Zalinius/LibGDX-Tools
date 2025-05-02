@@ -5,14 +5,14 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.6.2</version>
+	<version>0.6.3</version>
 	<name>libGDX Tools</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>21</maven.compiler.release>
 
-		<darzalcommon.version>0.6.0</darzalcommon.version>
+		<darzalcommon.version>0.6.3</darzalcommon.version>
 
 		<libgdx.version>1.13.1</libgdx.version>
 		<libgdx.controllers.version>2.2.3</libgdx.controllers.version>

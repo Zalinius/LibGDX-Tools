@@ -41,6 +41,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected PreferenceManager preferenceManager;
 	protected final GamePlatform gamePlatform;
 	protected SteamStrategy steamStrategy;
+	protected UserInterfaceFactory userInterfaceFactory;
 
 	// Objects created at initialization, but not widely shared
 	private final Supplier<SpriteBatch> spriteBatchSupplier;
@@ -55,13 +56,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private boolean isQuitting = false;
 
 
-	protected static UserInterfaceFactory userInterfaceFactory;
-
-
 
 	// The setup process, in order that they are called
 	protected abstract UserInterfaceFactory initializeAssetsAndUserInterfaceFactory();
-	protected abstract String getPreferenceManagerName(); // TODO this can be removed once we figure out our long-standing goal of making Assets extendable
+	protected abstract String getPreferenceManagerName();
 	protected abstract WindowResizerButton makeWindowResizerButton();
 
 	/**
@@ -99,7 +97,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	@Override
 	public final void create() {
 		makeInputStrategySwitcher();
-		MainGame.userInterfaceFactory = initializeAssetsAndUserInterfaceFactory();
+		userInterfaceFactory = initializeAssetsAndUserInterfaceFactory();
 		makePreferenceManager();
 		initializeWindowResizer();
 
@@ -126,10 +124,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			currentScreen.hide();
 			currentScreen.remove();
 		}
-		multipleStage.stage.clear(); // TODO is there a reason not to do this?
-		multipleStage.popUpStage.clear(); // TODO is there a reason not to do this?
+		multipleStage.getStage().clear();
+		multipleStage.getPopUpStage().clear();
 		currentScreen = gameScreen;
-		multipleStage.stage.addActor(currentScreen);
+		multipleStage.getStage().addActor(currentScreen);
 		currentScreen.show();
 	}
 
@@ -151,7 +149,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 		if (inputSetup.getPause().isPaused()) {
 			// Lets the game UI behind the options menu update the UI sizing
-			multipleStage.stage.act(0);
+			multipleStage.getStage().act(0);
 		}
 	}
 
@@ -196,7 +194,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		return steamStrategy;
 	}
 
-	public static UserInterfaceFactory getUserInterfaceFactory() {
+	@Override
+	public UserInterfaceFactory getUserInterfaceFactory() {
 		return userInterfaceFactory;
 	}
 
@@ -258,7 +257,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void setUpInput() {
 		// Set up input processing for all strategies
-		inputSetup = new InputSetup(inputStrategySwitcher, makeOptionsMenu(), windowResizer::toggleWindow, multipleStage.popUpStage);
+		inputSetup = new InputSetup(inputStrategySwitcher, makeOptionsMenu(), windowResizer::toggleWindow, multipleStage.getPopUpStage());
 		multipleStage.setPause(inputSetup.getPause());
 		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
 

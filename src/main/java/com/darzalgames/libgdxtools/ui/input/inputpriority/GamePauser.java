@@ -2,6 +2,9 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 public class GamePauser {
 
+	private GamePauser() {
+	}
+
 	private static Runnable pauseGameRunnable;
 
 	public static void setPauseGameRunnable(Runnable pauseGameRunnable) {

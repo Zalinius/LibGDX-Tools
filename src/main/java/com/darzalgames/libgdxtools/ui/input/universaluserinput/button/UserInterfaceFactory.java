@@ -41,7 +41,7 @@ public class UserInterfaceFactory {
 	private final Runnable soundInteractListener;
 	private final Supplier<Boolean> isPaused;
 
-	private final String QUIT_GAME_KEY = "quit_game";
+	private static final String QUIT_GAME_KEY = "quit_game";
 
 	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener, Supplier<Boolean> isPaused) {
 		this.skinManager = skinManager;
@@ -201,12 +201,7 @@ public class UserInterfaceFactory {
 	}
 
 	public UniversalButton getQuitGameButtonWithWarning() {
-		Runnable quitWithConfirmation = () -> {
-			new ConfirmationMenu(
-					"menu_warning",
-					QUIT_GAME_KEY,
-					quitGameRunnable::run);
-		};
+		Runnable quitWithConfirmation = () -> new ConfirmationMenu("menu_warning", QUIT_GAME_KEY, quitGameRunnable::run);
 		return getButton(getQuitButtonString(), quitWithConfirmation);
 	}
 

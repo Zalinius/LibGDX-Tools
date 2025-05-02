@@ -10,31 +10,31 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 public abstract class CrashHandler {
-	
-	
-	public void handleException(Exception exception, String[] programArguments) throws Exception {
+
+	public final void handleException(Exception exception, String[] programArguments) throws Exception {
 		CrashReport crashReport = buildCrashReport(exception, programArguments);
 		List<ReportStatus> statuses = reportCrash(crashReport);
 		logCrashReportStatus(statuses);
 
 		throw exception;
 	}
-	
+
 	/**
 	 * @param crashReport
 	 * @return The result of the crash reporting
 	 */
-	public abstract List<ReportStatus> reportCrash(CrashReport crashReport);
-	
+	protected abstract List<ReportStatus> reportCrash(CrashReport crashReport);
+
 	/**
 	 * @param statuses What the results of reporting the crash was
 	 */
-	public abstract void logCrashReportStatus(List<ReportStatus> statuses);
-	
-	
-	public static CrashReport buildCrashReport(Exception exception, String[] args) {
+	protected abstract void logCrashReportStatus(List<ReportStatus> statuses);
+
+
+	static CrashReport buildCrashReport(Exception exception, String[] args) {
 		Properties gameProperties = getGameProperties("data/game.properties");
 		String gameName = gameProperties.getProperty("gameName");
 		String gameVersion = gameProperties.getProperty("version");
@@ -44,19 +44,19 @@ public abstract class CrashHandler {
 		String[] stackTrace = getMessageAndStackTraceArray(exception);
 		return new CrashReport(gameName, gameVersion, platform, utcTime, id, stackTrace);
 	}
-	
+
 	public static Properties getGameProperties(String propertiesFile) {
 		Properties gameProperties = new Properties();
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		try (InputStream inputStream = cl.getResourceAsStream(propertiesFile)) {
 			gameProperties.load(inputStream);
 		} catch (Exception e) {
-			System.err.println("Couldn't find or open properties file: " + propertiesFile + "(" + e.getMessage() + ")");
+			Logger.getGlobal().severe("Couldn't find or open properties file: " + propertiesFile + "(" + e.getMessage() + ")");
 		}
-		
+
 		return gameProperties;
 	}
-	
+
 	public static String tryGetString(Supplier<String> stringGetter) {
 		String string = null;
 		try {
@@ -67,21 +67,21 @@ public abstract class CrashHandler {
 		}
 		return string;
 	}
-	
+
 	public static String[] getMessageAndStackTraceArray(Exception exception) {
-	    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    final Charset utf8 = StandardCharsets.UTF_8;
-	    String data = null;
-	    try (PrintStream ps = new PrintStream(baos, true, utf8)) {
-	    	exception.printStackTrace(ps);
-		    data = baos.toString(utf8);
-	    }
-	    
-	    String[] stackTraceArray = data.split("\n");
-	    for (int i = 0; i < stackTraceArray.length; i++) {
+		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		final Charset utf8 = StandardCharsets.UTF_8;
+		String data = null;
+		try (PrintStream ps = new PrintStream(baos, true, utf8)) {
+			exception.printStackTrace(ps);
+			data = baos.toString(utf8);
+		}
+
+		String[] stackTraceArray = data.split("\n");
+		for (int i = 0; i < stackTraceArray.length; i++) {
 			stackTraceArray[i] = stackTraceArray[i].trim();
 		}
-	    return stackTraceArray;
+		return stackTraceArray;
 	}
-	
+
 }

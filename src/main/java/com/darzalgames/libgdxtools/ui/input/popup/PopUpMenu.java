@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
-import com.darzalgames.libgdxtools.maingame.MainGame;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
@@ -30,7 +30,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	protected abstract void setUpDesiredSize();
 
 	private UniversalButton makeFinalButton(String finalButtonMessageKey) {
-		return MainGame.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(finalButtonMessageKey), this::hideThis);
+		return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(finalButtonMessageKey), this::hideThis);
 	}
 	
 	protected boolean slidesInAndOut() {

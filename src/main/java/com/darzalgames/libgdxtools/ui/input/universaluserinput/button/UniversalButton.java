@@ -23,12 +23,12 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
  * which allows them all to be put in a navigable menu together and treated the same
  */
 public class UniversalButton implements VisibleInputConsumer {
-	private BasicButton button;
+	private final BasicButton button;
 	private Supplier<String> textSupplier;
-	private Supplier<Label> labelSupplier;
-	private Supplier<Cell<Label>> cellSupplier;
+	private final Supplier<Label> labelSupplier;
+	private final Supplier<Cell<Label>> cellSupplier;
 	private Runnable buttonRunnable;
-	private Image image;
+	private final Image image;
 	private Alignment alignment;
 	private boolean wrap;
 	private boolean doesSoundOnInteract = true;
@@ -39,19 +39,19 @@ public class UniversalButton implements VisibleInputConsumer {
 		this(button, textSupplier, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
 	}
 
-	public UniversalButton(BasicButton button, Supplier<String> textSupplier, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) { 
+	public UniversalButton(BasicButton button, Supplier<String> textSupplier, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		this(button, textSupplier, null, runnable, inputStrategySwitcher, soundInteractListener);
 	}
 
 	public UniversalButton(BasicButton button, Supplier<String> textSupplier, Image image, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		this.button = button;
 		this.textSupplier = textSupplier;
-		this.labelSupplier = button::getLabel;
-		this.cellSupplier = button::getLabelCell;
-		this.buttonRunnable = runnable;
+		labelSupplier = button::getLabel;
+		cellSupplier = button::getLabelCell;
+		buttonRunnable = runnable;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.image = image;
-		this.alignment = Alignment.CENTER;
+		alignment = Alignment.CENTER;
 		this.soundInteractListener = soundInteractListener;
 
 		if (image != null) {
@@ -125,7 +125,7 @@ public class UniversalButton implements VisibleInputConsumer {
 		if (!isFocused) {
 			event.setType(InputEvent.Type.exit);
 		}
-		else if (isFocused && inputStrategySwitcher.shouldFlashButtons()) {
+		else if (inputStrategySwitcher.shouldFlashButtons()) {
 			event.setType(InputEvent.Type.enter);
 		}
 		else {
@@ -169,7 +169,7 @@ public class UniversalButton implements VisibleInputConsumer {
 	 * @return Whether or not the button is blank
 	 */
 	public boolean isBlank() {
-		return StringUtils.isBlank(textSupplier.get().toString()) && image == null;
+		return StringUtils.isBlank(textSupplier.get()) && image == null;
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class UniversalButton implements VisibleInputConsumer {
 	}
 
 	@Override
-	public void selectDefault() {}
+	public void selectDefault() { /*A basic button doesn't have any nested components to select*/ }
 
 	@Override
 	public void resizeUI() {

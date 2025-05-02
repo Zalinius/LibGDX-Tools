@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.darzalgames.darzalcommon.data.ListFactory;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.maingame.MainGame;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
@@ -47,7 +47,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	protected void setChosenKey(String chosenKey) {}
 	
 	protected BaseDrawable getBackgroundDrawable() {
-		return MainGame.getUserInterfaceFactory().getDefaultBackgroundDrawable();
+		return GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable();
 	}
 
 	@Override

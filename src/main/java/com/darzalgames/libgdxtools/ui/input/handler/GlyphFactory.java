@@ -5,6 +5,9 @@ import com.darzalgames.libgdxtools.ui.input.Input;
 
 public class GlyphFactory {
 
+	private GlyphFactory() {
+	}
+
 	private static InputHandler latestInputHandler;
 
 	static void setLatestInputHandler(InputHandler latestInputHandler) {
@@ -14,5 +17,5 @@ public class GlyphFactory {
 	public static Texture getGlyphForInput(Input input) {
 		return latestInputHandler.getGlyphForInput(input);
 	}
-	
+
 }

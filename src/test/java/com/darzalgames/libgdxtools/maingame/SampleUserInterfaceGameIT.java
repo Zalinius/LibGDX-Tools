@@ -86,8 +86,8 @@ class SampleUserInterfaceGameIT {
 	void hoveringTheQuitButtonWithTheMouse_putsItInFocus() {
 		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
 				app -> {
-					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.multipleStage.stage.act(1/60f);
+					app.multipleStage.getStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.getStage().act(1/60f);
 
 					assertTrue(app.quitButton.getButton().isOver());
 
@@ -111,11 +111,11 @@ class SampleUserInterfaceGameIT {
 		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
-					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in
+					app.multipleStage.getPopUpStage().act(3); // Give time for the popup to slide in
 
 					// Check that the menu is NOT back in focus by hovering over the quit button
-					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.multipleStage.stage.act(1/60f);
+					app.multipleStage.getStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.getStage().act(1/60f);
 					assertFalse(app.quitButton.getButton().isOver());
 
 					Gdx.app.exit();
@@ -130,8 +130,8 @@ class SampleUserInterfaceGameIT {
 					clickMouse(OFFCENTER_X, SCREEN_MIDDLE_Y); // Clicks on the dark screen to dismiss the popup
 
 					// Check that the menu is back in focus by hovering over the quit button
-					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.multipleStage.stage.act(1/60f);
+					app.multipleStage.getStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.getStage().act(1/60f);
 					assertTrue(app.quitButton.getButton().isOver());
 
 					Gdx.app.exit();
@@ -143,12 +143,12 @@ class SampleUserInterfaceGameIT {
 		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
-					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in
+					app.multipleStage.getPopUpStage().act(3); // Give time for the popup to slide in
 					rightClickMouse(SELECT_BOX_POPUP_BUTTON_X, SELECT_BOX_POPUP_BUTTON_Y); // Right click on the popup to dismiss it
 
 					// Check that the menu is back in focus by hovering over the quit button
-					app.multipleStage.stage.mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.multipleStage.stage.act(1/60f);
+					app.multipleStage.getStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.getStage().act(1/60f);
 					assertTrue(app.quitButton.getButton().isOver());
 
 					Gdx.app.exit();
@@ -167,14 +167,14 @@ class SampleUserInterfaceGameIT {
 					 * and then shows the dark screen again. This doubling caused the dark screen to show up in front of the popup.
 					 */
 					clickMouse(SCREEN_MIDDLE_X, NESTING_POPUP_BUTTON_Y); // Click to open the first popup
-					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in
+					app.multipleStage.getPopUpStage().act(3); // Give time for the popup to slide in
 					clickMouse(SCREEN_MIDDLE_X, NESTED_POPUP_DEEPER_BUTTON_Y); // Click to go deeper
-					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide in
+					app.multipleStage.getPopUpStage().act(3); // Give time for the popup to slide in
 					clickMouse(SCREEN_MIDDLE_X, NESTED_POPUP_DEEPER_BUTTON_Y); // Click to dismiss deeper popup
-					app.multipleStage.popUpStage.act(3); // Give time for the popup to slide out
+					app.multipleStage.getPopUpStage().act(3); // Give time for the popup to slide out
 
-					app.multipleStage.popUpStage.mouseMoved(SCREEN_MIDDLE_X, SCREEN_MIDDLE_Y);
-					app.multipleStage.popUpStage.act(1/60f);
+					app.multipleStage.getPopUpStage().mouseMoved(SCREEN_MIDDLE_X, SCREEN_MIDDLE_Y);
+					app.multipleStage.getPopUpStage().act(1/60f);
 					assertTrue(app.regainFocusPopup.getButton().isOver());
 
 					Gdx.app.exit();

@@ -231,10 +231,10 @@ public class NavigableList implements InputConsumer {
 		}
 	}
 
-	public void goTo(UniversalButton UniversalButton) {
+	public void goTo(UniversalButton universalButton) {
 		for (int i = 0; i < interactableEntries.size(); i++) {
 			UniversalButton entry = interactableEntries.get(i);
-			if (entry.equals(UniversalButton)) {
+			if (entry.equals(universalButton)) {
 				goTo(i);
 			}
 		}

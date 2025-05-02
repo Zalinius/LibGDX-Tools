@@ -6,7 +6,7 @@ import com.codedisaster.steamworks.SteamID;
 import com.codedisaster.steamworks.SteamResult;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.GamePauser;
 
-public class FriendsCallback implements SteamFriendsCallback {
+class FriendsCallback implements SteamFriendsCallback {
 
 	@Override
 	public void onSetPersonaNameResponse(boolean success, boolean localSuccess, SteamResult result) { /* To be implemented when needed */ }

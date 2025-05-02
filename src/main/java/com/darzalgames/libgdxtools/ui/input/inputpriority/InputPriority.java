@@ -4,12 +4,15 @@ import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 
 public class InputPriority {
 
+	private InputPriority() {
+	}
+
 	private static InputPriorityStack inputPriorityStack;
 
 	public static void claimPriority(InputConsumer inputConsumer) {
 		inputPriorityStack.claimPriority(inputConsumer);
 	}
-	
+
 	public static void releasePriority(InputConsumer inputConsumer) {
 		inputPriorityStack.releasePriority(inputConsumer);
 	}

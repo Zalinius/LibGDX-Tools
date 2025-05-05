@@ -46,6 +46,21 @@ public class UserInterfaceSizer {
 	}
 
 	/**
+	 * Size an actor relative to the screen size without taking UI scaling into account. Useful for decorative actors like the splash screen.
+	 * @param actor The actor to resize, maintaining aspect ratio, typically an image
+	 * @param percent The percentage of the world/stage WIDTH or HEIGHT (minimum) that this actor should occupy [0-1]
+	 */
+	public static void sizeToMinimumPercentageWithoutUIScaling(Actor actor, float percent) {
+		float multiplierWidth = getCurrentWidth() * percent;
+		float multiplierHeight = getCurrentHeight() * percent;
+		if (multiplierWidth <= multiplierHeight) {
+			actor.setSize(multiplierWidth, multiplierWidth * (actor.getHeight()/actor.getWidth()));
+		} else {
+			actor.setSize(multiplierHeight * (actor.getWidth()/actor.getHeight()), multiplierHeight);
+		}
+	}
+
+	/**
 	 * @param actor The actor which will be resized to fill the screen and centered
 	 */
 	public static void scaleToFillScreenAndMakeCentered(Actor actor) {

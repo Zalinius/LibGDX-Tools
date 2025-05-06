@@ -15,7 +15,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
  * This is the single entry point for keyboard input
  */
 public abstract class KeyboardInputHandler extends InputHandler {
-	
+
 	private final List<Input> keysToAllow;
 	protected final Map<Input, AssetDescriptor<Texture>> buttonMappings;
 
@@ -24,7 +24,7 @@ public abstract class KeyboardInputHandler extends InputHandler {
 	 */
 	protected KeyboardInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
 		super(inputStrategySwitcher);
-		
+
 		keysToAllow = getKeyWhitelist();
 		buttonMappings = makeButtonMappings();
 
@@ -33,19 +33,26 @@ public abstract class KeyboardInputHandler extends InputHandler {
 			public boolean keyDown(final InputEvent event, int keycode) {
 				Input input = Input.getInputFromKey(keycode);
 				input = remapInputIfNecessary(input, keycode);
-				
-				if (keysToAllow.contains(input)) {
+
+				if (shouldSetLatestInputMethodAsKeyboardBasedOnInput(input)) {
 					updateLatestInputMethod();
+				}
+
+				if (keysToAllow.contains(input)) {
 					inputReceiver.processKeyInput(input);
 					return true;
 				}
-				
+
 				return false;
 			}
 		});
 	}
-	
+
 	protected abstract Input remapInputIfNecessary(Input input, int keycode);
 	protected abstract List<Input> getKeyWhitelist();
 	protected abstract Map<Input, AssetDescriptor<Texture>> makeButtonMappings();
+
+	protected boolean shouldSetLatestInputMethodAsKeyboardBasedOnInput(Input input) {
+		return keysToAllow.contains(input);
+	}
 }

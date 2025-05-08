@@ -35,9 +35,9 @@ public abstract class CrashHandler {
 
 
 	static CrashReport buildCrashReport(Exception exception, String[] args) {
-		Properties gameProperties = getGameProperties("data/game.properties");
-		String gameName = gameProperties.getProperty("gameName");
-		String gameVersion = gameProperties.getProperty("version");
+		Properties gameProperties = tryGetGameProperties("data/game.properties");
+		String gameName = gameProperties.getProperty("gameName", "nameNotFound");
+		String gameVersion = gameProperties.getProperty("version", "versionNotFound");
 		String platform = tryGetString(() -> args[0]);
 		Instant utcTime = Instant.now();
 		UUID id = UUID.randomUUID();
@@ -45,13 +45,14 @@ public abstract class CrashHandler {
 		return new CrashReport(gameName, gameVersion, platform, utcTime, id, stackTrace);
 	}
 
-	public static Properties getGameProperties(String propertiesFile) {
+	public static Properties tryGetGameProperties(String propertiesFile) {
 		Properties gameProperties = new Properties();
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		try (InputStream inputStream = cl.getResourceAsStream(propertiesFile)) {
 			gameProperties.load(inputStream);
 		} catch (Exception e) {
 			Logger.getGlobal().severe("Couldn't find or open properties file: " + propertiesFile + "(" + e.getMessage() + ")");
+			return gameProperties;
 		}
 
 		return gameProperties;

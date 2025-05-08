@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +31,7 @@ class SampleUserInterfaceGameIT {
 	@Test
 	void launchGame_doesntThrowAnyExceptions() {
 		assertDoesNotThrow(
-				() -> SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
+				() -> SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 						app -> {
 							Gdx.app.exit();
 						})
@@ -38,7 +40,7 @@ class SampleUserInterfaceGameIT {
 
 	@Test
 	void pressingEscape_pausesTheGame() {
-		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
+		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
 					pressKey(Keys.ESCAPE);
 
@@ -50,7 +52,7 @@ class SampleUserInterfaceGameIT {
 
 	@Test
 	void clickingTheOptionsButton_pausesTheGame() {
-		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
+		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
 					app.inputSetup.getPause().act(3); // Give time for the pause button to be put in place
 					clickMouse(10, 10);
@@ -62,7 +64,7 @@ class SampleUserInterfaceGameIT {
 	}
 	@Test
 	void pressingEscapeTwice_pausesThenUnpausesTheGame() {
-		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
+		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
 					pressKey(Keys.ESCAPE);
 					assertTrue(app.inputSetup.getPause().isPaused());
@@ -75,7 +77,7 @@ class SampleUserInterfaceGameIT {
 
 	@Test
 	void clickingTheQuitButton_quitsTheGame() {
-		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
+		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
 				});
@@ -84,7 +86,7 @@ class SampleUserInterfaceGameIT {
 
 	@Test
 	void hoveringTheQuitButtonWithTheMouse_putsItInFocus() {
-		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
+		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
 					app.multipleStage.getStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
 					app.multipleStage.getStage().act(1/60f);
@@ -97,7 +99,7 @@ class SampleUserInterfaceGameIT {
 
 	@Test
 	void navigatingByKeyboard_andPressingTheQuitButton_wrapsAroundTheMenuAndQuitsTheGame() {
-		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
+		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
 					pressKey(Keys.DOWN); // Switch to keyboard mode
 					pressKey(Keys.UP); // Wrap around to the bottom of the menu
@@ -108,7 +110,7 @@ class SampleUserInterfaceGameIT {
 
 	@Test
 	void openingAPopup_putsTheMenuOutOfFocus() {
-		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
+		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
 					app.multipleStage.getPopUpStage().act(3); // Give time for the popup to slide in
@@ -124,7 +126,7 @@ class SampleUserInterfaceGameIT {
 
 	@Test
 	void openingAPopup_thenClickingTheDarkScreen_closesThePopup() {
-		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
+		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
 					clickMouse(OFFCENTER_X, SCREEN_MIDDLE_Y); // Clicks on the dark screen to dismiss the popup
@@ -140,7 +142,7 @@ class SampleUserInterfaceGameIT {
 
 	@Test
 	void openingAPopup_thenRightClickingIt_closesThePopup() {
-		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
+		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
 					clickMouse(SCREEN_MIDDLE_X, SELECT_BOX_BUTTON_Y); // Opens the popup away from the mouse
 					app.multipleStage.getPopUpStage().act(3); // Give time for the popup to slide in
@@ -157,7 +159,7 @@ class SampleUserInterfaceGameIT {
 
 	@Test
 	void openingAPopupTwice_theDarkScreenIsStillBehindThePopup() {
-		SampleUserInterfaceGame.testLauncher(new String[] {GamePlatform.WINDOWS},
+		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
 					/**
 					 * This was a bug from Quest Giver:

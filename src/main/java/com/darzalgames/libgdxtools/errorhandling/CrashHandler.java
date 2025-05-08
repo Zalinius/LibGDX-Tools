@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 public abstract class CrashHandler {
 
-	public final void handleException(Exception exception, String[] programArguments) throws Exception {
+	public final void handleException(Exception exception, List<String> programArguments) throws Exception {
 		CrashReport crashReport = buildCrashReport(exception, programArguments);
 		List<ReportStatus> statuses = reportCrash(crashReport);
 		logCrashReportStatus(statuses);
@@ -34,24 +34,25 @@ public abstract class CrashHandler {
 	protected abstract void logCrashReportStatus(List<ReportStatus> statuses);
 
 
-	static CrashReport buildCrashReport(Exception exception, String[] args) {
-		Properties gameProperties = getGameProperties("data/game.properties");
-		String gameName = gameProperties.getProperty("gameName");
-		String gameVersion = gameProperties.getProperty("version");
-		String platform = tryGetString(() -> args[0]);
+	static CrashReport buildCrashReport(Exception exception, List<String> args) {
+		Properties gameProperties = tryGetGameProperties("data/game.properties");
+		String gameName = gameProperties.getProperty("gameName", "nameNotFound");
+		String gameVersion = gameProperties.getProperty("version", "versionNotFound");
+		String platform = tryGetString(() -> args.get(0));
 		Instant utcTime = Instant.now();
 		UUID id = UUID.randomUUID();
 		String[] stackTrace = getMessageAndStackTraceArray(exception);
 		return new CrashReport(gameName, gameVersion, platform, utcTime, id, stackTrace);
 	}
 
-	public static Properties getGameProperties(String propertiesFile) {
+	public static Properties tryGetGameProperties(String propertiesFile) {
 		Properties gameProperties = new Properties();
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		try (InputStream inputStream = cl.getResourceAsStream(propertiesFile)) {
 			gameProperties.load(inputStream);
 		} catch (Exception e) {
 			Logger.getGlobal().severe("Couldn't find or open properties file: " + propertiesFile + "(" + e.getMessage() + ")");
+			return gameProperties;
 		}
 
 		return gameProperties;

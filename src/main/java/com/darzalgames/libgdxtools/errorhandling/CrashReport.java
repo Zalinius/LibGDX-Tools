@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
 public class CrashReport implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	private final String gameName;
 	private final String gameVersion;
 	private final String platformName;

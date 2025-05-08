@@ -50,10 +50,10 @@ public class SampleUserInterfaceGame extends MainGame {
 	protected UniversalButton quitButton;
 
 	public static void main(String[] args) {
-		SampleUserInterfaceGame.testLauncher(args, Consumers.nullConsumer());
+		SampleUserInterfaceGame.testLauncher(Arrays.asList(args), Consumers.nullConsumer());
 	}
 
-	static void testLauncher(String[] args, Consumer<SampleUserInterfaceGame> todo) {
+	static void testLauncher(List<String> args, Consumer<SampleUserInterfaceGame> todo) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		int width = 1280;
 		int height = 720;
@@ -63,9 +63,8 @@ public class SampleUserInterfaceGame extends MainGame {
 		new Lwjgl3Application(new SampleUserInterfaceGame(width, height, args, todo), config);
 	}
 
-	public SampleUserInterfaceGame(int width, int height, String[] args, Consumer<SampleUserInterfaceGame> toDoAfterLaunch) {
-		super(new WindowResizerDesktop(width, height),
-				DesktopGamePlatformHelper.getTypeFromArgs(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new), SpriteBatch::new);
+	public SampleUserInterfaceGame(int width, int height, List<String> args, Consumer<SampleUserInterfaceGame> toDoAfterLaunch) {
+		super(new WindowResizerDesktop(width, height), LaunchArgumentHelper.getGamePlatform(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new), SpriteBatch::new);
 		this.toDoAfterLaunch = toDoAfterLaunch;
 	}
 

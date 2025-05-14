@@ -16,7 +16,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.BasicButto
  * I'm adding functionality as needed for testing so there are many empty methods, especially those to do with visual layout
  */
 public class TestBasicButton implements BasicButton {
-	
+
 	private boolean isOver = false;
 	private boolean isChecked = false;
 	private boolean isDisabled = false;
@@ -26,7 +26,7 @@ public class TestBasicButton implements BasicButton {
 
 	@Override
 	public boolean isTouchable() {
-		return touchable.equals(Touchable.enabled);
+		return Touchable.enabled.equals(touchable);
 	}
 
 	@Override
@@ -66,11 +66,13 @@ public class TestBasicButton implements BasicButton {
 
 	@Override
 	public void setChecked(boolean checked) {
-		this.isChecked = checked;
+		isChecked = checked;
 
 		if (fireProgrammaticChangeEvents) {
 			ChangeEvent changeEvent = Pools.obtain(ChangeEvent.class);
-			if (fire(changeEvent)) this.isChecked = !checked;
+			if (fire(changeEvent)) {
+				isChecked = !checked;
+			}
 			Pools.free(changeEvent);
 		}
 	}
@@ -81,56 +83,57 @@ public class TestBasicButton implements BasicButton {
 	}
 
 	@Override
-	public void setStyle(ButtonStyle style) {	 
-		
+	public void setStyle(ButtonStyle style) {
+
 	}
 
 	@Override
-	public float getWidth() {	 
+	public float getWidth() {
 		return 0;
 	}
 
 	@Override
-	public void setWidth(float width) {		 
-		
+	public void setWidth(float width) {
+
 	}
 
 	@Override
-	public float getPrefWidth() {		 
+	public float getPrefWidth() {
 		return 0;
 	}
 
 	@Override
-	public float getPrefHeight() {		 
+	public float getPrefHeight() {
 		return 0;
 	}
 
 	@Override
-	public void setSize(float prefWidth, float prefHeight) {		 
-		
+	public void setSize(float prefWidth, float prefHeight) {
+
 	}
 
 	@Override
-	public void setName(String string) {		 
-		
+	public void setName(String string) {
+
 	}
 
 	@Override
 	public boolean fire(Event event) {
-		if (event instanceof InputEvent) {
-			InputEvent inputEvent = (InputEvent)event;
-			isOver = inputEvent.getType().equals(InputEvent.Type.enter);
+		if (event instanceof InputEvent inputEvent) {
+			isOver = InputEvent.Type.enter.equals(inputEvent.getType());
 		}
-		
+
 		// ---------------------------------------------------------------
 		// Below here is copied from LibGDX button
-		if (event.getStage() == null) event.setStage(getStage());
-		event.setTarget(this.getView());
+		if (event.getStage() == null) {
+			event.setStage(getStage());
+		}
+		event.setTarget(getView());
 
 		// Collect ascendants so event propagation is unaffected by hierarchy changes.
 		@SuppressWarnings("unchecked")
 		Array<Group> ascendants = Pools.obtain(Array.class);
-		Group parent = this.getView().getParent();
+		Group parent = getView().getParent();
 		while (parent != null) {
 			ascendants.add(parent);
 			parent = parent.getParent();
@@ -142,18 +145,26 @@ public class TestBasicButton implements BasicButton {
 			for (int i = ascendants.size - 1; i >= 0; i--) {
 				Group currentTarget = (Group)ascendantsArray[i];
 				currentTarget.notify(event, true);
-				if (event.isStopped()) return event.isCancelled();
+				if (event.isStopped()) {
+					return event.isCancelled();
+				}
 			}
 
 			// Notify the target listeners.
 			notify(event);
-			if (!event.getBubbles()) return event.isCancelled();
-			if (event.isStopped()) return event.isCancelled();
+			if (!event.getBubbles()) {
+				return event.isCancelled();
+			}
+			if (event.isStopped()) {
+				return event.isCancelled();
+			}
 
 			// Notify ascendants' actor listeners, starting at the target. Children may stop an event before ascendants receive it.
 			for (int i = 0, n = ascendants.size; i < n; i++) {
 				((Group)ascendantsArray[i]).notify(event, false);
-				if (event.isStopped()) return event.isCancelled();
+				if (event.isStopped()) {
+					return event.isCancelled();
+				}
 			}
 
 			return event.isCancelled();
@@ -162,23 +173,32 @@ public class TestBasicButton implements BasicButton {
 			Pools.free(ascendants);
 		}
 	}
-	
+
 	private boolean notify (Event event) {
 		// ---------------------------------------------------------------
 		// Below here is copied from LibGDX button
-		if (event.getTarget() == null) throw new IllegalArgumentException("The event target cannot be null.");
+		if (event.getTarget() == null) {
+			throw new IllegalArgumentException("The event target cannot be null.");
+		}
 
 		DelayedRemovalArray<EventListener> listeners = this.listeners;
-		if (listeners.size == 0) return event.isCancelled();
+		if (listeners.size == 0) {
+			return event.isCancelled();
+		}
 
-		event.setListenerActor(this.getView());
+		event.setListenerActor(getView());
 		event.setCapture(false);
-		if (event.getStage() == null) event.setStage(this.getStage());
+		if (event.getStage() == null) {
+			event.setStage(getStage());
+		}
 
 		try {
 			listeners.begin();
-			for (int i = 0, n = listeners.size; i < n; i++)
-				if (listeners.get(i).handle(event)) event.handle();
+			for (int i = 0, n = listeners.size; i < n; i++) {
+				if (listeners.get(i).handle(event)) {
+					event.handle();
+				}
+			}
 			listeners.end();
 		} catch (RuntimeException ex) {
 			String context = toString();
@@ -189,23 +209,25 @@ public class TestBasicButton implements BasicButton {
 	}
 
 	@Override
-	public void clearActions() {		 
-		
+	public void clearActions() {
+
 	}
 
 	@Override
-	public void clearChildren() {		 
-		
+	public void clearChildren() {
+
 	}
 
 	@Override
-	public void addAction(Action action) {		 
-		
+	public void addAction(Action action) {
+
 	}
 
 	@Override
 	public boolean addListener(EventListener listener) {
-		if (listener == null) throw new IllegalArgumentException("listener cannot be null.");
+		if (listener == null) {
+			throw new IllegalArgumentException("listener cannot be null.");
+		}
 		if (!listeners.contains(listener, true)) {
 			listeners.add(listener);
 			return true;
@@ -214,7 +236,12 @@ public class TestBasicButton implements BasicButton {
 	}
 
 	@Override
-	public <T extends Actor> Cell<T> add(T actor) {		 
+	public DelayedRemovalArray<EventListener> getListeners() {
+		return listeners;
+	}
+
+	@Override
+	public <T extends Actor> Cell<T> add(T actor) {
 		return null;
 	}
 
@@ -224,22 +251,22 @@ public class TestBasicButton implements BasicButton {
 	}
 
 	@Override
-	public Stage getStage() {		 
+	public Stage getStage() {
 		return null;
 	}
 
 	@Override
-	public Label getLabel() {		 
+	public Label getLabel() {
 		return null;
 	}
 
 	@Override
-	public Cell<Label> getLabelCell() {		 
+	public Cell<Label> getLabelCell() {
 		return null;
 	}
 
 	@Override
-	public String getButtonText() {	 
+	public String getButtonText() {
 		return null;
 	}
 
@@ -255,11 +282,11 @@ public class TestBasicButton implements BasicButton {
 
 	@Override
 	public void addActor(Actor actor) {
-		 		
+
 	}
 
 	@Override
-	public boolean removeActor(Actor actor) {		 
+	public boolean removeActor(Actor actor) {
 		return false;
 	}
 

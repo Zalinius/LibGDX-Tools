@@ -1,14 +1,14 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
-import java.util.Collection;
-import java.util.function.Consumer;
+import java.util.List;
 import java.util.function.Supplier;
+
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 public interface SelectBoxContentManager {
 
 	Supplier<String> getBoxLabelSupplier();
-	Collection<Supplier<String>> getAllDisplayNames();
-	Consumer<String> getChoiceResponder();
+	List<UniversalButton> getOptionButtons();
 	Supplier<String> getCurrentSelectedDisplayName();
 
 }

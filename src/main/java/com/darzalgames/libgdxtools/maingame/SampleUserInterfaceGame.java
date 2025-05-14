@@ -187,14 +187,12 @@ public class SampleUserInterfaceGame extends MainGame {
 		menuButtons.add(GameInfo.getUserInterfaceFactory().getButton(() -> "Image Text button!", new Image(ColorTools.getColoredTexture(Color.CHARTREUSE, 50, 12)),
 				() -> Gdx.app.log(logOrigin, "You pressed the image text button")));
 
-		String option1 = TextSupplier.getLine("option 1");
-		String option2 = TextSupplier.getLine("option 2");
+		Supplier<String> option1 = () -> TextSupplier.getLine("option 1");
+		Supplier<String> option2 = () -> TextSupplier.getLine("option 2");
 		Supplier<String> exampleSelectBoxLabelSupplier = () -> (TextSupplier.getLine("An option select box"));
-		Consumer<String> choiceResponder = selectedValue -> {};
 		UniversalSelectBox exampleSelectBox = GameInfo.getUserInterfaceFactory().getSelectBox(
 				exampleSelectBoxLabelSupplier,
-				List.of(() -> option1, () -> option2),
-				choiceResponder
+				List.of(userInterfaceFactory.getButton(option1, Runnables.nullRunnable()), userInterfaceFactory.getButton(option2, Runnables.nullRunnable()))
 				);
 		menuButtons.add(exampleSelectBox);
 

@@ -1,6 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -143,16 +143,16 @@ public class UserInterfaceFactory {
 
 
 	public UniversalSelectBox getSelectBox(SelectBoxContentManager contentManager) {
-		UniversalSelectBox selectBox = getSelectBox(contentManager.getBoxLabelSupplier(), contentManager.getAllDisplayNames(), contentManager.getChoiceResponder());
-		selectBox.setSelected(contentManager.getCurrentSelectedDisplayName());
+		UniversalSelectBox selectBox = getSelectBox(contentManager.getBoxLabelSupplier(), contentManager.getOptionButtons());
+		selectBox.setSelected(contentManager.getCurrentSelectedDisplayName().get());
 		return selectBox;
 	}
-	public UniversalSelectBox getSelectBox(Supplier<String> boxLabel, Collection<Supplier<String>> entries, Consumer<String> consumer) {
+	public UniversalSelectBox getSelectBox(Supplier<String> boxLabel, List<UniversalButton> entries) {
 		BasicButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getTextButtonStyle());
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		UniversalSelectBox universalSelectBox = new UniversalSelectBox(entries, textButton, boxLabel, inputStrategySwitcher, soundInteractListener);
-		universalSelectBox.setAction(consumer);
-		return universalSelectBox;
+		UniversalSelectBox selectBox = new UniversalSelectBox(textButton, boxLabel, inputStrategySwitcher, soundInteractListener);
+		selectBox.setEntryButtons(entries);
+		return selectBox;
 	}
 
 	public BaseDrawable getDefaultBackgroundDrawable() {

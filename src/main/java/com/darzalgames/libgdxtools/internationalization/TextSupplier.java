@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.internationalization;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -11,6 +10,7 @@ import com.darzalgames.darzalcommon.strings.StringUtils;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 public abstract class TextSupplier {
 
@@ -93,15 +93,6 @@ public abstract class TextSupplier {
 		bundleManager.throwExceptions = throwExceptions;
 	}
 
-	/**
-	 * Only to be used during validation, otherwise use TextSupplier.getLanguageChoiceResponder()
-	 * @param languageDisplayName
-	 */
-	public static void useLanguageFromDisplayName(String languageDisplayName) {
-		bundleManager.locale = bundleManager.displayNames.getSecondValue(languageDisplayName);
-
-		bundleManager.useLocale();
-	}
 
 	public static SelectBoxContentManager getContentManager() {
 		return new SelectBoxContentManager() {
@@ -111,21 +102,20 @@ public abstract class TextSupplier {
 			}
 
 			@Override
-			public Consumer<String> getChoiceResponder() {
-				return selectedNewLanguage -> {
-					TextSupplier.useLanguageFromDisplayName(selectedNewLanguage);
-					GameInfo.getSaveManager().save();
-				};
-			}
-
-			@Override
-			public Collection<Supplier<String>> getAllDisplayNames() {
-				return TextSupplier.getAllDisplayNames();
-			}
-
-			@Override
 			public Supplier<String> getBoxLabelSupplier() {
 				return () -> (TextSupplier.getLine("language_label"));
+			}
+
+			@Override
+			public List<UniversalButton> getOptionButtons() {
+				return bundleManager.displayNames.getSecondKeyset().stream().map(locale -> GameInfo.getUserInterfaceFactory().getButton(
+						() -> bundleManager.displayNames.getFirstValue(locale),
+						() -> {
+							bundleManager.locale = locale;
+							bundleManager.useLocale();
+							GameInfo.getSaveManager().save();
+						}
+						)).toList();
 			}
 		};
 	}

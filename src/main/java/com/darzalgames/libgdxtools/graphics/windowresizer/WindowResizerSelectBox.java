@@ -1,6 +1,8 @@
 package com.darzalgames.libgdxtools.graphics.windowresizer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -27,28 +29,30 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 	}
 
 	public WindowResizerSelectBox(BasicButton textButton, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(getEntries(), textButton, textSupplier, inputStrategySwitcher, soundInteractListener);
+		super(textButton, textSupplier, inputStrategySwitcher, soundInteractListener);
 
-		setAction(selectedNewMode -> {
-			String previousMode = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
-			if (!selectedNewMode.equalsIgnoreCase(previousMode)) {
-				windowResizer.setMode(getModeFromPreference(selectedNewMode), true);
-			}
-		});
+		setEntryButtons(getEntries());
 	}
 
-	private static Collection<Supplier<String>> getEntries() {
+	private List<UniversalButton> getEntries() {
 		List<ScreenMode> allModes = new ArrayList<>(Arrays.asList(ScreenMode.values()));
 		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
-		Stream<Supplier<String>> result = allModes.stream().map(mode -> (() -> translateWindowModeOption(mode)));
-		return result.toList();
+		Stream<UniversalButton> buttonStream = allModes.stream().map(mode -> GameInfo.getUserInterfaceFactory().getButton(
+				() -> translateWindowModeOption(mode),
+				() -> {
+					String previousMode = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
+					if (!mode.equals(getModeFromPreference(previousMode))) {
+						windowResizer.setMode(mode, true);
+					}
+				}));
+		return buttonStream.toList();
 	}
 
 	@Override
 	public void setSelectedScreenMode(ScreenMode screenMode) {
-		setSelected(() -> translateWindowModeOption(screenMode));
+		setSelected(translateWindowModeOption(screenMode));
 	}
 
 	@Override

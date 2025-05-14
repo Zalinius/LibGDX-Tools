@@ -14,11 +14,11 @@ public class BundleManager {
 
 	private I18NBundle baseBundle;
 	protected I18NBundle topBundle;
-	
+
 	protected boolean throwExceptions;
 	protected Locale locale;
 	protected final BiMap<String, Locale> displayNames;
-	
+
 	private final FileHandle baseBundleFileHandle;
 	private final UnaryOperator<String> modifierStrategy;
 
@@ -26,11 +26,11 @@ public class BundleManager {
 	public BundleManager(FileHandle baseBundleFileHandle, List<Locale> supportedLocales) {
 		this(baseBundleFileHandle, supportedLocales, String::toString);
 	}
-	
+
 	public BundleManager(FileHandle baseBundleFileHandle, List<Locale> supportedLocales, UnaryOperator<String> modifierStrategy) {
 		this.baseBundleFileHandle = baseBundleFileHandle;
 		this.modifierStrategy = modifierStrategy;
-		
+
 		displayNames = new BiMap<>();
 		for (Locale current : supportedLocales) {
 			I18NBundle tempBundle = I18NBundle.createBundle(baseBundleFileHandle, current);
@@ -48,14 +48,14 @@ public class BundleManager {
 	 * @return The localized line of text
 	 */
 	public String getLine(String key, Object... args) {
-		try { 
+		try {
 			if (topBundle != null) {
 				return modifierStrategy.apply(topBundle.format(key, args));
 			}
 		} catch (MissingResourceException e) {
 			// This will catch any keys that belong in the baseBundle, or any undefined keys
 		}
-		
+
 		try {
 			return modifierStrategy.apply(baseBundle.format(key, args));
 		} catch (NullPointerException e) {

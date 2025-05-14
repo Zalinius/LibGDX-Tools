@@ -3,22 +3,15 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.darzalgames.darzalcommon.data.Coordinate;
+import com.darzalgames.libgdxtools.maingame.GameInfo;
 
 public class WindowResizerDesktop extends WindowResizer {
 
-	private int defaultWindowWidth;
-	private int defaultWindowHeight;
-
-	public WindowResizerDesktop(int defaultWindowWidth, int defaultWindowHeight) {
-		super();
-		this.defaultWindowWidth = defaultWindowWidth;
-		this.defaultWindowHeight = defaultWindowHeight;
-	}
-
 	@Override
 	protected void switchToWindowed() {
+		Coordinate preferredWindowSize = GameInfo.getPreferenceManager().graphics().getPreferredWindowSize();
 		Gdx.graphics.setUndecorated(false);
-		Gdx.graphics.setWindowedMode(defaultWindowWidth, defaultWindowHeight);
+		Gdx.graphics.setWindowedMode(preferredWindowSize.i, preferredWindowSize.j);
 	}
 
 	@Override
@@ -27,12 +20,12 @@ public class WindowResizerDesktop extends WindowResizer {
 		Gdx.graphics.setUndecorated(true);
 		Gdx.graphics.setWindowedMode(displayMode.width, displayMode.height);
 	}
-	
+
 	@Override
 	protected void switchToFullScreen() {
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 	}
-	
+
 	@Override
 	public void setScreenSize(Coordinate size) {
 		Gdx.graphics.setUndecorated(false);

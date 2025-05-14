@@ -55,16 +55,14 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	static void testLauncher(List<String> args, Consumer<SampleUserInterfaceGame> todo) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		int width = 1280;
-		int height = 720;
-		config.setWindowedMode(width, height);
+		config.setWindowedMode(1280, 720);
 		config.setTitle("Test LibGDXTools UI");
 		config.setWindowListener(makeWindowListener());
-		new Lwjgl3Application(new SampleUserInterfaceGame(width, height, args, todo), config);
+		new Lwjgl3Application(new SampleUserInterfaceGame(args, todo), config);
 	}
 
-	public SampleUserInterfaceGame(int width, int height, List<String> args, Consumer<SampleUserInterfaceGame> toDoAfterLaunch) {
-		super(new WindowResizerDesktop(width, height), LaunchArgumentHelper.getGamePlatform(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new), SpriteBatch::new);
+	public SampleUserInterfaceGame(List<String> args, Consumer<SampleUserInterfaceGame> toDoAfterLaunch) {
+		super(new WindowResizerDesktop(), LaunchArgumentHelper.getGamePlatform(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new), SpriteBatch::new);
 		this.toDoAfterLaunch = toDoAfterLaunch;
 	}
 

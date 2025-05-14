@@ -1,13 +1,14 @@
 package com.darzalgames.libgdxtools.preferences;
 
-import com.darzalgames.libgdxtools.graphics.resolution.ResolutionPreset;
+import com.darzalgames.darzalcommon.data.Coordinate;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 
 public class GraphicsPreference {
 
 	private static final String USER_INTERFACE_SCALING_KEY = "userInterfaceScaling";
 	private static final String SCREEN_MODE_KEY = "screenMode";
-	private static final String RESOLUTION_KEY = "resolutionPreset";
+	private static final String WINDOW_WIDTH_KEY = "windowWidth";
+	private static final String WINDOW_HEIGHT_KEY = "windowHeight";
 
 	private final PreferenceManager preferenceManager;
 
@@ -32,11 +33,13 @@ public class GraphicsPreference {
 	}
 
 
-	public ResolutionPreset getPreferredResolution() {
-		String enumName = preferenceManager.getStringPrefValue(RESOLUTION_KEY, ResolutionPreset.X_1920X1080.name());
-		return ResolutionPreset.valueOf(enumName);
+	public Coordinate getPreferredWindowSize() {
+		int width = preferenceManager.getIntegerPrefValue(WINDOW_WIDTH_KEY, 1920);
+		int height = preferenceManager.getIntegerPrefValue(WINDOW_HEIGHT_KEY, 1080);
+		return new Coordinate(width, height);
 	}
-	public void setPreferredResoluton(ResolutionPreset preferredResolutionPreset) {
-		preferenceManager.savePrefValue(RESOLUTION_KEY, preferredResolutionPreset.name());
+	public void setPreferredWindowSize(int width, int height) {
+		preferenceManager.savePrefValue(WINDOW_WIDTH_KEY, width);
+		preferenceManager.savePrefValue(WINDOW_HEIGHT_KEY, height);
 	}
 }

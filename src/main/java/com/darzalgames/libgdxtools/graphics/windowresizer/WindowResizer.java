@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.graphics.windowresizer;
 
 import com.darzalgames.darzalcommon.data.Coordinate;
-import com.darzalgames.libgdxtools.graphics.resolution.ResolutionPreset;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
@@ -43,10 +42,6 @@ public abstract class WindowResizer {
 		String preferredModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
 		setMode(windowResizerButton.getModeFromPreference(preferredModeString), false);
 		previousScreenMode = currentScreenMode;
-
-		if (isWindowed()) {
-			ResolutionPreset.enterPreferredResolution();
-		}
 	}
 
 	/**

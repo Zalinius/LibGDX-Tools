@@ -29,10 +29,10 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 
 	protected abstract void setUpDesiredSize();
 
-	private UniversalButton makeFinalButton(String finalButtonMessageKey) {
+	protected UniversalButton makeFinalButton(String finalButtonMessageKey) {
 		return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(finalButtonMessageKey), this::hideThis);
 	}
-	
+
 	protected boolean slidesInAndOut() {
 		return true;
 	}
@@ -44,7 +44,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 			float startX = this.getX();
 			float startY = this.getY();
 			this.setY(UserInterfaceSizer.getCurrentHeight());
-			this.addAction(Actions.moveTo(startX, startY, 0.25f, Interpolation.circle));
+			addAction(Actions.moveTo(startX, startY, 0.25f, Interpolation.circle));
 		}
 	}
 
@@ -52,12 +52,12 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	public void hideThis() {
 		releasePriority();
 		if (slidesInAndOut()) {
-			this.addAction(Actions.sequence(
+			addAction(Actions.sequence(
 					Actions.moveTo(getX(), UserInterfaceSizer.getCurrentHeight(), 0.25f, Interpolation.circle),
 					new RunnableActionBest(super::remove)));
-			this.toFront();
+			toFront();
 		} else {
-			this.remove();
+			remove();
 		}
 	}
 

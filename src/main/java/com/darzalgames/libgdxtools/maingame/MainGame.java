@@ -170,6 +170,9 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	@Override
 	public final void resize (int width, int height) {
+		if (windowResizer.isWindowed()) {
+			preferenceManager.graphics().setPreferredWindowSize(width, height);
+		}
 		multipleStage.resize(width, height);
 		reactToResize(width, height);
 	}

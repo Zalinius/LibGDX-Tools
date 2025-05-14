@@ -1,6 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -27,6 +27,7 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 
 /**
@@ -140,12 +141,18 @@ public class UserInterfaceFactory {
 		return makeLibGDXTextButton(text, skinManager.getTextButtonStyle());
 	}
 
-	public UniversalSelectBox getSelectBox(Supplier<String> boxLabel, Collection<Supplier<String>> entries, Consumer<String> consumer) {
+
+	public UniversalSelectBox getSelectBox(SelectBoxContentManager contentManager) {
+		UniversalSelectBox selectBox = getSelectBox(contentManager.getBoxLabelSupplier(), contentManager.getOptionButtons());
+		selectBox.setSelected(contentManager.getCurrentSelectedDisplayName().get());
+		return selectBox;
+	}
+	public UniversalSelectBox getSelectBox(Supplier<String> boxLabel, List<UniversalButton> entries) {
 		BasicButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getTextButtonStyle());
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		UniversalSelectBox keyboardSelectBox = new UniversalSelectBox(entries, textButton, boxLabel, inputStrategySwitcher, soundInteractListener);
-		keyboardSelectBox.setAction(consumer);
-		return keyboardSelectBox;
+		UniversalSelectBox selectBox = new UniversalSelectBox(textButton, boxLabel, inputStrategySwitcher, soundInteractListener);
+		selectBox.setEntryButtons(entries);
+		return selectBox;
 	}
 
 	public BaseDrawable getDefaultBackgroundDrawable() {

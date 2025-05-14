@@ -1,11 +1,12 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
@@ -16,29 +17,19 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class UniversalSelectBox extends UniversalButton {
 
-	private PopUpMenu options;
+	private final PopUpMenu options;
 	private final UniversalLabel displayLabel;
-	private Supplier<String> defaultEntry;
-	private Consumer<String> action;
+	private UniversalButton defaultEntry;
+	protected List<UniversalButton> entryButtons;
 
-	public UniversalSelectBox(Collection<Supplier<String>> entries, BasicButton textButton, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+	public UniversalSelectBox(BasicButton textButton, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		super(textButton, textSupplier, inputStrategySwitcher, soundInteractListener);
 
-		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,
-		// sets that as the text in our display label (e.g. English), and calls the Consumer (which responds to the new entry, e.g. changing the game language and refreshing the main menu)
-		List<UniversalButton> entryButtons = entries.stream().map(entry -> GameInfo.getUserInterfaceFactory().getButton(
-				entry,
-				() -> {
-					options.hideThis();
-					setSelected(entry);
-					action.accept(entry.get());
-				}
-				)).toList();
-
 		// This is the keyboard navigable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
-		options = new PopUpMenu(true, entryButtons, "back_message") {
+		options = new PopUpMenu(true) {
 			@Override
 			protected void setUpTable() {
+				menu.replaceContents(entryButtons, makeFinalButton("back_message"));
 				menu.setAlignment(Alignment.LEFT, Alignment.LEFT);
 				menu.getView().setBackground(GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 				options.add(menu.getView()).left();
@@ -51,15 +42,31 @@ public class UniversalSelectBox extends UniversalButton {
 					UserInterfaceSizer.makeActorCentered(options);
 				}
 			}
+
+			@Override
+			public void gainFocus() {
+				super.gainFocus();
+				options.goTo(defaultEntry);
+			}
+
 		};
 
 		displayLabel = GameInfo.getUserInterfaceFactory().getLabel(Suppliers.emptyString());
 		displayLabel.setWrap(false);
 		textButton.add(displayLabel);
-		setButtonRunnable(this::showInnerOptionsPopUpMenu);
+		setButtonRunnable(() -> InputPriority.claimPriority(options));
 		setWrap(false);
+	}
 
-		setSelected(() -> entryButtons.get(0).getButton().getButtonText());
+	protected void setEntryButtons(List<UniversalButton> entryButtons) {
+		this.entryButtons = entryButtons;
+		entryButtons.forEach(entry -> entry.getButton().addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				setSelected(entry);
+				options.goTo(defaultEntry);
+			}
+		}));
 	}
 
 	/**
@@ -67,7 +74,7 @@ public class UniversalSelectBox extends UniversalButton {
 	 * or when first setting up the select box to make sure that the currently used value is highlighted (e.g. current language/font/window setting)
 	 * @param entry
 	 */
-	public void setSelected(Supplier<String> entry) {
+	public void setSelected(UniversalButton entry) {
 		defaultEntry = entry;
 		BasicButton view = getButton();
 		Label label = view.getLabel();
@@ -75,19 +82,18 @@ public class UniversalSelectBox extends UniversalButton {
 		view.setWidth(view.getLabelCell().getPadRight() + label.getWidth() + displayLabel.getPrefWidth());
 	}
 
-	private void showInnerOptionsPopUpMenu() {
-		InputPriority.claimPriority(options);
-		options.goTo(defaultEntry.get());
-	}
-
-	public void setAction(Consumer<String> action) {
-		this.action = action;
+	public void setSelected(String entryText) {
+		Optional<UniversalButton> desiredButton = entryButtons.stream().filter(button -> entryText.equalsIgnoreCase(button.getButton().getButtonText())).findFirst();
+		if (desiredButton.isPresent()) {
+			setSelected(desiredButton.get());
+		}
 	}
 
 	@Override
 	public void resizeUI() {
 		super.resizeUI();
-		displayLabel.setTextSupplier(defaultEntry);
+		defaultEntry.resizeUI(); // Needed for the displayLabel to update when changing language
+		displayLabel.setTextSupplier(() -> defaultEntry.getButton().getButtonText());
 		BasicButton thisButton = getButton();
 		displayLabel.setColor(thisButton.isOver() ? thisButton.getStyle().overFontColor : thisButton.getStyle().fontColor);
 		displayLabel.layout();

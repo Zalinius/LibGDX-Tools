@@ -55,16 +55,14 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	static void testLauncher(List<String> args, Consumer<SampleUserInterfaceGame> todo) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		int width = 1280;
-		int height = 720;
-		config.setWindowedMode(width, height);
+		config.setWindowedMode(1280, 720);
 		config.setTitle("Test LibGDXTools UI");
 		config.setWindowListener(makeWindowListener());
-		new Lwjgl3Application(new SampleUserInterfaceGame(width, height, args, todo), config);
+		new Lwjgl3Application(new SampleUserInterfaceGame(args, todo), config);
 	}
 
-	public SampleUserInterfaceGame(int width, int height, List<String> args, Consumer<SampleUserInterfaceGame> toDoAfterLaunch) {
-		super(new WindowResizerDesktop(width, height), LaunchArgumentHelper.getGamePlatform(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new), SpriteBatch::new);
+	public SampleUserInterfaceGame(List<String> args, Consumer<SampleUserInterfaceGame> toDoAfterLaunch) {
+		super(new WindowResizerDesktop(), LaunchArgumentHelper.getGamePlatform(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new), SpriteBatch::new);
 		this.toDoAfterLaunch = toDoAfterLaunch;
 	}
 
@@ -189,14 +187,12 @@ public class SampleUserInterfaceGame extends MainGame {
 		menuButtons.add(GameInfo.getUserInterfaceFactory().getButton(() -> "Image Text button!", new Image(ColorTools.getColoredTexture(Color.CHARTREUSE, 50, 12)),
 				() -> Gdx.app.log(logOrigin, "You pressed the image text button")));
 
-		String option1 = TextSupplier.getLine("option 1");
-		String option2 = TextSupplier.getLine("option 2");
+		Supplier<String> option1 = () -> TextSupplier.getLine("option 1");
+		Supplier<String> option2 = () -> TextSupplier.getLine("option 2");
 		Supplier<String> exampleSelectBoxLabelSupplier = () -> (TextSupplier.getLine("An option select box"));
-		Consumer<String> choiceResponder = selectedValue -> {};
 		UniversalSelectBox exampleSelectBox = GameInfo.getUserInterfaceFactory().getSelectBox(
 				exampleSelectBoxLabelSupplier,
-				List.of(() -> option1, () -> option2),
-				choiceResponder
+				List.of(userInterfaceFactory.getButton(option1, Runnables.nullRunnable()), userInterfaceFactory.getButton(option2, Runnables.nullRunnable()))
 				);
 		menuButtons.add(exampleSelectBox);
 

@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.I18NBundle;
 import com.darzalgames.darzalcommon.strings.StringUtils;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
 
 public abstract class TextSupplier {
 
@@ -43,22 +44,6 @@ public abstract class TextSupplier {
 		Stream<Supplier<String>> allNameSupplier = names.stream().map(name -> (() -> name));
 		return allNameSupplier.toList();
 	}
-	/**
-	 * @return The current language's display name, in the current locale
-	 */
-	public static String getCurrentLanguageDisplayName() {
-		return bundleManager.displayNames.getFirstValue(bundleManager.locale);
-	}
-
-	/**
-	 * @return A Consumer that dictates how this system responds to a change in the game language
-	 */
-	public static Consumer<String> getLanguageChoiceResponder() {
-		return selectedNewLanguage -> {
-			TextSupplier.useLanguageFromDisplayName(selectedNewLanguage);
-			GameInfo.getSaveManager().save();
-		};
-	}
 
 	/**
 	 * ONLY TO BE USED BY THE {@link DesktopSaveManager}
@@ -78,7 +63,7 @@ public abstract class TextSupplier {
 	}
 
 	/**
-	 * Only to be used when loading a save, otherwise use TextSupplier.getLanguageChoiceResponder()
+	 * Only to be used when loading a save, otherwise use the SelectBoxContentManager's getChoiceResponder()
 	 * @param languageCode
 	 */
 	public static void useLanguage(String languageCode) {
@@ -116,5 +101,32 @@ public abstract class TextSupplier {
 		bundleManager.locale = bundleManager.displayNames.getSecondValue(languageDisplayName);
 
 		bundleManager.useLocale();
+	}
+
+	public static SelectBoxContentManager getContentManager() {
+		return new SelectBoxContentManager() {
+			@Override
+			public Supplier<String> getCurrentSelectedDisplayName() {
+				return () -> bundleManager.displayNames.getFirstValue(bundleManager.locale);
+			}
+
+			@Override
+			public Consumer<String> getChoiceResponder() {
+				return selectedNewLanguage -> {
+					TextSupplier.useLanguageFromDisplayName(selectedNewLanguage);
+					GameInfo.getSaveManager().save();
+				};
+			}
+
+			@Override
+			public Collection<Supplier<String>> getAllDisplayNames() {
+				return TextSupplier.getAllDisplayNames();
+			}
+
+			@Override
+			public Supplier<String> getBoxLabelSupplier() {
+				return () -> (TextSupplier.getLine("language_label"));
+			}
+		};
 	}
 }

@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.graphics.windowresizer;
 
 import com.darzalgames.darzalcommon.data.Coordinate;
+import com.darzalgames.libgdxtools.graphics.resolution.ResolutionPreset;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
@@ -15,7 +16,7 @@ public abstract class WindowResizer {
 		WINDOWED,
 	}
 
-	
+
 	protected ScreenMode currentScreenMode;
 	private ScreenMode previousScreenMode;
 
@@ -42,6 +43,10 @@ public abstract class WindowResizer {
 		String preferredModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
 		setMode(windowResizerButton.getModeFromPreference(preferredModeString), false);
 		previousScreenMode = currentScreenMode;
+
+		if (isWindowed()) {
+			ResolutionPreset.enterPreferredResolution();
+		}
 	}
 
 	/**
@@ -50,7 +55,7 @@ public abstract class WindowResizer {
 	public UniversalButton getModeSelectBox() {
 		UniversalButton button = windowResizerButton.getWindowResizerButton();
 		if (currentScreenMode != null) {
-			windowResizerButton.setSelectedScreenMode(currentScreenMode);			
+			windowResizerButton.setSelectedScreenMode(currentScreenMode);
 		}
 		return button;
 	}
@@ -88,7 +93,7 @@ public abstract class WindowResizer {
 			switchToWindowed();
 			break;
 		}
-		offerToRevert = offerToRevert && previousScreenMode != currentScreenMode; 
+		offerToRevert = offerToRevert && previousScreenMode != currentScreenMode;
 		inputStrategySwitcher.revertToPreviousStrategy();
 		windowResizerButton.setSelectedScreenMode(currentScreenMode);
 		if (offerToRevert) {
@@ -100,12 +105,12 @@ public abstract class WindowResizer {
 	 * @return Whether or not the game is currently in windowed mode ("borderless windowed" returns false for this)
 	 */
 	public boolean isWindowed() {
-		return currentScreenMode.equals(ScreenMode.WINDOWED);
+		return ScreenMode.WINDOWED.equals(currentScreenMode);
 	}
 
 	public void revertMode() {
 		WindowResizer.this.setMode(previousScreenMode, false);
 		previousScreenMode = currentScreenMode;
 	}
-	
+
 }

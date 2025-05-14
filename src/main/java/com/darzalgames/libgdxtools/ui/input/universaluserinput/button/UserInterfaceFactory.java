@@ -27,6 +27,7 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 
 /**
@@ -140,12 +141,18 @@ public class UserInterfaceFactory {
 		return makeLibGDXTextButton(text, skinManager.getTextButtonStyle());
 	}
 
+
+	public UniversalSelectBox getSelectBox(SelectBoxContentManager contentManager) {
+		UniversalSelectBox selectBox = getSelectBox(contentManager.getBoxLabelSupplier(), contentManager.getAllDisplayNames(), contentManager.getChoiceResponder());
+		selectBox.setSelected(contentManager.getCurrentSelectedDisplayName());
+		return selectBox;
+	}
 	public UniversalSelectBox getSelectBox(Supplier<String> boxLabel, Collection<Supplier<String>> entries, Consumer<String> consumer) {
 		BasicButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getTextButtonStyle());
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		UniversalSelectBox keyboardSelectBox = new UniversalSelectBox(entries, textButton, boxLabel, inputStrategySwitcher, soundInteractListener);
-		keyboardSelectBox.setAction(consumer);
-		return keyboardSelectBox;
+		UniversalSelectBox universalSelectBox = new UniversalSelectBox(entries, textButton, boxLabel, inputStrategySwitcher, soundInteractListener);
+		universalSelectBox.setAction(consumer);
+		return universalSelectBox;
 	}
 
 	public BaseDrawable getDefaultBackgroundDrawable() {

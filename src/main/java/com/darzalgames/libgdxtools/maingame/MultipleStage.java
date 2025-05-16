@@ -138,7 +138,7 @@ public class MultipleStage {
 		return stage;
 	}
 
-	protected UniversalInputStage getPopUpStage() {
+	public UniversalInputStage getPopUpStage() {
 		return popUpStage;
 	}
 

@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.function.Supplier;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -134,9 +135,9 @@ public class UniversalButton implements VisibleInputConsumer {
 
 		if (event.getType() != null) {
 			event.setStage(button.getStage());
-			event.setStageX(0);
-			event.setStageY(0);
-			event.setRelatedActor(button.getView());
+			Vector2 localToStageCoordinates = button.getView().localToStageCoordinates(new Vector2(0, 0));
+			event.setStageX(localToStageCoordinates.x);
+			event.setStageY(localToStageCoordinates.y);
 			event.setPointer(-1);
 			button.fire(event);
 			Pools.free(event);

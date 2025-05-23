@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class UniversalLabel extends Label {
-	
+
 	protected Supplier<String> textSupplier;
 
 	protected UniversalLabel(Supplier<String> textSupplier, LabelStyle labelStyle) {
@@ -17,13 +17,14 @@ public class UniversalLabel extends Label {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		this.setStyle(this.getStyle());
 		this.setText(textSupplier.get());
-		this.invalidateHierarchy();
-		this.layout();
+		setStyle(getStyle());
+		if (!getWrap()) {
+			setSize(getPrefWidth(), getPrefHeight());
+		}
 		super.draw(batch, parentAlpha);
 	}
-	
+
 	public void setTextSupplier(Supplier<String> textSupplier) {
 		this.textSupplier = textSupplier;
 	}

@@ -1,6 +1,8 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,16 +16,19 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 /**
  * Manages which input consumer (including popups) is in focus and receiving input
  */
-public class InputPriorityStack implements InputObserver {
+public class InputPriorityStack implements InputObserver, InputPrioritySubject {
 
 	private final LimitedAccessDoubleStack stack;
 	private final DarkScreen darkScreen;
 	private final Stage popUpStage;
 	private final OptionsMenu optionsMenu;
 
+	private final List<InputPriorityObserver> inputPriorityObservers;
+
 	public InputPriorityStack(Stage popUpStage, OptionsMenu optionsMenu) {
 		this.popUpStage = popUpStage;
 		this.optionsMenu = optionsMenu;
+		inputPriorityObservers = new ArrayList<>();
 		stack = new LimitedAccessDoubleStack();
 		clearStackAndPushBlankConsumer();
 
@@ -152,6 +157,16 @@ public class InputPriorityStack implements InputObserver {
 		stack.resizeUI();
 	}
 
+	@Override
+	public void register(InputPriorityObserver observer) {
+		inputPriorityObservers.add(observer);
+	}
+
+	@Override
+	public void notifyInputPriorityObservers() {
+		inputPriorityObservers.stream().forEach(InputPriorityObserver::inputPriorityAboutToChange);
+	}
+
 	private void clearStackAndPushBlankConsumer() {
 		stack.clear();
 		stack.push(new InputConsumer() {
@@ -176,10 +191,12 @@ public class InputPriorityStack implements InputObserver {
 		}
 
 		private void push(InputConsumer inputConsumer) {
+			notifyInputPriorityObservers();
 			inputConsumerStack.push(inputConsumer);
 		}
 
 		private void push(Tuple<Actor, PopUp> actorPopup) {
+			notifyInputPriorityObservers();
 			popupInputConsumerStack.push(actorPopup);
 		}
 
@@ -195,6 +212,7 @@ public class InputPriorityStack implements InputObserver {
 		}
 
 		private void popTop() {
+			notifyInputPriorityObservers();
 			if (!popupInputConsumerStack.isEmpty()) {
 				popupInputConsumerStack.pop();
 			} else {

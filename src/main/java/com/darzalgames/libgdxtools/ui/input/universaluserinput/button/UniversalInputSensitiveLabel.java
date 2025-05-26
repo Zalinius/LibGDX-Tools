@@ -3,10 +3,10 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public class UniversalInputSensitiveLabel extends UniversalLabel implements InputObserver {
+public class UniversalInputSensitiveLabel extends UniversalLabel implements InputStrategyObserver {
 	
 	private final InputStrategySwitcher inputStrategySwitcher;
 

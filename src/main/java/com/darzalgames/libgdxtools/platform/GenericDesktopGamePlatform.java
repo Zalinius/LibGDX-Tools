@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.codedisaster.steamworks.SteamController;
 import com.codedisaster.steamworks.SteamControllerDigitalActionHandle;
 import com.darzalgames.darzalcommon.data.BiMap;
+import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.steam.SteamConnection;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
@@ -20,7 +21,7 @@ public abstract class GenericDesktopGamePlatform implements GamePlatform {
 
 	@Override
 	public SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
-		Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler = () -> new SteamGamepadInputHandler(inputStrategySwitcher, inputReceiver, null) {
+		Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler = () -> new SteamGamepadInputHandler(inputStrategySwitcher, inputReceiver, Suppliers.emptyString(), "") {
 			// Don't be using this default does-nothing SteamGamepadInputHandler, this is mainly here for the LibGDXTools TestGame which isn't on Steam
 			@Override
 			protected BiMap<SteamControllerDigitalActionHandle, Input> makeButtonMappings(SteamController steamController) {

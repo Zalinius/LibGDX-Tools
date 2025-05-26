@@ -5,14 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
 import com.darzalgames.libgdxtools.ui.input.*;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
  * Allows for navigation around a {@link HexagonControllerMap2D} using keyboard or gamepad
  * @param <E> The game-specific object associated with each {@link Hexagon} and {@link HexagonController2D}
  */
-public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E>> implements InputConsumer, InputObserver {
+public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E>> implements InputConsumer, InputStrategyObserver {
 
 	private Hexagon currentHexagon;
 

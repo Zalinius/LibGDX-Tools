@@ -2,7 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public interface InputObserver {
+public interface InputStrategyObserver {
 	void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher);
 
 	/*

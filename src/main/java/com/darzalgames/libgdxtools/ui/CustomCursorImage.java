@@ -11,10 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public class CustomCursorImage extends Image implements DoesNotPause, InputObserver {
+public class CustomCursorImage extends Image implements DoesNotPause, InputStrategyObserver {
 
 	private final Supplier<Boolean> checkIsWindowed;
 	private final TextureRegion cursorTexture;

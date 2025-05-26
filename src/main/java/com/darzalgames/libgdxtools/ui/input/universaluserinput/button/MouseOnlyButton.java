@@ -3,14 +3,14 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 
 /**
  * A {@link UniversalButton} which will only be visible and intractable in mouse mode
  */
-public class MouseOnlyButton extends UniversalButton implements InputObserver {
+public class MouseOnlyButton extends UniversalButton implements InputStrategyObserver {
 
 	public MouseOnlyButton(BasicButton textButton, Supplier<String> textSupplier, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		super(textButton, textSupplier, runnable, inputStrategySwitcher, soundInteractListener);

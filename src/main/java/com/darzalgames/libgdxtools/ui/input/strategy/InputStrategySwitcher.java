@@ -7,13 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputObserver;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSubject;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategySubject;
 
 /**
  * Tracks the current input strategy, and handles switching between them as needed.
  */
-public class InputStrategySwitcher extends Actor implements InputStrategy, InputSubject, DoesNotPause {
+public class InputStrategySwitcher extends Actor implements InputStrategy, InputStrategySubject, DoesNotPause {
 
 	private InputStrategy currentInputStrategy;
 	private InputStrategy previousInputStrategy;
@@ -52,21 +52,21 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 	}
 
 
-	private final List<InputObserver> observers;
+	private final List<InputStrategyObserver> observers;
 	@Override
-	public void register(InputObserver obj) {
+	public void register(InputStrategyObserver obj) {
 		observers.add(obj);
 		// Let the new observer know right away what the current input strategy is, since they pretty much always need to know!
 		// e.g. The stage needs to know on initialization that everything starts in mouse mode; a newly created input-sensitive label uses the current strategy, etc.
 		obj.inputStrategyChanged(this);
 	}
 	@Override
-	public void unregister(InputObserver obj) {
+	public void unregister(InputStrategyObserver obj) {
 		observers.remove(obj);
 	}
 	@Override
 	public void notifyObservers() {
-		List<InputObserver> toRemove = observers.stream().filter(InputObserver::shouldBeUnregistered).toList();
+		List<InputStrategyObserver> toRemove = observers.stream().filter(InputStrategyObserver::shouldBeUnregistered).toList();
 		observers.removeAll(toRemove);
 		observers.stream().forEach(observer -> observer.inputStrategyChanged(this));
 	}

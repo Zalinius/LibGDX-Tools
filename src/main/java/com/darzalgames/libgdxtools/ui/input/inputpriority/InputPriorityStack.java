@@ -16,7 +16,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 /**
  * Manages which input consumer (including popups) is in focus and receiving input
  */
-public class InputPriorityStack implements InputObserver, InputPrioritySubject {
+public class InputPriorityStack implements InputStrategyObserver, InputPrioritySubject {
 
 	private final LimitedAccessDoubleStack stack;
 	private final DarkScreen darkScreen;

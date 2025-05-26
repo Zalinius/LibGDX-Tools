@@ -26,14 +26,14 @@ public interface GamePlatform {
 	String getPlatformName();
 
 	/**
-	 * @return True if the active game platform supports borderless fullsreen
+	 * @return True if the active game platform supports borderless fullscreen
 	 */
 	boolean supportsBorderlessFullscreen();
 
 	/**
 	 * Return the correct directory for save files based on the platform
-	 * @param fullGameAndSaveName The subpath and name of the desired save file
-	 * @return A libgdx file handle to the save file
+	 * @param fullGameAndSaveName The sub-path and name of the desired save file
+	 * @return A LibGDX file handle to the save file
 	 */
 	FileHandle getSaveFileLocation(String fullGameAndSaveName);
 
@@ -87,6 +87,11 @@ public interface GamePlatform {
 			@Override
 			protected Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor) {
 				return null;
+			}
+
+			@Override
+			public void setActionSet(Supplier<String> newActionSetKeySupplier) {
+				// Not implemented
 			}
 		};
 	}

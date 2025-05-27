@@ -11,7 +11,6 @@ import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -62,7 +61,7 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	public SampleUserInterfaceGame(List<String> args, Consumer<SampleUserInterfaceGame> toDoAfterLaunch) {
-		super(new WindowResizerDesktop(), LaunchArgumentHelper.getGamePlatform(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new), SpriteBatch::new);
+		super(new WindowResizerDesktop(), LaunchArgumentHelper.getGamePlatform(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new));
 		this.toDoAfterLaunch = toDoAfterLaunch;
 	}
 

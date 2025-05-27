@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.ui.input.handler;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -19,14 +20,15 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public abstract class GamepadInputHandler extends InputHandler {
 
 	protected enum ButtonState { HELD_DOWN, NOT_HELD_DOWN }
-	
+
 	protected final InputReceiver inputReceiver;
 
 	protected final Map<Input, ButtonState> buttonStates;
 	public static final boolean LOG_INPUT = false;
-	
+
 	protected abstract List<Input> getTrackedInputs();
 	protected abstract Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor);
+	public abstract void setActionSet(Supplier<String> newActionSetKeySupplier);
 
 	protected GamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
 		super(inputStrategySwitcher);
@@ -49,11 +51,11 @@ public abstract class GamepadInputHandler extends InputHandler {
 		}
 		updateLatestInputMethod();
 	}
-	
+
 	protected final void controllerDisconnected() {
 		inputStrategySwitcher.setToMouseStrategy();
 		GamePauser.pause();
 	}
-	
+
 
 }

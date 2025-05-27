@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.handler;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -14,12 +15,13 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
-	private final String actionsSetHandleKey;
+	private final Supplier<String> currentActionsSet;
 
 	private SteamController steamController;
 	private SteamControllerHandle activeController;
 
-	private SteamControllerActionSetHandle actionsSetHandle;
+	private SteamControllerActionSetHandle actionSetHandle;
+	private final String joystickActionName;
 	private BiMap<SteamControllerDigitalActionHandle, Input> buttonMappings;
 	protected abstract BiMap<SteamControllerDigitalActionHandle, Input> makeButtonMappings(SteamController steamController);
 
@@ -34,13 +36,13 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 	private final Map<AssetDescriptor<Texture>, Texture> existingGlyphs;
 
-	protected SteamGamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver, String actionsSetHandleKey) {
+	protected SteamGamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver, Supplier<String> startActionSet, String joystickActionName) {
 		super(inputStrategySwitcher, inputReceiver);
 		SteamControllerManager.initialize(this);
 		justDisconnected = false;
 
-		// TODO maybe some day add support for multiple action sets
-		this.actionsSetHandleKey = actionsSetHandleKey;
+		currentActionsSet = startActionSet;
+		this.joystickActionName = joystickActionName;
 
 		existingGlyphs = new HashMap<>();
 
@@ -49,11 +51,14 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 
 	public void setSteamController(SteamController steamController) {
 		this.steamController = steamController;
-		actionsSetHandle = steamController.getActionSetHandle(actionsSetHandleKey);
+		setActionSet(currentActionsSet);
 		buttonMappings = makeButtonMappings(steamController);
-
 	}
 
+	@Override
+	public void setActionSet(Supplier<String> newActionSetKeySupplier) {
+		actionSetHandle = steamController.getActionSetHandle(newActionSetKeySupplier.get());
+	}
 
 	@Override
 	public void act(float delta) {
@@ -78,7 +83,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 		for (int i = 0; i < handlesOut.length; i++) {
 			SteamControllerHandle steamControllerHandle = handlesOut[i];
 			if (steamControllerHandle != null) {
-				steamController.activateActionSet(steamControllerHandle, actionsSetHandle);
+				steamController.activateActionSet(steamControllerHandle, actionSetHandle);
 			}
 		}
 	}
@@ -142,7 +147,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 		SteamControllerHandle steamControllerHandle = activeController;
 		if (steamControllerHandle != null) {
 			SteamControllerAnalogActionData analogActionData = new SteamControllerAnalogActionData();
-			SteamControllerAnalogActionHandle analogActionHandle = steamController.getAnalogActionHandle("Move");
+			SteamControllerAnalogActionHandle analogActionHandle = steamController.getAnalogActionHandle(joystickActionName);
 			steamController.getAnalogActionData(steamControllerHandle, analogActionHandle, analogActionData);
 			currentX = analogActionData.getX();
 			currentY = analogActionData.getY();
@@ -183,16 +188,16 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 		}
 
 		steamController.getDigitalActionOrigins(activeController,
-				actionsSetHandle,
+				actionSetHandle,
 				handle,
 				originsOut);
 
 		ActionOrigin action = originsOut[0];
 
 		if (action == null) { // Check for analog joystick movement
-			SteamControllerAnalogActionHandle handle2 = steamController.getAnalogActionHandle("move"); //note: you have to name the joystick "move" in each app's game_actions_#####.vdf file
+			SteamControllerAnalogActionHandle handle2 = steamController.getAnalogActionHandle(joystickActionName);
 			steamController.getAnalogActionOrigins(activeController,
-					actionsSetHandle,
+					actionSetHandle,
 					handle2,
 					originsOut);
 
@@ -227,6 +232,9 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 			absolutePath = absolutePath.replace("\\light\\", "\\dark\\");
 			absolutePath = absolutePath.replace("\\knockout\\", "\\dark\\");
 		}
+
+		// color_button is the full-color buttons (xbox 360), color_outlined_button is dark with a colorful outline (xbox one)
+		absolutePath = absolutePath.replace("color_button", "color_outlined_button");
 
 		AssetDescriptor<Texture> descriptor = new AssetDescriptor<>(absolutePath, Texture.class);
 		existingGlyphs.computeIfAbsent(descriptor, this::getTextureFromDescriptor);

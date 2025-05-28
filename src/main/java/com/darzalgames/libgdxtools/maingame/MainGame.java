@@ -1,11 +1,9 @@
 package com.darzalgames.libgdxtools.maingame;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -44,7 +42,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected UserInterfaceFactory userInterfaceFactory;
 
 	// Objects created at initialization, but not widely shared
-	private final Supplier<SpriteBatch> spriteBatchSupplier;
 	protected MultipleStage multipleStage;
 	protected InputSetup inputSetup;
 	protected WindowResizer windowResizer;
@@ -87,10 +84,9 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 
 
-	protected MainGame(WindowResizer windowResizer, GamePlatform gamePlatform, Supplier<SpriteBatch> spriteBatchSupplier) {
+	protected MainGame(WindowResizer windowResizer, GamePlatform gamePlatform) {
 		this.windowResizer = windowResizer;
 		this.gamePlatform = gamePlatform;
-		this.spriteBatchSupplier = spriteBatchSupplier;
 		GameInfo.setMainGame(this);
 	}
 
@@ -222,13 +218,13 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private UniversalInputStage makePopUpStage() {
 		// The options menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
-		UniversalInputStage popUpStage = new UniversalInputStage(new ScreenViewport(), inputStrategySwitcher, spriteBatchSupplier.get());
+		UniversalInputStage popUpStage = new UniversalInputStage(new ScreenViewport(), inputStrategySwitcher);
 		popUpStage.getRoot().setName("PopUp Stage");
 		return popUpStage;
 	}
 
 	private OptionalDrawStage makeInputHandlerStage() {
-		OptionalDrawStage inputHandlerStage = new OptionalDrawStage(new ScreenViewport(), spriteBatchSupplier.get());
+		OptionalDrawStage inputHandlerStage = new OptionalDrawStage(new ScreenViewport());
 		MouseInputHandler mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
 		inputHandlerStage.addActor(mouseInputHandler);
 		inputHandlerStage.addActor(inputStrategySwitcher);
@@ -246,14 +242,13 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		UniversalInputStage stage = new UniversalInputStageWithBackground(
 				new ScreenViewport(),
 				makeAddBackgroundToStageRunnable(),
-				inputStrategySwitcher,
-				spriteBatchSupplier.get());
+				inputStrategySwitcher);
 		stage.getRoot().setName("Main Stage");
 		return stage;
 	}
 
 	private OptionalDrawStage makeCursorStage() {
-		OptionalDrawStage cursorStage = new OptionalDrawStage(new ScreenViewport(), spriteBatchSupplier.get());
+		OptionalDrawStage cursorStage = new OptionalDrawStage(new ScreenViewport());
 		cursorStage.addActor(getCustomCursor());
 		return cursorStage;
 	}

@@ -1,7 +1,5 @@
 package com.darzalgames.libgdxtools.platform;
 
-import javax.swing.filechooser.FileSystemView;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -14,7 +12,7 @@ public class WindowsGamePlatform extends GenericDesktopGamePlatform {
 
 	@Override
 	public FileHandle getSaveFileLocation(String fullGameAndSaveName) {
-		return Gdx.files.absolute(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/My Games/" + fullGameAndSaveName);
+		return Gdx.files.absolute(System.getenv("APPDATA") + "/" + fullGameAndSaveName);
 	}
 
 	@Override

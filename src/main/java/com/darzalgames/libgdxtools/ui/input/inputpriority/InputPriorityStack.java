@@ -200,7 +200,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		}
 
 		private boolean isThisOnTop(InputConsumer inputConsumer) {
-			return inputConsumer.equals(getTop());
+			return inputConsumer.equals(getTop()) || getTop().equals(inputConsumer);
 		}
 
 		private InputConsumer getTop() {

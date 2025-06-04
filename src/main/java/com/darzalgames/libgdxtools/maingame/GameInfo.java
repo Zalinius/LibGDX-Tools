@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.maingame;
 
+import com.darzalgames.libgdxtools.platform.GameEdition;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
@@ -61,5 +62,9 @@ public class GameInfo {
 
 	public static UserInterfaceFactory getUserInterfaceFactory() {
 		return game.getUserInterfaceFactory();
+	}
+
+	public static GameEdition getGameEdition() {
+		return game.getGameEdition();
 	}
 }

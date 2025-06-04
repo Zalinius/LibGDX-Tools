@@ -17,6 +17,7 @@ import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 import com.darzalgames.darzalcommon.hexagon.gridfactory.HexagonGridRectangular;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.SharesGameInformation;
+import com.darzalgames.libgdxtools.platform.GameEdition;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
@@ -38,6 +39,7 @@ class NavigableHexagonControllerMapTest {
 			@Override public String getGameName() {return null;}
 			@Override public String getGameVersion() {return null;}
 			@Override public UserInterfaceFactory getUserInterfaceFactory() {return null;}
+			@Override public GameEdition getGameEdition() { return null; }
 		});
 
 		HexagonMap<String> hexagonMap = new HexagonMap<>();

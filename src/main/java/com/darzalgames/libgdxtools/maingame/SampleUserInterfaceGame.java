@@ -366,4 +366,9 @@ public class SampleUserInterfaceGame extends MainGame {
 		return "game version";
 	}
 
+	@Override
+	public GameEdition getGameEdition() {
+		return GameEdition.FULL;
+	}
+
 }

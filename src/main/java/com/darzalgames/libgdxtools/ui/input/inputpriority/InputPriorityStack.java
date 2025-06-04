@@ -7,7 +7,6 @@ import java.util.List;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.darzalgames.darzalcommon.data.Tuple;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -42,21 +41,21 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		if (thisIsDifferentFromTheTop) {
 			boolean isAPopup = inputConsumer.isPopUp();
 			if (isAPopup) {
-				claimPriorityForPopup(inputConsumer.getPopUp());
+				claimPriorityForPopup(inputConsumer);
 			} else {
 				claimPriorityOnStack(() -> stack.push(inputConsumer));
 			}
 		}
 	}
 
-	private void claimPriorityForPopup(Tuple<Actor, PopUp> actorPopup) {
+	private void claimPriorityForPopup(InputConsumer inputConsumer) {
 		darkScreen.remove();
-		Actor actor = actorPopup.e;
-		PopUp popup = actorPopup.f;
+		PopUp popup = inputConsumer.getPopUp();
+		Actor actor = popup.getAsActor();
 		popUpStage.addActor(actor);
 		actor.toFront();
 		darkScreen.fadeIn(actor, popup.canDismiss());
-		claimPriorityOnStack(() -> stack.push(new Tuple<>(actor, popup)));
+		claimPriorityOnStack(() -> stack.pushPopup(inputConsumer));
 		popup.addBackClickListenerIfCanDismiss();
 	}
 
@@ -133,9 +132,9 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 
 	private boolean showDarkScreenIfLandingOnPopup() {
 		if (stack.isLandingOnPopup()) {
-			Tuple<Actor, PopUp> actorPopUp = stack.getCurrentPopup();
-			Actor actor = actorPopUp.e;
-			PopUp popUp = actorPopUp.f;
+			InputConsumer actorPopUp = stack.getCurrentPopup();
+			PopUp popUp = actorPopUp.getPopUp();
+			Actor actor = popUp.getAsActor();
 			darkScreen.fadeIn(actor, popUp.canDismiss());
 		}
 		return false;
@@ -183,7 +182,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 
 	private class LimitedAccessDoubleStack {
 		private final ArrayDeque<InputConsumer> inputConsumerStack;
-		private final ArrayDeque<Tuple<Actor, PopUp>> popupInputConsumerStack;
+		private final ArrayDeque<InputConsumer> popupInputConsumerStack;
 
 		public LimitedAccessDoubleStack() {
 			inputConsumerStack = new ArrayDeque<>();
@@ -195,18 +194,18 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			inputConsumerStack.push(inputConsumer);
 		}
 
-		private void push(Tuple<Actor, PopUp> actorPopup) {
+		private void pushPopup(InputConsumer inputConsumer) {
 			notifyInputPriorityObservers();
-			popupInputConsumerStack.push(actorPopup);
+			popupInputConsumerStack.push(inputConsumer);
 		}
 
 		private boolean isThisOnTop(InputConsumer inputConsumer) {
-			return inputConsumer.equals(getTop());
+			return inputConsumer.equals(getTop()) || getTop().equals(inputConsumer);
 		}
 
 		private InputConsumer getTop() {
 			if (!popupInputConsumerStack.isEmpty()) {
-				return popupInputConsumerStack.peek().f;
+				return popupInputConsumerStack.peek();
 			}
 			return inputConsumerStack.peek();
 		}
@@ -224,8 +223,8 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			return !popupInputConsumerStack.isEmpty();
 		}
 
-		private Tuple<Actor, PopUp> getCurrentPopup() {
-			return popupInputConsumerStack.peek();
+		private InputConsumer getCurrentPopup() {
+			return popupInputConsumerStack.peek().getPopUp();
 		}
 
 		private void clear() {
@@ -235,7 +234,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 
 		private void resizeUI() {
 			inputConsumerStack.forEach(InputConsumer::resizeUI);
-			popupInputConsumerStack.forEach(actorPopup -> actorPopup.f.resizeUI());
+			popupInputConsumerStack.forEach(actorPopup -> actorPopup.getPopUp().resizeUI());
 		}
 	}
 

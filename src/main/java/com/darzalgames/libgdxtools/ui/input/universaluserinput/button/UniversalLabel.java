@@ -19,7 +19,8 @@ public class UniversalLabel extends Label {
 	public void draw(Batch batch, float parentAlpha) {
 		this.setText(textSupplier.get());
 		setStyle(getStyle());
-		if (!getWrap()) {
+		if (!getWrap() && getStyle().background != null) {
+			//TODO Makes backgrounds scale with text properly, but doesn't preserve Align.center...? Shucks
 			setSize(getPrefWidth(), getPrefHeight());
 		}
 		super.draw(batch, parentAlpha);

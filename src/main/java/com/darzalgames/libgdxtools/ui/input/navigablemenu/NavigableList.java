@@ -20,7 +20,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalB
  * and any interactions with it.
  */
 public class NavigableList implements InputConsumer {
-	private final Input backCode;	
+	private final Input backCode;
 	private final Input forwardCode;
 	protected final LinkedList<UniversalButton> allEntries;
 	protected List<UniversalButton> interactableEntries;
@@ -28,7 +28,7 @@ public class NavigableList implements InputConsumer {
 	private UniversalButton currentButton = null;
 	private int currentEntryIndex;
 	protected Table table;
-	private boolean isVertical;
+	private final boolean isVertical;
 	private boolean pressButtonOnEntryChanged;
 	private Alignment entryAlignment;
 	private Alignment tableAlignment;
@@ -39,21 +39,21 @@ public class NavigableList implements InputConsumer {
 	private final List<Consumer<Input>> extraKeyListeners;
 
 	NavigableList(boolean isVertical, final List<UniversalButton> entries) {
-		this.backCode = (isVertical ? Input.UP : Input.LEFT);
-		this.forwardCode = (isVertical ? Input.DOWN : Input.RIGHT);
-		this.allEntries = new LinkedList<>(entries);
+		backCode = (isVertical ? Input.UP : Input.LEFT);
+		forwardCode = (isVertical ? Input.DOWN : Input.RIGHT);
+		allEntries = new LinkedList<>(entries);
 		filterInteractableEntities();
-		this.isVertical = isVertical; 
-		this.pressButtonOnEntryChanged = false; 
-		this.entryAlignment = Alignment.CENTER;
-		this.tableAlignment = Alignment.TOP_LEFT;
+		this.isVertical = isVertical;
+		pressButtonOnEntryChanged = false;
+		entryAlignment = Alignment.CENTER;
+		tableAlignment = Alignment.TOP_LEFT;
 
 		extraKeyListeners = new ArrayList<>();
 
 		setRefreshPageRunnable(this::defaultRefreshPage);
 	}
 
-	public void replaceContents(final List<UniversalButton> newEntries) { 
+	public void replaceContents(final List<UniversalButton> newEntries) {
 		replaceContents(newEntries, null);
 	}
 
@@ -80,7 +80,7 @@ public class NavigableList implements InputConsumer {
 	protected void setFinalButton(UniversalButton finalButton) {
 		this.finalButton = finalButton;
 		if (finalButton != null && !finalButton.isBlank()) {
-			this.allEntries.add(finalButton);
+			allEntries.add(finalButton);
 			filterInteractableEntities();
 		}
 	}
@@ -169,7 +169,7 @@ public class NavigableList implements InputConsumer {
 			}
 			findCurrentButton();
 			if (currentButton != null) {
-				currentButton.setFocused(true);				
+				currentButton.setFocused(true);
 			}
 		}
 	}
@@ -276,6 +276,7 @@ public class NavigableList implements InputConsumer {
 	public void setAlignment(Alignment entryAlignment, Alignment tableAlignment) {
 		this.entryAlignment = entryAlignment;
 		this.tableAlignment = tableAlignment;
+		refreshPageRunnable.run();
 	}
 
 	public void addExtraListener(Consumer<Input> listener) {
@@ -287,7 +288,7 @@ public class NavigableList implements InputConsumer {
 		interactableEntries.stream().forEach(e->e.setFocused(false));
 		findCurrentButton();
 		if (currentButton != null) {
-			currentButton.setFocused(true);			
+			currentButton.setFocused(true);
 		}
 	}
 

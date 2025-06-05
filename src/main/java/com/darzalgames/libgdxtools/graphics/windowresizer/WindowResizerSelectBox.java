@@ -107,7 +107,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 
 			InstantRepeatAction repeatAction = new InstantRepeatAction();
 			repeatAction.setTotalCount(11);
-			DelayAction delayThenCountDownAction = new DelayRunnableAction(1, () -> revertCountdown.setTextSupplier(() -> makeCountdownString.apply(repeatAction.getRemainingCount() -1)));
+			DelayAction delayThenCountDownAction = new DelayRunnableAction(1, () -> revertCountdown.setTextSupplier(() -> makeCountdownString.apply(Math.max(0, repeatAction.getRemainingCount() -1))));
 			repeatAction.setAction(delayThenCountDownAction);
 
 			SequenceAction sequenceAction = new SequenceAction(repeatAction, new RunnableActionBest(getSecondChoiceRunnable()));

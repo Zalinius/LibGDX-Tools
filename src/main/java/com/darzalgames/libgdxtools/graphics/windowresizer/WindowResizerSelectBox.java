@@ -14,6 +14,7 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.scenes.scene2d.actions.DelayRunnableAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
@@ -106,9 +107,8 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 
 			InstantRepeatAction repeatAction = new InstantRepeatAction();
 			repeatAction.setTotalCount(11);
-			DelayAction delayAction = new DelayAction(1);
-			delayAction.setAction(new RunnableActionBest(() -> revertCountdown.setTextSupplier(() -> makeCountdownString.apply(repeatAction.getRemainingCount() -1))));
-			repeatAction.setAction(delayAction);
+			DelayAction delayThenCountDownAction = new DelayRunnableAction(1, () -> revertCountdown.setTextSupplier(() -> makeCountdownString.apply(Math.max(0, repeatAction.getRemainingCount() -1))));
+			repeatAction.setAction(delayThenCountDownAction);
 
 			SequenceAction sequenceAction = new SequenceAction(repeatAction, new RunnableActionBest(getSecondChoiceRunnable()));
 

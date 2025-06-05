@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Pool;
  */
 public class InstantSequenceAction extends ParallelActionBest {
 
+	private boolean hasStarted = false;
 	private int index;
 
 	public InstantSequenceAction (Action... allActions) {
@@ -21,19 +22,34 @@ public class InstantSequenceAction extends ParallelActionBest {
 	public InstantSequenceAction (List<Action> allActions) {
 		actions = allActions;
 	}
-	
+
+	protected void begin() {
+		// Override for any start behavior you want
+	}
+
 	@Override
 	public boolean act(float delta) {
-		if (index >= actions.size()) return true;
+		if (!hasStarted) {
+			hasStarted = true;
+			begin();
+		}
+		if (index >= actions.size()) {
+			return true;
+		}
 		@SuppressWarnings("rawtypes")
 		Pool pool = getPool();
 		setPool(null); // Ensure this action can't be returned to the pool while executing.
 		try {
 			if (actions.get(index).act(delta)) {
-				if (actor == null) return true; // This action was removed.
+				if (actor == null)
+				{
+					return true; // This action was removed.
+				}
 				index++;
-				if (index >= actions.size()) return true;
-				
+				if (index >= actions.size()) {
+					return true;
+				}
+
 				boolean done = act(delta); // THIS is the change.
 				if (done) {
 					return true;
@@ -49,6 +65,7 @@ public class InstantSequenceAction extends ParallelActionBest {
 	@Override
 	public void restart () {
 		super.restart();
+		hasStarted = false;
 		index = 0;
 	}
 }

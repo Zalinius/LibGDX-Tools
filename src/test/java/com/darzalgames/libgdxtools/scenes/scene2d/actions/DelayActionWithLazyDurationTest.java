@@ -2,26 +2,27 @@ package com.darzalgames.libgdxtools.scenes.scene2d.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.junit.jupiter.api.Test;
 
-class DelayActionWithLastMinuteDurationChoiceTest {
+class DelayActionWithLazyDurationTest {
 
 	@Test
 	void act_onADelayAction_hasTheSuppliedDuration() {
-		DelayActionWithLastMinuteDurationChoice delayAction = new DelayActionWithLastMinuteDurationChoice(() -> 4f);
+		DelayActionWithLazyDuration delayAction = new DelayActionWithLazyDuration(() -> 4f);
 
 		delayAction.act(0);
 
 		assertEquals(4, delayAction.getDuration());
 	}
 
-
-	private float delay = 5f;
 	@Test
 	void act_onADelayActionWithChangedSupplier_setsTheDurationToTheChangedValue() {
-		DelayActionWithLastMinuteDurationChoice delayAction = new DelayActionWithLastMinuteDurationChoice(() -> delay);
+		AtomicReference<Float> atomicFloat = new AtomicReference<>(5f);
+		DelayActionWithLazyDuration delayAction = new DelayActionWithLazyDuration(() -> atomicFloat.get());
 
-		delay = 3f;
+		atomicFloat.set(3f);
 		delayAction.act(0);
 
 		assertEquals(3, delayAction.getDuration());
@@ -29,11 +30,12 @@ class DelayActionWithLastMinuteDurationChoiceTest {
 
 	@Test
 	void restartAndAct_onADelayActionWithChangedSupplier_setsTheDurationToTheChangedValue() {
-		DelayActionWithLastMinuteDurationChoice delayAction = new DelayActionWithLastMinuteDurationChoice(() -> delay);
+		AtomicReference<Float> atomicFloat = new AtomicReference<>(5f);
+		DelayActionWithLazyDuration delayAction = new DelayActionWithLazyDuration(() -> atomicFloat.get());
 
 		delayAction.act(0);
 		delayAction.restart();
-		delay = 6f;
+		atomicFloat.set(6f);
 		delayAction.act(0);
 
 		assertEquals(6, delayAction.getDuration());

@@ -4,12 +4,12 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 
-public class DelayActionWithLastMinuteDurationChoice extends DelayAction {
+public class DelayActionWithLazyDuration extends DelayAction {
 
 	private boolean hasStarted = false;
 	private final Supplier<Float> durationSupplier;
 
-	public DelayActionWithLastMinuteDurationChoice(Supplier<Float> durationSupplier) {
+	public DelayActionWithLazyDuration(Supplier<Float> durationSupplier) {
 		this.durationSupplier = durationSupplier;
 	}
 

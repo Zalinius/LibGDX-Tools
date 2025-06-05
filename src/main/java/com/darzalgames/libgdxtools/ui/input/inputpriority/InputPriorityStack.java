@@ -74,6 +74,8 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			releasePriorityForTop();
 			darkScreen.fadeOutAndRemove();
 			showDarkScreenIfLandingOnPopup();
+		} else {
+			stack.remove(inputConsumer);
 		}
 	}
 
@@ -187,6 +189,11 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		public LimitedAccessDoubleStack() {
 			inputConsumerStack = new ArrayDeque<>();
 			popupInputConsumerStack = new ArrayDeque<>();
+		}
+
+		public void remove(InputConsumer inputConsumer) {
+			inputConsumerStack.remove(inputConsumer);
+			popupInputConsumerStack.remove(inputConsumer);
 		}
 
 		private void push(InputConsumer inputConsumer) {

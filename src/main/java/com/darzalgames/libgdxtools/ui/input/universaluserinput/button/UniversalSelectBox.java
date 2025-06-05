@@ -64,7 +64,7 @@ public class UniversalSelectBox extends UniversalButton {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				setSelected(entry);
-				options.goTo(defaultEntry);
+				options.hideThis();
 			}
 		}));
 	}

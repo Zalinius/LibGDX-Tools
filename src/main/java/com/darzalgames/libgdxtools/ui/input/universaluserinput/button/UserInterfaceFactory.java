@@ -8,9 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -22,6 +19,7 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
+import com.darzalgames.libgdxtools.scenes.scene2d.actions.DelayRunnableAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
@@ -278,27 +276,20 @@ public class UserInterfaceFactory {
 	}
 
 	private Action getChangeButtonStyleAfterDelayAction(BasicButton button, ButtonStyle buttonStyle) {
-		RunnableAction change = Actions.run(() -> {
-			if (shouldButtonFlash(button)) {
-				button.setStyle(buttonStyle);
-			}
-		});
-		DelayAction changeAfterDelay = Actions.delay(computeDelay());
-		changeAfterDelay.setAction(change);
-
-		return changeAfterDelay;
+		return new DelayRunnableAction(computeDelay(),
+				() -> {
+					if (shouldButtonFlash(button)) {
+						button.setStyle(buttonStyle);
+					}
+				});
 	}
 
 	private Action getChangeSliderStyleAfterDelayAction(UniversalSlider keyboardSlider, SliderStyle sliderStyle) {
-		RunnableAction change = Actions.run(() -> {
+		return new DelayRunnableAction(computeDelay(), () -> {
 			if (shouldButtonFlash(keyboardSlider.getButton())) {
 				keyboardSlider.setSliderStyle(sliderStyle);
 			}
 		});
-		DelayAction changeAfterDelay = Actions.delay(computeDelay());
-		changeAfterDelay.setAction(change);
-
-		return changeAfterDelay;
 	}
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {

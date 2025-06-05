@@ -1,9 +1,11 @@
 package com.darzalgames.libgdxtools.scenes.scene2d.actions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 class InstantSequenceActionTest {
 
 	@Test
-	void act_onASequenceActionOfTwoInstantActions_finishesinASingleAct() throws Exception {
+	void act_onASequenceActionOfTwoInstantActions_finishesinASingleAct() {
 		Actor actor = new Actor(); // Apparently sequence actions need an actor yet others don't?
 		AtomicBoolean spy = new AtomicBoolean(false);
 		InstantSequenceAction sequenceAction = new InstantSequenceAction(new NullAction(), new RunnableActionBest(() -> spy.set(true)));
@@ -23,8 +25,9 @@ class InstantSequenceActionTest {
 		assertTrue(spy.get());
 		assertTrue(actionDoneAfter1);
 	}
+
 	@Test
-	void act_onASequenceActionOfSixInstantActions_finishesinASingleAct() throws Exception {
+	void act_onASequenceActionOfSixInstantActions_finishesinASingleAct() {
 		Actor actor = new Actor(); // Apparently sequence actions need an actor yet others don't?
 		AtomicBoolean spy1 = new AtomicBoolean(false);
 		AtomicBoolean spy2 = new AtomicBoolean(false);
@@ -55,7 +58,7 @@ class InstantSequenceActionTest {
 	}
 
 	@Test
-	void act_onASequenceActionOfTwo_isCorrect() throws Exception {
+	void act_onASequenceActionOfTwo_isCorrect() {
 		Actor actor = new Actor(); // Apparently sequence actions need an actor yet others don't?
 		InstantSequenceAction sequenceAction = new InstantSequenceAction(InstantRepeatActionTest.getTwoFrameAction(), InstantRepeatActionTest.getTwoFrameAction());
 
@@ -67,5 +70,70 @@ class InstantSequenceActionTest {
 		assertFalse(actionDoneAfter1);
 		assertFalse(actionDoneAfter2);
 		assertTrue(actionDoneAfter3);
+	}
+
+	@Test
+	void constructor_doesNotCallBegin() {
+		AtomicBoolean spy = new AtomicBoolean(false);
+		new InstantSequenceAction() {
+			@Override
+			protected void begin() {
+				spy.set(true);
+			}
+		};
+
+		assertFalse(spy.get());
+	}
+
+	@Test
+	void act_onASequenceAction_callsBegin() {
+		AtomicBoolean spy = new AtomicBoolean(false);
+		InstantSequenceAction sequenceAction = new InstantSequenceAction() {
+			@Override
+			protected void begin() {
+				spy.set(true);
+			}
+		};
+
+		sequenceAction.act(0);
+
+		assertTrue(spy.get());
+	}
+
+	@Test
+	void act_twiceOnASequenceAction_callsBeginExactlyOnce() {
+		AtomicInteger spy = new AtomicInteger(0);
+		InstantSequenceAction sequenceAction = new InstantSequenceAction() {
+			@Override
+			protected void begin() {
+				spy.set(spy.get() + 1);
+			}
+		};
+		Actor actor = new Actor(); // Apparently sequence actions need an actor yet others don't?
+
+		actor.addAction(sequenceAction);
+		sequenceAction.act(0.1f);
+		sequenceAction.act(0.1f);
+
+		assertEquals(1, spy.get());
+	}
+
+	@Test
+	void restartAndAct_onASequenceAction_callsBeginExactlyTwice() {
+		AtomicInteger spy = new AtomicInteger(0);
+		InstantSequenceAction sequenceAction = new InstantSequenceAction() {
+			@Override
+			protected void begin() {
+				spy.set(spy.get() + 1);
+			}
+		};
+		Actor actor = new Actor(); // Apparently sequence actions need an actor yet others don't?
+
+		actor.addAction(sequenceAction);
+		sequenceAction.act(0);
+		sequenceAction.restart();
+		sequenceAction.act(0);
+
+		assertEquals(2, spy.get());
 	}
 }

@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
-import com.darzalgames.darzalcommon.strings.StringUtils;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
@@ -56,7 +55,7 @@ public abstract class TextSupplier {
 	public static String getFormattedLocaleForSave(Locale locale) {
 		String base = locale.getLanguage();
 		String optionalCountry = locale.getCountry();
-		if (!StringUtils.isBlank(optionalCountry)) {
+		if (!optionalCountry.isBlank()) {
 			base += "_" + optionalCountry;
 		}
 		return base;

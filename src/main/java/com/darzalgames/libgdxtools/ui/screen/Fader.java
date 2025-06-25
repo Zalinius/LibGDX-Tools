@@ -13,15 +13,15 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 
 public class Fader {
 
-	private static Stage popUpStage;
+	private static Stage topmostStage;
 	private static Image darkScreen;
 
 	private static float fadeTime = 0.6f;
 
 	private Fader() {}
 
-	public static void initialize(Stage popUpStage) {
-		Fader.popUpStage = popUpStage;
+	public static void initialize(Stage topmostStage) {
+		Fader.topmostStage = topmostStage;
 		darkScreen = new Image(ColorTools.getColoredTexture(Color.BLACK, 2));
 		darkScreen.setTouchable(Touchable.disabled);
 		hideDarkScreen();
@@ -36,7 +36,7 @@ public class Fader {
 	}
 
 	public static void doLongFadeIn(Runnable doAfter) {
-		popUpStage.addActor(darkScreen);
+		topmostStage.addActor(darkScreen);
 		darkScreen.clearActions();
 		darkScreen.setColor(Color.WHITE);
 		darkScreen.addAction(new InstantSequenceAction(
@@ -52,7 +52,7 @@ public class Fader {
 	}
 
 	public static void doLongFadeOut(Runnable doAfter) {
-		popUpStage.addActor(darkScreen);
+		topmostStage.addActor(darkScreen);
 		hideDarkScreen();
 		darkScreen.clearActions();
 		darkScreen.addAction(new InstantSequenceAction(

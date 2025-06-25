@@ -42,7 +42,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected UserInterfaceFactory userInterfaceFactory;
 
 	// Objects created at initialization, but not widely shared
-	protected MultipleStage multipleStage;
+	protected MultiStage multipleStage;
 	protected InputSetup inputSetup;
 	protected WindowResizer windowResizer;
 	protected InputStrategySwitcher inputStrategySwitcher;
@@ -120,8 +120,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			currentScreen.hide();
 			currentScreen.remove();
 		}
-		multipleStage.getStage().clear();
-		multipleStage.getPopUpStage().clear();
+		multipleStage.clear();
 		currentScreen = gameScreen;
 		multipleStage.getStage().addActor(currentScreen);
 		currentScreen.show();
@@ -133,7 +132,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 		if (!isQuitting) {
 			resizeUI();
-			multipleStage.update(this::renderInternal);
+			multipleStage.update();
 		}
 
 		steamStrategy.update();
@@ -206,25 +205,23 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		preferenceManager = new PreferenceManager(getPreferenceManagerName());
 	}
 
+	abstract MultiStage makeMultiStage(UniversalInputStage mainStage, UniversalInputStage pauseStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage);
 	private void makeAllStages() {
 		UniversalInputStage mainStage = makeMainStage();
-		UniversalInputStage popUpStage = makePopUpStage();
+		UniversalInputStage pauseStage = makePauseStage();
 		OptionalDrawStage cursorStage = makeCursorStage();
 		OptionalDrawStage inputHandlerStage = makeInputHandlerStage();
 		UserInterfaceSizer.setStage(mainStage);
-		multipleStage = new MultipleStage(mainStage, popUpStage, cursorStage, inputHandlerStage);
-		Fader.initialize(popUpStage);
+		multipleStage = makeMultiStage(mainStage, pauseStage, inputHandlerStage, cursorStage);
+		Fader.initialize(cursorStage);
 	}
 
-	private UniversalInputStage makePopUpStage() {
-		// The options menu and other popups have their own stage so it can still receive mouse enter/exit events when the main stage is paused
-		UniversalInputStage popUpStage = new UniversalInputStage(new ScreenViewport(), inputStrategySwitcher);
-		popUpStage.getRoot().setName("PopUp Stage");
-		return popUpStage;
+	private UniversalInputStage makePauseStage() {
+		return new UniversalInputStage("Pause Stage", new ScreenViewport(), inputStrategySwitcher);
 	}
 
 	private OptionalDrawStage makeInputHandlerStage() {
-		OptionalDrawStage inputHandlerStage = new OptionalDrawStage(new ScreenViewport());
+		OptionalDrawStage inputHandlerStage = new OptionalDrawStage("Input Handler Stage", new ScreenViewport());
 		MouseInputHandler mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
 		inputHandlerStage.addActor(mouseInputHandler);
 		inputHandlerStage.addActor(inputStrategySwitcher);
@@ -238,30 +235,30 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	private UniversalInputStage makeMainStage() {
-		// Set up main game stage
-		UniversalInputStage stage = new UniversalInputStageWithBackground(
+		return new UniversalInputStageWithBackground(
+				"Main Stage",
 				new ScreenViewport(),
 				makeAddBackgroundToStageRunnable(),
 				inputStrategySwitcher);
-		stage.getRoot().setName("Main Stage");
-		return stage;
 	}
 
 	private OptionalDrawStage makeCursorStage() {
-		OptionalDrawStage cursorStage = new OptionalDrawStage(new ScreenViewport());
+		OptionalDrawStage cursorStage = new OptionalDrawStage("Cursor Stage", new ScreenViewport());
 		cursorStage.addActor(getCustomCursor());
 		return cursorStage;
 	}
 
 	private void setUpInput() {
 		// Set up input processing for all strategies
-		inputSetup = new InputSetup(inputStrategySwitcher, makeOptionsMenu(), windowResizer::toggleWindow, multipleStage.getPopUpStage());
+		inputSetup = new InputSetup(inputStrategySwitcher, makeOptionsMenu(), windowResizer::toggleWindow, getPopUpStage(), multipleStage.getPauseStage());
 		multipleStage.setPause(inputSetup.getPause());
 		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
 
 		makeSteamStrategy();
 		makeKeyboardAndGamepadInputHandlers();
 	}
+
+	protected abstract Stage getPopUpStage();
 
 	private void makeSteamStrategy() {
 		steamStrategy = gamePlatform.getSteamStrategy(inputStrategySwitcher, inputSetup.getInputReceiver());

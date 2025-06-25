@@ -13,8 +13,8 @@ public class UniversalInputStageWithBackground extends UniversalInputStage {
 	/**
 	 * Creates a stage that will ensure that the supplied background is always present
 	 */
-	public UniversalInputStageWithBackground(final Viewport viewport, Consumer<Stage> addBackgroundToStage, InputStrategySwitcher inputStrategySwitcher) {
-		super(viewport, inputStrategySwitcher);
+	public UniversalInputStageWithBackground(String name, Viewport viewport, Consumer<Stage> addBackgroundToStage, InputStrategySwitcher inputStrategySwitcher) {
+		super(name, viewport, inputStrategySwitcher);
 
 		this.addBackgroundToStage = addBackgroundToStage;
 	}

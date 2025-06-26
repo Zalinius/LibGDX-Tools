@@ -57,6 +57,7 @@ public abstract class MultiStage {
 
 	public void setShouldRender(boolean shouldRender) {
 		getAllStagesInOrder().forEach(stage -> stage.setShouldDraw(shouldRender));
+		cursorStage.setShouldDraw(shouldRender);
 	}
 
 	public void addActorThatDoesNotPause(DoesNotPause actor) {
@@ -78,6 +79,10 @@ public abstract class MultiStage {
 		inputHandlerStage.addActor(scrollingManager);
 		actorsThatDoNotPause.add(scrollingManager);
 
+		setMainStageKeyboardFocus(keyboardInputHandler);
+	}
+
+	public void setMainStageKeyboardFocus(KeyboardInputHandler keyboardInputHandler) {
 		mainStage.setKeyboardFocus(keyboardInputHandler);
 	}
 

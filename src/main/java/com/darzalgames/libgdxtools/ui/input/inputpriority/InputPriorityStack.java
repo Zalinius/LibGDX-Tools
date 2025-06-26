@@ -245,7 +245,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 
 
 		private InputConsumer getTop() {
-			return getTopStack().peekLast();
+			return getTopStack().peek();
 		}
 
 

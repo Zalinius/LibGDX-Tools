@@ -1,6 +1,8 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import java.util.List;
+
+import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class InputSetup {
@@ -11,15 +13,15 @@ public class InputSetup {
 	private final ScrollingManager scrollingManager;
 
 
-	public InputSetup(InputStrategySwitcher inputStrategySwitcher, OptionsMenu optionsMenu, Runnable toggleFullscreenRunnable, Stage popUpStage, Stage pauseStage) {
-		inputPriorityStack = new InputPriorityStack(popUpStage, optionsMenu);
+	public InputSetup(InputStrategySwitcher inputStrategySwitcher, OptionsMenu optionsMenu, Runnable toggleFullscreenRunnable, List<StageLikeRenderable> list) {
+		inputPriorityStack = new InputPriorityStack(list, optionsMenu);
 		inputStrategySwitcher.register(inputPriorityStack);
 
 		inputReceiver = new InputReceiver(inputStrategySwitcher, inputPriorityStack, toggleFullscreenRunnable);
 
 		scrollingManager = new ScrollingManager(inputReceiver);
 
-		pause = new Pause(pauseStage, optionsMenu, inputPriorityStack::doesTopPauseGame);
+		pause = new Pause(list.getLast(), optionsMenu, inputPriorityStack::doesTopPauseGame);
 		inputReceiver.setPause(pause);
 	}
 

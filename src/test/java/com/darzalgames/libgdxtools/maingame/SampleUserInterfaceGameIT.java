@@ -88,8 +88,8 @@ class SampleUserInterfaceGameIT {
 	void hoveringTheQuitButtonWithTheMouse_putsItInFocus() {
 		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
-					app.multipleStage.getStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.multipleStage.getStage().act(1/60f);
+					app.multipleStage.getMainStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.getMainStage().act(1/60f);
 
 					assertTrue(app.quitButton.getButton().isOver());
 
@@ -116,8 +116,8 @@ class SampleUserInterfaceGameIT {
 					app.multipleStage.getPopUpStage().act(3); // Give time for the popup to slide in
 
 					// Check that the menu is NOT back in focus by hovering over the quit button
-					app.multipleStage.getStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.multipleStage.getStage().act(1/60f);
+					app.multipleStage.getMainStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.getMainStage().act(1/60f);
 					assertFalse(app.quitButton.getButton().isOver());
 
 					Gdx.app.exit();
@@ -132,8 +132,8 @@ class SampleUserInterfaceGameIT {
 					clickMouse(OFFCENTER_X, SCREEN_MIDDLE_Y); // Clicks on the dark screen to dismiss the popup
 
 					// Check that the menu is back in focus by hovering over the quit button
-					app.multipleStage.getStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.multipleStage.getStage().act(1/60f);
+					app.multipleStage.getMainStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.getMainStage().act(1/60f);
 					assertTrue(app.quitButton.getButton().isOver());
 
 					Gdx.app.exit();
@@ -149,8 +149,8 @@ class SampleUserInterfaceGameIT {
 					rightClickMouse(SELECT_BOX_POPUP_BUTTON_X, SELECT_BOX_POPUP_BUTTON_Y); // Right click on the popup to dismiss it
 
 					// Check that the menu is back in focus by hovering over the quit button
-					app.multipleStage.getStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
-					app.multipleStage.getStage().act(1/60f);
+					app.multipleStage.getMainStage().mouseMoved(SCREEN_MIDDLE_X, QUIT_BUTTON_Y);
+					app.multipleStage.getMainStage().act(1/60f);
 					assertTrue(app.quitButton.getButton().isOver());
 
 					Gdx.app.exit();

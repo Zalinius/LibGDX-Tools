@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.screen;
 
 import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.libgdxtools.maingame.MultiStage;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriorityStack;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
@@ -21,7 +22,7 @@ public class MainMenuScreen extends GameScreen {
 
 	@Override
 	public void gainFocus() {
-		InputPriority.claimPriority(mainMenu);
+		InputPriority.claimPriority(mainMenu, MultiStage.MAIN_STAGE_NAME);
 	}
 
 	@Override public String toString() { return "Main menu SCREEN, but not the buttons themselves"; }

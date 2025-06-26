@@ -3,19 +3,20 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.darzalgames.libgdxtools.maingame.MultiStage;
+import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 
 public class Pause extends Actor {
 
-	private OptionsMenu optionsMenu;
-	private Stage popUpStage;
+	private final OptionsMenu optionsMenu;
+	private final StageLikeRenderable popUpStage;
 	private final Supplier<Boolean> doesCurrentInputConsumerPauseGame;
 
 	/**
 	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
 	 */
-	public Pause(Stage popUpStage, OptionsMenu optionsMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
-		this.popUpStage = popUpStage;
+	public Pause(StageLikeRenderable stageLikeRenderable, OptionsMenu optionsMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
+		popUpStage = stageLikeRenderable;
 		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
 		GamePauser.setPauseGameRunnable(this::pause);
 
@@ -37,7 +38,7 @@ public class Pause extends Actor {
 	}
 
 	private void pause() {
-		InputPriority.claimPriority(optionsMenu);
+		InputPriority.claimPriority(optionsMenu, MultiStage.OPTIONS_STAGE_NAME);
 	}
 
 	@Override

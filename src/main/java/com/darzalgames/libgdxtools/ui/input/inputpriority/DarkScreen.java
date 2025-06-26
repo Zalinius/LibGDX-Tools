@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
+import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 
@@ -15,12 +16,8 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
  */
 class DarkScreen extends Image {
 
-	private final Stage popupStage;
-
-	public DarkScreen(Stage popupStage, Runnable onClick) {
+	public DarkScreen(Runnable onClick) {
 		super(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), 1, 1));
-
-		this.popupStage = popupStage;
 
 		addListener(new InputListener() {
 			@Override
@@ -38,9 +35,9 @@ class DarkScreen extends Image {
 		super.draw(batch, parentAlpha);
 	}
 
-	void fadeIn(Actor actorPopup, boolean isTouchable) {
+	void fadeIn(Actor actorPopup, boolean isTouchable, StageLikeRenderable stage) {
 		clearActions();
-		popupStage.addActor(this);
+		stage.addActor(this);
 		UserInterfaceSizer.scaleToFillScreenAndMakeCentered(this); // Set full screen size immediately so tests can click it in the same frame
 		int actorIndex = actorPopup.getZIndex();
 		setZIndex(actorIndex);

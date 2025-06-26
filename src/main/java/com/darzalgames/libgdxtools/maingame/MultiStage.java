@@ -5,6 +5,7 @@ import java.util.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.ui.input.OptionalDrawStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
@@ -17,35 +18,45 @@ public abstract class MultiStage {
 
 	private static final boolean SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR = false;
 
-	protected abstract List<StageLikeRenderable> getOtherStagesInRenderOrder();
+	public static final String MAIN_STAGE_NAME = "Main Stage";
+	public static final String OPTIONS_STAGE_NAME = "Options Stage";
+	public static final String CURSOR_STAGE_NAME = "Cursor Stage";
+	public static final String INPUT_HANDLER_STAGE_NAME = "Input Handler Stage";
+
+	protected abstract List<StageLikeRenderable> getGameSpecificStagesInRenderOrder();
+	public List<StageLikeRenderable> getAllStagesInOrder() {
+		// We don't include cursor and input handler stages here since no one else should be accessing them
+		List<StageLikeRenderable> allStages = new ArrayList<>(getGameSpecificStagesInRenderOrder());
+		allStages.addFirst(mainStage);
+		allStages.addLast(optionsStage);
+		return allStages;
+	}
 
 	protected Pause pause;
 	private final List<DoesNotPause> actorsThatDoNotPause;
 
 	private final UniversalInputStage mainStage;
-	private final UniversalInputStage pauseStage;
+	private final UniversalInputStage optionsStage;
 
 	private final OptionalDrawStage inputHandlerStage;
 	private final OptionalDrawStage cursorStage;
 
-	protected MultiStage(UniversalInputStage mainStage, UniversalInputStage pauseStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage) {
+	protected MultiStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage) {
 		this.mainStage = mainStage;
-		this.pauseStage = pauseStage;
+		this.optionsStage = optionsStage;
 		this.inputHandlerStage = inputHandlerStage;
 
 		actorsThatDoNotPause = new ArrayList<>();
 		this.cursorStage = cursorStage;
+	}
 
+	protected void finishSetup() {
 		setShouldRender(true);
 		setUpInputMultiplexerForAllStages();
 	}
 
 	public void setShouldRender(boolean shouldRender) {
-		mainStage.setShouldDraw(shouldRender);
-		pauseStage.setShouldDraw(shouldRender);
-		getOtherStagesInRenderOrder().forEach(stage -> stage.setShouldDraw(shouldRender));
-		cursorStage.setShouldDraw(shouldRender);
-		inputHandlerStage.setShouldDraw(shouldRender);
+		getAllStagesInOrder().forEach(stage -> stage.setShouldDraw(shouldRender));
 	}
 
 	public void addActorThatDoesNotPause(DoesNotPause actor) {
@@ -80,13 +91,13 @@ public abstract class MultiStage {
 			mainStage.draw();
 			float delta = Gdx.graphics.getDeltaTime();
 			actorsThatDoNotPause.forEach(actor -> actor.actWhilePaused(delta));
-			getOtherStagesInRenderOrder().forEach(StageLikeRenderable::draw);
+			getGameSpecificStagesInRenderOrder().forEach(StageLikeRenderable::draw);
 		} else {
 			updateAndDrawStage(mainStage);
-			getOtherStagesInRenderOrder().forEach(this::updateAndDrawStage);
+			getGameSpecificStagesInRenderOrder().forEach(this::updateAndDrawStage);
 		}
 
-		updateAndDrawStage(pauseStage);
+		updateAndDrawStage(optionsStage);
 		updateAndDrawStage(cursorStage);
 		updateAndDrawStage(inputHandlerStage);
 	}
@@ -98,25 +109,19 @@ public abstract class MultiStage {
 	}
 
 	void resize(int width, int height) {
-		mainStage.resize(width, height);
-		pauseStage.resize(width, height);
-		getOtherStagesInRenderOrder().forEach(stage -> stage.resize(width, height));
-		inputHandlerStage.resize(width, height);
-		cursorStage.resize(width, height);
+		getAllStagesInOrder().forEach(stage -> stage.resize(width, height));
 	}
 
 	private void doDebugPrinting() {
-		List<StageLikeRenderable> allStages = new ArrayList<>(getOtherStagesInRenderOrder());
-		Collections.reverse(allStages);
-		allStages.addFirst(pauseStage);
+		List<StageLikeRenderable> allStages = new ArrayList<>(getGameSpecificStagesInRenderOrder().reversed());
+		allStages.addFirst(optionsStage);
 		allStages.addLast(mainStage);
 
-		Iterator<StageLikeRenderable> stages = getOtherStagesInRenderOrder().iterator();
+		Iterator<StageLikeRenderable> stages = allStages.iterator();
 		boolean hitSomething = false;
 		while (!hitSomething && stages.hasNext()) {
 			hitSomething = tryToPrintADebugHit(stages.next());
 		}
-
 	}
 
 	private boolean tryToPrintADebugHit(StageLikeRenderable stage) {
@@ -134,26 +139,30 @@ public abstract class MultiStage {
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(inputHandlerStage);
 		inputMultiplexer.addProcessor(cursorStage);
-		inputMultiplexer.addProcessor(pauseStage);
-		List<StageLikeRenderable> gameSpecificStages = new ArrayList<>(getOtherStagesInRenderOrder());
+		inputMultiplexer.addProcessor(optionsStage);
+		List<StageLikeRenderable> gameSpecificStages = new ArrayList<>(getGameSpecificStagesInRenderOrder());
 		Collections.reverse(gameSpecificStages);
 		gameSpecificStages.forEach(inputMultiplexer::addProcessor);
 		inputMultiplexer.addProcessor(mainStage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
-	public UniversalInputStage getStage() {
-		return mainStage;
+	public void addActorToMainStage(Actor actor) {
+		mainStage.addActor(actor);
 	}
 
-	protected UniversalInputStage getPauseStage() {
-		return pauseStage;
+	protected UniversalInputStage getMainStage() {
+		return mainStage;
+	}
+	public UniversalInputStage getPauseStage() {
+		return optionsStage;
 	}
 
 	public void clear() {
 		mainStage.clear();
-		pauseStage.clear();
-		getOtherStagesInRenderOrder().forEach(StageLikeRenderable::clear);
+		optionsStage.clear();
+		getGameSpecificStagesInRenderOrder().forEach(StageLikeRenderable::clear);
+		// We don't clear the cursor stage and input handler stage ever
 	}
 
 }

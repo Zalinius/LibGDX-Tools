@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -12,6 +11,8 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.maingame.MultiStage;
+import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -69,7 +70,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected OptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox, int bottomPadding) {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
-		this.platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
+		platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
 		defaults().padBottom(bottomPadding);
 	}
 
@@ -77,14 +78,14 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	@Override
 	protected void setUpDesiredSize() {
 		UserInterfaceSizer.sizeToPercentage(this, 0.75f, 0.85f);
-		if (this.getActions().isEmpty()) {
+		if (getActions().isEmpty()) {
 			UserInterfaceSizer.makeActorCentered(this);
 		}
 	}
 
 
 	/**
-	 * To be used by child classes to have buttons in the menu hide/show it. E.g. pressing a button to change the 
+	 * To be used by child classes to have buttons in the menu hide/show it. E.g. pressing a button to change the
 	 * language does toggleScreenVisibility(false), refreshes the menu, then does toggleScreenVisibility(true).
 	 * @param show
 	 */
@@ -120,11 +121,11 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 		UniversalButton reportBugButton = makeReportBugButton();
 		if (reportBugButton != null) {
-			menuButtons.add(reportBugButton);					
+			menuButtons.add(reportBugButton);
 		}
 
 		UniversalButton controlsButton = makeControlsButton();
-		menuButtons.add(controlsButton);					
+		menuButtons.add(controlsButton);
 
 		// Window mode select box
 		UniversalButton windowModeSelectBox = makeWindowModeSelectBox.get();
@@ -148,18 +149,18 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		menu.replaceContents(menuButtons, backButton);
 		add(menu.getView()).grow().top();
 
-		
+
 		// Set up the version tag to be in its own inner table, so that the actual buttons can still reach the bottom of the main table
 		Table versionTable = new Table();
 		versionTable.setFillParent(true);
 		versionTable.setTouchable(Touchable.disabled);
 		addActor(versionTable);
-		
+
 		Label authors = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("authors_label"));
 		authors.setAlignment(Align.topLeft);
 		versionTable.add(authors).grow().top().left().padTop(getPadTop()).padLeft(getPadLeft());
 		versionTable.row();
-		
+
 		Label versionLabel = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> getGameVersion() + platformName);
 		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT.getAlignment());
 		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom()).padRight(getPadRight());
@@ -167,17 +168,17 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 	/**
 	 * NOTE: Setting the position here is important, otherwise the options menu will not open!<p>
-	 * e.g. call {@link UserInterfaceSizer#makeActorCentered(Actor) UserInterfaceSizer.makeActorCentered(this)} 
+	 * e.g. call {@link UserInterfaceSizer#makeActorCentered(Actor) UserInterfaceSizer.makeActorCentered(this)}
 	 */
 	private void setUpBackground() {
 		this.setBackground(GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 		UserInterfaceSizer.makeActorCentered(this);
 	}
-	
+
 	private UniversalButton makeBackButton() {
 		return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
 	}
-	
+
 	@Override
 	public void actWhilePaused(float delta) {
 		act(delta);
@@ -199,8 +200,8 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		optionsButton.getView().setVisible(show);
 	}
 
-	protected void addOptionsButtonToStage(Stage stage) {
-		stage.addActor(optionsButton.getView());
+	protected void addOptionsButtonToStage(StageLikeRenderable popUpStage) {
+		popUpStage.addActor(optionsButton.getView());
 		optionsButton.getView().toFront();
 		positionOptionsButton();
 	}
@@ -221,13 +222,13 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		protected void setUpDesiredSize() {
 			menu.setSpacing(OptionsMenu.this.menu.getSpacing());
 			UserInterfaceSizer.sizeToPercentage(this, 0.5f);
-			if (this.getActions().isEmpty()) {
+			if (getActions().isEmpty()) {
 				UserInterfaceSizer.makeActorCentered(this);
 			}
 		}
 
 		public UniversalButton getButton() {
-			return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this));
+			return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this, MultiStage.OPTIONS_STAGE_NAME));
 		}
 
 		@Override

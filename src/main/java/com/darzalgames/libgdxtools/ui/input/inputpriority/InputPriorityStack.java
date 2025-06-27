@@ -80,7 +80,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			darkScreen.fadeOutAndRemove();
 			releasePriorityForTop();
 			darkScreen.fadeOutAndRemove();
-			showDarkScreenIfLandingOnPopup(stageLikeRenderables.get(nameOfStageThisConsumerIsOn));
+			showDarkScreenIfLandingOnPopup(stageLikeRenderables.get(stack.getNameOfTopStage()));
 		} else {
 			stack.remove(inputConsumer, nameOfStageThisConsumerIsOn);
 		}

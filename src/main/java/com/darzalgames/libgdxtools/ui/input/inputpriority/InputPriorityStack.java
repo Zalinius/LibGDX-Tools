@@ -205,7 +205,8 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		}
 
 		public String getNameOfStageThisConsumerIsOn(InputConsumer inputConsumer) {
-			Optional<Entry<String, ArrayDeque<InputConsumer>>> optional = inputConsumerStacks.entrySet().stream().filter(pair -> pair.getValue().contains(inputConsumer)).findFirst();
+			// instead of checking that the deque contains() the value, we check equality in a specific direction (so that GameUIWrapper equals() can get called instead of basic Object's)
+			Optional<Entry<String, ArrayDeque<InputConsumer>>> optional = inputConsumerStacks.entrySet().stream().filter(pair -> pair.getValue().stream().anyMatch(entry -> entry.equals(inputConsumer))).findFirst();
 			if (optional.isEmpty()) {
 				return "";
 			}

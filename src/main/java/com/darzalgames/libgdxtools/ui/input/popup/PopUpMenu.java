@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
@@ -17,6 +18,8 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalB
  * It's a navigable menu, and it's a pop up!
  */
 public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
+
+	private Runnable runJustBeforeRemove = Runnables.nullRunnable();
 
 	protected PopUpMenu(boolean isVertical) {
 		super(isVertical);
@@ -59,11 +62,16 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 		if (slidesInAndOut()) {
 			addAction(Actions.sequence(
 					Actions.moveTo(getX(), UserInterfaceSizer.getCurrentHeight(), 0.25f, Interpolation.circle),
+					new RunnableActionBest(runJustBeforeRemove),
 					new RunnableActionBest(super::remove)));
 			toFront();
 		} else {
 			remove();
 		}
+	}
+
+	protected void setRunJustBeforeRemove(Runnable runJustBeforeRemove) {
+		this.runJustBeforeRemove = runJustBeforeRemove;
 	}
 
 	@Override

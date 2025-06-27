@@ -7,7 +7,7 @@ import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 
 public class OptionalDrawStage extends Stage implements StageLikeRenderable {
 
-	private boolean shouldDraw;
+	private boolean shouldDraw = true;
 
 	public OptionalDrawStage(String name, Viewport viewport) {
 		super(viewport);

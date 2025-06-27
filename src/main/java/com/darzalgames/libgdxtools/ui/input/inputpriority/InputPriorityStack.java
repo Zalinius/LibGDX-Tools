@@ -94,6 +94,10 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		return stack.getTop().isGamePausedWhileThisIsInFocus();
 	}
 
+	String getNameOfPausingStage() {
+		return stack.getNameOfTopStage();
+	}
+
 	private void focusTop(boolean isFirstFocus) {
 		if (isFirstFocus) {
 			stack.getTop().gainFocus();
@@ -231,6 +235,10 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			return inputConsumerStacks.get(nameOfStageThisConsumerIsOn).peek();
 		}
 
+		private String getNameOfTopStage() {
+			return getNameOfStageThisConsumerIsOn(getTop());
+		}
+
 		private ArrayDeque<InputConsumer> getTopStack() {
 			List<ArrayDeque<InputConsumer>> allStacks = new ArrayList<>(inputConsumerStacks.values());
 			Iterator<ArrayDeque<InputConsumer>> allStacksIterator = allStacks.reversed().iterator();
@@ -243,11 +251,9 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			return inputConsumerStacks.get(MultiStage.MAIN_STAGE_NAME);
 		}
 
-
 		private InputConsumer getTop() {
 			return getTopStack().peek();
 		}
-
 
 		private void popTop() {
 			notifyInputPriorityObservers();

@@ -91,15 +91,25 @@ public abstract class MultiStage {
 			doDebugPrinting();
 		}
 
-		if (pause.isPaused()) {
-			// skip stage.act() while paused
-			mainStage.draw();
-			float delta = Gdx.graphics.getDeltaTime();
-			actorsThatDoNotPause.forEach(actor -> actor.actWhilePaused(delta));
-			getGameSpecificStagesInRenderOrder().forEach(StageLikeRenderable::draw);
+		List<StageLikeRenderable> allPausableStages = new ArrayList<>(getGameSpecificStagesInRenderOrder());
+		allPausableStages.addFirst(mainStage);
+		if (!pause.isPaused()) {
+			allPausableStages.forEach(this::updateAndDrawStage);
 		} else {
-			updateAndDrawStage(mainStage);
-			getGameSpecificStagesInRenderOrder().forEach(this::updateAndDrawStage);
+			boolean hitPausingStage = false;
+			for (StageLikeRenderable stageLike : allPausableStages) {
+				if (stageLike.getName().equals(pause.getNameOfPausingStage())) {
+					hitPausingStage = true;
+				}
+
+				if (hitPausingStage) {
+					// Once we find the stage which is pausing the game, update and draw it and all stages above it like normal
+					updateAndDrawStage(stageLike);
+				} else {
+					// skip stage.act() while paused
+					stageLike.draw();
+				}
+			}
 		}
 
 		updateAndDrawStage(optionsStage);
@@ -157,10 +167,8 @@ public abstract class MultiStage {
 	}
 
 	protected UniversalInputStage getMainStage() {
+		// TODO only used for testing... are those IT tests too brittle to bother with?
 		return mainStage;
-	}
-	public UniversalInputStage getPauseStage() {
-		return optionsStage;
 	}
 
 	public void clear() {

@@ -21,7 +21,7 @@ public class InputSetup {
 
 		scrollingManager = new ScrollingManager(inputReceiver);
 
-		pause = new Pause(list.getLast(), optionsMenu, inputPriorityStack::doesTopPauseGame);
+		pause = new Pause(list.getLast(), optionsMenu, inputPriorityStack::doesTopPauseGame, inputPriorityStack::getNameOfPausingStage);
 		inputReceiver.setPause(pause);
 	}
 

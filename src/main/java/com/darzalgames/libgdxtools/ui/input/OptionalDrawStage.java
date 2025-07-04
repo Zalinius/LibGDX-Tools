@@ -47,4 +47,9 @@ public class OptionalDrawStage extends Stage implements StageLikeRenderable {
 	public String getName() {
 		return getRoot().getName();
 	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

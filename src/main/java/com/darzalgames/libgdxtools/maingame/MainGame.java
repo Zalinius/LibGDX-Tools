@@ -1,13 +1,11 @@
 package com.darzalgames.libgdxtools.maingame;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
@@ -66,7 +64,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	/**
 	 * @return The fallback background to be used in the game area, visible when nothing else is covering it
 	 */
-	protected abstract Consumer<Stage> makeAddBackgroundToStageRunnable();
+	protected abstract Actor makeBackground();
 	protected abstract Runnable getDrawConsoleRunnable();
 	protected abstract OptionsMenu makeOptionsMenu();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
@@ -233,7 +231,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		return new UniversalInputStageWithBackground(
 				MultipleStage.MAIN_STAGE_NAME,
 				new ScreenViewport(),
-				makeAddBackgroundToStageRunnable(),
+				makeBackground(),
 				inputStrategySwitcher);
 	}
 
@@ -245,7 +243,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void setUpInput() {
 		// Set up input processing for all strategies
-		inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, multipleStage.getAllStagesInOrder(), pause);
+		inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, multipleStage.getAllGameStagesInOrder(), pause);
 
 		makeSteamStrategy();
 		makeKeyboardAndGamepadInputHandlers();

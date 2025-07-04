@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.maingame;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
@@ -10,7 +9,7 @@ import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -137,13 +136,11 @@ public class SampleUserInterfaceGame extends MainGame {
 	protected void quitGame() {/* notYetNeeded */}
 
 	@Override
-	protected Consumer<Stage> makeAddBackgroundToStageRunnable() {
-		return stage -> {
-			NinePatchDrawable gray = new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.LIGHT_GRAY, 3), 1, 1, 1, 1));
-			Image grayImage = new Image(gray);
-			grayImage.setFillParent(true);
-			stage.addActor(grayImage);
-		};
+	protected Actor makeBackground() {
+		NinePatchDrawable gray = new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.LIGHT_GRAY, 3), 1, 1, 1, 1));
+		Image grayImage = new Image(gray);
+		grayImage.setFillParent(true);
+		return grayImage;
 	}
 
 	@Override

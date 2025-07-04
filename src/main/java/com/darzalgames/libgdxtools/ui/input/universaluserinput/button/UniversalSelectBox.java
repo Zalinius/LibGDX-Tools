@@ -54,7 +54,7 @@ public class UniversalSelectBox extends UniversalButton {
 		displayLabel = GameInfo.getUserInterfaceFactory().getLabel(Suppliers.emptyString());
 		displayLabel.setWrap(false);
 		textButton.add(displayLabel);
-		setButtonRunnable(() -> InputPriority.claimPriority(options, getView().getStage().getRoot().getName())); // TODO I don't think these get act called on them since they themselves pause the game, meaning they never slide in
+		setButtonRunnable(() -> InputPriority.claimPriority(options, getView().getStage().getRoot().getName()));
 		setWrap(false);
 	}
 

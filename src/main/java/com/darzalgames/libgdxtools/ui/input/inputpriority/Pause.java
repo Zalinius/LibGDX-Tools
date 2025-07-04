@@ -22,21 +22,8 @@ public class Pause extends Actor {
 		showOptionsButton(false); // Only enable the button after the splash screen
 	}
 
-	/**
-	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
-	 * @param getNameOfPausingStage a supplier for the name of the stage that the current pausing the game, if any
-	 */
-	protected void setInformationalSuppliers(Supplier<Boolean> doesCurrentInputConsumerPauseGame, Supplier<String> getNameOfPausingStage) {
-		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
-		this.getNameOfPausingStage = getNameOfPausingStage;
-	}
-
 	public void showOptionsButton(boolean show) {
 		optionsMenu.showOptionsButton(show);
-	}
-
-	boolean isOptionsMenuOpen() {
-		return optionsMenu.getStage() != null;
 	}
 
 	public boolean isPaused() {
@@ -56,7 +43,21 @@ public class Pause extends Actor {
 		optionsMenu.addOptionsButtonToStage();
 	}
 
-	protected OptionsMenu getOptionsMenu() {
+
+	/**
+	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
+	 * @param getNameOfPausingStage a supplier for the name of the stage that the current pausing the game, if any
+	 */
+	void setInformationalSuppliers(Supplier<Boolean> doesCurrentInputConsumerPauseGame, Supplier<String> getNameOfPausingStage) {
+		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
+		this.getNameOfPausingStage = getNameOfPausingStage;
+	}
+
+	boolean isOptionsMenuOpen() {
+		return optionsMenu.getStage() != null;
+	}
+
+	OptionsMenu getOptionsMenu() {
 		return optionsMenu;
 	}
 

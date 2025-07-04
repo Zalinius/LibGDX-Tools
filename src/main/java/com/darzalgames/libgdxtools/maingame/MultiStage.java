@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
+import com.darzalgames.libgdxtools.ui.GetOnStage;
 import com.darzalgames.libgdxtools.ui.input.OptionalDrawStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
@@ -20,19 +21,10 @@ public abstract class MultiStage {
 
 	public static final String MAIN_STAGE_NAME = "Main Stage";
 	public static final String OPTIONS_STAGE_NAME = "Options Stage";
-	public static final String CURSOR_STAGE_NAME = "Cursor Stage";
-	public static final String INPUT_HANDLER_STAGE_NAME = "Input Handler Stage";
+	static final String CURSOR_STAGE_NAME = "Cursor Stage";
+	static final String INPUT_HANDLER_STAGE_NAME = "Input Handler Stage";
 
-	protected abstract List<StageLikeRenderable> getGameSpecificStagesInRenderOrder();
-	public List<StageLikeRenderable> getAllStagesInOrder() {
-		// We don't include cursor and input handler stages here since no one else should be accessing them
-		List<StageLikeRenderable> allStages = new ArrayList<>(getGameSpecificStagesInRenderOrder());
-		allStages.addFirst(mainStage);
-		allStages.addLast(optionsStage);
-		return allStages;
-	}
-
-	protected Pause pause;
+	private Pause pause;
 	private final List<DoesNotPause> actorsThatDoNotPause;
 
 	private final UniversalInputStage mainStage;
@@ -41,18 +33,38 @@ public abstract class MultiStage {
 	private final OptionalDrawStage inputHandlerStage;
 	private final OptionalDrawStage cursorStage;
 
+
+	protected abstract List<StageLikeRenderable> getGameSpecificStagesInRenderOrder();
+
+
 	protected MultiStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage) {
 		this.mainStage = mainStage;
 		this.optionsStage = optionsStage;
 		this.inputHandlerStage = inputHandlerStage;
+		this.cursorStage = cursorStage;
+
+		GetOnStage.initialize(this::addActorStage);
 
 		actorsThatDoNotPause = new ArrayList<>();
-		this.cursorStage = cursorStage;
 	}
-
+	/**
+	 * Must be called after all stages are created for anything to work
+	 */
 	protected void finishSetup() {
 		setShouldRender(true);
 		setUpInputMultiplexerForAllStages();
+	}
+
+	public void addActorStage(Actor actor, String stageName) {
+		getAllStagesInOrder().stream().filter(stage -> stage.getName().equals(stageName)).findFirst().ifPresent(stage -> stage.addActor(actor));
+	}
+
+	public List<StageLikeRenderable> getAllStagesInOrder() {
+		// We don't include cursor and input handler stages here since no one else should be accessing them
+		List<StageLikeRenderable> allStages = new ArrayList<>(getGameSpecificStagesInRenderOrder());
+		allStages.addFirst(mainStage);
+		allStages.addLast(optionsStage);
+		return allStages;
 	}
 
 	public void setShouldRender(boolean shouldRender) {
@@ -64,7 +76,7 @@ public abstract class MultiStage {
 		actorsThatDoNotPause.add(actor);
 	}
 
-	protected void setPause(Pause pause) {
+	void setPause(Pause pause) {
 		this.pause = pause;
 		inputHandlerStage.addActor(pause);
 	}
@@ -117,7 +129,6 @@ public abstract class MultiStage {
 		updateAndDrawStage(inputHandlerStage);
 	}
 
-
 	private void updateAndDrawStage(StageLikeRenderable stageToUpdate) {
 		stageToUpdate.act();
 		stageToUpdate.draw();
@@ -162,19 +173,13 @@ public abstract class MultiStage {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
-	public void addActorToMainStage(Actor actor) {
-		mainStage.addActor(actor);
-	}
-
 	protected UniversalInputStage getMainStage() {
 		// TODO only used for testing... are those IT tests too brittle to bother with?
 		return mainStage;
 	}
 
 	public void clear() {
-		mainStage.clear();
-		optionsStage.clear();
-		getGameSpecificStagesInRenderOrder().forEach(StageLikeRenderable::clear);
+		getAllStagesInOrder().forEach(StageLikeRenderable::clear);
 		// We don't clear the cursor stage and input handler stage ever
 	}
 

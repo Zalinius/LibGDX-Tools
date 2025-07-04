@@ -95,6 +95,9 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	String getNameOfPausingStage() {
+		if (!doesTopPauseGame()) {
+			return "";
+		}
 		return stack.getNameOfTopStage();
 	}
 

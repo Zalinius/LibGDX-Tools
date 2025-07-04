@@ -4,20 +4,19 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.darzalgames.libgdxtools.maingame.MultiStage;
-import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 
 public class Pause extends Actor {
 
 	private final OptionsMenu optionsMenu;
-	private final StageLikeRenderable popUpStage;
 	private final Supplier<Boolean> doesCurrentInputConsumerPauseGame;
 	private final Supplier<String> getNameOfPausingStage;
 
 	/**
+	 * @param optionsMenu the game's pause/options menu
 	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
+	 * @param getNameOfPausingStage a supplier for the name of the stage that the current pausing the game, if any
 	 */
-	public Pause(StageLikeRenderable stageLikeRenderable, OptionsMenu optionsMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame, Supplier<String> getNameOfPausingStage) {
-		popUpStage = stageLikeRenderable;
+	public Pause(OptionsMenu optionsMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame, Supplier<String> getNameOfPausingStage) {
 		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
 		this.getNameOfPausingStage = getNameOfPausingStage;
 		GamePauser.setPauseGameRunnable(this::pause);
@@ -49,6 +48,6 @@ public class Pause extends Actor {
 
 	@Override
 	public void act(float delta) {
-		optionsMenu.addOptionsButtonToStage(popUpStage);
+		optionsMenu.addOptionsButtonToStage();
 	}
 }

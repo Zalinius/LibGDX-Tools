@@ -17,6 +17,7 @@ import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
+import com.darzalgames.libgdxtools.ui.GetOnStage;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.OptionalDrawStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
@@ -67,7 +68,7 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 	protected abstract OptionsMenu makeOptionsMenu();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 	protected abstract SaveManager makeSaveManager();
-	protected abstract T makeMultiStage(UniversalInputStage mainStage, UniversalInputStage pauseStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage);
+	protected abstract T makeMultiStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage);
 	protected abstract void setUpBeforeLoadingSave();
 	protected abstract void launchGame(boolean isNewSave);
 	/**
@@ -123,7 +124,7 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 		}
 		multipleStage.clear();
 		currentScreen = gameScreen;
-		multipleStage.addActorToMainStage(currentScreen);
+		GetOnStage.addActorToStage(gameScreen, MultiStage.MAIN_STAGE_NAME);
 		currentScreen.show();
 	}
 
@@ -206,11 +207,11 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 
 	private void makeAllStages() {
 		UniversalInputStage mainStage = makeMainStage();
-		UniversalInputStage pauseStage = makeAllPurposeStage(MultiStage.OPTIONS_STAGE_NAME);
+		UniversalInputStage optionsStage = makeAllPurposeStage(MultiStage.OPTIONS_STAGE_NAME);
 		OptionalDrawStage cursorStage = makeCursorStage();
 		OptionalDrawStage inputHandlerStage = makeInputHandlerStage();
 		UserInterfaceSizer.setStage(mainStage);
-		multipleStage = makeMultiStage(mainStage, pauseStage, inputHandlerStage, cursorStage);
+		multipleStage = makeMultiStage(mainStage, optionsStage, inputHandlerStage, cursorStage);
 		Fader.initialize(cursorStage);
 	}
 

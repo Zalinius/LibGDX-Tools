@@ -3,7 +3,7 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.darzalgames.libgdxtools.maingame.MultiStage;
+import com.darzalgames.libgdxtools.maingame.MultipleStage;
 
 public class Pause extends Actor {
 
@@ -48,7 +48,7 @@ public class Pause extends Actor {
 	}
 
 	private void pause() {
-		InputPriority.claimPriority(optionsMenu, MultiStage.OPTIONS_STAGE_NAME);
+		InputPriority.claimPriority(optionsMenu, MultipleStage.OPTIONS_STAGE_NAME);
 	}
 
 	@Override

@@ -12,6 +12,9 @@ public class UniversalInputStage extends OptionalDrawStage implements InputStrat
 
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
+	 * @param name The name of the stage, used for stage layering and useful for debugging
+	 * @param viewport
+	 * @param inputStrategySwitcher The stage needs to register with this
 	 */
 	public UniversalInputStage(String name, Viewport viewport, InputStrategySwitcher inputStrategySwitcher) {
 		super(name, viewport);

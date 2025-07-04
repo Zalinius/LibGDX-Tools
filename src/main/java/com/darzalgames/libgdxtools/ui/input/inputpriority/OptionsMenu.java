@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.maingame.MultiStage;
+import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.GetOnStage;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
@@ -201,7 +201,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	}
 
 	protected void addOptionsButtonToStage() {
-		GetOnStage.addActorToStage(optionsButton.getView(), MultiStage.OPTIONS_STAGE_NAME);
+		GetOnStage.addActorToStage(optionsButton.getView(), MultipleStage.OPTIONS_STAGE_NAME);
 		optionsButton.getView().toFront();
 		positionOptionsButton();
 	}
@@ -228,7 +228,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		}
 
 		public UniversalButton getButton() {
-			return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this, MultiStage.OPTIONS_STAGE_NAME));
+			return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this, MultipleStage.OPTIONS_STAGE_NAME));
 		}
 
 		@Override

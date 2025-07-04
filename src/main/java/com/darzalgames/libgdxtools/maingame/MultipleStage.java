@@ -15,7 +15,7 @@ import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.ScrollingManager;
 
-public abstract class MultiStage {
+public final class MultipleStage {
 
 	private static final boolean SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR = false;
 
@@ -34,10 +34,10 @@ public abstract class MultiStage {
 	private final Pause pause;
 
 
-	protected abstract List<StageLikeRenderable> getGameSpecificStagesInRenderOrder();
+	private final List<StageLikeRenderable> gameSpecificStages;
 
 
-	protected MultiStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage, Pause pause) {
+	MultipleStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage, Pause pause, List<StageLikeRenderable> gameSpecificStages) {
 		this.mainStage = mainStage;
 		this.optionsStage = optionsStage;
 		this.inputHandlerStage = inputHandlerStage;
@@ -46,28 +46,20 @@ public abstract class MultiStage {
 		this.pause = pause;
 		inputHandlerStage.addActor(pause);
 
+		this.gameSpecificStages = gameSpecificStages;
+		setShouldRender(true);
+		setUpInputMultiplexerForAllStages();
 		GetOnStage.initialize(this::addActorStage);
 
 		actorsThatDoNotPause = new ArrayList<>();
 	}
-	/**
-	 * Must be called after all stages are created for anything to work
-	 */
-	protected void finishSetup() {
-		setShouldRender(true);
-		setUpInputMultiplexerForAllStages();
-	}
 
 	public void addActorStage(Actor actor, String stageName) {
-		getAllStagesInOrder().stream().filter(stage -> stage.getName().equals(stageName)).findFirst().ifPresent(stage -> stage.addActor(actor));
+		findStageByName(stageName).ifPresent(stage -> stage.addActor(actor));
 	}
 
-	public List<StageLikeRenderable> getAllStagesInOrder() {
-		// We don't include cursor and input handler stages here since no one else should be accessing them
-		List<StageLikeRenderable> allStages = new ArrayList<>(getGameSpecificStagesInRenderOrder());
-		allStages.addFirst(mainStage);
-		allStages.addLast(optionsStage);
-		return allStages;
+	public void clearStage(String stageName) {
+		findStageByName(stageName).ifPresent(StageLikeRenderable::clear);
 	}
 
 	public void setShouldRender(boolean shouldRender) {
@@ -79,21 +71,10 @@ public abstract class MultiStage {
 		actorsThatDoNotPause.add(actor);
 	}
 
-	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, ScrollingManager scrollingManager) {
-		inputHandlerStage.addActor(keyboardInputHandler);
-		actorsThatDoNotPause.add(keyboardInputHandler);
 
-		inputHandlerStage.addActor(gamepadInputHandler);
-		actorsThatDoNotPause.add(gamepadInputHandler);
-
-		inputHandlerStage.addActor(scrollingManager);
-		actorsThatDoNotPause.add(scrollingManager);
-
-		setMainStageKeyboardFocus(keyboardInputHandler);
-	}
-
-	public void setMainStageKeyboardFocus(KeyboardInputHandler keyboardInputHandler) {
-		mainStage.setKeyboardFocus(keyboardInputHandler);
+	public void clear() {
+		getAllStagesInOrder().forEach(StageLikeRenderable::clear);
+		// We don't clear the cursor stage and input handler stage ever
 	}
 
 	void update() {
@@ -101,11 +82,12 @@ public abstract class MultiStage {
 			doDebugPrinting();
 		}
 
-		List<StageLikeRenderable> allPausableStages = new ArrayList<>(getGameSpecificStagesInRenderOrder());
+		List<StageLikeRenderable> allPausableStages = new ArrayList<>(gameSpecificStages);
 		allPausableStages.addFirst(mainStage);
 		if (!pause.isPaused()) {
 			allPausableStages.forEach(this::updateAndDrawStage);
 		} else {
+			resizeUIWhilePaused();
 			boolean hitPausingStage = false;
 			for (StageLikeRenderable stageLike : allPausableStages) {
 				if (stageLike.getName().equals(pause.getNameOfPausingStage())) {
@@ -137,11 +119,7 @@ public abstract class MultiStage {
 	}
 
 	private void doDebugPrinting() {
-		List<StageLikeRenderable> allStages = new ArrayList<>(getGameSpecificStagesInRenderOrder().reversed());
-		allStages.addFirst(optionsStage);
-		allStages.addLast(mainStage);
-
-		Iterator<StageLikeRenderable> stages = allStages.iterator();
+		Iterator<StageLikeRenderable> stages = getAllStagesInOrder().reversed().iterator();
 		boolean hitSomething = false;
 		while (!hitSomething && stages.hasNext()) {
 			hitSomething = tryToPrintADebugHit(stages.next());
@@ -164,21 +142,38 @@ public abstract class MultiStage {
 		inputMultiplexer.addProcessor(inputHandlerStage);
 		inputMultiplexer.addProcessor(cursorStage);
 		inputMultiplexer.addProcessor(optionsStage);
-		List<StageLikeRenderable> gameSpecificStages = new ArrayList<>(getGameSpecificStagesInRenderOrder());
-		Collections.reverse(gameSpecificStages);
-		gameSpecificStages.forEach(inputMultiplexer::addProcessor);
+		gameSpecificStages.reversed().forEach(inputMultiplexer::addProcessor);
 		inputMultiplexer.addProcessor(mainStage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
-	protected UniversalInputStage getMainStage() {
-		// TODO only used for testing... are those IT tests too brittle to bother with?
-		return mainStage;
+	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, ScrollingManager scrollingManager) {
+		inputHandlerStage.addActor(keyboardInputHandler);
+		actorsThatDoNotPause.add(keyboardInputHandler);
+
+		inputHandlerStage.addActor(gamepadInputHandler);
+		actorsThatDoNotPause.add(gamepadInputHandler);
+
+		inputHandlerStage.addActor(scrollingManager);
+		actorsThatDoNotPause.add(scrollingManager);
+
+		mainStage.setKeyboardFocus(keyboardInputHandler);
 	}
 
-	public void clear() {
-		getAllStagesInOrder().forEach(StageLikeRenderable::clear);
-		// We don't clear the cursor stage and input handler stage ever
+	List<StageLikeRenderable> getAllStagesInOrder() {
+		// We don't include cursor and input handler stages here since no one else should be accessing them
+		List<StageLikeRenderable> allStages = new ArrayList<>(gameSpecificStages);
+		allStages.addFirst(mainStage);
+		allStages.addLast(optionsStage);
+		return allStages;
+	}
+
+	private Optional<StageLikeRenderable> findStageByName(String stageName) {
+		return getAllStagesInOrder().stream().filter(stage -> stage.getName().equals(stageName)).findFirst();
+	}
+
+	private void resizeUIWhilePaused() {
+		getAllStagesInOrder().forEach(stage -> stage.act(0));
 	}
 
 }

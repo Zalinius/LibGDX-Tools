@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.maingame;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -33,7 +34,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterf
 import com.darzalgames.libgdxtools.ui.screen.Fader;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 
-public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter implements SharesGameInformation {
+public abstract class MainGame extends ApplicationAdapter implements SharesGameInformation {
 
 
 	// Values which are statically shared to the rest of the game by {@link GameInfo}
@@ -44,7 +45,7 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 	protected UserInterfaceFactory userInterfaceFactory;
 
 	// Objects created at initialization, but not widely shared
-	protected T multipleStage;
+	protected MultipleStage multipleStage;
 	protected InputSetup inputSetup;
 	protected WindowResizer windowResizer;
 	protected InputStrategySwitcher inputStrategySwitcher;
@@ -70,13 +71,9 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 	protected abstract OptionsMenu makeOptionsMenu();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 	protected abstract SaveManager makeSaveManager();
-	protected abstract T makeMultiStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage, Pause pause);
+	protected abstract List<StageLikeRenderable> makeGameSpecificStages();
 	protected abstract void setUpBeforeLoadingSave();
 	protected abstract void launchGame(boolean isNewSave);
-	/**
-	 * Anything the game needs to do once launching and initialization is fully complete
-	 */
-	protected abstract void afterLaunch();
 
 	protected void reactToResize(int width, int height) {}
 	protected abstract void resizeGameSpecificUI();
@@ -111,8 +108,6 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 		saveManager = makeSaveManager();
 		boolean isNewSave = !saveManager.load();
 		launchGame(isNewSave);
-
-		afterLaunch();
 	}
 
 
@@ -127,7 +122,7 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 		}
 		multipleStage.clear();
 		currentScreen = gameScreen;
-		GetOnStage.addActorToStage(gameScreen, MultiStage.MAIN_STAGE_NAME);
+		GetOnStage.addActorToStage(gameScreen, MultipleStage.MAIN_STAGE_NAME);
 		currentScreen.show();
 	}
 
@@ -146,11 +141,6 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 	private void resizeUI() {
 		inputSetup.getInputPriorityStack().resizeStackUI();
 		Fader.resizeUI();
-
-		if (pause.isPaused()) {
-			// Lets the game UI behind the options menu update the UI sizing
-			multipleStage.getAllStagesInOrder().forEach(stage -> stage.act(0));
-		}
 		resizeGameSpecificUI();
 	}
 
@@ -211,13 +201,13 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 
 	private void makeAllStages() {
 		UniversalInputStage mainStage = makeMainStage();
-		UniversalInputStage optionsStage = makeAllPurposeStage(MultiStage.OPTIONS_STAGE_NAME);
+		UniversalInputStage optionsStage = makeAllPurposeStage(MultipleStage.OPTIONS_STAGE_NAME);
 		OptionalDrawStage cursorStage = makeCursorStage();
 		OptionalDrawStage inputHandlerStage = makeInputHandlerStage();
 		UserInterfaceSizer.setStage(mainStage);
 
 		pause = new Pause(makeOptionsMenu());
-		multipleStage = makeMultiStage(mainStage, optionsStage, inputHandlerStage, cursorStage, pause);
+		multipleStage = new MultipleStage(mainStage, optionsStage, inputHandlerStage, cursorStage, pause, makeGameSpecificStages());
 	}
 
 	protected UniversalInputStage makeAllPurposeStage(String name) {
@@ -225,7 +215,7 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 	}
 
 	private OptionalDrawStage makeInputHandlerStage() {
-		OptionalDrawStage inputHandlerStage = new OptionalDrawStage(MultiStage.INPUT_HANDLER_STAGE_NAME, new ScreenViewport());
+		OptionalDrawStage inputHandlerStage = new OptionalDrawStage(MultipleStage.INPUT_HANDLER_STAGE_NAME, new ScreenViewport());
 		MouseInputHandler mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
 		inputHandlerStage.addActor(mouseInputHandler);
 		inputHandlerStage.addActor(inputStrategySwitcher);
@@ -240,14 +230,14 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 
 	private UniversalInputStage makeMainStage() {
 		return new UniversalInputStageWithBackground(
-				MultiStage.MAIN_STAGE_NAME,
+				MultipleStage.MAIN_STAGE_NAME,
 				new ScreenViewport(),
 				makeAddBackgroundToStageRunnable(),
 				inputStrategySwitcher);
 	}
 
 	private OptionalDrawStage makeCursorStage() {
-		OptionalDrawStage cursorStage = new OptionalDrawStage(MultiStage.CURSOR_STAGE_NAME, new ScreenViewport());
+		OptionalDrawStage cursorStage = new OptionalDrawStage(MultipleStage.CURSOR_STAGE_NAME, new ScreenViewport());
 		cursorStage.addActor(getCustomCursor());
 		Fader.initialize(cursorStage);
 		return cursorStage;

@@ -14,7 +14,7 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.maingame.MultiStage;
+import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.DelayRunnableAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
@@ -84,7 +84,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 					"accept_control",
 					"revert_message",
 					Runnables.nullRunnable(),
-					MultiStage.OPTIONS_STAGE_NAME);
+					MultipleStage.OPTIONS_STAGE_NAME);
 		}
 
 		@Override

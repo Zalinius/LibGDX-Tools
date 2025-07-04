@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.Color;
@@ -16,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.darzalgames.darzalcommon.functional.Consumers;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
@@ -24,19 +22,15 @@ import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
-import com.darzalgames.libgdxtools.maingame.SampleUserInterfaceGame.SampleMultiStage;
 import com.darzalgames.libgdxtools.platform.*;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.OptionalDrawStage;
-import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.ChoicePopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -45,28 +39,25 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
 
-public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
+public class SampleUserInterfaceGame extends MainGame {
 
-	private final Consumer<SampleUserInterfaceGame> toDoAfterLaunch;
+	public static final String POP_UP_STAGE_NAME = "PopUp Stage";
 
-	protected UniversalButton regainFocusPopup;
-	protected UniversalButton quitButton;
+	private UniversalButton regainFocusPopup;
+	private UniversalButton quitButton;
 
 	public static void main(String[] args) {
-		SampleUserInterfaceGame.testLauncher(Arrays.asList(args), Consumers.nullConsumer());
-	}
-
-	static void testLauncher(List<String> args, Consumer<SampleUserInterfaceGame> todo) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setWindowedMode(1280, 720);
 		config.setTitle("Test LibGDXTools UI");
 		config.setWindowListener(makeWindowListener());
-		new Lwjgl3Application(new SampleUserInterfaceGame(args, todo), config);
+		new Lwjgl3Application(new SampleUserInterfaceGame(Arrays.asList(args)), config);
 	}
 
-	public SampleUserInterfaceGame(List<String> args, Consumer<SampleUserInterfaceGame> toDoAfterLaunch) {
+
+
+	public SampleUserInterfaceGame(List<String> args) {
 		super(new WindowResizerDesktop(), LaunchArgumentHelper.getGamePlatform(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new));
-		this.toDoAfterLaunch = toDoAfterLaunch;
 	}
 
 	@Override
@@ -120,7 +111,6 @@ public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
 			@Override
 			protected List<Input> getKeyWhitelist() {
 				List<Input> keysToAllow = new ArrayList<>();
-				Input.ACCEPT.replaceKey(Keys.ENTER);
 				keysToAllow.add(Input.ACCEPT);
 				keysToAllow.add(Input.BACK);
 				keysToAllow.add(Input.UP);
@@ -236,7 +226,7 @@ public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
 				UserInterfaceSizer.sizeToPercentage(this, 0.25f);
 			}
 		};
-		UniversalButton popUpButton = GameInfo.getUserInterfaceFactory().getButton(() -> "Open a popup!", () -> InputPriority.claimPriority(choicePopup, SampleMultiStage.POP_UP_STAGE_NAME));
+		UniversalButton popUpButton = GameInfo.getUserInterfaceFactory().getButton(() -> "Open a popup!", () -> InputPriority.claimPriority(choicePopup, POP_UP_STAGE_NAME));
 		menuButtons.add(popUpButton);
 
 
@@ -262,7 +252,7 @@ public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
 			@Override
 			public void resizeUI() { /*Not needed*/ }
 		};
-		InputPriority.claimPriority(innerPopup, SampleMultiStage.POP_UP_STAGE_NAME);
+		InputPriority.claimPriority(innerPopup, POP_UP_STAGE_NAME);
 	}
 
 	private void showRegainFocusPopup() {
@@ -278,7 +268,7 @@ public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
 			@Override
 			public void resizeUI() { /*Not needed*/ }
 		};
-		InputPriority.claimPriority(innerPopup, SampleMultiStage.POP_UP_STAGE_NAME);
+		InputPriority.claimPriority(innerPopup, POP_UP_STAGE_NAME);
 	}
 
 
@@ -310,12 +300,12 @@ public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
 
 		@Override
 		protected PopUp makeControlsPopUp() {
-			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", Runnables.nullRunnable(), SampleMultiStage.POP_UP_STAGE_NAME);
+			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", Runnables.nullRunnable(), POP_UP_STAGE_NAME);
 		}
 
 		@Override protected UniversalButton makeReportBugButton() {return GameInfo.getUserInterfaceFactory().getButton(() -> "One could report a bug here", Runnables.nullRunnable());}
 		@Override protected UniversalButton makeControlsButton() {
-			return GameInfo.getUserInterfaceFactory().getButton(() -> "This is where one could theoretically view controls", () -> InputPriority.claimPriority(makeControlsPopUp(), MultiStage.OPTIONS_STAGE_NAME));
+			return GameInfo.getUserInterfaceFactory().getButton(() -> "This is where one could theoretically view controls", () -> InputPriority.claimPriority(makeControlsPopUp(), MultipleStage.OPTIONS_STAGE_NAME));
 		}
 
 		@Override
@@ -351,11 +341,6 @@ public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
 	}
 
 	@Override
-	protected void afterLaunch() {
-		toDoAfterLaunch.accept(this);
-	}
-
-	@Override
 	protected OptionsMenu makeOptionsMenu() {
 		return new TestOptionsMenu(windowResizer::getModeSelectBox);
 	}
@@ -375,31 +360,9 @@ public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
 		return GameEdition.FULL;
 	}
 
-	protected class SampleMultiStage extends MultiStage {
-
-		public static final String POP_UP_STAGE_NAME = "PopUp Stage";
-		private final UniversalInputStage popUpStage;
-
-		public SampleMultiStage(UniversalInputStage stage, UniversalInputStage pauseStage, OptionalDrawStage cursorStage, OptionalDrawStage inputHandlerStage, UniversalInputStage popUpStage) {
-			super(stage, pauseStage, inputHandlerStage, cursorStage, pause);
-			this.popUpStage = popUpStage;
-			finishSetup();
-		}
-
-		public UniversalInputStage getPopUpStage() {
-			return popUpStage;
-		}
-
-		@Override
-		protected List<StageLikeRenderable> getGameSpecificStagesInRenderOrder() {
-			return List.of(popUpStage);
-		}
-
-	}
-
 	@Override
-	protected SampleMultiStage makeMultiStage(UniversalInputStage mainStage, UniversalInputStage pauseStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage, Pause pause) {
-		return new SampleMultiStage(mainStage, pauseStage, cursorStage, inputHandlerStage, makeAllPurposeStage(SampleMultiStage.POP_UP_STAGE_NAME));
+	protected List<StageLikeRenderable> makeGameSpecificStages() {
+		return List.of(makeAllPurposeStage(POP_UP_STAGE_NAME));
 	}
 
 	@Override

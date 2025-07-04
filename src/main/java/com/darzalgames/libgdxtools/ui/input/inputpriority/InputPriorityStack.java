@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.darzalgames.libgdxtools.maingame.MultiStage;
+import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
@@ -135,7 +135,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	private void releasePriorityForTop() {
-		boolean isClosingOptionsMenu = stack.isThisOnTop(optionsMenu, MultiStage.OPTIONS_STAGE_NAME);
+		boolean isClosingOptionsMenu = stack.isThisOnTop(optionsMenu, MultipleStage.OPTIONS_STAGE_NAME);
 		unFocusTop();
 		stack.popTop();
 		if (isClosingOptionsMenu) {
@@ -183,7 +183,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 
 	private void clearStackAndPushBlankConsumer() {
 		stack.clear();
-		stack.push(makeBlankConsumer(), MultiStage.MAIN_STAGE_NAME);
+		stack.push(makeBlankConsumer(), MultipleStage.MAIN_STAGE_NAME);
 	}
 
 	private InputConsumer makeBlankConsumer() {
@@ -252,7 +252,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 					return topStack;
 				}
 			}
-			return inputConsumerStacks.get(MultiStage.MAIN_STAGE_NAME);
+			return inputConsumerStacks.get(MultipleStage.MAIN_STAGE_NAME);
 		}
 
 		private InputConsumer getTop() {

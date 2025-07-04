@@ -18,7 +18,7 @@ import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.GetOnStage;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
-import com.darzalgames.libgdxtools.ui.input.OptionalDrawStage;
+import com.darzalgames.libgdxtools.ui.input.StageBest;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStageWithBackground;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
@@ -200,8 +200,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void makeAllStages() {
 		UniversalInputStage mainStage = makeMainStage();
 		UniversalInputStage optionsStage = makeAllPurposeStage(MultipleStage.OPTIONS_STAGE_NAME);
-		OptionalDrawStage cursorStage = makeCursorStage();
-		OptionalDrawStage inputHandlerStage = makeInputHandlerStage();
+		StageBest cursorStage = makeCursorStage();
+		StageBest inputHandlerStage = makeInputHandlerStage();
 		UserInterfaceSizer.setStage(mainStage);
 		Fader.initialize(MultipleStage.CURSOR_STAGE_NAME);
 
@@ -213,8 +213,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		return new UniversalInputStage(name, new ScreenViewport(), inputStrategySwitcher);
 	}
 
-	private OptionalDrawStage makeInputHandlerStage() {
-		OptionalDrawStage inputHandlerStage = new OptionalDrawStage(MultipleStage.INPUT_HANDLER_STAGE_NAME, new ScreenViewport());
+	private StageBest makeInputHandlerStage() {
+		StageBest inputHandlerStage = new StageBest(MultipleStage.INPUT_HANDLER_STAGE_NAME, new ScreenViewport());
 		MouseInputHandler mouseInputHandler = new MouseInputHandler(inputStrategySwitcher);
 		inputHandlerStage.addActor(mouseInputHandler);
 		inputHandlerStage.addActor(inputStrategySwitcher);
@@ -235,15 +235,15 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 				inputStrategySwitcher);
 	}
 
-	private OptionalDrawStage makeCursorStage() {
-		OptionalDrawStage cursorStage = new OptionalDrawStage(MultipleStage.CURSOR_STAGE_NAME, new ScreenViewport());
+	private StageBest makeCursorStage() {
+		StageBest cursorStage = new StageBest(MultipleStage.CURSOR_STAGE_NAME, new ScreenViewport());
 		cursorStage.addActor(getCustomCursor());
 		return cursorStage;
 	}
 
 	private void setUpInput() {
 		// Set up input processing for all strategies
-		inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, multipleStage.getAllGameStagesInOrder(), pause);
+		inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, multipleStage.getGameStagesInOrder(), pause);
 
 		makeSteamStrategy();
 		makeKeyboardAndGamepadInputHandlers();

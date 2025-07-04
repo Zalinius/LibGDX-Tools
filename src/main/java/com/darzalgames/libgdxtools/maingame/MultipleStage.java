@@ -7,7 +7,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.darzalgames.libgdxtools.ui.GetOnStage;
-import com.darzalgames.libgdxtools.ui.input.OptionalDrawStage;
+import com.darzalgames.libgdxtools.ui.input.StageBest;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
@@ -26,14 +26,14 @@ public final class MultipleStage {
 
 	private final UniversalInputStage mainStage;
 	private final UniversalInputStage optionsStage;
-	private final OptionalDrawStage inputHandlerStage;
-	private final OptionalDrawStage cursorStage;
+	private final StageBest inputHandlerStage;
+	private final StageBest cursorStage;
 
 	private final Pause pause;
 	private final List<StageLikeRenderable> gameSpecificStages;
 
 
-	MultipleStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage, Pause pause, List<StageLikeRenderable> gameSpecificStages) {
+	MultipleStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, StageBest inputHandlerStage, StageBest cursorStage, Pause pause, List<StageLikeRenderable> gameSpecificStages) {
 		this.mainStage = mainStage;
 		this.optionsStage = optionsStage;
 		this.inputHandlerStage = inputHandlerStage;
@@ -56,7 +56,7 @@ public final class MultipleStage {
 	}
 
 	public void clearAllGameStages() {
-		getAllGameStagesInOrder().forEach(StageLikeRenderable::clear);
+		getGameStagesInOrder().forEach(StageLikeRenderable::clear);
 		// We don't clear the cursor stage and input handler stage ever
 	}
 
@@ -98,11 +98,11 @@ public final class MultipleStage {
 	}
 
 	void resize(int width, int height) {
-		getAllGameStagesInOrder().forEach(stage -> stage.resize(width, height));
+		getAllStagesInOrder().forEach(stage -> stage.resize(width, height));
 	}
 
 	private void doDebugPrinting() {
-		Iterator<StageLikeRenderable> stages = getAllGameStagesInOrder().reversed().iterator();
+		Iterator<StageLikeRenderable> stages = getGameStagesInOrder().reversed().iterator();
 		boolean hitSomething = false;
 		while (!hitSomething && stages.hasNext()) {
 			hitSomething = tryToPrintADebugHit(stages.next());
@@ -120,11 +120,6 @@ public final class MultipleStage {
 	}
 
 
-	private void setUpInputMultiplexerForAllStages() {
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		getActuallyAllStagesInOrder().reversed().forEach(inputMultiplexer::addProcessor);
-		Gdx.input.setInputProcessor(inputMultiplexer);
-	}
 
 	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, ScrollingManager scrollingManager) {
 		inputHandlerStage.addActor(keyboardInputHandler);
@@ -134,7 +129,7 @@ public final class MultipleStage {
 		mainStage.setKeyboardFocus(keyboardInputHandler);
 	}
 
-	List<StageLikeRenderable> getAllGameStagesInOrder() {
+	List<StageLikeRenderable> getGameStagesInOrder() {
 		// We don't include cursor and input handler stages here since no one else should be accessing them
 		List<StageLikeRenderable> allStages = new ArrayList<>(gameSpecificStages);
 		allStages.addFirst(mainStage);
@@ -142,19 +137,25 @@ public final class MultipleStage {
 		return allStages;
 	}
 
-	private List<StageLikeRenderable> getActuallyAllStagesInOrder() {
-		List<StageLikeRenderable> allStages = new ArrayList<>(getAllGameStagesInOrder());
+	private List<StageLikeRenderable> getAllStagesInOrder() {
+		List<StageLikeRenderable> allStages = new ArrayList<>(getGameStagesInOrder());
 		allStages.add(cursorStage);
 		allStages.add(inputHandlerStage);
 		return allStages;
 	}
 
+	private void setUpInputMultiplexerForAllStages() {
+		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		getAllStagesInOrder().reversed().forEach(inputMultiplexer::addProcessor);
+		Gdx.input.setInputProcessor(inputMultiplexer);
+	}
+
 	private Optional<StageLikeRenderable> findStageByName(String stageName) {
-		return getActuallyAllStagesInOrder().stream().filter(stage -> stage.getName().equals(stageName)).findFirst();
+		return getAllStagesInOrder().stream().filter(stage -> stage.getName().equals(stageName)).findFirst();
 	}
 
 	private void resizeUIWhilePaused() {
-		getAllGameStagesInOrder().forEach(stage -> stage.act(0));
+		getGameStagesInOrder().forEach(stage -> stage.act(0));
 	}
 
 }

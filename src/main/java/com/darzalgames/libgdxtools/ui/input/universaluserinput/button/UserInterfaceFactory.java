@@ -24,7 +24,7 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.DelayRunnableAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantForeverAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
-import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
+import com.darzalgames.libgdxtools.ui.input.StageBest;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
@@ -216,7 +216,7 @@ public class UserInterfaceFactory {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				super.enter(event, x, y, pointer, fromActor);
-				if (UniversalInputStage.isHoverEvent(pointer) && button.isTouchable()) {
+				if (StageBest.isHoverEvent(pointer) && button.isTouchable()) {
 					button.setStyle(mainButtonStyle);
 					if (shouldButtonFlash(button)) {
 						button.clearActions();
@@ -232,7 +232,7 @@ public class UserInterfaceFactory {
 			@Override
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 				super.exit(event, x, y, pointer, toActor);
-				if (UniversalInputStage.isHoverEvent(pointer)) {
+				if (StageBest.isHoverEvent(pointer)) {
 					button.clearActions();
 					button.setStyle(mainButtonStyle);
 				}
@@ -246,7 +246,7 @@ public class UserInterfaceFactory {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				super.enter(event, x, y, pointer, fromActor);
-				if (UniversalInputStage.isHoverEvent(pointer) && button.isTouchable()) {
+				if (StageBest.isHoverEvent(pointer) && button.isTouchable()) {
 					keyboardSlider.setSliderStyle(flashedStyle);
 					if (shouldButtonFlash(button)) {
 						button.clearActions();
@@ -262,7 +262,7 @@ public class UserInterfaceFactory {
 			@Override
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 				super.exit(event, x, y, pointer, toActor);
-				if (UniversalInputStage.isHoverEvent(pointer)) {
+				if (StageBest.isHoverEvent(pointer)) {
 					button.clearActions();
 					keyboardSlider.setSliderStyle(mainStyle);
 				}
@@ -271,7 +271,7 @@ public class UserInterfaceFactory {
 	}
 
 	private boolean shouldButtonFlash(BasicButton button) {
-		return UniversalInputStage.isInTouchableBranch(button.getView())
+		return StageBest.isInTouchableBranch(button.getView())
 				&& !button.isDisabled()
 				&& inputStrategySwitcher.shouldFlashButtons();
 	}

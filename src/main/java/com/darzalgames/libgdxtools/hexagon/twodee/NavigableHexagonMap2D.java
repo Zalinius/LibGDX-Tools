@@ -85,7 +85,7 @@ public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E
 	}
 
 	private boolean isInputAllowed() {
-		return UniversalInputStage.isInTouchableBranch(this);
+		return StageBest.isInTouchableBranch(this);
 	}
 
 	/**

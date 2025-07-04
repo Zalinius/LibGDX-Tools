@@ -27,6 +27,7 @@ import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.MouseInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSetup;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.screen.Fader;
@@ -47,6 +48,7 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 	protected InputSetup inputSetup;
 	protected WindowResizer windowResizer;
 	protected InputStrategySwitcher inputStrategySwitcher;
+	protected Pause pause;
 
 
 	// Values which change during gameplay
@@ -68,7 +70,7 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 	protected abstract OptionsMenu makeOptionsMenu();
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 	protected abstract SaveManager makeSaveManager();
-	protected abstract T makeMultiStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage);
+	protected abstract T makeMultiStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage, Pause pause);
 	protected abstract void setUpBeforeLoadingSave();
 	protected abstract void launchGame(boolean isNewSave);
 	/**
@@ -77,6 +79,7 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 	protected abstract void afterLaunch();
 
 	protected void reactToResize(int width, int height) {}
+	protected abstract void resizeGameSpecificUI();
 
 
 	/**
@@ -140,14 +143,15 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 		steamStrategy.update();
 	}
 
-	protected void resizeUI() {
+	private void resizeUI() {
 		inputSetup.getInputPriorityStack().resizeStackUI();
 		Fader.resizeUI();
 
-		if (inputSetup.getPause().isPaused()) {
+		if (pause.isPaused()) {
 			// Lets the game UI behind the options menu update the UI sizing
 			multipleStage.getAllStagesInOrder().forEach(stage -> stage.act(0));
 		}
+		resizeGameSpecificUI();
 	}
 
 	@Override
@@ -211,8 +215,9 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 		OptionalDrawStage cursorStage = makeCursorStage();
 		OptionalDrawStage inputHandlerStage = makeInputHandlerStage();
 		UserInterfaceSizer.setStage(mainStage);
-		multipleStage = makeMultiStage(mainStage, optionsStage, inputHandlerStage, cursorStage);
-		Fader.initialize(cursorStage);
+
+		pause = new Pause(makeOptionsMenu());
+		multipleStage = makeMultiStage(mainStage, optionsStage, inputHandlerStage, cursorStage, pause);
 	}
 
 	protected UniversalInputStage makeAllPurposeStage(String name) {
@@ -244,13 +249,13 @@ public abstract class MainGame<T extends MultiStage> extends ApplicationAdapter 
 	private OptionalDrawStage makeCursorStage() {
 		OptionalDrawStage cursorStage = new OptionalDrawStage(MultiStage.CURSOR_STAGE_NAME, new ScreenViewport());
 		cursorStage.addActor(getCustomCursor());
+		Fader.initialize(cursorStage);
 		return cursorStage;
 	}
 
 	private void setUpInput() {
 		// Set up input processing for all strategies
-		inputSetup = new InputSetup(inputStrategySwitcher, makeOptionsMenu(), windowResizer::toggleWindow, multipleStage.getAllStagesInOrder());
-		multipleStage.setPause(inputSetup.getPause());
+		inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, multipleStage.getAllStagesInOrder(), pause);
 		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
 
 		makeSteamStrategy();

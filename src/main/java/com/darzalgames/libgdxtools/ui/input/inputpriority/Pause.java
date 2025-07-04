@@ -8,22 +8,27 @@ import com.darzalgames.libgdxtools.maingame.MultiStage;
 public class Pause extends Actor {
 
 	private final OptionsMenu optionsMenu;
-	private final Supplier<Boolean> doesCurrentInputConsumerPauseGame;
-	private final Supplier<String> getNameOfPausingStage;
+	private Supplier<Boolean> doesCurrentInputConsumerPauseGame;
+	private Supplier<String> getNameOfPausingStage;
 
 	/**
 	 * @param optionsMenu the game's pause/options menu
-	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
-	 * @param getNameOfPausingStage a supplier for the name of the stage that the current pausing the game, if any
 	 */
-	public Pause(OptionsMenu optionsMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame, Supplier<String> getNameOfPausingStage) {
-		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
-		this.getNameOfPausingStage = getNameOfPausingStage;
+	public Pause(OptionsMenu optionsMenu) {
 		GamePauser.setPauseGameRunnable(this::pause);
 
 		this.optionsMenu = optionsMenu;
 
 		showOptionsButton(false); // Only enable the button after the splash screen
+	}
+
+	/**
+	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
+	 * @param getNameOfPausingStage a supplier for the name of the stage that the current pausing the game, if any
+	 */
+	protected void setInformationalSuppliers(Supplier<Boolean> doesCurrentInputConsumerPauseGame, Supplier<String> getNameOfPausingStage) {
+		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
+		this.getNameOfPausingStage = getNameOfPausingStage;
 	}
 
 	public void showOptionsButton(boolean show) {
@@ -50,4 +55,9 @@ public class Pause extends Actor {
 	public void act(float delta) {
 		optionsMenu.addOptionsButtonToStage();
 	}
+
+	protected OptionsMenu getOptionsMenu() {
+		return optionsMenu;
+	}
+
 }

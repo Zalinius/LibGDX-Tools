@@ -18,18 +18,18 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class InputPriorityStack implements InputStrategyObserver, InputPrioritySubject {
 
 	private final LimitedAccessDoubleStack stack;
-	private final OptionsMenu pauseMenu;
+	private final OptionsMenu optionsMenu;
 	private final DarkScreen darkScreen;
 
 	private final List<InputPriorityObserver> inputPriorityObservers;
 	private final Map<String, StageLikeRenderable> stageLikeRenderables;
 
-	public InputPriorityStack(List<StageLikeRenderable> stages, OptionsMenu optionsMenu) {
-		pauseMenu = optionsMenu;
+	public InputPriorityStack(List<StageLikeRenderable> allStagesInOrderForInput, OptionsMenu optionsMenu) {
+		this.optionsMenu = optionsMenu;
 		stageLikeRenderables = new HashMap<>();
-		stages.forEach(stage -> stageLikeRenderables.put(stage.getName(), stage));
+		allStagesInOrderForInput.forEach(stage -> stageLikeRenderables.put(stage.getName(), stage));
 		inputPriorityObservers = new ArrayList<>();
-		stack = new LimitedAccessDoubleStack(stages);
+		stack = new LimitedAccessDoubleStack(allStagesInOrderForInput);
 		clearStackAndPushBlankConsumer();
 
 		darkScreen = new DarkScreen(() -> sendInputToTop(Input.BACK));
@@ -135,7 +135,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	private void releasePriorityForTop() {
-		boolean isClosingOptionsMenu = stack.isThisOnTop(pauseMenu, MultiStage.OPTIONS_STAGE_NAME);
+		boolean isClosingOptionsMenu = stack.isThisOnTop(optionsMenu, MultiStage.OPTIONS_STAGE_NAME);
 		unFocusTop();
 		stack.popTop();
 		if (isClosingOptionsMenu) {
@@ -202,9 +202,9 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	private class LimitedAccessDoubleStack {
 		private final LinkedHashMap<String, ArrayDeque<InputConsumer>> inputConsumerStacks;
 
-		public LimitedAccessDoubleStack(List<StageLikeRenderable> stages) {
+		public LimitedAccessDoubleStack(List<StageLikeRenderable> allStagesInOrderForInput) {
 			inputConsumerStacks = new LinkedHashMap<>();
-			stages.forEach(stage -> inputConsumerStacks.put(stage.getName(), new ArrayDeque<>()));
+			allStagesInOrderForInput.forEach(stage -> inputConsumerStacks.put(stage.getName(), new ArrayDeque<>()));
 		}
 
 		public String getNameOfStageThisConsumerIsOn(InputConsumer inputConsumer) {

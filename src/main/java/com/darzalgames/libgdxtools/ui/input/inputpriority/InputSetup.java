@@ -9,29 +9,23 @@ public class InputSetup {
 
 	private final InputPriorityStack inputPriorityStack;
 	private final InputReceiver inputReceiver;
-	private final Pause pause;
 	private final ScrollingManager scrollingManager;
 
 
-	public InputSetup(InputStrategySwitcher inputStrategySwitcher, OptionsMenu optionsMenu, Runnable toggleFullscreenRunnable, List<StageLikeRenderable> allStagesInOrder) {
-		inputPriorityStack = new InputPriorityStack(allStagesInOrder, optionsMenu);
+	public InputSetup(InputStrategySwitcher inputStrategySwitcher, Runnable toggleFullscreenRunnable, List<StageLikeRenderable> allStagesInOrderForInput, Pause pause) {
+		inputPriorityStack = new InputPriorityStack(allStagesInOrderForInput, pause.getOptionsMenu());
 		inputStrategySwitcher.register(inputPriorityStack);
 
 		inputReceiver = new InputReceiver(inputStrategySwitcher, inputPriorityStack, toggleFullscreenRunnable);
 
 		scrollingManager = new ScrollingManager(inputReceiver);
 
-		pause = new Pause(optionsMenu, inputPriorityStack::doesTopPauseGame, inputPriorityStack::getNameOfPausingStage);
+		pause.setInformationalSuppliers(inputPriorityStack::doesTopPauseGame, inputPriorityStack::getNameOfPausingStage);
 		inputReceiver.setPause(pause);
 	}
 
-
 	public InputPriorityStack getInputPriorityStack() {
 		return inputPriorityStack;
-	}
-
-	public Pause getPause() {
-		return pause;
 	}
 
 	public ScrollingManager getScrollingManager() {
@@ -41,6 +35,5 @@ public class InputSetup {
 	public InputReceiver getInputReceiver() {
 		return inputReceiver;
 	}
-
 
 }

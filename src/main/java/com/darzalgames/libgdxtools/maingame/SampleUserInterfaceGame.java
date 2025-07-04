@@ -36,6 +36,7 @@ import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.ChoicePopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -70,7 +71,7 @@ public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
 
 	@Override
 	protected UserInterfaceFactory initializeAssetsAndUserInterfaceFactory() {
-		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable(), () -> inputSetup.getPause().isPaused());
+		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable(), () -> pause.isPaused());
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		return factory;
 	}
@@ -89,7 +90,7 @@ public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
 
 	@Override
 	protected void launchGame(boolean isNewSave) {
-		inputSetup.getPause().showOptionsButton(true);
+		pause.showOptionsButton(true);
 		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override
@@ -380,7 +381,7 @@ public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
 		private final UniversalInputStage popUpStage;
 
 		public SampleMultiStage(UniversalInputStage stage, UniversalInputStage pauseStage, OptionalDrawStage cursorStage, OptionalDrawStage inputHandlerStage, UniversalInputStage popUpStage) {
-			super(stage, pauseStage, inputHandlerStage, cursorStage);
+			super(stage, pauseStage, inputHandlerStage, cursorStage, pause);
 			this.popUpStage = popUpStage;
 			finishSetup();
 		}
@@ -397,8 +398,13 @@ public class SampleUserInterfaceGame extends MainGame<SampleMultiStage> {
 	}
 
 	@Override
-	protected SampleMultiStage makeMultiStage(UniversalInputStage mainStage, UniversalInputStage pauseStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage) {
+	protected SampleMultiStage makeMultiStage(UniversalInputStage mainStage, UniversalInputStage pauseStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage, Pause pause) {
 		return new SampleMultiStage(mainStage, pauseStage, cursorStage, inputHandlerStage, makeAllPurposeStage(SampleMultiStage.POP_UP_STAGE_NAME));
+	}
+
+	@Override
+	protected void resizeGameSpecificUI() {
+		// N/A
 	}
 
 }

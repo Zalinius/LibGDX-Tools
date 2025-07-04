@@ -24,24 +24,27 @@ public abstract class MultiStage {
 	static final String CURSOR_STAGE_NAME = "Cursor Stage";
 	static final String INPUT_HANDLER_STAGE_NAME = "Input Handler Stage";
 
-	private Pause pause;
 	private final List<DoesNotPause> actorsThatDoNotPause;
 
 	private final UniversalInputStage mainStage;
 	private final UniversalInputStage optionsStage;
-
 	private final OptionalDrawStage inputHandlerStage;
 	private final OptionalDrawStage cursorStage;
+
+	private final Pause pause;
 
 
 	protected abstract List<StageLikeRenderable> getGameSpecificStagesInRenderOrder();
 
 
-	protected MultiStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage) {
+	protected MultiStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, OptionalDrawStage inputHandlerStage, OptionalDrawStage cursorStage, Pause pause) {
 		this.mainStage = mainStage;
 		this.optionsStage = optionsStage;
 		this.inputHandlerStage = inputHandlerStage;
 		this.cursorStage = cursorStage;
+
+		this.pause = pause;
+		inputHandlerStage.addActor(pause);
 
 		GetOnStage.initialize(this::addActorStage);
 
@@ -74,11 +77,6 @@ public abstract class MultiStage {
 
 	public void addActorThatDoesNotPause(DoesNotPause actor) {
 		actorsThatDoNotPause.add(actor);
-	}
-
-	void setPause(Pause pause) {
-		this.pause = pause;
-		inputHandlerStage.addActor(pause);
 	}
 
 	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, ScrollingManager scrollingManager) {

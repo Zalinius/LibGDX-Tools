@@ -44,7 +44,7 @@ class SampleUserInterfaceGameIT {
 				app -> {
 					pressKey(Keys.ESCAPE);
 
-					assertTrue(app.inputSetup.getPause().isPaused());
+					assertTrue(app.pause.isPaused());
 
 					Gdx.app.exit();
 				});
@@ -54,10 +54,10 @@ class SampleUserInterfaceGameIT {
 	void clickingTheOptionsButton_pausesTheGame() {
 		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
-					app.inputSetup.getPause().act(3); // Give time for the pause button to be put in place
+					app.pause.act(3); // Give time for the pause button to be put in place
 					clickMouse(10, 10);
 
-					assertTrue(app.inputSetup.getPause().isPaused());
+					assertTrue(app.pause.isPaused());
 
 					Gdx.app.exit();
 				});
@@ -67,9 +67,9 @@ class SampleUserInterfaceGameIT {
 		SampleUserInterfaceGame.testLauncher(List.of(GamePlatform.WINDOWS),
 				app -> {
 					pressKey(Keys.ESCAPE);
-					assertTrue(app.inputSetup.getPause().isPaused());
+					assertTrue(app.pause.isPaused());
 					pressKey(Keys.ESCAPE);
-					assertFalse(app.inputSetup.getPause().isPaused());
+					assertFalse(app.pause.isPaused());
 
 					Gdx.app.exit();
 				});

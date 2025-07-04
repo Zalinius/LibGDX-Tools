@@ -120,7 +120,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			currentScreen.hide();
 			currentScreen.remove();
 		}
-		multipleStage.clear();
+		multipleStage.clearAllGameStages();
 		currentScreen = gameScreen;
 		GetOnStage.addActorToStage(gameScreen, MultipleStage.MAIN_STAGE_NAME);
 		currentScreen.show();
@@ -205,6 +205,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		OptionalDrawStage cursorStage = makeCursorStage();
 		OptionalDrawStage inputHandlerStage = makeInputHandlerStage();
 		UserInterfaceSizer.setStage(mainStage);
+		Fader.initialize(MultipleStage.CURSOR_STAGE_NAME);
 
 		pause = new Pause(makeOptionsMenu());
 		multipleStage = new MultipleStage(mainStage, optionsStage, inputHandlerStage, cursorStage, pause, makeGameSpecificStages());
@@ -239,14 +240,12 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private OptionalDrawStage makeCursorStage() {
 		OptionalDrawStage cursorStage = new OptionalDrawStage(MultipleStage.CURSOR_STAGE_NAME, new ScreenViewport());
 		cursorStage.addActor(getCustomCursor());
-		Fader.initialize(cursorStage);
 		return cursorStage;
 	}
 
 	private void setUpInput() {
 		// Set up input processing for all strategies
 		inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, multipleStage.getAllStagesInOrder(), pause);
-		multipleStage.addActorThatDoesNotPause(inputStrategySwitcher);
 
 		makeSteamStrategy();
 		makeKeyboardAndGamepadInputHandlers();

@@ -9,12 +9,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public class CustomCursorImage extends Image implements DoesNotPause, InputStrategyObserver {
+public class CustomCursorImage extends Image implements InputStrategyObserver {
 
 	private final Supplier<Boolean> checkIsWindowed;
 	private final TextureRegion cursorTexture;
@@ -74,11 +73,6 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputStrat
 		setPosition(position.x, position.y - getHeight());
 
 		setCursorImage(Gdx.input.isButtonPressed(Buttons.LEFT) ? clickedCursorTexture : cursorTexture);
-	}
-
-	@Override
-	public void actWhilePaused(float delta) {
-		act(delta);
 	}
 
 	@Override

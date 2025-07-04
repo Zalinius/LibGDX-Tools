@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.ui.GetOnStage;
 import com.darzalgames.libgdxtools.ui.input.OptionalDrawStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
@@ -24,7 +23,6 @@ public final class MultipleStage {
 	static final String CURSOR_STAGE_NAME = "Cursor Stage";
 	static final String INPUT_HANDLER_STAGE_NAME = "Input Handler Stage";
 
-	private final List<DoesNotPause> actorsThatDoNotPause;
 
 	private final UniversalInputStage mainStage;
 	private final UniversalInputStage optionsStage;
@@ -32,8 +30,6 @@ public final class MultipleStage {
 	private final OptionalDrawStage cursorStage;
 
 	private final Pause pause;
-
-
 	private final List<StageLikeRenderable> gameSpecificStages;
 
 
@@ -47,11 +43,8 @@ public final class MultipleStage {
 		inputHandlerStage.addActor(pause);
 
 		this.gameSpecificStages = gameSpecificStages;
-		setShouldRender(true);
 		setUpInputMultiplexerForAllStages();
 		GetOnStage.initialize(this::addActorStage);
-
-		actorsThatDoNotPause = new ArrayList<>();
 	}
 
 	public void addActorStage(Actor actor, String stageName) {
@@ -62,17 +55,7 @@ public final class MultipleStage {
 		findStageByName(stageName).ifPresent(StageLikeRenderable::clear);
 	}
 
-	public void setShouldRender(boolean shouldRender) {
-		getAllStagesInOrder().forEach(stage -> stage.setShouldDraw(shouldRender));
-		cursorStage.setShouldDraw(shouldRender);
-	}
-
-	public void addActorThatDoesNotPause(DoesNotPause actor) {
-		actorsThatDoNotPause.add(actor);
-	}
-
-
-	public void clear() {
+	public void clearAllGameStages() {
 		getAllStagesInOrder().forEach(StageLikeRenderable::clear);
 		// We don't clear the cursor stage and input handler stage ever
 	}
@@ -149,13 +132,8 @@ public final class MultipleStage {
 
 	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, ScrollingManager scrollingManager) {
 		inputHandlerStage.addActor(keyboardInputHandler);
-		actorsThatDoNotPause.add(keyboardInputHandler);
-
 		inputHandlerStage.addActor(gamepadInputHandler);
-		actorsThatDoNotPause.add(gamepadInputHandler);
-
 		inputHandlerStage.addActor(scrollingManager);
-		actorsThatDoNotPause.add(scrollingManager);
 
 		mainStage.setKeyboardFocus(keyboardInputHandler);
 	}

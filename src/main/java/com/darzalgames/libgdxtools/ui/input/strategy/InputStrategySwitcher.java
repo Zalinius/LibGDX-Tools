@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
-import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategySubject;
@@ -13,7 +12,7 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategySubject;
 /**
  * Tracks the current input strategy, and handles switching between them as needed.
  */
-public class InputStrategySwitcher extends Actor implements InputStrategy, InputStrategySubject, DoesNotPause {
+public class InputStrategySwitcher extends Actor implements InputStrategy, InputStrategySubject {
 
 	private InputStrategy currentInputStrategy;
 	private InputStrategy previousInputStrategy;
@@ -109,11 +108,6 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 			delayAction.setAction(resetInputAction);
 			addAction(delayAction);
 		}
-	}
-
-	@Override
-	public void actWhilePaused(float delta) {
-		act(delta);
 	}
 
 }

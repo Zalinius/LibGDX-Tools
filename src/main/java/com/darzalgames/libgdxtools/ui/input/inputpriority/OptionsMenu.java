@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
-import com.darzalgames.darzalcommon.state.DoesNotPause;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
@@ -23,7 +22,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalB
 /**
  * The base class for options menus (in-game versus when on the main menu)
  */
-public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
+public abstract class OptionsMenu extends PopUpMenu {
 
 	protected UniversalButton optionsButton;
 	private final Supplier<UniversalButton> makeWindowModeSelectBox;
@@ -180,11 +179,6 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	}
 
 	@Override
-	public void actWhilePaused(float delta) {
-		act(delta);
-	}
-
-	@Override
 	public boolean isGamePausedWhileThisIsInFocus() {
 		return true;
 	}
@@ -209,7 +203,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	/**
 	 * A sub-menu that opens up within this menu (e.g. a sub-menu for sound options)
 	 */
-	protected class NestedMenu extends PopUpMenu implements DoesNotPause {
+	protected class NestedMenu extends PopUpMenu {
 
 		private final String buttonKey;
 
@@ -229,11 +223,6 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 		public UniversalButton getButton() {
 			return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this, MultipleStage.OPTIONS_STAGE_NAME));
-		}
-
-		@Override
-		public void actWhilePaused(float delta) {
-			act(delta);
 		}
 
 		@Override

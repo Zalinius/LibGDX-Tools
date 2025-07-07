@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input;
 
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.darzalgames.libgdxtools.maingame.StageBest;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 

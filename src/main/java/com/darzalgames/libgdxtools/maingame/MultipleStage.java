@@ -6,8 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.darzalgames.libgdxtools.ui.GetOnStage;
-import com.darzalgames.libgdxtools.ui.input.StageBest;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
@@ -26,28 +24,28 @@ public final class MultipleStage {
 
 	private final UniversalInputStage mainStage;
 	private final UniversalInputStage optionsStage;
-	private final StageBest inputHandlerStage;
 	private final StageBest cursorStage;
+	private final StageBest inputHandlerStage;
 
 	private final Pause pause;
 	private final List<StageLikeRenderable> gameSpecificStages;
 
 
-	MultipleStage(UniversalInputStage mainStage, UniversalInputStage optionsStage, StageBest inputHandlerStage, StageBest cursorStage, Pause pause, List<StageLikeRenderable> gameSpecificStages) {
+	MultipleStage(UniversalInputStage mainStage, List<StageLikeRenderable> gameSpecificStages, UniversalInputStage optionsStage, StageBest cursorStage, StageBest inputHandlerStage, Pause pause) {
 		this.mainStage = mainStage;
 		this.optionsStage = optionsStage;
-		this.inputHandlerStage = inputHandlerStage;
 		this.cursorStage = cursorStage;
+		this.inputHandlerStage = inputHandlerStage;
 
 		this.pause = pause;
 		inputHandlerStage.addActor(pause);
 
 		this.gameSpecificStages = gameSpecificStages;
 		setUpInputMultiplexerForAllStages();
-		GetOnStage.initialize(this::addActorStage);
+		GetOnStage.setAddActorToStageFunction(this::addActorToStage);
 	}
 
-	public void addActorStage(Actor actor, String stageName) {
+	public void addActorToStage(Actor actor, String stageName) {
 		findStageByName(stageName).ifPresent(stage -> stage.addActor(actor));
 	}
 

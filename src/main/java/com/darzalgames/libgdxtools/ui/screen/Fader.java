@@ -6,9 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
+import com.darzalgames.libgdxtools.maingame.GetOnStage;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
-import com.darzalgames.libgdxtools.ui.GetOnStage;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 
 public class Fader {

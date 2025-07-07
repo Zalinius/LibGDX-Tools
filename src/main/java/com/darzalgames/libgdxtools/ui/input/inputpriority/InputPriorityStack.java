@@ -17,7 +17,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
  */
 public class InputPriorityStack implements InputStrategyObserver, InputPrioritySubject {
 
-	private final LimitedAccessDoubleStack stack;
+	private final LimitedAccessMultiStack multiStack;
 	private final OptionsMenu optionsMenu;
 	private final DarkScreen darkScreen;
 
@@ -29,7 +29,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		stageLikeRenderables = new HashMap<>();
 		allStagesInOrderForInput.forEach(stage -> stageLikeRenderables.put(stage.getName(), stage));
 		inputPriorityObservers = new ArrayList<>();
-		stack = new LimitedAccessDoubleStack(allStagesInOrderForInput);
+		multiStack = new LimitedAccessMultiStack(allStagesInOrderForInput);
 		clearStackAndPushBlankConsumer();
 
 		darkScreen = new DarkScreen(() -> sendInputToTop(Input.BACK));
@@ -38,13 +38,13 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	void claimPriority(InputConsumer inputConsumer, String stageLikeRenderableName) {
-		boolean thisIsDifferentFromTheTop = !stack.isThisOnTop(inputConsumer, stageLikeRenderableName);
+		boolean thisIsDifferentFromTheTop = !multiStack.isThisOnTop(inputConsumer, stageLikeRenderableName);
 		if (thisIsDifferentFromTheTop) {
 			boolean isAPopup = inputConsumer.isPopUp();
 			if (isAPopup) {
 				claimPriorityForPopup(inputConsumer, stageLikeRenderableName);
 			} else {
-				claimPriorityOnStack(() -> stack.push(inputConsumer, stageLikeRenderableName));
+				claimPriorityOnStack(() -> multiStack.push(inputConsumer, stageLikeRenderableName));
 			}
 		}
 	}
@@ -60,7 +60,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		stageLikeRenderable.addActor(actor);
 		actor.toFront();
 		darkScreen.fadeIn(actor, popup.canDismiss(), stageLikeRenderable);
-		claimPriorityOnStack(() -> stack.push(inputConsumer, nameOfStageLikeRenderable));
+		claimPriorityOnStack(() -> multiStack.push(inputConsumer, nameOfStageLikeRenderable));
 		popup.addBackClickListenerIfCanDismiss();
 	}
 
@@ -74,45 +74,45 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	 * @param inputConsumer The thing that wants to release its priority
 	 */
 	void releasePriority(InputConsumer inputConsumer) {
-		String nameOfStageThisConsumerIsOn = stack.getNameOfStageThisConsumerIsOn(inputConsumer);
+		String nameOfStageThisConsumerIsOn = multiStack.getNameOfStageThisConsumerIsOn(inputConsumer);
 		boolean stageExists = stageLikeRenderables.containsKey(nameOfStageThisConsumerIsOn);
-		if (stageExists && stack.isThisOnTop(inputConsumer, nameOfStageThisConsumerIsOn)) {
+		if (stageExists && multiStack.isThisOnTop(inputConsumer, nameOfStageThisConsumerIsOn)) {
 			darkScreen.fadeOutAndRemove();
 			releasePriorityForTop();
 			darkScreen.fadeOutAndRemove();
-			showDarkScreenIfLandingOnPopup(stageLikeRenderables.get(stack.getNameOfTopStage()));
+			showDarkScreenIfLandingOnPopup(stageLikeRenderables.get(multiStack.getNameOfTopStage()));
 		} else {
-			stack.remove(inputConsumer, nameOfStageThisConsumerIsOn);
+			multiStack.remove(inputConsumer, nameOfStageThisConsumerIsOn);
 		}
 	}
 
 	void sendInputToTop(Input input) {
-		stack.getTop().consumeKeyInput(input);
+		multiStack.getTop().consumeKeyInput(input);
 	}
 
 	boolean doesTopPauseGame() {
-		return stack.getTop().isGamePausedWhileThisIsInFocus();
+		return multiStack.getTop().isGamePausedWhileThisIsInFocus();
 	}
 
 	String getNameOfPausingStage() {
 		if (!doesTopPauseGame()) {
 			return "";
 		}
-		return stack.getNameOfTopStage();
+		return multiStack.getNameOfTopStage();
 	}
 
 	private void focusTop(boolean isFirstFocus) {
 		if (isFirstFocus) {
-			stack.getTop().gainFocus();
+			multiStack.getTop().gainFocus();
 		} else {
-			stack.getTop().regainFocus();
+			multiStack.getTop().regainFocus();
 		}
-		stack.getTop().setTouchable(Touchable.enabled);
-		stack.getTop().focusCurrent();
+		multiStack.getTop().setTouchable(Touchable.enabled);
+		multiStack.getTop().focusCurrent();
 	}
 
 	private void unFocusTop() {
-		InputConsumer top = stack.getTop();
+		InputConsumer top = multiStack.getTop();
 		top.setTouchable(Touchable.disabled);
 		top.loseFocus();
 	}
@@ -120,9 +120,9 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
 		if (inputStrategySwitcher.shouldFlashButtons()) {
-			stack.getTop().selectDefault();
+			multiStack.getTop().selectDefault();
 		} else { // Mouse mode
-			stack.getTop().clearSelected();
+			multiStack.getTop().clearSelected();
 		}
 	}
 
@@ -135,19 +135,19 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	private void releasePriorityForTop() {
-		boolean isClosingOptionsMenu = stack.isThisOnTop(optionsMenu, MultipleStage.OPTIONS_STAGE_NAME);
+		boolean isClosingOptionsMenu = multiStack.isThisOnTop(optionsMenu, MultipleStage.OPTIONS_STAGE_NAME);
 		unFocusTop();
-		stack.popTop();
+		multiStack.popTop();
 		if (isClosingOptionsMenu) {
-			stack.getTop().setTouchable(Touchable.enabled);
-			stack.getTop().focusCurrent();
+			multiStack.getTop().setTouchable(Touchable.enabled);
+			multiStack.getTop().focusCurrent();
 		} else {
 			focusTop(false);
 		}
 	}
 
 	private void showDarkScreenIfLandingOnPopup(StageLikeRenderable stageLikeRenderable) {
-		InputConsumer currentTop = stack.getTop();
+		InputConsumer currentTop = multiStack.getTop();
 		if (currentTop != null && currentTop.isPopUp()) {
 			PopUp popUp = currentTop.getPopUp();
 			Actor actor = popUp.getAsActor();
@@ -168,7 +168,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	public void resizeStackUI() {
-		stack.resizeUI();
+		multiStack.resizeUI();
 	}
 
 	@Override
@@ -182,8 +182,8 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	private void clearStackAndPushBlankConsumer() {
-		stack.clear();
-		stack.push(makeBlankConsumer(), MultipleStage.MAIN_STAGE_NAME);
+		multiStack.clear();
+		multiStack.push(makeBlankConsumer(), MultipleStage.MAIN_STAGE_NAME);
 	}
 
 	private InputConsumer makeBlankConsumer() {
@@ -199,10 +199,10 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		};
 	}
 
-	private class LimitedAccessDoubleStack {
-		private final LinkedHashMap<String, ArrayDeque<InputConsumer>> inputConsumerStacks;
+	private class LimitedAccessMultiStack {
+		private final Map<String, ArrayDeque<InputConsumer>> inputConsumerStacks;
 
-		public LimitedAccessDoubleStack(List<StageLikeRenderable> allStagesInOrderForInput) {
+		public LimitedAccessMultiStack(List<StageLikeRenderable> allStagesInOrderForInput) {
 			inputConsumerStacks = new LinkedHashMap<>();
 			allStagesInOrderForInput.forEach(stage -> inputConsumerStacks.put(stage.getName(), new ArrayDeque<>()));
 		}
@@ -228,9 +228,6 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		}
 
 		private boolean isThisOnTop(InputConsumer inputConsumer, String nameOfStageThisConsumerIsOn) {
-			if (nameOfStageThisConsumerIsOn == null) {
-				return false;
-			}
 			InputConsumer top = getTopForStage(nameOfStageThisConsumerIsOn);
 			return top != null && (inputConsumer.equals(top) || top.equals(inputConsumer));
 		}

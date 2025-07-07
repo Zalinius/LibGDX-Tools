@@ -1,10 +1,9 @@
-package com.darzalgames.libgdxtools.ui.input;
+package com.darzalgames.libgdxtools.maingame;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 
 public class StageBest extends Stage implements StageLikeRenderable {
 

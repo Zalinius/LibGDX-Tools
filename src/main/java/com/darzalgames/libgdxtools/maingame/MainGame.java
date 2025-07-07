@@ -16,9 +16,7 @@ import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
-import com.darzalgames.libgdxtools.ui.GetOnStage;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
-import com.darzalgames.libgdxtools.ui.input.StageBest;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStageWithBackground;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
@@ -206,7 +204,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		Fader.initialize(MultipleStage.CURSOR_STAGE_NAME);
 
 		pause = new Pause(makeOptionsMenu());
-		multipleStage = new MultipleStage(mainStage, optionsStage, inputHandlerStage, cursorStage, pause, makeGameSpecificStages());
+		multipleStage = new MultipleStage(mainStage, makeGameSpecificStages(), optionsStage, cursorStage, inputHandlerStage, pause);
 	}
 
 	protected UniversalInputStage makeAllPurposeStage(String name) {

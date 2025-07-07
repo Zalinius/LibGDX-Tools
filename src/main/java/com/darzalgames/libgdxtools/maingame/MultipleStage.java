@@ -1,146 +1,159 @@
 package com.darzalgames.libgdxtools.maingame;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.darzalgames.darzalcommon.state.DoesNotPause;
-import com.darzalgames.libgdxtools.ui.input.OptionalDrawStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.ScrollingManager;
 
-public class MultipleStage {
+public final class MultipleStage {
 
 	private static final boolean SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR = false;
 
-	private final UniversalInputStage stage;
-	private final UniversalInputStage popUpStage;
-	private final OptionalDrawStage cursorStage;
-	private final OptionalDrawStage inputHandlerStage;
+	public static final String MAIN_STAGE_NAME = "Main Stage";
+	public static final String OPTIONS_STAGE_NAME = "Options Stage";
+	static final String CURSOR_STAGE_NAME = "Cursor Stage";
+	static final String INPUT_HANDLER_STAGE_NAME = "Input Handler Stage";
 
-	private Pause pause;
-	private final List<DoesNotPause> actorsThatDoNotPause;
 
-	public MultipleStage(UniversalInputStage stage, UniversalInputStage popUpStage, OptionalDrawStage cursorStage, OptionalDrawStage inputHandlerStage) {
-		this.stage = stage;
-		this.popUpStage = popUpStage;
+	private final UniversalInputStage mainStage;
+	private final UniversalInputStage optionsStage;
+	private final StageBest cursorStage;
+	private final StageBest inputHandlerStage;
+
+	private final Pause pause;
+	private final List<StageLikeRenderable> gameSpecificStages;
+
+
+	MultipleStage(UniversalInputStage mainStage, List<StageLikeRenderable> gameSpecificStages, UniversalInputStage optionsStage, StageBest cursorStage, StageBest inputHandlerStage, Pause pause) {
+		this.mainStage = mainStage;
+		this.optionsStage = optionsStage;
 		this.cursorStage = cursorStage;
 		this.inputHandlerStage = inputHandlerStage;
-		actorsThatDoNotPause = new ArrayList<>();
+
+		this.pause = pause;
+		inputHandlerStage.addActor(pause);
+
+		this.gameSpecificStages = gameSpecificStages;
 		setUpInputMultiplexerForAllStages();
-		setShouldRender(true);
+		GetOnStage.setAddActorToStageFunction(this::addActorToStage);
 	}
 
-	public void setShouldRender(boolean shouldRender) {
-		stage.setShouldDraw(shouldRender);
-		popUpStage.setShouldDraw(shouldRender);
-		cursorStage.setShouldDraw(shouldRender);
-		inputHandlerStage.setShouldDraw(shouldRender);
+	public void addActorToStage(Actor actor, String stageName) {
+		findStageByName(stageName).ifPresent(stage -> stage.addActor(actor));
 	}
 
-	public void addActorThatDoesNotPause(DoesNotPause actor) {
-		actorsThatDoNotPause.add(actor);
+	public void clearStage(String stageName) {
+		findStageByName(stageName).ifPresent(StageLikeRenderable::clear);
 	}
 
-	public void clearPopUpStage() {
-		popUpStage.clear();
+	public void clearAllGameStages() {
+		getGameStagesInOrder().forEach(StageLikeRenderable::clear);
+		// We don't clear the cursor stage and input handler stage ever
 	}
 
-	void update(Runnable furtherRendering) {
+	void update() {
 		if (SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR) {
 			doDebugPrinting();
 		}
 
-		if (pause.isPaused()) {
-			// skip stage.act() while paused
-			stage.draw();
-			float delta = Gdx.graphics.getDeltaTime();
-			actorsThatDoNotPause.forEach(actor -> actor.actWhilePaused(delta));
+		List<StageLikeRenderable> allPausableStages = new ArrayList<>(gameSpecificStages);
+		allPausableStages.addFirst(mainStage);
+		if (!pause.isPaused()) {
+			allPausableStages.forEach(this::updateAndDrawStage);
 		} else {
-			updateAndDrawStage(stage);
-		}
-		furtherRendering.run();
+			resizeUIWhilePaused();
+			boolean hitPausingStage = false;
+			for (StageLikeRenderable stageLike : allPausableStages) {
+				if (stageLike.getName().equals(pause.getNameOfPausingStage())) {
+					hitPausingStage = true;
+				}
 
-		updateAndDrawStage(popUpStage);
+				if (hitPausingStage) {
+					// Once we find the stage which is pausing the game, update and draw it and all stages above it like normal
+					updateAndDrawStage(stageLike);
+				} else {
+					// skip stage.act() while paused
+					stageLike.draw();
+				}
+			}
+		}
+
+		updateAndDrawStage(optionsStage);
 		updateAndDrawStage(cursorStage);
 		updateAndDrawStage(inputHandlerStage);
 	}
 
-	private void updateAndDrawStage(Stage stageToUpdate) {
+	private void updateAndDrawStage(StageLikeRenderable stageToUpdate) {
 		stageToUpdate.act();
 		stageToUpdate.draw();
 	}
 
 	void resize(int width, int height) {
-		resizeStage(width, height, stage);
-		resizeStage(width, height, inputHandlerStage);
-		resizeStage(width, height, popUpStage);
-		resizeStage(width, height, cursorStage);
-	}
-
-	private static void resizeStage(int width, int height, Stage stageToResize) {
-		stageToResize.getViewport().update(width, height, true);
-		stageToResize.getCamera().update();
-	}
-
-	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, ScrollingManager scrollingManager) {
-		inputHandlerStage.addActor(keyboardInputHandler);
-		actorsThatDoNotPause.add(keyboardInputHandler);
-
-		inputHandlerStage.addActor(gamepadInputHandler);
-		actorsThatDoNotPause.add(gamepadInputHandler);
-
-		inputHandlerStage.addActor(scrollingManager);
-		actorsThatDoNotPause.add(scrollingManager);
-
-		stage.setKeyboardFocus(keyboardInputHandler);
-	}
-
-	void setPause(Pause pause) {
-		this.pause = pause;
-		inputHandlerStage.addActor(pause);
-	}
-
-	private void setUpInputMultiplexerForAllStages() {
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(inputHandlerStage);
-		inputMultiplexer.addProcessor(cursorStage);
-		inputMultiplexer.addProcessor(popUpStage);
-		inputMultiplexer.addProcessor(stage);
-		Gdx.input.setInputProcessor(inputMultiplexer);
+		getAllStagesInOrder().forEach(stage -> stage.resize(width, height));
 	}
 
 	private void doDebugPrinting() {
-		boolean hitPopUpStage = tryToPrintADebugHit(popUpStage);
-		if (!hitPopUpStage) {
-			tryToPrintADebugHit(stage);
+		Iterator<StageLikeRenderable> stages = getGameStagesInOrder().reversed().iterator();
+		boolean hitSomething = false;
+		while (!hitSomething && stages.hasNext()) {
+			hitSomething = tryToPrintADebugHit(stages.next());
 		}
 	}
 
-	private boolean tryToPrintADebugHit(Stage stage) {
+	private boolean tryToPrintADebugHit(StageLikeRenderable stage) {
 		Vector2 cursor = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-		Actor hitActor = stage.hit(cursor.x, cursor.y, true);
-		boolean hitSomething = hitActor != null;
+		String hit = stage.nameOfThingAtCursorPosition(cursor.x, cursor.y, true);
+		boolean hitSomething = hit != null && !hit.isBlank();
 		if (hitSomething) {
-			Gdx.app.log("Stage", stage.getRoot().getName() + ": " + hitActor);
+			Gdx.app.log("MultiStage", stage.getName() + ": " + hit);
 		}
 		return hitSomething;
 	}
 
-	public UniversalInputStage getStage() {
-		return stage;
+
+
+	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, ScrollingManager scrollingManager) {
+		inputHandlerStage.addActor(keyboardInputHandler);
+		inputHandlerStage.addActor(gamepadInputHandler);
+		inputHandlerStage.addActor(scrollingManager);
+
+		mainStage.setKeyboardFocus(keyboardInputHandler);
 	}
 
-	public UniversalInputStage getPopUpStage() {
-		return popUpStage;
+	List<StageLikeRenderable> getGameStagesInOrder() {
+		// We don't include cursor and input handler stages here since no one else should be accessing them
+		List<StageLikeRenderable> allStages = new ArrayList<>(gameSpecificStages);
+		allStages.addFirst(mainStage);
+		allStages.addLast(optionsStage);
+		return allStages;
 	}
 
+	private List<StageLikeRenderable> getAllStagesInOrder() {
+		List<StageLikeRenderable> allStages = new ArrayList<>(getGameStagesInOrder());
+		allStages.add(cursorStage);
+		allStages.add(inputHandlerStage);
+		return allStages;
+	}
+
+	private void setUpInputMultiplexerForAllStages() {
+		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		getAllStagesInOrder().reversed().forEach(inputMultiplexer::addProcessor);
+		Gdx.input.setInputProcessor(inputMultiplexer);
+	}
+
+	private Optional<StageLikeRenderable> findStageByName(String stageName) {
+		return getAllStagesInOrder().stream().filter(stage -> stage.getName().equals(stageName)).findFirst();
+	}
+
+	private void resizeUIWhilePaused() {
+		getGameStagesInOrder().forEach(stage -> stage.act(0));
+	}
 
 }

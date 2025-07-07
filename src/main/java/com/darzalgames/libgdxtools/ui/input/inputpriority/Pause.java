@@ -3,20 +3,18 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.darzalgames.libgdxtools.maingame.MultipleStage;
 
 public class Pause extends Actor {
 
-	private OptionsMenu optionsMenu;
-	private Stage popUpStage;
-	private final Supplier<Boolean> doesCurrentInputConsumerPauseGame;
+	private final OptionsMenu optionsMenu;
+	private Supplier<Boolean> doesCurrentInputConsumerPauseGame;
+	private Supplier<String> getNameOfPausingStage;
 
 	/**
-	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
+	 * @param optionsMenu the game's pause/options menu
 	 */
-	public Pause(Stage popUpStage, OptionsMenu optionsMenu, Supplier<Boolean> doesCurrentInputConsumerPauseGame) {
-		this.popUpStage = popUpStage;
-		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
+	public Pause(OptionsMenu optionsMenu) {
 		GamePauser.setPauseGameRunnable(this::pause);
 
 		this.optionsMenu = optionsMenu;
@@ -28,20 +26,39 @@ public class Pause extends Actor {
 		optionsMenu.showOptionsButton(show);
 	}
 
-	boolean isOptionsMenuOpen() {
-		return optionsMenu.getStage() != null;
-	}
-
 	public boolean isPaused() {
 		return doesCurrentInputConsumerPauseGame.get();
 	}
 
+	public String getNameOfPausingStage() {
+		return getNameOfPausingStage.get();
+	}
+
 	private void pause() {
-		InputPriority.claimPriority(optionsMenu);
+		InputPriority.claimPriority(optionsMenu, MultipleStage.OPTIONS_STAGE_NAME);
 	}
 
 	@Override
 	public void act(float delta) {
-		optionsMenu.addOptionsButtonToStage(popUpStage);
+		optionsMenu.addOptionsButtonToStage();
 	}
+
+
+	/**
+	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
+	 * @param getNameOfPausingStage a supplier for the name of the stage that the current pausing the game, if any
+	 */
+	void setInformationalSuppliers(Supplier<Boolean> doesCurrentInputConsumerPauseGame, Supplier<String> getNameOfPausingStage) {
+		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;
+		this.getNameOfPausingStage = getNameOfPausingStage;
+	}
+
+	boolean isOptionsMenuOpen() {
+		return optionsMenu.getStage() != null;
+	}
+
+	OptionsMenu getOptionsMenu() {
+		return optionsMenu;
+	}
+
 }

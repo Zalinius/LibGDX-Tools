@@ -1,12 +1,12 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.darzalgames.libgdxtools.maingame.MultipleStage;
+import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -17,45 +17,50 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
  */
 public class InputPriorityStack implements InputStrategyObserver, InputPrioritySubject {
 
-	private final LimitedAccessDoubleStack stack;
-	private final DarkScreen darkScreen;
-	private final Stage popUpStage;
+	private final LimitedAccessMultiStack multiStack;
 	private final OptionsMenu optionsMenu;
+	private final DarkScreen darkScreen;
 
 	private final List<InputPriorityObserver> inputPriorityObservers;
+	private final Map<String, StageLikeRenderable> stageLikeRenderables;
 
-	public InputPriorityStack(Stage popUpStage, OptionsMenu optionsMenu) {
-		this.popUpStage = popUpStage;
+	public InputPriorityStack(List<StageLikeRenderable> allStagesInOrderForInput, OptionsMenu optionsMenu) {
 		this.optionsMenu = optionsMenu;
+		stageLikeRenderables = new HashMap<>();
+		allStagesInOrderForInput.forEach(stage -> stageLikeRenderables.put(stage.getName(), stage));
 		inputPriorityObservers = new ArrayList<>();
-		stack = new LimitedAccessDoubleStack();
+		multiStack = new LimitedAccessMultiStack(allStagesInOrderForInput);
 		clearStackAndPushBlankConsumer();
 
-		darkScreen = new DarkScreen(popUpStage, () -> sendInputToTop(Input.BACK));
+		darkScreen = new DarkScreen(() -> sendInputToTop(Input.BACK));
 
 		InputPriority.setInputPriorityStack(this);
 	}
 
-	void claimPriority(InputConsumer inputConsumer) {
-		boolean thisIsDifferentFromTheTop = !stack.isThisOnTop(inputConsumer);
+	void claimPriority(InputConsumer inputConsumer, String stageLikeRenderableName) {
+		boolean thisIsDifferentFromTheTop = !multiStack.isThisOnTop(inputConsumer, stageLikeRenderableName);
 		if (thisIsDifferentFromTheTop) {
 			boolean isAPopup = inputConsumer.isPopUp();
 			if (isAPopup) {
-				claimPriorityForPopup(inputConsumer);
+				claimPriorityForPopup(inputConsumer, stageLikeRenderableName);
 			} else {
-				claimPriorityOnStack(() -> stack.push(inputConsumer));
+				claimPriorityOnStack(() -> multiStack.push(inputConsumer, stageLikeRenderableName));
 			}
 		}
 	}
 
-	private void claimPriorityForPopup(InputConsumer inputConsumer) {
+	private void claimPriorityForPopup(InputConsumer inputConsumer, String nameOfStageLikeRenderable) {
+		if (!stageLikeRenderables.containsKey(nameOfStageLikeRenderable)) {
+			throw new IllegalArgumentException("No stage registered with name: " + nameOfStageLikeRenderable);
+		}
+		StageLikeRenderable stageLikeRenderable = stageLikeRenderables.get(nameOfStageLikeRenderable);
 		darkScreen.remove();
 		PopUp popup = inputConsumer.getPopUp();
 		Actor actor = popup.getAsActor();
-		popUpStage.addActor(actor);
+		stageLikeRenderable.addActor(actor);
 		actor.toFront();
-		darkScreen.fadeIn(actor, popup.canDismiss());
-		claimPriorityOnStack(() -> stack.pushPopup(inputConsumer));
+		darkScreen.fadeIn(actor, popup.canDismiss(), stageLikeRenderable);
+		claimPriorityOnStack(() -> multiStack.push(inputConsumer, nameOfStageLikeRenderable));
 		popup.addBackClickListenerIfCanDismiss();
 	}
 
@@ -66,39 +71,48 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	/**
-	 * @param inputConsumer The thing that wants to release its priority, this only works if the requester is currently at the top of the stack
+	 * @param inputConsumer The thing that wants to release its priority
 	 */
 	void releasePriority(InputConsumer inputConsumer) {
-		if (stack.isThisOnTop(inputConsumer)) {
+		String nameOfStageThisConsumerIsOn = multiStack.getNameOfStageThisConsumerIsOn(inputConsumer);
+		boolean stageExists = stageLikeRenderables.containsKey(nameOfStageThisConsumerIsOn);
+		if (stageExists && multiStack.isThisOnTop(inputConsumer, nameOfStageThisConsumerIsOn)) {
 			darkScreen.fadeOutAndRemove();
 			releasePriorityForTop();
 			darkScreen.fadeOutAndRemove();
-			showDarkScreenIfLandingOnPopup();
+			showDarkScreenIfLandingOnPopup(stageLikeRenderables.get(multiStack.getNameOfTopStage()));
 		} else {
-			stack.remove(inputConsumer);
+			multiStack.remove(inputConsumer, nameOfStageThisConsumerIsOn);
 		}
 	}
 
 	void sendInputToTop(Input input) {
-		stack.getTop().consumeKeyInput(input);
+		multiStack.getTop().consumeKeyInput(input);
 	}
 
 	boolean doesTopPauseGame() {
-		return stack.getTop().isGamePausedWhileThisIsInFocus();
+		return multiStack.getTop().isGamePausedWhileThisIsInFocus();
+	}
+
+	String getNameOfPausingStage() {
+		if (!doesTopPauseGame()) {
+			return "";
+		}
+		return multiStack.getNameOfTopStage();
 	}
 
 	private void focusTop(boolean isFirstFocus) {
 		if (isFirstFocus) {
-			stack.getTop().gainFocus();
+			multiStack.getTop().gainFocus();
 		} else {
-			stack.getTop().regainFocus();
+			multiStack.getTop().regainFocus();
 		}
-		stack.getTop().setTouchable(Touchable.enabled);
-		stack.getTop().focusCurrent();
+		multiStack.getTop().setTouchable(Touchable.enabled);
+		multiStack.getTop().focusCurrent();
 	}
 
 	private void unFocusTop() {
-		InputConsumer top = stack.getTop();
+		InputConsumer top = multiStack.getTop();
 		top.setTouchable(Touchable.disabled);
 		top.loseFocus();
 	}
@@ -106,9 +120,9 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
 		if (inputStrategySwitcher.shouldFlashButtons()) {
-			stack.getTop().selectDefault();
+			multiStack.getTop().selectDefault();
 		} else { // Mouse mode
-			stack.getTop().clearSelected();
+			multiStack.getTop().clearSelected();
 		}
 	}
 
@@ -121,25 +135,24 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	private void releasePriorityForTop() {
-		boolean isClosingOptionsMenu = stack.isThisOnTop(optionsMenu);
+		boolean isClosingOptionsMenu = multiStack.isThisOnTop(optionsMenu, MultipleStage.OPTIONS_STAGE_NAME);
 		unFocusTop();
-		stack.popTop();
+		multiStack.popTop();
 		if (isClosingOptionsMenu) {
-			stack.getTop().setTouchable(Touchable.enabled);
-			stack.getTop().focusCurrent();
+			multiStack.getTop().setTouchable(Touchable.enabled);
+			multiStack.getTop().focusCurrent();
 		} else {
 			focusTop(false);
 		}
 	}
 
-	private boolean showDarkScreenIfLandingOnPopup() {
-		if (stack.isLandingOnPopup()) {
-			InputConsumer actorPopUp = stack.getCurrentPopup();
-			PopUp popUp = actorPopUp.getPopUp();
+	private void showDarkScreenIfLandingOnPopup(StageLikeRenderable stageLikeRenderable) {
+		InputConsumer currentTop = multiStack.getTop();
+		if (currentTop != null && currentTop.isPopUp()) {
+			PopUp popUp = currentTop.getPopUp();
 			Actor actor = popUp.getAsActor();
-			darkScreen.fadeIn(actor, popUp.canDismiss());
+			darkScreen.fadeIn(actor, popUp.canDismiss(), stageLikeRenderable);
 		}
-		return false;
 	}
 
 	/**
@@ -155,7 +168,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	public void resizeStackUI() {
-		stack.resizeUI();
+		multiStack.resizeUI();
 	}
 
 	@Override
@@ -169,8 +182,12 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	private void clearStackAndPushBlankConsumer() {
-		stack.clear();
-		stack.push(new InputConsumer() {
+		multiStack.clear();
+		multiStack.push(makeBlankConsumer(), MultipleStage.MAIN_STAGE_NAME);
+	}
+
+	private InputConsumer makeBlankConsumer() {
+		return new InputConsumer() {
 			@Override public void consumeKeyInput(Input input) {/*not needed*/}
 			@Override public void setTouchable(Touchable isTouchable)  {/*not needed*/}
 			@Override public void focusCurrent()  {/*not needed*/}
@@ -179,73 +196,78 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			@Override public void loseFocus() {/*not needed*/}
 			@Override public String toString() { return "Blank base"; }
 			@Override public void resizeUI() {/*not needed*/}
-		});
+		};
 	}
 
-	private class LimitedAccessDoubleStack {
-		private final ArrayDeque<InputConsumer> inputConsumerStack;
-		private final ArrayDeque<InputConsumer> popupInputConsumerStack;
+	private class LimitedAccessMultiStack {
+		private final Map<String, ArrayDeque<InputConsumer>> inputConsumerStacks;
 
-		public LimitedAccessDoubleStack() {
-			inputConsumerStack = new ArrayDeque<>();
-			popupInputConsumerStack = new ArrayDeque<>();
+		public LimitedAccessMultiStack(List<StageLikeRenderable> allStagesInOrderForInput) {
+			inputConsumerStacks = new LinkedHashMap<>();
+			allStagesInOrderForInput.forEach(stage -> inputConsumerStacks.put(stage.getName(), new ArrayDeque<>()));
 		}
 
-		public void remove(InputConsumer inputConsumer) {
-			inputConsumerStack.remove(inputConsumer);
-			popupInputConsumerStack.remove(inputConsumer);
+		public String getNameOfStageThisConsumerIsOn(InputConsumer inputConsumer) {
+			// instead of checking that the deque contains() the value, we check equality in a specific direction (so that GameUIWrapper equals() can get called instead of basic Object's)
+			Optional<Entry<String, ArrayDeque<InputConsumer>>> optional = inputConsumerStacks.entrySet().stream().filter(pair -> pair.getValue().stream().anyMatch(entry -> entry.equals(inputConsumer))).findFirst();
+			if (optional.isEmpty()) {
+				return "";
+			}
+			return optional.get().getKey();
 		}
 
-		private void push(InputConsumer inputConsumer) {
+		public void remove(InputConsumer inputConsumer, String nameOfStageThisConsumerIsOn) {
+			if (inputConsumerStacks.containsKey(nameOfStageThisConsumerIsOn)) {
+				inputConsumerStacks.get(nameOfStageThisConsumerIsOn).remove(inputConsumer);
+			}
+		}
+
+		private void push(InputConsumer inputConsumer, String nameOfStageThisConsumerIsOn) {
 			notifyInputPriorityObservers();
-			inputConsumerStack.push(inputConsumer);
+			inputConsumerStacks.get(nameOfStageThisConsumerIsOn).push(inputConsumer);
 		}
 
-		private void pushPopup(InputConsumer inputConsumer) {
-			notifyInputPriorityObservers();
-			popupInputConsumerStack.push(inputConsumer);
+		private boolean isThisOnTop(InputConsumer inputConsumer, String nameOfStageThisConsumerIsOn) {
+			InputConsumer top = getTopForStage(nameOfStageThisConsumerIsOn);
+			return top != null && (inputConsumer.equals(top) || top.equals(inputConsumer));
 		}
 
-		private boolean isThisOnTop(InputConsumer inputConsumer) {
-			return inputConsumer.equals(getTop()) || getTop().equals(inputConsumer);
+		private InputConsumer getTopForStage(String nameOfStageThisConsumerIsOn) {
+			return inputConsumerStacks.get(nameOfStageThisConsumerIsOn).peek();
+		}
+
+		private String getNameOfTopStage() {
+			return getNameOfStageThisConsumerIsOn(getTop());
+		}
+
+		private ArrayDeque<InputConsumer> getTopStack() {
+			List<ArrayDeque<InputConsumer>> allStacks = new ArrayList<>(inputConsumerStacks.values());
+			Iterator<ArrayDeque<InputConsumer>> allStacksIterator = allStacks.reversed().iterator();
+			while (allStacksIterator.hasNext()) {
+				ArrayDeque<InputConsumer> topStack = allStacksIterator.next();
+				if (topStack.peek() != null) {
+					return topStack;
+				}
+			}
+			return inputConsumerStacks.get(MultipleStage.MAIN_STAGE_NAME);
 		}
 
 		private InputConsumer getTop() {
-			if (!popupInputConsumerStack.isEmpty()) {
-				return popupInputConsumerStack.peek();
-			}
-			return inputConsumerStack.peek();
+			return getTopStack().peek();
 		}
 
 		private void popTop() {
 			notifyInputPriorityObservers();
-			if (!popupInputConsumerStack.isEmpty()) {
-				popupInputConsumerStack.pop();
-			} else {
-				inputConsumerStack.pop();
-			}
-		}
-
-		private boolean isLandingOnPopup() {
-			return !popupInputConsumerStack.isEmpty();
-		}
-
-		private InputConsumer getCurrentPopup() {
-			return popupInputConsumerStack.peek().getPopUp();
+			getTopStack().pop();
 		}
 
 		private void clear() {
-			inputConsumerStack.clear();
-			popupInputConsumerStack.clear();
+			inputConsumerStacks.entrySet().forEach(pair -> pair.getValue().clear());
 		}
 
 		private void resizeUI() {
-			inputConsumerStack.forEach(InputConsumer::resizeUI);
-			popupInputConsumerStack.forEach(actorPopup -> actorPopup.getPopUp().resizeUI());
+			inputConsumerStacks.entrySet().forEach(pair -> pair.getValue().forEach(InputConsumer::resizeUI));
 		}
 	}
 
-	// The compiler insists that we have one of these for proper de/serialization, it generated this number. (Not that this class should ever be serialized...)
-	@SuppressWarnings("unused")
-	private static final long serialVersionUID = 8021674885789936648L;
 }

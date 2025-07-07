@@ -9,14 +9,14 @@ import com.darzalgames.libgdxtools.ui.input.popup.TextChoicePopUp;
  */
 public class ConfirmationMenu extends TextChoicePopUp {
 
-	public ConfirmationMenu(String messageKey, String confirmButtonTextKey, Runnable confirmButtonRunnable) {
-		this(messageKey, confirmButtonTextKey, "back_message", confirmButtonRunnable);
+	public ConfirmationMenu(String messageKey, String confirmButtonTextKey, Runnable confirmButtonRunnable, String stageName) {
+		this(messageKey, confirmButtonTextKey, "back_message", confirmButtonRunnable, stageName);
 	}
 
-	public ConfirmationMenu(String messageKey, String confirmButtonTextKey, String backButtonTextKey, Runnable confirmButtonRunnable) {
-		super(messageKey, confirmButtonTextKey, confirmButtonRunnable, backButtonTextKey, false, true, true);
+	public ConfirmationMenu(String messageKey, String confirmButtonTextKey, String backButtonTextKey, Runnable confirmButtonRunnable, String stageName) {
+		super(messageKey, confirmButtonTextKey, confirmButtonRunnable, backButtonTextKey, false, true, true, stageName);
 	}
-	
+
 	@Override
 	protected BaseDrawable getBackgroundDrawable() {
 		return GameInfo.getUserInterfaceFactory().getConfirmationMenuBackground();
@@ -25,7 +25,7 @@ public class ConfirmationMenu extends TextChoicePopUp {
 	@Override
 	protected void setUpDesiredSize() {
 		UserInterfaceSizer.sizeToPercentage(this, 0.4f, 0.3f);
-		if (this.getActions().isEmpty()) {
+		if (getActions().isEmpty()) {
 			UserInterfaceSizer.makeActorCentered(this);
 		}
 	}

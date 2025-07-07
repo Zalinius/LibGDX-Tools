@@ -1,22 +1,19 @@
 package com.darzalgames.libgdxtools.maingame;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.darzalgames.darzalcommon.functional.Consumers;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
@@ -43,31 +40,28 @@ import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
 
 public class SampleUserInterfaceGame extends MainGame {
 
-	private final Consumer<SampleUserInterfaceGame> toDoAfterLaunch;
+	public static final String POP_UP_STAGE_NAME = "PopUp Stage";
 
-	protected UniversalButton regainFocusPopup;
-	protected UniversalButton quitButton;
+	private UniversalButton regainFocusPopup;
+	private UniversalButton quitButton;
 
 	public static void main(String[] args) {
-		SampleUserInterfaceGame.testLauncher(Arrays.asList(args), Consumers.nullConsumer());
-	}
-
-	static void testLauncher(List<String> args, Consumer<SampleUserInterfaceGame> todo) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setWindowedMode(1280, 720);
 		config.setTitle("Test LibGDXTools UI");
 		config.setWindowListener(makeWindowListener());
-		new Lwjgl3Application(new SampleUserInterfaceGame(args, todo), config);
+		new Lwjgl3Application(new SampleUserInterfaceGame(Arrays.asList(args)), config);
 	}
 
-	public SampleUserInterfaceGame(List<String> args, Consumer<SampleUserInterfaceGame> toDoAfterLaunch) {
+
+
+	public SampleUserInterfaceGame(List<String> args) {
 		super(new WindowResizerDesktop(), LaunchArgumentHelper.getGamePlatform(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new));
-		this.toDoAfterLaunch = toDoAfterLaunch;
 	}
 
 	@Override
 	protected UserInterfaceFactory initializeAssetsAndUserInterfaceFactory() {
-		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable(), () -> inputSetup.getPause().isPaused());
+		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable(), () -> pause.isPaused());
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		return factory;
 	}
@@ -86,7 +80,7 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	@Override
 	protected void launchGame(boolean isNewSave) {
-		inputSetup.getPause().showOptionsButton(true);
+		pause.showOptionsButton(true);
 		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
 
 			@Override
@@ -116,7 +110,6 @@ public class SampleUserInterfaceGame extends MainGame {
 			@Override
 			protected List<Input> getKeyWhitelist() {
 				List<Input> keysToAllow = new ArrayList<>();
-				Input.ACCEPT.replaceKey(Keys.ENTER);
 				keysToAllow.add(Input.ACCEPT);
 				keysToAllow.add(Input.BACK);
 				keysToAllow.add(Input.UP);
@@ -143,13 +136,11 @@ public class SampleUserInterfaceGame extends MainGame {
 	protected void quitGame() {/* notYetNeeded */}
 
 	@Override
-	protected Consumer<Stage> makeAddBackgroundToStageRunnable() {
-		return stage -> {
-			NinePatchDrawable gray = new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.LIGHT_GRAY, 3), 1, 1, 1, 1));
-			Image grayImage = new Image(gray);
-			grayImage.setFillParent(true);
-			stage.addActor(grayImage);
-		};
+	protected Actor makeBackground() {
+		NinePatchDrawable gray = new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.LIGHT_GRAY, 3), 1, 1, 1, 1));
+		Image grayImage = new Image(gray);
+		grayImage.setFillParent(true);
+		return grayImage;
 	}
 
 	@Override
@@ -232,7 +223,7 @@ public class SampleUserInterfaceGame extends MainGame {
 				UserInterfaceSizer.sizeToPercentage(this, 0.25f);
 			}
 		};
-		UniversalButton popUpButton = GameInfo.getUserInterfaceFactory().getButton(() -> "Open a popup!", () -> InputPriority.claimPriority(choicePopup));
+		UniversalButton popUpButton = GameInfo.getUserInterfaceFactory().getButton(() -> "Open a popup!", () -> InputPriority.claimPriority(choicePopup, POP_UP_STAGE_NAME));
 		menuButtons.add(popUpButton);
 
 
@@ -258,7 +249,7 @@ public class SampleUserInterfaceGame extends MainGame {
 			@Override
 			public void resizeUI() { /*Not needed*/ }
 		};
-		InputPriority.claimPriority(innerPopup);
+		InputPriority.claimPriority(innerPopup, POP_UP_STAGE_NAME);
 	}
 
 	private void showRegainFocusPopup() {
@@ -274,7 +265,7 @@ public class SampleUserInterfaceGame extends MainGame {
 			@Override
 			public void resizeUI() { /*Not needed*/ }
 		};
-		InputPriority.claimPriority(innerPopup);
+		InputPriority.claimPriority(innerPopup, POP_UP_STAGE_NAME);
 	}
 
 
@@ -306,12 +297,12 @@ public class SampleUserInterfaceGame extends MainGame {
 
 		@Override
 		protected PopUp makeControlsPopUp() {
-			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", Runnables.nullRunnable());
+			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", Runnables.nullRunnable(), POP_UP_STAGE_NAME);
 		}
 
 		@Override protected UniversalButton makeReportBugButton() {return GameInfo.getUserInterfaceFactory().getButton(() -> "One could report a bug here", Runnables.nullRunnable());}
 		@Override protected UniversalButton makeControlsButton() {
-			return GameInfo.getUserInterfaceFactory().getButton(() -> "This is where one could theoretically view controls", () -> InputPriority.claimPriority(makeControlsPopUp()));
+			return GameInfo.getUserInterfaceFactory().getButton(() -> "This is where one could theoretically view controls", () -> InputPriority.claimPriority(makeControlsPopUp(), MultipleStage.OPTIONS_STAGE_NAME));
 		}
 
 		@Override
@@ -347,11 +338,6 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	@Override
-	protected void afterLaunch() {
-		toDoAfterLaunch.accept(this);
-	}
-
-	@Override
 	protected OptionsMenu makeOptionsMenu() {
 		return new TestOptionsMenu(windowResizer::getModeSelectBox);
 	}
@@ -369,6 +355,16 @@ public class SampleUserInterfaceGame extends MainGame {
 	@Override
 	public GameEdition getGameEdition() {
 		return GameEdition.FULL;
+	}
+
+	@Override
+	protected List<StageLikeRenderable> makeGameSpecificStages() {
+		return List.of(makeAllPurposeStage(POP_UP_STAGE_NAME));
+	}
+
+	@Override
+	protected void resizeGameSpecificUI() {
+		// N/A
 	}
 
 }

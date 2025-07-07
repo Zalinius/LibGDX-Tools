@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
+import com.darzalgames.libgdxtools.maingame.StageBest;
 import com.darzalgames.libgdxtools.ui.input.*;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
@@ -85,7 +86,7 @@ public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E
 	}
 
 	private boolean isInputAllowed() {
-		return UniversalInputStage.isInTouchableBranch(this);
+		return StageBest.isInTouchableBranch(this);
 	}
 
 	/**

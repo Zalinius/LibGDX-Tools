@@ -4,6 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.darzalcommon.state.Endable;
+import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.ui.input.LogicalInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriorityStack;
@@ -11,8 +12,8 @@ import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
 /**
  * A distinct screen in the game (e.g. the main menu, a particular phase of gameplay) which handles making sure
- * its child actors are visible and can be interacted with, and ensures proper cleanup when the screen is departed from. 
- * 
+ * its child actors are visible and can be interacted with, and ensures proper cleanup when the screen is departed from.
+ *
  * We're ok to implement {@link LogicalInputConsumer} here because a GameScreen is always (so far) a wrapper for another InputConsumer,
  * such as a {@link NavigableListMenu}. This class is just responsible for cleaning up between screens.
  */
@@ -28,7 +29,7 @@ public abstract class GameScreen extends Group implements Screen, Endable, Logic
 
 	@Override
 	public void show() {
-		InputPriority.claimPriority(this);
+		InputPriority.claimPriority(this, MultipleStage.MAIN_STAGE_NAME);
 	}
 
 	@Override

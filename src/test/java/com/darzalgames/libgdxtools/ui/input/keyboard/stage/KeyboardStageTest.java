@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
+import com.darzalgames.libgdxtools.maingame.StageBest;
 
 class KeyboardStageTest {
 
@@ -19,7 +19,7 @@ class KeyboardStageTest {
 		group.addActor(actor);
 
 		group.setTouchable(Touchable.enabled);
-		boolean isInTouchableBranch = UniversalInputStage.isInTouchableBranch(actor);
+		boolean isInTouchableBranch = StageBest.isInTouchableBranch(actor);
 
 		assertTrue(isInTouchableBranch);
 	}
@@ -31,7 +31,7 @@ class KeyboardStageTest {
 		group.addActor(actor);
 
 		group.setTouchable(Touchable.childrenOnly);
-		boolean isInTouchableBranch = UniversalInputStage.isInTouchableBranch(actor);
+		boolean isInTouchableBranch = StageBest.isInTouchableBranch(actor);
 
 		assertTrue(isInTouchableBranch);
 	}
@@ -43,7 +43,7 @@ class KeyboardStageTest {
 		group.addActor(actor);
 
 		group.setTouchable(Touchable.disabled);
-		boolean isInTouchableBranch = UniversalInputStage.isInTouchableBranch(actor);
+		boolean isInTouchableBranch = StageBest.isInTouchableBranch(actor);
 
 		assertFalse(isInTouchableBranch);
 	}
@@ -53,7 +53,7 @@ class KeyboardStageTest {
 		Actor actor = new Actor();
 
 		actor.setTouchable(Touchable.enabled);
-		boolean isInTouchableBranch = UniversalInputStage.isInTouchableBranch(actor);
+		boolean isInTouchableBranch = StageBest.isInTouchableBranch(actor);
 
 		assertTrue(isInTouchableBranch);
 	}
@@ -63,7 +63,7 @@ class KeyboardStageTest {
 		Actor actor = new Actor();
 
 		actor.setTouchable(Touchable.disabled);
-		boolean isInTouchableBranch = UniversalInputStage.isInTouchableBranch(actor);
+		boolean isInTouchableBranch = StageBest.isInTouchableBranch(actor);
 
 		assertFalse(isInTouchableBranch);
 	}
@@ -73,7 +73,7 @@ class KeyboardStageTest {
 		Actor actor = new Actor();
 
 		actor.setTouchable(Touchable.childrenOnly);
-		boolean isInTouchableBranch = UniversalInputStage.isInTouchableBranch(actor);
+		boolean isInTouchableBranch = StageBest.isInTouchableBranch(actor);
 
 		assertTrue(isInTouchableBranch);
 		assertFalse(actor.isTouchable());

@@ -9,8 +9,8 @@ public class InputPriority {
 
 	private static InputPriorityStack inputPriorityStack;
 
-	public static void claimPriority(InputConsumer inputConsumer) {
-		inputPriorityStack.claimPriority(inputConsumer);
+	public static void claimPriority(InputConsumer inputConsumer, String stageName) {
+		inputPriorityStack.claimPriority(inputConsumer, stageName);
 	}
 
 	public static void releasePriority(InputConsumer inputConsumer) {

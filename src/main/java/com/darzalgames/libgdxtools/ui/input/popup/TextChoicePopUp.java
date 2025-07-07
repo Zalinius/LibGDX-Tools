@@ -23,15 +23,15 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 	private final String secondChoiceKey;
 	private final boolean isWarning;
 
-	protected TextChoicePopUp(String messageKey, String firstChoiceKey, Runnable firstChoiceRunnable, 
-			String secondChoiceKey, boolean isVertical, boolean isSecondButtonBack, boolean isWarning) {
+	protected TextChoicePopUp(String messageKey, String firstChoiceKey, Runnable firstChoiceRunnable,
+			String secondChoiceKey, boolean isVertical, boolean isSecondButtonBack, boolean isWarning, String stageName) {
 		super(firstChoiceRunnable, isVertical, isSecondButtonBack);
 		this.messageKey = messageKey;
 		this.firstChoiceKey = firstChoiceKey;
 		this.secondChoiceKey = secondChoiceKey;
 		this.isWarning = isWarning;
 
-		InputPriority.claimPriority(this);
+		InputPriority.claimPriority(this, stageName);
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 	protected UniversalButton getSecondChoiceButton() {
 		return getChoiceButton(secondChoiceKey, () -> getSecondChoiceRunnable().run());
 	}
-	
+
 	private UniversalButton getChoiceButton(String key, Runnable toRun) {
 		Runnable chooseAndHideRunnable = () -> {
 			setChosenKey(key);

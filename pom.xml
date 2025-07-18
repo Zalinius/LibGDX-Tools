@@ -5,7 +5,7 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.6.18</version>
+	<version>0.6.19</version>
 	<name>libGDX Tools</name>
 
 	<properties>
@@ -13,6 +13,7 @@
 		<maven.compiler.release>21</maven.compiler.release>
 
 		<darzalcommon.version>0.6.8</darzalcommon.version>
+		<zalaudiolibrary.version>0.1.0</zalaudiolibrary.version>
 
 		<libgdx.version>1.13.1</libgdx.version>
 		<libgdx.controllers.version>2.2.3</libgdx.controllers.version>
@@ -53,7 +54,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -66,18 +67,18 @@
 				</configuration>
 			</plugin>
 			<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-failsafe-plugin</artifactId>
-		        <version>3.5.3</version>
-		        <executions>
-		          <execution>
-		            <goals>
-		              <goal>integration-test</goal>
-		              <goal>verify</goal>
-		            </goals>
-		          </execution>
-		        </executions>
-      		</plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.5.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -105,6 +106,11 @@
 			<groupId>com.darzalgames</groupId>
 			<artifactId>darzal-common</artifactId>
 			<version>${darzalcommon.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.darzalgames</groupId>
+			<artifactId>zal-audio-library</artifactId>
+			<version>${zalaudiolibrary.version}</version>
 		</dependency>
 
 		<dependency>
@@ -141,7 +147,7 @@
 			<artifactId>gdx-controllers-desktop</artifactId>
 			<version>${libgdx.controllers.version}</version>
 		</dependency>
-		
+
 		<!-- Test Dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

@@ -39,7 +39,4 @@ public class SoundPreference implements VolumeListener {
 	public void setShouldMuteSoundWhenOutOfFocus(boolean shouldMuteSoundWhenOutOfFocus) {
 		preferenceManager.savePrefValue(FOCUS_KEY, shouldMuteSoundWhenOutOfFocus);
 	}
-
-
-
 }

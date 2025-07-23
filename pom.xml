@@ -12,8 +12,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>21</maven.compiler.release>
 
-		<darzalcommon.version>0.6.10</darzalcommon.version>
-		<zalaudiolibrary.version>0.1.0</zalaudiolibrary.version>
+		<darzalcommon.version>0.6.11</darzalcommon.version>
+		<zalaudiolibrary.version>0.2.0</zalaudiolibrary.version>
 
 		<libgdx.version>1.13.1</libgdx.version>
 		<libgdx.controllers.version>2.2.3</libgdx.controllers.version>

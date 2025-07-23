@@ -38,9 +38,9 @@ public class ColorTools {
 
 	/**
 	 * Get a square colored texture with width and height both being "size" long
-	 * @param color
-	 * @param size
-	 * @return
+	 * @param color the color for the texture
+	 * @param size the width and height of the square texture in pixels
+	 * @return a square monotone texture
 	 */
 	public static Texture getColoredTexture(Color color, int size) {
 		return getColoredTexture(color, size, size);
@@ -48,10 +48,10 @@ public class ColorTools {
 
 	/**
 	 * Get a colored texture with the specified width and height
-	 * @param color
-	 * @param width
-	 * @param height
-	 * @return
+	 * @param color the color for the texture
+	 * @param width the width of the texture in pixels
+	 * @param height the height of the texture in pixels
+	 * @return A rectangular monotone texture
 	 */
 	public static Texture getColoredTexture(Color color, int width, int height) {
 		Pixmap coloredMap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
@@ -61,7 +61,7 @@ public class ColorTools {
 		coloredMap.dispose();
 		return coloredTexture;
 	}
-	
+
 	/**
 	 * @return A texture for a black and white cursor
 	 */

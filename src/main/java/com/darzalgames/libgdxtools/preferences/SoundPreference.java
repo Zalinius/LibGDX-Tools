@@ -1,13 +1,15 @@
 package com.darzalgames.libgdxtools.preferences;
 
-public class SoundPreference {
+import com.darzalgames.zalaudiolibrary.VolumeListener;
+
+public class SoundPreference implements VolumeListener {
 
 	private static final String MUSIC_KEY = "musicVolume";
 	private static final String SOUND_EFFECT_KEY = "soundEffectVolume";
 	private static final String FOCUS_KEY = "muteWhenOutOfFocus";
-	
+
 	private final PreferenceManager preferenceManager;
-	
+
 	protected SoundPreference(PreferenceManager preferenceManager) {
 		this.preferenceManager = preferenceManager;
 	}
@@ -16,18 +18,20 @@ public class SoundPreference {
 		return preferenceManager.getFloatPrefValue(MUSIC_KEY, 0.5f);
 	}
 
+	@Override
 	public void setMusicVolume(float newVolume) {
 		preferenceManager.savePrefValue(MUSIC_KEY, newVolume);
 	}
-	
+
 	public float getSoundEffectVolume() {
 		return preferenceManager.getFloatPrefValue(SOUND_EFFECT_KEY, 0.5f);
 	}
 
+	@Override
 	public void setSoundEffectVolume(float newVolume) {
 		preferenceManager.savePrefValue(SOUND_EFFECT_KEY, newVolume);
 	}
-	
+
 	public boolean shouldMuteSoundWhenOutOfFocus() {
 		return preferenceManager.getBooleanPrefValue(FOCUS_KEY, false);
 	}

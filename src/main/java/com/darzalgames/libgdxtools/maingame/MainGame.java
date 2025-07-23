@@ -90,9 +90,9 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	@Override
 	public final void create() {
+		makePreferenceManager();
 		makeInputStrategySwitcher();
 		userInterfaceFactory = initializeAssetsAndUserInterfaceFactory();
-		makePreferenceManager();
 		initializeWindowResizer();
 
 		makeAllStages();

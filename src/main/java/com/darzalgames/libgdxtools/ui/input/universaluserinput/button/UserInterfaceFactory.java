@@ -175,7 +175,7 @@ public class UserInterfaceFactory {
 	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility) {
 		BasicButton textButton = new MyTextButton("", skinManager.getSettingsButtonStyle()) {
 			@Override public String toString() { return "options button"; }};
-			return new MouseOnlyButton(textButton, Suppliers.emptyString(),
+			return new UniversalButton(textButton, Suppliers.emptyString(),
 					() -> toggleOptionsScreenVisibility.accept(!isPaused.get()),
 					inputStrategySwitcher, soundInteractListener);
 	}

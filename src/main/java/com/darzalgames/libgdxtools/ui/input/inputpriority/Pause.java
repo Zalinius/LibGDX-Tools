@@ -3,7 +3,6 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
 
 public class Pause extends Actor {
@@ -19,7 +18,6 @@ public class Pause extends Actor {
 		GamePauser.setPauseGameRunnable(this::pause);
 
 		this.optionsMenu = optionsMenu;
-		optionsMenu.addAction(Actions.forever(Actions.run(optionsMenu::addOptionsButtonToStage)));
 
 		showOptionsButton(false); // Only enable the button after the splash screen
 	}

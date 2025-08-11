@@ -70,8 +70,6 @@ public class UserInterfaceFactory {
 
 	/**
 	 * Makes a label which changes its text based on the current input mode
-	 * @param textSupplier
-	 * @return
 	 */
 	public UniversalLabel getInputSensitiveLabelWithBackground(Supplier<String> textSupplier) {
 		return new UniversalInputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher);
@@ -83,8 +81,6 @@ public class UserInterfaceFactory {
 
 	/**
 	 * Makes a label which can be listed among other buttons, but isn't interactable
-	 * @param textSupplier
-	 * @return
 	 */
 	public UniversalButton getListableLabel(Supplier<String> textSupplier) {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
@@ -98,7 +94,6 @@ public class UserInterfaceFactory {
 	/**
 	 * Makes a spacer which can be listed among other buttons, but isn't interactable and which will
 	 * expand out to fill any available space in the menu
-	 * @return
 	 */
 	public UniversalButton getSpacer() {
 		UniversalButton spacer = getListableLabel(Suppliers.emptyString());

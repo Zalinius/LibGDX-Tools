@@ -55,7 +55,7 @@ public class Pause extends Actor {
 		this.getNameOfPausingStage = getNameOfPausingStage;
 	}
 
-	public boolean isOptionsMenuOpen() {
+	boolean isOptionsMenuOpen() {
 		return optionsMenu.getStage() != null;
 	}
 

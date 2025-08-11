@@ -196,7 +196,6 @@ public abstract class OptionsMenu extends PopUpMenu {
 
 	protected void addOptionsButtonToStage() {
 		GetOnStage.addActorToStage(optionsButton.getView(), MultipleStage.OPTIONS_STAGE_NAME);
-		optionsButton.getView().toFront();
 		positionOptionsButton();
 	}
 

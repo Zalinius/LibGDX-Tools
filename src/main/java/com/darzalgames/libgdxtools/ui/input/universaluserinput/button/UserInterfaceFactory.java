@@ -39,16 +39,14 @@ public class UserInterfaceFactory {
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Supplier<Float> flashesPerSecondSupplier;
 	private final Runnable soundInteractListener;
-	private final Supplier<Boolean> isPaused;
 
 	private static final String QUIT_GAME_KEY = "quit_game";
 
-	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener, Supplier<Boolean> isPaused) {
+	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener) {
 		this.skinManager = skinManager;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.flashesPerSecondSupplier = flashesPerSecondSupplier;
 		this.soundInteractListener = soundInteractListener;
-		this.isPaused = isPaused;
 		quitGameRunnable = Gdx.app::exit;
 	}
 
@@ -70,6 +68,8 @@ public class UserInterfaceFactory {
 
 	/**
 	 * Makes a label which changes its text based on the current input mode
+	 * @param textSupplier supplier for the desired localized and input-sensitive text
+	 * @return a UniversalLabel with a background, whose text changes when the input strategy changes
 	 */
 	public UniversalLabel getInputSensitiveLabelWithBackground(Supplier<String> textSupplier) {
 		return new UniversalInputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher);
@@ -81,6 +81,8 @@ public class UserInterfaceFactory {
 
 	/**
 	 * Makes a label which can be listed among other buttons, but isn't interactable
+	 * @param textSupplier supplier for the desired localized text
+	 * @return a disabled UniversalButton with the specified label text
 	 */
 	public UniversalButton getListableLabel(Supplier<String> textSupplier) {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
@@ -94,6 +96,7 @@ public class UserInterfaceFactory {
 	/**
 	 * Makes a spacer which can be listed among other buttons, but isn't interactable and which will
 	 * expand out to fill any available space in the menu
+	 * @return a blank UniversalButton
 	 */
 	public UniversalButton getSpacer() {
 		UniversalButton spacer = getListableLabel(Suppliers.emptyString());
@@ -171,7 +174,7 @@ public class UserInterfaceFactory {
 		BasicButton textButton = new MyTextButton("", skinManager.getSettingsButtonStyle()) {
 			@Override public String toString() { return "options button"; }};
 			return new UniversalButton(textButton, Suppliers.emptyString(),
-					() -> toggleOptionsScreenVisibility.accept(!isPaused.get()),
+					() -> toggleOptionsScreenVisibility.accept(true),
 					inputStrategySwitcher, soundInteractListener);
 	}
 
@@ -307,7 +310,4 @@ public class UserInterfaceFactory {
 		return soundInteractListener;
 	}
 
-	protected Supplier<Boolean> getIsPausedSupplier() {
-		return isPaused;
-	}
 }

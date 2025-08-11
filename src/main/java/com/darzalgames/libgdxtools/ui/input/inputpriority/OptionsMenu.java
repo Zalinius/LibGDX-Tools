@@ -186,7 +186,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	private void positionOptionsButton() {
 		float padding = UserInterfaceSizer.getHeightPercentage(0.01f);
 		optionsButton.getView().setPosition(padding, UserInterfaceSizer.getCurrentHeight() - optionsButton.getView().getHeight() - padding);
-		UserInterfaceSizer.scaleToMinimumPercentage(optionsButton.getView(), 0.08f);
+		UserInterfaceSizer.scaleToMinimumPercentage(optionsButton.getView(), 0.06f);
 	}
 
 	protected void showOptionsButton(boolean show) {

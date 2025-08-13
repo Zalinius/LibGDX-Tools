@@ -3,7 +3,6 @@ package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
@@ -33,21 +32,14 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	 * Be SUPER SURE to call the following in your implementation:
 	 * 		add(menu.getView());
 	 * with whatever modifiers you want (grow, colspan, etc...)
-	 * 
+	 *
 	 * Consider calling things like:
 	 * 		menu.setAlignment(Alignment.TOP_LEFT);
 	 * 		menu.replaceContents(menuButtons, backButton);
-	 * 
+	 *
 	 * No need to call clear() first or anything.
 	 */
 	protected abstract void setUpTable();
-
-	@Override
-	public void setTouchable(Touchable isTouchable) {
-		if (menu != null) { // This is called in the constructor for Table, at which point the menu is not yet made
-			menu.setTouchable(isTouchable);
-		}
-	}
 
 	/**
 	 * Set the focus to a particular {@link UniversalButton}
@@ -109,14 +101,14 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	}
 
 	/**
-	 * This method will try to find the entry corresponding to the string provided, 
+	 * This method will try to find the entry corresponding to the string provided,
 	 * if it fails then we default to the first entry.
 	 * @param entry The string of the entry that you want to go to
 	 */
 	public void goTo(String entry) {
 		int nonInteractablesToIgnore = 0;
 		for (int i = 0; i < menu.allEntries.size(); i++) {
-			UniversalButton thisEntry = menu.allEntries.get(i); 
+			UniversalButton thisEntry = menu.allEntries.get(i);
 			if (thisEntry.doesTextMatch(entry)) {
 				menu.goTo(i - nonInteractablesToIgnore);
 				return;
@@ -127,5 +119,5 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 		}
 		menu.goTo(0);
 	}
-	
+
 }

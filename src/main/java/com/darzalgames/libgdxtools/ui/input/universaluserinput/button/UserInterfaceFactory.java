@@ -26,14 +26,13 @@ import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
-import com.github.tommyettinger.textra.Font;
 import com.github.tommyettinger.textra.Styles.LabelStyle;
 import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 /**
  * The ONLY place where one should be making UI elements (buttons, labels, etc)
  */
-public abstract class UserInterfaceFactory {
+public class UserInterfaceFactory {
 
 	private final Runnable quitGameRunnable;
 	private final SkinManager skinManager;
@@ -43,7 +42,7 @@ public abstract class UserInterfaceFactory {
 
 	private static final String QUIT_GAME_KEY = "quit_game";
 
-	protected UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener) {
+	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractListener) {
 		this.skinManager = skinManager;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.flashesPerSecondSupplier = flashesPerSecondSupplier;
@@ -76,14 +75,10 @@ public abstract class UserInterfaceFactory {
 		return new UniversalInputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher);
 	}
 
-	protected UniversalLabel getLabel(final Supplier<String> textSupplier, LabelStyle labelStyle, Font font) {
+	protected UniversalLabel getLabel(final Supplier<String> textSupplier, LabelStyle labelStyle) {
 		return new UniversalLabel(textSupplier, labelStyle);
 	}
-	protected UniversalLabel getLabel(final Supplier<String> textSupplier, LabelStyle labelStyle) {
-		return getLabel(textSupplier, labelStyle, getRegularFont());
-	}
 
-	protected abstract Font getRegularFont();
 
 	/**
 	 * Makes a label which can be listed among other buttons, but isn't interactable

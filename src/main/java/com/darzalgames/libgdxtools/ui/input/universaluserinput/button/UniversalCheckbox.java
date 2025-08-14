@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
@@ -47,7 +48,10 @@ public class UniversalCheckbox extends UniversalButton {
 				super.draw(batch, parentAlpha);
 			}
 		};
-		box.getImageCell().padRight(UserInterfaceSizer.getWidthPercentage(0.01f));
+		Cell<?> imageCell = box.getImageCell();
+		if (imageCell != null) {
+			imageCell.padRight(UserInterfaceSizer.getWidthPercentage(0.01f));
+		}
 
 		basicButton.clearChildren();
 		basicButton.setWidth(basicButton.getWidth() + box.getPrefWidth());

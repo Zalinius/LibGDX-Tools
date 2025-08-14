@@ -52,10 +52,8 @@ public class UniversalSelectBox extends UniversalButton {
 		};
 
 		displayLabel = GameInfo.getUserInterfaceFactory().getLabel(Suppliers.emptyString());
-		displayLabel.setWrap(false);
 		textButton.add(displayLabel);
 		setButtonRunnable(() -> InputPriority.claimPriority(options, getView().getStage().getRoot().getName()));
-		setWrap(false);
 	}
 
 	protected void setEntryButtons(List<UniversalButton> entryButtons) {

@@ -251,9 +251,9 @@ public class UniversalButton implements VisibleInputConsumer {
 
 	@Override
 	public void resizeUI() {
-		button.setStyle(button.getStyle());
-		button.setSize(button.getPrefWidth(), button.getPrefHeight());
-		labelSupplier.get().setText(textSupplier.get());
+		//		button.setStyle(button.getStyle());
+		//		button.setSize(button.getPrefWidth(), button.getPrefHeight());
+		//		labelSupplier.get().setText(textSupplier.get());
 	}
 
 }

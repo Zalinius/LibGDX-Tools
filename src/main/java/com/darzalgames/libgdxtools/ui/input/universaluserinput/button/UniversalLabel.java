@@ -13,19 +13,20 @@ public class UniversalLabel extends TypingLabel {
 	protected UniversalLabel(Supplier<String> textSupplier, LabelStyle style) {
 		super(textSupplier.get(), style);
 		this.textSupplier = textSupplier;
-		setWrap(true);
-		skipToTheEnd();	 // Only Textra TypingLabel do the special effects, so we skip to the end right away
+		setWrap(false);
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		this.setText(textSupplier.get());
+		skipToTheEnd();	 // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		//		setStyle(getStyle());
 		//		if (!getWrap() && getStyle().background != null) {
 		//			//TODO Makes backgrounds scale with text properly, but doesn't preserve Align.center...? Shucks
 		//			setSize(getPrefWidth(), getPrefHeight());
 		//		}
 		super.draw(batch, parentAlpha);
+		debug();
 	}
 
 	public void setTextSupplier(Supplier<String> textSupplier) {

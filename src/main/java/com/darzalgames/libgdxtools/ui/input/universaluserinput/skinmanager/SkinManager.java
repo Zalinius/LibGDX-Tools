@@ -3,8 +3,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
@@ -116,12 +115,34 @@ public class SkinManager {
 	}
 
 	protected LabelStyle getLabelStyle(String style) {
+		if (!skin.has(style, LabelStyle.class)) {
+			Label.LabelStyle sceneStyle = skin.get(style, Label.LabelStyle.class);
+			String fontName = sceneStyle.font.getData().name;
+			fontName = fontName.substring(0, fontName.length() - 3);
+			skin.add(style, new LabelStyle(skin.get(fontName, Font.class), sceneStyle.fontColor, sceneStyle.background));
+		}
 		return skin.get(style, LabelStyle.class);
 	}
 	protected TextButtonStyle getTextButtonStyle(String style) {
+		if (!skin.has(style, TextButtonStyle.class)) {
+			TextButton.TextButtonStyle sceneStyle = skin.get(style, TextButton.TextButtonStyle.class);
+			String fontName = sceneStyle.font.getData().name;
+			fontName = fontName.substring(0, fontName.length() - 3);
+			TextButtonStyle textraStyle = new TextButtonStyle(sceneStyle.up, sceneStyle.down, sceneStyle.checked, skin.get(fontName, Font.class));
+			textraStyle.fontColor = sceneStyle.fontColor;
+			textraStyle.overFontColor = sceneStyle.overFontColor;
+			skin.add(style, textraStyle);
+		}
+
 		return skin.get(style, TextButtonStyle.class);
 	}
 	protected CheckBoxStyle getCheckboxStyle(String style) {
+		if (!skin.has(style, CheckBoxStyle.class)) {
+			CheckBox.CheckBoxStyle sceneStyle = skin.get(style, CheckBox.CheckBoxStyle.class);
+			String fontName = sceneStyle.font.getData().name;
+			fontName = fontName.substring(0, fontName.length() - 3);
+			skin.add(style, new CheckBoxStyle(sceneStyle.checkboxOff, sceneStyle.checkboxOn, skin.get(fontName, Font.class), sceneStyle.fontColor));
+		}
 		return skin.get(style, CheckBoxStyle.class);
 	}
 	protected SliderStyle getSliderStyle(String style) {

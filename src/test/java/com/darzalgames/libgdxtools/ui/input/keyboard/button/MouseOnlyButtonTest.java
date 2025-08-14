@@ -11,19 +11,16 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.mock.graphics.MockGraphics;
 import com.badlogic.gdx.graphics.GL32;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.MouseOnlyButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.MyTextButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 class MouseOnlyButtonTest {
-	
+
 	private static UniversalButton button;
 	private static InputStrategySwitcher inputStrategySwitcher;
 
@@ -49,17 +46,16 @@ class MouseOnlyButtonTest {
 		Gdx.gl = Gdx.gl20;
 		Gdx.graphics = new MockGraphics();
 		Gdx.files = Mockito.mock(Files.class);
-		
+
 		inputStrategySwitcher = new InputStrategySwitcher();
 		inputStrategySwitcher.setToMouseStrategy();
 		TextButtonStyle textButtonStyle =  new TextButtonStyle();
-		textButtonStyle.font = new BitmapFont(new BitmapFontData(), new TextureRegion(), false);
 		MyTextButton textButton = new MyTextButton("", textButtonStyle);
 		button = new MouseOnlyButton(textButton, Suppliers.emptyString(), Runnables.nullRunnable(), inputStrategySwitcher, Runnables.nullRunnable())  {
 			@Override
 			public boolean shouldBeUnregistered() {
 				return false;
-			}	
+			}
 		};
 	}
 }

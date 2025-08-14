@@ -3,13 +3,13 @@ package com.darzalgames.libgdxtools.ui.input.keyboard.button;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.Pools;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.BasicButton;
+import com.github.tommyettinger.textra.Styles.TextButtonStyle;
+import com.github.tommyettinger.textra.TextraLabel;
 
 /**
  * A minimalist re-implementation of a LibGDX Button, but without graphics (for testing)
@@ -75,11 +75,6 @@ public class TestBasicButton implements BasicButton {
 			}
 			Pools.free(changeEvent);
 		}
-	}
-
-	@Override
-	public TextButtonStyle getStyle() {
-		return null;
 	}
 
 	@Override
@@ -256,16 +251,6 @@ public class TestBasicButton implements BasicButton {
 	}
 
 	@Override
-	public Label getLabel() {
-		return null;
-	}
-
-	@Override
-	public Cell<Label> getLabelCell() {
-		return null;
-	}
-
-	@Override
 	public String getButtonText() {
 		return null;
 	}
@@ -288,6 +273,21 @@ public class TestBasicButton implements BasicButton {
 	@Override
 	public boolean removeActor(Actor actor) {
 		return false;
+	}
+
+	@Override
+	public TextButtonStyle getStyle() {
+		return null;
+	}
+
+	@Override
+	public TextraLabel getTextraLabel() {
+		return null;
+	}
+
+	@Override
+	public Cell<TextraLabel> getTextraLabelCell() {
+		return null;
 	}
 
 }

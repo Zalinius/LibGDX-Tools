@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Pools;
 import com.darzalgames.darzalcommon.functional.Runnables;
@@ -16,6 +15,7 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.github.tommyettinger.textra.TextraLabel;
 
 /**
  * Our very own custom button class that works with keyboard input!
@@ -25,8 +25,8 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class UniversalButton implements VisibleInputConsumer {
 	private final BasicButton button;
 	private Supplier<String> textSupplier;
-	private final Supplier<Label> labelSupplier;
-	private final Supplier<Cell<Label>> cellSupplier;
+	private final Supplier<TextraLabel> labelSupplier;
+	private final Supplier<Cell<TextraLabel>> cellSupplier;
 	private Runnable buttonRunnable;
 	private final Image image;
 	private Alignment alignment;
@@ -46,8 +46,8 @@ public class UniversalButton implements VisibleInputConsumer {
 	public UniversalButton(BasicButton button, Supplier<String> textSupplier, Image image, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		this.button = button;
 		this.textSupplier = textSupplier;
-		labelSupplier = button::getLabel;
-		cellSupplier = button::getLabelCell;
+		labelSupplier = button::getTextraLabel;
+		cellSupplier = button::getTextraLabelCell;
 		buttonRunnable = runnable;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.image = image;
@@ -55,11 +55,11 @@ public class UniversalButton implements VisibleInputConsumer {
 		this.soundInteractListener = soundInteractListener;
 
 		if (image != null) {
-			Label label = labelSupplier.get();
+			TextraLabel label = labelSupplier.get();
 			button.clearChildren();
 
-			int sidePadding = label.getText().toString().isBlank() ? 0 : 3;
-			float startWidth = label.getText().toString().isBlank() ? 0 : button.getWidth();
+			int sidePadding = label.storedText.isBlank() ? 0 : 3;
+			float startWidth = label.storedText.isBlank() ? 0 : button.getWidth();
 
 			button.add(image).padRight(sidePadding);
 			button.add(label);
@@ -91,7 +91,7 @@ public class UniversalButton implements VisibleInputConsumer {
 	@Override
 	public Actor getView() {
 		labelSupplier.get().setWrap(wrap);
-		labelSupplier.get().setAlignment(alignment.getAlignment(), alignment.getAlignment());
+		labelSupplier.get().setAlignment(alignment.getAlignment());
 		if (cellSupplier.get() != null) {
 			cellSupplier.get().grow();
 		}

@@ -5,9 +5,10 @@ import java.util.function.Supplier;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.github.tommyettinger.textra.Styles.LabelStyle;
 
 public class UniversalInputSensitiveLabel extends UniversalLabel implements InputStrategyObserver {
-	
+
 	private final InputStrategySwitcher inputStrategySwitcher;
 
 	/**
@@ -26,19 +27,19 @@ public class UniversalInputSensitiveLabel extends UniversalLabel implements Inpu
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
 		this.setText(textSupplier.get());
 	}
-	
+
 	@Override
 	public boolean remove() {
 		inputStrategySwitcher.unregister(this);
 		return super.remove();
 	}
-	
+
 	@Override
 	public void clear() {
 		inputStrategySwitcher.unregister(this);
 		super.clear();
 	}
-	
+
 	@Override
 	protected void setParent(Group parent) {
 		if (parent == null) {
@@ -49,7 +50,7 @@ public class UniversalInputSensitiveLabel extends UniversalLabel implements Inpu
 
 	@Override
 	public boolean shouldBeUnregistered() {
-		return this.getStage() == null;
+		return getStage() == null;
 	}
 
 }

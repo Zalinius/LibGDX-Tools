@@ -2,16 +2,17 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
+import com.github.tommyettinger.textra.Font;
+import com.github.tommyettinger.textra.Styles;
+import com.github.tommyettinger.textra.Styles.CheckBoxStyle;
+import com.github.tommyettinger.textra.Styles.LabelStyle;
+import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 /**
  * A class which holds a LibGDX {@link Skin} and provides convenient named accessors.
@@ -63,8 +64,8 @@ public class SkinManager {
 		skin.add(UI_BORDERED_NINE, darkGrayNinePatch);
 		skin.add(CONFIRMATION_MENU_BACKGROUND, new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.PINK, size), 1, 1, 1, 1)));
 
-		BitmapFont defaultFont = new BitmapFont();
-		defaultFont.setColor(Color.BLACK);
+		Font defaultFont = new Font();
+		//		defaultFont.color(Color.BLACK);
 		skin.add(DEFAULT_LABEL, defaultFont);
 
 		skin.add(DEFAULT_LABEL, new LabelStyle(defaultFont, Color.BLACK));
@@ -78,7 +79,7 @@ public class SkinManager {
 		sliderStyle.knobDown = darkGrayNinePatch;
 		skin.add(SLIDER, sliderStyle);
 
-		CheckBoxStyle checkboxStyle = new CheckBoxStyle();
+		CheckBoxStyle checkboxStyle = new Styles.CheckBoxStyle();
 		checkboxStyle.font = defaultFont;
 		checkboxStyle.fontColor = Color.BLACK;
 		checkboxStyle.checkboxOn = skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);

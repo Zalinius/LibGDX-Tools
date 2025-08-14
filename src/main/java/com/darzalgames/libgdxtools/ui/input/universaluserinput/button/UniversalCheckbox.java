@@ -5,17 +5,17 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.github.tommyettinger.textra.Styles.CheckBoxStyle;
+import com.github.tommyettinger.textra.TextraCheckBox;
 
 public class UniversalCheckbox extends UniversalButton {
 
-	private final CheckBox box;
+	private final TextraCheckBox box;
 	private final Supplier<String> uncheckedLabel;
 	private final Supplier<String> checkedLabel;
 
@@ -29,18 +29,21 @@ public class UniversalCheckbox extends UniversalButton {
 		float originalHeight = style.checkboxOff.getMinHeight();
 
 		// It doesn't matter which label we initialize with, as the button resizes every frame based on the contents
-		box = new CheckBox(uncheckedLabel.get(), style) {
+
+		box = new TextraCheckBox(uncheckedLabel.get(), style) {
 			@Override
 			public void draw(Batch batch, float parentAlpha) {
-				this.setStyle(this.getStyle());
+				setStyle(getStyle());
 				float minimum = 0.05f;
 				UserInterfaceSizer.scaleToMinimumPercentage(getStyle().checkboxOn, minimum, originalWidth, originalHeight);
 				UserInterfaceSizer.scaleToMinimumPercentage(getStyle().checkboxOff, minimum, originalWidth, originalHeight);
-				if (getStyle().checkboxOnOver != null)
+				if (getStyle().checkboxOnOver != null) {
 					UserInterfaceSizer.scaleToMinimumPercentage(getStyle().checkboxOnOver, minimum, originalWidth, originalHeight);
-				if (getStyle().checkboxOver != null)
+				}
+				if (getStyle().checkboxOver != null) {
 					UserInterfaceSizer.scaleToMinimumPercentage(getStyle().checkboxOver, minimum, originalWidth, originalHeight);
-				
+				}
+
 				super.draw(batch, parentAlpha);
 			}
 		};
@@ -63,7 +66,7 @@ public class UniversalCheckbox extends UniversalButton {
 	public void setFocused(boolean isFocused) {
 		super.setFocused(isFocused);
 		if (isFocused) {
-			box.getClickListener().enter(null, 0, 0, -1, box);	
+			box.getClickListener().enter(null, 0, 0, -1, box);
 		} else {
 			box.getClickListener().exit(null, 0, 0, -1, box);
 		}

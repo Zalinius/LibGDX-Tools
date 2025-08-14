@@ -1,12 +1,13 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.github.tommyettinger.textra.Styles.TextButtonStyle;
+import com.github.tommyettinger.textra.TextraButton;
 
 /**
  * Extend the LibGDX TextButton class, making it implement my own BasicButton interface
  */
-public class MyTextButton extends TextButton implements BasicButton {
+public class MyTextButton extends TextraButton implements BasicButton {
 
 	public MyTextButton(String text, TextButtonStyle textButtonStyle) {
 		super(text, textButtonStyle);
@@ -19,7 +20,8 @@ public class MyTextButton extends TextButton implements BasicButton {
 
 	@Override
 	public String getButtonText() {
-		return getText().toString();
+		return getText();
 	}
+
 
 }

@@ -136,6 +136,11 @@
 			<artifactId>gdx-backend-lwjgl3</artifactId>
 			<version>${libgdx.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.github.tommyettinger</groupId>
+		    <artifactId>textratypist</artifactId>
+		    <version>2.1.2</version>
+		</dependency>
 		<!-- Controller Dependendies -->
 		<dependency>
 			<groupId>com.badlogicgames.gdx-controllers</groupId>

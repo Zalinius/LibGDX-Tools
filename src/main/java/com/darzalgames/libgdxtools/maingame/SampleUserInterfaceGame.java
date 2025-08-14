@@ -37,6 +37,7 @@ import com.darzalgames.libgdxtools.ui.input.popup.SimplePopUp;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
+import com.github.tommyettinger.textra.Font;
 
 public class SampleUserInterfaceGame extends MainGame {
 
@@ -61,7 +62,12 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	@Override
 	protected UserInterfaceFactory initializeAssetsAndUserInterfaceFactory() {
-		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable());
+		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable()) {
+			@Override
+			protected Font getRegularFont() {
+				return new Font();
+			}
+		};
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		return factory;
 	}

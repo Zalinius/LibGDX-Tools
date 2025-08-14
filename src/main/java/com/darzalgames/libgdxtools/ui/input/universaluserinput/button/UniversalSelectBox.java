@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
@@ -14,6 +13,7 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.github.tommyettinger.textra.TextraLabel;
 
 public class UniversalSelectBox extends UniversalButton {
 
@@ -77,9 +77,9 @@ public class UniversalSelectBox extends UniversalButton {
 	public void setSelected(UniversalButton entry) {
 		defaultEntry = entry;
 		BasicButton view = getButton();
-		Label label = view.getLabel();
-		view.getLabelCell().padRight(3);
-		view.setWidth(view.getLabelCell().getPadRight() + label.getWidth() + displayLabel.getPrefWidth());
+		TextraLabel label = view.getTextraLabel();
+		view.getTextraLabelCell().padRight(3);
+		view.setWidth(view.getTextraLabelCell().getPadRight() + label.getWidth() + displayLabel.getPrefWidth());
 	}
 
 	public void setSelected(String entryText) {

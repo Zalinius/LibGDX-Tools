@@ -4,10 +4,10 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.Null;
+import com.github.tommyettinger.textra.Styles.TextButtonStyle;
+import com.github.tommyettinger.textra.TextraLabel;
 
 public interface BasicButton {
 
@@ -48,7 +48,7 @@ public interface BasicButton {
 	boolean removeActor(Actor actor);
 	Actor getView();
 	Stage getStage();
-	Label getLabel();
-	Cell<Label> getLabelCell();
+	TextraLabel getTextraLabel();
+	Cell<TextraLabel> getTextraLabelCell();
 	String getButtonText();
 }

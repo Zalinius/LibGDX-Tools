@@ -1,37 +1,40 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.button;
+package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.Pools;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.BasicButton;
-import com.github.tommyettinger.textra.Styles.TextButtonStyle;
-import com.github.tommyettinger.textra.TextraLabel;
+import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
  * A minimalist re-implementation of a LibGDX Button, but without graphics (for testing)
  * I'm adding functionality as needed for testing so there are many empty methods, especially those to do with visual layout
  */
-public class TestBasicButton implements BasicButton {
+public class TestButton implements VisibleInputConsumer {
+
+	private final InputStrategySwitcher inputStrategySwitcher;
+	private final Runnable pressRunnable;
+
+	protected TestButton(InputStrategySwitcher inputStrategySwitcher) {
+		this(inputStrategySwitcher, Runnables.nullRunnable());
+	}
+	protected TestButton(InputStrategySwitcher inputStrategySwitcher, Runnable pressRunnable) {
+		this.pressRunnable = pressRunnable;
+		this.inputStrategySwitcher = inputStrategySwitcher;
+	}
 
 	private boolean isOver = false;
-	private boolean isChecked = false;
 	private boolean isDisabled = false;
-	private boolean fireProgrammaticChangeEvents = true;
 	private Touchable touchable = Touchable.enabled;
 	private final DelayedRemovalArray<EventListener> listeners = new DelayedRemovalArray<>(0);
 
-	@Override
 	public boolean isTouchable() {
 		return Touchable.enabled.equals(touchable);
-	}
-
-	@Override
-	public boolean isChecked() {
-		return isChecked;
 	}
 
 	@Override
@@ -39,14 +42,8 @@ public class TestBasicButton implements BasicButton {
 		return isDisabled;
 	}
 
-	@Override
 	public boolean isOver() {
 		return isOver;
-	}
-
-	@Override
-	public void toggle() {
-		setChecked(!isChecked());
 	}
 
 	@Override
@@ -59,60 +56,25 @@ public class TestBasicButton implements BasicButton {
 		this.touchable = touchable;
 	}
 
-	@Override
-	public void setProgrammaticChangeEvents(boolean fireProgrammaticChangeEvents) {
-		this.fireProgrammaticChangeEvents = fireProgrammaticChangeEvents;
-	}
 
-	@Override
-	public void setChecked(boolean checked) {
-		isChecked = checked;
+	//	@Override
+	//	public void setChecked(boolean checked) {
+	//		isChecked = checked;
+	//
+	//		if (fireProgrammaticChangeEvents) {
+	//			ChangeEvent changeEvent = Pools.obtain(ChangeEvent.class);
+	//			if (fire(changeEvent)) {
+	//				isChecked = !checked;
+	//			}
+	//			Pools.free(changeEvent);
+	//		}
+	//	}
+	//
+	//	@Override
+	//	public void setStyle(ButtonStyle style) {
+	//
+	//	}
 
-		if (fireProgrammaticChangeEvents) {
-			ChangeEvent changeEvent = Pools.obtain(ChangeEvent.class);
-			if (fire(changeEvent)) {
-				isChecked = !checked;
-			}
-			Pools.free(changeEvent);
-		}
-	}
-
-	@Override
-	public void setStyle(ButtonStyle style) {
-
-	}
-
-	@Override
-	public float getWidth() {
-		return 0;
-	}
-
-	@Override
-	public void setWidth(float width) {
-
-	}
-
-	@Override
-	public float getPrefWidth() {
-		return 0;
-	}
-
-	@Override
-	public float getPrefHeight() {
-		return 0;
-	}
-
-	@Override
-	public void setSize(float prefWidth, float prefHeight) {
-
-	}
-
-	@Override
-	public void setName(String string) {
-
-	}
-
-	@Override
 	public boolean fire(Event event) {
 		if (event instanceof InputEvent inputEvent) {
 			isOver = InputEvent.Type.enter.equals(inputEvent.getType());
@@ -203,22 +165,6 @@ public class TestBasicButton implements BasicButton {
 		return event.isCancelled();
 	}
 
-	@Override
-	public void clearActions() {
-
-	}
-
-	@Override
-	public void clearChildren() {
-
-	}
-
-	@Override
-	public void addAction(Action action) {
-
-	}
-
-	@Override
 	public boolean addListener(EventListener listener) {
 		if (listener == null) {
 			throw new IllegalArgumentException("listener cannot be null.");
@@ -230,12 +176,10 @@ public class TestBasicButton implements BasicButton {
 		return false;
 	}
 
-	@Override
 	public DelayedRemovalArray<EventListener> getListeners() {
 		return listeners;
 	}
 
-	@Override
 	public <T extends Actor> Cell<T> add(T actor) {
 		return null;
 	}
@@ -245,13 +189,7 @@ public class TestBasicButton implements BasicButton {
 		return new Actor();
 	}
 
-	@Override
 	public Stage getStage() {
-		return null;
-	}
-
-	@Override
-	public String getButtonText() {
 		return null;
 	}
 
@@ -260,34 +198,58 @@ public class TestBasicButton implements BasicButton {
 		return 0;
 	}
 
-	@Override
 	public float getHeight() {
 		return 0;
 	}
 
-	@Override
 	public void addActor(Actor actor) {
 
 	}
 
-	@Override
 	public boolean removeActor(Actor actor) {
 		return false;
 	}
 
 	@Override
-	public TextButtonStyle getStyle() {
-		return null;
+	public boolean isBlank() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
-	public TextraLabel getTextraLabel() {
-		return null;
-	}
+	public void setAlignment(Alignment alignment) {
+		// TODO Auto-generated method stub
 
+	}
 	@Override
-	public Cell<TextraLabel> getTextraLabelCell() {
-		return null;
+	public void consumeKeyInput(Input input) {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void focusCurrent() {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void clearSelected() {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void selectDefault() {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void setFocused(boolean focused) {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void resizeUI() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

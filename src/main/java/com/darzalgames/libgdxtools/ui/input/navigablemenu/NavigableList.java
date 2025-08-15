@@ -10,22 +10,20 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumer;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.BasicButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
 /**
  * This class is not an Actor, it's the logical list of buttons held in a Table.
  * One of these is owned by a {@link NavigableListMenu}, which is responsible for any decorative elements around this,
  * and any interactions with it.
  */
-public class NavigableList implements InputConsumer {
+public class NavigableList implements VisibleInputConsumer {
 	private final Input backCode;
 	private final Input forwardCode;
-	protected final LinkedList<UniversalButton> allEntries;
-	protected List<UniversalButton> interactableEntries;
-	private UniversalButton finalButton;
-	private UniversalButton currentButton = null;
+	protected final LinkedList<VisibleInputConsumer> allEntries;
+	protected List<VisibleInputConsumer> interactableEntries;
+	private VisibleInputConsumer finalButton;
+	private VisibleInputConsumer currentButton = null;
 	private int currentEntryIndex;
 	protected Table table;
 	private final boolean isVertical;
@@ -38,7 +36,7 @@ public class NavigableList implements InputConsumer {
 
 	private final List<Consumer<Input>> extraKeyListeners;
 
-	NavigableList(boolean isVertical, final List<UniversalButton> entries) {
+	NavigableList(boolean isVertical, final List<VisibleInputConsumer> entries) {
 		backCode = (isVertical ? Input.UP : Input.LEFT);
 		forwardCode = (isVertical ? Input.DOWN : Input.RIGHT);
 		allEntries = new LinkedList<>(entries);
@@ -53,7 +51,7 @@ public class NavigableList implements InputConsumer {
 		setRefreshPageRunnable(this::defaultRefreshPage);
 	}
 
-	public void replaceContents(final List<UniversalButton> newEntries) {
+	public void replaceContents(final List<VisibleInputConsumer> newEntries) {
 		replaceContents(newEntries, null);
 	}
 
@@ -61,7 +59,7 @@ public class NavigableList implements InputConsumer {
 	 * @param newEntries The new entries to be held in this list, excluding a special finalButton (see next line). This can include spacers, which will not be interactable
 	 * @param finalButton The button that will be pressed when the player presses *back*
 	 */
-	public void replaceContents(final List<UniversalButton> newEntries, UniversalButton finalButton) {
+	public void replaceContents(final List<VisibleInputConsumer> newEntries, VisibleInputConsumer finalButton) {
 		allEntries.clear();
 		allEntries.addAll(newEntries);
 		filterInteractableEntities();
@@ -73,11 +71,11 @@ public class NavigableList implements InputConsumer {
 		interactableEntries = allEntries.stream().filter(NavigableList::isInteractable).toList();
 	}
 
-	private static boolean isInteractable(UniversalButton entry) {
-		return !BasicButton.isSpacer(entry) && !entry.getButton().isDisabled();
+	private static boolean isInteractable(VisibleInputConsumer entry) {
+		return !VisibleInputConsumer.isSpacer(entry) && !entry.isDisabled();
 	}
 
-	protected void setFinalButton(UniversalButton finalButton) {
+	protected void setFinalButton(VisibleInputConsumer finalButton) {
 		this.finalButton = finalButton;
 		if (finalButton != null && !finalButton.isBlank()) {
 			allEntries.add(finalButton);
@@ -96,6 +94,7 @@ public class NavigableList implements InputConsumer {
 		return -1;
 	}
 
+	@Override
 	public Table getView() {
 		if (table == null) {
 			table = new Table();
@@ -109,7 +108,7 @@ public class NavigableList implements InputConsumer {
 
 	@Override
 	public void resizeUI() {
-		allEntries.forEach(UniversalButton::resizeUI);
+		allEntries.forEach(VisibleInputConsumer::resizeUI);
 	}
 
 	public void defaultRefreshPage() {
@@ -125,14 +124,14 @@ public class NavigableList implements InputConsumer {
 		}
 		table.align(tableAlignment.getAlignment());
 
-		for (UniversalButton entry : allEntries) {
+		for (VisibleInputConsumer entry : allEntries) {
 			if(isVertical()) {
 				table.row();
 			}
 			entry.setAlignment(entryAlignment);
 			Actor button = entry.getView();
 			table.add(button);
-			if (BasicButton.isSpacer(entry)) {
+			if (VisibleInputConsumer.isSpacer(entry)) {
 				if (isVertical()) {
 					table.getCell(button).expandY();
 				} else {
@@ -231,10 +230,10 @@ public class NavigableList implements InputConsumer {
 		}
 	}
 
-	public void goTo(UniversalButton universalButton) {
+	public void goTo(VisibleInputConsumer VisibleInputConsumer) {
 		for (int i = 0; i < interactableEntries.size(); i++) {
-			UniversalButton entry = interactableEntries.get(i);
-			if (entry.equals(universalButton)) {
+			VisibleInputConsumer entry = interactableEntries.get(i);
+			if (entry.equals(VisibleInputConsumer)) {
 				goTo(i);
 			}
 		}
@@ -273,12 +272,6 @@ public class NavigableList implements InputConsumer {
 		this.spacing = spacing;
 	}
 
-	public void setAlignment(Alignment entryAlignment, Alignment tableAlignment) {
-		this.entryAlignment = entryAlignment;
-		this.tableAlignment = tableAlignment;
-		refreshPageRunnable.run();
-	}
-
 	public void addExtraListener(Consumer<Input> listener) {
 		extraKeyListeners.add(listener);
 	}
@@ -295,13 +288,13 @@ public class NavigableList implements InputConsumer {
 	public float getPrefHeight() {
 		if(isVertical()) {
 			float total = spacing;
-			for (UniversalButton entry : allEntries) {
-				total += entry.getButton().getMinHeight();
+			for (VisibleInputConsumer entry : allEntries) {
+				total += entry.getMinHeight();
 				total += spacing;
 			}
 			return total;
 		} else {
-			return allEntries.get(0).getButton().getMinHeight();
+			return allEntries.get(0).getMinHeight();
 		}
 	}
 
@@ -319,6 +312,57 @@ public class NavigableList implements InputConsumer {
 
 	public int getSpacing() {
 		return spacing;
+	}
+
+	@Override
+	public boolean isDisabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isBlank() {
+		return allEntries.isEmpty();
+	}
+
+	/**
+	 * Sets the alignment for all entries AND the table itself, use {@link #setAlignment(Alignment entryAlignment, Alignment tableAlignment)} to set them separately
+	 */
+	@Override
+	public void setAlignment(Alignment alignment) {
+		setAlignment(alignment, alignment);
+	}
+
+	public void setAlignment(Alignment entryAlignment, Alignment tableAlignment) {
+		this.entryAlignment = entryAlignment;
+		this.tableAlignment = tableAlignment;
+		refreshPageRunnable.run();
+	}
+
+	@Override
+	public void setFocused(boolean focused) {
+		if (focused) {
+			focusCurrent();
+		} else {
+			clearSelected();
+		}
+	}
+
+	@Override
+	public float getMinHeight() {
+		return getPrefHeight();
+	}
+
+	@Override
+	public void setDisabled(boolean disabled) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean isOver() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

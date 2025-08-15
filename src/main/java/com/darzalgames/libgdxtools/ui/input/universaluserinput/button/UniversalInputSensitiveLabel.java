@@ -25,7 +25,8 @@ public class UniversalInputSensitiveLabel extends UniversalLabel implements Inpu
 
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-		this.setText(textSupplier.get());
+		// TODO probably no longer necessary since we update the text every frame
+		setTextSupplier(textSupplier);
 	}
 
 	@Override

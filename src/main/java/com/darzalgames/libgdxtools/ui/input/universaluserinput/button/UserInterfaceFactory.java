@@ -25,6 +25,7 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalDoodad;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.github.tommyettinger.textra.Styles.LabelStyle;
 import com.github.tommyettinger.textra.Styles.TextButtonStyle;
@@ -85,22 +86,24 @@ public class UserInterfaceFactory {
 	 * @param textSupplier supplier for the desired localized text
 	 * @return a disabled UniversalButton with the specified label text
 	 */
-	public UniversalButton getListableLabel(Supplier<String> textSupplier) {
-		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
-		BasicButton textButton = makeLibGDXTextButton(textSupplier.get(), skinManager.getSneakyLableButtonStyle());
-		textButton.setName(textSupplier.get());
-		UniversalButton listableButton = new UniversalButton(textButton, textSupplier, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
-		listableButton.setDisabled(true);
-		return listableButton;
-	}
+	//	public UniversalButton getListableLabel(Supplier<String> textSupplier) {
+	//		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.)
+	//
+	//				// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
+	//				BasicButton textButton = makeLibGDXTextButton(textSupplier.get(), skinManager.getSneakyLableButtonStyle());
+	//		textButton.setName(textSupplier.get());
+	//		UniversalButton listableButton = new UniversalButton(textButton, textSupplier, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
+	//		listableButton.setDisabled(true);
+	//		return listableButton;
+	//	}
 
 	/**
 	 * Makes a spacer which can be listed among other buttons, but isn't interactable and which will
 	 * expand out to fill any available space in the menu
 	 * @return a blank UniversalButton
 	 */
-	public UniversalButton getSpacer() {
-		UniversalButton spacer = getListableLabel(Suppliers.emptyString());
+	public UniversalDoodad getSpacer() {
+		UniversalLabel spacer = getLabel(Suppliers.emptyString());
 		spacer.getView().setName("spacer");
 		return spacer;
 	}

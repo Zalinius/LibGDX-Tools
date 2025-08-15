@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input;
 
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 
@@ -49,6 +50,12 @@ public interface InputConsumer {
 	 * If applicable, select a default object (e.g. the first button in a list, or the only intractable object in the current scene)
 	 */
 	void selectDefault();
+
+	boolean isDisabled();
+	boolean isBlank();
+	void setAlignment(Alignment alignment);
+	void setFocused(boolean focused);
+	void setDisabled(boolean disabled);
 
 	default boolean isPopUp() {
 		return false;

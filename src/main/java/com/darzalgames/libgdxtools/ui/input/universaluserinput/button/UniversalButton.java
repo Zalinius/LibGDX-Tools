@@ -1,82 +1,45 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
-import java.util.function.Supplier;
-
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Pools;
-import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.github.tommyettinger.textra.TextraLabel;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalDoodad;
+import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 /**
  * Our very own custom button class that works with keyboard input!
  * This is also the base class for other keyboard *buttons* such as checkboxes and sliders,
  * which allows them all to be put in a navigable menu together and treated the same
  */
-public class UniversalButton implements VisibleInputConsumer {
-	private final BasicButton button;
-	private Supplier<String> textSupplier;
-	private final Supplier<TextraLabel> labelSupplier;
-	private final Supplier<Cell<TextraLabel>> cellSupplier;
+public abstract class UniversalButton extends UniversalDoodad implements VisibleInputConsumer {
+
+	// TODO use enter and exit events to handle styling
+	// TODO homebrew my own system for toggling or checked and focused
+	// TODO Some sort of factory to make buttons with different components?
+
+
 	private Runnable buttonRunnable;
-	private final Image image;
-	private Alignment alignment;
-	private boolean wrap;
 	private boolean doesSoundOnInteract = true;
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Runnable soundInteractListener;
 
-	public UniversalButton(BasicButton button, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		this(button, textSupplier, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
-	}
-
-	public UniversalButton(BasicButton button, Supplier<String> textSupplier, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		this(button, textSupplier, null, runnable, inputStrategySwitcher, soundInteractListener);
-	}
-
-	public UniversalButton(BasicButton button, Supplier<String> textSupplier, Image image, Runnable runnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		this.button = button;
-		this.textSupplier = textSupplier;
-		labelSupplier = button::getTextraLabel;
-		cellSupplier = button::getTextraLabelCell;
-		buttonRunnable = runnable;
+	protected UniversalButton(Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle textButtonStyle) {
+		super(textButtonStyle, true);
+		this.buttonRunnable = buttonRunnable;
 		this.inputStrategySwitcher = inputStrategySwitcher;
-		this.image = image;
-		alignment = Alignment.CENTER;
 		this.soundInteractListener = soundInteractListener;
+	}
 
-		if (image != null) {
-			TextraLabel label = labelSupplier.get();
-			button.clearChildren();
-
-			int sidePadding = label.storedText.isBlank() ? 0 : 3;
-			float startWidth = label.storedText.isBlank() ? 0 : button.getWidth();
-
-			button.add(image).padRight(sidePadding);
-			button.add(label);
-
-			button.setWidth(startWidth + image.getWidth() + sidePadding);
+	@Override
+	protected void justPressed() {
+		if (isAClickableDoodad() && !isDisabled() && isTouchable()) {
+			buttonRunnable.run();
+			setUnchecked();
+			requestInteractSound();
 		}
-
-		button.addListener(new ChangeListener() {
-			@Override
-			public void changed(final ChangeEvent event, final Actor actor) {
-				if (button.isTouchable() && button.isChecked() && !button.isDisabled()) {
-					buttonRunnable.run();
-					setUnchecked();
-					requestInteractSound();
-				}
-			}
-		});
 	}
 
 	/**
@@ -88,31 +51,27 @@ public class UniversalButton implements VisibleInputConsumer {
 		}
 	}
 
-	@Override
-	public Actor getView() {
-		labelSupplier.get().setWrap(wrap);
-		labelSupplier.get().setAlignment(alignment.getAlignment());
-		if (cellSupplier.get() != null) {
-			cellSupplier.get().grow();
-		}
-		return button.getView();
-	}
-
-	public BasicButton getButton() {
-		return button;
-	}
+	//	@Override
+	//	public Actor getView() {
+	//		labelSupplier.get().setWrap(wrap);
+	//		labelSupplier.get().setAlignment(alignment.getAlignment());
+	//		if (cellSupplier.get() != null) {
+	//			cellSupplier.get().grow();
+	//		}
+	//		return this;
+	//	}
 
 	@Override
 	public void consumeKeyInput(Input input) {
 		if (input == Input.ACCEPT) {
-			button.toggle();
+			justPressed();
 		}
 	}
 
 	private void setUnchecked() {
-		button.setProgrammaticChangeEvents(false);
-		button.setChecked(false);
-		button.setProgrammaticChangeEvents(true);
+		//		setProgrammaticChangeEvents(false);
+		//		setChecked(false);
+		//		setProgrammaticChangeEvents(true);
 		setFocused(false);
 	}
 
@@ -120,6 +79,7 @@ public class UniversalButton implements VisibleInputConsumer {
 	 * Sets this button un/focused, generating a mimicked LibGDX mouse enter/exit event
 	 * @param isFocused
 	 */
+	@Override
 	public void setFocused(boolean isFocused) {
 		InputEvent event = Pools.obtain(InputEvent.class);
 		if (!isFocused) {
@@ -133,54 +93,33 @@ public class UniversalButton implements VisibleInputConsumer {
 		}
 
 		if (event.getType() != null) {
-			event.setStage(button.getStage());
-			Vector2 localToStageCoordinates = button.getView().localToStageCoordinates(new Vector2(0, 0));
+			event.setStage(getStage());
+			Vector2 localToStageCoordinates = localToStageCoordinates(new Vector2(0, 0));
 			event.setStageX(localToStageCoordinates.x);
 			event.setStageY(localToStageCoordinates.y);
 			event.setPointer(-1);
-			button.fire(event);
+			fire(event);
 			Pools.free(event);
 		}
 	}
 
-	/**
-	 * Set whether or not this button can be interacted with
-	 * @param disabled
-	 */
-	public void setDisabled(boolean disabled) {
-		button.setDisabled(disabled);
-	}
-
-	@Override
-	public void setTouchable(Touchable isTouchable) {
-		button.setTouchable(isTouchable);
-	}
-
-	/**
-	 * Replace the text on the button
-	 * @param newText
-	 */
-	public void updateText(String newText) {
-		textSupplier = () -> newText;
-		labelSupplier.get().setText(newText);
-	}
-
-	/**
-	 * @return Whether or not the button is blank
-	 */
-	public boolean isBlank() {
-		return textSupplier.get().isBlank() && image == null;
-	}
-
-	/**
-	 * Useful for trying to navigate to a particular button in a menu based on its text
-	 * (e.g. defaulting to the current setting in a drop-down menu via string matching)
-	 * @param value
-	 * @return Whether or not this button has text that matches the supplied value
-	 */
-	public boolean doesTextMatch(String value) {
-		return textSupplier.get().equalsIgnoreCase(value);
-	}
+	//	/**
+	//	 * @return Whether or not the button is blank
+	//	 */
+	//	@Override
+	//	public boolean isBlank() {
+	//		return textSupplier.get().isBlank() && image == null;
+	//	}
+	//
+	//	/**
+	//	 * Useful for trying to navigate to a particular button in a menu based on its text
+	//	 * (e.g. defaulting to the current setting in a drop-down menu via string matching)
+	//	 * @param value
+	//	 * @return Whether or not this button has text that matches the supplied value
+	//	 */
+	//	public boolean doesTextMatch(String value) {
+	//		return textSupplier.get().equalsIgnoreCase(value);
+	//	}
 
 	/**
 	 * Set what to do when the button is pressed
@@ -190,33 +129,17 @@ public class UniversalButton implements VisibleInputConsumer {
 		this.buttonRunnable = buttonRunnable;
 	}
 
-	/**
-	 * Set both alignments for the button's label. Quoting from the LibGDX documentation:
-	 * 		labelAlign Aligns all the text within the label (default left center).
-	 * 		lineAlign Aligns each line of text horizontally (default left).
-	 * @param alignment The new alignment
-	 */
-	public void setAlignment(Alignment alignment) {
-		this.alignment = alignment;
-	}
 
-	/**
-	 * Set whether or not the text in the button's label should wrap
-	 * @param wrap
-	 */
-	public void setWrap(boolean wrap) {
-		this.wrap = wrap;
-	}
 
 	/**
 	 * Update both the button's text and image in one go
 	 * @param textSupplier
 	 * @param image
 	 */
-	public void updateLabels(Supplier<String> textSupplier, final Image image) {
-		this.textSupplier = textSupplier;
-		this.image.setDrawable(image.getDrawable());
-	}
+	//	public void updateLabels(Supplier<String> textSupplier, final Image image) {
+	//		this.textSupplier = textSupplier;
+	//		this.image.setDrawable(image.getDrawable());
+	//	}
 
 	/**
 	 * Set whether or not this button should make a sound when interacted with
@@ -255,5 +178,7 @@ public class UniversalButton implements VisibleInputConsumer {
 		//		button.setSize(button.getPrefWidth(), button.getPrefHeight());
 		//		labelSupplier.get().setText(textSupplier.get());
 	}
+
+
 
 }

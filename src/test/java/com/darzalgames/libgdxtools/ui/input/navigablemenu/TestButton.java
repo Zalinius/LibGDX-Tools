@@ -9,7 +9,6 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
  * A minimalist re-implementation of a LibGDX Button, but without graphics (for testing)
@@ -17,16 +16,14 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
  */
 public class TestButton implements VisibleInputConsumer {
 
-	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Runnable pressRunnable;
 	private boolean isBlank;
 
-	protected TestButton(InputStrategySwitcher inputStrategySwitcher) {
-		this(inputStrategySwitcher, Runnables.nullRunnable());
+	protected TestButton() {
+		this(Runnables.nullRunnable());
 	}
-	protected TestButton(InputStrategySwitcher inputStrategySwitcher, Runnable pressRunnable) {
+	protected TestButton(Runnable pressRunnable) {
 		this.pressRunnable = pressRunnable;
-		this.inputStrategySwitcher = inputStrategySwitcher;
 		setBlank(true);
 	}
 

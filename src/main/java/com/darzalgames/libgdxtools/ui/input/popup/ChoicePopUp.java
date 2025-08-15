@@ -45,7 +45,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	 * @param chosenKey The key that was chosen
 	 */
 	protected void setChosenKey(String chosenKey) {}
-	
+
 	protected BaseDrawable getBackgroundDrawable() {
 		return GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable();
 	}
@@ -62,12 +62,12 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		}
 
 
-		UniversalButton firstButton = getFirstChoiceButton(); 
+		UniversalButton firstButton = getFirstChoiceButton();
 		UniversalButton secondButton = getSecondChoiceButton();
 		if (isSecondButtonBack) {
 			menu.replaceContents(ListFactory.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
 		} else {
-			menu.replaceContents(ListFactory.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button			
+			menu.replaceContents(ListFactory.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button
 		}
 
 		menu.setAlignment(Alignment.CENTER, Alignment.CENTER);

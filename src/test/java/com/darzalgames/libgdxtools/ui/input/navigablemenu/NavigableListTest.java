@@ -6,15 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
-import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public class NavigableListTest {
+class NavigableListTest {
 
 	@Test
 	void selectDefault_onlyFirstButtonIsFocused() {
@@ -241,7 +239,7 @@ public class NavigableListTest {
 		entries.add(buttonThree);
 		NavigableList navigableList = new NavigableList(true, entries);
 		navigableList.selectDefault();
-		TestButton finalButton = new TestButton(inputStrategySwitcher);
+		TestButton finalButton = new TestButton();
 		finalButton.setBlank(false);
 		//		VisibleInputConsumer finalButton = new TestButton(() -> "back", inputStrategySwitcher, Runnables.nullRunnable());
 		navigableList.setFinalButton(finalButton);
@@ -265,7 +263,7 @@ public class NavigableListTest {
 		entries.add(buttonThree);
 		NavigableList navigableList = new NavigableList(true, entries);
 		navigableList.selectDefault();
-		TestButton finalButton = new TestButton(inputStrategySwitcher);
+		TestButton finalButton = new TestButton();
 		finalButton.setBlank(false);
 		navigableList.setFinalButton(finalButton);
 
@@ -429,7 +427,7 @@ public class NavigableListTest {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		entries.add(makeTestButton());
 		entries.add(makeTestButton());
-		TestButton finalButton = new TestButton(inputStrategySwitcher, () -> finalButtonPressed.set(true));
+		TestButton finalButton = new TestButton(() -> finalButtonPressed.set(true));
 		finalButton.setBlank(false);
 		NavigableList navigableList = new NavigableList(true, entries);
 		navigableList.setFinalButton(finalButton);
@@ -444,7 +442,7 @@ public class NavigableListTest {
 		AtomicBoolean testButtonPressed = new AtomicBoolean();
 		testButtonPressed.set(false);
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer testButton = new TestButton(inputStrategySwitcher, () -> testButtonPressed.set(true));
+		VisibleInputConsumer testButton = new TestButton(() -> testButtonPressed.set(true));
 		entries.add(testButton);
 		NavigableList navigableList = new NavigableList(true, entries);
 		navigableList.selectDefault();
@@ -533,33 +531,15 @@ public class NavigableListTest {
 		assertFalse(buttonTwo.isOver());
 	}
 
-
-	private static InputStrategySwitcher inputStrategySwitcher;
-
-	@BeforeAll
-	public static void setUp() {
-		inputStrategySwitcher = makeInputStrategySwitcher();
-	}
-
 	private static VisibleInputConsumer makeTestButton() {
-		return new TestButton(inputStrategySwitcher);
+		return new TestButton();
 	}
 
 	private static VisibleInputConsumer makeTestSpacer() {
-		VisibleInputConsumer spacer = new TestButton(inputStrategySwitcher);
+		VisibleInputConsumer spacer = new TestButton();
 		spacer.setDisabled(true);
 		assertTrue(VisibleInputConsumer.isSpacer(spacer));
 		return spacer;
 	}
-
-	private static InputStrategySwitcher makeInputStrategySwitcher() {
-		return new InputStrategySwitcher() {
-			@Override
-			public boolean shouldFlashButtons() {
-				return true;
-			}
-		};
-	}
-
 
 }

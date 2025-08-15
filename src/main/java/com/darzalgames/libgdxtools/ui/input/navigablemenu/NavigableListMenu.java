@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
@@ -97,6 +98,31 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	@Override
 	public void focusCurrent() {
 		menu.focusCurrent();
+	}
+
+	@Override
+	public void setFocused(boolean focused) {
+		menu.setFocused(focused);
+	}
+
+	@Override
+	public boolean isDisabled() {
+		return menu.isDisabled();
+	}
+
+	@Override
+	public boolean isBlank() {
+		return menu.isBlank();
+	}
+
+	@Override
+	public void setAlignment(Alignment alignment) {
+		menu.setAlignment(alignment);
+	}
+
+	@Override
+	public void setDisabled(boolean disabled) {
+		menu.setDisabled(disabled);
 	}
 
 	/**

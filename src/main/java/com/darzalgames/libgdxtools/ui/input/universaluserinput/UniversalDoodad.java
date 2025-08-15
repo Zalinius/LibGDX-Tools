@@ -38,6 +38,10 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		return this;
 	}
 
+	protected TextButtonStyle getStyle() {
+		return style;
+	}
+
 	@Override
 	public boolean isDisabled() {
 		return disabled;
@@ -52,6 +56,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		return clickListener.isVisualPressed();
 	}
 
+	@Override
 	public boolean isOver() {
 		return clickListener.isOver();
 	}
@@ -67,6 +72,8 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	protected void justPressed() {
 		// let subclasses define this if needed
 	}
+
+	// Table has align(), do we call that??
 
 
 	// ----------------- \/  VISUAL STYLING  \/  ----------------- //

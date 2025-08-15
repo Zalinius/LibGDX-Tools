@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.data.Tuple;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMath;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.CustomHitbox;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
@@ -21,9 +22,9 @@ public class HexagonController2D extends Container<Actor> implements VisibleInpu
 
 	public HexagonController2D(Hexagon hexagon, CustomHitbox hitBox, Function<HexagonController2D, VisibleInputConsumer> makeInputConsumer) {
 		this.hexagon = hexagon;
-		this.hitbox = hitBox;
-		this.inputConsumer = makeInputConsumer.apply(this);
-		this.setActor(inputConsumer.getView());
+		hitbox = hitBox;
+		inputConsumer = makeInputConsumer.apply(this);
+		setActor(inputConsumer.getView());
 		this.setOrigin(Align.center);
 	}
 
@@ -34,7 +35,7 @@ public class HexagonController2D extends Container<Actor> implements VisibleInpu
 			return null;
 		}
 
-		boolean isInsideHexagon = !hitbox.isHit(x, y, this.getWidth(), this.getHeight());
+		boolean isInsideHexagon = !hitbox.isHit(x, y, getWidth(), getHeight());
 		if (!isInsideHexagon) {
 			return null;
 		} else {
@@ -44,7 +45,7 @@ public class HexagonController2D extends Container<Actor> implements VisibleInpu
 
 	private void setPositionOnScreen() {
 		Tuple<Float, Float> hexagonPosition =  HexagonMath.getScreenPositionOnStage(hexagon.getQ(), hexagon.getR(),
-				this.getWidth(), this.getHeight(), UserInterfaceSizer.getCurrentHeight());
+				getWidth(), getHeight(), UserInterfaceSizer.getCurrentHeight());
 		this.setPosition(hexagonPosition.e, hexagonPosition.f);
 		inputConsumer.getView().setPosition(0, 0);
 	}
@@ -73,7 +74,7 @@ public class HexagonController2D extends Container<Actor> implements VisibleInpu
 	public Actor getView() {
 		return inputConsumer.getView();
 	}
-	
+
 	@Override
 	public String toString() {
 		return hexagon.toString() + " " + inputConsumer.toString();
@@ -88,6 +89,36 @@ public class HexagonController2D extends Container<Actor> implements VisibleInpu
 
 	public Hexagon getHexagon() {
 		return hexagon;
+	}
+
+	@Override
+	public boolean isDisabled() {
+		return inputConsumer.isDisabled();
+	}
+
+	@Override
+	public boolean isBlank() {
+		return inputConsumer.isBlank();
+	}
+
+	@Override
+	public void setAlignment(Alignment alignment) {
+		inputConsumer.setAlignment(alignment);
+	}
+
+	@Override
+	public void setFocused(boolean focused) {
+		inputConsumer.setFocused(focused);
+	}
+
+	@Override
+	public void setDisabled(boolean disabled) {
+		inputConsumer.setDisabled(disabled);
+	}
+
+	@Override
+	public boolean isOver() {
+		return inputConsumer.isOver();
 	}
 
 }

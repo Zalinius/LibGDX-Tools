@@ -27,6 +27,7 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
@@ -148,8 +149,8 @@ public class SampleUserInterfaceGame extends MainGame {
 		return "com.darzalgames.libgdxtools.preferences";
 	}
 
-	protected List<UniversalButton> getMenuEntries() {
-		List<UniversalButton> menuButtons = new ArrayList<>();
+	protected List<VisibleInputConsumer> getMenuEntries() {
+		List<VisibleInputConsumer> menuButtons = new ArrayList<>();
 
 		UniversalSlider basicSlider = GameInfo.getUserInterfaceFactory().getSlider(() -> "Slider with a label", newValue -> {});
 		basicSlider.setSliderPosition(0.5f, false);
@@ -163,8 +164,8 @@ public class SampleUserInterfaceGame extends MainGame {
 		menuButtons.add(focusMute);
 
 		String sliderInfo = "The below slider is at ";
-		UniversalButton sliderInfoLabel = GameInfo.getUserInterfaceFactory().getListableLabel(() -> sliderInfo + "0.5");
-		UniversalSlider funSlider = GameInfo.getUserInterfaceFactory().getSlider(Suppliers.emptyString(), newValue -> sliderInfoLabel.updateText(sliderInfo + String.format("%.1f", newValue)));
+		UniversalLabel sliderInfoLabel = GameInfo.getUserInterfaceFactory().getLabel(() -> sliderInfo + "0.5");
+		UniversalSlider funSlider = GameInfo.getUserInterfaceFactory().getSlider(Suppliers.emptyString(), newValue -> sliderInfoLabel.setTextSupplier(() -> sliderInfo + String.format("%.1f", newValue)));
 		funSlider.setSliderPosition(0.5f, false);
 		menuButtons.add(sliderInfoLabel);
 		menuButtons.add(funSlider);
@@ -245,9 +246,12 @@ public class SampleUserInterfaceGame extends MainGame {
 				UserInterfaceSizer.makeActorCentered(popup.getView());
 				addActor(popup.getView());
 			}
-
-			@Override
-			public void resizeUI() { /*Not needed*/ }
+			@Override public void resizeUI() { /*Not needed*/ }
+			@Override public boolean isDisabled() { return false; }
+			@Override public boolean isBlank() { return false; }
+			@Override public void setAlignment(Alignment alignment) { /*Not needed*/ }
+			@Override public void setFocused(boolean focused) { /*Not needed*/ }
+			@Override public void setDisabled(boolean disabled) { /*Not needed*/ }
 		};
 		InputPriority.claimPriority(innerPopup, POP_UP_STAGE_NAME);
 	}
@@ -261,9 +265,12 @@ public class SampleUserInterfaceGame extends MainGame {
 				UserInterfaceSizer.makeActorCentered(regainFocusPopup.getView());
 				addActor(regainFocusPopup.getView());
 			}
-
-			@Override
-			public void resizeUI() { /*Not needed*/ }
+			@Override public void resizeUI() { /*Not needed*/ }
+			@Override public boolean isDisabled() { return false; }
+			@Override public boolean isBlank() { return false; }
+			@Override public void setAlignment(Alignment alignment) { /*Not needed*/ }
+			@Override public void setFocused(boolean focused) { /*Not needed*/ }
+			@Override public void setDisabled(boolean disabled) { /*Not needed*/ }
 		};
 		InputPriority.claimPriority(innerPopup, POP_UP_STAGE_NAME);
 	}

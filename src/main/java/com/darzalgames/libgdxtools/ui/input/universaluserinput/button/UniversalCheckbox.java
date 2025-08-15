@@ -8,10 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.darzalcommon.functional.Suppliers;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.github.tommyettinger.textra.Styles.CheckBoxStyle;
+import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 import com.github.tommyettinger.textra.TextraCheckBox;
 
 public class UniversalCheckbox extends UniversalButton {
@@ -20,8 +21,8 @@ public class UniversalCheckbox extends UniversalButton {
 	private final Supplier<String> uncheckedLabel;
 	private final Supplier<String> checkedLabel;
 
-	public UniversalCheckbox(BasicButton basicButton, Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(basicButton, Suppliers.emptyString(), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
+	public UniversalCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, TextButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+		super(Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
 		this.uncheckedLabel = uncheckedLabel;
 		this.checkedLabel = checkedLabel;
 
@@ -53,14 +54,13 @@ public class UniversalCheckbox extends UniversalButton {
 			imageCell.padRight(UserInterfaceSizer.getWidthPercentage(0.01f));
 		}
 
-		basicButton.clearChildren();
-		basicButton.setWidth(basicButton.getWidth() + box.getPrefWidth());
-		basicButton.add(box).center().growX();
-		basicButton.addListener(new ChangeListener() {
+		clearChildren();
+		setWidth(getWidth() + box.getPrefWidth());
+		add(box).center().growX();
+		addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				initializeAsChecked(!box.isChecked());
-				basicButton.setChecked(false);
 				consumer.accept(box.isChecked());
 				UniversalCheckbox.this.setFocused(true);
 			}
@@ -92,6 +92,19 @@ public class UniversalCheckbox extends UniversalButton {
 	public void resizeUI() {
 		super.resizeUI();
 		box.setText(box.isChecked() ? checkedLabel.get() : uncheckedLabel.get());
+	}
+
+	@Override
+	public boolean isBlank() {
+		// what would a blank checkbox even mean
+		return false;
+	}
+
+	@Override
+	public void setAlignment(Alignment alignment) {
+		getCell(box).align(alignment.getAlignment());
+		box.getTextraLabel().setAlignment(alignment.getAlignment());
+		// TODO uh any more?
 	}
 
 }

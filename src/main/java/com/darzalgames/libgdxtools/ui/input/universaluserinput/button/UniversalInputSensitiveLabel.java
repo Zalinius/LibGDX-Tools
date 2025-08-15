@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.github.tommyettinger.textra.Styles.LabelStyle;
+import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 public class UniversalInputSensitiveLabel extends UniversalLabel implements InputStrategyObserver {
 
@@ -17,8 +18,8 @@ public class UniversalInputSensitiveLabel extends UniversalLabel implements Inpu
 	 * @param style
 	 * @param inputStrategySwitcher
 	 */
-	protected UniversalInputSensitiveLabel(Supplier<String> labelTextSupplier, LabelStyle style, InputStrategySwitcher inputStrategySwitcher) {
-		super(labelTextSupplier, style);
+	protected UniversalInputSensitiveLabel(Supplier<String> labelTextSupplier, LabelStyle style, TextButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher) {
+		super(labelTextSupplier, style, buttonStyle);
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		inputStrategySwitcher.register(this);
 	}

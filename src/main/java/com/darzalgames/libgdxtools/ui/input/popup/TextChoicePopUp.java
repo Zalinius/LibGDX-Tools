@@ -62,7 +62,7 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 	protected Table getMessage() {
 		Function<Supplier<String>, UniversalLabel> labelFunction = isWarning ? GameInfo.getUserInterfaceFactory()::getWarningLabel : GameInfo.getUserInterfaceFactory()::getLabelWithBackground;
 		UniversalLabel label = labelFunction.apply(() -> TextSupplier.getLine(messageKey));
-		label.setAlignment(Alignment.CENTER.getAlignment());
+		label.setAlignment(Alignment.CENTER);
 		Table table = new Table();
 		table.add(label).grow();
 		return table;

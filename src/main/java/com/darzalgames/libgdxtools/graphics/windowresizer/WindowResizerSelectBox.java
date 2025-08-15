@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
@@ -18,9 +17,13 @@ import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.DelayRunnableAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalLabel;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
+import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 public class WindowResizerSelectBox extends UniversalSelectBox implements WindowResizerButton {
 
@@ -30,8 +33,8 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		this.windowResizer = windowResizer;
 	}
 
-	public WindowResizerSelectBox(BasicButton textButton, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(textButton, textSupplier, inputStrategySwitcher, soundInteractListener);
+	public WindowResizerSelectBox(Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle style) {
+		super(textSupplier, inputStrategySwitcher, soundInteractListener, style);
 
 		setEntryButtons(getEntries());
 	}
@@ -103,7 +106,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 			super.setUpTable();
 			IntFunction<String> makeCountdownString = count -> TextSupplier.getLine("screen_mode_revert", count);
 			revertCountdown = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> makeCountdownString.apply(10));
-			revertCountdown.setAlignment(Align.center);
+			revertCountdown.setAlignment(Alignment.CENTER);
 			row();
 			add(revertCountdown).growX();
 

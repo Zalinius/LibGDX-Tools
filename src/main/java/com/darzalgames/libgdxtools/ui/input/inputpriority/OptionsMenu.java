@@ -6,13 +6,13 @@ import java.util.function.Supplier;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.GetOnStage;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
+import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
@@ -113,7 +113,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 		setUpBackground();
 
 		// ALL SELECTABLE MENU BUTTONS
-		List<UniversalButton> menuButtons = new ArrayList<>();
+		List<VisibleInputConsumer> menuButtons = new ArrayList<>();
 		menuButtons.add(GameInfo.getUserInterfaceFactory().getSpacer());
 
 		menuButtons.addAll(makeMiddleButtons());
@@ -156,12 +156,12 @@ public abstract class OptionsMenu extends PopUpMenu {
 		addActor(versionTable);
 
 		UniversalLabel authors = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("authors_label"));
-		authors.setAlignment(Align.topLeft);
+		authors.setAlignment(Alignment.TOP_LEFT);
 		versionTable.add(authors).grow().top().left().padTop(getPadTop()).padLeft(getPadLeft());
 		versionTable.row();
 
 		UniversalLabel versionLabel = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> getGameVersion() + platformName);
-		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT.getAlignment());
+		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT);
 		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom()).padRight(getPadRight());
 	}
 
@@ -206,7 +206,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 
 		private final String buttonKey;
 
-		public NestedMenu(final List<UniversalButton> entries, String buttonKey) {
+		public NestedMenu(final List<VisibleInputConsumer> entries, String buttonKey) {
 			super(true, entries, "back_message");
 			this.buttonKey = buttonKey;
 		}

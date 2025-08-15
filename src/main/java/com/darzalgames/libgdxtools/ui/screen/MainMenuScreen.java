@@ -52,4 +52,9 @@ public class MainMenuScreen extends GameScreen {
 	public void setFocused(boolean focused) {
 		mainMenu.setFocused(focused);
 	}
+
+	@Override
+	public void setDisabled(boolean disabled) {
+		mainMenu.setDisabled(disabled);
+	}
 }

@@ -27,6 +27,9 @@ public class UniversalLabel extends UniversalDoodad {
 		};
 		this.textSupplier = textSupplier;
 		label.setWrap(false);
+		label.skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
+		add(label);
+		this.debug();
 	}
 
 	public void setTextSupplier(Supplier<String> textSupplier) {
@@ -89,7 +92,7 @@ public class UniversalLabel extends UniversalDoodad {
 
 	@Override
 	public void resizeUI() {
-		label.setText(textSupplier.get());
+		label.setText(textSupplier.get(), true, false);
 		label.skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		//		setStyle(getStyle());
 		//		if (!getWrap() && getStyle().background != null) {

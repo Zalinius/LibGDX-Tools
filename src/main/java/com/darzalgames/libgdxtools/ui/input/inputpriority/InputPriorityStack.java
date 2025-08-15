@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -196,6 +197,11 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			@Override public void loseFocus() {/*not needed*/}
 			@Override public String toString() { return "Blank base"; }
 			@Override public void resizeUI() {/*not needed*/}
+			@Override public boolean isDisabled() { return false; }
+			@Override public boolean isBlank() { return true; }
+			@Override public void setAlignment(Alignment alignment) {/*not needed*/}
+			@Override public void setFocused(boolean focused) {/*not needed*/}
+			@Override public void setDisabled(boolean disabled) {/*not needed*/}
 		};
 	}
 

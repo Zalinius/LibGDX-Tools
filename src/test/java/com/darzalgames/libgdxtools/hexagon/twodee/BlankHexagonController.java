@@ -22,4 +22,5 @@ public class BlankHexagonController implements VisibleInputConsumer {
 	@Override public void setFocused(boolean focused) { }
 	@Override public float getMinHeight() { return 0; }
 	@Override public void setDisabled(boolean disabled) { }
+	@Override public boolean isOver() { return false; }
 }

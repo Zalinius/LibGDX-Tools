@@ -19,6 +19,7 @@ public class TestButton implements VisibleInputConsumer {
 
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Runnable pressRunnable;
+	private boolean isBlank;
 
 	protected TestButton(InputStrategySwitcher inputStrategySwitcher) {
 		this(inputStrategySwitcher, Runnables.nullRunnable());
@@ -26,6 +27,7 @@ public class TestButton implements VisibleInputConsumer {
 	protected TestButton(InputStrategySwitcher inputStrategySwitcher, Runnable pressRunnable) {
 		this.pressRunnable = pressRunnable;
 		this.inputStrategySwitcher = inputStrategySwitcher;
+		setBlank(true);
 	}
 
 	private boolean isOver = false;
@@ -37,11 +39,16 @@ public class TestButton implements VisibleInputConsumer {
 		return Touchable.enabled.equals(touchable);
 	}
 
+	protected void setBlank(boolean isBlank) {
+		this.isBlank = isBlank;
+	}
+
 	@Override
 	public boolean isDisabled() {
 		return isDisabled;
 	}
 
+	@Override
 	public boolean isOver() {
 		return isOver;
 	}
@@ -212,8 +219,7 @@ public class TestButton implements VisibleInputConsumer {
 
 	@Override
 	public boolean isBlank() {
-		// TODO Auto-generated method stub
-		return false;
+		return isBlank;
 	}
 
 	@Override
@@ -223,8 +229,9 @@ public class TestButton implements VisibleInputConsumer {
 	}
 	@Override
 	public void consumeKeyInput(Input input) {
-		// TODO Auto-generated method stub
-
+		if (input.equals(Input.ACCEPT)) {
+			pressRunnable.run();
+		}
 	}
 	@Override
 	public void focusCurrent() {
@@ -243,8 +250,7 @@ public class TestButton implements VisibleInputConsumer {
 	}
 	@Override
 	public void setFocused(boolean focused) {
-		// TODO Auto-generated method stub
-
+		isOver = focused;
 	}
 	@Override
 	public void resizeUI() {

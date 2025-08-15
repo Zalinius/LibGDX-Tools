@@ -241,7 +241,8 @@ public class NavigableListTest {
 		entries.add(buttonThree);
 		NavigableList navigableList = new NavigableList(true, entries);
 		navigableList.selectDefault();
-		VisibleInputConsumer finalButton = new TestButton(inputStrategySwitcher);
+		TestButton finalButton = new TestButton(inputStrategySwitcher);
+		finalButton.setBlank(false);
 		//		VisibleInputConsumer finalButton = new TestButton(() -> "back", inputStrategySwitcher, Runnables.nullRunnable());
 		navigableList.setFinalButton(finalButton);
 
@@ -264,7 +265,8 @@ public class NavigableListTest {
 		entries.add(buttonThree);
 		NavigableList navigableList = new NavigableList(true, entries);
 		navigableList.selectDefault();
-		VisibleInputConsumer finalButton = new TestButton(inputStrategySwitcher);
+		TestButton finalButton = new TestButton(inputStrategySwitcher);
+		finalButton.setBlank(false);
 		navigableList.setFinalButton(finalButton);
 
 		navigableList.returnToSecondLast();
@@ -427,7 +429,8 @@ public class NavigableListTest {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		entries.add(makeTestButton());
 		entries.add(makeTestButton());
-		VisibleInputConsumer finalButton = new TestButton(inputStrategySwitcher, () -> finalButtonPressed.set(true));
+		TestButton finalButton = new TestButton(inputStrategySwitcher, () -> finalButtonPressed.set(true));
+		finalButton.setBlank(false);
 		NavigableList navigableList = new NavigableList(true, entries);
 		navigableList.setFinalButton(finalButton);
 

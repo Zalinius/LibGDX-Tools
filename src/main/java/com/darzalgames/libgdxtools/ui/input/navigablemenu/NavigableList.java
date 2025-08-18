@@ -109,6 +109,9 @@ public class NavigableList implements VisibleInputConsumer {
 	@Override
 	public void resizeUI() {
 		allEntries.forEach(VisibleInputConsumer::resizeUI);
+		if (table != null) {
+			table.layout();
+		}
 	}
 
 	public void defaultRefreshPage() {

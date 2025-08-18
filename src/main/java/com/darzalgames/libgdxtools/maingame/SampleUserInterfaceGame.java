@@ -60,11 +60,7 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	@Override
-	protected void startLoadingGameAssets() {
-	}
-	@Override
-	protected boolean loadGameAssets() {
-		return true;
+	protected void loadAssets() {
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public class UniversalTextButton extends UniversalButton {
 
 	private final UniversalLabel label;
 
-	protected UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle textButtonStyle) {
+	public UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle textButtonStyle) {
 		super(buttonRunnable, inputStrategySwitcher, soundInteractListener, textButtonStyle);
 		this.label = label;
 		add(label);

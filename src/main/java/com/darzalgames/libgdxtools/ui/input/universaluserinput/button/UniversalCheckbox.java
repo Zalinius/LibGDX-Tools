@@ -73,10 +73,8 @@ public class UniversalCheckbox extends UniversalButton {
 				super.draw(batch, parentAlpha);
 			}
 		};
-		//		add(box).padRight(calculatePadding());
 		add(box);
 		add(label).growX();
-		debug();
 		addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -137,7 +135,7 @@ public class UniversalCheckbox extends UniversalButton {
 
 	@Override
 	public void setAlignment(Alignment alignment) {
-		getCell(box).align(alignment.getAlignment());
+		//		getCell(box).align(alignment.getAlignment());
 		label.setAlignment(alignment);
 		// TODO uh any more?
 	}

@@ -15,13 +15,13 @@ import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 public abstract class UniversalDoodad extends Table implements VisibleInputConsumer {
 
-	private final TextButtonStyle style;
+	private TextButtonStyle style;
 	private boolean disabled;
 	private final boolean isAClickableDoodad;
 	private final ClickListener clickListener;
 
 	protected UniversalDoodad(TextButtonStyle textButtonStyle, boolean isAClickableDoodad) {
-		style = textButtonStyle;
+		setStyle(textButtonStyle);
 		this.isAClickableDoodad = isAClickableDoodad;
 		setDisabled(false);
 		clickListener = new ClickListener() {
@@ -38,8 +38,13 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		return this;
 	}
 
-	protected TextButtonStyle getStyle() {
+	public TextButtonStyle getStyle() {
 		return style;
+	}
+
+	public void setStyle(TextButtonStyle newStyle) {
+		style = newStyle;
+		setBackground(style.down);
 	}
 
 	@Override
@@ -103,7 +108,8 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 		setBackground(getBackgroundDrawable());
 
-		float offsetX = 0, offsetY = 0;
+		float offsetX = 0;
+		float offsetY = 0;
 		if (isPressed() && !isDisabled()) {
 			offsetX = style.pressedOffsetX;
 			offsetY = style.pressedOffsetY;

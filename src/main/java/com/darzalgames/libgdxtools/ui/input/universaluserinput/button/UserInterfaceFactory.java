@@ -100,9 +100,8 @@ public class UserInterfaceFactory {
 		return spacer;
 	}
 
-
-	public UniversalButton getImageButton(final Image image, final Runnable runnable) {
-		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, soundInteractRunnable, skinManager.getTextButtonStyle()) {
+	protected UniversalButton getImageButton(final Image image, final Runnable runnable, TextButtonStyle style) {
+		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, soundInteractRunnable, style) {
 			@Override
 			public boolean isBlank() {
 				return image != null;
@@ -116,31 +115,17 @@ public class UserInterfaceFactory {
 		return button;
 	}
 
-	//	public UniversalButton getButton(Supplier<String> textKey, Image image, final Runnable runnable) {
-	//		return makeButton(textKey, image, runnable);
-	//	}
-
-	private UniversalButton makeButton(Supplier<String> textSupplier, Image image, final Runnable runnable) {
-		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle(), skinManager.getBlankButtonStyle());
-		//		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, soundInteractRunnable, skinManager.getTextButtonStyle()) {
-			@Override
-			public boolean isBlank() {
-				return label.isBlank();
-			}
-			@Override
-			public void setAlignment(Alignment alignment) {
-				label.setAlignment(alignment);
-			}
-		};
-		button.add(image);
-		button.add(label);
-		return button;
+	public UniversalButton getImageButton(final Image image, final Runnable runnable) {
+		return getImageButton(image, runnable, skinManager.getTextButtonStyle());
 	}
 
 	public UniversalTextButton makeTextButton(Supplier<String> textSupplier, final Runnable runnable) {
+		return makeTextButtonWithStyle(textSupplier, runnable, skinManager.getTextButtonStyle());
+	}
+
+	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, TextButtonStyle style) {
 		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle(), skinManager.getBlankButtonStyle());
-		return new UniversalTextButton(label, runnable, inputStrategySwitcher, soundInteractRunnable, skinManager.getTextButtonStyle());
+		return new UniversalTextButton(label, runnable, inputStrategySwitcher, soundInteractRunnable, style);
 	}
 
 	/**

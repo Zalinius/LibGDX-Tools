@@ -93,6 +93,7 @@ public class SampleUserInterfaceGame extends MainGame {
 				menu.setSpacing(1);
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 				add(menu.getView()).grow().align(Align.center);
+				menu.getView().debug();
 			}
 
 			@Override
@@ -313,7 +314,7 @@ public class SampleUserInterfaceGame extends MainGame {
 		@Override protected String getGameVersion() {return "version goes here";}
 
 		@Override
-		protected Collection<UniversalButton> makeMiddleButtons() {
+		protected Collection<VisibleInputConsumer> makeMiddleButtons() {
 			return new ArrayList<>();
 		}
 

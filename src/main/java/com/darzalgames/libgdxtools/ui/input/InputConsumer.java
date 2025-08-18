@@ -54,8 +54,16 @@ public interface InputConsumer {
 	boolean isDisabled();
 	boolean isBlank();
 	void setAlignment(Alignment alignment);
-	void setFocused(boolean focused);
 	void setDisabled(boolean disabled);
+
+
+	default void setFocused(boolean focused) {
+		if (focused) {
+			focusCurrent();
+		} else {
+			clearSelected();
+		}
+	}
 
 	default boolean isPopUp() {
 		return false;

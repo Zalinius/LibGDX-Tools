@@ -40,7 +40,6 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 		if (isAClickableDoodad() && !isDisabled() && isTouchable) {
 			buttonRunnable.run();
 			setFocused(false);
-			//was setUnchecked
 			requestInteractSound();
 		}
 	}
@@ -54,27 +53,11 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 		}
 	}
 
-	//	@Override
-	//	public Actor getView() {
-	//		labelSupplier.get().setWrap(wrap);
-	//		labelSupplier.get().setAlignment(alignment.getAlignment());
-	//		if (cellSupplier.get() != null) {
-	//			cellSupplier.get().grow();
-	//		}
-	//		return this;
-	//	}
-
 	@Override
 	public void consumeKeyInput(Input input) {
 		if (input == Input.ACCEPT) {
 			justPressed();
 		}
-	}
-
-	private void setUnchecked() {
-		//		setProgrammaticChangeEvents(false);
-		//		setChecked(false);
-		//		setProgrammaticChangeEvents(true);
 	}
 
 	/**
@@ -176,11 +159,8 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 
 	@Override
 	public void resizeUI() {
-		//		button.setStyle(button.getStyle());
-		//		button.setSize(button.getPrefWidth(), button.getPrefHeight());
-		//		labelSupplier.get().setText(textSupplier.get());
+		setStyle(getStyle());
+		setSize(getPrefWidth(), getPrefHeight());
 	}
-
-
 
 }

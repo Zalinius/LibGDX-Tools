@@ -41,7 +41,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	/**
 	 * @return A list of any game-specific options buttons (e.g. language, text speed, etc)
 	 */
-	protected abstract Collection<UniversalButton> makeMiddleButtons();
+	protected abstract Collection<VisibleInputConsumer> makeMiddleButtons();
 
 	/**
 	 * @return An optional button to display controls (return null if you don't want this)

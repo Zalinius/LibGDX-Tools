@@ -75,8 +75,9 @@ public class SkinManager {
 		labelWithBackgroundStyle.background = skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
 		skin.add(LABEL_WITH_BACKGROUND, labelWithBackgroundStyle);
 
-		SliderStyle sliderStyle = new SliderStyle(new Image(ColorTools.getColoredTexture(Color.GOLDENROD, size)).getDrawable(), darkGrayNinePatch);
+		SliderStyle sliderStyle = new SliderStyle(new Image(ColorTools.getColoredTexture(Color.GOLDENROD, size)).getDrawable(), new Image(ColorTools.getColoredTexture(Color.GRAY, size)).getDrawable());
 		sliderStyle.knobDown = darkGrayNinePatch;
+		sliderStyle.knobOver = darkGrayNinePatch;
 		skin.add(SLIDER, sliderStyle);
 
 		CheckBoxStyle checkboxStyle = new Styles.CheckBoxStyle(new Image(ColorTools.getColoredTexture(Color.DARK_GRAY, size)).getDrawable(), new Image(ColorTools.getColoredTexture(Color.PURPLE, size)).getDrawable(), defaultFont, Color.BLACK);

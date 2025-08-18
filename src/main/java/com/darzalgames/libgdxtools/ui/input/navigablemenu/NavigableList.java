@@ -340,15 +340,6 @@ public class NavigableList implements VisibleInputConsumer {
 	}
 
 	@Override
-	public void setFocused(boolean focused) {
-		if (focused) {
-			focusCurrent();
-		} else {
-			clearSelected();
-		}
-	}
-
-	@Override
 	public float getMinHeight() {
 		return getPrefHeight();
 	}

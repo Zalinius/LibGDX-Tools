@@ -17,7 +17,7 @@ public class UniversalLabel extends UniversalDoodad {
 
 	protected Supplier<String> textSupplier;
 
-	protected UniversalLabel(Supplier<String> textSupplier, LabelStyle typingLabelStyle, TextButtonStyle style) {
+	public UniversalLabel(Supplier<String> textSupplier, LabelStyle typingLabelStyle, TextButtonStyle style) {
 		super(style, false);
 		label = new TypingLabel(textSupplier.get(), typingLabelStyle) {
 			@Override
@@ -30,6 +30,7 @@ public class UniversalLabel extends UniversalDoodad {
 		label.setWrap(false);
 		label.skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		add(label);
+		setDisabled(true);
 	}
 
 	public void setTextSupplier(Supplier<String> textSupplier) {
@@ -72,7 +73,7 @@ public class UniversalLabel extends UniversalDoodad {
 
 	@Override
 	public boolean isDisabled() {
-		return isBlank();
+		return isBlank() || super.isDisabled();
 	}
 
 	@Override

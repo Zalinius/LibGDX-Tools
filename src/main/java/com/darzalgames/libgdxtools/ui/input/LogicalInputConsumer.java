@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input;
 
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.darzalgames.libgdxtools.ui.Alignment;
 
 /**
  * These are for more logic-heavy objects which still need to be on the input stack,
@@ -11,13 +12,22 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
  */
 public interface LogicalInputConsumer extends InputConsumer {
 
-		@Override public default void setTouchable(Touchable isTouchable) {}
+	@Override default void setTouchable(Touchable isTouchable) {}
 
-		@Override public default void selectDefault() {}
+	@Override default void selectDefault() {}
 
-		@Override public default void focusCurrent() {}
+	@Override default void focusCurrent() {}
 
-		@Override public default void consumeKeyInput(Input input) {}
+	@Override default void consumeKeyInput(Input input) {}
 
-		@Override public default void clearSelected() {}
+	@Override default void clearSelected() {}
+
+	@Override default void setAlignment(Alignment alignment) {}
+
+	@Override default void setFocused(boolean focused) {}
+
+	@Override default void setDisabled(boolean disabled) { }
+	@Override default boolean isDisabled() { return false; }
+
+	@Override default boolean isBlank() { return false; }
 }

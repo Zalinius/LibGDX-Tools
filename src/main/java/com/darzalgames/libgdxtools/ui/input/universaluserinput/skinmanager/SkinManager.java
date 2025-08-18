@@ -60,11 +60,12 @@ public class SkinManager {
 		int size = 4;
 
 		NinePatchDrawable darkGrayNinePatch = new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.DARK_GRAY, size), 1, 1, 1, 1));
+		darkGrayNinePatch.setMinWidth(size);
+		darkGrayNinePatch.setMinHeight(size);
 		skin.add(UI_BORDERED_NINE, darkGrayNinePatch);
 		skin.add(CONFIRMATION_MENU_BACKGROUND, new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.PINK, size), 1, 1, 1, 1)));
 
 		Font defaultFont = new Font();
-		//		defaultFont.color(Color.BLACK);
 		skin.add(DEFAULT_LABEL, defaultFont);
 
 		skin.add(DEFAULT_LABEL, new LabelStyle(defaultFont, Color.BLACK));
@@ -74,15 +75,11 @@ public class SkinManager {
 		labelWithBackgroundStyle.background = skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
 		skin.add(LABEL_WITH_BACKGROUND, labelWithBackgroundStyle);
 
-		SliderStyle sliderStyle = new SliderStyle(new Image(ColorTools.getColoredTexture(Color.GOLDENROD, size)).getDrawable(), skin.get(UI_BORDERED_NINE, NinePatchDrawable.class));
+		SliderStyle sliderStyle = new SliderStyle(new Image(ColorTools.getColoredTexture(Color.GOLDENROD, size)).getDrawable(), darkGrayNinePatch);
 		sliderStyle.knobDown = darkGrayNinePatch;
 		skin.add(SLIDER, sliderStyle);
 
-		CheckBoxStyle checkboxStyle = new Styles.CheckBoxStyle();
-		checkboxStyle.font = defaultFont;
-		checkboxStyle.fontColor = Color.BLACK;
-		checkboxStyle.checkboxOn = skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
-		checkboxStyle.checkboxOff = darkGrayNinePatch;
+		CheckBoxStyle checkboxStyle = new Styles.CheckBoxStyle(new Image(ColorTools.getColoredTexture(Color.DARK_GRAY, size)).getDrawable(), new Image(ColorTools.getColoredTexture(Color.PURPLE, size)).getDrawable(), defaultFont, Color.BLACK);
 		skin.add(CHECKBOX, checkboxStyle);
 
 		Drawable buttonNOTHighlighted = new Image(ColorTools.getColoredTexture(Color.WHITE, size)).getDrawable();

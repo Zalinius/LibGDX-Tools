@@ -3,7 +3,6 @@ package com.darzalgames.libgdxtools.maingame;
 import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -56,7 +55,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 
 	// The setup process, in order that they are called
-	protected abstract Screen startLoadingGameAssets();
+	protected abstract void startLoadingGameAssets();
 	protected abstract boolean loadGameAssets();
 	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName();
@@ -94,11 +93,11 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	@Override
 	public final void create() {
 		makePreferenceManager();
-		startLoadingGameAssets().show();
-		makeInputStrategySwitcher();
+		startLoadingGameAssets();
 		while (!loadGameAssets()) {
 
 		}
+		makeInputStrategySwitcher();
 		userInterfaceFactory = initializeGameAndUserInterfaceFactory();
 		initializeWindowResizer();
 

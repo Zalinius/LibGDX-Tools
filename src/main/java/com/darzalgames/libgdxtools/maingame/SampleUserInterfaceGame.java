@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.Color;
@@ -60,8 +61,17 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	@Override
-	protected UserInterfaceFactory initializeAssetsAndUserInterfaceFactory() {
-		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable());
+	protected Screen startLoadingGameAssets() {
+		return null;
+	}
+	@Override
+	protected boolean loadGameAssets() {
+		return true;
+	}
+
+	@Override
+	protected UserInterfaceFactory initializeGameAndUserInterfaceFactory() {
+		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable(), () -> pause.isPaused());
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		return factory;
 	}

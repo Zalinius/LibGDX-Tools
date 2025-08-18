@@ -60,7 +60,11 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	@Override
-	protected UserInterfaceFactory initializeAssetsAndUserInterfaceFactory() {
+	protected void loadAssets() {
+	}
+
+	@Override
+	protected UserInterfaceFactory initializeGameAndUserInterfaceFactory() {
 		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, () -> 2.5f, Runnables.nullRunnable());
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		return factory;

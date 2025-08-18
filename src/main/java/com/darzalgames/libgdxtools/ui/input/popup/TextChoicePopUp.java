@@ -50,7 +50,7 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 			hideThis();
 			toRun.run();
 		};
-		return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(key), chooseAndHideRunnable);
+		return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine(key), chooseAndHideRunnable);
 	}
 
 	@Override

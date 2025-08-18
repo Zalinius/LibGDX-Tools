@@ -15,6 +15,7 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager.SelectBoxButtonInfo;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalDoodad;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.github.tommyettinger.textra.Styles.LabelStyle;
@@ -42,20 +43,19 @@ public class UserInterfaceFactory {
 	}
 
 	public UniversalLabel getLabel(final Supplier<String> textSupplier) {
-		// TODO are all these textbuttonstyles correct?
-		return getLabel(textSupplier, skinManager.getDefaultLableStyle(), skinManager.getTextButtonStyle());
+		return getLabel(textSupplier, skinManager.getDefaultLableStyle(), skinManager.getBlankButtonStyle());
 	}
 
 	public UniversalLabel getFlavorTextLabel(final Supplier<String> textSupplier) {
-		return getLabel(textSupplier, skinManager.getFlavorTextLableStyle(), skinManager.getTextButtonStyle());
+		return getLabel(textSupplier, skinManager.getFlavorTextLableStyle(), skinManager.getBlankButtonStyle());
 	}
 
 	public UniversalLabel getWarningLabel(final Supplier<String> textSupplier) {
-		return getLabel(textSupplier, skinManager.getWarningLableStyle(), skinManager.getTextButtonStyle());
+		return getLabel(textSupplier, skinManager.getWarningLableStyle(), skinManager.getBlankButtonStyle());
 	}
 
 	public UniversalLabel getLabelWithBackground(final Supplier<String> textSupplier) {
-		return getLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), skinManager.getTextButtonStyle());
+		return getLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), skinManager.getBlankButtonStyle());
 	}
 
 	/**
@@ -96,20 +96,29 @@ public class UserInterfaceFactory {
 	public UniversalDoodad getSpacer() {
 		UniversalLabel spacer = getLabel(Suppliers.emptyString());
 		spacer.getView().setName("spacer");
+		spacer.setDisabled(true);
 		return spacer;
 	}
 
-	public UniversalButton getButton(Supplier<String> textKey, final Runnable runnable) {
-		return makeButton(textKey, null, runnable);
+
+	public UniversalButton getImageButton(final Image image, final Runnable runnable) {
+		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, soundInteractRunnable, skinManager.getTextButtonStyle()) {
+			@Override
+			public boolean isBlank() {
+				return image != null;
+			}
+			@Override
+			public void setAlignment(Alignment alignment) {
+				getCell(image).align(alignment.getAlignment());
+			}
+		};
+		button.add(image);
+		return button;
 	}
 
-	public UniversalButton getButton(final Image image, final Runnable runnable) {
-		return makeButton(Suppliers.emptyString(), image, runnable);
-	}
-
-	public UniversalButton getButton(Supplier<String> textKey, Image image, final Runnable runnable) {
-		return makeButton(textKey, image, runnable);
-	}
+	//	public UniversalButton getButton(Supplier<String> textKey, Image image, final Runnable runnable) {
+	//		return makeButton(textKey, image, runnable);
+	//	}
 
 	private UniversalButton makeButton(Supplier<String> textSupplier, Image image, final Runnable runnable) {
 		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle(), skinManager.getBlankButtonStyle());
@@ -127,6 +136,11 @@ public class UserInterfaceFactory {
 		button.add(image);
 		button.add(label);
 		return button;
+	}
+
+	public UniversalTextButton makeTextButton(Supplier<String> textSupplier, final Runnable runnable) {
+		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle(), skinManager.getBlankButtonStyle());
+		return new UniversalTextButton(label, runnable, inputStrategySwitcher, soundInteractRunnable, skinManager.getTextButtonStyle());
 	}
 
 	/**
@@ -151,15 +165,18 @@ public class UserInterfaceFactory {
 
 
 	public UniversalSelectBox getSelectBox(SelectBoxContentManager contentManager) {
-		UniversalSelectBox selectBox = getSelectBox(contentManager.getBoxLabelSupplier(), contentManager.getOptionButtons());
-		selectBox.setSelected(contentManager.getCurrentSelectedDisplayName().get());
-		return selectBox;
-	}
-	public UniversalSelectBox getSelectBox(Supplier<String> boxLabel, List<UniversalButton> entries) {
+		Supplier<String> boxLabel = contentManager.getBoxLabelSupplier();
+		List<SelectBoxButtonInfo> entries = contentManager.getOptionButtons();
 		//		BasicButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getTextButtonStyle());
 		//		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 		UniversalSelectBox selectBox = new UniversalSelectBox(boxLabel, inputStrategySwitcher, soundInteractRunnable, skinManager.getTextButtonStyle());
-		selectBox.setEntryButtons(entries);
+		List<UniversalTextButton> entriesButtons = entries.stream().map(buttonInfo -> makeTextButton(buttonInfo.buttonTextSupplier(), () -> {
+			buttonInfo.buttonPressRunnable().run();
+			selectBox.setSelected(buttonInfo.buttonTextSupplier().get());
+			selectBox.closeSelectBox();
+		})).toList();
+		selectBox.setEntryButtons(entriesButtons);
+		selectBox.setSelected(contentManager.getCurrentSelectedDisplayName().get());
 		return selectBox;
 	}
 
@@ -192,8 +209,8 @@ public class UserInterfaceFactory {
 	 * @param buttonText
 	 * @return A quit button, with a default English text label if not otherwise to find
 	 */
-	public UniversalButton getQuitGameButton(Supplier<String> buttonText) {
-		return getButton(buttonText, quitGameRunnable);
+	public UniversalTextButton getQuitGameButton(Supplier<String> buttonText) {
+		return makeTextButton(buttonText, quitGameRunnable);
 	}
 
 	/**
@@ -214,9 +231,9 @@ public class UserInterfaceFactory {
 		return text;
 	}
 
-	public UniversalButton getQuitGameButtonWithWarning() {
+	public UniversalTextButton getQuitGameButtonWithWarning() {
 		Runnable quitWithConfirmation = () -> new ConfirmationMenu("menu_warning", QUIT_GAME_KEY, quitGameRunnable::run, MultipleStage.OPTIONS_STAGE_NAME);
-		return getButton(getQuitButtonString(), quitWithConfirmation);
+		return makeTextButton(getQuitButtonString(), quitWithConfirmation);
 	}
 
 	//	protected void makeBackgroundFlashing(BasicButton button, ButtonStyle mainButtonStyle, ButtonStyle flashedButtonStyle) {

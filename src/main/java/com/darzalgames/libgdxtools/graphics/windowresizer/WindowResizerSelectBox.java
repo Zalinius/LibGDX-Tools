@@ -20,9 +20,7 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalLabel;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
 import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 public class WindowResizerSelectBox extends UniversalSelectBox implements WindowResizerButton {
@@ -39,18 +37,20 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		setEntryButtons(getEntries());
 	}
 
-	private List<UniversalButton> getEntries() {
+	private List<UniversalTextButton> getEntries() {
 		List<ScreenMode> allModes = new ArrayList<>(Arrays.asList(ScreenMode.values()));
 		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
-		Stream<UniversalButton> buttonStream = allModes.stream().map(mode -> GameInfo.getUserInterfaceFactory().getButton(
+		Stream<UniversalTextButton> buttonStream = allModes.stream().map(mode -> GameInfo.getUserInterfaceFactory().makeTextButton(
 				() -> translateWindowModeOption(mode),
 				() -> {
 					String previousMode = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
 					if (!mode.equals(getModeFromPreference(previousMode))) {
 						windowResizer.setMode(mode, true);
 					}
+					setSelected(mode.toString());
+					closeSelectBox();
 				}));
 		return buttonStream.toList();
 	}

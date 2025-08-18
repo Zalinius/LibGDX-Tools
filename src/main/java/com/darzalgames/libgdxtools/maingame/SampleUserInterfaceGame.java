@@ -35,6 +35,7 @@ import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.ChoicePopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.SimplePopUp;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
@@ -96,6 +97,7 @@ public class SampleUserInterfaceGame extends MainGame {
 
 			@Override
 			public void resizeUI() {
+				super.resizeUI();
 				setBounds(0, 0, UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight() - 25f);
 			}
 		}, inputSetup.getInputPriorityStack()));
@@ -171,20 +173,36 @@ public class SampleUserInterfaceGame extends MainGame {
 		menuButtons.add(funSlider);
 
 		String logOrigin = "LibGDXTools Test Game";
-		menuButtons.add(GameInfo.getUserInterfaceFactory().getButton(() -> "Text button!", () -> Gdx.app.log(logOrigin, "You pressed the text button")));
+		menuButtons.add(GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Text button!", () -> Gdx.app.log(logOrigin, "You pressed the text button")));
 
-		menuButtons.add(GameInfo.getUserInterfaceFactory().getButton(new Image(ColorTools.getColoredTexture(Color.GOLD, 50, 12)), () -> Gdx.app.log(logOrigin, "You pressed the image button")));
+		menuButtons.add(GameInfo.getUserInterfaceFactory().getImageButton(new Image(ColorTools.getColoredTexture(Color.GOLD, 50, 12)), () -> Gdx.app.log(logOrigin, "You pressed the image button")));
 
-		menuButtons.add(GameInfo.getUserInterfaceFactory().getButton(() -> "Image Text button!", new Image(ColorTools.getColoredTexture(Color.CHARTREUSE, 50, 12)),
-				() -> Gdx.app.log(logOrigin, "You pressed the image text button")));
+		//		menuButtons.add(GameInfo.getUserInterfaceFactory().getButton(() -> "Image Text button!", new Image(ColorTools.getColoredTexture(Color.CHARTREUSE, 50, 12)),
+		//				() -> Gdx.app.log(logOrigin, "You pressed the image text button")));
 
 		Supplier<String> option1 = () -> TextSupplier.getLine("option 1");
-		Supplier<String> option2 = () -> TextSupplier.getLine("option 2");
+		Supplier<String> option2 = () -> TextSupplier.getLine("looooong option 2");
 		Supplier<String> exampleSelectBoxLabelSupplier = () -> (TextSupplier.getLine("An option select box"));
-		UniversalSelectBox exampleSelectBox = GameInfo.getUserInterfaceFactory().getSelectBox(
-				exampleSelectBoxLabelSupplier,
-				List.of(userInterfaceFactory.getButton(option1, Runnables.nullRunnable()), userInterfaceFactory.getButton(option2, Runnables.nullRunnable()))
-				);
+		SelectBoxContentManager selectBoxContents = new SelectBoxContentManager() {
+			@Override
+			public List<SelectBoxButtonInfo> getOptionButtons() {
+				return List.of(
+						new SelectBoxButtonInfo(option1, () -> Gdx.app.log("Select Box", "You picked " + option1.get())),
+						new SelectBoxButtonInfo(option2, () -> Gdx.app.log("Select Box", "You picked " + option2.get()))
+						);
+			}
+
+			@Override
+			public Supplier<String> getCurrentSelectedDisplayName() {
+				return option1;
+			}
+
+			@Override
+			public Supplier<String> getBoxLabelSupplier() {
+				return exampleSelectBoxLabelSupplier;
+			}
+		};
+		UniversalSelectBox exampleSelectBox = GameInfo.getUserInterfaceFactory().getSelectBox(selectBoxContents);
 		menuButtons.add(exampleSelectBox);
 
 		ChoicePopUp choicePopup = new ChoicePopUp(this::showInnerPopUp, true, true) {
@@ -201,12 +219,12 @@ public class SampleUserInterfaceGame extends MainGame {
 
 			@Override
 			protected UniversalButton getFirstChoiceButton() {
-				return GameInfo.getUserInterfaceFactory().getButton(() -> "Click to go deeper!", SampleUserInterfaceGame.this::showInnerPopUp);
+				return GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Click to go deeper!", SampleUserInterfaceGame.this::showInnerPopUp);
 			}
 
 			@Override
 			protected UniversalButton getSecondChoiceButton() {
-				return GameInfo.getUserInterfaceFactory().getButton(() -> "Goodbye!", this::hideThis);
+				return GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Goodbye!", this::hideThis);
 			}
 
 			@Override
@@ -224,7 +242,7 @@ public class SampleUserInterfaceGame extends MainGame {
 				UserInterfaceSizer.sizeToPercentage(this, 0.25f);
 			}
 		};
-		UniversalButton popUpButton = GameInfo.getUserInterfaceFactory().getButton(() -> "Open a popup!", () -> InputPriority.claimPriority(choicePopup, POP_UP_STAGE_NAME));
+		UniversalButton popUpButton = GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Open a popup!", () -> InputPriority.claimPriority(choicePopup, POP_UP_STAGE_NAME));
 		menuButtons.add(popUpButton);
 
 
@@ -241,7 +259,7 @@ public class SampleUserInterfaceGame extends MainGame {
 		SimplePopUp innerPopup = new SimplePopUp() {
 			@Override
 			protected void setUpTable() {
-				UniversalButton popup = GameInfo.getUserInterfaceFactory().getButton(() -> "Goodbye!", this::hideThis);
+				UniversalButton popup = GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Goodbye!", this::hideThis);
 				popup.getView().setSize(180, 100);
 				UserInterfaceSizer.makeActorCentered(popup.getView());
 				addActor(popup.getView());
@@ -260,7 +278,7 @@ public class SampleUserInterfaceGame extends MainGame {
 		SimplePopUp innerPopup = new SimplePopUp() {
 			@Override
 			protected void setUpTable() {
-				regainFocusPopup = GameInfo.getUserInterfaceFactory().getButton(() -> "You Made It!", this::hideThis);
+				regainFocusPopup = GameInfo.getUserInterfaceFactory().makeTextButton(() -> "You Made It!", this::hideThis);
 				regainFocusPopup.getView().setSize(200, 130);
 				UserInterfaceSizer.makeActorCentered(regainFocusPopup.getView());
 				addActor(regainFocusPopup.getView());
@@ -307,9 +325,9 @@ public class SampleUserInterfaceGame extends MainGame {
 			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", Runnables.nullRunnable(), POP_UP_STAGE_NAME);
 		}
 
-		@Override protected UniversalButton makeReportBugButton() {return GameInfo.getUserInterfaceFactory().getButton(() -> "One could report a bug here", Runnables.nullRunnable());}
+		@Override protected UniversalButton makeReportBugButton() {return GameInfo.getUserInterfaceFactory().makeTextButton(() -> "One could report a bug here", Runnables.nullRunnable());}
 		@Override protected UniversalButton makeControlsButton() {
-			return GameInfo.getUserInterfaceFactory().getButton(() -> "This is where one could theoretically view controls", () -> InputPriority.claimPriority(makeControlsPopUp(), MultipleStage.OPTIONS_STAGE_NAME));
+			return GameInfo.getUserInterfaceFactory().makeTextButton(() -> "This is where one could theoretically view controls", () -> InputPriority.claimPriority(makeControlsPopUp(), MultipleStage.OPTIONS_STAGE_NAME));
 		}
 
 		@Override

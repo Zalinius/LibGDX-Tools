@@ -116,6 +116,11 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	}
 
 	@Override
+	public void resizeUI() {
+		menu.resizeUI();
+	}
+
+	@Override
 	public void setAlignment(Alignment alignment) {
 		menu.setAlignment(alignment);
 	}

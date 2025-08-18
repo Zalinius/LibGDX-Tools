@@ -175,7 +175,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	}
 
 	private UniversalButton makeBackButton() {
-		return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
+		return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
 	}
 
 	@Override
@@ -221,7 +221,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 		}
 
 		public UniversalButton getButton() {
-			return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this, MultipleStage.OPTIONS_STAGE_NAME));
+			return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this, MultipleStage.OPTIONS_STAGE_NAME));
 		}
 
 		@Override

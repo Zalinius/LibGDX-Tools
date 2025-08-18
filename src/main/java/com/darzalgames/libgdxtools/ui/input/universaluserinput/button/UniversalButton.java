@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Pools;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
@@ -35,9 +36,11 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 
 	@Override
 	protected void justPressed() {
-		if (isAClickableDoodad() && !isDisabled() && isTouchable()) {
+		boolean isTouchable = getTouchable() != Touchable.disabled;
+		if (isAClickableDoodad() && !isDisabled() && isTouchable) {
 			buttonRunnable.run();
-			setUnchecked();
+			setFocused(false);
+			//was setUnchecked
 			requestInteractSound();
 		}
 	}
@@ -72,7 +75,6 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 		//		setProgrammaticChangeEvents(false);
 		//		setChecked(false);
 		//		setProgrammaticChangeEvents(true);
-		setFocused(false);
 	}
 
 	/**

@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.darzalgames.darzalcommon.functional.FunctionalConverter;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
+import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
@@ -21,22 +22,25 @@ public class UniversalSelectBox extends UniversalButton {
 	private final PopUpMenu options;
 	private final UniversalLabel mainLabel;
 	private final UniversalLabel displayLabel;
-	private UniversalButton defaultEntry;
-	protected List<UniversalButton> entryButtons;
+	private UniversalTextButton defaultEntry;
+	protected List<UniversalTextButton> entryButtons;
+	private final Cell<UniversalLabel> mainLabelCell;
 
 	public UniversalSelectBox(Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle buttonStyle) {
 		super(Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
 
 		mainLabel = GameInfo.getUserInterfaceFactory().getLabel(textSupplier);
-		add(mainLabel).padRight(3);
+		mainLabelCell = add(mainLabel);
 
 		// This is the keyboard navigable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
 		options = new PopUpMenu(true) {
 			@Override
 			protected void setUpTable() {
-				//				menu.replaceContents(entryButtons, makeFinalButton("back_message"));
+				List<VisibleInputConsumer> buttonsAsVisibleInputConsumers = FunctionalConverter.convertList(entryButtons);
+				menu.replaceContents(buttonsAsVisibleInputConsumers, makeFinalButton("back_message"));
 				menu.setAlignment(Alignment.LEFT, Alignment.LEFT);
 				menu.getView().setBackground(GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable());
+				entryButtons.forEach(UniversalTextButton::resizeUI);
 				options.add(menu.getView()).left();
 				options.pack();
 				UserInterfaceSizer.makeActorCentered(options);
@@ -45,6 +49,7 @@ public class UniversalSelectBox extends UniversalButton {
 			protected void setUpDesiredSize() {
 				if (getActions().isEmpty()) {
 					UserInterfaceSizer.makeActorCentered(options);
+					options.pack();
 				}
 			}
 
@@ -57,19 +62,17 @@ public class UniversalSelectBox extends UniversalButton {
 		};
 
 		displayLabel = GameInfo.getUserInterfaceFactory().getLabel(Suppliers.emptyString());
-		add(displayLabel);
+		add(displayLabel).growX();
 		setButtonRunnable(() -> InputPriority.claimPriority(options, getView().getStage().getRoot().getName()));
+		setAlignment(Alignment.LEFT);
 	}
 
-	protected void setEntryButtons(List<UniversalButton> entryButtons) {
+	protected void setEntryButtons(List<UniversalTextButton> entryButtons) {
 		this.entryButtons = entryButtons;
-		entryButtons.forEach(entry -> entry.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				setSelected(entry);
-				options.hideThis();
-			}
-		}));
+	}
+
+	public void closeSelectBox() {
+		options.hideThis();
 	}
 
 	/**
@@ -77,15 +80,14 @@ public class UniversalSelectBox extends UniversalButton {
 	 * or when first setting up the select box to make sure that the currently used value is highlighted (e.g. current language/font/window setting)
 	 * @param entry
 	 */
-	public void setSelected(UniversalButton entry) {
+	public void setSelected(UniversalTextButton entry) {
 		defaultEntry = entry;
 		//		BasicButton view = getButton();
 		//		TextraLabel label = view.getTextraLabel();
-		//		view.setWidth(view.getTextraLabelCell().getPadRight() + label.getWidth() + displayLabel.getPrefWidth());
 	}
 
 	public void setSelected(String entryText) {
-		Optional<UniversalButton> desiredButton = entryButtons.stream().filter(button -> entryText.equalsIgnoreCase(button.getName())).findFirst();
+		Optional<UniversalTextButton> desiredButton = entryButtons.stream().filter(button -> entryText.equalsIgnoreCase(button.getText())).findFirst();
 		if (desiredButton.isPresent()) {
 			setSelected(desiredButton.get());
 		}
@@ -94,10 +96,25 @@ public class UniversalSelectBox extends UniversalButton {
 	@Override
 	public void resizeUI() {
 		super.resizeUI();
-		defaultEntry.resizeUI(); // Needed for the displayLabel to update when changing language
-		//		displayLabel.setTextSupplier(() -> defaultEntry.getButtonText());
+
+		mainLabel.resizeUI();
+
+		displayLabel.setTextSupplier(() -> defaultEntry.getText()); // Needed for the displayLabel to update when changing language
+		displayLabel.resizeUI();
 		displayLabel.setColor(isOver() ? getStyle().overFontColor : getStyle().fontColor);
 		displayLabel.layout();
+
+		mainLabelCell.padRight(calculatePadding());
+		pack();
+	}
+
+	@Override
+	public float getPrefWidth() {
+		return mainLabel.getWidth() + calculatePadding() + displayLabel.getWidth();
+	}
+
+	private float calculatePadding() {
+		return UserInterfaceSizer.getWidthPercentage(0.005f);
 	}
 
 	@Override

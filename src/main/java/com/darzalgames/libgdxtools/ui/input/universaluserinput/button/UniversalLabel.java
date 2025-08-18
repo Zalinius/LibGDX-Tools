@@ -13,6 +13,7 @@ import com.github.tommyettinger.textra.TypingLabel;
 public class UniversalLabel extends UniversalDoodad {
 
 	private final TypingLabel label;
+	//	private final LabelStyle typingLabelStyle;
 
 	protected Supplier<String> textSupplier;
 
@@ -29,7 +30,6 @@ public class UniversalLabel extends UniversalDoodad {
 		label.setWrap(false);
 		label.skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		add(label);
-		this.debug();
 	}
 
 	public void setTextSupplier(Supplier<String> textSupplier) {
@@ -43,6 +43,11 @@ public class UniversalLabel extends UniversalDoodad {
 	@Override
 	public float getMinHeight() {
 		return label.getMinHeight();
+	}
+
+	@Override
+	public float getWidth() {
+		return label.getPrefWidth();
 	}
 
 	@Override
@@ -67,7 +72,7 @@ public class UniversalLabel extends UniversalDoodad {
 
 	@Override
 	public boolean isDisabled() {
-		return false;
+		return isBlank();
 	}
 
 	@Override
@@ -95,7 +100,7 @@ public class UniversalLabel extends UniversalDoodad {
 		label.setText(textSupplier.get(), true, false);
 		label.skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		//		setStyle(getStyle());
-		//		if (!getWrap() && getStyle().background != null) {
+		//		if (!label.isWrap()) {// && label.getStyle().background != null) {
 		//			//TODO Makes backgrounds scale with text properly, but doesn't preserve Align.center...? Shucks
 		//			setSize(getPrefWidth(), getPrefHeight());
 		//		}

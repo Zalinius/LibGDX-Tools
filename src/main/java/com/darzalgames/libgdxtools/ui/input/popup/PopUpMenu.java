@@ -34,7 +34,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	protected abstract void setUpDesiredSize();
 
 	protected UniversalButton makeFinalButton(String finalButtonMessageKey) {
-		return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(finalButtonMessageKey), this::hideThis);
+		return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine(finalButtonMessageKey), this::hideThis);
 	}
 
 	protected boolean slidesInAndOut() {

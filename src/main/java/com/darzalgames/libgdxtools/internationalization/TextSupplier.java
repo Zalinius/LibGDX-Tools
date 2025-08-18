@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.I18NBundle;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
 
 public abstract class TextSupplier {
 
@@ -106,15 +105,16 @@ public abstract class TextSupplier {
 			}
 
 			@Override
-			public List<UniversalButton> getOptionButtons() {
-				return bundleManager.displayNames.getSecondKeyset().stream().map(locale -> GameInfo.getUserInterfaceFactory().getButton(
+			public List<SelectBoxButtonInfo> getOptionButtons() {
+				return bundleManager.displayNames.getSecondKeyset().stream().map(locale ->
+				new SelectBoxButtonInfo(
 						() -> bundleManager.displayNames.getFirstValue(locale),
 						() -> {
 							bundleManager.locale = locale;
 							bundleManager.useLocale();
 							GameInfo.getSaveManager().save();
-						}
-						)).toList();
+						})
+						).toList();
 			}
 		};
 	}

@@ -19,6 +19,7 @@ public class UniversalTextButton extends UniversalButton {
 
 	@Override
 	public void resizeUI() {
+		super.resizeUI();
 		label.resizeUI();
 	}
 

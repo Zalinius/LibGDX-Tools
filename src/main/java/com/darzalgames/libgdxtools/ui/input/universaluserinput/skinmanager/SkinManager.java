@@ -129,6 +129,9 @@ public class SkinManager {
 			TextButtonStyle textraStyle = new TextButtonStyle(sceneStyle.up, sceneStyle.down, sceneStyle.checked, skin.get(fontName, Font.class));
 			textraStyle.fontColor = sceneStyle.fontColor;
 			textraStyle.overFontColor = sceneStyle.overFontColor;
+			textraStyle.over = sceneStyle.over;
+			textraStyle.disabled = sceneStyle.disabled;
+			textraStyle.disabledFontColor = sceneStyle.disabledFontColor;
 			skin.add(style, textraStyle);
 		}
 

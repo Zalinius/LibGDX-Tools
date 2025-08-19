@@ -2,9 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -76,6 +74,11 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	protected void justPressed() {
 		// let subclasses define this if needed
+	}
+
+	@Override
+	public boolean isTouchable() {
+		return getTouchable() != Touchable.disabled;
 	}
 
 	// Table has align(), do we call that??

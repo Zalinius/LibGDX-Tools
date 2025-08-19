@@ -88,24 +88,6 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 		}
 	}
 
-	//	/**
-	//	 * @return Whether or not the button is blank
-	//	 */
-	//	@Override
-	//	public boolean isBlank() {
-	//		return textSupplier.get().isBlank() && image == null;
-	//	}
-	//
-	//	/**
-	//	 * Useful for trying to navigate to a particular button in a menu based on its text
-	//	 * (e.g. defaulting to the current setting in a drop-down menu via string matching)
-	//	 * @param value
-	//	 * @return Whether or not this button has text that matches the supplied value
-	//	 */
-	//	public boolean doesTextMatch(String value) {
-	//		return textSupplier.get().equalsIgnoreCase(value);
-	//	}
-
 	/**
 	 * Set what to do when the button is pressed
 	 * @param buttonRunnable
@@ -113,18 +95,6 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 	public void setButtonRunnable(Runnable buttonRunnable) {
 		this.buttonRunnable = buttonRunnable;
 	}
-
-
-
-	/**
-	 * Update both the button's text and image in one go
-	 * @param textSupplier
-	 * @param image
-	 */
-	//	public void updateLabels(Supplier<String> textSupplier, final Image image) {
-	//		this.textSupplier = textSupplier;
-	//		this.image.setDrawable(image.getDrawable());
-	//	}
 
 	/**
 	 * Set whether or not this button should make a sound when interacted with

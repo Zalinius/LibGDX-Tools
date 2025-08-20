@@ -93,7 +93,6 @@ public class SampleUserInterfaceGame extends MainGame {
 				menu.setSpacing(1);
 				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
 				add(menu.getView()).grow().align(Align.center);
-				menu.getView().debug();
 			}
 
 			@Override

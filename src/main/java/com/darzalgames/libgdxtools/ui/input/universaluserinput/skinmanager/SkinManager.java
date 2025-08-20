@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -82,28 +81,22 @@ public class SkinManager {
 
 		Drawable buttonNOTHighlighted = new Image(ColorTools.getColoredTexture(Color.WHITE, size)).getDrawable();
 		Drawable buttonHighlighted = new Image(ColorTools.getColoredTexture(Color.GRAY, size)).getDrawable();
-		TextButtonStyle textButtonStyle = new TextButtonStyle(buttonNOTHighlighted, null, null, defaultFont);
+		TextButtonStyle textButtonStyle = new TextButtonStyle(buttonNOTHighlighted, buttonHighlighted, buttonHighlighted, defaultFont);
 		textButtonStyle.over = buttonHighlighted;
 		textButtonStyle.fontColor = Color.LIGHT_GRAY;
 		textButtonStyle.overFontColor = Color.WHITE;
 		textButtonStyle.focused = buttonHighlighted;
 		textButtonStyle.disabledFontColor = Color.FIREBRICK;
 		skin.add(DEFAULT, textButtonStyle);
-		//		TextButtonStyle flashedTextButtonStyle = new TextButtonStyle(buttonHighlighted, null, null, defaultFont);
-		//		flashedTextButtonStyle.over = buttonNOTHighlighted;
-		//		textButtonStyle.fontColor = Color.LIGHT_GRAY;
-		//		flashedTextButtonStyle.overFontColor = Color.WHITE;
-		//		flashedTextButtonStyle.focused = buttonNOTHighlighted;
-		//		skin.add(FLASHED_TEXT_BUTTON, flashedTextButtonStyle);
-		//		TextButtonStyle sneakyLabelButtonStyle = new TextButtonStyle(new Image(ColorTools.getColoredTexture(Color.CLEAR, size)).getDrawable(), null, null, defaultFont);
-		//		skin.add(SNEAKY_LABEL_BUTTON, sneakyLabelButtonStyle);
-		TextButtonStyle blankButtonStyle = new TextButtonStyle(null, null, null, defaultFont);
+
+		Drawable blank = new Image(ColorTools.getColoredTexture(Color.CLEAR, size)).getDrawable();
+		TextButtonStyle blankButtonStyle = new TextButtonStyle(blank, blank, blank, defaultFont);
 		blankButtonStyle.focused = null;
 		skin.add(BLANK_BUTTON, blankButtonStyle);
-		TextButtonStyle settingsButtonStyle = new TextButtonStyle(new Image(ColorTools.getColoredTexture(Color.PURPLE, size)).getDrawable(), null, null, defaultFont);
-		Texture settingsHighlightedIcon = ColorTools.getColoredTexture(Color.PINK, size);
-		settingsButtonStyle.over = new TextureRegionDrawable(settingsHighlightedIcon);
-		settingsButtonStyle.focused = new TextureRegionDrawable(settingsHighlightedIcon);
+		TextureRegionDrawable settingsHighlightedIcon = new TextureRegionDrawable(ColorTools.getColoredTexture(Color.PINK, size));
+		TextButtonStyle settingsButtonStyle = new TextButtonStyle(new Image(ColorTools.getColoredTexture(Color.PURPLE, size)).getDrawable(), settingsHighlightedIcon, settingsHighlightedIcon, defaultFont);
+		settingsButtonStyle.over = settingsHighlightedIcon;
+		settingsButtonStyle.focused = settingsHighlightedIcon;
 		skin.add(SETTINGS_BUTTON, settingsButtonStyle);
 
 		return skin;

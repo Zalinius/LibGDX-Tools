@@ -15,7 +15,6 @@ public class UniversalTextButton extends UniversalButton {
 		super(buttonRunnable, inputStrategySwitcher, soundInteractListener, textButtonStyle);
 		this.label = label;
 		add(label);
-		debug();
 	}
 
 	@Override

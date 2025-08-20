@@ -108,11 +108,6 @@ public class UniversalSelectBox extends UniversalButton {
 		super.resizeUI();
 	}
 
-	@Override
-	public float getPrefWidth() {
-		return mainLabel.getWidth() + calculatePadding() + displayLabel.getWidth();
-	}
-
 	private float calculatePadding() {
 		return UserInterfaceSizer.getWidthPercentage(0.005f);
 	}

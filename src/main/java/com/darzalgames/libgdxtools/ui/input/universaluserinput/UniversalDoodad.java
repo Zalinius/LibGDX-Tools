@@ -68,17 +68,16 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		return isAClickableDoodad;
 	}
 
-	//	public ClickListener getClickListener() {
-	//		return clickListener;
-	//	}
-
 	protected void justPressed() {
 		// let subclasses define this if needed
 	}
 
 	@Override
-	public boolean isTouchable() {
-		return getTouchable() != Touchable.disabled;
+	public void setTouchable(Touchable touchable) {
+		if (Touchable.childrenOnly.equals(touchable)) {
+			touchable = Touchable.enabled;
+		}
+		super.setTouchable(touchable);
 	}
 
 	// Table has align(), do we call that??
@@ -141,44 +140,44 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		}
 	}
 
-	@Override
-	public float getPrefWidth () {
-		float width = super.getPrefWidth();
-		if (style.up != null) {
-			width = Math.max(width, style.up.getMinWidth());
-		}
-		if (style.down != null) {
-			width = Math.max(width, style.down.getMinWidth());
-		}
-		if (style.checked != null) {
-			width = Math.max(width, style.checked.getMinWidth());
-		}
-		return width;
-	}
+	//	@Override
+	//	public float getPrefWidth () {
+	//		float width = super.getPrefWidth();
+	//		if (style.up != null) {
+	//			width = Math.max(width, style.up.getMinWidth());
+	//		}
+	//		if (style.down != null) {
+	//			width = Math.max(width, style.down.getMinWidth());
+	//		}
+	//		if (style.checked != null) {
+	//			width = Math.max(width, style.checked.getMinWidth());
+	//		}
+	//		return width;
+	//	}
+	//
+	//	@Override
+	//	public float getPrefHeight () {
+	//		float height = super.getPrefHeight();
+	//		if (style.up != null) {
+	//			height = Math.max(height, style.up.getMinHeight());
+	//		}
+	//		if (style.down != null) {
+	//			height = Math.max(height, style.down.getMinHeight());
+	//		}
+	//		if (style.checked != null) {
+	//			height = Math.max(height, style.checked.getMinHeight());
+	//		}
+	//		return height;
+	//	}
 
-	@Override
-	public float getPrefHeight () {
-		float height = super.getPrefHeight();
-		if (style.up != null) {
-			height = Math.max(height, style.up.getMinHeight());
-		}
-		if (style.down != null) {
-			height = Math.max(height, style.down.getMinHeight());
-		}
-		if (style.checked != null) {
-			height = Math.max(height, style.checked.getMinHeight());
-		}
-		return height;
-	}
-
-	@Override
-	public float getMinWidth () {
-		return getPrefWidth();
-	}
-
-	@Override
-	public float getMinHeight () {
-		return getPrefHeight();
-	}
+	//	@Override
+	//	public float getMinWidth () {
+	//		return getPrefWidth();
+	//	}
+	//
+	//	@Override
+	//	public float getMinHeight () {
+	//		return getPrefHeight();
+	//	}
 
 }

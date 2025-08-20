@@ -98,13 +98,16 @@ public class UniversalLabel extends UniversalDoodad {
 
 	@Override
 	public void resizeUI() {
+		label.setFont(getStyle().font); // updates us to the resized font size
 		label.setText(textSupplier.get(), true, false);
 		label.skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
+		label.debug();
 		//		setStyle(getStyle());
 		//		if (!label.isWrap()) {// && label.getStyle().background != null) {
 		//			//TODO Makes backgrounds scale with text properly, but doesn't preserve Align.center...? Shucks
 		//			setSize(getPrefWidth(), getPrefHeight());
 		//		}
+		//		super.resizeUI();
 	}
 
 }

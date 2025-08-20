@@ -17,11 +17,6 @@ import com.github.tommyettinger.textra.Styles.TextButtonStyle;
  */
 public abstract class UniversalButton extends UniversalDoodad implements VisibleInputConsumer {
 
-	// TODO use enter and exit events to handle styling
-	// TODO homebrew my own system for toggling or checked and focused
-	// TODO Some sort of factory to make buttons with different components?
-
-
 	private Runnable buttonRunnable;
 	private boolean doesSoundOnInteract = true;
 	private final InputStrategySwitcher inputStrategySwitcher;
@@ -129,8 +124,9 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 
 	@Override
 	public void resizeUI() {
-		setStyle(getStyle());
-		setSize(getPrefWidth(), getPrefHeight());
+		//		setStyle(getStyle());
+		//		setSize(getPrefWidth(), getPrefHeight());
+		pack();
 	}
 
 }

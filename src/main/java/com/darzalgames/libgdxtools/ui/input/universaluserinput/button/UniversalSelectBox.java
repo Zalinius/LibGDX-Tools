@@ -95,7 +95,6 @@ public class UniversalSelectBox extends UniversalButton {
 
 	@Override
 	public void resizeUI() {
-		super.resizeUI();
 
 		mainLabel.resizeUI();
 
@@ -106,6 +105,7 @@ public class UniversalSelectBox extends UniversalButton {
 
 		mainLabelCell.padRight(calculatePadding());
 		pack();
+		super.resizeUI();
 	}
 
 	@Override

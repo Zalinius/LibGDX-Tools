@@ -29,15 +29,13 @@ public class UserInterfaceFactory {
 	private final Runnable quitGameRunnable;
 	private final SkinManager skinManager;
 	private final InputStrategySwitcher inputStrategySwitcher;
-	private final Supplier<Float> flashesPerSecondSupplier;
 	private final Runnable soundInteractRunnable;
 
 	private static final String QUIT_GAME_KEY = "quit_game";
 
-	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Supplier<Float> flashesPerSecondSupplier, Runnable soundInteractRunnable) {
+	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractRunnable) {
 		this.skinManager = skinManager;
 		this.inputStrategySwitcher = inputStrategySwitcher;
-		this.flashesPerSecondSupplier = flashesPerSecondSupplier;
 		this.soundInteractRunnable = soundInteractRunnable;
 		quitGameRunnable = Gdx.app::exit;
 	}
@@ -305,13 +303,7 @@ public class UserInterfaceFactory {
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {
 		Supplier<String> textSupplier = () -> TextSupplier.getLine("window_mode_label");
-		//		BasicButton textButton = makeLibGDXTextButton(textSupplier.get(), skinManager.getTextButtonStyle());
-		//		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 		return new WindowResizerSelectBox(textSupplier, inputStrategySwitcher, soundInteractRunnable, skinManager.getTextButtonStyle());
-	}
-
-	private float computeDelay() {
-		return 1f / flashesPerSecondSupplier.get();
 	}
 
 	protected InputStrategySwitcher getInputStrategySwitcher() {

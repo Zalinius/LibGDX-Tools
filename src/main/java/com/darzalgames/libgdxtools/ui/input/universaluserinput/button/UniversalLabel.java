@@ -16,16 +16,14 @@ public class UniversalLabel extends TypingLabel {
 	public UniversalLabel(Supplier<String> textSupplier, LabelStyle typingLabelStyle) {
 		super(textSupplier.get(), typingLabelStyle);
 		this.typingLabelStyle = typingLabelStyle;
-		this.textSupplier = textSupplier;
+		setTextSupplier(textSupplier);
 		setWrap(false);
 		skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		setAlignment(Alignment.CENTER);
-		//		add(label);
-		//		setDisabled(true);
 	}
 
 	public void setTextSupplier(Supplier<String> textSupplier) {
-		this.textSupplier = textSupplier;
+		this.textSupplier =  () ->  "[@" + typingLabelStyle.font.name + "]" + textSupplier.get() + "[@]";
 	}
 
 	public boolean isBlank() {
@@ -42,13 +40,10 @@ public class UniversalLabel extends TypingLabel {
 		setFont(typingLabelStyle.font); // updates us to the resized font size
 		setText(textSupplier.get(), true, false);
 		skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
-		//		label.pack();
-		//		setStyle(getStyle());
 		//		if (!label.isWrap()) {// && label.getStyle().background != null) {
 		//			//TODO Makes backgrounds scale with text properly, but doesn't preserve Align.center...? Shucks
 		//			setSize(getPrefWidth(), getPrefHeight());
 		//		}
-		//		super.resizeUI();
 	}
 
 	public void setAlignment(Alignment alignment) {

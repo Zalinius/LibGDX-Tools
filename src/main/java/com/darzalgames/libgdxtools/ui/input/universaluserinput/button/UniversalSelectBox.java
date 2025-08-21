@@ -57,7 +57,7 @@ public class UniversalSelectBox extends UniversalTextButton {
 		};
 
 		setButtonRunnable(() -> InputPriority.claimPriority(options, getView().getStage().getRoot().getName()));
-		//		setAlignment(Alignment.LEFT);
+		setAlignment(Alignment.LEFT);
 	}
 
 	protected void setEntryButtons(List<UniversalTextButton> entryButtons) {

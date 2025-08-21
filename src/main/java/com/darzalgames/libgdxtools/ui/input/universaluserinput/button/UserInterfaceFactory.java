@@ -128,7 +128,8 @@ public abstract class UserInterfaceFactory {
 	}
 
 	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, TextButtonStyle style) {
-		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle());
+		// TODO getting the font and making a new label style is a nice idea, but means the size isn't updated since the style isn't in the skin
+		UniversalLabel label = new UniversalLabel(textSupplier, new LabelStyle(style.font, style.fontColor));
 		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, soundInteractRunnable, style);
 		addGameSpecificHighlightListener(button);
 		return button;

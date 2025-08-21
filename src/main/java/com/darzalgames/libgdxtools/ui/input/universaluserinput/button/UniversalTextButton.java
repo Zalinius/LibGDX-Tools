@@ -40,7 +40,7 @@ public class UniversalTextButton extends UniversalButton {
 	}
 
 	public String getText() {
-		return label.textSupplier.get();
+		return label.storedText;
 	}
 
 }

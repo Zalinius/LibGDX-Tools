@@ -89,6 +89,8 @@ public class UniversalLabel extends UniversalDoodad {
 	@Override
 	public void setAlignment(Alignment alignment) {
 		label.setAlignment(alignment.getAlignment());
+		getCell(label).align(alignment.getAlignment());
+
 	}
 
 	@Override

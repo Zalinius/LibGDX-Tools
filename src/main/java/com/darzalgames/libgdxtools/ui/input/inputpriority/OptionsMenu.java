@@ -157,12 +157,17 @@ public abstract class OptionsMenu extends PopUpMenu {
 
 		UniversalLabel authors = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("authors_label"));
 		authors.setAlignment(Alignment.TOP_LEFT);
-		versionTable.add(authors).grow().top().left().padTop(getPadTop()).padLeft(getPadLeft());
+		versionTable.add(authors).top().left().padTop(getPadTop()).padLeft(getPadLeft());
+		versionTable.add(GameInfo.getUserInterfaceFactory().getSpacer());
 		versionTable.row();
 
+		versionTable.add(GameInfo.getUserInterfaceFactory().getSpacer()).colspan(2).grow();
+		versionTable.row();
+
+		versionTable.add(GameInfo.getUserInterfaceFactory().getSpacer());
 		UniversalLabel versionLabel = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> getGameVersion() + platformName);
 		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT);
-		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom()).padRight(getPadRight());
+		versionTable.add(versionLabel).bottom().right().padBottom(getPadBottom()).padRight(getPadRight());
 	}
 
 	/**

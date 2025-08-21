@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.IntFunction;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
@@ -31,8 +30,8 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		this.windowResizer = windowResizer;
 	}
 
-	public WindowResizerSelectBox(Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle style) {
-		super(textSupplier, inputStrategySwitcher, soundInteractListener, style);
+	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle style) {
+		super(textKey, inputStrategySwitcher, soundInteractListener, style);
 
 		setEntryButtons(getEntries());
 	}

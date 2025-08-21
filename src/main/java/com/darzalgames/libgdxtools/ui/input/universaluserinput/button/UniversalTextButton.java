@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
@@ -9,7 +10,7 @@ import com.github.tommyettinger.textra.Styles.TextButtonStyle;
  */
 public class UniversalTextButton extends UniversalButton {
 
-	private final UniversalLabel label;
+	protected final UniversalLabel label;
 
 	public UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle textButtonStyle) {
 		super(buttonRunnable, inputStrategySwitcher, soundInteractListener, textButtonStyle);
@@ -20,6 +21,7 @@ public class UniversalTextButton extends UniversalButton {
 	@Override
 	public void resizeUI() {
 		label.resizeUI();
+		getCell(label).pad(UserInterfaceSizer.getMinimumPercentage(0.0025f));
 		super.resizeUI();
 	}
 

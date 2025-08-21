@@ -2,12 +2,11 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.darzalgames.darzalcommon.functional.FunctionalConverter;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
+import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
@@ -17,20 +16,16 @@ import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
-public class UniversalSelectBox extends UniversalButton {
+public class UniversalSelectBox extends UniversalTextButton {
 
 	private final PopUpMenu options;
-	private final UniversalLabel mainLabel;
-	private final UniversalLabel displayLabel;
+	private final String mainLabelKey;
 	private UniversalTextButton defaultEntry;
 	protected List<UniversalTextButton> entryButtons;
-	private final Cell<UniversalLabel> mainLabelCell;
 
-	public UniversalSelectBox(Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle buttonStyle) {
-		super(Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
-
-		mainLabel = GameInfo.getUserInterfaceFactory().getLabel(textSupplier);
-		mainLabelCell = add(mainLabel);
+	public UniversalSelectBox(String mainLabelKey, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle buttonStyle) {
+		super(GameInfo.getUserInterfaceFactory().getLabel(Suppliers.emptyString()), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
+		this.mainLabelKey = mainLabelKey;
 
 		// This is the keyboard navigable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
 		options = new PopUpMenu(true) {
@@ -61,10 +56,8 @@ public class UniversalSelectBox extends UniversalButton {
 
 		};
 
-		displayLabel = GameInfo.getUserInterfaceFactory().getLabel(Suppliers.emptyString());
-		add(displayLabel).growX();
 		setButtonRunnable(() -> InputPriority.claimPriority(options, getView().getStage().getRoot().getName()));
-		setAlignment(Alignment.LEFT);
+		//		setAlignment(Alignment.LEFT);
 	}
 
 	protected void setEntryButtons(List<UniversalTextButton> entryButtons) {
@@ -82,8 +75,6 @@ public class UniversalSelectBox extends UniversalButton {
 	 */
 	public void setSelected(UniversalTextButton entry) {
 		defaultEntry = entry;
-		//		BasicButton view = getButton();
-		//		TextraLabel label = view.getTextraLabel();
 	}
 
 	public void setSelected(String entryText) {
@@ -95,32 +86,8 @@ public class UniversalSelectBox extends UniversalButton {
 
 	@Override
 	public void resizeUI() {
-
-		mainLabel.resizeUI();
-
-		displayLabel.setTextSupplier(() -> defaultEntry.getText()); // Needed for the displayLabel to update when changing language
-		displayLabel.resizeUI();
-		displayLabel.setColor(isOver() ? getStyle().overFontColor : getStyle().fontColor);
-		displayLabel.layout();
-
-		mainLabelCell.padRight(calculatePadding());
-		pack();
+		label.setTextSupplier(() -> TextSupplier.getLine(mainLabelKey, defaultEntry.getText())); // Needed for the displayLabel to update when changing language
 		super.resizeUI();
-	}
-
-	private float calculatePadding() {
-		return UserInterfaceSizer.getWidthPercentage(0.005f);
-	}
-
-	@Override
-	public boolean isBlank() {
-		return false;
-	}
-
-	@Override
-	public void setAlignment(Alignment alignment) {
-		mainLabel.setAlignment(alignment);
-		displayLabel.setAlignment(alignment);
 	}
 
 }

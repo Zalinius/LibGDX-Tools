@@ -122,11 +122,4 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 	@Override
 	public void selectDefault() { /*A basic button doesn't have any nested components to select*/ }
 
-	@Override
-	public void resizeUI() {
-		//		setStyle(getStyle());
-		//		setSize(getPrefWidth(), getPrefHeight());
-		pack();
-	}
-
 }

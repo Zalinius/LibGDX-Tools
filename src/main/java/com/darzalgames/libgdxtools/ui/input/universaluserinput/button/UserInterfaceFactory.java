@@ -148,7 +148,7 @@ public class UserInterfaceFactory {
 
 
 	public UniversalSelectBox getSelectBox(SelectBoxContentManager contentManager) {
-		Supplier<String> boxLabel = contentManager.getBoxLabelSupplier();
+		String boxLabel = contentManager.getBoxLabelKey();
 		List<SelectBoxButtonInfo> entries = contentManager.getOptionButtons();
 		//		BasicButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getTextButtonStyle());
 		//		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
@@ -302,8 +302,8 @@ public class UserInterfaceFactory {
 	//	}
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {
-		Supplier<String> textSupplier = () -> TextSupplier.getLine("window_mode_label");
-		return new WindowResizerSelectBox(textSupplier, inputStrategySwitcher, soundInteractRunnable, skinManager.getTextButtonStyle());
+		String textKey = "window_mode_label";
+		return new WindowResizerSelectBox(textKey, inputStrategySwitcher, soundInteractRunnable, skinManager.getTextButtonStyle());
 	}
 
 	protected InputStrategySwitcher getInputStrategySwitcher() {

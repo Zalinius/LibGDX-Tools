@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 
 public interface SelectBoxContentManager {
 
-	Supplier<String> getBoxLabelSupplier();
+	String getBoxLabelKey();
 	List<SelectBoxButtonInfo> getOptionButtons();
 	Supplier<String> getCurrentSelectedDisplayName();
 

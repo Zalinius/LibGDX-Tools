@@ -182,7 +182,7 @@ public class SampleUserInterfaceGame extends MainGame {
 
 		Supplier<String> option1 = () -> TextSupplier.getLine("option 1");
 		Supplier<String> option2 = () -> TextSupplier.getLine("looooong option 2");
-		Supplier<String> exampleSelectBoxLabelSupplier = () -> (TextSupplier.getLine("An option select box"));
+		String exampleSelectBoxLabelSupplier = "An option select box";
 		SelectBoxContentManager selectBoxContents = new SelectBoxContentManager() {
 			@Override
 			public List<SelectBoxButtonInfo> getOptionButtons() {
@@ -198,9 +198,10 @@ public class SampleUserInterfaceGame extends MainGame {
 			}
 
 			@Override
-			public Supplier<String> getBoxLabelSupplier() {
+			public String getBoxLabelKey() {
 				return exampleSelectBoxLabelSupplier;
 			}
+
 		};
 		UniversalSelectBox exampleSelectBox = GameInfo.getUserInterfaceFactory().getSelectBox(selectBoxContents);
 		menuButtons.add(exampleSelectBox);

@@ -100,8 +100,8 @@ public abstract class TextSupplier {
 			}
 
 			@Override
-			public Supplier<String> getBoxLabelSupplier() {
-				return () -> (TextSupplier.getLine("language_label"));
+			public String getBoxLabelKey() {
+				return "language_label";
 			}
 
 			@Override

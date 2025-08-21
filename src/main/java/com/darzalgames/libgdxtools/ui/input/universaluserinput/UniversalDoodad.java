@@ -56,10 +56,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		this.disabled = disabled;
 	}
 
-	private boolean isPressed() {
-		return clickListener.isVisualPressed();
-	}
-
 	@Override
 	public boolean isOver() {
 		return clickListener.isOver();
@@ -81,7 +77,12 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		super.setTouchable(touchable);
 	}
 
-	// Table has align(), do we call that??
+
+	@Override
+	public void resizeUI() {
+		invalidate();
+		pack();
+	}
 
 
 	// ----------------- \/  VISUAL STYLING  \/  ----------------- //
@@ -96,7 +97,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		if (isOver() && (style.over != null)) {
 			return style.over;
 		}
-		boolean focused = hasKeyboardFocus(); // todo my own focus system?
+		boolean focused = hasKeyboardFocus();
 		if (focused && style.focused != null) {
 			return style.focused;
 		}
@@ -141,50 +142,8 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		}
 	}
 
-	//	@Override
-	//	public float getPrefWidth () {
-	//		float width = super.getPrefWidth();
-	//		if (style.up != null) {
-	//			width = Math.max(width, style.up.getMinWidth());
-	//		}
-	//		if (style.down != null) {
-	//			width = Math.max(width, style.down.getMinWidth());
-	//		}
-	//		if (style.checked != null) {
-	//			width = Math.max(width, style.checked.getMinWidth());
-	//		}
-	//		return width;
-	//	}
-	//
-	//	@Override
-	//	public float getPrefHeight () {
-	//		float height = super.getPrefHeight();
-	//		if (style.up != null) {
-	//			height = Math.max(height, style.up.getMinHeight());
-	//		}
-	//		if (style.down != null) {
-	//			height = Math.max(height, style.down.getMinHeight());
-	//		}
-	//		if (style.checked != null) {
-	//			height = Math.max(height, style.checked.getMinHeight());
-	//		}
-	//		return height;
-	//	}
-
-	//	@Override
-	//	public float getMinWidth () {
-	//		return getPrefWidth();
-	//	}
-	//
-	//	@Override
-	//	public float getMinHeight () {
-	//		return getPrefHeight();
-	//	}
-
-	@Override
-	public void resizeUI() {
-		invalidate();
-		pack();
+	private boolean isPressed() {
+		return clickListener.isVisualPressed();
 	}
 
 }

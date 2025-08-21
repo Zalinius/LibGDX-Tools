@@ -110,6 +110,7 @@ public class NavigableList implements VisibleInputConsumer {
 	public void resizeUI() {
 		allEntries.forEach(VisibleInputConsumer::resizeUI);
 		if (table != null) {
+			table.invalidate();
 			table.layout();
 		}
 	}

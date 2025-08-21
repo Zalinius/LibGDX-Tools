@@ -2,7 +2,6 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import java.util.function.Supplier;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalDoodad;
@@ -19,13 +18,7 @@ public class UniversalLabel extends UniversalDoodad {
 
 	public UniversalLabel(Supplier<String> textSupplier, LabelStyle typingLabelStyle, TextButtonStyle style) {
 		super(style, false);
-		label = new TypingLabel(textSupplier.get(), typingLabelStyle) {
-			@Override
-			public void draw(Batch batch, float parentAlpha) {
-				resizeUI(); // TODO will this be covered elsewhere with composite doodads?
-				super.draw(batch, parentAlpha);
-			}
-		};
+		label = new TypingLabel(textSupplier.get(), typingLabelStyle);
 		this.textSupplier = textSupplier;
 		label.setWrap(false);
 		label.skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
@@ -39,16 +32,6 @@ public class UniversalLabel extends UniversalDoodad {
 
 	public void setWrap(boolean wrap) {
 		label.setWrap(wrap);
-	}
-
-	@Override
-	public float getMinHeight() {
-		return label.getMinHeight();
-	}
-
-	@Override
-	public float getWidth() {
-		return label.getPrefWidth();
 	}
 
 	@Override
@@ -103,12 +86,40 @@ public class UniversalLabel extends UniversalDoodad {
 		label.setFont(getStyle().font); // updates us to the resized font size
 		label.setText(textSupplier.get(), true, false);
 		label.skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
+		label.pack();
 		//		setStyle(getStyle());
 		//		if (!label.isWrap()) {// && label.getStyle().background != null) {
 		//			//TODO Makes backgrounds scale with text properly, but doesn't preserve Align.center...? Shucks
 		//			setSize(getPrefWidth(), getPrefHeight());
 		//		}
-		//		super.resizeUI();
+		super.resizeUI();
+	}
+
+
+	@Override
+	public float getMinHeight() {
+		return label.getMinHeight();
+	}
+	@Override
+	public float getHeight() {
+		return label.getHeight();
+	}
+	@Override
+	public float getPrefHeight() {
+		return label.getPrefHeight();
+	}
+
+	@Override
+	public float getMinWidth() {
+		return label.getMinWidth();
+	}
+	@Override
+	public float getWidth() {
+		return label.getWidth();
+	}
+	@Override
+	public float getPrefWidth() {
+		return label.getPrefWidth();
 	}
 
 }

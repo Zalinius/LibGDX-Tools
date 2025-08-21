@@ -119,15 +119,6 @@ public class UniversalCheckbox extends UniversalButton {
 	}
 
 	@Override
-	public float getPrefWidth() {
-		return box.getWidth() + calculatePadding() + label.getWidth();
-	}
-
-	private float calculatePadding() {
-		return UserInterfaceSizer.getWidthPercentage(0.005f);
-	}
-
-	@Override
 	public boolean isBlank() {
 		// what would a blank checkbox even mean
 		return false;
@@ -135,9 +126,9 @@ public class UniversalCheckbox extends UniversalButton {
 
 	@Override
 	public void setAlignment(Alignment alignment) {
-		//		getCell(box).align(alignment.getAlignment());
+		box.setAlign(alignment.getAlignment());
 		label.setAlignment(alignment);
-		// TODO uh any more?
+		align(alignment.getAlignment());
 	}
 
 	protected boolean isChecked() {

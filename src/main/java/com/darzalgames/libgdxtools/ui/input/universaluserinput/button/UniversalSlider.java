@@ -9,22 +9,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
-public class UniversalSlider extends UniversalButton {
+public class UniversalSlider extends UniversalTextButton {
 
-	private final UniversalLabel label;
 	private final Slider slider;
 	private float previousValue;
 
 	public UniversalSlider(UniversalLabel label, SliderStyle sliderStyle, TextButtonStyle buttonStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, float knobMinimumPercentage) {
-		super(Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
-		this.label = label;
-		add(label);
+		super(label, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
 
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle) {
 			@Override
@@ -48,8 +44,6 @@ public class UniversalSlider extends UniversalButton {
 			}
 		});
 
-
-		//		setWidth(getWidth() + slider.getPrefWidth());
 		add(slider);
 		addListener(new ChangeListener() {
 			@Override
@@ -99,15 +93,26 @@ public class UniversalSlider extends UniversalButton {
 		setDoesSoundOnInteract(true);
 	}
 
-	@Override
-	public boolean isBlank() {
-		return label.isBlank();
-	}
+	//	@Override
+	//	public boolean isBlank() {
+	//		return label.isBlank();
+	//	}
+	//
+	//	@Override
+	//	public void setAlignment(Alignment alignment) {
+	//		label.setAlignment(alignment);
+	//		// slider alignment isn't a thing?
+	//	}
 
 	@Override
-	public void setAlignment(Alignment alignment) {
-		label.setAlignment(alignment);
-		// slider alignment isn't a thing?
+	public void resizeUI() {
+		//		label.resizeUI();
+		super.resizeUI();
+		getCell(label).padRight(calculatePadding());
+	}
+
+	private float calculatePadding() {
+		return UserInterfaceSizer.getWidthPercentage(0.005f);
 	}
 
 }

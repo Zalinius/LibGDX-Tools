@@ -33,6 +33,8 @@ public class UniversalTextButton extends UniversalButton {
 	@Override
 	public void setAlignment(Alignment alignment) {
 		label.setAlignment(alignment);
+		getCell(label).align(alignment.getAlignment());
+		align(alignment.getAlignment());
 	}
 
 	public String getText() {

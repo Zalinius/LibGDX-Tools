@@ -142,12 +142,6 @@ public class SkinManager {
 	public TextButtonStyle getTextButtonStyle() {
 		return getTextButtonStyle(DEFAULT);
 	}
-	//	public TextButtonStyle getFlashedTextButtonStyle() {
-	//		return getTextButtonStyle(FLASHED_TEXT_BUTTON);
-	//	}
-	//	public TextButtonStyle getSneakyLableButtonStyle() {
-	//		return getTextButtonStyle(SNEAKY_LABEL_BUTTON);
-	//	}
 	public TextButtonStyle getBlankButtonStyle() {
 		return getTextButtonStyle(BLANK_BUTTON);
 	}

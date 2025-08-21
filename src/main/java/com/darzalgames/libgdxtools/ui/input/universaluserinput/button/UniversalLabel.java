@@ -12,13 +12,14 @@ import com.github.tommyettinger.textra.TypingLabel;
 public class UniversalLabel extends UniversalDoodad {
 
 	private final TypingLabel label;
-	//	private final LabelStyle typingLabelStyle;
+	private final LabelStyle typingLabelStyle;
 
 	protected Supplier<String> textSupplier;
 
 	public UniversalLabel(Supplier<String> textSupplier, LabelStyle typingLabelStyle, TextButtonStyle style) {
 		super(style, false);
 		label = new TypingLabel(textSupplier.get(), typingLabelStyle);
+		this.typingLabelStyle = typingLabelStyle;
 		this.textSupplier = textSupplier;
 		label.setWrap(false);
 		label.skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
@@ -83,7 +84,7 @@ public class UniversalLabel extends UniversalDoodad {
 
 	@Override
 	public void resizeUI() {
-		label.setFont(getStyle().font); // updates us to the resized font size
+		label.setFont(typingLabelStyle.font); // updates us to the resized font size
 		label.setText(textSupplier.get(), true, false);
 		label.skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		label.pack();

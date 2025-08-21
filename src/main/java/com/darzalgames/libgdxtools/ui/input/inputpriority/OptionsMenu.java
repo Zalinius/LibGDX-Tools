@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
@@ -157,7 +156,6 @@ public abstract class OptionsMenu extends PopUpMenu {
 		addActor(versionTable);
 
 		UniversalLabel authors = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("authors_label"));
-		authors.addAction(Actions.forever(Actions.run(() -> authors.resizeUI())));
 		authors.setAlignment(Alignment.TOP_LEFT);
 		versionTable.add(authors).top().left().padTop(getPadTop()).padLeft(getPadLeft());
 		versionTable.add(GameInfo.getUserInterfaceFactory().getSpacer());
@@ -167,7 +165,6 @@ public abstract class OptionsMenu extends PopUpMenu {
 		versionTable.row();
 
 		UniversalLabel versionLabel = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> getGameVersion() + platformName);
-		versionLabel.addAction(Actions.forever(Actions.run(() -> versionLabel.resizeUI())));
 		versionLabel.setAlignment(Alignment.BOTTOM_LEFT);
 		versionTable.add(versionLabel).bottom().left().padBottom(getPadBottom()).padLeft(getPadLeft());
 		versionTable.add(GameInfo.getUserInterfaceFactory().getSpacer());

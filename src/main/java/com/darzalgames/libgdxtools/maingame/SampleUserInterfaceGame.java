@@ -172,7 +172,8 @@ public class SampleUserInterfaceGame extends MainGame {
 		UniversalLabel sliderInfoLabel = GameInfo.getUserInterfaceFactory().getLabel(() -> sliderInfo + "0.5");
 		UniversalSlider funSlider = GameInfo.getUserInterfaceFactory().getSlider(Suppliers.emptyString(), newValue -> sliderInfoLabel.setTextSupplier(() -> sliderInfo + String.format("%.1f", newValue)));
 		funSlider.setSliderPosition(0.5f, false);
-		menuButtons.add(sliderInfoLabel);
+		//		menuButtons.add(sliderInfoLabel);
+		// TODO Reimplement adding labels into menus like this?
 		menuButtons.add(funSlider);
 
 		String logOrigin = "LibGDXTools Test Game";

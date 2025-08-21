@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
@@ -15,6 +16,7 @@ public class UniversalTextButton extends UniversalButton {
 	public UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle textButtonStyle) {
 		super(buttonRunnable, inputStrategySwitcher, soundInteractListener, textButtonStyle);
 		this.label = label;
+		label.setTouchable(Touchable.disabled);
 		add(label);
 	}
 

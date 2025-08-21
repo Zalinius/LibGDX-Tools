@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
+import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
@@ -45,19 +46,19 @@ public abstract class UserInterfaceFactory {
 	protected abstract void addGameSpecificHighlightListener(Group button);
 
 	public UniversalLabel getLabel(final Supplier<String> textSupplier) {
-		return getLabel(textSupplier, skinManager.getDefaultLableStyle(), skinManager.getBlankButtonStyle());
+		return getLabel(textSupplier, skinManager.getDefaultLableStyle());
 	}
 
 	public UniversalLabel getFlavorTextLabel(final Supplier<String> textSupplier) {
-		return getLabel(textSupplier, skinManager.getFlavorTextLableStyle(), skinManager.getBlankButtonStyle());
+		return getLabel(textSupplier, skinManager.getFlavorTextLableStyle());
 	}
 
 	public UniversalLabel getWarningLabel(final Supplier<String> textSupplier) {
-		return getLabel(textSupplier, skinManager.getWarningLableStyle(), skinManager.getBlankButtonStyle());
+		return getLabel(textSupplier, skinManager.getWarningLableStyle());
 	}
 
 	public UniversalLabel getLabelWithBackground(final Supplier<String> textSupplier) {
-		return getLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), skinManager.getBlankButtonStyle());
+		return getLabel(textSupplier, skinManager.getLabelWithBackgroundStyle());
 	}
 
 	/**
@@ -66,11 +67,11 @@ public abstract class UserInterfaceFactory {
 	 * @return a UniversalLabel with a background, whose text changes when the input strategy changes
 	 */
 	public UniversalLabel getInputSensitiveLabelWithBackground(Supplier<String> textSupplier) {
-		return new UniversalInputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), skinManager.getBlankButtonStyle(), inputStrategySwitcher);
+		return new UniversalInputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher);
 	}
 
-	protected UniversalLabel getLabel(final Supplier<String> textSupplier, LabelStyle labelStyle, TextButtonStyle buttonStyle) {
-		return new UniversalLabel(textSupplier, labelStyle, buttonStyle);
+	protected UniversalLabel getLabel(final Supplier<String> textSupplier, LabelStyle labelStyle) {
+		return new UniversalLabel(textSupplier, labelStyle);
 	}
 
 
@@ -96,8 +97,8 @@ public abstract class UserInterfaceFactory {
 	 * @return a blank UniversalButton
 	 */
 	public UniversalDoodad getSpacer() {
-		UniversalLabel spacer = getLabel(Suppliers.emptyString());
-		spacer.getView().setName("spacer");
+		UniversalTextButton spacer = makeTextButtonWithStyle(Suppliers.emptyString(), Runnables.nullRunnable(), skinManager.getBlankButtonStyle());
+		spacer.setName("spacer");
 		spacer.setDisabled(true);
 		return spacer;
 	}
@@ -127,7 +128,7 @@ public abstract class UserInterfaceFactory {
 	}
 
 	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, TextButtonStyle style) {
-		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle(), skinManager.getBlankButtonStyle());
+		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle());
 		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, soundInteractRunnable, style);
 		addGameSpecificHighlightListener(button);
 		return button;
@@ -182,7 +183,7 @@ public abstract class UserInterfaceFactory {
 	}
 
 	public UniversalSlider getSlider(Supplier<String> textSupplier, Consumer<Float> consumer) {
-		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle(), skinManager.getBlankButtonStyle());
+		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle());
 		UniversalSlider button = new UniversalSlider(label, skinManager.getSliderStyle(), skinManager.getBlankButtonStyle(), consumer, inputStrategySwitcher, soundInteractRunnable, 0.05f);
 		addGameSpecificHighlightListener(button);
 		return button;

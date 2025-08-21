@@ -8,31 +8,31 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
-import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.github.tommyettinger.textra.Styles.CheckBoxStyle;
 import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
-public class UniversalCheckbox extends UniversalButton {
+public class UniversalCheckbox extends UniversalTextButton {
 
 	private final Image box;
-	private final UniversalLabel label;
 	private final Supplier<String> uncheckedLabel;
 	private final Supplier<String> checkedLabel;
 	private boolean checked;
+	private final float widthOverHeight;
 
 	public UniversalCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, TextButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
+		super(GameInfo.getUserInterfaceFactory().getLabel(uncheckedLabel), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
 		this.uncheckedLabel = () -> " " + uncheckedLabel.get();
 		this.checkedLabel = () -> " " + checkedLabel.get();
-		label = GameInfo.getUserInterfaceFactory().getLabel(uncheckedLabel);
 
 		// YOU MUST SET THE MIN WIDTH & HEIGHT OF THIS DRAWABLE FOR RESIZING TO WORK
 		float originalWidth = style.checkboxOff.getMinWidth();
 		float originalHeight = style.checkboxOff.getMinHeight();
+		widthOverHeight = originalWidth/originalHeight;
 
 		// It doesn't matter which label we initialize with, as the button resizes every frame based on the contents
 		box = new Image() {
@@ -58,23 +58,13 @@ public class UniversalCheckbox extends UniversalButton {
 				}
 				setDrawable(checkbox);
 
-
-				// mine below
-				float minimum = 0.05f;
-				UserInterfaceSizer.scaleToMinimumPercentage(style.checkboxOn, minimum, originalWidth, originalHeight);
-				UserInterfaceSizer.scaleToMinimumPercentage(style.checkboxOff, minimum, originalWidth, originalHeight);
-				if (style.checkboxOnOver != null) {
-					UserInterfaceSizer.scaleToMinimumPercentage(style.checkboxOnOver, minimum, originalWidth, originalHeight);
-				}
-				if (style.checkboxOver != null) {
-					UserInterfaceSizer.scaleToMinimumPercentage(style.checkboxOver, minimum, originalWidth, originalHeight);
-				}
-
 				super.draw(batch, parentAlpha);
 			}
 		};
+		box.setScaling(Scaling.fit);
+		clearChildren();
 		add(box);
-		add(label).growX();
+		add(label);
 		addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -88,17 +78,9 @@ public class UniversalCheckbox extends UniversalButton {
 			consumer.accept(isChecked());
 			UniversalCheckbox.this.setFocused(true);
 		});
+		// todo are both these necessary??
 	}
-	@Override
-	public void setFocused(boolean isFocused) {
-		super.setFocused(isFocused);
-		//		if (isFocused) {
-		//			box.getClickListener().enter(null, 0, 0, -1, box);
-		//		} else {
-		//			box.getClickListener().exit(null, 0, 0, -1, box);
-		//		}
 
-	}
 
 	/**
 	 * To be used when setting up a menu: this sets the box as checked (or not) without firing an interaction event
@@ -111,11 +93,11 @@ public class UniversalCheckbox extends UniversalButton {
 
 	@Override
 	public void resizeUI() {
-		super.resizeUI();
 		label.setTextSupplier(isChecked() ? checkedLabel : uncheckedLabel);
-		label.resizeUI();
-		//		displayLabel.setColor(isOver() ? getStyle().overFontColor : getStyle().fontColor);
-		pack();
+		super.resizeUI();
+		box.setHeight(label.getHeight()*1.25f);
+		box.setWidth(widthOverHeight * box.getHeight());
+		getCell(box).width(box.getWidth()).height(box.getHeight());
 	}
 
 	@Override
@@ -127,8 +109,7 @@ public class UniversalCheckbox extends UniversalButton {
 	@Override
 	public void setAlignment(Alignment alignment) {
 		box.setAlign(alignment.getAlignment());
-		label.setAlignment(alignment);
-		align(alignment.getAlignment());
+		super.setAlignment(alignment);
 	}
 
 	protected boolean isChecked() {

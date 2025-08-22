@@ -25,6 +25,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	private final InputStrategySwitcher inputStrategySwitcher;
 
 	protected UniversalDoodad(ButtonStyle buttonStyle, boolean isAClickableDoodad, InputStrategySwitcher inputStrategySwitcher) {
+		this.inputStrategySwitcher = inputStrategySwitcher;
 		setStyle(buttonStyle);
 		setSize(buttonStyle.up.getMinWidth(), buttonStyle.up.getMinHeight());
 		this.isAClickableDoodad = isAClickableDoodad;
@@ -35,7 +36,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 				justPressed();
 			}
 		};
-		this.inputStrategySwitcher = inputStrategySwitcher;
 		addListener(clickListener);
 	}
 
@@ -85,17 +85,22 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	}
 
 
+	@Override
+	public void setFocused(boolean isFocused) {
+		setFocused(isFocused, false);
+	}
+
 	/**
 	 * Sets this button un/focused, generating a mimicked LibGDX mouse enter/exit event
 	 * @param isFocused
+	 * @param forced whether or not to force the focus event (they're not normally sent when in mouse mode)
 	 */
-	@Override
-	public void setFocused(boolean isFocused) {
+	public void setFocused(boolean isFocused, boolean forced) {
 		InputEvent event = Pools.obtain(InputEvent.class);
 		if (!isFocused) {
 			event.setType(InputEvent.Type.exit);
 		}
-		else if (inputStrategySwitcher.shouldFlashButtons()) {
+		else if (!inputStrategySwitcher.isMouseMode() || forced) {
 			event.setType(InputEvent.Type.enter);
 		}
 		else {
@@ -119,6 +124,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		pack();
 		invalidateHierarchy();
 	}
+
 	@Override
 	public void gainFocus() {
 		setFocused(true);

@@ -140,10 +140,6 @@ public class NavigableList implements VisibleInputConsumer {
 				}
 			}
 		}
-
-		if (!pressButtonOnEntryChanged) {
-			changedEntries();
-		}
 	}
 
 	private void findCurrentButton() {
@@ -264,7 +260,7 @@ public class NavigableList implements VisibleInputConsumer {
 	}
 
 	/**
-	 * Adjust the vertical spacing between entries as needed default is 0.05% of width or height depending on if the menu is horizontal or vertical
+	 * Adjust the vertical spacing between entries as needed default is based on width or height depending on if the menu is horizontal or vertical
 	 * @param spacing new spacing
 	 */
 	public void setSpacing(Supplier<Float> spacing) {

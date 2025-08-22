@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
@@ -48,19 +49,19 @@ public class UniversalSlider extends UniversalTextButton {
 		addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				UniversalSlider.this.setFocused(true);
 				float currentValue = slider.getValue();
 				if (currentValue != previousValue) { //The slider fires a ChangeEvent on touchUp (mouse mode) which we want to ignore
 					requestInteractSound();
 				}
 				previousValue = currentValue;
+				addAction(Actions.run(() -> setFocused(true)));
 			}
 		});
 	}
 
 	@Override
 	public void setFocused(boolean isFocused) {
-		super.setFocused(isFocused);
+		super.setFocused(isFocused, true);
 		InputListener inputListener = (InputListener) slider.getListeners().get(0);
 		if (isFocused) {
 			inputListener.enter(null, 0, 0, -1, slider);

@@ -22,20 +22,27 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	private final OptionsMenu optionsMenu;
 	private final DarkScreen darkScreen;
 
+	private final InputStrategySwitcher inputStrategySwitcher;
 	private final List<InputPriorityObserver> inputPriorityObservers;
 	private final Map<String, StageLikeRenderable> stageLikeRenderables;
 
-	public InputPriorityStack(List<StageLikeRenderable> allStagesInOrderForInput, OptionsMenu optionsMenu) {
+	public InputPriorityStack(List<StageLikeRenderable> allStagesInOrderForInput, OptionsMenu optionsMenu, InputStrategySwitcher inputStrategySwitcher) {
 		this.optionsMenu = optionsMenu;
+
 		stageLikeRenderables = new HashMap<>();
 		allStagesInOrderForInput.forEach(stage -> stageLikeRenderables.put(stage.getName(), stage));
+
 		inputPriorityObservers = new ArrayList<>();
+
 		multiStack = new LimitedAccessMultiStack(allStagesInOrderForInput);
 		clearStackAndPushBlankConsumer();
 
 		darkScreen = new DarkScreen(() -> sendInputToTop(Input.BACK));
 
 		InputPriority.setInputPriorityStack(this);
+
+		this.inputStrategySwitcher = inputStrategySwitcher;
+		inputStrategySwitcher.register(this);
 	}
 
 	void claimPriority(InputConsumer inputConsumer, String stageLikeRenderableName) {
@@ -109,8 +116,8 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			multiStack.getTop().regainFocus();
 		}
 		multiStack.getTop().setTouchable(Touchable.enabled);
-		multiStack.getTop().focusCurrent();
-	}
+			multiStack.getTop().focusCurrent();
+		}
 
 	private void unFocusTop() {
 		InputConsumer top = multiStack.getTop();
@@ -120,10 +127,10 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-		if (inputStrategySwitcher.shouldFlashButtons()) {
-			multiStack.getTop().selectDefault();
-		} else { // Mouse mode
+		if (inputStrategySwitcher.isMouseMode()) {
 			multiStack.getTop().clearSelected();
+		} else {
+			multiStack.getTop().selectDefault();
 		}
 	}
 
@@ -141,7 +148,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		multiStack.popTop();
 		if (isClosingOptionsMenu) {
 			multiStack.getTop().setTouchable(Touchable.enabled);
-			multiStack.getTop().focusCurrent();
+				multiStack.getTop().focusCurrent();
 		} else {
 			focusTop(false);
 		}

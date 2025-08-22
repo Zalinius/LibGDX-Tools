@@ -4,10 +4,9 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.darzalgames.darzalcommon.functional.Runnables;
@@ -65,20 +64,12 @@ public class UniversalCheckbox extends UniversalTextButton {
 		clearChildren();
 		add(box);
 		add(label);
-		addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				initializeAsChecked(!isChecked());
-				consumer.accept(isChecked());
-				UniversalCheckbox.this.setFocused(true);
-			}
-		});
+
 		setButtonRunnable(() -> {
 			initializeAsChecked(!isChecked());
 			consumer.accept(isChecked());
-			UniversalCheckbox.this.setFocused(true);
+			addAction(Actions.run(() -> setFocused(true, true)));
 		});
-		// todo are both these necessary??
 	}
 
 

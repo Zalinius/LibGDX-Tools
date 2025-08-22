@@ -50,7 +50,7 @@ public abstract class UserInterfaceFactory {
 	}
 
 	public UniversalLabel getFlavorTextLabel(final Supplier<String> textSupplier) {
-		return getLabel(textSupplier, skinManager.getFlavorTextLableStyle());
+		return getLabel(() -> "[/]" + textSupplier.get() + "[/]", skinManager.getFlavorTextLableStyle());
 	}
 
 	public UniversalLabel getWarningLabel(final Supplier<String> textSupplier) {

@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -12,14 +13,13 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 public class UniversalSlider extends UniversalTextButton {
 
 	private final Slider slider;
 	private float previousValue;
 
-	public UniversalSlider(UniversalLabel label, SliderStyle sliderStyle, TextButtonStyle buttonStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, float knobMinimumPercentage) {
+	public UniversalSlider(UniversalLabel label, SliderStyle sliderStyle, ButtonStyle buttonStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, float knobMinimumPercentage) {
 		super(label, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
 
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle) {

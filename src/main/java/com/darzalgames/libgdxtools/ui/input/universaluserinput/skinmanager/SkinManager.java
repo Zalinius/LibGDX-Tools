@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
@@ -11,7 +12,6 @@ import com.github.tommyettinger.textra.Font;
 import com.github.tommyettinger.textra.Styles;
 import com.github.tommyettinger.textra.Styles.CheckBoxStyle;
 import com.github.tommyettinger.textra.Styles.LabelStyle;
-import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 /**
  * A class which holds a LibGDX {@link Skin} and provides convenient named accessors.
@@ -35,9 +35,16 @@ public class SkinManager {
 
 	// CheckboxStyle
 
-	// TextButtonStyle
+	// ButtonStyle
 	protected static final String BLANK_BUTTON = "blankButtonStyle";
 	protected static final String SETTINGS_BUTTON = "settingsButtonStyle";
+
+	// Colors used for styling buttons and labels based on focus
+	public static final Color DARK_COLOR = Color.GRAY;
+	public static final Color FOCUSED_COLOR = Color.WHITE;
+	public static final Color OUT_OF_FOCUS_COLOR = Color.LIGHT_GRAY;
+	public static final Color DISABLED_COLOR = Color.DARK_GRAY;
+
 
 	/**
 	 * @param skin The skin set up by the base class
@@ -81,20 +88,17 @@ public class SkinManager {
 
 		Drawable buttonNOTHighlighted = new Image(ColorTools.getColoredTexture(Color.WHITE, size)).getDrawable();
 		Drawable buttonHighlighted = new Image(ColorTools.getColoredTexture(Color.GRAY, size)).getDrawable();
-		TextButtonStyle textButtonStyle = new TextButtonStyle(buttonNOTHighlighted, buttonHighlighted, buttonHighlighted, defaultFont);
-		textButtonStyle.over = buttonHighlighted;
-		textButtonStyle.fontColor = Color.LIGHT_GRAY;
-		textButtonStyle.overFontColor = Color.WHITE;
-		textButtonStyle.focused = buttonHighlighted;
-		textButtonStyle.disabledFontColor = Color.FIREBRICK;
-		skin.add(DEFAULT, textButtonStyle);
+		ButtonStyle buttonStyle = new ButtonStyle(buttonNOTHighlighted, buttonHighlighted, buttonHighlighted);
+		buttonStyle.over = buttonHighlighted;
+		buttonStyle.focused = buttonHighlighted;
+		skin.add(DEFAULT, buttonStyle);
 
 		Drawable blank = new Image(ColorTools.getColoredTexture(Color.CLEAR, size)).getDrawable();
-		TextButtonStyle blankButtonStyle = new TextButtonStyle(blank, blank, blank, defaultFont);
+		ButtonStyle blankButtonStyle = new ButtonStyle(blank, blank, blank);
 		blankButtonStyle.focused = null;
 		skin.add(BLANK_BUTTON, blankButtonStyle);
 		TextureRegionDrawable settingsHighlightedIcon = new TextureRegionDrawable(ColorTools.getColoredTexture(Color.PINK, size));
-		TextButtonStyle settingsButtonStyle = new TextButtonStyle(new Image(ColorTools.getColoredTexture(Color.PURPLE, size)).getDrawable(), settingsHighlightedIcon, settingsHighlightedIcon, defaultFont);
+		ButtonStyle settingsButtonStyle = new ButtonStyle(new Image(ColorTools.getColoredTexture(Color.PURPLE, size)).getDrawable(), settingsHighlightedIcon, settingsHighlightedIcon);
 		settingsButtonStyle.over = settingsHighlightedIcon;
 		settingsButtonStyle.focused = settingsHighlightedIcon;
 		skin.add(SETTINGS_BUTTON, settingsButtonStyle);
@@ -105,8 +109,8 @@ public class SkinManager {
 	protected LabelStyle getLabelStyle(String style) {
 		return skin.get(style, LabelStyle.class);
 	}
-	protected TextButtonStyle getTextButtonStyle(String style) {
-		return skin.get(style, TextButtonStyle.class);
+	protected ButtonStyle getButtonStyle(String style) {
+		return skin.get(style, ButtonStyle.class);
 	}
 	protected CheckBoxStyle getCheckboxStyle(String style) {
 		return skin.get(style, CheckBoxStyle.class);
@@ -139,14 +143,14 @@ public class SkinManager {
 	public CheckBoxStyle getCheckboxStyle() {
 		return getCheckboxStyle(DEFAULT);
 	}
-	public TextButtonStyle getTextButtonStyle() {
-		return getTextButtonStyle(DEFAULT);
+	public ButtonStyle getDefaultButtonStyle() {
+		return getButtonStyle(DEFAULT);
 	}
-	public TextButtonStyle getBlankButtonStyle() {
-		return getTextButtonStyle(BLANK_BUTTON);
+	public ButtonStyle getBlankButtonStyle() {
+		return getButtonStyle(BLANK_BUTTON);
 	}
-	public TextButtonStyle getSettingsButtonStyle() {
-		return getTextButtonStyle(SETTINGS_BUTTON);
+	public ButtonStyle getSettingsButtonStyle() {
+		return getButtonStyle(SETTINGS_BUTTON);
 	}
 
 }

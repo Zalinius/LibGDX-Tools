@@ -6,10 +6,10 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
@@ -21,7 +21,6 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentM
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalDoodad;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.github.tommyettinger.textra.Styles.LabelStyle;
-import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 /**
  * The ONLY place where one should be making UI elements (buttons, labels, etc)
@@ -97,13 +96,16 @@ public abstract class UserInterfaceFactory {
 	 * @return a blank UniversalButton
 	 */
 	public UniversalDoodad getSpacer() {
-		UniversalTextButton spacer = makeTextButtonWithStyle(Suppliers.emptyString(), Runnables.nullRunnable(), skinManager.getBlankButtonStyle());
+		UniversalButton spacer = new UniversalButton(Runnables.nullRunnable(), inputStrategySwitcher, soundInteractRunnable, skinManager.getBlankButtonStyle()) {
+			@Override public void setAlignment(Alignment alignment) { }
+			@Override public boolean isBlank() { return true; }
+		};
 		spacer.setName("spacer");
 		spacer.setDisabled(true);
 		return spacer;
 	}
 
-	protected UniversalButton getImageButton(final Image image, final Runnable runnable, TextButtonStyle style) {
+	protected UniversalButton getImageButton(final Image image, final Runnable runnable, ButtonStyle style) {
 		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, soundInteractRunnable, style) {
 			@Override
 			public boolean isBlank() {
@@ -120,50 +122,28 @@ public abstract class UserInterfaceFactory {
 	}
 
 	public UniversalButton getImageButton(final Image image, final Runnable runnable) {
-		return getImageButton(image, runnable, skinManager.getTextButtonStyle());
+		return getImageButton(image, runnable, skinManager.getDefaultButtonStyle());
 	}
 
 	public UniversalTextButton makeTextButton(Supplier<String> textSupplier, final Runnable runnable) {
-		return makeTextButtonWithStyle(textSupplier, runnable, skinManager.getTextButtonStyle());
+		return makeTextButtonWithStyle(textSupplier, runnable, skinManager.getDefaultButtonStyle(), skinManager.getDefaultLableStyle());
 	}
 
-	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, TextButtonStyle style) {
-		// TODO getting the font and making a new label style is a nice idea, but means the size isn't updated since the style isn't in the skin
-		UniversalLabel label = new UniversalLabel(textSupplier, new LabelStyle(style.font, style.fontColor));
+	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, ButtonStyle style, LabelStyle labelStyle) {
+		UniversalLabel label = new UniversalLabel(textSupplier, labelStyle);
 		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, soundInteractRunnable, style);
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
 
-	/**
-	 * Make a button in a particular style, these are generally exceptional buttons (in Quest Giver this includes the play button, scenario map pips, etc)
-	 */
-	protected UniversalButton makeButton(final String text, final Runnable runnable, TextButtonStyle textButtonStyle) {
-		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, soundInteractRunnable, textButtonStyle) {
-
-			@Override
-			public boolean isBlank() {
-				return text.isBlank();
-			}
-
-			@Override
-			public void setAlignment(Alignment alignment) {
-				// TODO Auto-generated method stub
-
-			}
-
-		};
-		addGameSpecificHighlightListener(button);
-		return button;
-	}
 
 
 	public UniversalSelectBox getSelectBox(SelectBoxContentManager contentManager) {
 		String boxLabel = contentManager.getBoxLabelKey();
 		List<SelectBoxButtonInfo> entries = contentManager.getOptionButtons();
-		//		BasicButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getTextButtonStyle());
-		//		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		UniversalSelectBox selectBox = new UniversalSelectBox(boxLabel, inputStrategySwitcher, soundInteractRunnable, skinManager.getTextButtonStyle());
+		//		BasicButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getButtonStyle());
+		//		makeBackgroundFlashing(textButton, skinManager.getButtonStyle(), skinManager.getFlashedButtonStyle());
+		UniversalSelectBox selectBox = new UniversalSelectBox(boxLabel, inputStrategySwitcher, soundInteractRunnable, skinManager.getDefaultButtonStyle());
 		List<UniversalTextButton> entriesButtons = entries.stream().map(buttonInfo -> makeTextButton(buttonInfo.buttonTextSupplier(), () -> {
 			buttonInfo.buttonPressRunnable().run();
 			selectBox.setSelected(buttonInfo.buttonTextSupplier().get());
@@ -237,7 +217,7 @@ public abstract class UserInterfaceFactory {
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {
 		String textKey = "window_mode_label";
-		WindowResizerSelectBox button = new WindowResizerSelectBox(textKey, inputStrategySwitcher, soundInteractRunnable, skinManager.getTextButtonStyle());
+		WindowResizerSelectBox button = new WindowResizerSelectBox(textKey, inputStrategySwitcher, soundInteractRunnable, skinManager.getDefaultButtonStyle());
 		addGameSpecificHighlightListener(button);
 		return button;
 	}

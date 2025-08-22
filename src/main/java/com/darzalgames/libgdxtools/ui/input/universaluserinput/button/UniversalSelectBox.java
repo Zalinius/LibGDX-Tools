@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 import java.util.List;
 import java.util.Optional;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.darzalgames.darzalcommon.functional.FunctionalConverter;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
@@ -14,7 +15,6 @@ import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 public class UniversalSelectBox extends UniversalTextButton {
 
@@ -23,7 +23,7 @@ public class UniversalSelectBox extends UniversalTextButton {
 	private UniversalTextButton defaultEntry;
 	protected List<UniversalTextButton> entryButtons;
 
-	public UniversalSelectBox(String mainLabelKey, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle buttonStyle) {
+	public UniversalSelectBox(String mainLabelKey, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle buttonStyle) {
 		super(GameInfo.getUserInterfaceFactory().getLabel(Suppliers.emptyString()), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
 		this.mainLabelKey = mainLabelKey;
 
@@ -68,15 +68,15 @@ public class UniversalSelectBox extends UniversalTextButton {
 		options.hideThis();
 	}
 
-	/**
-	 * Select a button based on the string of the entry, generally used after a choice has been made
-	 * or when first setting up the select box to make sure that the currently used value is highlighted (e.g. current language/font/window setting)
-	 * @param entry
-	 */
 	public void setSelected(UniversalTextButton entry) {
 		defaultEntry = entry;
 	}
 
+	/**
+	 * Select a button based on the string of the entry, generally used after a choice has been made
+	 * or when first setting up the select box to make sure that the currently used value is highlighted (e.g. current language/font/window setting)
+	 * @param entryText the selected button's text
+	 */
 	public void setSelected(String entryText) {
 		Optional<UniversalTextButton> desiredButton = entryButtons.stream().filter(button -> entryText.equalsIgnoreCase(button.getText())).findFirst();
 		if (desiredButton.isPresent()) {

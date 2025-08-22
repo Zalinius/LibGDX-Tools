@@ -1,10 +1,10 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 /**
  * A UniversalButton which you know for sure has a label
@@ -13,8 +13,8 @@ public class UniversalTextButton extends UniversalButton {
 
 	protected final UniversalLabel label;
 
-	public UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle textButtonStyle) {
-		super(buttonRunnable, inputStrategySwitcher, soundInteractListener, textButtonStyle);
+	public UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle buttonStyle) {
+		super(buttonRunnable, inputStrategySwitcher, soundInteractListener, buttonStyle);
 		this.label = label;
 		label.setTouchable(Touchable.disabled);
 		add(label);

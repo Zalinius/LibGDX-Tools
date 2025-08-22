@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -14,7 +15,6 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.github.tommyettinger.textra.Styles.CheckBoxStyle;
-import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 public class UniversalCheckbox extends UniversalTextButton {
 
@@ -24,7 +24,7 @@ public class UniversalCheckbox extends UniversalTextButton {
 	private boolean checked;
 	private final float widthOverHeight;
 
-	public UniversalCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, TextButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
+	public UniversalCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
 		super(GameInfo.getUserInterfaceFactory().getLabel(uncheckedLabel), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
 		this.uncheckedLabel = () -> " " + uncheckedLabel.get();
 		this.checkedLabel = () -> " " + checkedLabel.get();

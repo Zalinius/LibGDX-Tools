@@ -3,24 +3,24 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
-import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 public abstract class UniversalDoodad extends Table implements VisibleInputConsumer {
 
-	private TextButtonStyle style;
+	private ButtonStyle style;
 	private boolean disabled;
 	private final boolean isAClickableDoodad;
 	private final ClickListener clickListener;
 
-	protected UniversalDoodad(TextButtonStyle textButtonStyle, boolean isAClickableDoodad) {
-		setStyle(textButtonStyle);
-		setSize(textButtonStyle.up.getMinWidth(), textButtonStyle.up.getMinHeight());
+	protected UniversalDoodad(ButtonStyle buttonStyle, boolean isAClickableDoodad) {
+		setStyle(buttonStyle);
+		setSize(buttonStyle.up.getMinWidth(), buttonStyle.up.getMinHeight());
 		this.isAClickableDoodad = isAClickableDoodad;
 		setDisabled(false);
 		clickListener = new ClickListener() {
@@ -37,12 +37,12 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		return this;
 	}
 
-	public TextButtonStyle getStyle() {
+	public ButtonStyle getStyle() {
 		return style;
 	}
 
-	public void setStyle(TextButtonStyle newStyle) {
-		style = newStyle;
+	public void setStyle(ButtonStyle buttonStyle) {
+		style = buttonStyle;
 		setBackground(style.down);
 	}
 

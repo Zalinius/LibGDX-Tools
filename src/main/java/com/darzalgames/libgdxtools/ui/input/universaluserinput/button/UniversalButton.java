@@ -3,12 +3,12 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.utils.Pools;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalDoodad;
-import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 /**
  * Our very own custom button class that works with keyboard input!
@@ -22,8 +22,8 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Runnable soundInteractListener;
 
-	protected UniversalButton(Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle textButtonStyle) {
-		super(textButtonStyle, true);
+	protected UniversalButton(Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle buttonStyle) {
+		super(buttonStyle, true);
 		this.buttonRunnable = buttonRunnable;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.soundInteractListener = soundInteractListener;

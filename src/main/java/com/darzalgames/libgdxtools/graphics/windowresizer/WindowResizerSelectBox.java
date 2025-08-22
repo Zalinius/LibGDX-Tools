@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
@@ -20,7 +21,6 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
-import com.github.tommyettinger.textra.Styles.TextButtonStyle;
 
 public class WindowResizerSelectBox extends UniversalSelectBox implements WindowResizerButton {
 
@@ -30,7 +30,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		this.windowResizer = windowResizer;
 	}
 
-	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, TextButtonStyle style) {
+	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle style) {
 		super(textKey, inputStrategySwitcher, soundInteractListener, style);
 
 		setEntryButtons(getEntries());

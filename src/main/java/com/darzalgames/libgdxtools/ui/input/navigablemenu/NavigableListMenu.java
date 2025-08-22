@@ -91,11 +91,6 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	}
 
 	@Override
-	public float getPrefHeight() {
-		return menu.getPrefHeight();
-	}
-
-	@Override
 	public void focusCurrent() {
 		menu.focusCurrent();
 	}
@@ -129,25 +124,5 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	public void setDisabled(boolean disabled) {
 		menu.setDisabled(disabled);
 	}
-
-	/**
-	 * This method will try to find the entry corresponding to the string provided,
-	 * if it fails then we default to the first entry.
-	 * @param entry The string of the entry that you want to go to
-	 */
-	//	public void goTo(String entry) {
-	//		int nonInteractablesToIgnore = 0;
-	//		for (int i = 0; i < menu.allEntries.size(); i++) {
-	//			VisibleInputConsumer thisEntry = menu.allEntries.get(i);
-	//			if (thisEntry.doesTextMatch(entry)) {
-	//				menu.goTo(i - nonInteractablesToIgnore);
-	//				return;
-	//			}
-	//			else if (thisEntry.isDisabled() || VisibleInputConsumer.isSpacer(thisEntry)) {
-	//				nonInteractablesToIgnore++;
-	//			}
-	//		}
-	//		menu.goTo(0);
-	//	}
 
 }

@@ -214,7 +214,6 @@ public abstract class OptionsMenu extends PopUpMenu {
 
 		@Override
 		protected void setUpDesiredSize() {
-			menu.setSpacing(OptionsMenu.this.menu.getSpacing());
 			UserInterfaceSizer.sizeToPercentage(this, 0.5f);
 			if (getActions().isEmpty()) {
 				UserInterfaceSizer.makeActorCentered(this);

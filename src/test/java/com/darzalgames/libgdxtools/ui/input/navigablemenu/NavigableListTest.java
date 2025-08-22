@@ -461,25 +461,6 @@ class NavigableListTest {
 	}
 
 	@Test
-	void consumeKeyInput_accept_triggersExtraKeyListeners() {
-		AtomicBoolean listenerNotifiedPressed = new AtomicBoolean();
-		listenerNotifiedPressed.set(false);
-		List<VisibleInputConsumer> entries = new ArrayList<>();
-		entries.add(makeTestButton());
-		NavigableList navigableList = new NavigableList(true, entries);
-		navigableList.selectDefault();
-		navigableList.addExtraListener(input -> {
-			if (input.equals(Input.ACCEPT)) {
-				listenerNotifiedPressed.set(true);
-			}
-		});
-
-		navigableList.consumeKeyInput(Input.ACCEPT);
-
-		assertTrue(listenerNotifiedPressed.get());
-	}
-
-	@Test
 	void consumeKeyInput_backWithoutFinalButton_pressesNothing() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		VisibleInputConsumer buttonOne = makeTestButton();

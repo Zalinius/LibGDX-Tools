@@ -117,6 +117,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	public void resizeUI() {
 		invalidate();
 		pack();
+		invalidateHierarchy();
 	}
 	@Override
 	public void gainFocus() {

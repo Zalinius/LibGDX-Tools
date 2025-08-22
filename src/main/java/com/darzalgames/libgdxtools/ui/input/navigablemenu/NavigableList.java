@@ -1,14 +1,15 @@
 package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
@@ -30,11 +31,9 @@ public class NavigableList implements VisibleInputConsumer {
 	private boolean pressButtonOnEntryChanged;
 	private Alignment entryAlignment;
 	private Alignment tableAlignment;
-	private int spacing = 2;
+	private Supplier<Float> spacing;
 	private Runnable refreshPageRunnable;
 	private boolean menuLoops = true;
-
-	private final List<Consumer<Input>> extraKeyListeners;
 
 	NavigableList(boolean isVertical, final List<VisibleInputConsumer> entries) {
 		backCode = (isVertical ? Input.UP : Input.LEFT);
@@ -46,7 +45,11 @@ public class NavigableList implements VisibleInputConsumer {
 		entryAlignment = Alignment.CENTER;
 		tableAlignment = Alignment.TOP_LEFT;
 
-		extraKeyListeners = new ArrayList<>();
+		if (isVertical) {
+			spacing = () -> UserInterfaceSizer.getHeightPercentage(0.0075f);
+		} else {
+			spacing = () -> UserInterfaceSizer.getWidthPercentage(0.0075f);
+		}
 
 		setRefreshPageRunnable(this::defaultRefreshPage);
 	}
@@ -83,17 +86,6 @@ public class NavigableList implements VisibleInputConsumer {
 		}
 	}
 
-	public boolean hasFinalButton() {
-		return finalButton != null;
-	}
-
-	public float getFinalButtonWidth() {
-		if (hasFinalButton()) {
-			return finalButton.getView().getWidth();
-		}
-		return -1;
-	}
-
 	@Override
 	public Table getView() {
 		if (table == null) {
@@ -110,6 +102,11 @@ public class NavigableList implements VisibleInputConsumer {
 	public void resizeUI() {
 		allEntries.forEach(VisibleInputConsumer::resizeUI);
 		if (table != null) {
+			allEntries.forEach(entry -> {
+				Cell<Actor> cell = table.getCell(entry.getView());
+				cell.spaceTop(spacing.get());
+				cell.spaceBottom(spacing.get());
+			});
 			table.invalidate();
 			table.layout();
 		}
@@ -121,7 +118,7 @@ public class NavigableList implements VisibleInputConsumer {
 		}
 		table.clearChildren();
 		table.clear();
-		table.defaults().expandX().spaceTop(spacing).spaceBottom(spacing).align(entryAlignment.getAlignment());
+		table.defaults().expandX().spaceTop(spacing.get()).spaceBottom(spacing.get()).align(entryAlignment.getAlignment());
 
 		if (!isVertical()) {
 			table.defaults().expandY();
@@ -202,8 +199,6 @@ public class NavigableList implements VisibleInputConsumer {
 		else if (currentButton != null) {
 			currentButton.consumeKeyInput(input);
 		}
-
-		extraKeyListeners.forEach(listener -> listener.accept(input));
 	}
 
 	public void returnToFirst() {
@@ -269,15 +264,11 @@ public class NavigableList implements VisibleInputConsumer {
 	}
 
 	/**
-	 * Adjust the vertical spacing between entries as needed (default is 2)
+	 * Adjust the vertical spacing between entries as needed default is 0.05% of width or height depending on if the menu is horizontal or vertical
 	 * @param spacing new spacing
 	 */
-	public void setSpacing(int spacing) {
+	public void setSpacing(Supplier<Float> spacing) {
 		this.spacing = spacing;
-	}
-
-	public void addExtraListener(Consumer<Input> listener) {
-		extraKeyListeners.add(listener);
 	}
 
 	@Override
@@ -286,19 +277,6 @@ public class NavigableList implements VisibleInputConsumer {
 		findCurrentButton();
 		if (currentButton != null) {
 			currentButton.setFocused(true);
-		}
-	}
-
-	public float getPrefHeight() {
-		if(isVertical()) {
-			float total = spacing;
-			for (VisibleInputConsumer entry : allEntries) {
-				total += entry.getMinHeight();
-				total += spacing;
-			}
-			return total;
-		} else {
-			return allEntries.get(0).getMinHeight();
 		}
 	}
 
@@ -312,16 +290,6 @@ public class NavigableList implements VisibleInputConsumer {
 
 	public boolean isVertical() {
 		return isVertical;
-	}
-
-	public int getSpacing() {
-		return spacing;
-	}
-
-	@Override
-	public boolean isDisabled() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -343,21 +311,25 @@ public class NavigableList implements VisibleInputConsumer {
 		refreshPageRunnable.run();
 	}
 
+
 	@Override
-	public float getMinHeight() {
-		return getPrefHeight();
+	public boolean isDisabled() {
+		return interactableEntries.stream().allMatch(VisibleInputConsumer::isDisabled);
 	}
 
 	@Override
 	public void setDisabled(boolean disabled) {
-		// TODO Auto-generated method stub
-
+		interactableEntries.forEach(entry -> entry.setDisabled(disabled));
 	}
 
 	@Override
 	public boolean isOver() {
-		// TODO Auto-generated method stub
-		return false;
+		return interactableEntries.stream().anyMatch(VisibleInputConsumer::isOver);
+	}
+
+	@Override
+	public float getMinHeight() {
+		return table.getMinHeight();
 	}
 
 }

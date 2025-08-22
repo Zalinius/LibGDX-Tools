@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.darzalgames.libgdxtools.ui.Alignment;
@@ -41,6 +42,11 @@ public class UniversalTextButton extends UniversalButton {
 
 	public String getText() {
 		return label.storedText;
+	}
+
+	@Override
+	public void colorOtherComponentsBasedOnFocus(Color color) {
+		label.setColor(color);
 	}
 
 }

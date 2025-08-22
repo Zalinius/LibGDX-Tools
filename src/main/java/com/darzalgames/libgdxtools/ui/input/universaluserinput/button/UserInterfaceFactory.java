@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -99,6 +100,7 @@ public abstract class UserInterfaceFactory {
 		UniversalButton spacer = new UniversalButton(Runnables.nullRunnable(), inputStrategySwitcher, soundInteractRunnable, skinManager.getBlankButtonStyle()) {
 			@Override public void setAlignment(Alignment alignment) { }
 			@Override public boolean isBlank() { return true; }
+			@Override public void colorOtherComponentsBasedOnFocus(Color color)  { /* not needed */ }
 		};
 		spacer.setName("spacer");
 		spacer.setDisabled(true);
@@ -114,6 +116,10 @@ public abstract class UserInterfaceFactory {
 			@Override
 			public void setAlignment(Alignment alignment) {
 				getCell(image).align(alignment.getAlignment());
+			}
+			@Override
+			public void colorOtherComponentsBasedOnFocus(Color color) {
+				image.setColor(color);
 			}
 		};
 		button.add(image);
@@ -181,6 +187,7 @@ public abstract class UserInterfaceFactory {
 			@Override public String toString() { return "options button"; }
 			@Override public boolean isBlank() { return false; }
 			@Override public void setAlignment(Alignment alignment) { /* nothing? */ }
+			@Override public void colorOtherComponentsBasedOnFocus(Color color)  { /* not needed */ }
 		};
 	}
 

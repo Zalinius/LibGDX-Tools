@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 
 public abstract class UniversalDoodad extends Table implements VisibleInputConsumer {
 
@@ -112,6 +114,10 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 		setBackground(getBackgroundDrawable());
 
+
+		Color labelColor = getColorBasedOnFocus();
+		colorOtherComponentsBasedOnFocus(labelColor);
+
 		float offsetX = 0;
 		float offsetY = 0;
 		if (isPressed() && !isDisabled()) {
@@ -142,8 +148,26 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		}
 	}
 
+
+	public abstract void colorOtherComponentsBasedOnFocus(Color color);
+
 	private boolean isPressed() {
 		return clickListener.isVisualPressed();
+	}
+
+	private Color getColorBasedOnFocus() {
+		Color textColor = SkinManager.getOutOfFocusColor();
+		if (isDisabled()) {
+			textColor = SkinManager.getDisabledColor();
+		}
+		if (isPressed()) {
+			textColor = SkinManager.getDarkColor();
+		}
+		boolean focused = hasKeyboardFocus();
+		if (focused || isOver()) {
+			textColor = SkinManager.getFocusedColor();
+		}
+		return textColor;
 	}
 
 }

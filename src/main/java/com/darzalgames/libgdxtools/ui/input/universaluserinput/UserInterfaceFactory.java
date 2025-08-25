@@ -139,7 +139,8 @@ public abstract class UserInterfaceFactory {
 		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, soundInteractRunnable, style);
 		addGameSpecificHighlightListener(button);
 		if (inputForGlyph != Input.NONE) {
-			button.addActor(getControlsGlyph(inputForGlyph));
+			ControlsGlyph glyph = getControlsGlyphForButton(inputForGlyph, button);
+			button.addActor(glyph);
 		}
 		return button;
 	}
@@ -191,9 +192,9 @@ public abstract class UserInterfaceFactory {
 			@Override public void setAlignment(Alignment alignment) { /* nothing? */ }
 			@Override public void colorOtherComponentsBasedOnFocus(Color color)  { /* not needed */ }
 		};
-		ControlsGlyph glyph = getControlsGlyph(Input.PAUSE);
-		button.addActor(glyph);
+		ControlsGlyph glyph = getControlsGlyphForButton(Input.PAUSE, button);
 		glyph.setAlignment(Alignment.BOTTOM_RIGHT);
+		button.addActor(glyph);
 		return button;
 	}
 
@@ -239,17 +240,17 @@ public abstract class UserInterfaceFactory {
 		return button;
 	}
 
+	public ControlsGlyph getControlsGlyphForButton(Input input, UniversalButton button) {
+		return getControlsGlyph(input, () -> !button.isDisabled());
+	}
 
-
-	public ControlsGlyph getControlsGlyph(Input input) {
+	public ControlsGlyph getControlsGlyph(Input input, Supplier<Boolean> parentIsEnabled) {
 		Texture texture = sampleGlyphSupplierForSizeReference.getGlyphForInput(input);
-		if (texture != null) {
-			return new ControlsGlyph(input, inputStrategySwitcher, texture);
-		} else {
+		if (texture == null) {
 			Gdx.app.error("GlyphFactory", "Missing glyph setup for: " + input);
-			Texture blankPlaceholder = new Texture(10, 10, Format.RGBA8888);
-			return new ControlsGlyph(input, inputStrategySwitcher, blankPlaceholder);
+			texture = new Texture(30, 30, Format.RGBA8888);
 		}
+		return new ControlsGlyph(input, inputStrategySwitcher, texture, parentIsEnabled);
 	}
 
 	protected InputStrategySwitcher getInputStrategySwitcher() {

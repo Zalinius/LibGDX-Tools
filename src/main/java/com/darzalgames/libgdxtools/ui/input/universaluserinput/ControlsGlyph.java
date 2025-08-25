@@ -1,12 +1,13 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
+import java.util.function.Supplier;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.darzalgames.libgdxtools.maingame.StageBest;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
@@ -18,8 +19,10 @@ public class ControlsGlyph extends Image implements InputStrategyObserver {
 
 	private Input input;
 	private Alignment alignment;
+	private final Supplier<Boolean> parentIsEnabled;
 
-	public ControlsGlyph(Input input, InputStrategySwitcher inputStrategySwitcher, Texture referenceGlyphForSize) {
+	public ControlsGlyph(Input input, InputStrategySwitcher inputStrategySwitcher, Texture referenceGlyphForSize, Supplier<Boolean> parentIsEnabled) {
+		this.parentIsEnabled = parentIsEnabled;
 		setInput(input);
 		inputStrategySwitcher.register(this);
 		setSize(referenceGlyphForSize.getWidth(), referenceGlyphForSize.getHeight());
@@ -65,7 +68,7 @@ public class ControlsGlyph extends Image implements InputStrategyObserver {
 			};
 			moveBy(xOffset, yOffset);
 
-			setVisible(StageBest.isInTouchableBranch(getParent()));
+			setVisible(parentIsEnabled.get());
 		}
 	}
 
@@ -76,7 +79,7 @@ public class ControlsGlyph extends Image implements InputStrategyObserver {
 	}
 
 	private void setVisibilityBasedOnCurrentInputStrategy(InputStrategySwitcher inputStrategySwitcher) {
-		setVisible(!inputStrategySwitcher.isMouseMode());
+		setVisible(!inputStrategySwitcher.isMouseMode() && parentIsEnabled.get());
 	}
 
 	@Override

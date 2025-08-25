@@ -18,7 +18,7 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 	private final Runnable soundInteractListener;
 
 	protected UniversalButton(Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle buttonStyle) {
-		super(buttonStyle, true, inputStrategySwitcher);
+		super(buttonStyle, inputStrategySwitcher);
 		this.buttonRunnable = buttonRunnable;
 		this.soundInteractListener = soundInteractListener;
 	}

@@ -23,7 +23,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	private final ClickListener clickListener;
 	private final InputStrategySwitcher inputStrategySwitcher;
 
-	protected UniversalDoodad(ButtonStyle buttonStyle, boolean isAClickableDoodad, InputStrategySwitcher inputStrategySwitcher) {
+	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		setStyle(buttonStyle);
 		setSize(buttonStyle.up.getMinWidth(), buttonStyle.up.getMinHeight());
@@ -34,9 +34,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 				justPressed();
 			}
 		};
-		if (isAClickableDoodad) {
-			addListener(clickListener);
-		}
+		addListener(clickListener);
 	}
 
 	@Override

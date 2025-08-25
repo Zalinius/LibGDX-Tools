@@ -178,7 +178,9 @@ public abstract class UserInterfaceFactory {
 	 * @return A quit button, with a default English text label if not otherwise to find
 	 */
 	public UniversalTextButton getQuitGameButton(Supplier<String> buttonText) {
-		return makeTextButton(buttonText, quitGameRunnable);
+		UniversalTextButton button = makeTextButton(buttonText, quitGameRunnable);
+		button.setColor(Color.SALMON);
+		return button;
 	}
 
 	/**
@@ -201,7 +203,9 @@ public abstract class UserInterfaceFactory {
 
 	public UniversalTextButton getQuitGameButtonWithWarning() {
 		Runnable quitWithConfirmation = () -> new ConfirmationMenu("menu_warning", QUIT_GAME_KEY, quitGameRunnable::run, MultipleStage.OPTIONS_STAGE_NAME);
-		return makeTextButton(getQuitButtonString(), quitWithConfirmation);
+		UniversalTextButton button = makeTextButton(getQuitButtonString(), quitWithConfirmation);
+		button.setColor(Color.SALMON);
+		return button;
 	}
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {

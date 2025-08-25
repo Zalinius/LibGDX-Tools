@@ -1,11 +1,13 @@
 package com.darzalgames.libgdxtools.maingame;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.backends.lwjgl3.*;
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -29,6 +31,7 @@ import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
+import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
@@ -63,7 +66,14 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	@Override
 	protected UserInterfaceFactory initializeAssetsAndUserInterfaceFactory() {
-		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, Runnables.nullRunnable()) {
+		FallbackGamepadInputHandler fallbackRef = new FallbackGamepadInputHandler(inputStrategySwitcher, null) {
+			@Override public void setActionSet(Supplier<String> newActionSetKeySupplier) { }
+			@Override protected List<Input> getTrackedInputs() { return List.of(); }
+			@Override protected Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor) { return null; }
+			@Override protected Map<Input, AssetDescriptor<Texture>> makeGlyphMappings() { return null; }
+			@Override protected Map<Function<Controller, Integer>, Input> makeButtonMappings() { return null; }
+		};
+		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, Runnables.nullRunnable(), fallbackRef) {
 			@Override protected void addGameSpecificHighlightListener(Group button) { /*do nothing*/ }
 		};
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));

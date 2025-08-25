@@ -13,6 +13,7 @@ import com.darzalgames.libgdxtools.maingame.GetOnStage;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
+import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
@@ -176,7 +177,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	}
 
 	private UniversalButton makeBackButton() {
-		return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
+		return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false), Input.BACK);
 	}
 
 	@Override

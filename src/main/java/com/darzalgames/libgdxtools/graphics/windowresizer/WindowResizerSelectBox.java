@@ -84,7 +84,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		private WindowRevertCountdownConfirmationMenu() {
 			super("screen_mode_accept",
 					"accept_control",
-					"revert_message",
+					"revert_message", // TODO give this button the back glyph
 					Runnables.nullRunnable(),
 					MultipleStage.OPTIONS_STAGE_NAME);
 		}

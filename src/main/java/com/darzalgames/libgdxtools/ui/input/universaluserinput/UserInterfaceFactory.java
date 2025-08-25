@@ -5,7 +5,10 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -16,6 +19,8 @@ import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
+import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager.SelectBoxButtonInfo;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
@@ -31,12 +36,21 @@ public abstract class UserInterfaceFactory {
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Runnable soundInteractRunnable;
 
+
+	private final FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference;
+
 	private static final String QUIT_GAME_KEY = "quit_game";
 
-	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractRunnable) {
+	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractRunnable, FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference) {
 		this.skinManager = skinManager;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.soundInteractRunnable = soundInteractRunnable;
+
+		this.sampleGlyphSupplierForSizeReference = sampleGlyphSupplierForSizeReference;
+		/* We use an un-connected copy of the fallback gamepad system to get glyphs as a size reference: the Steam glyphs are higher-res
+		 * and since I work with the fallback system while designing the UI, this ensures that the Steam glyphs layout nicely / the same. */
+		Controllers.removeListener(sampleGlyphSupplierForSizeReference);
+
 		quitGameRunnable = Gdx.app::exit;
 	}
 
@@ -114,13 +128,19 @@ public abstract class UserInterfaceFactory {
 	}
 
 	public UniversalTextButton makeTextButton(Supplier<String> textSupplier, final Runnable runnable) {
-		return makeTextButtonWithStyle(textSupplier, runnable, skinManager.getDefaultButtonStyle(), skinManager.getDefaultLableStyle());
+		return makeTextButton(textSupplier, runnable, Input.NONE);
+	}
+	public UniversalTextButton makeTextButton(Supplier<String> textSupplier, final Runnable runnable, Input inputForGlyph) {
+		return makeTextButtonWithStyle(textSupplier, runnable, skinManager.getDefaultButtonStyle(), skinManager.getDefaultLableStyle(), inputForGlyph);
 	}
 
-	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, ButtonStyle style, LabelStyle labelStyle) {
+	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, ButtonStyle style, LabelStyle labelStyle, Input inputForGlyph) {
 		UniversalLabel label = new UniversalLabel(textSupplier, labelStyle);
 		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, soundInteractRunnable, style);
 		addGameSpecificHighlightListener(button);
+		if (inputForGlyph != Input.NONE) {
+			button.addActor(getControlsGlyph(inputForGlyph));
+		}
 		return button;
 	}
 
@@ -165,12 +185,16 @@ public abstract class UserInterfaceFactory {
 	}
 
 	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility) {
-		return new UniversalButton(() -> toggleOptionsScreenVisibility.accept(true), inputStrategySwitcher, soundInteractRunnable, skinManager.getSettingsButtonStyle()) {
+		UniversalButton button = new UniversalButton(() -> toggleOptionsScreenVisibility.accept(true), inputStrategySwitcher, soundInteractRunnable, skinManager.getSettingsButtonStyle()) {
 			@Override public String toString() { return "options button"; }
 			@Override public boolean isBlank() { return false; }
 			@Override public void setAlignment(Alignment alignment) { /* nothing? */ }
 			@Override public void colorOtherComponentsBasedOnFocus(Color color)  { /* not needed */ }
 		};
+		ControlsGlyph glyph = getControlsGlyph(Input.PAUSE);
+		button.addActor(glyph);
+		glyph.setAlignment(Alignment.BOTTOM_RIGHT);
+		return button;
 	}
 
 	/**
@@ -178,7 +202,7 @@ public abstract class UserInterfaceFactory {
 	 * @return A quit button, with a default English text label if not otherwise to find
 	 */
 	public UniversalTextButton getQuitGameButton(Supplier<String> buttonText) {
-		UniversalTextButton button = makeTextButton(buttonText, quitGameRunnable);
+		UniversalTextButton button = makeTextButton(buttonText, quitGameRunnable, Input.NONE);
 		button.setColor(Color.SALMON);
 		return button;
 	}
@@ -203,7 +227,7 @@ public abstract class UserInterfaceFactory {
 
 	public UniversalTextButton getQuitGameButtonWithWarning() {
 		Runnable quitWithConfirmation = () -> new ConfirmationMenu("menu_warning", QUIT_GAME_KEY, quitGameRunnable::run, MultipleStage.OPTIONS_STAGE_NAME);
-		UniversalTextButton button = makeTextButton(getQuitButtonString(), quitWithConfirmation);
+		UniversalTextButton button = makeTextButton(getQuitButtonString(), quitWithConfirmation, Input.NONE);
 		button.setColor(Color.SALMON);
 		return button;
 	}
@@ -213,6 +237,19 @@ public abstract class UserInterfaceFactory {
 		WindowResizerSelectBox button = new WindowResizerSelectBox(textKey, inputStrategySwitcher, soundInteractRunnable, skinManager.getDefaultButtonStyle());
 		addGameSpecificHighlightListener(button);
 		return button;
+	}
+
+
+
+	public ControlsGlyph getControlsGlyph(Input input) {
+		Texture texture = sampleGlyphSupplierForSizeReference.getGlyphForInput(input);
+		if (texture != null) {
+			return new ControlsGlyph(input, inputStrategySwitcher, texture);
+		} else {
+			Gdx.app.error("GlyphFactory", "Missing glyph setup for: " + input);
+			Texture blankPlaceholder = new Texture(10, 10, Format.RGBA8888);
+			return new ControlsGlyph(input, inputStrategySwitcher, blankPlaceholder);
+		}
 	}
 
 	protected InputStrategySwitcher getInputStrategySwitcher() {

@@ -5,7 +5,7 @@ import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
 
 public interface SharesGameInformation {
 

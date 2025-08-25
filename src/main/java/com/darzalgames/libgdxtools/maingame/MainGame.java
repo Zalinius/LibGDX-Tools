@@ -26,7 +26,7 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSetup;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.screen.Fader;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 

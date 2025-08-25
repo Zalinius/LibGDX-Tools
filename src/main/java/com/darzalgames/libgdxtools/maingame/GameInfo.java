@@ -6,7 +6,7 @@ import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
 
 /**
  * Allows static access to the globally useful variables/managers from {@link MainGame}

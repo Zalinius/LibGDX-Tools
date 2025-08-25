@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;

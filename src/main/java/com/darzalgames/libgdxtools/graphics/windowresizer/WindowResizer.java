@@ -5,8 +5,8 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalSelectBox;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalSelectBox;
 
 public abstract class WindowResizer {
 

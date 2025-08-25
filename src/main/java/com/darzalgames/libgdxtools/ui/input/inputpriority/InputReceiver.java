@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 
 /**
  * Receives and processes input from the various handlers, manages special inputs like ESC to pause and toggling full screen with F11.

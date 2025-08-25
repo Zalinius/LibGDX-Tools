@@ -9,8 +9,8 @@ import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalLabel;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 
 /**
  * A pop up that offers two choices, and can respond differently based on which choice is made.

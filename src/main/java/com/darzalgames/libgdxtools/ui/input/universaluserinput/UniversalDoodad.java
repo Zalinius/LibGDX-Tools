@@ -20,7 +20,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	private ButtonStyle style;
 	private boolean disabled;
-	private final boolean isAClickableDoodad;
 	private final ClickListener clickListener;
 	private final InputStrategySwitcher inputStrategySwitcher;
 
@@ -28,7 +27,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		setStyle(buttonStyle);
 		setSize(buttonStyle.up.getMinWidth(), buttonStyle.up.getMinHeight());
-		this.isAClickableDoodad = isAClickableDoodad;
 		setDisabled(false);
 		clickListener = new ClickListener() {
 			@Override
@@ -36,7 +34,9 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 				justPressed();
 			}
 		};
-		addListener(clickListener);
+		if (isAClickableDoodad) {
+			addListener(clickListener);
+		}
 	}
 
 	@Override
@@ -66,10 +66,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	@Override
 	public boolean isOver() {
 		return clickListener.isOver();
-	}
-
-	protected boolean isAClickableDoodad() {
-		return isAClickableDoodad;
 	}
 
 	protected void justPressed() {

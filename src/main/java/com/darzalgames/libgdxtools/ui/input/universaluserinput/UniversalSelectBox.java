@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
 import java.util.List;
 import java.util.Optional;

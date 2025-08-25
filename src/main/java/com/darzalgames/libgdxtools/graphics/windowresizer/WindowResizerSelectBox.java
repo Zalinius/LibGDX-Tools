@@ -20,7 +20,7 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.*;
 
 public class WindowResizerSelectBox extends UniversalSelectBox implements WindowResizerButton {
 

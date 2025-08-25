@@ -1,11 +1,10 @@
-package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalDoodad;
 
 /**
  * Our very own custom button class that works with keyboard input!
@@ -27,7 +26,7 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 	@Override
 	protected void justPressed() {
 		boolean isTouchable = getTouchable() != Touchable.disabled;
-		if (isAClickableDoodad() && !isDisabled() && isTouchable) {
+		if (!isDisabled() && isTouchable) {
 			buttonRunnable.run();
 			setFocused(false);
 			requestInteractSound();

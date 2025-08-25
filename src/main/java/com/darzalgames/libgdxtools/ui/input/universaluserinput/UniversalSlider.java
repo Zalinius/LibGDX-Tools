@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
 import java.util.function.Consumer;
 
@@ -68,8 +68,8 @@ public class UniversalSlider extends UniversalTextButton {
 		} else {
 			inputListener.exit(null, 0, 0, -1, slider);
 		}
-
 	}
+
 	public void setSliderStyle(SliderStyle sliderStyle) {
 		slider.setStyle(sliderStyle);
 	}
@@ -90,24 +90,14 @@ public class UniversalSlider extends UniversalTextButton {
 	public void setSliderPosition(float newPosition, boolean withSoundEffect) {
 		previousValue = slider.getValue();
 		setDoesSoundOnInteract(withSoundEffect);
+		slider.setProgrammaticChangeEvents(false);
 		slider.setValue(newPosition);
+		slider.setProgrammaticChangeEvents(true);
 		setDoesSoundOnInteract(true);
 	}
 
-	//	@Override
-	//	public boolean isBlank() {
-	//		return label.isBlank();
-	//	}
-	//
-	//	@Override
-	//	public void setAlignment(Alignment alignment) {
-	//		label.setAlignment(alignment);
-	//		// slider alignment isn't a thing?
-	//	}
-
 	@Override
 	public void resizeUI() {
-		//		label.resizeUI();
 		super.resizeUI();
 		getCell(label).padRight(calculatePadding());
 	}

@@ -20,7 +20,6 @@ import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
-import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
@@ -307,16 +306,10 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 
-
-	@Override
-	protected WindowResizerButton makeWindowResizerButton() {
-		return GameInfo.getUserInterfaceFactory().getWindowModeTextSelectBox();
-	}
-
 	private class TestOptionsMenu extends OptionsMenu {
 
-		protected TestOptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox) {
-			super(makeWindowModeSelectBox, 0);
+		protected TestOptionsMenu() {
+			super(0, windowResizer);
 			optionsButton = GameInfo.getUserInterfaceFactory().getOptionsButton(this::toggleScreenVisibility);
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 		}
@@ -377,7 +370,7 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	@Override
 	protected OptionsMenu makeOptionsMenu() {
-		return new TestOptionsMenu(windowResizer::getModeSelectBox);
+		return new TestOptionsMenu();
 	}
 
 	@Override

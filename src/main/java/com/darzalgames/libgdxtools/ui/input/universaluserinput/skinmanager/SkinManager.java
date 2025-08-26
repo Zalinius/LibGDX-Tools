@@ -40,7 +40,7 @@ public class SkinManager {
 	protected static final String SETTINGS_BUTTON = "settingsButtonStyle";
 
 	// Colors used for styling buttons and labels based on focus
-	protected static final Color DARK_COLOR = Color.GRAY;
+	protected static final Color DARK_COLOR = new Color(0.65f, 0.65f, 0.65f, 1);
 	protected static final Color FOCUSED_COLOR = Color.WHITE;
 	protected static final Color OUT_OF_FOCUS_COLOR = new Color(0.55f, 0.55f, 0.55f, 1);
 	protected static final Color DISABLED_COLOR = Color.DARK_GRAY;

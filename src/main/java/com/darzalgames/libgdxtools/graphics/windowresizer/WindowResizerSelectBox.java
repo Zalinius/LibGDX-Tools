@@ -20,20 +20,22 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.*;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalSelectBox;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalTextButton;
 
-public class WindowResizerSelectBox extends UniversalSelectBox implements WindowResizerButton {
+public class WindowResizerSelectBox extends UniversalSelectBox {
 
 	private WindowResizer windowResizer;
-	@Override
-	public void setWindowResizer(WindowResizer windowResizer) {
-		this.windowResizer = windowResizer;
-	}
 
 	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle style) {
 		super(textKey, inputStrategySwitcher, soundInteractListener, style);
 
 		setEntryButtons(getEntries());
+	}
+
+	public void setWindowResizer(WindowResizer windowResizer) {
+		this.windowResizer = windowResizer;
 	}
 
 	private List<UniversalTextButton> getEntries() {
@@ -54,12 +56,10 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		return buttonStream.toList();
 	}
 
-	@Override
 	public void setSelectedScreenMode(ScreenMode screenMode) {
 		setSelected(translateWindowModeOption(screenMode));
 	}
 
-	@Override
 	public ScreenMode getModeFromPreference(String screenMode) {
 		ScreenMode preferredMode = ScreenMode.BORDERLESS;
 		for (int i = 0; i < ScreenMode.values().length; i++) {
@@ -72,7 +72,6 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		return preferredMode;
 	}
 
-	@Override
 	public ConfirmationMenu getRevertMenu() {
 		return new WindowRevertCountdownConfirmationMenu();
 	}
@@ -131,11 +130,6 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 			windowResizer.revertMode();
 		}
 
-	}
-
-	@Override
-	public UniversalButton getWindowResizerButton() {
-		return this;
 	}
 
 	private static String translateWindowModeOption(ScreenMode screenMode) {

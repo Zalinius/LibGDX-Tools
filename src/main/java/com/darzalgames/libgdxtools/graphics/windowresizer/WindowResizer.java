@@ -5,8 +5,6 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalSelectBox;
 
 public abstract class WindowResizer {
 
@@ -26,34 +24,23 @@ public abstract class WindowResizer {
 	protected abstract void switchToFullScreen();
 
 	private InputStrategySwitcher inputStrategySwitcher;
-	private WindowResizerButton windowResizerButton;
+	private WindowResizerSelectBox windowResizerButton;
 
 	/**
 	 * Initialize the WindowResizer, setting the window to the preferred mode based on the user's history
-	 * We do this in initialize() rather than a constructor because this object is created at the same time as the entire game,
-	 * and so LibGDX isn't ready to do any resizing yet
 	 * @param inputStrategySwitcher
-	 * @param windowResizerButton
 	 */
-	public void initialize(InputStrategySwitcher inputStrategySwitcher, WindowResizerButton windowResizerButton) {
+	public void initialize(InputStrategySwitcher inputStrategySwitcher) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
+	}
+
+	public void setWindowResizerButton(WindowResizerSelectBox windowResizerButton) {
 		this.windowResizerButton = windowResizerButton;
 		windowResizerButton.setWindowResizer(this);
-		getModeSelectBox();
 		String preferredModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
 		setMode(windowResizerButton.getModeFromPreference(preferredModeString), false);
 		previousScreenMode = currentScreenMode;
-	}
-
-	/**
-	 * @return A {@link UniversalButton} which, when pressed, opens a {@link UniversalSelectBox select box} for changing the window mode
-	 */
-	public UniversalButton getModeSelectBox() {
-		UniversalButton button = windowResizerButton.getWindowResizerButton();
-		if (currentScreenMode != null) {
-			windowResizerButton.setSelectedScreenMode(currentScreenMode);
-		}
-		return button;
+		windowResizerButton.setSelectedScreenMode(currentScreenMode);
 	}
 
 	/**

@@ -315,7 +315,8 @@ public class NavigableList implements VisibleInputConsumer {
 
 	@Override
 	public void setDisabled(boolean disabled) {
-		interactableEntries.forEach(entry -> entry.setDisabled(disabled));
+		allEntries.forEach(entry -> entry.setDisabled(disabled));
+		filterInteractableEntities();
 	}
 
 	@Override

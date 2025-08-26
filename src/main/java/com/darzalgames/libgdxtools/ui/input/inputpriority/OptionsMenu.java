@@ -1,12 +1,13 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.GetOnStage;
@@ -27,7 +28,6 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 public abstract class OptionsMenu extends PopUpMenu {
 
 	protected UniversalButton optionsButton;
-	private final Supplier<UniversalButton> makeWindowModeSelectBox;
 
 	private final String platformName;
 
@@ -68,10 +68,13 @@ public abstract class OptionsMenu extends PopUpMenu {
 	 */
 	protected abstract PopUp makeControlsPopUp();
 
-	protected OptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox, int bottomPadding) {
+	private final WindowResizerSelectBox windowModeSelectBox;
+
+	protected OptionsMenu(int bottomPadding, WindowResizer windowResizer) {
 		super(true);
-		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
 		platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
+		windowModeSelectBox = GameInfo.getUserInterfaceFactory().getWindowModeTextSelectBox();
+		windowResizer.setWindowResizerButton(windowModeSelectBox);
 		defaults().padBottom(bottomPadding);
 	}
 
@@ -101,6 +104,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	@Override
 	public void gainFocus() {
 		setUpDesiredSize();
+		windowModeSelectBox.setDisabled(false);
 		super.gainFocus();
 	}
 
@@ -108,6 +112,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	public void regainFocus() {
 		focusCurrent();
 		optionsButton.setTouchable(Touchable.enabled);
+		super.regainFocus();
 	}
 
 	@Override
@@ -129,7 +134,6 @@ public abstract class OptionsMenu extends PopUpMenu {
 		menuButtons.add(controlsButton);
 
 		// Window mode select box
-		UniversalButton windowModeSelectBox = makeWindowModeSelectBox.get();
 		menuButtons.add(windowModeSelectBox);
 
 		UniversalButton optionalButtonAboveQuit = makeButtonAboveQuitButton();

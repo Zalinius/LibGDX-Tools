@@ -22,7 +22,6 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	private final OptionsMenu optionsMenu;
 	private final DarkScreen darkScreen;
 
-	private final InputStrategySwitcher inputStrategySwitcher;
 	private final List<InputPriorityObserver> inputPriorityObservers;
 	private final Map<String, StageLikeRenderable> stageLikeRenderables;
 
@@ -40,8 +39,6 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		darkScreen = new DarkScreen(() -> sendInputToTop(Input.BACK));
 
 		InputPriority.setInputPriorityStack(this);
-
-		this.inputStrategySwitcher = inputStrategySwitcher;
 		inputStrategySwitcher.register(this);
 	}
 
@@ -115,13 +112,15 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		} else {
 			multiStack.getTop().regainFocus();
 		}
+		multiStack.getTop().setDisabled(false);
 		multiStack.getTop().setTouchable(Touchable.enabled);
-			multiStack.getTop().focusCurrent();
-		}
+		multiStack.getTop().focusCurrent();
+	}
 
 	private void unFocusTop() {
 		InputConsumer top = multiStack.getTop();
 		top.setTouchable(Touchable.disabled);
+		top.setDisabled(true);
 		top.loseFocus();
 	}
 
@@ -147,8 +146,9 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		unFocusTop();
 		multiStack.popTop();
 		if (isClosingOptionsMenu) {
+			multiStack.getTop().setDisabled(false);
 			multiStack.getTop().setTouchable(Touchable.enabled);
-				multiStack.getTop().focusCurrent();
+			multiStack.getTop().focusCurrent();
 		} else {
 			focusTop(false);
 		}

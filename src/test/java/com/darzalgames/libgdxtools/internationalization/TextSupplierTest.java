@@ -11,10 +11,10 @@ import com.badlogic.gdx.files.FileHandle;
 
 class TextSupplierTest {
 
-	private String key = "test_key";
-	
+	private final String key = "test_key";
+
 	@Test
-	void getLine_withoutAnyBundles_returnsTheKeyAsProvided() throws Exception {
+	void getLine_withoutAnyBundles_returnsTheKeyAsProvided() {
 		makeTextSupplier();
 
 		String result = TextSupplier.getLine(key);
@@ -23,7 +23,7 @@ class TextSupplierTest {
 	}
 
 	@Test
-	void getLine_withOnlyBaseBundle_returnsTheLocalizedKey() throws Exception {
+	void getLine_withOnlyBaseBundle_returnsTheLocalizedKey() {
 		makeTextSupplier();
 		TextSupplier.useLanguage("");
 
@@ -33,7 +33,7 @@ class TextSupplierTest {
 	}
 
 	@Test
-	void getLine_withTopAndBaseBundle_returnsTheLocalizedKey() throws Exception {
+	void getLine_withTopAndBaseBundle_returnsTheLocalizedKey() {
 		makeTextSupplier();
 		TextSupplier.useLanguage("");
 		TextSupplier.useTopBundle(new FileHandle("./src/test/resources/com/darzalgames/libgdxtools/internationalization/Top"));
@@ -44,7 +44,7 @@ class TextSupplierTest {
 	}
 
 	@Test
-	void getLine_withFrenchBaseBundle_returnsTheLocalizedKey() throws Exception {
+	void getLine_withFrenchBaseBundle_returnsTheLocalizedKey() {
 		makeTextSupplier();
 		TextSupplier.useLanguage("fr");
 
@@ -54,7 +54,7 @@ class TextSupplierTest {
 	}
 
 	@Test
-	void getLine_withFrenchTopAndBaseBundle_returnsTheLocalizedKey() throws Exception {
+	void getLine_withFrenchTopAndBaseBundle_returnsTheLocalizedKey() {
 		makeTextSupplier();
 		TextSupplier.useLanguage("fr");
 		TextSupplier.useTopBundle(new FileHandle("./src/test/resources/com/darzalgames/libgdxtools/internationalization/Top"));
@@ -71,7 +71,7 @@ class TextSupplierTest {
 	}
 
 	protected static ArrayList<Locale> getSupportedLocales() {
-		ArrayList<Locale> supportedLocales = new ArrayList<>(); 
+		ArrayList<Locale> supportedLocales = new ArrayList<>();
 		supportedLocales.add(Locale.ROOT);
 		supportedLocales.add(Locale.FRENCH);
 		return supportedLocales;

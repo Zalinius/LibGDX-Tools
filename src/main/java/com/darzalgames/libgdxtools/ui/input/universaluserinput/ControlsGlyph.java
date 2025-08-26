@@ -20,14 +20,16 @@ public class ControlsGlyph extends Image implements InputStrategyObserver {
 	private Input input;
 	private Alignment alignment;
 	private final Supplier<Boolean> parentIsEnabled;
+	private final InputStrategySwitcher inputStrategySwitcher;
 
 	public ControlsGlyph(Input input, InputStrategySwitcher inputStrategySwitcher, Texture referenceGlyphForSize, Supplier<Boolean> parentIsEnabled) {
 		this.parentIsEnabled = parentIsEnabled;
+		this.inputStrategySwitcher = inputStrategySwitcher;
 		setInput(input);
 		inputStrategySwitcher.register(this);
 		setSize(referenceGlyphForSize.getWidth(), referenceGlyphForSize.getHeight());
 		setTouchable(Touchable.disabled);
-		setVisibilityBasedOnCurrentInputStrategy(inputStrategySwitcher);
+		setVisibilityBasedOnCurrentInputStrategy();
 		setAlignment(Alignment.BOTTOM_LEFT);
 	}
 
@@ -68,17 +70,17 @@ public class ControlsGlyph extends Image implements InputStrategyObserver {
 			};
 			moveBy(xOffset, yOffset);
 
-			setVisible(parentIsEnabled.get());
+			setVisibilityBasedOnCurrentInputStrategy();
 		}
 	}
 
 
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-		setVisibilityBasedOnCurrentInputStrategy(inputStrategySwitcher);
+		setVisibilityBasedOnCurrentInputStrategy();
 	}
 
-	private void setVisibilityBasedOnCurrentInputStrategy(InputStrategySwitcher inputStrategySwitcher) {
+	private void setVisibilityBasedOnCurrentInputStrategy() {
 		setVisible(!inputStrategySwitcher.isMouseMode() && parentIsEnabled.get());
 	}
 

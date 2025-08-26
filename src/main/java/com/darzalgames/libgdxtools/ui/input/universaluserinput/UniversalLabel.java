@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.TemporaryStyler;
 import com.github.tommyettinger.textra.Styles.LabelStyle;
 import com.github.tommyettinger.textra.TypingLabel;
 
@@ -23,7 +24,7 @@ public class UniversalLabel extends TypingLabel {
 	}
 
 	public void setTextSupplier(Supplier<String> textSupplier) {
-		this.textSupplier =  () ->  "[@" + typingLabelStyle.font.name + "]" + textSupplier.get() + "[@]";
+		this.textSupplier =  () -> TemporaryStyler.make("[@" + typingLabelStyle.font.name + "]" + textSupplier.get());
 	}
 
 	public boolean isBlank() {

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -24,17 +25,21 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	private final List<InputPriorityObserver> inputPriorityObservers;
 	private final Map<String, StageLikeRenderable> stageLikeRenderables;
 
-	public InputPriorityStack(List<StageLikeRenderable> allStagesInOrderForInput, OptionsMenu optionsMenu) {
+	public InputPriorityStack(List<StageLikeRenderable> allStagesInOrderForInput, OptionsMenu optionsMenu, InputStrategySwitcher inputStrategySwitcher) {
 		this.optionsMenu = optionsMenu;
+
 		stageLikeRenderables = new HashMap<>();
 		allStagesInOrderForInput.forEach(stage -> stageLikeRenderables.put(stage.getName(), stage));
+
 		inputPriorityObservers = new ArrayList<>();
+
 		multiStack = new LimitedAccessMultiStack(allStagesInOrderForInput);
 		clearStackAndPushBlankConsumer();
 
 		darkScreen = new DarkScreen(() -> sendInputToTop(Input.BACK));
 
 		InputPriority.setInputPriorityStack(this);
+		inputStrategySwitcher.register(this);
 	}
 
 	void claimPriority(InputConsumer inputConsumer, String stageLikeRenderableName) {
@@ -102,27 +107,29 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	private void focusTop(boolean isFirstFocus) {
+		multiStack.getTop().setDisabled(false);
+		multiStack.getTop().setTouchable(Touchable.enabled);
 		if (isFirstFocus) {
 			multiStack.getTop().gainFocus();
 		} else {
 			multiStack.getTop().regainFocus();
 		}
-		multiStack.getTop().setTouchable(Touchable.enabled);
 		multiStack.getTop().focusCurrent();
 	}
 
 	private void unFocusTop() {
 		InputConsumer top = multiStack.getTop();
 		top.setTouchable(Touchable.disabled);
+		top.setDisabled(true);
 		top.loseFocus();
 	}
 
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-		if (inputStrategySwitcher.shouldFlashButtons()) {
-			multiStack.getTop().selectDefault();
-		} else { // Mouse mode
+		if (inputStrategySwitcher.isMouseMode()) {
 			multiStack.getTop().clearSelected();
+		} else {
+			multiStack.getTop().selectDefault();
 		}
 	}
 
@@ -139,6 +146,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		unFocusTop();
 		multiStack.popTop();
 		if (isClosingOptionsMenu) {
+			multiStack.getTop().setDisabled(false);
 			multiStack.getTop().setTouchable(Touchable.enabled);
 			multiStack.getTop().focusCurrent();
 		} else {
@@ -196,6 +204,11 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			@Override public void loseFocus() {/*not needed*/}
 			@Override public String toString() { return "Blank base"; }
 			@Override public void resizeUI() {/*not needed*/}
+			@Override public boolean isDisabled() { return false; }
+			@Override public boolean isBlank() { return true; }
+			@Override public void setAlignment(Alignment alignment) {/*not needed*/}
+			@Override public void setFocused(boolean focused) {/*not needed*/}
+			@Override public void setDisabled(boolean disabled) {/*not needed*/}
 		};
 	}
 

@@ -3,14 +3,14 @@ package com.darzalgames.libgdxtools.ui.input.popup;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 
 /**
  * A pop up that offers two choices, and can respond differently based on which choice is made.
@@ -50,7 +50,7 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 			hideThis();
 			toRun.run();
 		};
-		return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(key), chooseAndHideRunnable);
+		return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine(key), chooseAndHideRunnable);
 	}
 
 	@Override
@@ -60,9 +60,9 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 
 	@Override
 	protected Table getMessage() {
-		Function<Supplier<String>, Label> labelFunction = isWarning ? GameInfo.getUserInterfaceFactory()::getWarningLabel : GameInfo.getUserInterfaceFactory()::getLabelWithBackground;
-		Label label = labelFunction.apply(() -> TextSupplier.getLine(messageKey));
-		label.setAlignment(Alignment.CENTER.getAlignment());
+		Function<Supplier<String>, UniversalLabel> labelFunction = isWarning ? GameInfo.getUserInterfaceFactory()::getWarningLabel : GameInfo.getUserInterfaceFactory()::getLabelWithBackground;
+		UniversalLabel label = labelFunction.apply(() -> TextSupplier.getLine(messageKey));
+		label.setAlignment(Alignment.CENTER);
 		Table table = new Table();
 		table.add(label).grow();
 		return table;

@@ -35,7 +35,9 @@ public class Pause extends Actor {
 	}
 
 	private void pause() {
-		InputPriority.claimPriority(optionsMenu, MultipleStage.OPTIONS_STAGE_NAME);
+		if (!isOptionsMenuOpen()) {
+			InputPriority.claimPriority(optionsMenu, MultipleStage.OPTIONS_STAGE_NAME);
+		}
 	}
 
 	@Override

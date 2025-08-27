@@ -5,7 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonDirection;
 import com.darzalgames.libgdxtools.maingame.StageBest;
-import com.darzalgames.libgdxtools.ui.input.*;
+import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.InputConsumer;
+import com.darzalgames.libgdxtools.ui.input.InputOnHexagonGrid;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
@@ -22,7 +25,7 @@ public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E
 	 * @param hexagonControllerMap The map of hexagon controllers to be navigated
 	 */
 	public NavigableHexagonMap2D(HexagonControllerMap2D<E> hexagonControllerMap) {
-		this.setActor(hexagonControllerMap);
+		setActor(hexagonControllerMap);
 	}
 
 	@Override
@@ -50,7 +53,7 @@ public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E
 	public void gainFocus() {
 		selectDefault();
 	}
-	
+
 	@Override
 	public void focusCurrent() {
 		if (isInputAllowed()) {
@@ -75,14 +78,14 @@ public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E
 			getActor().setTouchable(Touchable.enabled);
 		} else {
 			getActor().setTouchable(Touchable.disabled);
-			focusCurrent();	
+			focusCurrent();
 		}
 	}
 
 
 	@Override
 	public boolean shouldBeUnregistered() {
-		return this.getStage() == null;
+		return getStage() == null;
 	}
 
 	private boolean isInputAllowed() {
@@ -99,6 +102,36 @@ public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E
 	@Override
 	public void resizeUI() {
 		getActor().resizeUI();
+	}
+
+	@Override
+	public boolean isDisabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isBlank() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setAlignment(Alignment alignment) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setFocused(boolean focused) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setDisabled(boolean disabled) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

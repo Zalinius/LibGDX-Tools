@@ -1,10 +1,11 @@
-package com.darzalgames.libgdxtools.ui.input.universaluserinput.button;
+package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -14,13 +15,14 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public class UniversalSlider extends UniversalButton {
+public class UniversalSlider extends UniversalTextButton {
 
 	private final Slider slider;
 	private float previousValue;
 
-	public UniversalSlider(BasicButton textButton, Supplier<String> textSupplier, SliderStyle sliderStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, float knobMinimumPercentage) {
-		super(textButton, textSupplier, null, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener);
+	public UniversalSlider(UniversalLabel label, SliderStyle sliderStyle, ButtonStyle buttonStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, float knobMinimumPercentage) {
+		super(label, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
+
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle) {
 			@Override
 			public float getPrefWidth() {
@@ -43,32 +45,31 @@ public class UniversalSlider extends UniversalButton {
 			}
 		});
 
-		textButton.setWidth(textButton.getWidth() + slider.getPrefWidth());
-		textButton.add(slider);
-		textButton.addListener(new ChangeListener() {
+		add(slider);
+		addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				UniversalSlider.this.setFocused(true);
 				float currentValue = slider.getValue();
 				if (currentValue != previousValue) { //The slider fires a ChangeEvent on touchUp (mouse mode) which we want to ignore
 					requestInteractSound();
 				}
 				previousValue = currentValue;
+				addAction(Actions.run(() -> setFocused(true)));
 			}
 		});
 	}
 
 	@Override
 	public void setFocused(boolean isFocused) {
-		super.setFocused(isFocused);
+		super.setFocused(isFocused, true);
 		InputListener inputListener = (InputListener) slider.getListeners().get(0);
 		if (isFocused) {
-			inputListener.enter(null, 0, 0, -1, slider);	
+			inputListener.enter(null, 0, 0, -1, slider);
 		} else {
 			inputListener.exit(null, 0, 0, -1, slider);
 		}
-
 	}
+
 	public void setSliderStyle(SliderStyle sliderStyle) {
 		slider.setStyle(sliderStyle);
 	}
@@ -88,9 +89,21 @@ public class UniversalSlider extends UniversalButton {
 	 */
 	public void setSliderPosition(float newPosition, boolean withSoundEffect) {
 		previousValue = slider.getValue();
-		this.setDoesSoundOnInteract(withSoundEffect);
+		setDoesSoundOnInteract(withSoundEffect);
+		slider.setProgrammaticChangeEvents(false);
 		slider.setValue(newPosition);
-		this.setDoesSoundOnInteract(true);
+		slider.setProgrammaticChangeEvents(true);
+		setDoesSoundOnInteract(true);
+	}
+
+	@Override
+	public void resizeUI() {
+		super.resizeUI();
+		getCell(label).padRight(calculatePadding());
+	}
+
+	private float calculatePadding() {
+		return UserInterfaceSizer.getWidthPercentage(0.005f);
 	}
 
 }

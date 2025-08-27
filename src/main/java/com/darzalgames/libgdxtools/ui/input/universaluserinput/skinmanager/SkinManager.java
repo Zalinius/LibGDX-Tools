@@ -1,17 +1,17 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
+import com.github.tommyettinger.textra.Font;
+import com.github.tommyettinger.textra.Styles;
+import com.github.tommyettinger.textra.Styles.CheckBoxStyle;
+import com.github.tommyettinger.textra.Styles.LabelStyle;
 
 /**
  * A class which holds a LibGDX {@link Skin} and provides convenient named accessors.
@@ -25,23 +25,26 @@ public class SkinManager {
 	protected static final String UI_BORDERED_NINE = "uiBorderedNine";
 
 	// LabelStyle
-	protected static final String DEFAULT_LABEL = "default";
+	protected static final String DEFAULT = "default";
 	protected static final String FLAVOR_TEXT_LABEL = "flavorTextLabelStyle";
 	protected static final String WARNING_LABEL = "warningLabelStyle";
 	protected static final String LABEL_WITH_BACKGROUND = "labelWithBackgroundStyle";
 
 	// SliderStyle
-	protected static final String SLIDER = "default-horizontal";
+	protected static final String SLIDER_DEFAULT = "default-horizontal";
 
 	// CheckboxStyle
-	protected static final String CHECKBOX = "default";
 
-	// TextButtonStyle
-	protected static final String TEXT_BUTTON = "default";
-	protected static final String FLASHED_TEXT_BUTTON = "flashedTextButtonStyle";
-	protected static final String SNEAKY_LABEL_BUTTON = "sneakyLabelButtonStyle";
+	// ButtonStyle
 	protected static final String BLANK_BUTTON = "blankButtonStyle";
 	protected static final String SETTINGS_BUTTON = "settingsButtonStyle";
+
+	// Colors used for styling buttons and labels based on focus
+	protected static final Color DARK_COLOR = new Color(0.65f, 0.65f, 0.65f, 1);
+	protected static final Color FOCUSED_COLOR = Color.WHITE;
+	protected static final Color OUT_OF_FOCUS_COLOR = new Color(0.55f, 0.55f, 0.55f, 1);
+	protected static final Color DISABLED_COLOR = Color.DARK_GRAY;
+
 
 	/**
 	 * @param skin The skin set up by the base class
@@ -60,55 +63,44 @@ public class SkinManager {
 		int size = 4;
 
 		NinePatchDrawable darkGrayNinePatch = new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.DARK_GRAY, size), 1, 1, 1, 1));
+		darkGrayNinePatch.setMinWidth(size);
+		darkGrayNinePatch.setMinHeight(size);
 		skin.add(UI_BORDERED_NINE, darkGrayNinePatch);
 		skin.add(CONFIRMATION_MENU_BACKGROUND, new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.PINK, size), 1, 1, 1, 1)));
 
-		BitmapFont defaultFont = new BitmapFont();
-		defaultFont.setColor(Color.BLACK);
-		skin.add(DEFAULT_LABEL, defaultFont);
+		Font defaultFont = new Font();
+		skin.add(DEFAULT, defaultFont);
 
-		skin.add(DEFAULT_LABEL, new LabelStyle(defaultFont, Color.BLACK));
+		skin.add(DEFAULT, new LabelStyle(defaultFont, Color.BLACK));
 		skin.add(FLAVOR_TEXT_LABEL, new LabelStyle(defaultFont, Color.CHARTREUSE));
 		skin.add(WARNING_LABEL, new LabelStyle(defaultFont, Color.FIREBRICK));
 		LabelStyle labelWithBackgroundStyle = new LabelStyle(defaultFont, Color.BLACK);
 		labelWithBackgroundStyle.background = skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
 		skin.add(LABEL_WITH_BACKGROUND, labelWithBackgroundStyle);
 
-		SliderStyle sliderStyle = new SliderStyle(new Image(ColorTools.getColoredTexture(Color.GOLDENROD, size)).getDrawable(), skin.get(UI_BORDERED_NINE, NinePatchDrawable.class));
+		SliderStyle sliderStyle = new SliderStyle(new Image(ColorTools.getColoredTexture(Color.GOLDENROD, size)).getDrawable(), new Image(ColorTools.getColoredTexture(Color.GRAY, size)).getDrawable());
 		sliderStyle.knobDown = darkGrayNinePatch;
-		skin.add(SLIDER, sliderStyle);
+		sliderStyle.knobOver = darkGrayNinePatch;
+		skin.add(SLIDER_DEFAULT, sliderStyle);
 
-		CheckBoxStyle checkboxStyle = new CheckBoxStyle();
-		checkboxStyle.font = defaultFont;
-		checkboxStyle.fontColor = Color.BLACK;
-		checkboxStyle.checkboxOn = skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
-		checkboxStyle.checkboxOff = darkGrayNinePatch;
-		skin.add(CHECKBOX, checkboxStyle);
+		CheckBoxStyle checkboxStyle = new Styles.CheckBoxStyle(new Image(ColorTools.getColoredTexture(Color.DARK_GRAY, size)).getDrawable(), new Image(ColorTools.getColoredTexture(Color.PURPLE, size)).getDrawable(), defaultFont, Color.BLACK);
+		skin.add(DEFAULT, checkboxStyle);
 
 		Drawable buttonNOTHighlighted = new Image(ColorTools.getColoredTexture(Color.WHITE, size)).getDrawable();
 		Drawable buttonHighlighted = new Image(ColorTools.getColoredTexture(Color.GRAY, size)).getDrawable();
-		TextButtonStyle textButtonStyle = new TextButtonStyle(buttonNOTHighlighted, null, null, defaultFont);
-		textButtonStyle.over = buttonHighlighted;
-		textButtonStyle.fontColor = Color.LIGHT_GRAY;
-		textButtonStyle.overFontColor = Color.WHITE;
-		textButtonStyle.focused = buttonHighlighted;
-		textButtonStyle.disabledFontColor = Color.FIREBRICK;
-		skin.add(TEXT_BUTTON, textButtonStyle);
-		TextButtonStyle flashedTextButtonStyle = new TextButtonStyle(buttonHighlighted, null, null, defaultFont);
-		flashedTextButtonStyle.over = buttonNOTHighlighted;
-		textButtonStyle.fontColor = Color.LIGHT_GRAY;
-		flashedTextButtonStyle.overFontColor = Color.WHITE;
-		flashedTextButtonStyle.focused = buttonNOTHighlighted;
-		skin.add(FLASHED_TEXT_BUTTON, flashedTextButtonStyle);
-		TextButtonStyle sneakyLabelButtonStyle = new TextButtonStyle(new Image(ColorTools.getColoredTexture(Color.CLEAR, size)).getDrawable(), null, null, defaultFont);
-		skin.add(SNEAKY_LABEL_BUTTON, sneakyLabelButtonStyle);
-		TextButtonStyle blankButtonStyle = new TextButtonStyle(null, null, null, defaultFont);
+		ButtonStyle buttonStyle = new ButtonStyle(buttonNOTHighlighted, buttonHighlighted, buttonHighlighted);
+		buttonStyle.over = buttonHighlighted;
+		buttonStyle.focused = buttonHighlighted;
+		skin.add(DEFAULT, buttonStyle);
+
+		Drawable blank = new Image(ColorTools.getColoredTexture(Color.CLEAR, size)).getDrawable();
+		ButtonStyle blankButtonStyle = new ButtonStyle(blank, blank, blank);
 		blankButtonStyle.focused = null;
 		skin.add(BLANK_BUTTON, blankButtonStyle);
-		TextButtonStyle settingsButtonStyle = new TextButtonStyle(new Image(ColorTools.getColoredTexture(Color.PURPLE, size)).getDrawable(), null, null, defaultFont);
-		Texture settingsHighlightedIcon = ColorTools.getColoredTexture(Color.PINK, size);
-		settingsButtonStyle.over = new TextureRegionDrawable(settingsHighlightedIcon);
-		settingsButtonStyle.focused = new TextureRegionDrawable(settingsHighlightedIcon);
+		TextureRegionDrawable settingsHighlightedIcon = new TextureRegionDrawable(ColorTools.getColoredTexture(Color.PINK, size));
+		ButtonStyle settingsButtonStyle = new ButtonStyle(new Image(ColorTools.getColoredTexture(Color.PURPLE, size)).getDrawable(), settingsHighlightedIcon, settingsHighlightedIcon);
+		settingsButtonStyle.over = settingsHighlightedIcon;
+		settingsButtonStyle.focused = settingsHighlightedIcon;
 		skin.add(SETTINGS_BUTTON, settingsButtonStyle);
 
 		return skin;
@@ -117,8 +109,8 @@ public class SkinManager {
 	protected LabelStyle getLabelStyle(String style) {
 		return skin.get(style, LabelStyle.class);
 	}
-	protected TextButtonStyle getTextButtonStyle(String style) {
-		return skin.get(style, TextButtonStyle.class);
+	protected ButtonStyle getButtonStyle(String style) {
+		return skin.get(style, ButtonStyle.class);
 	}
 	protected CheckBoxStyle getCheckboxStyle(String style) {
 		return skin.get(style, CheckBoxStyle.class);
@@ -134,7 +126,7 @@ public class SkinManager {
 		return skin.get(CONFIRMATION_MENU_BACKGROUND, NinePatchDrawable.class);
 	}
 	public LabelStyle getDefaultLableStyle() {
-		return getLabelStyle(DEFAULT_LABEL);
+		return getLabelStyle(DEFAULT);
 	}
 	public LabelStyle getFlavorTextLableStyle() {
 		return getLabelStyle(FLAVOR_TEXT_LABEL);
@@ -146,25 +138,38 @@ public class SkinManager {
 		return getLabelStyle(LABEL_WITH_BACKGROUND);
 	}
 	public SliderStyle getSliderStyle() {
-		return getSliderStyle(SLIDER);
+		return getSliderStyle(SLIDER_DEFAULT);
 	}
 	public CheckBoxStyle getCheckboxStyle() {
-		return getCheckboxStyle(CHECKBOX);
+		return getCheckboxStyle(DEFAULT);
 	}
-	public TextButtonStyle getTextButtonStyle() {
-		return getTextButtonStyle(TEXT_BUTTON);
+	public ButtonStyle getDefaultButtonStyle() {
+		return getButtonStyle(DEFAULT);
 	}
-	public TextButtonStyle getFlashedTextButtonStyle() {
-		return getTextButtonStyle(FLASHED_TEXT_BUTTON);
+	public ButtonStyle getBlankButtonStyle() {
+		return getButtonStyle(BLANK_BUTTON);
 	}
-	public TextButtonStyle getSneakyLableButtonStyle() {
-		return getTextButtonStyle(SNEAKY_LABEL_BUTTON);
+	public ButtonStyle getSettingsButtonStyle() {
+		return getButtonStyle(SETTINGS_BUTTON);
 	}
-	public TextButtonStyle getBlankButtonStyle() {
-		return getTextButtonStyle(BLANK_BUTTON);
+
+
+
+
+	public static Color getDarkColor() {
+		return DARK_COLOR;
 	}
-	public TextButtonStyle getSettingsButtonStyle() {
-		return getTextButtonStyle(SETTINGS_BUTTON);
+
+	public static Color getFocusedColor() {
+		return FOCUSED_COLOR;
+	}
+
+	public static Color getOutOfFocusColor() {
+		return OUT_OF_FOCUS_COLOR;
+	}
+
+	public static Color getDisabledColor() {
+		return DISABLED_COLOR;
 	}
 
 }

@@ -7,7 +7,7 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 
 /**
  * A pop up that offers two choices, and can respond differently based on which choice is made.
@@ -45,7 +45,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	 * @param chosenKey The key that was chosen
 	 */
 	protected void setChosenKey(String chosenKey) {}
-	
+
 	protected BaseDrawable getBackgroundDrawable() {
 		return GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable();
 	}
@@ -62,12 +62,12 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		}
 
 
-		UniversalButton firstButton = getFirstChoiceButton(); 
+		UniversalButton firstButton = getFirstChoiceButton();
 		UniversalButton secondButton = getSecondChoiceButton();
 		if (isSecondButtonBack) {
 			menu.replaceContents(ListFactory.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
 		} else {
-			menu.replaceContents(ListFactory.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button			
+			menu.replaceContents(ListFactory.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button
 		}
 
 		menu.setAlignment(Alignment.CENTER, Alignment.CENTER);

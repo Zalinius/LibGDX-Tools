@@ -1,22 +1,25 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.GetOnStage;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
+import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 
 
 /**
@@ -25,7 +28,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalB
 public abstract class OptionsMenu extends PopUpMenu {
 
 	protected UniversalButton optionsButton;
-	private final Supplier<UniversalButton> makeWindowModeSelectBox;
+	private final WindowResizerSelectBox windowModeSelectBox;
 
 	private final String platformName;
 
@@ -41,7 +44,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	/**
 	 * @return A list of any game-specific options buttons (e.g. language, text speed, etc)
 	 */
-	protected abstract Collection<UniversalButton> makeMiddleButtons();
+	protected abstract Collection<VisibleInputConsumer> makeMiddleButtons();
 
 	/**
 	 * @return An optional button to display controls (return null if you don't want this)
@@ -66,10 +69,12 @@ public abstract class OptionsMenu extends PopUpMenu {
 	 */
 	protected abstract PopUp makeControlsPopUp();
 
-	protected OptionsMenu(Supplier<UniversalButton> makeWindowModeSelectBox, int bottomPadding) {
+
+	protected OptionsMenu(int bottomPadding, WindowResizer windowResizer) {
 		super(true);
-		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
 		platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
+		windowModeSelectBox = GameInfo.getUserInterfaceFactory().getWindowModeTextSelectBox();
+		windowResizer.setWindowResizerButton(windowModeSelectBox);
 		defaults().padBottom(bottomPadding);
 	}
 
@@ -99,6 +104,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	@Override
 	public void gainFocus() {
 		setUpDesiredSize();
+		windowModeSelectBox.setDisabled(false);
 		super.gainFocus();
 	}
 
@@ -106,17 +112,18 @@ public abstract class OptionsMenu extends PopUpMenu {
 	public void regainFocus() {
 		focusCurrent();
 		optionsButton.setTouchable(Touchable.enabled);
+		super.regainFocus();
 	}
 
 	@Override
 	protected void setUpTable() {
 		setUpBackground();
 
-		// ALL SELECTABLE MENU BUTTONS
-		List<UniversalButton> menuButtons = new ArrayList<>();
-		menuButtons.add(GameInfo.getUserInterfaceFactory().getSpacer());
+		add().growY();
+		row();
 
-		menuButtons.addAll(makeMiddleButtons());
+		// ALL SELECTABLE MENU BUTTONS
+		List<VisibleInputConsumer> menuButtons = new ArrayList<>(makeMiddleButtons());
 
 		UniversalButton reportBugButton = makeReportBugButton();
 		if (reportBugButton != null) {
@@ -127,7 +134,6 @@ public abstract class OptionsMenu extends PopUpMenu {
 		menuButtons.add(controlsButton);
 
 		// Window mode select box
-		UniversalButton windowModeSelectBox = makeWindowModeSelectBox.get();
 		menuButtons.add(windowModeSelectBox);
 
 		UniversalButton optionalButtonAboveQuit = makeButtonAboveQuitButton();
@@ -148,6 +154,9 @@ public abstract class OptionsMenu extends PopUpMenu {
 		menu.replaceContents(menuButtons, backButton);
 		add(menu.getView()).grow().top();
 
+		row();
+		add().growY();
+
 
 		// Set up the version tag to be in its own inner table, so that the actual buttons can still reach the bottom of the main table
 		Table versionTable = new Table();
@@ -155,14 +164,14 @@ public abstract class OptionsMenu extends PopUpMenu {
 		versionTable.setTouchable(Touchable.disabled);
 		addActor(versionTable);
 
-		Label authors = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("authors_label"));
+		UniversalLabel authors = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("authors_label"));
 		authors.setAlignment(Align.topLeft);
 		versionTable.add(authors).grow().top().left().padTop(getPadTop()).padLeft(getPadLeft());
 		versionTable.row();
 
-		Label versionLabel = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> getGameVersion() + platformName);
+		UniversalLabel versionLabel = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> getGameVersion() + platformName);
 		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT.getAlignment());
-		versionTable.add(versionLabel).bottom().grow().padBottom(getPadBottom()).padRight(getPadRight());
+		versionTable.add(versionLabel).bottom().right().expand().padBottom(getPadBottom()).padRight(getPadRight());
 	}
 
 	/**
@@ -175,7 +184,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	}
 
 	private UniversalButton makeBackButton() {
-		return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false));
+		return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine("back_message"), () -> toggleScreenVisibility(false), Input.BACK);
 	}
 
 	@Override
@@ -186,7 +195,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	private void positionOptionsButton() {
 		float padding = UserInterfaceSizer.getHeightPercentage(0.01f);
 		optionsButton.getView().setPosition(padding, UserInterfaceSizer.getCurrentHeight() - optionsButton.getView().getHeight() - padding);
-		UserInterfaceSizer.scaleToMinimumPercentage(optionsButton.getView(), 0.06f);
+		UserInterfaceSizer.scaleToMinimumPercentage(optionsButton, 0.06f);
 	}
 
 	protected void showOptionsButton(boolean show) {
@@ -206,14 +215,13 @@ public abstract class OptionsMenu extends PopUpMenu {
 
 		private final String buttonKey;
 
-		public NestedMenu(final List<UniversalButton> entries, String buttonKey) {
+		public NestedMenu(final List<VisibleInputConsumer> entries, String buttonKey) {
 			super(true, entries, "back_message");
 			this.buttonKey = buttonKey;
 		}
 
 		@Override
 		protected void setUpDesiredSize() {
-			menu.setSpacing(OptionsMenu.this.menu.getSpacing());
 			UserInterfaceSizer.sizeToPercentage(this, 0.5f);
 			if (getActions().isEmpty()) {
 				UserInterfaceSizer.makeActorCentered(this);
@@ -221,7 +229,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 		}
 
 		public UniversalButton getButton() {
-			return GameInfo.getUserInterfaceFactory().getButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this, MultipleStage.OPTIONS_STAGE_NAME));
+			return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine(buttonKey), () -> InputPriority.claimPriority(this, MultipleStage.OPTIONS_STAGE_NAME));
 		}
 
 		@Override
@@ -229,7 +237,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 			setUpDesiredSize();
 			background(GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 
-			menu.setAlignment(Alignment.CENTER, Alignment.TOP);
+			menu.setAlignment(Alignment.CENTER, Alignment.CENTER);
 			add(menu.getView()).growX().top();
 			UserInterfaceSizer.makeActorCentered(this);
 		}

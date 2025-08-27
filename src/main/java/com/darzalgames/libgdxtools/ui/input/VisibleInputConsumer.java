@@ -4,6 +4,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public interface VisibleInputConsumer extends InputConsumer {
 
-	public Actor getView();
+	boolean isOver();
+	Actor getView();
+	float getMinHeight();
+
+
+	static boolean isSpacer(VisibleInputConsumer button) {
+		return button.isDisabled() && button.isBlank();
+	}
 
 }

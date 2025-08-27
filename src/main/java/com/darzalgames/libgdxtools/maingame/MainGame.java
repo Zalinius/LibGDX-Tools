@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
-import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerButton;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
@@ -26,7 +25,7 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSetup;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UserInterfaceFactory;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.screen.Fader;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 
@@ -58,7 +57,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected abstract void loadAssets();
 	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName();
-	protected abstract WindowResizerButton makeWindowResizerButton();
 
 	/**
 	 * @return The fallback background to be used in the game area, visible when nothing else is covering it
@@ -261,7 +259,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	private void initializeWindowResizer() {
-		windowResizer.initialize(inputStrategySwitcher, makeWindowResizerButton());
+		windowResizer.initialize(inputStrategySwitcher);
 	}
 
 }

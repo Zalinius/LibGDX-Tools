@@ -13,11 +13,8 @@ public class InputSetup {
 
 
 	public InputSetup(InputStrategySwitcher inputStrategySwitcher, Runnable toggleFullscreenRunnable, List<StageLikeRenderable> allStagesInOrderForInput, Pause pause) {
-		inputPriorityStack = new InputPriorityStack(allStagesInOrderForInput, pause.getOptionsMenu());
-		inputStrategySwitcher.register(inputPriorityStack);
-
+		inputPriorityStack = new InputPriorityStack(allStagesInOrderForInput, pause.getOptionsMenu(), inputStrategySwitcher);
 		inputReceiver = new InputReceiver(inputStrategySwitcher, inputPriorityStack, toggleFullscreenRunnable);
-
 		scrollingManager = new ScrollingManager(inputReceiver);
 
 		pause.setInformationalSuppliers(inputPriorityStack::doesTopPauseGame, inputPriorityStack::getNameOfPausingStage);

@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.IntFunction;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
@@ -18,46 +17,49 @@ import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.DelayRunnableAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.*;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalSelectBox;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalTextButton;
 
-public class WindowResizerSelectBox extends UniversalSelectBox implements WindowResizerButton {
+public class WindowResizerSelectBox extends UniversalSelectBox {
 
 	private WindowResizer windowResizer;
-	@Override
-	public void setWindowResizer(WindowResizer windowResizer) {
-		this.windowResizer = windowResizer;
-	}
 
-	public WindowResizerSelectBox(BasicButton textButton, Supplier<String> textSupplier, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(textButton, textSupplier, inputStrategySwitcher, soundInteractListener);
+	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle style) {
+		super(textKey, inputStrategySwitcher, soundInteractListener, style);
 
 		setEntryButtons(getEntries());
 	}
 
-	private List<UniversalButton> getEntries() {
+	public void setWindowResizer(WindowResizer windowResizer) {
+		this.windowResizer = windowResizer;
+	}
+
+	private List<UniversalTextButton> getEntries() {
 		List<ScreenMode> allModes = new ArrayList<>(Arrays.asList(ScreenMode.values()));
 		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
-		Stream<UniversalButton> buttonStream = allModes.stream().map(mode -> GameInfo.getUserInterfaceFactory().getButton(
+		Stream<UniversalTextButton> buttonStream = allModes.stream().map(mode -> GameInfo.getUserInterfaceFactory().makeTextButton(
 				() -> translateWindowModeOption(mode),
 				() -> {
 					String previousMode = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
 					if (!mode.equals(getModeFromPreference(previousMode))) {
 						windowResizer.setMode(mode, true);
 					}
+					setSelected(mode.toString());
+					closeSelectBox();
 				}));
 		return buttonStream.toList();
 	}
 
-	@Override
 	public void setSelectedScreenMode(ScreenMode screenMode) {
 		setSelected(translateWindowModeOption(screenMode));
 	}
 
-	@Override
 	public ScreenMode getModeFromPreference(String screenMode) {
 		ScreenMode preferredMode = ScreenMode.BORDERLESS;
 		for (int i = 0; i < ScreenMode.values().length; i++) {
@@ -70,7 +72,6 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		return preferredMode;
 	}
 
-	@Override
 	public ConfirmationMenu getRevertMenu() {
 		return new WindowRevertCountdownConfirmationMenu();
 	}
@@ -82,7 +83,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 		private WindowRevertCountdownConfirmationMenu() {
 			super("screen_mode_accept",
 					"accept_control",
-					"revert_message",
+					"revert_message", // TODO give this button the back glyph
 					Runnables.nullRunnable(),
 					MultipleStage.OPTIONS_STAGE_NAME);
 		}
@@ -103,7 +104,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 			super.setUpTable();
 			IntFunction<String> makeCountdownString = count -> TextSupplier.getLine("screen_mode_revert", count);
 			revertCountdown = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> makeCountdownString.apply(10));
-			revertCountdown.setAlignment(Align.center);
+			revertCountdown.setAlignment(Alignment.CENTER);
 			row();
 			add(revertCountdown).growX();
 
@@ -129,11 +130,6 @@ public class WindowResizerSelectBox extends UniversalSelectBox implements Window
 			windowResizer.revertMode();
 		}
 
-	}
-
-	@Override
-	public UniversalButton getWindowResizerButton() {
-		return this;
 	}
 
 	private static String translateWindowModeOption(ScreenMode screenMode) {

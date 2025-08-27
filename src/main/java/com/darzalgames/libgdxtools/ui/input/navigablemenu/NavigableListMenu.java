@@ -4,10 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.BasicButton;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.button.UniversalButton;
+import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
 /**
  * The actor that holds a {@link NavigableList} and handles how it looks and is interacted with.
@@ -19,7 +19,7 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 		this(isVertical, new LinkedList<>());
 	}
 
-	protected NavigableListMenu(boolean isVertical, List<UniversalButton> entries) {
+	protected NavigableListMenu(boolean isVertical, List<VisibleInputConsumer> entries) {
 		menu = new NavigableList(isVertical, entries);
 	}
 
@@ -42,11 +42,11 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	protected abstract void setUpTable();
 
 	/**
-	 * Set the focus to a particular {@link UniversalButton}
-	 * @param universalButton
+	 * Set the focus to a particular {@link VisibleInputConsumer}
+	 * @param entry
 	 */
-	public void goTo(UniversalButton universalButton) {
-		menu.goTo(universalButton);
+	public void goTo(VisibleInputConsumer entry) {
+		menu.goTo(entry);
 	}
 
 	/**
@@ -91,33 +91,38 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	}
 
 	@Override
-	public float getPrefHeight() {
-		return menu.getPrefHeight();
-	}
-
-	@Override
 	public void focusCurrent() {
 		menu.focusCurrent();
 	}
 
-	/**
-	 * This method will try to find the entry corresponding to the string provided,
-	 * if it fails then we default to the first entry.
-	 * @param entry The string of the entry that you want to go to
-	 */
-	public void goTo(String entry) {
-		int nonInteractablesToIgnore = 0;
-		for (int i = 0; i < menu.allEntries.size(); i++) {
-			UniversalButton thisEntry = menu.allEntries.get(i);
-			if (thisEntry.doesTextMatch(entry)) {
-				menu.goTo(i - nonInteractablesToIgnore);
-				return;
-			}
-			else if (thisEntry.getButton().isDisabled() || BasicButton.isSpacer(thisEntry)) {
-				nonInteractablesToIgnore++;
-			}
-		}
-		menu.goTo(0);
+	@Override
+	public void setFocused(boolean focused) {
+		menu.setFocused(focused);
+	}
+
+	@Override
+	public boolean isDisabled() {
+		return menu.isDisabled();
+	}
+
+	@Override
+	public boolean isBlank() {
+		return menu.isBlank();
+	}
+
+	@Override
+	public void resizeUI() {
+		menu.resizeUI();
+	}
+
+	@Override
+	public void setAlignment(Alignment alignment) {
+		menu.setAlignment(alignment);
+	}
+
+	@Override
+	public void setDisabled(boolean disabled) {
+		menu.setDisabled(disabled);
 	}
 
 }

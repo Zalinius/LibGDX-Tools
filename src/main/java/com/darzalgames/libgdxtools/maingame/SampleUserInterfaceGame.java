@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -73,7 +72,7 @@ public class SampleUserInterfaceGame extends MainGame {
 			@Override protected Map<Function<Controller, Integer>, Input> makeButtonMappings() { return null; }
 		};
 		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, Runnables.nullRunnable(), fallbackRef) {
-			@Override protected void addGameSpecificHighlightListener(Group button) { /*do nothing*/ }
+			@Override protected void addGameSpecificHighlightListener(UniversalDoodad button) { /*do nothing*/ }
 		};
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		return factory;

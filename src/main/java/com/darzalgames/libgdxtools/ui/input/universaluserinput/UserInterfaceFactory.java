@@ -9,7 +9,6 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
@@ -55,7 +54,7 @@ public abstract class UserInterfaceFactory {
 	}
 
 
-	protected abstract void addGameSpecificHighlightListener(Group button);
+	protected abstract void addGameSpecificHighlightListener(UniversalDoodad button);
 
 	public UniversalLabel getLabel(final Supplier<String> textSupplier) {
 		return getLabel(textSupplier, skinManager.getDefaultLableStyle());

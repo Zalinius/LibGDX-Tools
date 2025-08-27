@@ -212,15 +212,15 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	}
 
 	private Color getColorBasedOnFocus() {
+		boolean focused = hasKeyboardFocus();
 		Color textColor = SkinManager.getOutOfFocusColor();
 		if (isDisabled()) {
 			textColor = SkinManager.getDisabledColor();
 		}
-		if (isPressed()) {
+		else if (isPressed()) {
 			textColor = SkinManager.getDarkColor();
 		}
-		boolean focused = hasKeyboardFocus();
-		if (focused || isOver()) {
+		else if (focused || isOver()) {
 			textColor = SkinManager.getFocusedColor();
 		}
 		return textColor;

@@ -89,16 +89,16 @@ public class UserInterfaceSizer {
 	 * @return The percentage of the stage's WIDTH [0-1], useful for things like padding
 	 */
 	public static float getWidthPercentage(float percentage) {
-		float maximum = getCurrentWidth();
-		return Math.min(maximum, getCurrentWidth()*percentage*scaling);
+		float scaledPercentage = Math.clamp(percentage*scaling, 0, 1);
+		return getCurrentWidth()*scaledPercentage;
 	}
 
 	/**
 	 * @return The percentage of the stage's HEIGHT [0-1], useful for things like padding
 	 */
 	public static float getHeightPercentage(float percentage) {
-		float maximum = getCurrentHeight();
-		return Math.min(maximum, getCurrentHeight()*percentage*scaling);
+		float scaledPercentage = Math.clamp(percentage*scaling, 0, 1);
+		return getCurrentHeight()*scaledPercentage;
 	}
 	/**
 	 * @return The percentage of the stage's HEIGHT or WIDTH [0-1], whatever is smaller

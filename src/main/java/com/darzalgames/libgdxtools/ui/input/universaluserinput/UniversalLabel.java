@@ -19,7 +19,6 @@ public class UniversalLabel extends TypingLabel {
 		this.typingLabelStyle = typingLabelStyle;
 		setTextSupplier(textSupplier);
 		setWrap(false);
-		skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		setAlignment(Alignment.CENTER);
 	}
 

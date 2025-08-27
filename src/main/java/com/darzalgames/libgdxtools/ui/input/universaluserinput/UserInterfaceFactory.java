@@ -150,8 +150,6 @@ public abstract class UserInterfaceFactory {
 	public UniversalSelectBox getSelectBox(SelectBoxContentManager contentManager) {
 		String boxLabel = contentManager.getBoxLabelKey();
 		List<SelectBoxButtonInfo> entries = contentManager.getOptionButtons();
-		//		BasicButton textButton = makeLibGDXTextButton(boxLabel.get(), skinManager.getButtonStyle());
-		//		makeBackgroundFlashing(textButton, skinManager.getButtonStyle(), skinManager.getFlashedButtonStyle());
 		UniversalSelectBox selectBox = new UniversalSelectBox(boxLabel, inputStrategySwitcher, soundInteractRunnable, skinManager.getDefaultButtonStyle());
 		List<UniversalTextButton> entriesButtons = entries.stream().map(buttonInfo -> makeTextButton(buttonInfo.buttonTextSupplier(), () -> {
 			buttonInfo.buttonPressRunnable().run();

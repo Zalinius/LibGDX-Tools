@@ -60,25 +60,6 @@ public class TestButton implements VisibleInputConsumer {
 		this.touchable = touchable;
 	}
 
-
-	//	@Override
-	//	public void setChecked(boolean checked) {
-	//		isChecked = checked;
-	//
-	//		if (fireProgrammaticChangeEvents) {
-	//			ChangeEvent changeEvent = Pools.obtain(ChangeEvent.class);
-	//			if (fire(changeEvent)) {
-	//				isChecked = !checked;
-	//			}
-	//			Pools.free(changeEvent);
-	//		}
-	//	}
-	//
-	//	@Override
-	//	public void setStyle(ButtonStyle style) {
-	//
-	//	}
-
 	public boolean fire(Event event) {
 		if (event instanceof InputEvent inputEvent) {
 			isOver = InputEvent.Type.enter.equals(inputEvent.getType());

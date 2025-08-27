@@ -63,7 +63,11 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	@Override
-	protected UserInterfaceFactory initializeAssetsAndUserInterfaceFactory() {
+	protected void loadAssets() {
+	}
+
+	@Override
+	protected UserInterfaceFactory initializeGameAndUserInterfaceFactory() {
 		FallbackGamepadInputHandler fallbackRef = new FallbackGamepadInputHandler(inputStrategySwitcher, null) {
 			@Override public void setActionSet(Supplier<String> newActionSetKeySupplier) { }
 			@Override protected List<Input> getTrackedInputs() { return List.of(); }

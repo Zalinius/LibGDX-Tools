@@ -54,7 +54,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 
 	// The setup process, in order that they are called
-	protected abstract UserInterfaceFactory initializeAssetsAndUserInterfaceFactory();
+	protected abstract void loadAssets();
+	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName();
 
 	/**
@@ -89,8 +90,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	@Override
 	public final void create() {
 		makePreferenceManager();
+		loadAssets();
+
 		makeInputStrategySwitcher();
-		userInterfaceFactory = initializeAssetsAndUserInterfaceFactory();
+		userInterfaceFactory = initializeGameAndUserInterfaceFactory();
 		initializeWindowResizer();
 
 		makeAllStages();

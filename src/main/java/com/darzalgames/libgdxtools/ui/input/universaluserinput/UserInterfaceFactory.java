@@ -97,9 +97,9 @@ public abstract class UserInterfaceFactory {
 			@Override public boolean isBlank() { return true; }
 			@Override public void colorOtherComponentsBasedOnFocus(Color color)  { /* not needed */ }
 			@Override public void setDisabled(boolean disabled) { /* stay disabled */ }
+			@Override public boolean isDisabled() { return true; }
 		};
 		spacer.setName("spacer");
-		spacer.setDisabled(true);
 		return spacer;
 	}
 

@@ -28,6 +28,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 public abstract class OptionsMenu extends PopUpMenu {
 
 	protected UniversalButton optionsButton;
+	private final WindowResizerSelectBox windowModeSelectBox;
 
 	private final String platformName;
 
@@ -68,7 +69,6 @@ public abstract class OptionsMenu extends PopUpMenu {
 	 */
 	protected abstract PopUp makeControlsPopUp();
 
-	private final WindowResizerSelectBox windowModeSelectBox;
 
 	protected OptionsMenu(int bottomPadding, WindowResizer windowResizer) {
 		super(true);
@@ -119,6 +119,9 @@ public abstract class OptionsMenu extends PopUpMenu {
 	protected void setUpTable() {
 		setUpBackground();
 
+		add().growY();
+		row();
+
 		// ALL SELECTABLE MENU BUTTONS
 		List<VisibleInputConsumer> menuButtons = new ArrayList<>(makeMiddleButtons());
 
@@ -150,6 +153,9 @@ public abstract class OptionsMenu extends PopUpMenu {
 		menu.setAlignment(getEntryAlignment(), getMenuAlignment());
 		menu.replaceContents(menuButtons, backButton);
 		add(menu.getView()).grow().top();
+
+		row();
+		add().growY();
 
 
 		// Set up the version tag to be in its own inner table, so that the actual buttons can still reach the bottom of the main table

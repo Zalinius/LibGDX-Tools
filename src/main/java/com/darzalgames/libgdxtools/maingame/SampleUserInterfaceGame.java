@@ -68,8 +68,8 @@ public class SampleUserInterfaceGame extends MainGame {
 			@Override public void setActionSet(Supplier<String> newActionSetKeySupplier) { }
 			@Override protected List<Input> getTrackedInputs() { return List.of(); }
 			@Override protected Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor) { return null; }
-			@Override protected Map<Input, AssetDescriptor<Texture>> makeGlyphMappings() { return null; }
-			@Override protected Map<Function<Controller, Integer>, Input> makeButtonMappings() { return null; }
+			@Override protected Map<Input, AssetDescriptor<Texture>> makeGlyphMappings() { return new HashMap<>(); }
+			@Override protected Map<Function<Controller, Integer>, Input> makeButtonMappings() { return new HashMap<>(); }
 		};
 		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, Runnables.nullRunnable(), fallbackRef) {
 			@Override protected void addGameSpecificHighlightListener(UniversalDoodad button) { /*do nothing*/ }
@@ -178,17 +178,12 @@ public class SampleUserInterfaceGame extends MainGame {
 		UniversalLabel sliderInfoLabel = GameInfo.getUserInterfaceFactory().getLabel(() -> sliderInfo + "0.5");
 		UniversalSlider funSlider = GameInfo.getUserInterfaceFactory().getSlider(Suppliers.emptyString(), newValue -> sliderInfoLabel.setTextSupplier(() -> sliderInfo + String.format("%.1f", newValue)));
 		funSlider.setSliderPosition(0.5f, false);
-		//		menuButtons.add(sliderInfoLabel);
-		// TODO Reimplement adding labels into menus like this?
 		menuButtons.add(funSlider);
 
 		String logOrigin = "LibGDXTools Test Game";
 		menuButtons.add(GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Text button!", () -> Gdx.app.log(logOrigin, "You pressed the text button")));
 
 		menuButtons.add(GameInfo.getUserInterfaceFactory().getImageButton(new Image(ColorTools.getColoredTexture(Color.GOLD, 50, 12)), () -> Gdx.app.log(logOrigin, "You pressed the image button")));
-
-		//		menuButtons.add(GameInfo.getUserInterfaceFactory().getButton(() -> "Image Text button!", new Image(ColorTools.getColoredTexture(Color.CHARTREUSE, 50, 12)),
-		//				() -> Gdx.app.log(logOrigin, "You pressed the image text button")));
 
 		Supplier<String> option1 = () -> TextSupplier.getLine("option 1");
 		Supplier<String> option2 = () -> TextSupplier.getLine("looooong option 2");

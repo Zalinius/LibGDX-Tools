@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.darzalgames.darzalcommon.functional.FunctionalConverter;
 import com.darzalgames.darzalcommon.functional.Runnables;
-import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
@@ -19,13 +18,11 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class UniversalSelectBox extends UniversalTextButton {
 
 	private final PopUpMenu options;
-	private final String mainLabelKey;
 	private UniversalTextButton defaultEntry;
 	protected List<UniversalTextButton> entryButtons;
 
 	public UniversalSelectBox(String mainLabelKey, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle buttonStyle) {
-		super(GameInfo.getUserInterfaceFactory().getLabel(Suppliers.emptyString()), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
-		this.mainLabelKey = mainLabelKey;
+		super(GameInfo.getUserInterfaceFactory().getLabel(() -> TextSupplier.getLine(mainLabelKey)), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
 
 		// This is the keyboard navigable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
 		options = new PopUpMenu(true) {
@@ -82,12 +79,6 @@ public class UniversalSelectBox extends UniversalTextButton {
 		if (desiredButton.isPresent()) {
 			setSelected(desiredButton.get());
 		}
-	}
-
-	@Override
-	public void resizeUI() {
-		label.setTextSupplier(() -> TextSupplier.getLine(mainLabelKey, defaultEntry.getText())); // Needed for the displayLabel to update when changing language
-		super.resizeUI();
 	}
 
 }

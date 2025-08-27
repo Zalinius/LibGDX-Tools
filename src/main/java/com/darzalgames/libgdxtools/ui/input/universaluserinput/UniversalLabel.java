@@ -42,10 +42,6 @@ public class UniversalLabel extends TypingLabel {
 		setText(textSupplier.get(), true, false);
 		skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		invalidateHierarchy();
-		//		if (!label.isWrap()) {// && label.getStyle().background != null) {
-		//			//TODO Makes backgrounds scale with text properly, but doesn't preserve Align.center...? Shucks
-		//			setSize(getPrefWidth(), getPrefHeight());
-		//		}
 	}
 
 	public void setAlignment(Alignment alignment) {

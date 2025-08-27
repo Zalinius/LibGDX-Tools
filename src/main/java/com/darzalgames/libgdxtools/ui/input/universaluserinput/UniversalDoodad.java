@@ -27,7 +27,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		setStyle(buttonStyle);
 		setSize(buttonStyle.up.getMinWidth(), buttonStyle.up.getMinHeight());
-		setDisabled(false);
 		clickListener = new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {

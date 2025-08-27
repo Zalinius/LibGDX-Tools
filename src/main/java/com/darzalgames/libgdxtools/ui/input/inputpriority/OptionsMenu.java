@@ -120,10 +120,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 		setUpBackground();
 
 		// ALL SELECTABLE MENU BUTTONS
-		List<VisibleInputConsumer> menuButtons = new ArrayList<>();
-		menuButtons.add(GameInfo.getUserInterfaceFactory().getSpacer());
-
-		menuButtons.addAll(makeMiddleButtons());
+		List<VisibleInputConsumer> menuButtons = new ArrayList<>(makeMiddleButtons());
 
 		UniversalButton reportBugButton = makeReportBugButton();
 		if (reportBugButton != null) {

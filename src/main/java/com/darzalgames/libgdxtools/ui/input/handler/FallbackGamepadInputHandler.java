@@ -23,11 +23,14 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 
 	protected FallbackGamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
 		super(inputStrategySwitcher, inputReceiver);
-		Controllers.addListener(this); // receives events from all controllers
 		buttonMappings = makeButtonMappings();
 		glyphMappings = makeGlyphMappings();
 
-		Gdx.app.log("GamepadInputHandler", "Using FALLBACK gamepad input handling.");
+		// We make a Fallback handler for reference glyphs, it isn't the real deal unless it has connections to both the input objects
+		if (inputStrategySwitcher != null && inputReceiver != null) {
+			Controllers.addListener(this); // receives events from all controllers
+			Gdx.app.log("GamepadInputHandler", "Using FALLBACK gamepad input handling.");
+		}
 	}
 
 	@Override

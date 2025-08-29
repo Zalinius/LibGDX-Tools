@@ -37,9 +37,6 @@ public abstract class WindowResizer {
 	public void setWindowResizerButton(WindowResizerSelectBox windowResizerButton) {
 		this.windowResizerButton = windowResizerButton;
 		windowResizerButton.setWindowResizer(this);
-		String preferredModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
-		setMode(windowResizerButton.getModeFromPreference(preferredModeString), false);
-		previousScreenMode = currentScreenMode;
 		windowResizerButton.setSelectedScreenMode(currentScreenMode);
 	}
 
@@ -93,6 +90,23 @@ public abstract class WindowResizer {
 
 	public void revertMode() {
 		WindowResizer.this.setMode(previousScreenMode, false);
+		previousScreenMode = currentScreenMode;
+	}
+
+	public void setModeFromPreferences() {
+		String preferredModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
+		currentScreenMode = ScreenMode.valueOf(preferredModeString);
+		switch(currentScreenMode) {
+		case BORDERLESS:
+			switchToBorderless();
+			break;
+		case FULLSCREEN:
+			switchToFullScreen();
+			break;
+		case WINDOWED:
+			switchToWindowed();
+			break;
+		}
 		previousScreenMode = currentScreenMode;
 	}
 

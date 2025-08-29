@@ -63,7 +63,7 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	@Override
-	protected void loadAssets() {
+	protected void beginLoadingAssets() {
 	}
 
 	@Override
@@ -394,6 +394,18 @@ public class SampleUserInterfaceGame extends MainGame {
 	@Override
 	protected void resizeGameSpecificUI() {
 		// N/A
+	}
+
+
+
+	@Override
+	protected boolean isDoneLoading() {
+		// this is an asset-free project
+		return true;
+	}
+	@Override
+	protected void doLoadingFrame() {
+		// this is an asset-free project
 	}
 
 }

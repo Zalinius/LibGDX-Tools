@@ -49,12 +49,17 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
+	private boolean hasProcessedFinishedLoading = false;
 	private boolean isQuitting = false;
 
+	// loading functionality
+	protected abstract boolean isDoneLoading();
+	protected abstract void beginLoadingAssets();
+	protected abstract void doLoadingFrame();
+	protected void onLoadingFinished() {}
 
 
 	// The setup process, in order that they are called
-	protected abstract void loadAssets();
 	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName();
 
@@ -90,8 +95,11 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	@Override
 	public final void create() {
 		makePreferenceManager();
-		loadAssets();
+		windowResizer.setModeFromPreferences();
+		beginLoadingAssets();
+	}
 
+	private void afterLoadingComplete() {
 		makeInputStrategySwitcher();
 		userInterfaceFactory = initializeGameAndUserInterfaceFactory();
 		initializeWindowResizer();
@@ -99,7 +107,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		makeAllStages();
 
 		setUpInput();
-
 
 		setUpBeforeLoadingSave();
 		saveManager = makeSaveManager();
@@ -124,15 +131,26 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	@Override
-	public final void render () {
+	public final void render() {
 		ScreenUtils.clear(0, 0, 0, 1, true);
 
-		if (!isQuitting) {
-			resizeUI();
-			multipleStage.update();
-		}
+		boolean gameIsLoadedAndRunning = hasProcessedFinishedLoading;
+		boolean justFinishedLoading = isDoneLoading() && !hasProcessedFinishedLoading;
 
-		steamStrategy.update();
+		if (gameIsLoadedAndRunning) {
+			if (!isQuitting) {
+				resizeUI();
+				multipleStage.update();
+			}
+
+			steamStrategy.update();
+		} else if (justFinishedLoading) {
+			hasProcessedFinishedLoading = true;
+			onLoadingFinished();
+			afterLoadingComplete();
+		} else {
+			doLoadingFrame();
+		}
 	}
 
 	private void resizeUI() {
@@ -159,8 +177,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		if (windowResizer.isWindowed()) {
 			preferenceManager.graphics().setPreferredWindowSize(width, height);
 		}
-		multipleStage.resize(width, height);
-		reactToResize(width, height);
+		if (hasProcessedFinishedLoading) {
+			multipleStage.resize(width, height);
+			reactToResize(width, height);
+		}
 	}
 
 	@Override

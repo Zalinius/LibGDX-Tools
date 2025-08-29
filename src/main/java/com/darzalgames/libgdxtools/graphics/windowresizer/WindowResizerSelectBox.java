@@ -43,11 +43,13 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
+		// TODO store the screen mode non-localized for the love of goodness
 		Stream<UniversalTextButton> buttonStream = allModes.stream().map(mode -> GameInfo.getUserInterfaceFactory().makeTextButton(
 				() -> translateWindowModeOption(mode),
 				() -> {
-					String previousMode = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
-					if (!mode.equals(getModeFromPreference(previousMode))) {
+					String previousModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
+					ScreenMode previousMode = ScreenMode.valueOf(previousModeString);
+					if (!mode.equals(previousMode)) {
 						windowResizer.setMode(mode, true);
 					}
 					setSelected(mode.toString());
@@ -58,18 +60,6 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 
 	public void setSelectedScreenMode(ScreenMode screenMode) {
 		setSelected(translateWindowModeOption(screenMode));
-	}
-
-	public ScreenMode getModeFromPreference(String screenMode) {
-		ScreenMode preferredMode = ScreenMode.BORDERLESS;
-		for (int i = 0; i < ScreenMode.values().length; i++) {
-			String translatedPref = translateWindowModeOption(ScreenMode.values()[i]);
-			if (screenMode.equalsIgnoreCase(ScreenMode.values()[i].name()) //English
-					|| screenMode.equalsIgnoreCase(translatedPref)) { //French
-				preferredMode = ScreenMode.values()[i];
-			}
-		}
-		return preferredMode;
 	}
 
 	public ConfirmationMenu getRevertMenu() {

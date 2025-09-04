@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.darzalgames.libgdxtools.assetloading.LoadingScreen;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
@@ -40,6 +41,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected UserInterfaceFactory userInterfaceFactory;
 
 	// Objects created at initialization, but not widely shared
+	private LoadingScreen loadingScreen;
 	protected MultipleStage multipleStage;
 	protected InputSetup inputSetup;
 	protected WindowResizer windowResizer;
@@ -55,11 +57,12 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	// loading functionality
 	protected abstract boolean isDoneLoading();
 	protected abstract void beginLoadingAssets();
-	protected abstract void doLoadingFrame();
+	protected abstract float doLoadingFrame();
 	protected void onLoadingFinished() {}
 
 
 	// The setup process, in order that they are called
+	protected abstract LoadingScreen makeLoadingScreen();
 	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName();
 
@@ -97,6 +100,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		makePreferenceManager();
 		windowResizer.setModeFromPreferences();
 		beginLoadingAssets();
+		loadingScreen = makeLoadingScreen();
 	}
 
 	private void afterLoadingComplete() {
@@ -134,22 +138,26 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	public final void render() {
 		ScreenUtils.clear(0, 0, 0, 1, true);
 
-		boolean gameIsLoadedAndRunning = hasProcessedFinishedLoading;
 		boolean justFinishedLoading = isDoneLoading() && !hasProcessedFinishedLoading;
+		boolean loadScreenIsExiting = hasProcessedFinishedLoading && !loadingScreen.hasFinishedAnimating();
+		boolean gameIsLoadedAndRunning = hasProcessedFinishedLoading && !loadScreenIsExiting;
 
 		if (gameIsLoadedAndRunning) {
 			if (!isQuitting) {
 				resizeUI();
 				multipleStage.update();
 			}
-
 			steamStrategy.update();
 		} else if (justFinishedLoading) {
 			hasProcessedFinishedLoading = true;
 			onLoadingFinished();
 			afterLoadingComplete();
+			loadingScreen.startExitAnimation();
+		} else if (loadScreenIsExiting) {
+			loadingScreen.update(1); // lets the loading screen do a fade out or something
 		} else {
-			doLoadingFrame();
+			float completion = doLoadingFrame();
+			loadingScreen.update(completion);
 		}
 	}
 

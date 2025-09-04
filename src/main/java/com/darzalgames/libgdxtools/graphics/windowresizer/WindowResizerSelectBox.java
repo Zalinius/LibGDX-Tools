@@ -43,7 +43,6 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
-		// TODO store the screen mode non-localized for the love of goodness
 		Stream<UniversalTextButton> buttonStream = allModes.stream().map(mode -> GameInfo.getUserInterfaceFactory().makeTextButton(
 				() -> translateWindowModeOption(mode),
 				() -> {

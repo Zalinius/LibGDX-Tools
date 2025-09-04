@@ -163,9 +163,15 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	public final void dispose() {
 		isQuitting = true;
 
-		saveManager.save();
+		if (saveManager != null) {
+			// it's null during the loading screen
+			saveManager.save();
+		}
 
-		steamStrategy.dispose();
+		if (steamStrategy != null) {
+			// it's null during the loading screen
+			steamStrategy.dispose();
+		}
 
 		quitGame();
 

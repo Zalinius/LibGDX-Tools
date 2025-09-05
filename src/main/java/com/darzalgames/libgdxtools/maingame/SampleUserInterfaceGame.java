@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
+import com.darzalgames.libgdxtools.assetloading.BlankLoadingScreen;
+import com.darzalgames.libgdxtools.assetloading.LoadingScreen;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
@@ -63,7 +65,7 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	@Override
-	protected void loadAssets() {
+	protected void beginLoadingAssets() {
 	}
 
 	@Override
@@ -394,6 +396,25 @@ public class SampleUserInterfaceGame extends MainGame {
 	@Override
 	protected void resizeGameSpecificUI() {
 		// N/A
+	}
+
+
+
+	@Override
+	protected boolean isDoneLoading() {
+		// this is an asset-free project
+		return true;
+	}
+	
+	@Override
+	protected float doLoadingFrame() {
+		// the completion number isn't used by the blank loading screen
+		return 1;
+	}
+
+	@Override
+	protected LoadingScreen makeLoadingScreen() {
+		return new BlankLoadingScreen();
 	}
 
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.darzalgames.libgdxtools.assetloading.LoadingScreen;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
@@ -40,6 +41,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected UserInterfaceFactory userInterfaceFactory;
 
 	// Objects created at initialization, but not widely shared
+	private LoadingScreen loadingScreen;
 	protected MultipleStage multipleStage;
 	protected InputSetup inputSetup;
 	protected WindowResizer windowResizer;
@@ -49,12 +51,15 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
-	private boolean isQuitting = false;
-
+	private LoadingState loadingState;
 
 
 	// The setup process, in order that they are called
-	protected abstract void loadAssets();
+	protected abstract void beginLoadingAssets();
+	protected abstract LoadingScreen makeLoadingScreen();
+	protected abstract float doLoadingFrame();
+	protected abstract boolean isDoneLoading();
+	protected void onLoadingFinished() {}
 	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName();
 
@@ -85,13 +90,18 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		this.windowResizer = windowResizer;
 		this.gamePlatform = gamePlatform;
 		GameInfo.setMainGame(this);
+		loadingState = LoadingState.LOADING;
 	}
 
 	@Override
 	public final void create() {
 		makePreferenceManager();
-		loadAssets();
+		windowResizer.setModeFromPreferences();
+		beginLoadingAssets();
+		loadingScreen = makeLoadingScreen();
+	}
 
+	private void afterLoadingComplete() {
 		makeInputStrategySwitcher();
 		userInterfaceFactory = initializeGameAndUserInterfaceFactory();
 		initializeWindowResizer();
@@ -99,7 +109,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		makeAllStages();
 
 		setUpInput();
-
 
 		setUpBeforeLoadingSave();
 		saveManager = makeSaveManager();
@@ -124,15 +133,28 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	@Override
-	public final void render () {
+	public final void render() {
 		ScreenUtils.clear(0, 0, 0, 1, true);
 
-		if (!isQuitting) {
+		if (loadingState == LoadingState.GAME_RUNNING) {
 			resizeUI();
 			multipleStage.update();
+			steamStrategy.update();
+		} else if (loadingState == LoadingState.LOADING_TO_LAUNCH_TRANSITION) {
+			loadingScreen.update(1); // lets the loading screen do a fade out or something
+			if (loadingScreen.hasFinishedAnimating()) {
+				loadingState = LoadingState.GAME_RUNNING;
+			}
+		} else if (loadingState == LoadingState.LOADING) {
+			float completion = doLoadingFrame();
+			loadingScreen.update(completion);
+			if (completion >= 1) {
+				loadingState = LoadingState.LOADING_TO_LAUNCH_TRANSITION;
+				onLoadingFinished();
+				afterLoadingComplete();
+				loadingScreen.startExitAnimation();
+			}
 		}
-
-		steamStrategy.update();
 	}
 
 	private void resizeUI() {
@@ -143,11 +165,17 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	@Override
 	public final void dispose() {
-		isQuitting = true;
+		loadingState = LoadingState.GAME_QUITTING;
 
-		saveManager.save();
+		if (saveManager != null) {
+			// it's null during the loading screen
+			saveManager.save();
+		}
 
-		steamStrategy.dispose();
+		if (steamStrategy != null) {
+			// it's null during the loading screen
+			steamStrategy.dispose();
+		}
 
 		quitGame();
 
@@ -159,8 +187,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		if (windowResizer.isWindowed()) {
 			preferenceManager.graphics().setPreferredWindowSize(width, height);
 		}
-		multipleStage.resize(width, height);
-		reactToResize(width, height);
+		if (loadingState == LoadingState.GAME_RUNNING) {
+			multipleStage.resize(width, height);
+			reactToResize(width, height);
+		}
 	}
 
 	@Override
@@ -261,5 +291,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void initializeWindowResizer() {
 		windowResizer.initialize(inputStrategySwitcher);
 	}
+
+	private enum LoadingState { LOADING, LOADING_TO_LAUNCH_TRANSITION, GAME_RUNNING, GAME_QUITTING }
 
 }

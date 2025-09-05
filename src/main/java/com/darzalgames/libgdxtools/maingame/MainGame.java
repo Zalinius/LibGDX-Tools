@@ -51,18 +51,15 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
-	private boolean hasProcessedFinishedLoading = false;
-	private boolean isQuitting = false;
-
-	// loading functionality
-	protected abstract boolean isDoneLoading();
-	protected abstract void beginLoadingAssets();
-	protected abstract float doLoadingFrame();
-	protected void onLoadingFinished() {}
+	private LoadingState loadingState;
 
 
 	// The setup process, in order that they are called
+	protected abstract void beginLoadingAssets();
 	protected abstract LoadingScreen makeLoadingScreen();
+	protected abstract float doLoadingFrame();
+	protected abstract boolean isDoneLoading();
+	protected void onLoadingFinished() {}
 	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
 	protected abstract String getPreferenceManagerName();
 
@@ -93,6 +90,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		this.windowResizer = windowResizer;
 		this.gamePlatform = gamePlatform;
 		GameInfo.setMainGame(this);
+		loadingState = LoadingState.LOADING;
 	}
 
 	@Override
@@ -138,26 +136,24 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	public final void render() {
 		ScreenUtils.clear(0, 0, 0, 1, true);
 
-		boolean justFinishedLoading = isDoneLoading() && !hasProcessedFinishedLoading;
-		boolean loadScreenIsExiting = hasProcessedFinishedLoading && !loadingScreen.hasFinishedAnimating();
-		boolean gameIsLoadedAndRunning = hasProcessedFinishedLoading && !loadScreenIsExiting;
-
-		if (gameIsLoadedAndRunning) {
-			if (!isQuitting) {
-				resizeUI();
-				multipleStage.update();
-			}
+		if (loadingState == LoadingState.GAME_RUNNING) {
+			resizeUI();
+			multipleStage.update();
 			steamStrategy.update();
-		} else if (justFinishedLoading) {
-			hasProcessedFinishedLoading = true;
-			onLoadingFinished();
-			afterLoadingComplete();
-			loadingScreen.startExitAnimation();
-		} else if (loadScreenIsExiting) {
+		} else if (loadingState == LoadingState.LOADING_TO_LAUNCH_TRANSITION) {
 			loadingScreen.update(1); // lets the loading screen do a fade out or something
-		} else {
+			if (loadingScreen.hasFinishedAnimating()) {
+				loadingState = LoadingState.GAME_RUNNING;
+			}
+		} else if (loadingState == LoadingState.LOADING) {
 			float completion = doLoadingFrame();
 			loadingScreen.update(completion);
+			if (completion >= 1) {
+				loadingState = LoadingState.LOADING_TO_LAUNCH_TRANSITION;
+				onLoadingFinished();
+				afterLoadingComplete();
+				loadingScreen.startExitAnimation();
+			}
 		}
 	}
 
@@ -169,7 +165,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	@Override
 	public final void dispose() {
-		isQuitting = true;
+		loadingState = LoadingState.GAME_QUITTING;
 
 		if (saveManager != null) {
 			// it's null during the loading screen
@@ -191,7 +187,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		if (windowResizer.isWindowed()) {
 			preferenceManager.graphics().setPreferredWindowSize(width, height);
 		}
-		if (hasProcessedFinishedLoading) {
+		if (loadingState == LoadingState.GAME_RUNNING) {
 			multipleStage.resize(width, height);
 			reactToResize(width, height);
 		}
@@ -295,5 +291,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void initializeWindowResizer() {
 		windowResizer.initialize(inputStrategySwitcher);
 	}
+
+	private enum LoadingState { LOADING, LOADING_TO_LAUNCH_TRANSITION, GAME_RUNNING, GAME_QUITTING }
 
 }

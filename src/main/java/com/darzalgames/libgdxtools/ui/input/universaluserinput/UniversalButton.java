@@ -59,7 +59,7 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 
 	/**
 	 * Set whether or not this button should make a sound when interacted with
-	 * @param doesSoundOnInteract true if the button should sound when pressed, false otherwise
+	 * @param doesSoundOnInteract whether or not the button should make a sound when pressed
 	 */
 	public void setDoesSoundOnInteract(boolean doesSoundOnInteract) {
 		this.doesSoundOnInteract = doesSoundOnInteract;

@@ -52,9 +52,6 @@ public abstract class GameScreen extends Group implements Screen, LogicalInputCo
 	public void hide() {
 		inputPriorityStack.clearChildren();
 		releasePriority();
-	}
-
-	public void end() {
 		leaveScreenRunnable.run();
 	}
 

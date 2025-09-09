@@ -51,7 +51,7 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 
 	/**
 	 * Set the focus to a particular button index (often first or last, but there can be more specialized applications)
-	 * @param index the depth index of the button to go to
+	 * @param index the index of the button to go to
 	 */
 	public void goTo(final int index) {
 		menu.goTo(index);
@@ -60,7 +60,7 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	/**
 	 * Sets whether or not to press a button immediately when an entry is changed.
 	 * This is generally false, but will be true for menu tabs navigated with the bumpers, for example.
-	 * @param pressButtonOnEntryChanged true if the button should be pressed, false otherwise
+	 * @param pressButtonOnEntryChanged whether or not the button should make a sound when pressed
 	 */
 	public void setPressButtonOnEntryChanged(boolean pressButtonOnEntryChanged) {
 		menu.setPressButtonOnEntryChanged(pressButtonOnEntryChanged);

@@ -225,10 +225,10 @@ public class NavigableList implements VisibleInputConsumer {
 		}
 	}
 
-	public void goTo(VisibleInputConsumer VisibleInputConsumer) {
+	public void goTo(VisibleInputConsumer visibleInputConsumer) {
 		for (int i = 0; i < interactableEntries.size(); i++) {
 			VisibleInputConsumer entry = interactableEntries.get(i);
-			if (entry.equals(VisibleInputConsumer)) {
+			if (entry.equals(visibleInputConsumer)) {
 				goTo(i);
 			}
 		}

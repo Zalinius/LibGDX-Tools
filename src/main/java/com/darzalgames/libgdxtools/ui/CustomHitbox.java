@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.darzalgames.libgdxtools.graphics.PixmapUtilities;
 
 public class CustomHitbox {
-	
-	private Pixmap maskMap;
+
+	private final Pixmap maskMap;
 
 	/**
 	 * @param maskTexture The texture (or related mask texture) that represents the visual clickable actor.
@@ -20,8 +20,6 @@ public class CustomHitbox {
 	 * NOTE: the map texture needs to be the same proportions as the actor for this!
 	 * @param hitX The x value provided in Actor's hit()
 	 * @param hitY The y value provided in Actor's hit()
-	 * @param scaledWidth
-	 * @param scaledHeight
 	 * @return Whether or not this position is a "hit" on the custom hitbox
 	 */
 	public boolean isHit(float hitX, float hitY, float scaledWidth, float scaledHeight) {

@@ -62,7 +62,7 @@ public abstract class TextSupplier {
 
 	/**
 	 * Only to be used when loading a save, otherwise use the SelectBoxContentManager's getChoiceResponder()
-	 * @param languageCode
+	 * @param languageCode the language code to switch to
 	 */
 	public static void useLanguage(String languageCode) {
 		List<Locale> match = bundleManager.displayNames.getSecondKeyset().stream().filter(loc -> getFormattedLocaleForSave(loc).equalsIgnoreCase(languageCode)).toList();
@@ -85,10 +85,10 @@ public abstract class TextSupplier {
 
 	/**
 	 * Set whether or not to throw exceptions if a key is missing (generally yes during validation, and no during actual gameplay)
-	 * @param throwExceptions
+	 * @param shouldThrowExceptions Whether exceptions should be thrown
 	 */
-	public static void setThrowExceptions(boolean throwExceptions) {
-		bundleManager.throwExceptions = throwExceptions;
+	public static void setThrowExceptions(boolean shouldThrowExceptions) {
+		bundleManager.throwExceptions = shouldThrowExceptions;
 	}
 
 

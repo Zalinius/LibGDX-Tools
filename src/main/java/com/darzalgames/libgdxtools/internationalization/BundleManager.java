@@ -35,7 +35,7 @@ public class BundleManager {
 		for (Locale current : supportedLocales) {
 			I18NBundle tempBundle = I18NBundle.createBundle(baseBundleFileHandle, current);
 			String displayname = tempBundle.format("language_display_name");
-			displayNames.addPair(displayname, current);
+			displayNames.putPair(displayname, current);
 		}
 	}
 

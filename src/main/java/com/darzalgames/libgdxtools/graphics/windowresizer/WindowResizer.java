@@ -28,7 +28,6 @@ public abstract class WindowResizer {
 
 	/**
 	 * Initialize the WindowResizer, setting the window to the preferred mode based on the user's history
-	 * @param inputStrategySwitcher
 	 */
 	public void initialize(InputStrategySwitcher inputStrategySwitcher) {
 		this.inputStrategySwitcher = inputStrategySwitcher;

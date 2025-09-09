@@ -75,7 +75,7 @@ public class UniversalCheckbox extends UniversalTextButton {
 
 	/**
 	 * To be used when setting up a menu: this sets the box as checked (or not) without firing an interaction event
-	 * @param shouldBeChecked
+	 * @param shouldBeChecked whether it should be checked initially
 	 */
 	public void initializeAsChecked(boolean shouldBeChecked) {
 		setChecked(shouldBeChecked);

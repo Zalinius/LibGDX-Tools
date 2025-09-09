@@ -197,7 +197,7 @@ public abstract class UserInterfaceFactory {
 	}
 
 	/**
-	 * @param buttonText
+	 * @param buttonText The text on the quit button
 	 * @return A quit button, with a default English text label if not otherwise to find
 	 */
 	public UniversalTextButton getQuitGameButton(Supplier<String> buttonText) {

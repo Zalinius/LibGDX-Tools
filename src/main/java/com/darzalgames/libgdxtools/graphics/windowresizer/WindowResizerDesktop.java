@@ -11,7 +11,7 @@ public class WindowResizerDesktop extends WindowResizer {
 	protected void switchToWindowed() {
 		Coordinate preferredWindowSize = GameInfo.getPreferenceManager().graphics().getPreferredWindowSize();
 		Gdx.graphics.setUndecorated(false);
-		Gdx.graphics.setWindowedMode(preferredWindowSize.i, preferredWindowSize.j);
+		Gdx.graphics.setWindowedMode(preferredWindowSize.i(), preferredWindowSize.j());
 	}
 
 	@Override
@@ -29,6 +29,6 @@ public class WindowResizerDesktop extends WindowResizer {
 	@Override
 	public void setScreenSize(Coordinate size) {
 		Gdx.graphics.setUndecorated(false);
-		Gdx.graphics.setWindowedMode(size.i, size.j);
+		Gdx.graphics.setWindowedMode(size.i(), size.j());
 	}
 }

@@ -51,7 +51,7 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 
 	/**
 	 * Set what to do when the button is pressed
-	 * @param buttonRunnable
+	 * @param buttonRunnable the runnable for the button
 	 */
 	public void setButtonRunnable(Runnable buttonRunnable) {
 		this.buttonRunnable = buttonRunnable;
@@ -59,7 +59,7 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 
 	/**
 	 * Set whether or not this button should make a sound when interacted with
-	 * @param doesSoundOnInteract
+	 * @param doesSoundOnInteract true if the button should sound when pressed, false otherwise
 	 */
 	public void setDoesSoundOnInteract(boolean doesSoundOnInteract) {
 		this.doesSoundOnInteract = doesSoundOnInteract;

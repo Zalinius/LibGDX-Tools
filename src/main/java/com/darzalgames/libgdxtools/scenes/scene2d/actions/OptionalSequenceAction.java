@@ -9,15 +9,15 @@ import com.badlogic.gdx.utils.Pool;
 
 /**
  * A sequence of OptionalAction, which will instantly skip an action if it isn't supposed to be executed.
- * Effectively, in a single act call, OptionalActions are called until one is enable. 
+ * Effectively, in a single act call, OptionalActions are called until one is enable.
  */
 public class OptionalSequenceAction extends Action{
 
-	private List<OptionalAction> optionalActions;
+	private final List<OptionalAction> optionalActions;
 	private int index;
 
 	public OptionalSequenceAction (OptionalAction... actions) {
-		this.optionalActions = new ArrayList<>();
+		optionalActions = new ArrayList<>();
 		for (int i = 0; i < actions.length; i++) {
 			addAction(actions[i]);
 		}
@@ -62,17 +62,17 @@ public class OptionalSequenceAction extends Action{
 		super.restart();
 		index = 0;
 	}
-	
+
 	public void addAction (OptionalAction optionalAction) {
 		optionalActions.add(optionalAction);
 		if (actor != null) {
 			optionalAction.setActor(actor);
 		}
 	}
-	
+
 	/**
 	 * Adds an action that is non optional
-	 * @param action
+	 * @param action an action that will be executed
 	 */
 	public void addMandatoryAction(Action action) {
 		OptionalAction mandatoryAction = new OptionalAction(() -> true);

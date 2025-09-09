@@ -23,7 +23,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	public HexagonControllerMap2D(HexagonMap<E> hexagonMap, Function<Hexagon, HexagonController2D> hexagonControllerFactory) {
 		this.hexagonMap = new HexagonMap<>();
 
-		hexagonMap.getAllHexagons().forEach(hexagon -> makeControllerForHexagon(hexagonControllerFactory, hexagon, hexagonMap.getValueAt(hexagon)));
+		hexagonMap.getAllHexagons().forEach(hexagon -> makeControllerForHexagon(hexagonControllerFactory, hexagon, hexagonMap.get(hexagon)));
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	 * @return The given controller, or null if the hexagon is not present on this map
 	 */
 	HexagonController2D getControllerOf(Hexagon hexagon) {
-		return hexagonMap.getValueAt(hexagon).f;
+		return hexagonMap.get(hexagon).f();
 	}
 
 
@@ -54,7 +54,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	 */
 	public List<HexagonController2D> getControllerNeighborsOf(Hexagon hexagon) {
 		Set<Hexagon> hexes = hexagonMap.getHexagonNeighborsOf(hexagon);
-		return hexes.stream().map(neighborHexagon -> hexagonMap.getValueAt(neighborHexagon).f).toList();
+		return hexes.stream().map(neighborHexagon -> hexagonMap.get(neighborHexagon).f()).toList();
 	}
 
 	void centerSelf() {
@@ -98,7 +98,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	}
 
 	private Stream<HexagonController2D> getAllControllers() {
-		return hexagonMap.getAllHexagons().stream().map(hex -> hexagonMap.getValueAt(hex).f);
+		return hexagonMap.getAllHexagons().stream().map(hex -> hexagonMap.get(hex).f());
 	}
 
 	public void resizeUI() {

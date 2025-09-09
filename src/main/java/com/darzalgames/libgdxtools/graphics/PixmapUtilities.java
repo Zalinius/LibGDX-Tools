@@ -3,9 +3,9 @@ package com.darzalgames.libgdxtools.graphics;
 import com.badlogic.gdx.graphics.*;
 
 public class PixmapUtilities {
-	
+
 	public static Pixmap convertTextureToPixelMap(Texture texture) {
-		TextureData textureData = texture.getTextureData(); 
+		TextureData textureData = texture.getTextureData();
 		if (!textureData.isPrepared()) {
 			textureData.prepare();
 		}
@@ -15,7 +15,7 @@ public class PixmapUtilities {
 	/**
 	 * @param hitX The x value provided in Actor's hit()
 	 * @param hitY The y value provided in Actor's hit()
-	 * @param map
+	 * @param map the pixmap to analyze
 	 * @return The color on the specified position of the map, or CLEAR if out of bounds
 	 */
 	public static Color getPixelColorOnMap(float hitX, float hitY, Pixmap map) {

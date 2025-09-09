@@ -21,8 +21,6 @@ public class InputReceiver {
 	private final Runnable toggleFullscreenRunnable;
 
 	/**
-	 * @param inputStrategySwitcher
-	 * @param inputPriorityStack
 	 * @param toggleFullscreenRunnable A runnable that toggles between full screen and windowed mode
 	 */
 	public InputReceiver(InputStrategySwitcher inputStrategySwitcher, InputPriorityStack inputPriorityStack, Runnable toggleFullscreenRunnable) {

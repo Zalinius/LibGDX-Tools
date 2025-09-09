@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.darzalgames.darzalcommon.functional.FunctionalConverter;
+import com.darzalgames.darzalcommon.data.GenericInheritanceConverter;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
@@ -28,7 +28,7 @@ public class UniversalSelectBox extends UniversalTextButton {
 		options = new PopUpMenu(true) {
 			@Override
 			protected void setUpTable() {
-				List<VisibleInputConsumer> buttonsAsVisibleInputConsumers = FunctionalConverter.convertList(entryButtons);
+				List<VisibleInputConsumer> buttonsAsVisibleInputConsumers = GenericInheritanceConverter.convertList(entryButtons);
 				menu.replaceContents(buttonsAsVisibleInputConsumers, makeFinalButton("back_message"));
 				menu.setAlignment(Alignment.LEFT, Alignment.LEFT);
 				menu.getView().setBackground(GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable());

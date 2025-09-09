@@ -85,7 +85,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	/**
 	 * Sets this button un/focused, generating a mimicked LibGDX mouse enter/exit event
-	 * @param isFocused
+	 * @param isFocused true if it should be focused, false for unfocusing
 	 * @param forced whether or not to force the focus event (they're not normally sent when in mouse mode)
 	 */
 	public void setFocused(boolean isFocused, boolean forced) {

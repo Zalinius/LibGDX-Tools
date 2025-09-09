@@ -11,7 +11,7 @@ public class UniversalInputStageWithBackground extends UniversalInputStage {
 	/**
 	 * Creates a stage that will ensure that the supplied background is always present
 	 * @param name The name of the stage, used for stage layering and useful for debugging
-	 * @param viewport
+	 * @param viewport The viewport for the stage
 	 * @param background the background to always keep visible as the back-most actor
 	 * @param inputStrategySwitcher The stage needs to register with this
 	 */

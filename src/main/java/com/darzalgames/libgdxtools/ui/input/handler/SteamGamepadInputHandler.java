@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.handler;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -23,6 +24,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 	private SteamControllerActionSetHandle actionSetHandle;
 	private final String joystickActionName;
 	private BiMap<SteamControllerDigitalActionHandle, Input> buttonMappings;
+
 	protected abstract BiMap<SteamControllerDigitalActionHandle, Input> makeButtonMappings(SteamController steamController);
 
 	private boolean justDisconnected;
@@ -89,9 +91,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 	}
 
 	private void checkForControllerJustDisconnected(SteamControllerHandle[] handlesOut) {
-		if (activeController != null
-				&& !Arrays.asList(handlesOut).contains(activeController)
-				&& !justDisconnected) {
+		if (activeController != null && !Arrays.asList(handlesOut).contains(activeController) && !justDisconnected) {
 			controllerDisconnected();
 			justDisconnected = true;
 			activeController = null;
@@ -118,7 +118,6 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 			}
 		}
 	}
-
 
 	private void updateButtonsState() {
 		SteamControllerHandle steamControllerHandle = activeController;
@@ -174,9 +173,7 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 		}
 	}
 
-
 	protected abstract void sendAxisInput();
-
 
 	@Override
 	public Texture getGlyphForInput(Input input) {
@@ -187,27 +184,25 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 			return null;
 		}
 
-		steamController.getDigitalActionOrigins(activeController,
-				actionSetHandle,
-				handle,
-				originsOut);
+		steamController.getDigitalActionOrigins(activeController, actionSetHandle, handle, originsOut);
 
 		ActionOrigin action = originsOut[0];
 
 		if (action == null) { // Check for analog joystick movement
 			SteamControllerAnalogActionHandle handle2 = steamController.getAnalogActionHandle(joystickActionName);
-			steamController.getAnalogActionOrigins(activeController,
-					actionSetHandle,
-					handle2,
-					originsOut);
+			steamController.getAnalogActionOrigins(activeController, actionSetHandle, handle2, originsOut);
 
 			// Prioritize left stick when several joysticks/dpads are available
 			List<ActionOrigin> origins = Arrays.asList(originsOut);
-			origins = origins.stream().filter(o -> o != null).toList();
-			Comparator<ActionOrigin> comparator = Comparator.<ActionOrigin, Boolean>comparing(s -> s.toString().toLowerCase().contains("left") && s.toString().contains("stick")).reversed()
-					.thenComparing(Comparator.naturalOrder());
+			origins = origins.stream().filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
+			Comparator<ActionOrigin> comparator = Comparator.<ActionOrigin, Boolean>comparing(s -> s.toString().toLowerCase().contains("left") && s.toString().contains("stick")).reversed().thenComparing(Comparator.naturalOrder());
 			origins.sort(comparator);
 
+			if (origins.isEmpty()) {
+				// no action for this, likely it's not bound for the current action set
+				// this happens when in a menu but the game in the background still wants to show glyphs
+				return null;
+			}
 			action = origins.get(0);
 		}
 
@@ -223,9 +218,9 @@ public abstract class SteamGamepadInputHandler extends GamepadInputHandler {
 		} else if (input.equals(Input.LEFT)) {
 			direction = "_left";
 		}
-		String ending = "_sz.png"; //all glyphs end in a size "sm"/"md"/"lg", and the direction goes before that
+		String ending = "_sz.png"; // all glyphs end in a size "sm"/"md"/"lg", and the direction goes before that
 		if (!absolutePath.contains(direction)) {
-			absolutePath = new StringBuilder(absolutePath).insert(absolutePath.length()-ending.length(), direction).toString();
+			absolutePath = new StringBuilder(absolutePath).insert(absolutePath.length() - ending.length(), direction).toString();
 		}
 
 		if (darkMode) {

@@ -61,10 +61,13 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	public void hideThis() {
 		releasePriority();
 		if (slidesInAndOut()) {
-			addAction(Actions.sequence(
-					Actions.moveTo(getX(), UserInterfaceSizer.getCurrentHeight(), 0.25f, Interpolation.circle),
-					new RunnableActionBest(runJustBeforeRemove),
-					new RunnableActionBest(super::remove)));
+			addAction(
+					Actions.sequence(
+							Actions.moveTo(getX(), UserInterfaceSizer.getCurrentHeight(), 0.25f, Interpolation.circle),
+							new RunnableActionBest(runJustBeforeRemove),
+							new RunnableActionBest(super::remove)
+					)
+			);
 			toFront();
 		} else {
 			remove();
@@ -84,8 +87,9 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 	}
 
 	@Override
-	public Actor getAsActor() { return this; }
-
+	public Actor getAsActor() {
+		return this;
+	}
 
 	@Override
 	public void resizeUI() {

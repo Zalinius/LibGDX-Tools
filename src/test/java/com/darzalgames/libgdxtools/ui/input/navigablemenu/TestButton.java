@@ -22,6 +22,7 @@ public class TestButton implements VisibleInputConsumer {
 	protected TestButton() {
 		this(Runnables.nullRunnable());
 	}
+
 	protected TestButton(Runnable pressRunnable) {
 		this.pressRunnable = pressRunnable;
 		setBlank(true);
@@ -85,7 +86,7 @@ public class TestButton implements VisibleInputConsumer {
 			// Notify ascendants' capture listeners, starting at the root. Ascendants may stop an event before children receive it.
 			Object[] ascendantsArray = ascendants.items;
 			for (int i = ascendants.size - 1; i >= 0; i--) {
-				Group currentTarget = (Group)ascendantsArray[i];
+				Group currentTarget = (Group) ascendantsArray[i];
 				currentTarget.notify(event, true);
 				if (event.isStopped()) {
 					return event.isCancelled();
@@ -103,7 +104,7 @@ public class TestButton implements VisibleInputConsumer {
 
 			// Notify ascendants' actor listeners, starting at the target. Children may stop an event before ascendants receive it.
 			for (int i = 0, n = ascendants.size; i < n; i++) {
-				((Group)ascendantsArray[i]).notify(event, false);
+				((Group) ascendantsArray[i]).notify(event, false);
 				if (event.isStopped()) {
 					return event.isCancelled();
 				}
@@ -116,7 +117,7 @@ public class TestButton implements VisibleInputConsumer {
 		}
 	}
 
-	private boolean notify (Event event) {
+	private boolean notify(Event event) {
 		// ---------------------------------------------------------------
 		// Below here is copied from LibGDX button
 		if (event.getTarget() == null) {
@@ -205,31 +206,37 @@ public class TestButton implements VisibleInputConsumer {
 		// TODO Auto-generated method stub
 
 	}
+
 	@Override
 	public void consumeKeyInput(Input input) {
 		if (input.equals(Input.ACCEPT)) {
 			pressRunnable.run();
 		}
 	}
+
 	@Override
 	public void focusCurrent() {
 		// TODO Auto-generated method stub
 
 	}
+
 	@Override
 	public void clearSelected() {
 		// TODO Auto-generated method stub
 
 	}
+
 	@Override
 	public void selectDefault() {
 		// TODO Auto-generated method stub
 
 	}
+
 	@Override
 	public void setFocused(boolean focused) {
 		isOver = focused;
 	}
+
 	@Override
 	public void resizeUI() {
 		// TODO Auto-generated method stub

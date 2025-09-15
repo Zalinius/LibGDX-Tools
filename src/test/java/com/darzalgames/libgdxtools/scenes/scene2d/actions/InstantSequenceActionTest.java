@@ -43,7 +43,7 @@ class InstantSequenceActionTest {
 				new RunnableActionBest(() -> spy4.set(true)),
 				new RunnableActionBest(() -> spy5.set(true)),
 				new RunnableActionBest(() -> spy6.set(true))
-				);
+		);
 
 		actor.addAction(sequenceAction);
 		boolean actionDoneAfter1 = sequenceAction.act(0);
@@ -63,9 +63,9 @@ class InstantSequenceActionTest {
 		InstantSequenceAction sequenceAction = new InstantSequenceAction(InstantRepeatActionTest.getTwoFrameAction(), InstantRepeatActionTest.getTwoFrameAction());
 
 		actor.addAction(sequenceAction);
-		boolean actionDoneAfter1 = sequenceAction.act(0);  // The first action gets its first hit
-		boolean actionDoneAfter2 = sequenceAction.act(0);  // The first action gets its second hit and finishes, and the second action gets its first hit
-		boolean actionDoneAfter3 = sequenceAction.act(0);  // The second action gets its second hit and finishes
+		boolean actionDoneAfter1 = sequenceAction.act(0); // The first action gets its first hit
+		boolean actionDoneAfter2 = sequenceAction.act(0); // The first action gets its second hit and finishes, and the second action gets its first hit
+		boolean actionDoneAfter3 = sequenceAction.act(0); // The second action gets its second hit and finishes
 
 		assertFalse(actionDoneAfter1);
 		assertFalse(actionDoneAfter2);

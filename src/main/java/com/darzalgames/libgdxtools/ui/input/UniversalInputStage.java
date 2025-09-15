@@ -11,8 +11,8 @@ public class UniversalInputStage extends StageBest implements InputStrategyObser
 
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
-	 * @param name The name of the stage, used for stage layering and useful for debugging
-	 * @param viewport The viewport for the stage
+	 * @param name                  The name of the stage, used for stage layering and useful for debugging
+	 * @param viewport              The viewport for the stage
 	 * @param inputStrategySwitcher The stage needs to register with this
 	 */
 	public UniversalInputStage(String name, Viewport viewport, InputStrategySwitcher inputStrategySwitcher) {

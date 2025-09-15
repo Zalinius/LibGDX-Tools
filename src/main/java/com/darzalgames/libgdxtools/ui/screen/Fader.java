@@ -39,13 +39,14 @@ public class Fader {
 		GetOnStage.addActorToStage(darkScreen, topmostStageName);
 		darkScreen.clearActions();
 		darkScreen.setColor(Color.WHITE);
-		darkScreen.addAction(new InstantSequenceAction(
-				Actions.fadeOut(fadeTime),
-				new RunnableActionBest(doAfter),
-				Actions.removeActor()
-				));
+		darkScreen.addAction(
+				new InstantSequenceAction(
+						Actions.fadeOut(fadeTime),
+						new RunnableActionBest(doAfter),
+						Actions.removeActor()
+				)
+		);
 	}
-
 
 	public static void doLongFadeOut() {
 		doLongFadeOut(Runnables.nullRunnable());
@@ -55,10 +56,12 @@ public class Fader {
 		GetOnStage.addActorToStage(darkScreen, topmostStageName);
 		hideDarkScreen();
 		darkScreen.clearActions();
-		darkScreen.addAction(new InstantSequenceAction(
-				Actions.fadeIn(fadeTime),
-				new RunnableActionBest(doAfter)
-				));
+		darkScreen.addAction(
+				new InstantSequenceAction(
+						Actions.fadeIn(fadeTime),
+						new RunnableActionBest(doAfter)
+				)
+		);
 	}
 
 	public static void hideDarkScreen() {

@@ -31,8 +31,7 @@ public interface PopUp extends InputConsumer {
 		if (canDismiss()) {
 			ClickListener rightClickBack = new ClickListener(Buttons.RIGHT) {
 				@Override
-				public void clicked(InputEvent event, float x, float y)
-				{
+				public void clicked(InputEvent event, float x, float y) {
 					PopUp.this.removeListener(this);
 					PopUp.this.consumeKeyInput(Input.BACK);
 				}
@@ -43,6 +42,7 @@ public interface PopUp extends InputConsumer {
 
 	// These are implemented by default in Actor, which all of our PopUp objects are.
 	boolean addListener(EventListener listener);
+
 	boolean removeListener(EventListener listener);
 
 	@Override
@@ -54,5 +54,6 @@ public interface PopUp extends InputConsumer {
 	default PopUp getPopUp() {
 		return this;
 	}
+
 	Actor getAsActor();
 }

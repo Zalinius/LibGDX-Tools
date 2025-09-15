@@ -27,7 +27,7 @@ class ParallelActionBestTest {
 				new RunnableActionBest(() -> spy4.set(true)),
 				new RunnableActionBest(() -> spy5.set(true)),
 				new RunnableActionBest(() -> spy6.set(true))
-				);
+		);
 
 		actor.addAction(parallelAction);
 		boolean actionDoneAfter1 = parallelAction.act(0);

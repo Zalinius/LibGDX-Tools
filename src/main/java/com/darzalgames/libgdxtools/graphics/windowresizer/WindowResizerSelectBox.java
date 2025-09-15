@@ -43,17 +43,20 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
-		Stream<UniversalTextButton> buttonStream = allModes.stream().map(mode -> GameInfo.getUserInterfaceFactory().makeTextButton(
-				() -> translateWindowModeOption(mode),
-				() -> {
-					String previousModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
-					ScreenMode previousMode = ScreenMode.valueOf(previousModeString);
-					if (!mode.equals(previousMode)) {
-						windowResizer.setMode(mode, true);
-					}
-					setSelected(mode.toString());
-					closeSelectBox();
-				}));
+		Stream<UniversalTextButton> buttonStream = allModes.stream().map(
+				mode -> GameInfo.getUserInterfaceFactory().makeTextButton(
+						() -> translateWindowModeOption(mode),
+						() -> {
+							String previousModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
+							ScreenMode previousMode = ScreenMode.valueOf(previousModeString);
+							if (!mode.equals(previousMode)) {
+								windowResizer.setMode(mode, true);
+							}
+							setSelected(mode.toString());
+							closeSelectBox();
+						}
+				)
+		);
 		return buttonStream.toList();
 	}
 
@@ -70,11 +73,13 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 		private UniversalLabel revertCountdown;
 
 		private WindowRevertCountdownConfirmationMenu() {
-			super("screen_mode_accept",
+			super(
+					"screen_mode_accept",
 					"accept_control",
 					"revert_message", // TODO give this button the back glyph
 					Runnables.nullRunnable(),
-					MultipleStage.OPTIONS_STAGE_NAME);
+					MultipleStage.OPTIONS_STAGE_NAME
+			);
 		}
 
 		@Override
@@ -99,7 +104,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 
 			InstantRepeatAction repeatAction = new InstantRepeatAction();
 			repeatAction.setTotalCount(11);
-			DelayAction delayThenCountDownAction = new DelayRunnableAction(1, () -> revertCountdown.setTextSupplier(() -> makeCountdownString.apply(Math.max(0, repeatAction.getRemainingCount() -1))));
+			DelayAction delayThenCountDownAction = new DelayRunnableAction(1, () -> revertCountdown.setTextSupplier(() -> makeCountdownString.apply(Math.max(0, repeatAction.getRemainingCount() - 1))));
 			repeatAction.setAction(delayThenCountDownAction);
 
 			SequenceAction sequenceAction = new SequenceAction(repeatAction, new RunnableActionBest(getSecondChoiceRunnable()));

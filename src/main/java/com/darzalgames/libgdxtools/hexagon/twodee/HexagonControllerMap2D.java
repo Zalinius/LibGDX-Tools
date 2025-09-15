@@ -42,7 +42,6 @@ public class HexagonControllerMap2D<E> extends Group {
 		return hexagonMap.get(hexagon).f();
 	}
 
-
 	void unfocusAll() {
 		getAllControllers().forEach(HexagonController2D::clearSelected);
 	}
@@ -89,7 +88,6 @@ public class HexagonControllerMap2D<E> extends Group {
 		getAllControllers().forEach(controller -> controller.moveBy(-diffX, -diffY));
 		UserInterfaceSizer.makeActorCentered(this);
 	}
-
 
 	private void makeControllerForHexagon(Function<Hexagon, HexagonController2D> hexagonControllerFactory, Hexagon hexagon, E e) {
 		HexagonController2D controller = hexagonControllerFactory.apply(hexagon);

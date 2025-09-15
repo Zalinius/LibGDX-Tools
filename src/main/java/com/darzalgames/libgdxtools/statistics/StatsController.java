@@ -19,7 +19,7 @@ public interface StatsController {
 	/**
 	 * Add to or subtract from a particular Steam statistic value. The should even work offline.
 	 * @param stat The statistic key, matching those we set up on the Steam website
-	 * @param val The amount to increment/decrement by
+	 * @param val  The amount to increment/decrement by
 	 */
 	void setStat(String stat, int val);
 

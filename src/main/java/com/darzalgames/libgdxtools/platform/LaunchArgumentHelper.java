@@ -22,10 +22,9 @@ public class LaunchArgumentHelper {
 	 * @return The corresponding CrashHandler
 	 */
 	public static CrashHandler getCrashHandler(List<String> launchArgs) {
-		if(launchArgs.contains(OPTION_NO_CRASH_REPORTING)) {
+		if (launchArgs.contains(OPTION_NO_CRASH_REPORTING)) {
 			return new DummyCrashHandler();
-		}
-		else {
+		} else {
 			return new DesktopCrashHandler();
 		}
 	}
@@ -35,18 +34,15 @@ public class LaunchArgumentHelper {
 	 * @param argsList java main arguments
 	 * @return The corresponding platform
 	 */
-	public static GamePlatform getGamePlatform(List<String> argsList, Supplier<GamePlatform> makeWindowsPlatform, Supplier<GamePlatform> makeLinuxPlatform,	Supplier<GamePlatform> makeMacPlatform) {
+	public static GamePlatform getGamePlatform(List<String> argsList, Supplier<GamePlatform> makeWindowsPlatform, Supplier<GamePlatform> makeLinuxPlatform, Supplier<GamePlatform> makeMacPlatform) {
 
-		if(listContainsIgnoreCase(argsList, GamePlatform.WINDOWS)) {
+		if (listContainsIgnoreCase(argsList, GamePlatform.WINDOWS)) {
 			return makeWindowsPlatform.get();
-		}
-		else if(listContainsIgnoreCase(argsList, GamePlatform.LINUX)) {
+		} else if (listContainsIgnoreCase(argsList, GamePlatform.LINUX)) {
 			return makeLinuxPlatform.get();
-		}
-		else if(listContainsIgnoreCase(argsList, GamePlatform.MAC)) {
+		} else if (listContainsIgnoreCase(argsList, GamePlatform.MAC)) {
 			return makeMacPlatform.get();
-		}
-		else {
+		} else {
 			throw new IllegalArgumentException("Args :" + argsList.toString() + " does not contain a valid Game Platform");
 		}
 	}
@@ -54,8 +50,5 @@ public class LaunchArgumentHelper {
 	private static boolean listContainsIgnoreCase(List<String> argsList, String toCheckFor) {
 		return argsList.stream().anyMatch(argument -> argument.equalsIgnoreCase(toCheckFor));
 	}
-
-
-
 
 }

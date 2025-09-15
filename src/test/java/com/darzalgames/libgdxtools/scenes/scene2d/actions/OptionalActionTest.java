@@ -21,13 +21,13 @@ class OptionalActionTest {
 		runnableAction.setRunnable(() -> spy.set(true));
 		DelegateAction optionalAction = new OptionalAction(() -> false);
 		optionalAction.setAction(runnableAction);
-		
+
 		boolean actionDone = optionalAction.act(0);
-		
+
 		assertFalse(spy.get());
 		assertTrue(actionDone);
 	}
-	
+
 	@Test
 	void act_whenOptionalActionHasSupplierReturningTrue_activatesAction() throws Exception {
 		AtomicBoolean spy = new AtomicBoolean(false);
@@ -35,11 +35,11 @@ class OptionalActionTest {
 		runnableAction.setRunnable(() -> spy.set(true));
 		DelegateAction optionalAction = new OptionalAction(() -> true);
 		optionalAction.setAction(runnableAction);
-		
+
 		boolean actionDone = optionalAction.act(0);
-		
+
 		assertTrue(spy.get());
 		assertTrue(actionDone);
 	}
-		
+
 }

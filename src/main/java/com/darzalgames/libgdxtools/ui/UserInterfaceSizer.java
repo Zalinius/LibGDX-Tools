@@ -7,15 +7,14 @@ import com.darzalgames.libgdxtools.maingame.GameInfo;
 
 public class UserInterfaceSizer {
 
-	private UserInterfaceSizer() {
-	}
+	private UserInterfaceSizer() {}
 
 	private static Stage stage;
 	private static float scaling = 1;
 	private static Runnable updateFont;
 
 	/**
-	 * @param actor The actor to size, typically a nine/ten patch
+	 * @param actor      The actor to size, typically a nine/ten patch
 	 * @param proportion The percentage of the world/stage WIDTH and HEIGHT that this actor should occupy [0-1]
 	 */
 	public static void sizeToPercentage(Actor actor, float proportion) {
@@ -23,8 +22,8 @@ public class UserInterfaceSizer {
 	}
 
 	/**
-	 * @param actor The actor to size, typically a nine/ten patch
-	 * @param width The percentage of the world/stage WIDTH that this actor should occupy [0-1]
+	 * @param actor  The actor to size, typically a nine/ten patch
+	 * @param width  The percentage of the world/stage WIDTH that this actor should occupy [0-1]
 	 * @param height The percentage of the world/stage HEIGHT that this actor should occupy [0-1]
 	 */
 	public static void sizeToPercentage(Actor actor, float width, float height) {
@@ -32,31 +31,31 @@ public class UserInterfaceSizer {
 	}
 
 	/**
-	 * @param actor The actor to resize, maintaining aspect ratio, typically an image
+	 * @param actor   The actor to resize, maintaining aspect ratio, typically an image
 	 * @param percent The percentage of the world/stage WIDTH or HEIGHT (minimum) that this actor should occupy [0-1]
 	 */
 	public static void scaleToMinimumPercentage(Actor actor, float percent) {
 		float multiplierWidth = getWidthPercentage(percent);
 		float multiplierHeight = getHeightPercentage(percent);
 		if (multiplierWidth <= multiplierHeight) {
-			actor.setSize(multiplierWidth, multiplierWidth * (actor.getHeight()/actor.getWidth()));
+			actor.setSize(multiplierWidth, multiplierWidth * (actor.getHeight() / actor.getWidth()));
 		} else {
-			actor.setSize(multiplierHeight * (actor.getWidth()/actor.getHeight()), multiplierHeight);
+			actor.setSize(multiplierHeight * (actor.getWidth() / actor.getHeight()), multiplierHeight);
 		}
 	}
 
 	/**
 	 * Size an actor relative to the screen size without taking UI scaling into account. Useful for decorative actors like the splash screen.
-	 * @param actor The actor to resize, maintaining aspect ratio, typically an image
+	 * @param actor   The actor to resize, maintaining aspect ratio, typically an image
 	 * @param percent The percentage of the world/stage WIDTH or HEIGHT (minimum) that this actor should occupy [0-1]
 	 */
 	public static void sizeToMinimumPercentageWithoutUIScaling(Actor actor, float percent) {
 		float multiplierWidth = getCurrentWidth() * percent;
 		float multiplierHeight = getCurrentHeight() * percent;
 		if (multiplierWidth <= multiplierHeight) {
-			actor.setSize(multiplierWidth, multiplierWidth * (actor.getHeight()/actor.getWidth()));
+			actor.setSize(multiplierWidth, multiplierWidth * (actor.getHeight() / actor.getWidth()));
 		} else {
-			actor.setSize(multiplierHeight * (actor.getWidth()/actor.getHeight()), multiplierHeight);
+			actor.setSize(multiplierHeight * (actor.getWidth() / actor.getHeight()), multiplierHeight);
 		}
 	}
 
@@ -70,36 +69,36 @@ public class UserInterfaceSizer {
 
 	/**
 	 * @param drawable The drawable to set minimum width and height, maintaining aspect ratio, typically an image
-	 * @param percent The percentage of the world/stage WIDTH or HEIGHT (minimum) that this actor should occupy [0-1]
+	 * @param percent  The percentage of the world/stage WIDTH or HEIGHT (minimum) that this actor should occupy [0-1]
 	 */
 	public static void scaleToMinimumPercentage(Drawable drawable, float percent, float originalWidth, float originalHeight) {
 		float multiplierWidth = getWidthPercentage(percent);
 		float multiplierHeight = getHeightPercentage(percent);
 		if (multiplierWidth <= multiplierHeight) {
 			drawable.setMinWidth(multiplierWidth);
-			drawable.setMinHeight(multiplierWidth * (originalHeight/originalWidth));
+			drawable.setMinHeight(multiplierWidth * (originalHeight / originalWidth));
 		} else {
-			drawable.setMinWidth(multiplierHeight * (originalWidth/originalHeight));
+			drawable.setMinWidth(multiplierHeight * (originalWidth / originalHeight));
 			drawable.setMinHeight(multiplierHeight);
 		}
 	}
-
 
 	/**
 	 * @return The percentage of the stage's WIDTH [0-1], useful for things like padding
 	 */
 	public static float getWidthPercentage(float percentage) {
-		float scaledPercentage = Math.clamp(percentage*scaling, 0, 1);
-		return getCurrentWidth()*scaledPercentage;
+		float scaledPercentage = Math.clamp(percentage * scaling, 0, 1);
+		return getCurrentWidth() * scaledPercentage;
 	}
 
 	/**
 	 * @return The percentage of the stage's HEIGHT [0-1], useful for things like padding
 	 */
 	public static float getHeightPercentage(float percentage) {
-		float scaledPercentage = Math.clamp(percentage*scaling, 0, 1);
-		return getCurrentHeight()*scaledPercentage;
+		float scaledPercentage = Math.clamp(percentage * scaling, 0, 1);
+		return getCurrentHeight() * scaledPercentage;
 	}
+
 	/**
 	 * @return The percentage of the stage's HEIGHT or WIDTH [0-1], whatever is smaller
 	 */
@@ -125,11 +124,11 @@ public class UserInterfaceSizer {
 	 * @param actor The given actor will be centered on screen, call this every frame to stay centered
 	 */
 	public static void makeActorCentered(final Actor actor) {
-		actor.setPosition(getCurrentWidth()/2f - (actor.getWidth()*actor.getScaleX()) / 2f,
-				getCurrentHeight()/2f - (actor.getHeight()*actor.getScaleY()) / 2f);
+		actor.setPosition(
+				getCurrentWidth() / 2f - (actor.getWidth() * actor.getScaleX()) / 2f,
+				getCurrentHeight() / 2f - (actor.getHeight() * actor.getScaleY()) / 2f
+		);
 	}
-
-
 
 	public static void setStage(Stage stage) {
 		UserInterfaceSizer.stage = stage;

@@ -23,7 +23,7 @@ public class UniversalLabel extends TypingLabel {
 	}
 
 	public void setTextSupplier(Supplier<String> textSupplier) {
-		this.textSupplier =  () -> TemporaryStyler.make("[@" + typingLabelStyle.font.name + "]" + textSupplier.get());
+		this.textSupplier = () -> TemporaryStyler.make("[@" + typingLabelStyle.font.name + "]" + textSupplier.get());
 	}
 
 	public boolean isBlank() {
@@ -39,7 +39,7 @@ public class UniversalLabel extends TypingLabel {
 	public void resizeUI() {
 		setFont(typingLabelStyle.font); // updates us to the resized font size
 		setText(textSupplier.get(), true, false);
-		skipToTheEnd();  // Only Textra TypingLabel do the special effects, so we skip to the end right away
+		skipToTheEnd(); // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		invalidateHierarchy();
 	}
 

@@ -25,13 +25,12 @@ public class SteamConnection {
 		try {
 			SteamAPI.loadLibraries();
 			steamInitialized = SteamAPI.init();
-			if(steamInitialized) {
+			if (steamInitialized) {
 				ConnectedSteamStrategy connectedSteamStrategy = new ConnectedSteamStrategy(makeSteamGamepadInputHandler.get());
 				connectedSteamStrategy.initialize();
 				Gdx.app.log(STEAM_CONNECTED, "Steam initialized");
 				return connectedSteamStrategy;
-			}
-			else {
+			} else {
 				Gdx.app.error(STEAM_NOT_CONNECTED, "Could not initialize Steam. Is Steam running?");
 				return new DummySteamStrategy(makeFallbackGamepadInputHandler.get());
 			}

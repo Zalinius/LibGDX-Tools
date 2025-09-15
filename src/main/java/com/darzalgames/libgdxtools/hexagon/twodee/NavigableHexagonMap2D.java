@@ -82,7 +82,6 @@ public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E
 		}
 	}
 
-
 	@Override
 	public boolean shouldBeUnregistered() {
 		return getStage() == null;

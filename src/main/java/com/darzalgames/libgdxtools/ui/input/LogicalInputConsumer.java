@@ -12,22 +12,37 @@ import com.darzalgames.libgdxtools.ui.Alignment;
  */
 public interface LogicalInputConsumer extends InputConsumer {
 
-	@Override default void setTouchable(Touchable isTouchable) {}
+	@Override
+	default void setTouchable(Touchable isTouchable) {}
 
-	@Override default void selectDefault() {}
+	@Override
+	default void selectDefault() {}
 
-	@Override default void focusCurrent() {}
+	@Override
+	default void focusCurrent() {}
 
-	@Override default void consumeKeyInput(Input input) {}
+	@Override
+	default void consumeKeyInput(Input input) {}
 
-	@Override default void clearSelected() {}
+	@Override
+	default void clearSelected() {}
 
-	@Override default void setAlignment(Alignment alignment) {}
+	@Override
+	default void setAlignment(Alignment alignment) {}
 
-	@Override default void setFocused(boolean focused) {}
+	@Override
+	default void setFocused(boolean focused) {}
 
-	@Override default void setDisabled(boolean disabled) { }
-	@Override default boolean isDisabled() { return false; }
+	@Override
+	default void setDisabled(boolean disabled) {}
 
-	@Override default boolean isBlank() { return false; }
+	@Override
+	default boolean isDisabled() {
+		return false;
+	}
+
+	@Override
+	default boolean isBlank() {
+		return false;
+	}
 }

@@ -23,7 +23,7 @@ public abstract class TextSupplier {
 	/**
 	 * This will first check the more transitive top bundle (e.g. a scenario in Quest Giver), then the base bundle (text used all the time in the game, such as menus).
 	 * If there is no bundle, the supplied key is returned unchanged.
-	 * @param key The localization key, must be an exact match to a key in the bundle file
+	 * @param key  The localization key, must be an exact match to a key in the bundle file
 	 * @param args Any optional arguments to supply to the localized sentence, e.g. character names, a number for pluralization, etc
 	 * @return The localized line of text
 	 */
@@ -91,7 +91,6 @@ public abstract class TextSupplier {
 		bundleManager.throwExceptions = shouldThrowExceptions;
 	}
 
-
 	public static SelectBoxContentManager getContentManager() {
 		return new SelectBoxContentManager() {
 			@Override
@@ -106,15 +105,16 @@ public abstract class TextSupplier {
 
 			@Override
 			public List<SelectBoxButtonInfo> getOptionButtons() {
-				return bundleManager.displayNames.getSecondKeyset().stream().map(locale ->
-				new SelectBoxButtonInfo(
-						() -> bundleManager.displayNames.getFirstValue(locale),
-						() -> {
-							bundleManager.locale = locale;
-							bundleManager.useLocale();
-							GameInfo.getSaveManager().save();
-						})
-						).toList();
+				return bundleManager.displayNames.getSecondKeyset().stream().map(
+						locale -> new SelectBoxButtonInfo(
+								() -> bundleManager.displayNames.getFirstValue(locale),
+								() -> {
+									bundleManager.locale = locale;
+									bundleManager.useLocale();
+									GameInfo.getSaveManager().save();
+								}
+						)
+				).toList();
 			}
 		};
 	}

@@ -43,7 +43,7 @@ public class DesktopCrashHandler extends CrashHandler {
 			return status;
 		};
 
-		if(shouldHavePopup(crashReport)) {
+		if (shouldHavePopup(crashReport)) {
 			JFrame.setDefaultLookAndFeelDecorated(false);
 			CrashLocalization crashLocalization = CrashLocalization.getLocalizationFromCode(Locale.getDefault().getLanguage());
 			DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, reportCrashOnline, crashReportLocalFile.getAbsolutePath(), crashLocalization);
@@ -64,9 +64,8 @@ public class DesktopCrashHandler extends CrashHandler {
 		statuses.forEach(status -> logError("  " + status));
 	}
 
-
 	private ReportStatus reportCrashToFile(File crashReportFile, String crashReportJson) {
-		try(FileWriter fileWriter = new FileWriter(crashReportFile)){
+		try (FileWriter fileWriter = new FileWriter(crashReportFile)) {
 			fileWriter.write(crashReportJson);
 		} catch (IOException e) {
 			logError("Couldn't write crash report to file: " + crashReportFile.getName());
@@ -97,19 +96,18 @@ public class DesktopCrashHandler extends CrashHandler {
 			return new ReportStatus(false, "ERR", "Did not send crash report to DarBot 5000: " + crashReportFileName);
 		}
 
-		if(response != null && isHttpCodeSuccess(response.statusCode())) {
+		if (response != null && isHttpCodeSuccess(response.statusCode())) {
 			return new ReportStatus(true, Integer.toString(response.statusCode()), "SUCCESS - Sent crash report to DarBot 5000: " + crashReportFileName);
-		}
-		else if (response != null) {
+		} else if (response != null) {
 			return new ReportStatus(false, Integer.toString(response.statusCode()), "FAIL - Did not send crash report to DarBot 5000: " + crashReportFileName);
-		}
-		else {
+		} else {
 			return new ReportStatus(false, "ERR", "Did not send crash report to DarBot 5000: " + crashReportFileName);
 		}
 	}
 
 	public static final int HTTP_SUCCESS_PREFIX = 2;
 	public static final int HTTP_CODE_FAMILY_SIZE = 100;
+
 	public static boolean isHttpCodeSuccess(int httpCode) {
 		return httpCode / HTTP_CODE_FAMILY_SIZE == HTTP_SUCCESS_PREFIX;
 	}

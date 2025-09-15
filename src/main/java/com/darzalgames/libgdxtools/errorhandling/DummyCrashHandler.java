@@ -15,7 +15,7 @@ public class DummyCrashHandler extends CrashHandler {
 
 	@Override
 	protected void logCrashReportStatus(List<ReportStatus> statuses) {
-		//do nothing
+		// do nothing
 	}
 
 }

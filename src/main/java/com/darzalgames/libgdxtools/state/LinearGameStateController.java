@@ -8,11 +8,13 @@ public abstract class LinearGameStateController extends GameStateController {
 	protected LinearGameStateController(GameState state) {
 		super(state);
 	}
-	
+
 	@Override
 	public final void focusCurrent() {}
+
 	@Override
 	public final void clearSelected() {}
+
 	@Override
 	public void selectDefault() {}
 

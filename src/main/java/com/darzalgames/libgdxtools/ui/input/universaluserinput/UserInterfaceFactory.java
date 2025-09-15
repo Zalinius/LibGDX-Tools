@@ -35,7 +35,6 @@ public abstract class UserInterfaceFactory {
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Runnable soundInteractRunnable;
 
-
 	private final FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference;
 
 	private static final String QUIT_GAME_KEY = "quit_game";
@@ -46,13 +45,14 @@ public abstract class UserInterfaceFactory {
 		this.soundInteractRunnable = soundInteractRunnable;
 
 		this.sampleGlyphSupplierForSizeReference = sampleGlyphSupplierForSizeReference;
-		/* We use an un-connected copy of the fallback gamepad system to get glyphs as a size reference: the Steam glyphs are higher-res
-		 * and since I work with the fallback system while designing the UI, this ensures that the Steam glyphs layout nicely / the same. */
+		/*
+		 * We use an un-connected copy of the fallback gamepad system to get glyphs as a size reference: the Steam glyphs are higher-res
+		 * and since I work with the fallback system while designing the UI, this ensures that the Steam glyphs layout nicely / the same.
+		 */
 		Controllers.removeListener(sampleGlyphSupplierForSizeReference);
 
 		quitGameRunnable = Gdx.app::exit;
 	}
-
 
 	protected abstract void addGameSpecificHighlightListener(UniversalDoodad button);
 
@@ -85,7 +85,6 @@ public abstract class UserInterfaceFactory {
 		return new UniversalLabel(textSupplier, labelStyle);
 	}
 
-
 	/**
 	 * Makes a spacer which can be listed among other buttons, but isn't interactable and which will
 	 * expand out to fill any available space in the menu
@@ -93,11 +92,24 @@ public abstract class UserInterfaceFactory {
 	 */
 	public UniversalDoodad getSpacer() {
 		UniversalButton spacer = new UniversalButton(Runnables.nullRunnable(), inputStrategySwitcher, soundInteractRunnable, skinManager.getBlankButtonStyle()) {
-			@Override public void setAlignment(Alignment alignment) { }
-			@Override public boolean isBlank() { return true; }
-			@Override public void colorOtherComponentsBasedOnFocus(Color color)  { /* not needed */ }
-			@Override public void setDisabled(boolean disabled) { /* stay disabled */ }
-			@Override public boolean isDisabled() { return true; }
+			@Override
+			public void setAlignment(Alignment alignment) {}
+
+			@Override
+			public boolean isBlank() {
+				return true;
+			}
+
+			@Override
+			public void colorOtherComponentsBasedOnFocus(Color color) { /* not needed */ }
+
+			@Override
+			public void setDisabled(boolean disabled) { /* stay disabled */ }
+
+			@Override
+			public boolean isDisabled() {
+				return true;
+			}
 		};
 		spacer.setName("spacer");
 		return spacer;
@@ -109,10 +121,12 @@ public abstract class UserInterfaceFactory {
 			public boolean isBlank() {
 				return image != null;
 			}
+
 			@Override
 			public void setAlignment(Alignment alignment) {
 				getCell(image).align(alignment.getAlignment());
 			}
+
 			@Override
 			public void colorOtherComponentsBasedOnFocus(Color color) {
 				image.setColor(color);
@@ -130,6 +144,7 @@ public abstract class UserInterfaceFactory {
 	public UniversalTextButton makeTextButton(Supplier<String> textSupplier, final Runnable runnable) {
 		return makeTextButton(textSupplier, runnable, Input.NONE);
 	}
+
 	public UniversalTextButton makeTextButton(Supplier<String> textSupplier, final Runnable runnable, Input inputForGlyph) {
 		return makeTextButtonWithStyle(textSupplier, runnable, skinManager.getDefaultButtonStyle(), skinManager.getDefaultLableStyle(), inputForGlyph);
 	}
@@ -144,8 +159,6 @@ public abstract class UserInterfaceFactory {
 		}
 		return button;
 	}
-
-
 
 	public UniversalSelectBox getSelectBox(SelectBoxContentManager contentManager) {
 		String boxLabel = contentManager.getBoxLabelKey();
@@ -185,10 +198,21 @@ public abstract class UserInterfaceFactory {
 
 	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility) {
 		UniversalButton button = new UniversalButton(() -> toggleOptionsScreenVisibility.accept(true), inputStrategySwitcher, soundInteractRunnable, skinManager.getSettingsButtonStyle()) {
-			@Override public String toString() { return "options button"; }
-			@Override public boolean isBlank() { return false; }
-			@Override public void setAlignment(Alignment alignment) { /* nothing? */ }
-			@Override public void colorOtherComponentsBasedOnFocus(Color color)  { /* not needed */ }
+			@Override
+			public String toString() {
+				return "options button";
+			}
+
+			@Override
+			public boolean isBlank() {
+				return false;
+			}
+
+			@Override
+			public void setAlignment(Alignment alignment) { /* nothing? */ }
+
+			@Override
+			public void colorOtherComponentsBasedOnFocus(Color color) { /* not needed */ }
 		};
 		ControlsGlyph glyph = getControlsGlyphForButton(Input.PAUSE, button);
 		glyph.setAlignment(Alignment.BOTTOM_RIGHT);

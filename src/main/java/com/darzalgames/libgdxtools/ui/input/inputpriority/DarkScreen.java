@@ -41,7 +41,7 @@ class DarkScreen extends Image {
 		UserInterfaceSizer.scaleToFillScreenAndMakeCentered(this); // Set full screen size immediately so tests can click it in the same frame
 		int actorIndex = actorPopup.getZIndex();
 		setZIndex(actorIndex);
-		actorPopup.setZIndex(actorIndex+1);
+		actorPopup.setZIndex(actorIndex + 1);
 		// There used to be a 1 second delay here before setting the dark screen touchable, I'm not sure why.
 		setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled);
 		addAction(Actions.fadeIn(0.25f, Interpolation.circle));
@@ -49,10 +49,12 @@ class DarkScreen extends Image {
 
 	void fadeOutAndRemove() {
 		clearActions();
-		addAction(new InstantSequenceAction(
-				Actions.fadeOut(0.25f, Interpolation.circle),
-				Actions.removeActor(this)
-				));
+		addAction(
+				new InstantSequenceAction(
+						Actions.fadeOut(0.25f, Interpolation.circle),
+						Actions.removeActor(this)
+				)
+		);
 	}
 
 	@Override

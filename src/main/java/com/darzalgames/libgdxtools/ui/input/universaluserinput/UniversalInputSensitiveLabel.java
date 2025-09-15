@@ -13,7 +13,7 @@ public class UniversalInputSensitiveLabel extends UniversalLabel implements Inpu
 
 	/**
 	 * Creates a label that changes it's text when the input strategy changes
-	 * @param labelTextSupplier supplies a string for what the label should say based on the current input method (using info from the inputStrategySwitcher, perhaps)
+	 * @param labelTextSupplier     supplies a string for what the label should say based on the current input method (using info from the inputStrategySwitcher, perhaps)
 	 * @param style
 	 * @param inputStrategySwitcher
 	 */

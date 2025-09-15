@@ -77,7 +77,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		super.setTouchable(touchable);
 	}
 
-
 	@Override
 	public void setFocused(boolean isFocused) {
 		setFocused(isFocused, false);
@@ -86,17 +85,15 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	/**
 	 * Sets this button un/focused, generating a mimicked LibGDX mouse enter/exit event
 	 * @param isFocused true if it should be focused, false for unfocusing
-	 * @param forced whether or not to force the focus event (they're not normally sent when in mouse mode)
+	 * @param forced    whether or not to force the focus event (they're not normally sent when in mouse mode)
 	 */
 	public void setFocused(boolean isFocused, boolean forced) {
 		InputEvent event = Pools.obtain(InputEvent.class);
 		if (!isFocused) {
 			event.setType(InputEvent.Type.exit);
-		}
-		else if (!inputStrategySwitcher.isMouseMode() || forced) {
+		} else if (!inputStrategySwitcher.isMouseMode() || forced) {
 			event.setType(InputEvent.Type.enter);
-		}
-		else {
+		} else {
 			event.setType(null); // Since the events are pooled I think they can come with a type?! (the type of the last event it was used for?)
 		}
 
@@ -139,10 +136,9 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	}
 
 	@Override
-	public void selectDefault() { /*A basic doodad doesn't have any nested components to select*/ }
+	public void selectDefault() { /* A basic doodad doesn't have any nested components to select */ }
 
-
-	// ----------------- \/  VISUAL STYLING  \/  ----------------- //
+	// ----------------- \/ VISUAL STYLING \/ ----------------- //
 	/** Returns appropriate background drawable from the style based on the current button state. */
 	protected @Null Drawable getBackgroundDrawable() {
 		if (isDisabled() && style.disabled != null) {
@@ -168,7 +164,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		validate();
 
 		setBackground(getBackgroundDrawable());
-
 
 		Color labelColor = getColorBasedOnFocus();
 		colorOtherComponentsBasedOnFocus(labelColor);
@@ -203,7 +198,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		}
 	}
 
-
 	public abstract void colorOtherComponentsBasedOnFocus(Color color);
 
 	private boolean isPressed() {
@@ -215,11 +209,9 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		Color textColor = SkinManager.getOutOfFocusColor();
 		if (isDisabled()) {
 			textColor = SkinManager.getDisabledColor();
-		}
-		else if (isPressed()) {
+		} else if (isPressed()) {
 			textColor = SkinManager.getDarkColor();
-		}
-		else if (focused || isOver()) {
+		} else if (focused || isOver()) {
 			textColor = SkinManager.getFocusedColor();
 		}
 		return textColor;

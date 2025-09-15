@@ -50,7 +50,7 @@ public class UniversalSlider extends UniversalTextButton {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				float currentValue = slider.getValue();
-				if (currentValue != previousValue) { //The slider fires a ChangeEvent on touchUp (mouse mode) which we want to ignore
+				if (currentValue != previousValue) { // The slider fires a ChangeEvent on touchUp (mouse mode) which we want to ignore
 					requestInteractSound();
 				}
 				previousValue = currentValue;
@@ -77,14 +77,14 @@ public class UniversalSlider extends UniversalTextButton {
 	@Override
 	public void consumeKeyInput(Input input) {
 		if (input == Input.LEFT || input == Input.RIGHT) {
-			float value = slider.getValue() + (input == Input.LEFT ? -1 : 1)*slider.getStepSize();
+			float value = slider.getValue() + (input == Input.LEFT ? -1 : 1) * slider.getStepSize();
 			slider.setValue(value);
 		}
 	}
 
 	/**
 	 * Set the position of the slider, optionally triggering the sound effect for doing so
-	 * @param newPosition A value within the bar's min/max range, it's clamped regardless
+	 * @param newPosition     A value within the bar's min/max range, it's clamped regardless
 	 * @param withSoundEffect Whether or not to play the interaction sound
 	 */
 	public void setSliderPosition(float newPosition, boolean withSoundEffect) {

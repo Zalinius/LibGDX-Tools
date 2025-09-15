@@ -14,13 +14,15 @@ public abstract class WindowResizer {
 		WINDOWED,
 	}
 
-
 	protected ScreenMode currentScreenMode;
 	private ScreenMode previousScreenMode;
 
 	public abstract void setScreenSize(Coordinate size);
+
 	protected abstract void switchToWindowed();
+
 	protected abstract void switchToBorderless();
+
 	protected abstract void switchToFullScreen();
 
 	private InputStrategySwitcher inputStrategySwitcher;
@@ -53,7 +55,6 @@ public abstract class WindowResizer {
 			setMode(ScreenMode.WINDOWED, true);
 		}
 	}
-
 
 	protected void setMode(ScreenMode screenMode, boolean offerToRevert) {
 		previousScreenMode = currentScreenMode;
@@ -95,7 +96,7 @@ public abstract class WindowResizer {
 	public void setModeFromPreferences() {
 		String preferredModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
 		currentScreenMode = ScreenMode.valueOf(preferredModeString);
-		switch(currentScreenMode) {
+		switch (currentScreenMode) {
 		case BORDERLESS:
 			switchToBorderless();
 			break;

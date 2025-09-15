@@ -58,27 +58,42 @@ public class SampleUserInterfaceGame extends MainGame {
 		new Lwjgl3Application(new SampleUserInterfaceGame(Arrays.asList(args)), config);
 	}
 
-
-
 	public SampleUserInterfaceGame(List<String> args) {
 		super(new WindowResizerDesktop(), LaunchArgumentHelper.getGamePlatform(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new));
 	}
 
 	@Override
-	protected void beginLoadingAssets() {
-	}
+	protected void beginLoadingAssets() {}
 
 	@Override
 	protected UserInterfaceFactory initializeGameAndUserInterfaceFactory() {
 		FallbackGamepadInputHandler fallbackRef = new FallbackGamepadInputHandler(inputStrategySwitcher, null) {
-			@Override public void setActionSet(Supplier<String> newActionSetKeySupplier) { }
-			@Override protected List<Input> getTrackedInputs() { return List.of(); }
-			@Override protected Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor) { return null; }
-			@Override protected Map<Input, AssetDescriptor<Texture>> makeGlyphMappings() { return new HashMap<>(); }
-			@Override protected Map<Function<Controller, Integer>, Input> makeButtonMappings() { return new HashMap<>(); }
+			@Override
+			public void setActionSet(Supplier<String> newActionSetKeySupplier) {}
+
+			@Override
+			protected List<Input> getTrackedInputs() {
+				return List.of();
+			}
+
+			@Override
+			protected Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor) {
+				return null;
+			}
+
+			@Override
+			protected Map<Input, AssetDescriptor<Texture>> makeGlyphMappings() {
+				return new HashMap<>();
+			}
+
+			@Override
+			protected Map<Function<Controller, Integer>, Input> makeButtonMappings() {
+				return new HashMap<>();
+			}
 		};
 		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, Runnables.nullRunnable(), fallbackRef) {
-			@Override protected void addGameSpecificHighlightListener(UniversalDoodad button) { /*do nothing*/ }
+			@Override
+			protected void addGameSpecificHighlightListener(UniversalDoodad button) { /* do nothing */ }
 		};
 		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
 		return factory;
@@ -89,10 +104,14 @@ public class SampleUserInterfaceGame extends MainGame {
 		return new DesktopSaveManager() {
 			@Override
 			public void save() {/* notYetNeeded */}
+
 			@Override
-			public boolean load() { return true; }
+			public boolean load() {
+				return true;
+			}
 		};
 	}
+
 	@Override
 	protected void setUpBeforeLoadingSave() {/* notYetNeeded */}
 
@@ -125,6 +144,7 @@ public class SampleUserInterfaceGame extends MainGame {
 			protected Input remapInputIfNecessary(Input input, int keycode) {
 				return input;
 			}
+
 			@Override
 			protected List<Input> getKeyWhitelist() {
 				List<Input> keysToAllow = new ArrayList<>();
@@ -143,6 +163,7 @@ public class SampleUserInterfaceGame extends MainGame {
 			public Texture getGlyphForInput(Input input) {
 				return null;
 			}
+
 			@Override
 			protected Map<Input, AssetDescriptor<Texture>> makeButtonMappings() {
 				return Collections.emptyMap();
@@ -176,7 +197,8 @@ public class SampleUserInterfaceGame extends MainGame {
 		UniversalCheckbox focusMute = GameInfo.getUserInterfaceFactory().getCheckbox(
 				() -> "I am NOT checked!",
 				() -> "I am checked!",
-				isChecked -> {});
+				isChecked -> {}
+		);
 		focusMute.initializeAsChecked(true);
 		menuButtons.add(focusMute);
 
@@ -200,7 +222,7 @@ public class SampleUserInterfaceGame extends MainGame {
 				return List.of(
 						new SelectBoxButtonInfo(option1, () -> Gdx.app.log("Select Box", "You picked " + option1.get())),
 						new SelectBoxButtonInfo(option2, () -> Gdx.app.log("Select Box", "You picked " + option2.get()))
-						);
+				);
 			}
 
 			@Override
@@ -257,7 +279,6 @@ public class SampleUserInterfaceGame extends MainGame {
 		UniversalButton popUpButton = GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Open a popup!", () -> InputPriority.claimPriority(choicePopup, POP_UP_STAGE_NAME));
 		menuButtons.add(popUpButton);
 
-
 		menuButtons.add(GameInfo.getUserInterfaceFactory().getSpacer());
 
 		// Quit button
@@ -276,12 +297,28 @@ public class SampleUserInterfaceGame extends MainGame {
 				UserInterfaceSizer.makeActorCentered(popup.getView());
 				addActor(popup.getView());
 			}
-			@Override public void resizeUI() { /*Not needed*/ }
-			@Override public boolean isDisabled() { return false; }
-			@Override public boolean isBlank() { return false; }
-			@Override public void setAlignment(Alignment alignment) { /*Not needed*/ }
-			@Override public void setFocused(boolean focused) { /*Not needed*/ }
-			@Override public void setDisabled(boolean disabled) { /*Not needed*/ }
+
+			@Override
+			public void resizeUI() { /* Not needed */ }
+
+			@Override
+			public boolean isDisabled() {
+				return false;
+			}
+
+			@Override
+			public boolean isBlank() {
+				return false;
+			}
+
+			@Override
+			public void setAlignment(Alignment alignment) { /* Not needed */ }
+
+			@Override
+			public void setFocused(boolean focused) { /* Not needed */ }
+
+			@Override
+			public void setDisabled(boolean disabled) { /* Not needed */ }
 		};
 		InputPriority.claimPriority(innerPopup, POP_UP_STAGE_NAME);
 	}
@@ -295,16 +332,31 @@ public class SampleUserInterfaceGame extends MainGame {
 				UserInterfaceSizer.makeActorCentered(regainFocusPopup.getView());
 				addActor(regainFocusPopup.getView());
 			}
-			@Override public void resizeUI() { /*Not needed*/ }
-			@Override public boolean isDisabled() { return false; }
-			@Override public boolean isBlank() { return false; }
-			@Override public void setAlignment(Alignment alignment) { /*Not needed*/ }
-			@Override public void setFocused(boolean focused) { /*Not needed*/ }
-			@Override public void setDisabled(boolean disabled) { /*Not needed*/ }
+
+			@Override
+			public void resizeUI() { /* Not needed */ }
+
+			@Override
+			public boolean isDisabled() {
+				return false;
+			}
+
+			@Override
+			public boolean isBlank() {
+				return false;
+			}
+
+			@Override
+			public void setAlignment(Alignment alignment) { /* Not needed */ }
+
+			@Override
+			public void setFocused(boolean focused) { /* Not needed */ }
+
+			@Override
+			public void setDisabled(boolean disabled) { /* Not needed */ }
 		};
 		InputPriority.claimPriority(innerPopup, POP_UP_STAGE_NAME);
 	}
-
 
 	private class TestOptionsMenu extends OptionsMenu {
 
@@ -314,9 +366,20 @@ public class SampleUserInterfaceGame extends MainGame {
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 		}
 
-		@Override protected Alignment getEntryAlignment() {return Alignment.CENTER;}
-		@Override protected Alignment getMenuAlignment() {return Alignment.CENTER;}
-		@Override protected String getGameVersion() {return "version goes here";}
+		@Override
+		protected Alignment getEntryAlignment() {
+			return Alignment.CENTER;
+		}
+
+		@Override
+		protected Alignment getMenuAlignment() {
+			return Alignment.CENTER;
+		}
+
+		@Override
+		protected String getGameVersion() {
+			return "version goes here";
+		}
 
 		@Override
 		protected Collection<VisibleInputConsumer> makeMiddleButtons() {
@@ -324,15 +387,22 @@ public class SampleUserInterfaceGame extends MainGame {
 		}
 
 		@Override
-		protected UniversalButton makeButtonAboveQuitButton() {return null;}
+		protected UniversalButton makeButtonAboveQuitButton() {
+			return null;
+		}
 
 		@Override
 		protected PopUp makeControlsPopUp() {
 			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", Runnables.nullRunnable(), POP_UP_STAGE_NAME);
 		}
 
-		@Override protected UniversalButton makeReportBugButton() {return GameInfo.getUserInterfaceFactory().makeTextButton(() -> "One could report a bug here", Runnables.nullRunnable());}
-		@Override protected UniversalButton makeControlsButton() {
+		@Override
+		protected UniversalButton makeReportBugButton() {
+			return GameInfo.getUserInterfaceFactory().makeTextButton(() -> "One could report a bug here", Runnables.nullRunnable());
+		}
+
+		@Override
+		protected UniversalButton makeControlsButton() {
 			return GameInfo.getUserInterfaceFactory().makeTextButton(() -> "This is where one could theoretically view controls", () -> InputPriority.claimPriority(makeControlsPopUp(), MultipleStage.OPTIONS_STAGE_NAME));
 		}
 
@@ -348,18 +418,33 @@ public class SampleUserInterfaceGame extends MainGame {
 			@Override
 			public void focusLost() {
 				// TODO uncomment these once the audio stuff is in this library
-				//QuestGiverGame.music.temporarilyMute();
+				// QuestGiverGame.music.temporarilyMute();
 			}
+
 			@Override
 			public void focusGained() {
-				//QuestGiverGame.music.untemporarilyMute();
+				// QuestGiverGame.music.untemporarilyMute();
 			}
-			@Override public void iconified(boolean isIconified) {/* notYetNeeded */}
-			@Override public void created(Lwjgl3Window window) {/* notYetNeeded */}
-			@Override public void maximized(boolean isMaximized) {/* notYetNeeded */}
-			@Override public boolean closeRequested() {return true;}
-			@Override public void filesDropped(String[] files) {/* notYetNeeded */}
-			@Override public void refreshRequested() {/* notYetNeeded */}
+
+			@Override
+			public void iconified(boolean isIconified) {/* notYetNeeded */}
+
+			@Override
+			public void created(Lwjgl3Window window) {/* notYetNeeded */}
+
+			@Override
+			public void maximized(boolean isMaximized) {/* notYetNeeded */}
+
+			@Override
+			public boolean closeRequested() {
+				return true;
+			}
+
+			@Override
+			public void filesDropped(String[] files) {/* notYetNeeded */}
+
+			@Override
+			public void refreshRequested() {/* notYetNeeded */}
 		};
 	}
 
@@ -398,14 +483,12 @@ public class SampleUserInterfaceGame extends MainGame {
 		// N/A
 	}
 
-
-
 	@Override
 	protected boolean isDoneLoading() {
 		// this is an asset-free project
 		return true;
 	}
-	
+
 	@Override
 	protected float doLoadingFrame() {
 		// the completion number isn't used by the blank loading screen

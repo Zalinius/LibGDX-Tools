@@ -17,7 +17,7 @@ public enum Alignment {
 	LEFT(Align.left),
 	TOP_LEFT(Align.topLeft),
 	CENTER(Align.center);
-	
+
 	private final int alignmentInteger;
 
 	private Alignment(int alignment) {

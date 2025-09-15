@@ -59,7 +59,7 @@ public class NavigableList implements VisibleInputConsumer {
 	}
 
 	/**
-	 * @param newEntries The new entries to be held in this list, excluding a special finalButton (see next line). This can include spacers, which will not be interactable
+	 * @param newEntries  The new entries to be held in this list, excluding a special finalButton (see next line). This can include spacers, which will not be interactable
 	 * @param finalButton The button that will be pressed when the player presses *back*
 	 */
 	public void replaceContents(final List<VisibleInputConsumer> newEntries, VisibleInputConsumer finalButton) {
@@ -126,7 +126,7 @@ public class NavigableList implements VisibleInputConsumer {
 		table.align(tableAlignment.getAlignment());
 
 		for (VisibleInputConsumer entry : allEntries) {
-			if(isVertical()) {
+			if (isVertical()) {
 				table.row();
 			}
 			entry.setAlignment(entryAlignment);
@@ -155,8 +155,7 @@ public class NavigableList implements VisibleInputConsumer {
 	}
 
 	private void changedEntries() {
-		if (pressButtonOnEntryChanged)
-		{
+		if (pressButtonOnEntryChanged) {
 			interactableEntries.get(currentEntryIndex).consumeKeyInput(Input.ACCEPT);
 		} else {
 			if (currentButton != null
@@ -172,7 +171,7 @@ public class NavigableList implements VisibleInputConsumer {
 
 	@Override
 	public void consumeKeyInput(final Input input) {
-		if(input.equals(forwardCode)) {
+		if (input.equals(forwardCode)) {
 			if (currentEntryIndex < interactableEntries.size() - 1) {
 				currentEntryIndex++;
 				changedEntries();
@@ -180,8 +179,7 @@ public class NavigableList implements VisibleInputConsumer {
 				currentEntryIndex = 0;
 				changedEntries();
 			}
-		}
-		else if(input.equals(backCode)) {
+		} else if (input.equals(backCode)) {
 			if (currentEntryIndex > 0) {
 				currentEntryIndex--;
 				changedEntries();
@@ -191,8 +189,7 @@ public class NavigableList implements VisibleInputConsumer {
 			}
 		} else if (input.equals(Input.BACK) && finalButton != null) {
 			finalButton.consumeKeyInput(Input.ACCEPT);
-		}
-		else if (currentButton != null) {
+		} else if (currentButton != null) {
 			currentButton.consumeKeyInput(input);
 		}
 	}
@@ -241,7 +238,7 @@ public class NavigableList implements VisibleInputConsumer {
 
 	@Override
 	public void clearSelected() {
-		interactableEntries.stream().forEach(e->e.setFocused(false));
+		interactableEntries.stream().forEach(e -> e.setFocused(false));
 		currentEntryIndex = -1;
 		currentButton = null;
 	}
@@ -269,7 +266,7 @@ public class NavigableList implements VisibleInputConsumer {
 
 	@Override
 	public void focusCurrent() {
-		interactableEntries.stream().forEach(e->e.setFocused(false));
+		interactableEntries.stream().forEach(e -> e.setFocused(false));
 		findCurrentButton();
 		if (currentButton != null) {
 			currentButton.setFocused(true);
@@ -306,7 +303,6 @@ public class NavigableList implements VisibleInputConsumer {
 		this.tableAlignment = tableAlignment;
 		refreshPageRunnable.run();
 	}
-
 
 	@Override
 	public boolean isDisabled() {

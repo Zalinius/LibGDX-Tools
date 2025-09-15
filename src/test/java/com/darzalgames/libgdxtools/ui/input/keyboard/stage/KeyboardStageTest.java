@@ -23,7 +23,7 @@ class KeyboardStageTest {
 
 		assertTrue(isInTouchableBranch);
 	}
-	
+
 	@Test
 	void isInTouchableBranch_TouchableChildrenOnlyInParentGroup_returnsTrue() throws Exception {
 		Group group = new Group();
@@ -35,7 +35,7 @@ class KeyboardStageTest {
 
 		assertTrue(isInTouchableBranch);
 	}
-	
+
 	@Test
 	void isInTouchableBranch_TouchableDisabledInParentGroup_returnsFalse() throws Exception {
 		Group group = new Group();
@@ -47,7 +47,7 @@ class KeyboardStageTest {
 
 		assertFalse(isInTouchableBranch);
 	}
-	
+
 	@Test
 	void isInTouchableBranch_TouchableEnabled_returnsTrue() throws Exception {
 		Actor actor = new Actor();
@@ -57,7 +57,7 @@ class KeyboardStageTest {
 
 		assertTrue(isInTouchableBranch);
 	}
-	
+
 	@Test
 	void isInTouchableBranch_TouchableDisabled_returnsFalse() throws Exception {
 		Actor actor = new Actor();
@@ -67,7 +67,7 @@ class KeyboardStageTest {
 
 		assertFalse(isInTouchableBranch);
 	}
-	
+
 	@Test
 	void isInTouchableBranch_TouchableChildrenOnly_returnsTrueButTheActorItselfIsNotTouchable() throws Exception {
 		Actor actor = new Actor();

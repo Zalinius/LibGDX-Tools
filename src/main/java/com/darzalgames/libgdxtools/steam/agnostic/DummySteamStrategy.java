@@ -21,6 +21,7 @@ public class DummySteamStrategy implements SteamStrategy {
 
 	@Override
 	public void dispose() { /* Dummy strategy does nothing */ }
+
 	@Override
 	public String getSteamID() {
 		return "dev";

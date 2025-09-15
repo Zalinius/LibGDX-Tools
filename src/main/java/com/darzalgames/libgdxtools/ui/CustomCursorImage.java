@@ -29,7 +29,7 @@ public class CustomCursorImage extends Image implements InputStrategyObserver {
 
 	/**
 	 * An Image which follows the (hidden) cursor around, allowing you to keep the visible cursor the same pixel resolution regardless of window size.
-	 * @param checkIsWindowed A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
+	 * @param checkIsWindowed      A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
 	 * @param clickedCursorTexture The texture shown while the left mouse button is held down
 	 */
 	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, TextureRegion cursorTexture, TextureRegion clickedCursorTexture, InputStrategySwitcher inputStrategySwitcher) {

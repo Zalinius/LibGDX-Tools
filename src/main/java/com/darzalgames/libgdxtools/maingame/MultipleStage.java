@@ -21,7 +21,6 @@ public final class MultipleStage {
 	static final String CURSOR_STAGE_NAME = "Cursor Stage";
 	static final String INPUT_HANDLER_STAGE_NAME = "Input Handler Stage";
 
-
 	private final UniversalInputStage mainStage;
 	private final UniversalInputStage optionsStage;
 	private final StageBest cursorStage;
@@ -29,7 +28,6 @@ public final class MultipleStage {
 
 	private final Pause pause;
 	private final List<StageLikeRenderable> gameSpecificStages;
-
 
 	MultipleStage(UniversalInputStage mainStage, List<StageLikeRenderable> gameSpecificStages, UniversalInputStage optionsStage, StageBest cursorStage, StageBest inputHandlerStage, Pause pause) {
 		this.mainStage = mainStage;
@@ -41,7 +39,6 @@ public final class MultipleStage {
 		inputHandlerStage.addActor(pause);
 
 		this.gameSpecificStages = gameSpecificStages;
-		setUpInputMultiplexerForAllStages();
 		GetOnStage.setAddActorToStageFunction(this::addActorToStage);
 	}
 
@@ -117,8 +114,6 @@ public final class MultipleStage {
 		return hitSomething;
 	}
 
-
-
 	void setUpInputHandlersOnStages(KeyboardInputHandler keyboardInputHandler, GamepadInputHandler gamepadInputHandler, ScrollingManager scrollingManager) {
 		inputHandlerStage.addActor(keyboardInputHandler);
 		inputHandlerStage.addActor(gamepadInputHandler);
@@ -142,7 +137,7 @@ public final class MultipleStage {
 		return allStages;
 	}
 
-	private void setUpInputMultiplexerForAllStages() {
+	void setUpInputMultiplexerForAllStages() {
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		getAllStagesInOrder().reversed().forEach(inputMultiplexer::addProcessor);
 		Gdx.input.setInputProcessor(inputMultiplexer);

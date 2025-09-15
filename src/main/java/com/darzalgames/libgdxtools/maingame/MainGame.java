@@ -32,7 +32,6 @@ import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 
 public abstract class MainGame extends ApplicationAdapter implements SharesGameInformation {
 
-
 	// Values which are statically shared to the rest of the game by {@link GameInfo}
 	protected SaveManager saveManager;
 	protected PreferenceManager preferenceManager;
@@ -48,43 +47,52 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected InputStrategySwitcher inputStrategySwitcher;
 	protected Pause pause;
 
-
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
 	private LoadingState loadingState;
 
-
 	// The setup process, in order that they are called
 	protected abstract void beginLoadingAssets();
+
 	protected abstract LoadingScreen makeLoadingScreen();
+
 	protected abstract float doLoadingFrame();
+
 	protected abstract boolean isDoneLoading();
+
 	protected void onLoadingFinished() {}
+
 	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
+
 	protected abstract String getPreferenceManagerName();
 
 	/**
 	 * @return The fallback background to be used in the game area, visible when nothing else is covering it
 	 */
 	protected abstract Actor makeBackground();
+
 	protected abstract Runnable getDrawConsoleRunnable();
+
 	protected abstract OptionsMenu makeOptionsMenu();
+
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
+
 	protected abstract SaveManager makeSaveManager();
+
 	protected abstract List<StageLikeRenderable> makeGameSpecificStages();
+
 	protected abstract void setUpBeforeLoadingSave();
+
 	protected abstract void launchGame(boolean isNewSave);
 
 	protected void reactToResize(int width, int height) {}
-	protected abstract void resizeGameSpecificUI();
 
+	protected abstract void resizeGameSpecificUI();
 
 	/**
 	 * Shutdown game-specific objects like the music system, call dispose() on things, etc.
 	 */
 	protected abstract void quitGame();
-
-
 
 	protected MainGame(WindowResizer windowResizer, GamePlatform gamePlatform) {
 		this.windowResizer = windowResizer;
@@ -116,7 +124,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		launchGame(isNewSave);
 	}
 
-
 	protected CustomCursorImage getCustomCursor() {
 		return new CustomCursorImage(windowResizer::isWindowed, new TextureRegion(ColorTools.getDefaultCursor()), inputStrategySwitcher);
 	}
@@ -144,6 +151,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			loadingScreen.update(1); // lets the loading screen do a fade out or something
 			if (loadingScreen.hasFinishedAnimating()) {
 				loadingState = LoadingState.GAME_RUNNING;
+				multipleStage.setUpInputMultiplexerForAllStages();
 			}
 		} else if (loadingState == LoadingState.LOADING) {
 			float completion = doLoadingFrame();
@@ -183,7 +191,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	@Override
-	public final void resize (int width, int height) {
+	public final void resize(int width, int height) {
 		if (windowResizer.isWindowed()) {
 			preferenceManager.graphics().setPreferredWindowSize(width, height);
 		}
@@ -257,11 +265,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	private UniversalInputStage makeMainStage() {
-		return new UniversalInputStageWithBackground(
-				MultipleStage.MAIN_STAGE_NAME,
-				new ScreenViewport(),
-				makeBackground(),
-				inputStrategySwitcher);
+		return new UniversalInputStageWithBackground(MultipleStage.MAIN_STAGE_NAME, new ScreenViewport(), makeBackground(), inputStrategySwitcher);
 	}
 
 	private StageBest makeCursorStage() {
@@ -292,6 +296,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		windowResizer.initialize(inputStrategySwitcher);
 	}
 
-	private enum LoadingState { LOADING, LOADING_TO_LAUNCH_TRANSITION, GAME_RUNNING, GAME_QUITTING }
+	private enum LoadingState {
+		LOADING, LOADING_TO_LAUNCH_TRANSITION, GAME_RUNNING, GAME_QUITTING
+	}
 
 }

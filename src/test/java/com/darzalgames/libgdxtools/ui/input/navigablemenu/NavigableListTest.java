@@ -23,7 +23,6 @@ class NavigableListTest {
 		entries.add(buttonTwo);
 		NavigableList navigableList = new NavigableList(true, entries);
 
-
 		navigableList.selectDefault();
 
 		assertTrue(buttonOne.isOver());
@@ -241,7 +240,7 @@ class NavigableListTest {
 		navigableList.selectDefault();
 		TestButton finalButton = new TestButton();
 		finalButton.setBlank(false);
-		//		VisibleInputConsumer finalButton = new TestButton(() -> "back", inputStrategySwitcher, Runnables.nullRunnable());
+		// VisibleInputConsumer finalButton = new TestButton(() -> "back", inputStrategySwitcher, Runnables.nullRunnable());
 		navigableList.setFinalButton(finalButton);
 
 		navigableList.returnToLast();
@@ -296,7 +295,6 @@ class NavigableListTest {
 
 		assertDoesNotThrow(() -> navigableList.returnToSecondLast());
 	}
-
 
 	@Test
 	void consumeKeyInput_upFromTop_loopsAround() {
@@ -358,12 +356,9 @@ class NavigableListTest {
 		entries.add(buttonTwo);
 		NavigableList navigableList = new NavigableList(true, entries);
 
-
 		assertEquals(3, navigableList.allEntries.size());
 		assertEquals(2, navigableList.interactableEntries.size());
 	}
-
-
 
 	@Test
 	void consumeInput_downWithSpacer_skipsSpacer() {

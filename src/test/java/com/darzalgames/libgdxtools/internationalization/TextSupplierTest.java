@@ -65,9 +65,12 @@ class TextSupplierTest {
 	}
 
 	private static void makeTextSupplier() {
-		TextSupplier.initialize(new BundleManager(
-				new FileHandle("./src/test/resources/com/darzalgames/libgdxtools/internationalization/Base"),
-				getSupportedLocales()));
+		TextSupplier.initialize(
+				new BundleManager(
+						new FileHandle("./src/test/resources/com/darzalgames/libgdxtools/internationalization/Base"),
+						getSupportedLocales()
+				)
+		);
 	}
 
 	protected static ArrayList<Locale> getSupportedLocales() {

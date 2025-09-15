@@ -4,8 +4,7 @@ import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 
 public class InputPriority {
 
-	private InputPriority() {
-	}
+	private InputPriority() {}
 
 	private static InputPriorityStack inputPriorityStack;
 

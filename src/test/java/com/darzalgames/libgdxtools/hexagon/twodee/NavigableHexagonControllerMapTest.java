@@ -29,17 +29,49 @@ class NavigableHexagonControllerMapTest {
 
 	private NavigableHexagonMap2D<String> navigableHexagonMap;
 	private HexagonControllerMap2D<String> hexagonControllerMap;
+
 	@BeforeEach
 	private void setup() {
 		GameInfo.setMainGame(new SharesGameInformation() {
-			@Override public SaveManager getSaveManager() {return null;}
-			@Override public PreferenceManager getPreferenceManager() {return null;}
-			@Override public GamePlatform getGamePlatform() {return null;}
-			@Override public SteamStrategy getSteamStrategy() {return null;}
-			@Override public String getGameName() {return null;}
-			@Override public String getGameVersion() {return null;}
-			@Override public UserInterfaceFactory getUserInterfaceFactory() {return null;}
-			@Override public GameEdition getGameEdition() { return null; }
+			@Override
+			public SaveManager getSaveManager() {
+				return null;
+			}
+
+			@Override
+			public PreferenceManager getPreferenceManager() {
+				return null;
+			}
+
+			@Override
+			public GamePlatform getGamePlatform() {
+				return null;
+			}
+
+			@Override
+			public SteamStrategy getSteamStrategy() {
+				return null;
+			}
+
+			@Override
+			public String getGameName() {
+				return null;
+			}
+
+			@Override
+			public String getGameVersion() {
+				return null;
+			}
+
+			@Override
+			public UserInterfaceFactory getUserInterfaceFactory() {
+				return null;
+			}
+
+			@Override
+			public GameEdition getGameEdition() {
+				return null;
+			}
 		});
 
 		HexagonMap<String> hexagonMap = new HexagonMap<>();
@@ -47,7 +79,6 @@ class NavigableHexagonControllerMapTest {
 		hexagonControllerMap = new HexagonControllerMap2D<>(hexagonMap, hex -> new HexagonController2D(hex, null, hexagonController -> new BlankHexagonController()));
 		navigableHexagonMap = new NavigableHexagonMap2D<>(hexagonControllerMap);
 	}
-
 
 	@Test
 	void focusCurrent_withDefault_focusesHexagon0x0() {
@@ -74,13 +105,12 @@ class NavigableHexagonControllerMapTest {
 	void getControllerNeighbors_of0x0_returnsCorrectHexagons() {
 		List<Hexagon> expectedNeighbors = List.of(new Hexagon(-1, 0), new Hexagon(-1, 1), new Hexagon(0, -1), new Hexagon(0, 1), new Hexagon(1, -1), new Hexagon(1, 0));
 
-		List<HexagonController2D> neighborControllers = hexagonControllerMap.getControllerNeighborsOf(new Hexagon(0,0));
+		List<HexagonController2D> neighborControllers = hexagonControllerMap.getControllerNeighborsOf(new Hexagon(0, 0));
 		List<Hexagon> neighborHexagons = neighborControllers.stream().map(controller -> controller.hexagon).toList();
 
 		assertEquals(expectedNeighbors.size(), neighborHexagons.size());
 		assertTrue(neighborHexagons.containsAll(expectedNeighbors));
 	}
-
 
 	private static Stream<Arguments> directionToCoordinates() {
 		return Stream.of(
@@ -90,6 +120,6 @@ class NavigableHexagonControllerMapTest {
 				Arguments.of(InputOnHexagonGrid.DOWN_RELEASED, 0, 1),
 				Arguments.of(InputOnHexagonGrid.DOWN_LEFT, -1, 1),
 				Arguments.of(InputOnHexagonGrid.DOWN_RIGHT, 1, 0)
-				);
+		);
 	}
 }

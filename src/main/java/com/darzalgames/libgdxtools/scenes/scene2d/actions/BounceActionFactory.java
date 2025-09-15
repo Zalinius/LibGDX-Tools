@@ -13,9 +13,9 @@ public class BounceActionFactory {
 	/**
 	 * An action which makes an actor scale larger or smaller, returning to the original scale
 	 * You may wish to do this for alignment:
-			table.setTransform(true);
-			table.setOrigin(Align.center);
-	 * @param scaleTo The fullest scale of the bounce, 1 = no change, 0.5 = half size, 2 = double size
+	 * table.setTransform(true);
+	 * table.setOrigin(Align.center);
+	 * @param scaleTo  The fullest scale of the bounce, 1 = no change, 0.5 = half size, 2 = double size
 	 * @param duration The time each part of the bounce takes (scales up for duration, then down for duration)
 	 * @return A single bounce action that takes 2*duration to complete
 	 */
@@ -24,13 +24,14 @@ public class BounceActionFactory {
 		return Actions.sequence(
 				Actions.scaleTo(scaleTo, scaleTo, duration, Interpolation.sine),
 				Actions.scaleTo(originalScale, originalScale, duration, Interpolation.sine)
-				);}
+		);
+	}
 
 	/**
 	 * An action which makes an actor scale up 20%, then returning to the original scale all over 1 second
 	 * You may wish to do this for alignment:
-			table.setTransform(true);
-			table.setOrigin(Align.center);
+	 * table.setTransform(true);
+	 * table.setOrigin(Align.center);
 	 * @return A single bounce action that takes 2*duration to complete
 	 */
 	public static Action makeSingleBounceAction() {
@@ -40,8 +41,8 @@ public class BounceActionFactory {
 	/**
 	 * An action which FOREVER makes an actor scale up 20%, then returning to the original scale all over 1 second per cycle
 	 * You may wish to do this for alignment:
-			table.setTransform(true);
-			table.setOrigin(Align.center);
+	 * table.setTransform(true);
+	 * table.setOrigin(Align.center);
 	 * @return A single bounce action that takes 2*duration to complete
 	 */
 	public static Action makeForeverBounceAction() {
@@ -51,9 +52,9 @@ public class BounceActionFactory {
 	/**
 	 * An action which FOREVER makes an actor scale larger or smaller, returning to the original scale
 	 * You may wish to do this for alignment:
-			table.setTransform(true);
-			table.setOrigin(Align.center);
-	 * @param scaleTo The fullest scale of the bounce, 1 = no change, 0.5 = half size, 2 = double size
+	 * table.setTransform(true);
+	 * table.setOrigin(Align.center);
+	 * @param scaleTo  The fullest scale of the bounce, 1 = no change, 0.5 = half size, 2 = double size
 	 * @param duration The time each part of the bounce takes (scales up for duration, then down for duration)
 	 * @return A FOREVER bounce action that takes 2*duration to complete
 	 */

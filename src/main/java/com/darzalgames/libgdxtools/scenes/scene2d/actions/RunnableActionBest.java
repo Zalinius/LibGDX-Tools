@@ -11,5 +11,5 @@ public class RunnableActionBest extends RunnableAction {
 		super();
 		this.setRunnable(runnable);
 	}
-	
+
 }

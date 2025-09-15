@@ -57,23 +57,22 @@ public class ControlsGlyph extends Image implements InputStrategyObserver {
 			this.setPosition(0, 0);
 
 			Actor parent = getParent();
-			float xOffset = switch(alignment) {
-			case BOTTOM_LEFT, LEFT, TOP_LEFT -> -getWidth()*0.55f;
-			case BOTTOM_RIGHT, RIGHT, TOP_RIGHT -> parent.getWidth() - getWidth()*0.55f;
-			default -> (parent.getWidth() - getWidth())/2f;
+			float xOffset = switch (alignment) {
+			case BOTTOM_LEFT, LEFT, TOP_LEFT -> -getWidth() * 0.55f;
+			case BOTTOM_RIGHT, RIGHT, TOP_RIGHT -> parent.getWidth() - getWidth() * 0.55f;
+			default -> (parent.getWidth() - getWidth()) / 2f;
 			};
 
-			float yOffset = switch(alignment) {
-			case BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT -> -getHeight()*0.45f;
-			case TOP_LEFT, TOP, TOP_RIGHT -> parent.getHeight() - getHeight()*0.15f;
-			default -> (parent.getHeight() - getHeight())/2f;
+			float yOffset = switch (alignment) {
+			case BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT -> -getHeight() * 0.45f;
+			case TOP_LEFT, TOP, TOP_RIGHT -> parent.getHeight() - getHeight() * 0.15f;
+			default -> (parent.getHeight() - getHeight()) / 2f;
 			};
 			moveBy(xOffset, yOffset);
 
 			setVisibilityBasedOnCurrentInputStrategy();
 		}
 	}
-
 
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {

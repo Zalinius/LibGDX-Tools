@@ -45,7 +45,6 @@ public class SkinManager {
 	protected static final Color OUT_OF_FOCUS_COLOR = new Color(0.55f, 0.55f, 0.55f, 1);
 	protected static final Color DISABLED_COLOR = Color.DARK_GRAY;
 
-
 	/**
 	 * @param skin The skin set up by the base class
 	 */
@@ -109,12 +108,15 @@ public class SkinManager {
 	protected LabelStyle getLabelStyle(String style) {
 		return skin.get(style, LabelStyle.class);
 	}
+
 	protected ButtonStyle getButtonStyle(String style) {
 		return skin.get(style, ButtonStyle.class);
 	}
+
 	protected CheckBoxStyle getCheckboxStyle(String style) {
 		return skin.get(style, CheckBoxStyle.class);
 	}
+
 	protected SliderStyle getSliderStyle(String style) {
 		return skin.get(style, SliderStyle.class);
 	}
@@ -122,39 +124,46 @@ public class SkinManager {
 	public BaseDrawable getUINinePatch() {
 		return skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
 	}
+
 	public BaseDrawable getConfirmationMenuBackground() {
 		return skin.get(CONFIRMATION_MENU_BACKGROUND, NinePatchDrawable.class);
 	}
+
 	public LabelStyle getDefaultLableStyle() {
 		return getLabelStyle(DEFAULT);
 	}
+
 	public LabelStyle getFlavorTextLableStyle() {
 		return getLabelStyle(FLAVOR_TEXT_LABEL);
 	}
+
 	public LabelStyle getWarningLableStyle() {
 		return getLabelStyle(WARNING_LABEL);
 	}
+
 	public LabelStyle getLabelWithBackgroundStyle() {
 		return getLabelStyle(LABEL_WITH_BACKGROUND);
 	}
+
 	public SliderStyle getSliderStyle() {
 		return getSliderStyle(SLIDER_DEFAULT);
 	}
+
 	public CheckBoxStyle getCheckboxStyle() {
 		return getCheckboxStyle(DEFAULT);
 	}
+
 	public ButtonStyle getDefaultButtonStyle() {
 		return getButtonStyle(DEFAULT);
 	}
+
 	public ButtonStyle getBlankButtonStyle() {
 		return getButtonStyle(BLANK_BUTTON);
 	}
+
 	public ButtonStyle getSettingsButtonStyle() {
 		return getButtonStyle(SETTINGS_BUTTON);
 	}
-
-
-
 
 	public static Color getDarkColor() {
 		return DARK_COLOR;

@@ -15,11 +15,11 @@ public class InstantSequenceAction extends ParallelActionBest {
 	private boolean hasStarted = false;
 	private int index;
 
-	public InstantSequenceAction (Action... allActions) {
+	public InstantSequenceAction(Action... allActions) {
 		actions.addAll(Arrays.asList(allActions));
 	}
 
-	public InstantSequenceAction (List<Action> allActions) {
+	public InstantSequenceAction(List<Action> allActions) {
 		actions = allActions;
 	}
 
@@ -41,8 +41,7 @@ public class InstantSequenceAction extends ParallelActionBest {
 		setPool(null); // Ensure this action can't be returned to the pool while executing.
 		try {
 			if (actions.get(index).act(delta)) {
-				if (actor == null)
-				{
+				if (actor == null) {
 					return true; // This action was removed.
 				}
 				index++;
@@ -61,9 +60,8 @@ public class InstantSequenceAction extends ParallelActionBest {
 		}
 	}
 
-
 	@Override
-	public void restart () {
+	public void restart() {
 		super.restart();
 		hasStarted = false;
 		index = 0;

@@ -14,8 +14,7 @@ public class MainMenuScreen extends GameScreen {
 
 	private final NavigableListMenu mainMenu;
 
-	public MainMenuScreen(NavigableListMenu mainMenu, InputPriorityStack inputPriorityStack)
-	{
+	public MainMenuScreen(NavigableListMenu mainMenu, InputPriorityStack inputPriorityStack) {
 		super(Runnables.nullRunnable(), inputPriorityStack);
 		this.mainMenu = mainMenu;
 		addActor(mainMenu);
@@ -26,7 +25,10 @@ public class MainMenuScreen extends GameScreen {
 		InputPriority.claimPriority(mainMenu, MultipleStage.MAIN_STAGE_NAME);
 	}
 
-	@Override public String toString() { return "Main menu SCREEN, but not the buttons themselves"; }
+	@Override
+	public String toString() {
+		return "Main menu SCREEN, but not the buttons themselves";
+	}
 
 	@Override
 	public void resizeUI() {

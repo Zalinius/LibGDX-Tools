@@ -10,14 +10,14 @@ public class ColorTools {
 
 	/**
 	 *
-	 * @param red The red color channel value, must be within the range [0, 255]
+	 * @param red   The red color channel value, must be within the range [0, 255]
 	 * @param green The green color channel value, must be within the range [0, 255]
-	 * @param blue The blue color channel value, must be within the range [0, 255]
+	 * @param blue  The blue color channel value, must be within the range [0, 255]
 	 * @return A color with the specified RGB values, which is completely opaque.
 	 */
 	public static Color makeColorFromIntComponents(final int red, final int green, final int blue) {
-		if(componentsInvalid(red, green, blue)) {
-			throw new IllegalArgumentException("Color channel values must be with range ["+MIN_COLOR_CHANNEL_VALUE+", "+MAX_COLOR_CHANNEL_VALUE+"]");
+		if (componentsInvalid(red, green, blue)) {
+			throw new IllegalArgumentException("Color channel values must be with range [" + MIN_COLOR_CHANNEL_VALUE + ", " + MAX_COLOR_CHANNEL_VALUE + "]");
 		}
 
 		int packedColorInt = componentsToRGBAIntegerBits(red, green, blue);
@@ -39,7 +39,7 @@ public class ColorTools {
 	/**
 	 * Get a square colored texture with width and height both being "size" long
 	 * @param color the color for the texture
-	 * @param size the width and height of the square texture in pixels
+	 * @param size  the width and height of the square texture in pixels
 	 * @return a square monotone texture
 	 */
 	public static Texture getColoredTexture(Color color, int size) {
@@ -48,8 +48,8 @@ public class ColorTools {
 
 	/**
 	 * Get a colored texture with the specified width and height
-	 * @param color the color for the texture
-	 * @param width the width of the texture in pixels
+	 * @param color  the color for the texture
+	 * @param width  the width of the texture in pixels
 	 * @param height the height of the texture in pixels
 	 * @return A rectangular monotone texture
 	 */

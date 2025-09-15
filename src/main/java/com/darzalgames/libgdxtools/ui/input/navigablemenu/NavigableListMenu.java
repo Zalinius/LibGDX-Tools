@@ -30,12 +30,12 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 
 	/**
 	 * Be SUPER SURE to call the following in your implementation:
-	 * 		add(menu.getView());
+	 * add(menu.getView());
 	 * with whatever modifiers you want (grow, colspan, etc...)
 	 *
 	 * Consider calling things like:
-	 * 		menu.setAlignment(Alignment.TOP_LEFT);
-	 * 		menu.replaceContents(menuButtons, backButton);
+	 * menu.setAlignment(Alignment.TOP_LEFT);
+	 * menu.replaceContents(menuButtons, backButton);
 	 *
 	 * No need to call clear() first or anything.
 	 */

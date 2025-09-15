@@ -45,17 +45,16 @@ public class StageBest extends Stage implements StageLikeRenderable {
 		cancelTouchFocus();
 	}
 
-
 	/*
 	 * https://stackoverflow.com/questions/36336111/libgdx-listener-enter-and-exit-fires-multiple-times
 	 *
 	 * If you move the cursor over the button and click and then move away, you get two enter events and two exit events.
-
-	Hover -> entered with pointer -1
-	Click down -> entered with pointer 0
-	Release click -> exited with pointer 0
-	Move cursor away -> exited with pointer -1
-
+	 * 
+	 * Hover -> entered with pointer -1
+	 * Click down -> entered with pointer 0
+	 * Release click -> exited with pointer 0
+	 * Move cursor away -> exited with pointer -1
+	 * 
 	 */
 	public static boolean isHoverEvent(int pointer) {
 		return pointer == -1;
@@ -70,7 +69,7 @@ public class StageBest extends Stage implements StageLikeRenderable {
 	 */
 	public static boolean isInTouchableBranch(Actor actor) {
 		Actor parent = actor;
-		while(parent != null) {
+		while (parent != null) {
 			if (Touchable.disabled.equals(parent.getTouchable())) {
 				return false;
 			}

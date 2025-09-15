@@ -21,7 +21,6 @@ import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 
-
 /**
  * The base class for options menus (in-game versus when on the main menu)
  */
@@ -33,7 +32,9 @@ public abstract class OptionsMenu extends PopUpMenu {
 	private final String platformName;
 
 	protected abstract Alignment getEntryAlignment();
+
 	protected abstract Alignment getMenuAlignment();
+
 	protected abstract String getGameVersion();
 
 	/**
@@ -53,7 +54,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 
 	/**
 	 * @return An optional button that goes right above a quit button (e.g. in-game have a "return to main menu" button)
-	 * (return null if you don't want this)
+	 *         (return null if you don't want this)
 	 */
 	protected abstract UniversalButton makeButtonAboveQuitButton();
 
@@ -62,13 +63,10 @@ public abstract class OptionsMenu extends PopUpMenu {
 	 */
 	protected abstract UniversalButton makeQuitButton();
 
-
-
 	/**
 	 * @return A PopUp that explains the control schemes
 	 */
 	protected abstract PopUp makeControlsPopUp();
-
 
 	protected OptionsMenu(int bottomPadding, WindowResizer windowResizer) {
 		super(true);
@@ -78,7 +76,6 @@ public abstract class OptionsMenu extends PopUpMenu {
 		defaults().padBottom(bottomPadding);
 	}
 
-
 	@Override
 	protected void setUpDesiredSize() {
 		UserInterfaceSizer.sizeToPercentage(this, 0.75f, 0.85f);
@@ -86,7 +83,6 @@ public abstract class OptionsMenu extends PopUpMenu {
 			UserInterfaceSizer.makeActorCentered(this);
 		}
 	}
-
 
 	/**
 	 * To be used by child classes to have buttons in the menu hide/show it. E.g. pressing a button to change the
@@ -157,7 +153,6 @@ public abstract class OptionsMenu extends PopUpMenu {
 		row();
 		add().growY();
 
-
 		// Set up the version tag to be in its own inner table, so that the actual buttons can still reach the bottom of the main table
 		Table versionTable = new Table();
 		versionTable.setFillParent(true);
@@ -175,7 +170,8 @@ public abstract class OptionsMenu extends PopUpMenu {
 	}
 
 	/**
-	 * NOTE: Setting the position here is important, otherwise the options menu will not open!<p>
+	 * NOTE: Setting the position here is important, otherwise the options menu will not open!
+	 * <p>
 	 * e.g. call {@link UserInterfaceSizer#makeActorCentered(Actor) UserInterfaceSizer.makeActorCentered(this)}
 	 */
 	private void setUpBackground() {
@@ -243,4 +239,3 @@ public abstract class OptionsMenu extends PopUpMenu {
 		}
 	}
 }
-

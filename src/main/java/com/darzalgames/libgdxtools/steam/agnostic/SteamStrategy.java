@@ -15,7 +15,6 @@ public interface SteamStrategy {
 	 */
 	void dispose();
 
-
 	StatsController getStatsController();
 
 	/**
@@ -25,7 +24,6 @@ public interface SteamStrategy {
 	 */
 	String getSteamID();
 
-
 	/**
 	 * @return The game-specific input handler for Steam
 	 */
@@ -34,7 +32,7 @@ public interface SteamStrategy {
 	/**
 	 * Sets a variable used when generating the strings for rich presence.
 	 * This only works when Steam is running.
-	 * @param key The variable key, matching those we set up in the externalMedia RichPresence.txt file
+	 * @param key   The variable key, matching those we set up in the externalMedia RichPresence.txt file
 	 * @param value The string to be used to replace the variable
 	 */
 	void setRichPresentsVariable(String key, String value);

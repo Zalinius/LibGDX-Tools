@@ -25,8 +25,13 @@ public class MouseInputHandler extends InputHandler {
 			}
 		});
 
-		addAction(Actions.forever(new RunnableActionBest(
-				() -> setSize(getStage().getWidth(), getStage().getHeight())))); // I'm PRETTY CONFIDENT™ that we can count on the stage existing, because otherwise who is calling act() on this?
+		addAction(
+				Actions.forever(
+						new RunnableActionBest(
+								() -> setSize(getStage().getWidth(), getStage().getHeight())
+						)
+				)
+		); // I'm PRETTY CONFIDENT™ that we can count on the stage existing, because otherwise who is calling act() on this?
 		setTouchable(Touchable.enabled);
 		updateLatestInputMethod();
 	}

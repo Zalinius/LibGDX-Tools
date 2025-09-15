@@ -36,18 +36,23 @@ public class CrashReport implements Serializable {
 	public String getGameName() {
 		return gameName;
 	}
+
 	public String getGameVersion() {
 		return gameVersion;
 	}
+
 	public String getPlatformName() {
 		return platformName;
 	}
+
 	public String getTime() {
 		return time;
 	}
+
 	public String getId() {
 		return id;
 	}
+
 	public String[] getStackTrace() {
 		return stackTrace;
 	}
@@ -79,7 +84,5 @@ public class CrashReport implements Serializable {
 
 		return json.prettyPrint(this);
 	}
-
-
 
 }

@@ -43,17 +43,15 @@ public class InputReceiver {
 
 		if (shouldToggleFullScreen) {
 			toggleFullscreenRunnable.run();
-		}else if (input == Input.PAUSE) {
+		} else if (input == Input.PAUSE) {
 			// Don't try to enter keyboard mode when someone is just pressing escape/pause, simply let the pause system consume the input
 			togglePause();
 		} else if (isScrolling) {
 			inputStrategySwitcher.setToMouseStrategy();
 			inputPriorityStack.sendInputToTop(input);
-		}
-		else if (specialButtons.containsKey(input)) {
+		} else if (specialButtons.containsKey(input)) {
 			specialButtons.get(input).consumeKeyInput(Input.ACCEPT);
-		}
-		else if (inputStrategySwitcher.isMouseMode()) {
+		} else if (inputStrategySwitcher.isMouseMode()) {
 			inputStrategySwitcher.setToKeyboardAndGamepadStrategy();
 		} else {
 			inputPriorityStack.sendInputToTop(input);

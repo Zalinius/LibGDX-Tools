@@ -13,7 +13,7 @@ public class ControlledMusic extends Actor {
 	private final float fadeTime;
 	private final SoundPreference soundPreferenceManager;
 
-	//Since music is game specific, we don't set it in the constructor
+	// Since music is game specific, we don't set it in the constructor
 	public ControlledMusic(final float fadeTime, final SoundPreference soundPreferenceManager) {
 		this.fadeTime = fadeTime;
 		this.soundPreferenceManager = soundPreferenceManager;
@@ -23,7 +23,6 @@ public class ControlledMusic extends Actor {
 		this.fadeTime = 0.75f;
 		this.soundPreferenceManager = soundPreferenceManager;
 	}
-
 
 	public float getMusicVolume() {
 		return soundPreferenceManager.getMusicVolume();
@@ -47,7 +46,6 @@ public class ControlledMusic extends Actor {
 		};
 
 		RunnableActionBest createMusic = new RunnableActionBest(() -> createAndStartMusic(musicToUse));
-		
 
 		SequenceAction createAndFadeIn = new SequenceAction(createMusic, fadeIn);
 
@@ -74,7 +72,7 @@ public class ControlledMusic extends Actor {
 			currentMusic.setVolume(getMusicVolume());
 		}
 	}
-	
+
 	private void createAndStartMusic(Music musicToUse) {
 		currentMusic = musicToUse;
 		currentMusic.play();

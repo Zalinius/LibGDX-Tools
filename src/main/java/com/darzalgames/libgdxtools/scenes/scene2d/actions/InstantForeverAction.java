@@ -25,8 +25,9 @@ public class InstantForeverAction extends RepeatAction {
 	}
 
 	@Override
-	protected boolean delegate (float delta) {
-		if (executedCount == repeatCount) return true;
+	protected boolean delegate(float delta) {
+		if (executedCount == repeatCount)
+			return true;
 		if (action.act(delta)) {
 			if (finished) {
 				return true;

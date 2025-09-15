@@ -14,8 +14,9 @@ public class InstantRepeatAction extends DelegateAction {
 	private boolean finished;
 
 	@Override
-	protected boolean delegate (float delta) {
-		if (executedCount == repeatCount) return true;
+	protected boolean delegate(float delta) {
+		if (executedCount == repeatCount)
+			return true;
 		if (action.act(delta)) {
 			if (finished) {
 				return true;
@@ -31,29 +32,29 @@ public class InstantRepeatAction extends DelegateAction {
 			if (isDelegateDone) {
 				return true;
 			}
-			
+
 		}
 		return false;
 	}
 
 	/** Causes the action to not repeat again. */
-	public void finish () {
+	public void finish() {
 		finished = true;
 	}
 
 	@Override
-	public void restart () {
+	public void restart() {
 		super.restart();
 		executedCount = 0;
 		finished = false;
 	}
 
 	/** Sets the number of times to repeat. Can be set to {@link #FOREVER}. */
-	public void setTotalCount (int count) {
+	public void setTotalCount(int count) {
 		this.repeatCount = count;
 	}
 
-	public int getTotalCount () {
+	public int getTotalCount() {
 		return repeatCount;
 	}
 

@@ -19,7 +19,9 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
  */
 public abstract class GamepadInputHandler extends InputHandler {
 
-	protected enum ButtonState { HELD_DOWN, NOT_HELD_DOWN }
+	protected enum ButtonState {
+		HELD_DOWN, NOT_HELD_DOWN
+	}
 
 	protected final InputReceiver inputReceiver;
 
@@ -27,7 +29,9 @@ public abstract class GamepadInputHandler extends InputHandler {
 	public static final boolean LOG_INPUT = false;
 
 	protected abstract List<Input> getTrackedInputs();
+
 	protected abstract Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor);
+
 	public abstract void setActionSet(Supplier<String> newActionSetKeySupplier);
 
 	protected GamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
@@ -56,6 +60,5 @@ public abstract class GamepadInputHandler extends InputHandler {
 		inputStrategySwitcher.setToMouseStrategy();
 		GamePauser.pause();
 	}
-
 
 }

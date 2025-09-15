@@ -35,7 +35,7 @@ class CrashHandlerTest {
 		assertEquals("java.lang.RuntimeException: Test Exception", stackTraceArray[0]);
 		assertEquals(stackTraceFrames.length + 1, stackTraceArray.length);
 		for (int i = 0; i < stackTraceFrames.length; i++) {
-			assertTrue(stackTraceArray[i+1].contains(stackTraceFrames[i].toString()));
+			assertTrue(stackTraceArray[i + 1].contains(stackTraceFrames[i].toString()));
 		}
 
 	}

@@ -24,8 +24,8 @@ public class ParallelActionBest extends Action {
 	}
 
 	@Override
-	public boolean act (float delta) {
-		if (complete) { 
+	public boolean act(float delta) {
+		if (complete) {
 			return true;
 		}
 		complete = true;
@@ -49,35 +49,39 @@ public class ParallelActionBest extends Action {
 	}
 
 	@Override
-	public void restart () {
+	public void restart() {
 		complete = false;
 		actions.forEach(Action::restart);
 	}
 
 	@Override
-	public void reset () {
+	public void reset() {
 		super.reset();
 		actions.clear();
 	}
 
-	public void addAction (Action action) {
+	public void addAction(Action action) {
 		actions.add(action);
-		if (actor != null) action.setActor(actor);
+		if (actor != null) {
+			action.setActor(actor);
+		}
 	}
 
 	@Override
-	public void setActor (Actor actor) {
+	public void setActor(Actor actor) {
 		actions.forEach(action -> action.setActor(actor));
 		super.setActor(actor);
 	}
 
 	@Override
-	public String toString () {
+	public String toString() {
 		StringBuilder buffer = new StringBuilder(64);
 		buffer.append(super.toString());
 		buffer.append('(');
 		for (int i = 0, n = actions.size(); i < n; i++) {
-			if (i > 0) buffer.append(", ");
+			if (i > 0) {
+				buffer.append(", ");
+			}
 			buffer.append(actions.get(i));
 		}
 		buffer.append(')');

@@ -23,7 +23,7 @@ public class DesktopCrashPopup extends JFrame {
 		JFrame.setDefaultLookAndFeelDecorated(false);
 		CrashReport crashReport = new CrashReport("Test Game", "1.0.1", "linux", Instant.now(), UUID.randomUUID(), CrashHandler.getMessageAndStackTraceArray(new RuntimeException("Test Exception lol")));
 		CrashLocalization crashLocalization = CrashLocalization.getLocalizationFromCode(Locale.getDefault().getLanguage());
-		DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, ()-> DesktopCrashHandler.reportCrashToDarBot5000(crashReport.getGameName(), "file.err.json", crashReport.toJson()), "localfile.err.json", crashLocalization);
+		DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, () -> DesktopCrashHandler.reportCrashToDarBot5000(crashReport.getGameName(), "file.err.json", crashReport.toJson()), "localfile.err.json", crashLocalization);
 		crashPopup.setVisible(true);
 		crashPopup.requestFocusOnSendButton();
 	}
@@ -76,7 +76,6 @@ public class DesktopCrashPopup extends JFrame {
 
 		add(crashReportScrollPane, BorderLayout.CENTER);
 
-
 		JPanel buttonPanel = new JPanel();
 		Border buttonPadding = BorderFactory.createEmptyBorder(getSmallPadding(), getLargePadding(), getLargePadding(), getLargePadding());
 		buttonPanel.setBorder(buttonPadding);
@@ -89,11 +88,10 @@ public class DesktopCrashPopup extends JFrame {
 			buttonSendReport.setEnabled(false);
 			buttonSendReport.setText(crashLocalization.getSendingButtonString());
 			ReportStatus reportStatus = sendErrorReport.get();
-			if(reportStatus.isSuccessful()) {
+			if (reportStatus.isSuccessful()) {
 				buttonSendReport.setText(crashLocalization.getSentSuccessButtonString());
 				buttonSendReport.setBackground(Color.GREEN);
-			}
-			else {
+			} else {
 				buttonSendReport.setText(crashLocalization.getSentFailedButtonString(reportStatus.getShortMessage()));
 				buttonSendReport.setBackground(Color.RED.darker());
 			}
@@ -106,7 +104,6 @@ public class DesktopCrashPopup extends JFrame {
 			copyTextToClipboard(crashReport.toString());
 			buttonCopy.setText(crashLocalization.getCopiedButtonString());
 		});
-
 
 		JButton buttonClose = new JButton(crashLocalization.getExitButtonString());
 		buttonClose.setFont(getRegularFont());
@@ -130,7 +127,7 @@ public class DesktopCrashPopup extends JFrame {
 		clipboard.setContents(stringSelection, null);
 	}
 
-	private static class SingleUseThreadedAction implements ActionListener{
+	private static class SingleUseThreadedAction implements ActionListener {
 		private final AtomicBoolean notRun;
 		private final Runnable singleUseRunnable;
 
@@ -141,7 +138,7 @@ public class DesktopCrashPopup extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(notRun.getAndSet(false)) {
+			if (notRun.getAndSet(false)) {
 				Thread thread = new Thread(singleUseRunnable);
 				thread.start();
 			}

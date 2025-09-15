@@ -33,7 +33,6 @@ public abstract class CrashHandler {
 	 */
 	protected abstract void logCrashReportStatus(List<ReportStatus> statuses);
 
-
 	static CrashReport buildCrashReport(Exception exception, List<String> args) {
 		Properties gameProperties = tryGetGameProperties("data/game.properties");
 		String gameName = gameProperties.getProperty("gameName", "nameNotFound");
@@ -62,9 +61,8 @@ public abstract class CrashHandler {
 		String string = null;
 		try {
 			string = stringGetter.get();
-		}
-		catch (Exception e) {
-			//swallow the exception, since we are already handling a game crash
+		} catch (Exception e) {
+			// swallow the exception, since we are already handling a game crash
 		}
 		return string;
 	}

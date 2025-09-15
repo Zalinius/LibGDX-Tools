@@ -22,7 +22,6 @@ public class BundleManager {
 	private final FileHandle baseBundleFileHandle;
 	private final UnaryOperator<String> modifierStrategy;
 
-
 	public BundleManager(FileHandle baseBundleFileHandle, List<Locale> supportedLocales) {
 		this(baseBundleFileHandle, supportedLocales, String::toString);
 	}
@@ -39,11 +38,10 @@ public class BundleManager {
 		}
 	}
 
-
 	/**
 	 * This will first check the more transitive top bundle (e.g. a scenario in Quest Giver), then the base bundle (text used all the time in the game, such as menus).
 	 * If there is no bundle, the supplied key is returned unchanged.
-	 * @param key The localization key, must be an exact match to a key in the bundle file
+	 * @param key  The localization key, must be an exact match to a key in the bundle file
 	 * @param args Any optional arguments to supply to the localized sentence, e.g. character names, a number for pluralization, etc
 	 * @return The localized line of text
 	 */
@@ -76,7 +74,7 @@ public class BundleManager {
 	}
 
 	void useLocale() {
-		if(locale == null) {
+		if (locale == null) {
 			locale = Locale.ROOT;
 		}
 		baseBundle = I18NBundle.createBundle(baseBundleFileHandle, locale);

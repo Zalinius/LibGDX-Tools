@@ -10,13 +10,19 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFact
 public interface SharesGameInformation {
 
 	String getGameName();
+
 	String getGameVersion();
 
 	SaveManager getSaveManager();
+
 	PreferenceManager getPreferenceManager();
+
 	GamePlatform getGamePlatform();
+
 	GameEdition getGameEdition();
+
 	SteamStrategy getSteamStrategy();
+
 	UserInterfaceFactory getUserInterfaceFactory();
 
 }

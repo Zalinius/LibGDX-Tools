@@ -26,8 +26,9 @@ class InputOnHexagonGridTest {
 				Arguments.of(Input.DOWN, HexagonDirection.BOTTOM),
 				Arguments.of(InputOnHexagonGrid.DOWN_LEFT, HexagonDirection.BOTTOM_LEFT),
 				Arguments.of(InputOnHexagonGrid.DOWN_RIGHT, HexagonDirection.BOTTOM_RIGHT)
-				);
+		);
 	}
+
 	@ParameterizedTest
 	@MethodSource("inputToDirection")
 	void getDirectionFromInput_givenInput_returnsCorrespondingDirection(Input input, HexagonDirection expectedDirection) {

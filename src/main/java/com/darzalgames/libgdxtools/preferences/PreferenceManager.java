@@ -12,19 +12,20 @@ public class PreferenceManager {
 	 */
 	public PreferenceManager(final String preferencePrefix) {
 		this(Gdx.app.getPreferences(preferencePrefix));
-	}	
+	}
+
 	public PreferenceManager(final Preferences preferencesFile) {
 		prefs = preferencesFile;
 	}
-	
+
 	public SoundPreference sound() {
 		return new SoundPreference(this);
 	}
-	
+
 	public GraphicsPreference graphics() {
 		return new GraphicsPreference(this);
 	}
-	
+
 	public OtherPreferences other() {
 		return new OtherPreferences(this);
 	}
@@ -33,14 +34,15 @@ public class PreferenceManager {
 		Preferences preferences = getPreferences();
 		return preferences.contains(key);
 	}
-	
+
 	protected String getStringPrefValue(final String key) {
 		Preferences preferences = getPreferences();
-		return preferences.getString(key);		
+		return preferences.getString(key);
 	}
+
 	protected String getStringPrefValue(final String key, final String defaultValue) {
 		Preferences preferences = getPreferences();
-		return preferences.getString(key, defaultValue);		
+		return preferences.getString(key, defaultValue);
 	}
 
 	protected int getIntegerPrefValue(final String key) {
@@ -82,7 +84,6 @@ public class PreferenceManager {
 		Preferences preferences = getPreferences();
 		return preferences.getFloat(key, defaultValue);
 	}
-
 
 	protected void savePrefValue(final String key, final String value) {
 		Preferences preferences = getPreferences();

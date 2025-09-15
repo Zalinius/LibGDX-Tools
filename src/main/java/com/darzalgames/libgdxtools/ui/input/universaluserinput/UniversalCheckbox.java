@@ -31,7 +31,7 @@ public class UniversalCheckbox extends UniversalTextButton {
 		// YOU MUST SET THE MIN WIDTH & HEIGHT OF THIS DRAWABLE FOR RESIZING TO WORK
 		float originalWidth = style.checkboxOff.getMinWidth();
 		float originalHeight = style.checkboxOff.getMinHeight();
-		widthOverHeight = originalWidth/originalHeight;
+		widthOverHeight = originalWidth / originalHeight;
 
 		// It doesn't matter which label we initialize with, as the button resizes every frame based on the contents
 		box = new Image() {
@@ -72,7 +72,6 @@ public class UniversalCheckbox extends UniversalTextButton {
 		});
 	}
 
-
 	/**
 	 * To be used when setting up a menu: this sets the box as checked (or not) without firing an interaction event
 	 * @param shouldBeChecked whether it should be checked initially
@@ -86,7 +85,7 @@ public class UniversalCheckbox extends UniversalTextButton {
 	public void resizeUI() {
 		label.setTextSupplier(isChecked() ? checkedLabel : uncheckedLabel);
 		super.resizeUI();
-		box.setHeight(label.getHeight()*1.25f);
+		box.setHeight(label.getHeight() * 1.25f);
 		box.setWidth(widthOverHeight * box.getHeight());
 		getCell(box).width(box.getWidth()).height(box.getHeight());
 	}
@@ -106,6 +105,7 @@ public class UniversalCheckbox extends UniversalTextButton {
 	protected boolean isChecked() {
 		return checked;
 	}
+
 	protected void setChecked(boolean checked) {
 		this.checked = checked;
 	}

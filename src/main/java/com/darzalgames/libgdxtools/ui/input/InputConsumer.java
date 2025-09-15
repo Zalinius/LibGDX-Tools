@@ -52,10 +52,12 @@ public interface InputConsumer {
 	void selectDefault();
 
 	boolean isDisabled();
-	boolean isBlank();
-	void setAlignment(Alignment alignment);
-	void setDisabled(boolean disabled);
 
+	boolean isBlank();
+
+	void setAlignment(Alignment alignment);
+
+	void setDisabled(boolean disabled);
 
 	default void setFocused(boolean focused) {
 		if (focused) {

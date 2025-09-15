@@ -17,8 +17,11 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public abstract class FallbackGamepadInputHandler extends GamepadInputHandler implements ControllerListener {
 
 	private final Map<Function<Controller, Integer>, Input> buttonMappings;
+
 	protected abstract Map<Function<Controller, Integer>, Input> makeButtonMappings();
+
 	private final Map<Input, AssetDescriptor<Texture>> glyphMappings;
+
 	protected abstract Map<Input, AssetDescriptor<Texture>> makeGlyphMappings();
 
 	protected FallbackGamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
@@ -45,7 +48,7 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 
 	@Override
 	public boolean buttonDown(Controller controller, int buttonCode) {
-		for(Entry<Function<Controller, Integer>, Input> entry : buttonMappings.entrySet()) {
+		for (Entry<Function<Controller, Integer>, Input> entry : buttonMappings.entrySet()) {
 			if (entry.getKey().apply(controller) == buttonCode) {
 				justPressed(entry.getValue());
 			}
@@ -55,7 +58,7 @@ public abstract class FallbackGamepadInputHandler extends GamepadInputHandler im
 
 	@Override
 	public boolean buttonUp(Controller controller, int buttonCode) {
-		for(Entry<Function<Controller, Integer>, Input> entry : buttonMappings.entrySet()) {
+		for (Entry<Function<Controller, Integer>, Input> entry : buttonMappings.entrySet()) {
 			if (entry.getKey().apply(controller) == buttonCode) {
 				justReleased(entry.getValue());
 			}

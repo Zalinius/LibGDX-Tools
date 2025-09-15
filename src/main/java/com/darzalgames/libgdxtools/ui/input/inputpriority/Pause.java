@@ -45,10 +45,9 @@ public class Pause extends Actor {
 		optionsMenu.addOptionsButtonToStage();
 	}
 
-
 	/**
 	 * @param doesCurrentInputConsumerPauseGame A supplier to tell us if whatever's in focus pauses the game (some popups and the options menu do this)
-	 * @param getNameOfPausingStage a supplier for the name of the stage that the current pausing the game, if any
+	 * @param getNameOfPausingStage             a supplier for the name of the stage that the current pausing the game, if any
 	 */
 	void setInformationalSuppliers(Supplier<Boolean> doesCurrentInputConsumerPauseGame, Supplier<String> getNameOfPausingStage) {
 		this.doesCurrentInputConsumerPauseGame = doesCurrentInputConsumerPauseGame;

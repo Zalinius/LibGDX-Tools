@@ -26,6 +26,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	}
 
 	protected abstract UniversalButton getFirstChoiceButton();
+
 	protected abstract UniversalButton getSecondChoiceButton();
 
 	/**
@@ -60,7 +61,6 @@ public abstract class ChoicePopUp extends PopUpMenu {
 		if (addRowAfterMessage) {
 			row();
 		}
-
 
 		UniversalButton firstButton = getFirstChoiceButton();
 		UniversalButton secondButton = getSecondChoiceButton();

@@ -49,7 +49,9 @@ public abstract class KeyboardInputHandler extends InputHandler {
 	}
 
 	protected abstract Input remapInputIfNecessary(Input input, int keycode);
+
 	protected abstract List<Input> getKeyWhitelist();
+
 	protected abstract Map<Input, AssetDescriptor<Texture>> makeButtonMappings();
 
 	protected boolean shouldSetLatestInputMethodAsKeyboardBasedOnInput(Input input) {

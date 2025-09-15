@@ -5,8 +5,7 @@ import com.darzalgames.libgdxtools.ui.input.Input;
 
 public class GlyphFactory {
 
-	private GlyphFactory() {
-	}
+	private GlyphFactory() {}
 
 	private static InputHandler latestInputHandler;
 

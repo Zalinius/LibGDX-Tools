@@ -11,7 +11,6 @@ public class InputSetup {
 	private final InputReceiver inputReceiver;
 	private final ScrollingManager scrollingManager;
 
-
 	public InputSetup(InputStrategySwitcher inputStrategySwitcher, Runnable toggleFullscreenRunnable, List<StageLikeRenderable> allStagesInOrderForInput, Pause pause) {
 		inputPriorityStack = new InputPriorityStack(allStagesInOrderForInput, pause.getOptionsMenu(), inputStrategySwitcher);
 		inputReceiver = new InputReceiver(inputStrategySwitcher, inputPriorityStack, toggleFullscreenRunnable);

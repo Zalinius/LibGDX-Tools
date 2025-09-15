@@ -3,7 +3,7 @@ package com.darzalgames.libgdxtools.errorhandling;
 import java.util.Set;
 
 public class CrashLocalization {
-	
+
 	public static final CrashLocalization ENGLISH_CRASH_LOCALIZATION = new CrashLocalization(
 			"{game} - crash reporting",
 			"Unfortunately {game} has crashed :(",
@@ -11,50 +11,48 @@ public class CrashLocalization {
 			"Crash Report:",
 
 			"Send to DarZal Games",
-			"Sending . . .", 
+			"Sending . . .",
 			"SENT!  thanks c:",
 			"FAILED({httpCode})  :l",
-			
-			"Copy crash report", 
+
+			"Copy crash report",
 			"Copied!",
-			
-			"Exit");
-	
+
+			"Exit"
+	);
+
 	public static final CrashLocalization FRENCH_CRASH_LOCALIZATION = new CrashLocalization(
 			"{game} - rapport d'erreur",
 			"Malheureusement, {game} a rencontré une erreur :(",
 			"Le rapport suivant a été sauvegardé à : {file}",
 			"Rapport d'erreur :",
-			
+
 			"Envoyer à Jeux DarZal",
-			"En cours d'envoi . . .", 
+			"En cours d'envoi . . .",
 			"ENVOYÉ !  merci c:",
 			"ÉCHEC({httpCode})  :l",
-			
-			"Copier le rapport", 
-			"Copié !",
-			
-			"Quitter");
 
-	
+			"Copier le rapport",
+			"Copié !",
+
+			"Quitter"
+	);
+
 	public static CrashLocalization getLocalizationFromCode(String languageCode) {
 		Set<String> frenchLanguageCodes = Set.of("fr", "fra", "fre");
-		
-		if(frenchLanguageCodes.contains(languageCode)) {
+
+		if (frenchLanguageCodes.contains(languageCode)) {
 			return FRENCH_CRASH_LOCALIZATION;
-		}
-		else {
+		} else {
 			return ENGLISH_CRASH_LOCALIZATION;
 		}
 	}
 
-	
-	
 	private final String titleSuffixString;
 	private final String reportSituationLabelString;
 	private final String reportFileLabelString;
 	private final String reportHeaderLabelString;
-	
+
 	private final String sendButtonString;
 	private final String sendingButtonString;
 	private final String sentSuccessButtonString;
@@ -114,7 +112,7 @@ public class CrashLocalization {
 	public String getSentFailedButtonString(String statusCode) {
 		return sentFailedButtonString.replace("{httpCode}", statusCode);
 	}
-	
+
 	public String getCopyButtonString() {
 		return copyButtonString;
 	}
@@ -126,6 +124,5 @@ public class CrashLocalization {
 	public String getExitButtonString() {
 		return exitButtonString;
 	}
-	
-	
+
 }

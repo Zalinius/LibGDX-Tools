@@ -28,7 +28,6 @@ public class Input {
 	public static final Input NONE = new Input(-1, "N/A");
 	/*----------------------------------------------------------------------------------------------------*/
 
-
 	private int key;
 	private final String actionName;
 
@@ -50,7 +49,8 @@ public class Input {
 	}
 
 	/**
-	 * Go from a keyboard key to our custom {@link Input}.<p>
+	 * Go from a keyboard key to our custom {@link Input}.
+	 * <p>
 	 * NOTE: If a game defines its own input class that extends this one to add other inputs, this still works great!
 	 * @param key the keyboard key's integer code
 	 * @return the corresponding mapped input

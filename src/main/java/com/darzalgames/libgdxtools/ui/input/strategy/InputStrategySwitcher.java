@@ -50,8 +50,8 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 		notifyObservers();
 	}
 
-
 	private final List<InputStrategyObserver> observers;
+
 	@Override
 	public void register(InputStrategyObserver obj) {
 		observers.add(obj);
@@ -59,10 +59,12 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 		// e.g. The stage needs to know on initialization that everything starts in mouse mode; a newly created input-sensitive label uses the current strategy, etc.
 		obj.inputStrategyChanged(this);
 	}
+
 	@Override
 	public void unregister(InputStrategyObserver obj) {
 		observers.remove(obj);
 	}
+
 	@Override
 	public void notifyObservers() {
 		List<InputStrategyObserver> toRemove = observers.stream().filter(InputStrategyObserver::shouldBeUnregistered).toList();
@@ -101,7 +103,7 @@ public class InputStrategySwitcher extends Actor implements InputStrategy, Input
 			RunnableActionBest resetInputAction = new RunnableActionBest(() -> {
 				if (InputStrategySwitcher.this.previousInputStrategy == InputStrategySwitcher.this.keyboardAndGamepadInputStrategy) {
 					setToKeyboardAndGamepadStrategy();
-				}  else {
+				} else {
 					setToMouseStrategy();
 				}
 			});

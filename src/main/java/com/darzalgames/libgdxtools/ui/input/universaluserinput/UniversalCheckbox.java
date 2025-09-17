@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
@@ -109,5 +110,8 @@ public class UniversalCheckbox extends UniversalTextButton {
 	protected void setChecked(boolean checked) {
 		this.checked = checked;
 	}
+
+	@Override
+	public void colorOtherComponentsBasedOnFocus(Color color) { /* DON'T recolor the label of a checkbox while pressing on it */ }
 
 }

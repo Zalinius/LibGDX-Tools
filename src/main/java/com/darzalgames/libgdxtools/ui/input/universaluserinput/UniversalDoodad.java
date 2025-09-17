@@ -198,7 +198,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		}
 	}
 
-	public abstract void colorOtherComponentsBasedOnFocus(Color color);
+	public void colorOtherComponentsBasedOnFocus(Color color) {/* No special inner buttons or whatnot to color by default */}
 
 	private boolean isPressed() {
 		return clickListener.isVisualPressed();

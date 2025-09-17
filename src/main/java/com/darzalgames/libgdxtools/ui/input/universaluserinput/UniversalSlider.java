@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
 import java.util.function.Consumer;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -105,5 +106,8 @@ public class UniversalSlider extends UniversalTextButton {
 	private float calculatePadding() {
 		return UserInterfaceSizer.getWidthPercentage(0.005f);
 	}
+
+	@Override
+	public void colorOtherComponentsBasedOnFocus(Color color) { /* DON'T recolor the label of a slider while pressing on it */ }
 
 }

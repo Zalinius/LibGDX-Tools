@@ -173,9 +173,6 @@ public class SkinManager {
 		return FOCUSED_COLOR;
 	}
 
-	public static Color getOutOfFocusColor() {
-		return OUT_OF_FOCUS_COLOR;
-	}
 
 	public static Color getDisabledColor() {
 		return DISABLED_COLOR;

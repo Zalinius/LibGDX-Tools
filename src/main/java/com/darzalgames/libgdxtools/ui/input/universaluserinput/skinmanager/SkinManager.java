@@ -23,6 +23,7 @@ public class SkinManager {
 	// NinePatch
 	protected static final String CONFIRMATION_MENU_BACKGROUND = "confirmationMenuBackground";
 	protected static final String UI_BORDERED_NINE = "uiBorderedNine";
+	protected static final String UI_BORDERED_NINE_COMPACT = "uiBorderedNineCompact";
 
 	// LabelStyle
 	protected static final String DEFAULT = "default";
@@ -64,6 +65,7 @@ public class SkinManager {
 		darkGrayNinePatch.setMinWidth(size);
 		darkGrayNinePatch.setMinHeight(size);
 		skin.add(UI_BORDERED_NINE, darkGrayNinePatch);
+		skin.add(UI_BORDERED_NINE_COMPACT, new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.GRAY, size), 1, 1, 1, 1)));
 		skin.add(CONFIRMATION_MENU_BACKGROUND, new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.PINK, size), 1, 1, 1, 1)));
 
 		Font defaultFont = new Font();
@@ -122,6 +124,10 @@ public class SkinManager {
 
 	public BaseDrawable getUINinePatch() {
 		return skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
+	}
+
+	public BaseDrawable getCompactUINinePatch() {
+		return skin.get(UI_BORDERED_NINE_COMPACT, NinePatchDrawable.class);
 	}
 
 	public BaseDrawable getConfirmationMenuBackground() {

@@ -41,8 +41,7 @@ public class SkinManager {
 
 	// Colors used for styling buttons and labels based on focus
 	protected static final Color DARK_COLOR = new Color(0.65f, 0.65f, 0.65f, 1);
-	protected static final Color FOCUSED_COLOR = Color.WHITE;
-	protected static final Color OUT_OF_FOCUS_COLOR = new Color(0.55f, 0.55f, 0.55f, 1);
+	protected static final Color DEFAULT_COLOR = Color.WHITE;
 	protected static final Color DISABLED_COLOR = Color.DARK_GRAY;
 
 	/**
@@ -169,10 +168,9 @@ public class SkinManager {
 		return DARK_COLOR;
 	}
 
-	public static Color getFocusedColor() {
-		return FOCUSED_COLOR;
+	public static Color getDefaultColor() {
+		return DEFAULT_COLOR;
 	}
-
 
 	public static Color getDisabledColor() {
 		return DISABLED_COLOR;

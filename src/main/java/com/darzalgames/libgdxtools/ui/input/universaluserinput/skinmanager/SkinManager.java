@@ -23,6 +23,7 @@ public class SkinManager {
 	// NinePatch
 	protected static final String CONFIRMATION_MENU_BACKGROUND = "confirmationMenuBackground";
 	protected static final String UI_BORDERED_NINE = "uiBorderedNine";
+	protected static final String UI_BORDERED_NINE_COMPACT = "uiBorderedNineCompact";
 
 	// LabelStyle
 	protected static final String DEFAULT = "default";
@@ -41,8 +42,7 @@ public class SkinManager {
 
 	// Colors used for styling buttons and labels based on focus
 	protected static final Color DARK_COLOR = new Color(0.65f, 0.65f, 0.65f, 1);
-	protected static final Color FOCUSED_COLOR = Color.WHITE;
-	protected static final Color OUT_OF_FOCUS_COLOR = new Color(0.55f, 0.55f, 0.55f, 1);
+	protected static final Color DEFAULT_COLOR = Color.WHITE;
 	protected static final Color DISABLED_COLOR = Color.DARK_GRAY;
 
 	/**
@@ -65,6 +65,7 @@ public class SkinManager {
 		darkGrayNinePatch.setMinWidth(size);
 		darkGrayNinePatch.setMinHeight(size);
 		skin.add(UI_BORDERED_NINE, darkGrayNinePatch);
+		skin.add(UI_BORDERED_NINE_COMPACT, new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.GRAY, size), 1, 1, 1, 1)));
 		skin.add(CONFIRMATION_MENU_BACKGROUND, new NinePatchDrawable(new NinePatch(ColorTools.getColoredTexture(Color.PINK, size), 1, 1, 1, 1)));
 
 		Font defaultFont = new Font();
@@ -125,6 +126,10 @@ public class SkinManager {
 		return skin.get(UI_BORDERED_NINE, NinePatchDrawable.class);
 	}
 
+	public BaseDrawable getCompactUINinePatch() {
+		return skin.get(UI_BORDERED_NINE_COMPACT, NinePatchDrawable.class);
+	}
+
 	public BaseDrawable getConfirmationMenuBackground() {
 		return skin.get(CONFIRMATION_MENU_BACKGROUND, NinePatchDrawable.class);
 	}
@@ -169,12 +174,8 @@ public class SkinManager {
 		return DARK_COLOR;
 	}
 
-	public static Color getFocusedColor() {
-		return FOCUSED_COLOR;
-	}
-
-	public static Color getOutOfFocusColor() {
-		return OUT_OF_FOCUS_COLOR;
+	public static Color getDefaultColor() {
+		return DEFAULT_COLOR;
 	}
 
 	public static Color getDisabledColor() {

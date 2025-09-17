@@ -175,6 +175,10 @@ public abstract class UserInterfaceFactory {
 		return selectBox;
 	}
 
+	public BaseDrawable getCompactBackgroundDrawable() {
+		return skinManager.getCompactUINinePatch();
+	}
+
 	public BaseDrawable getDefaultBackgroundDrawable() {
 		return skinManager.getUINinePatch();
 	}

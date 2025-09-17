@@ -28,12 +28,15 @@ public class UniversalSelectBox extends UniversalTextButton {
 		options = new PopUpMenu(true) {
 			@Override
 			protected void setUpTable() {
+				UniversalLabel currentlySelectedIndicator = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("select_box_current", defaultEntry.label.textSupplier.get()));
+				options.add(currentlySelectedIndicator).center();
+				options.row();
 				List<VisibleInputConsumer> buttonsAsVisibleInputConsumers = GenericInheritanceConverter.convertList(entryButtons);
 				menu.replaceContents(buttonsAsVisibleInputConsumers, makeFinalButton("back_message"));
-				menu.setAlignment(Alignment.LEFT, Alignment.LEFT);
-				menu.getView().setBackground(GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable());
+				menu.setAlignment(Alignment.CENTER, Alignment.CENTER);
+				options.setBackground(GameInfo.getUserInterfaceFactory().getCompactBackgroundDrawable());
 				entryButtons.forEach(UniversalTextButton::resizeUI);
-				options.add(menu.getView()).left();
+				options.add(menu.getView()).center();
 				options.pack();
 				UserInterfaceSizer.makeActorCentered(options);
 			}

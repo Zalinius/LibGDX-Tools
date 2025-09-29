@@ -23,7 +23,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	public HexagonControllerMap2D(HexagonMap<E> hexagonMap, Function<Hexagon, HexagonController2D> hexagonControllerFactory) {
 		this.hexagonMap = new HexagonMap<>();
 
-		hexagonMap.getAllHexagons().forEach(hexagon -> makeControllerForHexagon(hexagonControllerFactory, hexagon, hexagonMap.get(hexagon)));
+		hexagonMap.keySet().forEach(hexagon -> makeControllerForHexagon(hexagonControllerFactory, hexagon, hexagonMap.get(hexagon)));
 	}
 
 	/**
@@ -31,7 +31,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	 * @return Whether or not this map has a visual representation for the given hexagon
 	 */
 	boolean containsHexagon(Hexagon hexagon) {
-		return hexagonMap.getAllHexagons().contains(hexagon);
+		return hexagonMap.keySet().contains(hexagon);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	}
 
 	private Stream<HexagonController2D> getAllControllers() {
-		return hexagonMap.getAllHexagons().stream().map(hex -> hexagonMap.get(hex).f());
+		return hexagonMap.keySet().stream().map(hex -> hexagonMap.get(hex).f());
 	}
 
 	public void resizeUI() {

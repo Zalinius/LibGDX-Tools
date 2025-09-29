@@ -45,7 +45,7 @@ public class HexagonController2D extends Container<Actor> implements VisibleInpu
 
 	private void setPositionOnScreen() {
 		Tuple<Float, Float> hexagonPosition = HexagonMath.getScreenPositionOnStage(
-				hexagon.getQ(), hexagon.getR(),
+				hexagon.q(), hexagon.r(),
 				getWidth(), getHeight(), UserInterfaceSizer.getCurrentHeight()
 		);
 		this.setPosition(hexagonPosition.e(), hexagonPosition.f());

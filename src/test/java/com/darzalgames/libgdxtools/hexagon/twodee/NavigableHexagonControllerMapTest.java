@@ -86,8 +86,8 @@ class NavigableHexagonControllerMapTest {
 		navigableHexagonMap.gainFocus();
 		navigableHexagonMap.focusCurrent();
 
-		assertEquals(0, navigableHexagonMap.getCurrentHexagonController().hexagon.getQ());
-		assertEquals(0, navigableHexagonMap.getCurrentHexagonController().hexagon.getR());
+		assertEquals(0, navigableHexagonMap.getCurrentHexagonController().hexagon.q());
+		assertEquals(0, navigableHexagonMap.getCurrentHexagonController().hexagon.r());
 	}
 
 	@ParameterizedTest
@@ -97,8 +97,8 @@ class NavigableHexagonControllerMapTest {
 		navigableHexagonMap.gainFocus();
 		navigableHexagonMap.consumeKeyInput(input);
 
-		assertEquals(q, navigableHexagonMap.getCurrentHexagonController().hexagon.getQ());
-		assertEquals(r, navigableHexagonMap.getCurrentHexagonController().hexagon.getR());
+		assertEquals(q, navigableHexagonMap.getCurrentHexagonController().hexagon.q());
+		assertEquals(r, navigableHexagonMap.getCurrentHexagonController().hexagon.r());
 	}
 
 	@Test

@@ -41,7 +41,7 @@ public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E
 	}
 
 	private void navigateToNeighborInDirection(HexagonDirection direction) {
-		Hexagon neighborHexagon = HexagonDirection.getNeighborHexagon(currentHexagon, direction);
+		Hexagon neighborHexagon = direction.getNeighborHexagon(currentHexagon);
 		if (getActor().containsHexagon(neighborHexagon)) {
 			clearSelected();
 			currentHexagon = neighborHexagon;

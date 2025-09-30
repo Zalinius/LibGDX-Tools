@@ -5,7 +5,7 @@ import com.badlogic.gdx.Preferences;
 
 public class PreferenceManager {
 
-	private Preferences prefs;
+	private final Preferences prefs;
 
 	/**
 	 * @param preferencePrefix A name for the preferences file, which should be in a package format corresponding to the game, e.g. com.darzalgames.cultivar
@@ -24,6 +24,10 @@ public class PreferenceManager {
 
 	public GraphicsPreference graphics() {
 		return new GraphicsPreference(this);
+	}
+
+	public PausePreference pause() {
+		return new PausePreference(this);
 	}
 
 	public OtherPreferences other() {

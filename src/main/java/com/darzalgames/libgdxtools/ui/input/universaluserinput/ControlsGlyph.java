@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -12,10 +13,9 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.GlyphFactory;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputStrategyObserver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public class ControlsGlyph extends Image implements InputStrategyObserver {
+public class ControlsGlyph extends Image {
 
 	private Input input;
 	private Alignment alignment;
@@ -26,7 +26,6 @@ public class ControlsGlyph extends Image implements InputStrategyObserver {
 		this.parentIsEnabled = parentIsEnabled;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		setInput(input);
-		inputStrategySwitcher.register(this);
 		setSize(referenceGlyphForSize.getWidth(), referenceGlyphForSize.getHeight());
 		setTouchable(Touchable.disabled);
 		setVisibilityBasedOnCurrentInputStrategy();
@@ -70,22 +69,23 @@ public class ControlsGlyph extends Image implements InputStrategyObserver {
 			};
 			moveBy(xOffset, yOffset);
 
-			setVisibilityBasedOnCurrentInputStrategy();
+			setVisibilityBasedOnCurrentInputStrategy(); // act() but not draw() is called when the glyph is not visible
 		}
 	}
 
+	// we set the visibility based on the current input strategy in both act() and draw() since there are valid cases where only one of the two is being called and an update is needed
+
 	@Override
-	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-		setVisibilityBasedOnCurrentInputStrategy();
+	public void draw(Batch batch, float parentAlpha) {
+		setVisibilityBasedOnCurrentInputStrategy(); // draw() but not act() is called when the game is paused
+		if (isVisible()) {
+			// libgdx checks visibility before calling draw(), so since I interrupted their draw() and may be toggling visibility here, we check again
+			super.draw(batch, parentAlpha);
+		}
 	}
 
 	private void setVisibilityBasedOnCurrentInputStrategy() {
 		setVisible(!inputStrategySwitcher.isMouseMode() && parentIsEnabled.get());
-	}
-
-	@Override
-	public boolean shouldBeUnregistered() {
-		return getStage() == null;
 	}
 
 }

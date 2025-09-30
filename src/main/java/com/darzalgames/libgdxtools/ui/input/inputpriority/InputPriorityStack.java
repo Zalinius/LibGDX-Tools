@@ -80,13 +80,15 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	 */
 	void releasePriority(InputConsumer inputConsumer) {
 		String nameOfStageThisConsumerIsOn = multiStack.getNameOfStageThisConsumerIsOn(inputConsumer);
-		boolean stageExists = stageLikeRenderables.containsKey(nameOfStageThisConsumerIsOn);
-		if (stageExists && multiStack.isThisOnTop(inputConsumer, nameOfStageThisConsumerIsOn)) {
+		boolean isTopmostStage = nameOfStageThisConsumerIsOn.equals(multiStack.getNameOfTopStage());
+		if (isTopmostStage && multiStack.isThisOnTop(inputConsumer, nameOfStageThisConsumerIsOn)) {
+			// Removing the cosumer which currently has focus (is on top of the top-most stage)
 			darkScreen.fadeOutAndRemove();
 			releasePriorityForTop();
 			darkScreen.fadeOutAndRemove();
 			showDarkScreenIfLandingOnPopup(stageLikeRenderables.get(multiStack.getNameOfTopStage()));
 		} else {
+			// A consumer somewhere below the current one, remove it without fanfare
 			multiStack.remove(inputConsumer, nameOfStageThisConsumerIsOn);
 		}
 	}
@@ -263,6 +265,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		public void remove(InputConsumer inputConsumer, String nameOfStageThisConsumerIsOn) {
 			if (inputConsumerStacks.containsKey(nameOfStageThisConsumerIsOn)) {
 				inputConsumerStacks.get(nameOfStageThisConsumerIsOn).remove(inputConsumer);
+				inputConsumer.removedFocus();
 			}
 		}
 
@@ -301,8 +304,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		}
 
 		private void popTop() {
-			notifyInputPriorityObservers();
-			getTopStack().pop();
+			remove(getTop(), getNameOfTopStage());
 		}
 
 		private void clear() {

@@ -32,9 +32,14 @@ public interface InputConsumer {
 	default void regainFocus() {}
 
 	/**
-	 * Called when this object has lost focus (sometimes an object does this voluntarily, but it also happens when something else claims priority above this)
+	 * Called when this object has temporarily lost focus (i.e. when something else claims priority above this)
 	 */
 	default void loseFocus() {}
+
+	/**
+	 * Called when this object is being removed from the input focus system
+	 */
+	default void removedFocus() {}
 
 	/**
 	 * If applicable, put the current relevant object into focus (e.g. selecting the current button so it flashes)

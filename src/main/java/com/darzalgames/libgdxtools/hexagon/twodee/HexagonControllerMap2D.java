@@ -31,7 +31,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	 * @return Whether or not this map has a visual representation for the given hexagon
 	 */
 	boolean containsHexagon(Hexagon hexagon) {
-		return hexagonMap.keySet().contains(hexagon);
+		return hexagonMap.containsKey(hexagon);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	 */
 	public List<HexagonController2D> getControllerNeighborsOf(Hexagon hexagon) {
 		Set<Hexagon> hexes = hexagonMap.getHexagonNeighborsOf(hexagon);
-		return hexes.stream().map(neighborHexagon -> hexagonMap.get(neighborHexagon).f()).toList();
+		return hexes.stream().map(neighborHexagon -> getControllerOf(neighborHexagon)).toList();
 	}
 
 	void centerSelf() {
@@ -96,7 +96,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	}
 
 	private Stream<HexagonController2D> getAllControllers() {
-		return hexagonMap.keySet().stream().map(hex -> hexagonMap.get(hex).f());
+		return hexagonMap.keySet().stream().map(hex -> getControllerOf(hex));
 	}
 
 	public void resizeUI() {

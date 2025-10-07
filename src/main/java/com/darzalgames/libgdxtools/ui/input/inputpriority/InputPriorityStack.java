@@ -264,6 +264,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 
 		public void remove(InputConsumer inputConsumer, String nameOfStageThisConsumerIsOn) {
 			if (inputConsumerStacks.containsKey(nameOfStageThisConsumerIsOn)) {
+				notifyInputPriorityObservers();
 				inputConsumerStacks.get(nameOfStageThisConsumerIsOn).remove(inputConsumer);
 				inputConsumer.removedFocus();
 			}

@@ -45,4 +45,9 @@ public interface LogicalInputConsumer extends InputConsumer {
 	default boolean isBlank() {
 		return false;
 	}
+
+	@Override
+	default void resizeUI() {
+		// not relevant for a logical input consumer
+	}
 }

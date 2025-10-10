@@ -5,20 +5,16 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pools;
-import com.darzalgames.libgdxtools.maingame.StageBest;
 import com.darzalgames.libgdxtools.ui.CenterActor;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.DoodadBackgroundImage;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 
 public abstract class UniversalDoodad extends Table implements VisibleInputConsumer {
@@ -27,44 +23,23 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	private boolean disabled;
 	private final ClickListener clickListener;
 	private final InputStrategySwitcher inputStrategySwitcher;
-	private final Image background;
-	private final float SCALE_TIME = 0.1f;
+	private final DoodadBackgroundImage background;
 	private float focusScaleIncrease = 0.05f;
 
 	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		setStyle(buttonStyle);
 		clickListener = new ClickListener() {
-			private Action currentScaleAction;
-
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				justPressed();
 			}
-
-			@Override
-			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-				// TODO focus like this when selecting default in a menu
-				super.enter(event, x, y, pointer, fromActor);
-				if (StageBest.isHoverEvent(pointer) && isTouchable() && !isDisabled()) {
-					currentScaleAction = Actions.scaleBy(focusScaleIncrease, focusScaleIncrease, SCALE_TIME);
-					background.addAction(currentScaleAction);
-				}
-			}
-
-			@Override
-			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-				super.exit(event, x, y, pointer, toActor);
-				if (StageBest.isHoverEvent(pointer)) {
-					background.removeAction(currentScaleAction);
-					currentScaleAction = Actions.scaleTo(1, 1, SCALE_TIME);
-					background.addAction(currentScaleAction);
-				}
-			}
 		};
 		addListener(clickListener);
+
 		background = new DoodadBackgroundImage();
 		background.setFillParent(true);
+		DoodadBackgroundImage.addScalingClickListener(background, this);
 	}
 
 	@Override
@@ -78,77 +53,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	public void setStyle(ButtonStyle buttonStyle) {
 		style = buttonStyle;
-
-		// TODO tidy up this mess
-		// sizes the button, very important
-		setBackground(new Drawable() {
-
-			@Override
-			public void draw(Batch batch, float x, float y, float width, float height) {
-				// DO NOT DRAW THIS
-			}
-
-			@Override
-			public float getLeftWidth() {
-				return style.up.getLeftWidth();
-			}
-
-			@Override
-			public void setLeftWidth(float leftWidth) {
-				// irrelevant
-			}
-
-			@Override
-			public float getRightWidth() {
-				return style.up.getRightWidth();
-			}
-
-			@Override
-			public void setRightWidth(float rightWidth) {
-				// irrelevant
-			}
-
-			@Override
-			public float getTopHeight() {
-				return style.up.getTopHeight();
-			}
-
-			@Override
-			public void setTopHeight(float topHeight) {
-				// irrelevant
-			}
-
-			@Override
-			public float getBottomHeight() {
-				return style.up.getBottomHeight();
-			}
-
-			@Override
-			public void setBottomHeight(float bottomHeight) {
-				// irrelevant
-			}
-
-			@Override
-			public float getMinWidth() {
-				return style.up.getMinWidth();
-			}
-
-			@Override
-			public void setMinWidth(float minWidth) {
-				// irrelevant
-			}
-
-			@Override
-			public float getMinHeight() {
-				return style.up.getMinHeight();
-			}
-
-			@Override
-			public void setMinHeight(float minHeight) {
-				// irrelevant
-			}
-
-		});
+		DoodadBackgroundImage.setStyleOnDoodadBackground(this, buttonStyle); // sizes the button, very important
 	}
 
 	@Override
@@ -320,6 +225,10 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 			textColor = SkinManager.getDarkColor();
 		}
 		return textColor;
+	}
+
+	public float getFocusScaleIncrease() {
+		return focusScaleIncrease;
 	}
 
 }

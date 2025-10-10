@@ -79,7 +79,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	public void setStyle(ButtonStyle buttonStyle) {
 		style = buttonStyle;
 
-		// TODO tidy up this mess, and fix the broken gear button
+		// TODO tidy up this mess
 		// sizes the button, very important
 		setBackground(new Drawable() {
 

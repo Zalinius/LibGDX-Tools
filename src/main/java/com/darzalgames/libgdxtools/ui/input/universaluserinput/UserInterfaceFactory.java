@@ -218,6 +218,7 @@ public abstract class UserInterfaceFactory {
 			@Override
 			public void colorOtherComponentsBasedOnFocus(Color color) { /* not needed */ }
 		};
+		button.setSize(button.getStyle().up.getMinWidth(), button.getStyle().up.getMinHeight());
 		ControlsGlyph glyph = getControlsGlyphForButton(Input.PAUSE, button);
 		glyph.setAlignment(Alignment.BOTTOM_RIGHT);
 		button.addActor(glyph);

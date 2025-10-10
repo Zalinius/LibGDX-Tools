@@ -28,15 +28,13 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	private final ClickListener clickListener;
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Image background;
+	private final float SCALE_TIME = 0.1f;
+	private float focusScaleIncrease = 0.05f;
 
 	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		setStyle(buttonStyle);
 		clickListener = new ClickListener() {
-			private final float SCALE_TIME = 0.1f;
-			private final float SCALE_SIZE = 0.05f;
-			private float startScaleX;
-			private float startScaleY;
 			private Action currentScaleAction;
 
 			@Override
@@ -48,10 +46,8 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 				// TODO focus like this when selecting default in a menu
 				super.enter(event, x, y, pointer, fromActor);
-				if (StageBest.isHoverEvent(pointer) && UniversalDoodad.this.isTouchable()) {
-					startScaleX = background.getScaleX();
-					startScaleY = background.getScaleY();
-					currentScaleAction = Actions.scaleBy(SCALE_SIZE, SCALE_SIZE, SCALE_TIME);
+				if (StageBest.isHoverEvent(pointer) && isTouchable() && !isDisabled()) {
+					currentScaleAction = Actions.scaleBy(focusScaleIncrease, focusScaleIncrease, SCALE_TIME);
 					background.addAction(currentScaleAction);
 				}
 			}
@@ -59,9 +55,9 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 			@Override
 			public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 				super.exit(event, x, y, pointer, toActor);
-				if (StageBest.isHoverEvent(pointer) && currentScaleAction != null) {
+				if (StageBest.isHoverEvent(pointer)) {
 					background.removeAction(currentScaleAction);
-					currentScaleAction = Actions.scaleTo(startScaleX, startScaleY, SCALE_TIME);
+					currentScaleAction = Actions.scaleTo(1, 1, SCALE_TIME);
 					background.addAction(currentScaleAction);
 				}
 			}
@@ -82,7 +78,77 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	public void setStyle(ButtonStyle buttonStyle) {
 		style = buttonStyle;
-		setBackground(style.down); // sizes the button, very important
+
+		// TODO tidy up this mess, and fix the broken gear button
+		// sizes the button, very important
+		setBackground(new Drawable() {
+
+			@Override
+			public void draw(Batch batch, float x, float y, float width, float height) {
+				// DO NOT DRAW THIS
+			}
+
+			@Override
+			public float getLeftWidth() {
+				return style.up.getLeftWidth();
+			}
+
+			@Override
+			public void setLeftWidth(float leftWidth) {
+				// irrelevant
+			}
+
+			@Override
+			public float getRightWidth() {
+				return style.up.getRightWidth();
+			}
+
+			@Override
+			public void setRightWidth(float rightWidth) {
+				// irrelevant
+			}
+
+			@Override
+			public float getTopHeight() {
+				return style.up.getTopHeight();
+			}
+
+			@Override
+			public void setTopHeight(float topHeight) {
+				// irrelevant
+			}
+
+			@Override
+			public float getBottomHeight() {
+				return style.up.getBottomHeight();
+			}
+
+			@Override
+			public void setBottomHeight(float bottomHeight) {
+				// irrelevant
+			}
+
+			@Override
+			public float getMinWidth() {
+				return style.up.getMinWidth();
+			}
+
+			@Override
+			public void setMinWidth(float minWidth) {
+				// irrelevant
+			}
+
+			@Override
+			public float getMinHeight() {
+				return style.up.getMinHeight();
+			}
+
+			@Override
+			public void setMinHeight(float minHeight) {
+				// irrelevant
+			}
+
+		});
 	}
 
 	@Override
@@ -158,6 +224,10 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	@Override
 	public void loseFocus() {
 		setFocused(false);
+	}
+
+	public void setFocusScaleIncrease(float focusScaleIncrease) {
+		this.focusScaleIncrease = focusScaleIncrease;
 	}
 
 	@Override

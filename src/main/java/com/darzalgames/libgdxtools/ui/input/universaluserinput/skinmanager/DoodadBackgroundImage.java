@@ -14,22 +14,6 @@ public class DoodadBackgroundImage extends Image {
 		float scaleX = getScaleX();
 		float scaleY = getScaleY();
 		getDrawable().draw(batch, x + getImageX(), y + getImageY(), getImageWidth() * scaleX, getImageHeight() * scaleY);
-
-//		Color color = getColor();
-//		batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-//
-//		if (drawable instanceof TransformDrawable) {
-//			float rotation = getRotation();
-//			if (scaleX != 1 || scaleY != 1 || rotation != 0) {
-//				((TransformDrawable) drawable).draw(
-//						batch, x + imageX, y + imageY, getOriginX() - imageX, getOriginY() - imageY,
-//						imageWidth, imageHeight, scaleX, scaleY, rotation
-//				);
-//				return;
-//			}
-//		}
-//		if (drawable != null) {
-//		}
 	}
 
 	@Override

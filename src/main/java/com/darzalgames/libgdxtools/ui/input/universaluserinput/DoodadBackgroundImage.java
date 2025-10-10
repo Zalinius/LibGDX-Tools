@@ -34,7 +34,6 @@ public class DoodadBackgroundImage extends Image {
 
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-				// TODO focus like this when selecting default in a menu
 				super.enter(event, x, y, pointer, fromActor);
 				if (StageBest.isHoverEvent(pointer) && listeningDoodad.isTouchable() && !listeningDoodad.isDisabled()) {
 					if (currentScaleAction != null) {

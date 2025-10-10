@@ -37,6 +37,10 @@ public class DoodadBackgroundImage extends Image {
 				// TODO focus like this when selecting default in a menu
 				super.enter(event, x, y, pointer, fromActor);
 				if (StageBest.isHoverEvent(pointer) && listeningDoodad.isTouchable() && !listeningDoodad.isDisabled()) {
+					if (currentScaleAction != null) {
+						toScale.removeAction(currentScaleAction);
+						toScale.setScale(1);
+					}
 					currentScaleAction = Actions.scaleBy(listeningDoodad.getFocusScaleIncrease(), listeningDoodad.getFocusScaleIncrease(), SCALE_TIME);
 					toScale.addAction(currentScaleAction);
 				}

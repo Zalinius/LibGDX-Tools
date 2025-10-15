@@ -76,7 +76,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 			super(
 					"screen_mode_accept",
 					"accept_control",
-					"revert_message", // TODO give this button the back glyph
+					"revert_message",
 					Runnables.nullRunnable(),
 					MultipleStage.OPTIONS_STAGE_NAME
 			);

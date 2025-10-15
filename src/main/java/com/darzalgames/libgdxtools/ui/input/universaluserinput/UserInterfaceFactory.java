@@ -38,6 +38,7 @@ public abstract class UserInterfaceFactory {
 	private final FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference;
 
 	private static final String QUIT_GAME_KEY = "quit_game";
+	public static final String BACK_BUTTON_KEY = "back_message";
 
 	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractRunnable, FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference) {
 		this.skinManager = skinManager;
@@ -226,7 +227,11 @@ public abstract class UserInterfaceFactory {
 	}
 
 	public UniversalButton makeBackButton(Runnable runnable) {
-		return makeTextButtonWithStyle(() -> TextSupplier.getLine("back_message"), runnable, skinManager.getBackButtonStyle(), skinManager.getDefaultLableStyle(), Input.BACK);
+		return makeBackButton(runnable, () -> TextSupplier.getLine(BACK_BUTTON_KEY));
+	}
+
+	public UniversalButton makeBackButton(Runnable runnable, Supplier<String> customMessage) {
+		return makeTextButtonWithStyle(customMessage, runnable, skinManager.getBackButtonStyle(), skinManager.getDefaultLableStyle(), Input.BACK);
 	}
 
 	/**

@@ -32,7 +32,7 @@ public class UniversalSelectBox extends UniversalTextButton {
 				options.add(currentlySelectedIndicator).center();
 				options.row();
 				List<VisibleInputConsumer> buttonsAsVisibleInputConsumers = GenericInheritanceConverter.convertList(entryButtons);
-				menu.replaceContents(buttonsAsVisibleInputConsumers, makeFinalButton("back_message"));
+				menu.replaceContents(buttonsAsVisibleInputConsumers, makeDefaultBackButton());
 				menu.setAlignment(Alignment.CENTER, Alignment.CENTER);
 				options.setBackground(GameInfo.getUserInterfaceFactory().getCompactBackgroundDrawable());
 				entryButtons.forEach(UniversalTextButton::resizeUI);

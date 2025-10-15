@@ -19,8 +19,8 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 public abstract class TextChoicePopUp extends ChoicePopUp {
 
 	protected final String messageKey;
-	private final String firstChoiceKey;
-	private final String secondChoiceKey;
+	protected final String firstChoiceKey;
+	protected final String secondChoiceKey;
 	private final boolean isWarning;
 
 	protected TextChoicePopUp(String messageKey, String firstChoiceKey, Runnable firstChoiceRunnable,

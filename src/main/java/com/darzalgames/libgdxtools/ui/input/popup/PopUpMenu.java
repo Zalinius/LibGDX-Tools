@@ -26,14 +26,23 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 		super(isVertical);
 	}
 
+	protected PopUpMenu(boolean isVertical, List<VisibleInputConsumer> entries) {
+		super(isVertical, entries);
+		menu.replaceContents(entries, makeDefaultBackButton()); // Because the final button calls this::hideThis, we make it after the call to super()
+	}
+
 	protected PopUpMenu(boolean isVertical, List<VisibleInputConsumer> entries, String finalButtonMessageKey) {
 		super(isVertical, entries);
-		menu.replaceContents(entries, makeFinalButton(finalButtonMessageKey)); // Because the final button calls this::hideThis, we make it after the call to super()
+		menu.replaceContents(entries, makeCustomFinalButton(finalButtonMessageKey)); // Because the final button calls this::hideThis, we make it after the call to super()
 	}
 
 	protected abstract void setUpDesiredSize();
 
-	protected UniversalButton makeFinalButton(String finalButtonMessageKey) {
+	protected UniversalButton makeDefaultBackButton() {
+		return GameInfo.getUserInterfaceFactory().makeBackButton(this::hideThis);
+	}
+
+	protected UniversalButton makeCustomFinalButton(String finalButtonMessageKey) {
 		return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine(finalButtonMessageKey), this::hideThis, Input.BACK);
 	}
 

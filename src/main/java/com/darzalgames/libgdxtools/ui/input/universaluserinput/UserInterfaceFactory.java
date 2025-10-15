@@ -225,6 +225,10 @@ public abstract class UserInterfaceFactory {
 		return button;
 	}
 
+	public UniversalButton makeBackButton(Runnable runnable) {
+		return makeTextButtonWithStyle(() -> TextSupplier.getLine("back_message"), runnable, skinManager.getBackButtonStyle(), skinManager.getDefaultLableStyle(), Input.BACK);
+	}
+
 	/**
 	 * @param buttonText The text on the quit button
 	 * @return A quit button, with a default English text label if not otherwise to find

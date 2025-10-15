@@ -38,6 +38,7 @@ public class SkinManager {
 
 	// ButtonStyle
 	protected static final String BLANK_BUTTON = "blankButtonStyle";
+	protected static final String BACK_BUTTON = "backButtonStyle";
 	protected static final String SETTINGS_BUTTON = "settingsButtonStyle";
 
 	// Colors used for styling buttons and labels based on focus
@@ -92,6 +93,7 @@ public class SkinManager {
 		buttonStyle.over = buttonHighlighted;
 		buttonStyle.focused = buttonHighlighted;
 		skin.add(DEFAULT, buttonStyle);
+		skin.add(BACK_BUTTON, buttonStyle);
 
 		Drawable blank = new Image(ColorTools.getColoredTexture(Color.CLEAR, size)).getDrawable();
 		ButtonStyle blankButtonStyle = new ButtonStyle(blank, blank, blank);
@@ -164,6 +166,10 @@ public class SkinManager {
 
 	public ButtonStyle getBlankButtonStyle() {
 		return getButtonStyle(BLANK_BUTTON);
+	}
+
+	public ButtonStyle getBackButtonStyle() {
+		return getButtonStyle(BACK_BUTTON);
 	}
 
 	public ButtonStyle getSettingsButtonStyle() {

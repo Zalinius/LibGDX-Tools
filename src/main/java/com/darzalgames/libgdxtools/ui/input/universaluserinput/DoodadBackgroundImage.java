@@ -27,6 +27,10 @@ public class DoodadBackgroundImage extends Image {
 		getDrawable().draw(batch, x + getImageX(), y + getImageY(), getImageWidth() * scaleX, getImageHeight() * scaleY);
 	}
 
+	/**
+	 * @param toScale         the background art to be scaled up when the doodad is in focus
+	 * @param listeningDoodad the doodad to animate
+	 */
 	public static void addScalingClickListener(Actor toScale, UniversalDoodad listeningDoodad) {
 		listeningDoodad.addListener(new ClickListener() {
 			private final float SCALE_TIME = 0.1f;
@@ -57,6 +61,13 @@ public class DoodadBackgroundImage extends Image {
 		});
 	}
 
+	/**
+	 * This is a bit of a hack: setting the background of a doodad with an invisible copy of the 'up' style defines the doodad's size,
+	 * which we need to do in order to have a pulse animation on the doodad's visible background WITHOUT affecting the doodad's true size
+	 * (since this ruins menu layout, jiggling around all neighboring doodads)
+	 * @param doodad the doodad being given a new size
+	 * @param style  the doodad's new style
+	 */
 	public static void setStyleOnDoodadBackground(UniversalDoodad doodad, ButtonStyle style) {
 		if (style.up == null) {
 			throw new IllegalArgumentException("Can't style a doodad when the 'up' style is undefined!");
@@ -64,9 +75,7 @@ public class DoodadBackgroundImage extends Image {
 		doodad.setBackground(new Drawable() {
 
 			@Override
-			public void draw(Batch batch, float x, float y, float width, float height) {
-				// DO NOT DRAW THIS
-			}
+			public void draw(Batch batch, float x, float y, float width, float height) { /* DO NOT DRAW THIS */ }
 
 			@Override
 			public float getLeftWidth() {
@@ -74,9 +83,7 @@ public class DoodadBackgroundImage extends Image {
 			}
 
 			@Override
-			public void setLeftWidth(float leftWidth) {
-				// irrelevant
-			}
+			public void setLeftWidth(float leftWidth) { /* irrelevant */ }
 
 			@Override
 			public float getRightWidth() {
@@ -84,9 +91,7 @@ public class DoodadBackgroundImage extends Image {
 			}
 
 			@Override
-			public void setRightWidth(float rightWidth) {
-				// irrelevant
-			}
+			public void setRightWidth(float rightWidth) { /* irrelevant */ }
 
 			@Override
 			public float getTopHeight() {
@@ -94,9 +99,7 @@ public class DoodadBackgroundImage extends Image {
 			}
 
 			@Override
-			public void setTopHeight(float topHeight) {
-				// irrelevant
-			}
+			public void setTopHeight(float topHeight) { /* irrelevant */ }
 
 			@Override
 			public float getBottomHeight() {
@@ -104,9 +107,7 @@ public class DoodadBackgroundImage extends Image {
 			}
 
 			@Override
-			public void setBottomHeight(float bottomHeight) {
-				// irrelevant
-			}
+			public void setBottomHeight(float bottomHeight) { /* irrelevant */ }
 
 			@Override
 			public float getMinWidth() {
@@ -114,9 +115,7 @@ public class DoodadBackgroundImage extends Image {
 			}
 
 			@Override
-			public void setMinWidth(float minWidth) {
-				// irrelevant
-			}
+			public void setMinWidth(float minWidth) { /* irrelevant */ }
 
 			@Override
 			public float getMinHeight() {
@@ -124,9 +123,7 @@ public class DoodadBackgroundImage extends Image {
 			}
 
 			@Override
-			public void setMinHeight(float minHeight) {
-				// irrelevant
-			}
+			public void setMinHeight(float minHeight) { /* irrelevant */ }
 		});
 	}
 

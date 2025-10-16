@@ -120,10 +120,10 @@ class NavigableListTest {
 		entries.add(buttonOne);
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.HORIZONTAL, entries);
 		navigableList.selectDefault();
 
-		navigableList.consumeKeyInput(Input.RIGHT);
+		navigableList.consumeKeyInput(Input.DOWN);
 
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());

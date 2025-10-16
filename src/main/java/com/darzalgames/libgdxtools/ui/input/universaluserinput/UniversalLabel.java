@@ -16,12 +16,13 @@ public class UniversalLabel extends TypingLabel {
 	private final LabelStyle typingLabelStyle;
 
 	protected Supplier<String> textSupplier;
-	private float bounceScaling = 1f;
+	private float bounceScaling;
 	private Action currentBounceAction;
 
 	public UniversalLabel(Supplier<String> textSupplier, LabelStyle typingLabelStyle) {
 		super(textSupplier.get(), typingLabelStyle);
 		this.typingLabelStyle = typingLabelStyle;
+		bounceScaling = 1;
 		setTextSupplier(textSupplier);
 		setWrap(false);
 		setAlignment(Alignment.CENTER);

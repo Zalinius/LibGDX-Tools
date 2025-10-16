@@ -24,10 +24,13 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	private final ClickListener clickListener;
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private final DoodadBackgroundImage background;
-	private float focusScaleIncrease = 0.05f;
+	private float focusScaleIncrease;
+
+	public static final float DEFAULT_FOCUS_SCALE_INCREASE = 0.05f;
 
 	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
+		setFocusScaleIncrease(DEFAULT_FOCUS_SCALE_INCREASE);
 		setStyle(buttonStyle);
 		clickListener = new ClickListener() {
 			@Override
@@ -131,6 +134,11 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		setFocused(false);
 	}
 
+	/**
+	 * Adjust how much the doodad changes size when it's in focus, something near the default value ({@value #DEFAULT_FOCUS_SCALE_INCREASE}) should be right.
+	 * NOTE: this is the amount we scale BY, not the value we scale TO. So the doodad will scale to 1 + focusScaleIncrease, then back down to 1 when out of focus.
+	 * @param focusScaleIncrease the amount to increase the background's size by when the doodad is in focus
+	 */
 	public void setFocusScaleIncrease(float focusScaleIncrease) {
 		this.focusScaleIncrease = focusScaleIncrease;
 	}
@@ -227,7 +235,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		return textColor;
 	}
 
-	public float getFocusScaleIncrease() {
+	float getFocusScaleIncrease() {
 		return focusScaleIncrease;
 	}
 

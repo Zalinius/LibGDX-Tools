@@ -179,10 +179,11 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		validate();
-
 		background.setDrawable(getBackgroundDrawable());
 		addActor(background);
+
+		validate();
+
 		background.toBack();
 		CenterActor.centerActorOnParent(background);
 

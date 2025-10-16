@@ -35,6 +35,7 @@ import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.ChoicePopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -118,7 +119,7 @@ public class SampleUserInterfaceGame extends MainGame {
 	@Override
 	protected void launchGame(boolean isNewSave) {
 		pause.showOptionsButton(true);
-		changeScreen(new MainMenuScreen(new NavigableListMenu(true, getMenuEntries()) {
+		changeScreen(new MainMenuScreen(new NavigableListMenu(MenuOrientation.VERTICAL, getMenuEntries()) {
 
 			@Override
 			protected void setUpTable() {
@@ -239,7 +240,7 @@ public class SampleUserInterfaceGame extends MainGame {
 		UniversalSelectBox exampleSelectBox = GameInfo.getUserInterfaceFactory().getSelectBox(selectBoxContents);
 		menuButtons.add(exampleSelectBox);
 
-		ChoicePopUp choicePopup = new ChoicePopUp(this::showInnerPopUp, true, true) {
+		ChoicePopUp choicePopup = new ChoicePopUp(this::showInnerPopUp, MenuOrientation.VERTICAL) {
 
 			boolean showedRegainFocusPopup = false;
 
@@ -274,6 +275,11 @@ public class SampleUserInterfaceGame extends MainGame {
 			@Override
 			protected void setUpDesiredSize() {
 				UserInterfaceSizer.sizeToPercentage(this, 0.25f);
+			}
+
+			@Override
+			protected boolean doesBackInputPressSecondButton() {
+				return true;
 			}
 		};
 		UniversalButton popUpButton = GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Open a popup!", () -> InputPriority.claimPriority(choicePopup, POP_UP_STAGE_NAME));

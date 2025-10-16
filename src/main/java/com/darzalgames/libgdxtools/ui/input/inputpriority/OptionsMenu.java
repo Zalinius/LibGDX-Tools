@@ -15,6 +15,7 @@ import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
@@ -68,7 +69,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	protected abstract PopUp makeControlsPopUp();
 
 	protected OptionsMenu(int bottomPadding, WindowResizer windowResizer) {
-		super(true);
+		super(MenuOrientation.VERTICAL);
 		platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
 		windowModeSelectBox = GameInfo.getUserInterfaceFactory().getWindowModeTextSelectBox();
 		windowResizer.setWindowResizerButton(windowModeSelectBox);
@@ -211,7 +212,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 		private final String buttonKey;
 
 		public NestedMenu(final List<VisibleInputConsumer> entries, String buttonKey) {
-			super(true, entries);
+			super(MenuOrientation.VERTICAL, entries);
 			this.buttonKey = buttonKey;
 		}
 

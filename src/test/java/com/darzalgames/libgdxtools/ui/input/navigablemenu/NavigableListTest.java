@@ -21,7 +21,7 @@ class NavigableListTest {
 		entries.add(buttonOne);
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 
 		navigableList.selectDefault();
 
@@ -36,7 +36,7 @@ class NavigableListTest {
 		entries.add(buttonOne);
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.DOWN);
@@ -52,7 +52,7 @@ class NavigableListTest {
 		entries.add(buttonOne);
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.DOWN);
@@ -69,7 +69,7 @@ class NavigableListTest {
 		entries.add(buttonOne);
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.DOWN);
@@ -86,7 +86,7 @@ class NavigableListTest {
 		entries.add(buttonOne);
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.setMenuLoops(false);
 		navigableList.selectDefault();
 
@@ -104,7 +104,7 @@ class NavigableListTest {
 		entries.add(buttonOne);
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(false, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.HORIZONTAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.RIGHT);
@@ -120,7 +120,7 @@ class NavigableListTest {
 		entries.add(buttonOne);
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.RIGHT);
@@ -138,7 +138,7 @@ class NavigableListTest {
 		entries.add(buttonTwo);
 		VisibleInputConsumer buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.DOWN);
@@ -158,7 +158,7 @@ class NavigableListTest {
 		entries.add(buttonTwo);
 		VisibleInputConsumer buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.goTo(buttonTwo);
@@ -177,7 +177,7 @@ class NavigableListTest {
 		entries.add(buttonTwo);
 		VisibleInputConsumer buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.goTo(makeTestButton());
@@ -196,7 +196,7 @@ class NavigableListTest {
 		entries.add(buttonTwo);
 		VisibleInputConsumer buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.DOWN);
@@ -217,7 +217,7 @@ class NavigableListTest {
 		entries.add(buttonTwo);
 		VisibleInputConsumer buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.returnToLast();
@@ -236,7 +236,7 @@ class NavigableListTest {
 		entries.add(buttonTwo);
 		VisibleInputConsumer buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 		TestButton finalButton = new TestButton();
 		finalButton.setBlank(false);
@@ -260,7 +260,7 @@ class NavigableListTest {
 		entries.add(buttonTwo);
 		VisibleInputConsumer buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 		TestButton finalButton = new TestButton();
 		finalButton.setBlank(false);
@@ -279,7 +279,7 @@ class NavigableListTest {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		VisibleInputConsumer buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.returnToSecondLast();
@@ -290,7 +290,7 @@ class NavigableListTest {
 	@Test
 	void returnToSecondLast_withNoEntries_doesntCrash() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		assertDoesNotThrow(() -> navigableList.returnToSecondLast());
@@ -304,7 +304,7 @@ class NavigableListTest {
 		entries.add(makeTestButton());
 		VisibleInputConsumer buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.UP);
@@ -320,7 +320,7 @@ class NavigableListTest {
 		entries.add(buttonOne);
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 		navigableList.setMenuLoops(false);
 
@@ -338,7 +338,7 @@ class NavigableListTest {
 		replacementEntries.add(makeTestButton());
 		replacementEntries.add(makeTestButton());
 		replacementEntries.add(makeTestButton());
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.setRefreshPageRunnable(Runnables.nullRunnable());
 
 		navigableList.replaceContents(replacementEntries);
@@ -354,7 +354,7 @@ class NavigableListTest {
 		entries.add(makeTestSpacer());
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 
 		assertEquals(3, navigableList.allEntries.size());
 		assertEquals(2, navigableList.interactableEntries.size());
@@ -368,7 +368,7 @@ class NavigableListTest {
 		entries.add(makeTestSpacer());
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.DOWN);
@@ -385,7 +385,7 @@ class NavigableListTest {
 		entries.add(makeTestSpacer());
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.DOWN);
@@ -405,7 +405,7 @@ class NavigableListTest {
 		entries.add(buttonTwo);
 		VisibleInputConsumer buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.DOWN);
@@ -424,7 +424,7 @@ class NavigableListTest {
 		entries.add(makeTestButton());
 		TestButton finalButton = new TestButton(() -> finalButtonPressed.set(true));
 		finalButton.setBlank(false);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.setFinalButton(finalButton);
 
 		navigableList.consumeKeyInput(Input.BACK);
@@ -439,7 +439,7 @@ class NavigableListTest {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		VisibleInputConsumer testButton = new TestButton(() -> testButtonPressed.set(true));
 		entries.add(testButton);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.ACCEPT);
@@ -450,7 +450,7 @@ class NavigableListTest {
 	@Test
 	void consumeKeyInput_inputWithoutCurrentButton_doesntCrash() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 
 		assertDoesNotThrow(() -> navigableList.consumeKeyInput(Input.ACCEPT));
 	}
@@ -464,7 +464,7 @@ class NavigableListTest {
 		entries.add(buttonTwo);
 		VisibleInputConsumer buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.consumeKeyInput(Input.BACK);
@@ -481,7 +481,7 @@ class NavigableListTest {
 		entries.add(buttonOne);
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.focusCurrent();
@@ -497,7 +497,7 @@ class NavigableListTest {
 		entries.add(buttonOne);
 		VisibleInputConsumer buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableList navigableList = new NavigableList(true, entries);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
 		navigableList.focusCurrent();

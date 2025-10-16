@@ -9,6 +9,7 @@ import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 
@@ -21,15 +22,12 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 	protected final String messageKey;
 	protected final String firstChoiceKey;
 	protected final String secondChoiceKey;
-	private final boolean isWarning;
 
-	protected TextChoicePopUp(String messageKey, String firstChoiceKey, Runnable firstChoiceRunnable,
-			String secondChoiceKey, boolean isVertical, boolean isSecondButtonBack, boolean isWarning, String stageName) {
-		super(firstChoiceRunnable, isVertical, isSecondButtonBack);
+	protected TextChoicePopUp(String messageKey, String firstChoiceKey, Runnable firstChoiceRunnable, String secondChoiceKey, MenuOrientation menuOrientation, String stageName) {
+		super(firstChoiceRunnable, menuOrientation);
 		this.messageKey = messageKey;
 		this.firstChoiceKey = firstChoiceKey;
 		this.secondChoiceKey = secondChoiceKey;
-		this.isWarning = isWarning;
 
 		InputPriority.claimPriority(this, stageName);
 	}
@@ -60,12 +58,16 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 
 	@Override
 	protected Table getMessage() {
-		Function<Supplier<String>, UniversalLabel> labelFunction = isWarning ? GameInfo.getUserInterfaceFactory()::getWarningLabel : GameInfo.getUserInterfaceFactory()::getLabelWithBackground;
+		Function<Supplier<String>, UniversalLabel> labelFunction = isWarning() ? GameInfo.getUserInterfaceFactory()::getWarningLabel : GameInfo.getUserInterfaceFactory()::getLabelWithBackground;
 		UniversalLabel label = labelFunction.apply(() -> TextSupplier.getLine(messageKey));
 		label.setAlignment(Alignment.CENTER);
 		Table table = new Table();
-		table.add(label).grow();
+		table.add(label).expand().center();
 		return table;
+	}
+
+	protected boolean isWarning() {
+		return false;
 	}
 
 }

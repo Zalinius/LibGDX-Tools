@@ -7,6 +7,7 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 
 /**
@@ -16,18 +17,21 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 public abstract class ChoicePopUp extends PopUpMenu {
 
 	protected final Runnable firstChoiceRunnable;
-	private final boolean isSecondButtonBack;
 	protected boolean addRowAfterMessage = true;
 
-	protected ChoicePopUp(Runnable firstChoiceRunnable, boolean isVertical, boolean isSecondButtonBack) {
-		super(isVertical);
+	protected ChoicePopUp(Runnable firstChoiceRunnable, MenuOrientation menuOrientation) {
+		super(menuOrientation);
 		this.firstChoiceRunnable = firstChoiceRunnable;
-		this.isSecondButtonBack = isSecondButtonBack;
 	}
 
 	protected abstract UniversalButton getFirstChoiceButton();
 
 	protected abstract UniversalButton getSecondChoiceButton();
+
+	/**
+	 * @return Whether or not Input.BACK should press the second button
+	 */
+	protected abstract boolean doesBackInputPressSecondButton();
 
 	/**
 	 * What to do when the second choice is chosen. Sometimes this will be the same as the firstChoiceRunnable,
@@ -64,7 +68,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 
 		UniversalButton firstButton = getFirstChoiceButton();
 		UniversalButton secondButton = getSecondChoiceButton();
-		if (isSecondButtonBack) {
+		if (doesBackInputPressSecondButton()) {
 			menu.replaceContents(ListFactory.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
 		} else {
 			menu.replaceContents(ListFactory.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button

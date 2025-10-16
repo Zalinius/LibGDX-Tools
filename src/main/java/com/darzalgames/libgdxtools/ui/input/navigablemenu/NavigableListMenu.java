@@ -15,12 +15,12 @@ import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 public abstract class NavigableListMenu extends Table implements InputConsumer {
 	protected NavigableList menu;
 
-	protected NavigableListMenu(boolean isVertical) {
-		this(isVertical, new LinkedList<>());
+	protected NavigableListMenu(MenuOrientation menuOrientation) {
+		this(menuOrientation, new LinkedList<>());
 	}
 
-	protected NavigableListMenu(boolean isVertical, List<VisibleInputConsumer> entries) {
-		menu = new NavigableList(isVertical, entries);
+	protected NavigableListMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries) {
+		menu = new NavigableList(menuOrientation, entries);
 	}
 
 	@Override

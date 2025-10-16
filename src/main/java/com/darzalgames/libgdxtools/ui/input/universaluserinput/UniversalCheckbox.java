@@ -71,6 +71,8 @@ public class UniversalCheckbox extends UniversalTextButton {
 			consumer.accept(isChecked());
 			addAction(Actions.run(() -> setFocused(true, true)));
 		});
+
+		DoodadBackgroundImage.addScalingClickListener(box, this);
 	}
 
 	/**

@@ -12,6 +12,7 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 
@@ -22,18 +23,27 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 
 	private Runnable runJustBeforeRemove = Runnables.nullRunnable();
 
-	protected PopUpMenu(boolean isVertical) {
-		super(isVertical);
+	protected PopUpMenu(MenuOrientation menuOrientation) {
+		super(menuOrientation);
 	}
 
-	protected PopUpMenu(boolean isVertical, List<VisibleInputConsumer> entries, String finalButtonMessageKey) {
-		super(isVertical, entries);
-		menu.replaceContents(entries, makeFinalButton(finalButtonMessageKey)); // Because the final button calls this::hideThis, we make it after the call to super()
+	protected PopUpMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries) {
+		super(menuOrientation, entries);
+		menu.replaceContents(entries, makeDefaultBackButton()); // Because the final button calls this::hideThis, we make it after the call to super()
+	}
+
+	protected PopUpMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries, String finalButtonMessageKey) {
+		super(menuOrientation, entries);
+		menu.replaceContents(entries, makeCustomFinalButton(finalButtonMessageKey)); // Because the final button calls this::hideThis, we make it after the call to super()
 	}
 
 	protected abstract void setUpDesiredSize();
 
-	protected UniversalButton makeFinalButton(String finalButtonMessageKey) {
+	protected UniversalButton makeDefaultBackButton() {
+		return GameInfo.getUserInterfaceFactory().makeBackButton(this::hideThis);
+	}
+
+	protected UniversalButton makeCustomFinalButton(String finalButtonMessageKey) {
 		return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine(finalButtonMessageKey), this::hideThis, Input.BACK);
 	}
 

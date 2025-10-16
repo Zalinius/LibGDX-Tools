@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.Alignment;
-import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
@@ -19,37 +18,33 @@ import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
  * and any interactions with it.
  */
 public class NavigableList implements VisibleInputConsumer {
-	private final Input backCode;
-	private final Input forwardCode;
+
 	protected final LinkedList<VisibleInputConsumer> allEntries;
 	protected List<VisibleInputConsumer> interactableEntries;
 	private VisibleInputConsumer finalButton;
-	private VisibleInputConsumer currentButton = null;
-	private int currentEntryIndex;
 	protected Table table;
-	private final boolean isVertical;
+
+	private final MenuOrientation menuOrientation;
+	private final Supplier<Float> spacing;
+
 	private boolean pressButtonOnEntryChanged;
 	private Alignment entryAlignment;
 	private Alignment tableAlignment;
-	private Supplier<Float> spacing;
 	private Runnable refreshPageRunnable;
-	private boolean menuLoops = true;
 
-	NavigableList(boolean isVertical, final List<VisibleInputConsumer> entries) {
-		backCode = (isVertical ? Input.UP : Input.LEFT);
-		forwardCode = (isVertical ? Input.DOWN : Input.RIGHT);
+	private boolean menuLoops;
+	private int currentEntryIndex;
+	private VisibleInputConsumer currentButton;
+
+	NavigableList(MenuOrientation menuOrientation, final List<VisibleInputConsumer> entries) {
 		allEntries = new LinkedList<>(entries);
 		filterInteractableEntities();
-		this.isVertical = isVertical;
+		this.menuOrientation = menuOrientation;
 		pressButtonOnEntryChanged = false;
 		entryAlignment = Alignment.CENTER;
 		tableAlignment = Alignment.TOP_LEFT;
-
-		if (isVertical) {
-			spacing = () -> UserInterfaceSizer.getHeightPercentage(0.0075f);
-		} else {
-			spacing = () -> UserInterfaceSizer.getWidthPercentage(0.0075f);
-		}
+		spacing = menuOrientation.getSpacingPolicy();
+		setMenuLoops(true);
 
 		setRefreshPageRunnable(this::defaultRefreshPage);
 	}
@@ -133,11 +128,7 @@ public class NavigableList implements VisibleInputConsumer {
 			Actor button = entry.getView();
 			table.add(button);
 			if (VisibleInputConsumer.isSpacer(entry)) {
-				if (isVertical()) {
-					table.getCell(button).expandY();
-				} else {
-					table.getCell(button).expandX();
-				}
+				menuOrientation.getSpacerExpansionPolicy().accept(table.getCell(button));
 			}
 		}
 	}
@@ -171,7 +162,7 @@ public class NavigableList implements VisibleInputConsumer {
 
 	@Override
 	public void consumeKeyInput(final Input input) {
-		if (input.equals(forwardCode)) {
+		if (input.equals(menuOrientation.getForwardCode())) {
 			if (currentEntryIndex < interactableEntries.size() - 1) {
 				currentEntryIndex++;
 				changedEntries();
@@ -179,7 +170,7 @@ public class NavigableList implements VisibleInputConsumer {
 				currentEntryIndex = 0;
 				changedEntries();
 			}
-		} else if (input.equals(backCode)) {
+		} else if (input.equals(menuOrientation.getBackCode())) {
 			if (currentEntryIndex > 0) {
 				currentEntryIndex--;
 				changedEntries();
@@ -252,16 +243,12 @@ public class NavigableList implements VisibleInputConsumer {
 		interactableEntries.forEach(entry -> entry.setTouchable(isTouchable));
 	}
 
+	/**
+	 * False by default, useful if you want to make a tabbed menu
+	 * @param pressButtonOnEntryChanged Set whether or not navigating to an entry presses it automatically
+	 */
 	public void setPressButtonOnEntryChanged(boolean pressButtonOnEntryChanged) {
 		this.pressButtonOnEntryChanged = pressButtonOnEntryChanged;
-	}
-
-	/**
-	 * Adjust the vertical spacing between entries as needed default is based on width or height depending on if the menu is horizontal or vertical
-	 * @param spacing new spacing
-	 */
-	public void setSpacing(Supplier<Float> spacing) {
-		this.spacing = spacing;
 	}
 
 	@Override
@@ -277,12 +264,15 @@ public class NavigableList implements VisibleInputConsumer {
 		this.refreshPageRunnable = refreshPageRunnable;
 	}
 
+	/**
+	 * @param menuLoops Whether or not the menu loops around, true by default
+	 */
 	public void setMenuLoops(boolean menuLoops) {
 		this.menuLoops = menuLoops;
 	}
 
-	public boolean isVertical() {
-		return isVertical;
+	private boolean isVertical() {
+		return MenuOrientation.VERTICAL.equals(menuOrientation);
 	}
 
 	@Override

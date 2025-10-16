@@ -12,6 +12,7 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
@@ -25,14 +26,14 @@ public class UniversalSelectBox extends UniversalTextButton {
 		super(GameInfo.getUserInterfaceFactory().getLabel(() -> TextSupplier.getLine(mainLabelKey)), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
 
 		// This is the keyboard navigable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
-		options = new PopUpMenu(true) {
+		options = new PopUpMenu(MenuOrientation.VERTICAL) {
 			@Override
 			protected void setUpTable() {
 				UniversalLabel currentlySelectedIndicator = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("select_box_current", defaultEntry.label.textSupplier.get()));
 				options.add(currentlySelectedIndicator).center();
 				options.row();
 				List<VisibleInputConsumer> buttonsAsVisibleInputConsumers = GenericInheritanceConverter.convertList(entryButtons);
-				menu.replaceContents(buttonsAsVisibleInputConsumers, makeFinalButton("back_message"));
+				menu.replaceContents(buttonsAsVisibleInputConsumers, makeDefaultBackButton());
 				menu.setAlignment(Alignment.CENTER, Alignment.CENTER);
 				options.setBackground(GameInfo.getUserInterfaceFactory().getCompactBackgroundDrawable());
 				entryButtons.forEach(UniversalTextButton::resizeUI);

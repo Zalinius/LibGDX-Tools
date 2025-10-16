@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pools;
+import com.darzalgames.libgdxtools.ui.CenterActor;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
@@ -22,11 +23,15 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	private boolean disabled;
 	private final ClickListener clickListener;
 	private final InputStrategySwitcher inputStrategySwitcher;
+	private final DoodadBackgroundImage background;
+	private float focusScaleIncrease;
+
+	public static final float DEFAULT_FOCUS_SCALE_INCREASE = 0.05f;
 
 	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
+		setFocusScaleIncrease(DEFAULT_FOCUS_SCALE_INCREASE);
 		setStyle(buttonStyle);
-		setSize(buttonStyle.up.getMinWidth(), buttonStyle.up.getMinHeight());
 		clickListener = new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -34,6 +39,10 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 			}
 		};
 		addListener(clickListener);
+
+		background = new DoodadBackgroundImage();
+		background.setFillParent(true);
+		DoodadBackgroundImage.addScalingClickListener(background, this);
 	}
 
 	@Override
@@ -47,7 +56,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	public void setStyle(ButtonStyle buttonStyle) {
 		style = buttonStyle;
-		setBackground(style.down);
+		DoodadBackgroundImage.setStyleOnDoodadBackground(this, buttonStyle); // sizes the button, very important
 	}
 
 	@Override
@@ -125,6 +134,15 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		setFocused(false);
 	}
 
+	/**
+	 * Adjust how much the doodad changes size when it's in focus, something near the default value ({@value #DEFAULT_FOCUS_SCALE_INCREASE}) should be right.
+	 * NOTE: this is the amount we scale BY, not the value we scale TO. So the doodad will scale to 1 + focusScaleIncrease, then back down to 1 when out of focus.
+	 * @param focusScaleIncrease the amount to increase the background's size by when the doodad is in focus
+	 */
+	public void setFocusScaleIncrease(float focusScaleIncrease) {
+		this.focusScaleIncrease = focusScaleIncrease;
+	}
+
 	@Override
 	public void focusCurrent() {
 		setFocused(true);
@@ -163,7 +181,10 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	public void draw(Batch batch, float parentAlpha) {
 		validate();
 
-		setBackground(getBackgroundDrawable());
+		background.setDrawable(getBackgroundDrawable());
+		addActor(background);
+		background.toBack();
+		CenterActor.centerActorOnParent(background);
 
 		Color labelColor = getColorBasedOnFocus();
 		colorOtherComponentsBasedOnFocus(labelColor);
@@ -212,6 +233,10 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 			textColor = SkinManager.getDarkColor();
 		}
 		return textColor;
+	}
+
+	float getFocusScaleIncrease() {
+		return focusScaleIncrease;
 	}
 
 }

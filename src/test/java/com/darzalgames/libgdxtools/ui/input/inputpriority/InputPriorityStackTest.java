@@ -117,9 +117,100 @@ class InputPriorityStackTest {
 		assertThrows(IllegalArgumentException.class, () -> stack.claimPriority(consumer, "ng"));
 	}
 
+	@Test
+	void releasePriority_withTopmostConsumer_callsRemoveFocus() {
+		AtomicBoolean spy = new AtomicBoolean(false);
+		InputPriorityStack stack = makeStack();
+		InputConsumerForTesting consumer = new InputConsumerForTesting() {
+			@Override
+			public void removedFocus() {
+				spy.set(true);
+				super.removedFocus();
+			}
+		};
+		stack.claimPriority(consumer, MultipleStage.MAIN_STAGE_NAME);
+
+		stack.releasePriority(consumer);
+
+		assertTrue(spy.get());
+	}
+
+	@Test
+	void releasePriority_withTopmostConsumerButNotTopmostLayer_callsRemoveFocusAnyway() {
+		AtomicBoolean spy = new AtomicBoolean(false);
+		InputPriorityStack stack = makeStack();
+		InputConsumerForTesting consumer = new InputConsumerForTesting() {
+			@Override
+			public void removedFocus() {
+				spy.set(true);
+				super.removedFocus();
+			}
+		};
+		stack.claimPriority(consumer, MultipleStage.MAIN_STAGE_NAME);
+		stack.claimPriority(new InputConsumerPopUpForTesting(), MultipleStage.OPTIONS_STAGE_NAME);
+
+		stack.releasePriority(consumer);
+
+		assertTrue(spy.get());
+	}
+
+	@Test
+	void releasePriority_withNotTopmostConsumer_doesNotRemoveFocusFromTopmostConsumer() {
+		AtomicBoolean bottomConsumerRemovalSpy = new AtomicBoolean(false);
+		AtomicBoolean topConsumerRemovalSpy = new AtomicBoolean(false);
+		InputPriorityStack stack = makeStack();
+		InputConsumerForTesting consumer = new InputConsumerForTesting() {
+			@Override
+			public void removedFocus() {
+				bottomConsumerRemovalSpy.set(true);
+				super.removedFocus();
+			}
+		};
+		InputConsumerForTesting topConsumer = new InputConsumerForTesting() {
+			@Override
+			public void removedFocus() {
+				topConsumerRemovalSpy.set(true);
+				super.removedFocus();
+			}
+		};
+		stack.claimPriority(consumer, MultipleStage.MAIN_STAGE_NAME);
+		stack.claimPriority(topConsumer, MultipleStage.MAIN_STAGE_NAME);
+
+		stack.releasePriority(consumer);
+
+		assertTrue(bottomConsumerRemovalSpy.get());
+		assertFalse(topConsumerRemovalSpy.get());
+	}
+
+	@Test
+	void releasePriority_withPopUpBelowAnother_doesNotRemoveDarkScreen() {
+		AtomicBoolean spy = new AtomicBoolean(true);
+		List<StageLikeRenderable> allStagesInOrderForInput = new ArrayList<>();
+		allStagesInOrderForInput.add(new TestStageLikeRenderable(MultipleStage.MAIN_STAGE_NAME));
+		allStagesInOrderForInput.add(new TestStageLikeRenderable(MultipleStage.OPTIONS_STAGE_NAME));
+		InputConsumer optionsMenu = new InputConsumerPopUpForTesting();
+		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher();
+		DarkScreenForTesting darkScreen = new DarkScreenForTesting() {
+			@Override
+			public void fadeOutAndRemove() {
+				spy.set(false);
+				super.fadeOutAndRemove();
+			}
+		};
+		InputPriorityStack stack = new InputPriorityStack(allStagesInOrderForInput, optionsMenu, inputStrategySwitcher, darkScreen);
+		InputConsumerForTesting consumer = new InputConsumerForTesting();
+		stack.claimPriority(consumer, MultipleStage.MAIN_STAGE_NAME);
+		stack.claimPriority(new InputConsumerPopUpForTesting(), MultipleStage.OPTIONS_STAGE_NAME);
+
+		stack.releasePriority(consumer);
+
+		assertTrue(spy.get());
+	}
+
 	private static InputPriorityStack makeStack() {
 		List<StageLikeRenderable> allStagesInOrderForInput = new ArrayList<>();
 		allStagesInOrderForInput.add(new TestStageLikeRenderable(MultipleStage.MAIN_STAGE_NAME));
+		allStagesInOrderForInput.add(new TestStageLikeRenderable(MultipleStage.OPTIONS_STAGE_NAME));
 		InputConsumer optionsMenu = new InputConsumerPopUpForTesting();
 		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher();
 		return new InputPriorityStack(allStagesInOrderForInput, optionsMenu, inputStrategySwitcher, new DarkScreenForTesting());

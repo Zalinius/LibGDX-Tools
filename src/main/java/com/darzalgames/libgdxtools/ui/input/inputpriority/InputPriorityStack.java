@@ -19,14 +19,15 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class InputPriorityStack implements InputStrategyObserver, InputPrioritySubject {
 
 	private final LimitedAccessMultiStack multiStack;
-	private final OptionsMenu optionsMenu;
-	private final DarkScreen darkScreen;
+	private final InputConsumer optionsMenu;
+	private final DarkScreenBehindPopUp darkScreen;
 
 	private final List<InputPriorityObserver> inputPriorityObservers;
 	private final Map<String, StageLikeRenderable> stageLikeRenderables;
 
-	public InputPriorityStack(List<StageLikeRenderable> allStagesInOrderForInput, OptionsMenu optionsMenu, InputStrategySwitcher inputStrategySwitcher) {
+	public InputPriorityStack(List<StageLikeRenderable> allStagesInOrderForInput, InputConsumer optionsMenu, InputStrategySwitcher inputStrategySwitcher, DarkScreenBehindPopUp darkScreen) {
 		this.optionsMenu = optionsMenu;
+		this.darkScreen = darkScreen;
 
 		stageLikeRenderables = new HashMap<>();
 		allStagesInOrderForInput.forEach(stage -> stageLikeRenderables.put(stage.getName(), stage));
@@ -36,28 +37,26 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		multiStack = new LimitedAccessMultiStack(allStagesInOrderForInput);
 		clearStackAndPushBlankConsumer();
 
-		darkScreen = new DarkScreen(() -> sendInputToTop(Input.BACK));
-
 		InputPriority.setInputPriorityStack(this);
 		inputStrategySwitcher.register(this);
 	}
 
-	void claimPriority(InputConsumer inputConsumer, String stageLikeRenderableName) {
-		boolean thisIsDifferentFromTheTop = !multiStack.isThisOnTop(inputConsumer, stageLikeRenderableName);
+	void claimPriority(InputConsumer inputConsumer, String nameOfStageLikeRenderable) {
+		if (!stageLikeRenderables.containsKey(nameOfStageLikeRenderable)) {
+			throw new IllegalArgumentException("No stage registered with name: " + nameOfStageLikeRenderable);
+		}
+		boolean thisIsDifferentFromTheTop = !multiStack.isThisOnTop(inputConsumer, nameOfStageLikeRenderable);
 		if (thisIsDifferentFromTheTop) {
 			boolean isAPopup = inputConsumer.isPopUp();
 			if (isAPopup) {
-				claimPriorityForPopup(inputConsumer, stageLikeRenderableName);
+				claimPriorityForPopup(inputConsumer, nameOfStageLikeRenderable);
 			} else {
-				claimPriorityOnStack(() -> multiStack.push(inputConsumer, stageLikeRenderableName));
+				claimPriorityOnStack(() -> multiStack.push(inputConsumer, nameOfStageLikeRenderable));
 			}
 		}
 	}
 
 	private void claimPriorityForPopup(InputConsumer inputConsumer, String nameOfStageLikeRenderable) {
-		if (!stageLikeRenderables.containsKey(nameOfStageLikeRenderable)) {
-			throw new IllegalArgumentException("No stage registered with name: " + nameOfStageLikeRenderable);
-		}
 		StageLikeRenderable stageLikeRenderable = stageLikeRenderables.get(nameOfStageLikeRenderable);
 		darkScreen.remove();
 		PopUp popup = inputConsumer.getPopUp();

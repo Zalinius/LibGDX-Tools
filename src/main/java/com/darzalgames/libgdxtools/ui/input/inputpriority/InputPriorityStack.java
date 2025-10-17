@@ -157,7 +157,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 
 	private void showDarkScreenIfLandingOnPopup(StageLikeRenderable stageLikeRenderable) {
 		InputConsumer currentTop = multiStack.getTop();
-		if (currentTop != null && currentTop.isPopUp()) {
+		if (currentTop.isPopUp()) {
 			PopUp popUp = currentTop.getPopUp();
 			Actor actor = popUp.getAsActor();
 			darkScreen.fadeIn(actor, popUp.canDismiss(), stageLikeRenderable);

@@ -8,63 +8,48 @@ import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 public class InputConsumerForTesting implements InputConsumer {
 
 	@Override
-	public void consumeKeyInput(Input input) {
-		// TODO Auto-generated method stub
+	public void consumeKeyInput(Input input) {/* not needed */}
 
+	@Override
+	public void setTouchable(Touchable isTouchable) {/* not needed */}
+
+	@Override
+	public void focusCurrent() {/* not needed */}
+
+	@Override
+	public void clearSelected() {/* not needed */}
+
+	@Override
+	public void selectDefault() {/* not needed */}
+
+	@Override
+	public void loseFocus() {/* not needed */}
+
+	@Override
+	public String toString() {
+		return "Testing input consumer";
 	}
 
 	@Override
-	public void setTouchable(Touchable isTouchable) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void focusCurrent() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void clearSelected() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void selectDefault() {
-		// TODO Auto-generated method stub
-
-	}
+	public void resizeUI() {/* not needed */}
 
 	@Override
 	public boolean isDisabled() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isBlank() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void setAlignment(Alignment alignment) {
-		// TODO Auto-generated method stub
-
-	}
+	public void setAlignment(Alignment alignment) {/* not needed */}
 
 	@Override
-	public void setDisabled(boolean disabled) {
-		// TODO Auto-generated method stub
-
-	}
+	public void setFocused(boolean focused) {/* not needed */}
 
 	@Override
-	public void resizeUI() {
-		// TODO Auto-generated method stub
-
-	}
+	public void setDisabled(boolean disabled) {/* not needed */}
 
 }

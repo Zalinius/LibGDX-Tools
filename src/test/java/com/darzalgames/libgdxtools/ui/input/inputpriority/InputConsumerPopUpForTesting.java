@@ -8,13 +8,11 @@ public class InputConsumerPopUpForTesting extends InputConsumerForTesting implem
 
 	@Override
 	public boolean addListener(EventListener listener) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean removeListener(EventListener listener) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

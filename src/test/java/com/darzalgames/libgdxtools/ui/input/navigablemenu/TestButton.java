@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.Pools;
@@ -124,7 +123,6 @@ public class TestButton implements VisibleInputConsumer {
 			throw new IllegalArgumentException("The event target cannot be null.");
 		}
 
-		DelayedRemovalArray<EventListener> listeners = this.listeners;
 		if (listeners.size == 0) {
 			return event.isCancelled();
 		}
@@ -166,10 +164,6 @@ public class TestButton implements VisibleInputConsumer {
 		return listeners;
 	}
 
-	public <T extends Actor> Cell<T> add(T actor) {
-		return null;
-	}
-
 	@Override
 	public Actor getView() {
 		return new Actor();
@@ -188,24 +182,13 @@ public class TestButton implements VisibleInputConsumer {
 		return 0;
 	}
 
-	public void addActor(Actor actor) {
-
-	}
-
-	public boolean removeActor(Actor actor) {
-		return false;
-	}
-
 	@Override
 	public boolean isBlank() {
 		return isBlank;
 	}
 
 	@Override
-	public void setAlignment(Alignment alignment) {
-		// TODO Auto-generated method stub
-
-	}
+	public void setAlignment(Alignment alignment) { /* Not relevant for testing */ }
 
 	@Override
 	public void consumeKeyInput(Input input) {
@@ -215,22 +198,13 @@ public class TestButton implements VisibleInputConsumer {
 	}
 
 	@Override
-	public void focusCurrent() {
-		// TODO Auto-generated method stub
-
-	}
+	public void focusCurrent() { /* Not relevant for testing */ }
 
 	@Override
-	public void clearSelected() {
-		// TODO Auto-generated method stub
-
-	}
+	public void clearSelected() { /* Not relevant for testing */ }
 
 	@Override
-	public void selectDefault() {
-		// TODO Auto-generated method stub
-
-	}
+	public void selectDefault() { /* Not relevant for testing */ }
 
 	@Override
 	public void setFocused(boolean focused) {
@@ -238,9 +212,6 @@ public class TestButton implements VisibleInputConsumer {
 	}
 
 	@Override
-	public void resizeUI() {
-		// TODO Auto-generated method stub
-
-	}
+	public void resizeUI() { /* Not relevant for testing */ }
 
 }

@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Align;
 class AlignmentTest {
 
 	@Test
-	void getAlignment_onAll_ReturnsTheCorrectInteger() throws Exception {
+	void getAlignment_onAll_ReturnsTheCorrectInteger()  {
 		assertEquals(Align.left, Alignment.LEFT.getAlignment());
 		assertEquals(Align.right, Alignment.RIGHT.getAlignment());
 		assertEquals(Align.top, Alignment.TOP.getAlignment());

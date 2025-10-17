@@ -5,14 +5,14 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.7.13</version>
+	<version>0.7.14</version>
 	<name>libGDX Tools</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>21</maven.compiler.release>
 
-		<darzalcommon.version>0.7.6</darzalcommon.version>
+		<darzalcommon.version>0.7.8</darzalcommon.version>
 		<zalaudiolibrary.version>0.3.0</zalaudiolibrary.version>
 
 		<libgdx.version>1.13.1</libgdx.version>

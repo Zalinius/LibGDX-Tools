@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 class OptionalActionTest {
 
 	@Test
-	void act_whenOptionalActionHasSupplierReturningFalse_hasNoEffect() throws Exception {
+	void act_whenOptionalActionHasSupplierReturningFalse_hasNoEffect()  {
 		InstantRepeatAction repeatAction = new InstantRepeatAction();
 		repeatAction.setTotalCount(10);
 		AtomicBoolean spy = new AtomicBoolean(false);
@@ -29,7 +29,7 @@ class OptionalActionTest {
 	}
 
 	@Test
-	void act_whenOptionalActionHasSupplierReturningTrue_activatesAction() throws Exception {
+	void act_whenOptionalActionHasSupplierReturningTrue_activatesAction()  {
 		AtomicBoolean spy = new AtomicBoolean(false);
 		RunnableAction runnableAction = new RunnableAction();
 		runnableAction.setRunnable(() -> spy.set(true));

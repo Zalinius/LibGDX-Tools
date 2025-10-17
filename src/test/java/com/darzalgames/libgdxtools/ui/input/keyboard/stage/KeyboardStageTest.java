@@ -13,7 +13,7 @@ import com.darzalgames.libgdxtools.maingame.StageBest;
 class KeyboardStageTest {
 
 	@Test
-	void isInTouchableBranch_TouchableEnabledInParentGroup_returnsTrue() throws Exception {
+	void isInTouchableBranch_TouchableEnabledInParentGroup_returnsTrue() {
 		Group group = new Group();
 		Actor actor = new Actor();
 		group.addActor(actor);
@@ -25,7 +25,7 @@ class KeyboardStageTest {
 	}
 
 	@Test
-	void isInTouchableBranch_TouchableChildrenOnlyInParentGroup_returnsTrue() throws Exception {
+	void isInTouchableBranch_TouchableChildrenOnlyInParentGroup_returnsTrue() {
 		Group group = new Group();
 		Actor actor = new Actor();
 		group.addActor(actor);
@@ -37,7 +37,7 @@ class KeyboardStageTest {
 	}
 
 	@Test
-	void isInTouchableBranch_TouchableDisabledInParentGroup_returnsFalse() throws Exception {
+	void isInTouchableBranch_TouchableDisabledInParentGroup_returnsFalse() {
 		Group group = new Group();
 		Actor actor = new Actor();
 		group.addActor(actor);
@@ -49,7 +49,7 @@ class KeyboardStageTest {
 	}
 
 	@Test
-	void isInTouchableBranch_TouchableEnabled_returnsTrue() throws Exception {
+	void isInTouchableBranch_TouchableEnabled_returnsTrue() {
 		Actor actor = new Actor();
 
 		actor.setTouchable(Touchable.enabled);
@@ -59,7 +59,7 @@ class KeyboardStageTest {
 	}
 
 	@Test
-	void isInTouchableBranch_TouchableDisabled_returnsFalse() throws Exception {
+	void isInTouchableBranch_TouchableDisabled_returnsFalse() {
 		Actor actor = new Actor();
 
 		actor.setTouchable(Touchable.disabled);
@@ -69,7 +69,7 @@ class KeyboardStageTest {
 	}
 
 	@Test
-	void isInTouchableBranch_TouchableChildrenOnly_returnsTrueButTheActorItselfIsNotTouchable() throws Exception {
+	void isInTouchableBranch_TouchableChildrenOnly_returnsTrueButTheActorItselfIsNotTouchable() {
 		Actor actor = new Actor();
 
 		actor.setTouchable(Touchable.childrenOnly);

@@ -22,7 +22,7 @@ public class LibgdxAudioConsumer implements AudioConsumer {
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close()  {
 		audioDevice.dispose();
 	}
 

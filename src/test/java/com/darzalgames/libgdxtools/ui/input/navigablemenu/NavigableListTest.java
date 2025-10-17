@@ -240,7 +240,6 @@ class NavigableListTest {
 		navigableList.selectDefault();
 		TestButton finalButton = new TestButton();
 		finalButton.setBlank(false);
-		// VisibleInputConsumer finalButton = new TestButton(() -> "back", inputStrategySwitcher, Runnables.nullRunnable());
 		navigableList.setFinalButton(finalButton);
 
 		navigableList.returnToLast();
@@ -293,7 +292,7 @@ class NavigableListTest {
 		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
-		assertDoesNotThrow(() -> navigableList.returnToSecondLast());
+		assertDoesNotThrow(navigableList::returnToSecondLast);
 	}
 
 	@Test

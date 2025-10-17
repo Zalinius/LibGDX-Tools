@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class CrashReportTest {
 
 	@Test
-	void getters() throws Exception {
+	void getters()  {
 		Instant instant = Instant.parse("2025-02-09T18:40:36.949177809Z");
 		UUID uuid = UUID.fromString("8c6b106b-e613-4cdd-b75b-2b6592c6806d");
 		CrashReport crashReport = new CrashReport("gameName", "version", "platformName", instant, uuid, new String[] { "stackTrace" });
@@ -25,7 +25,7 @@ class CrashReportTest {
 	}
 
 	@Test
-	void toJson() throws Exception {
+	void toJson()  {
 		Instant instant = Instant.parse("2025-02-09T18:40:36.949177809Z");
 		UUID uuid = UUID.fromString("8c6b106b-e613-4cdd-b75b-2b6592c6806d");
 		CrashReport crashReport = new CrashReport("game", "version", "platform", instant, uuid, new String[] { "java.lang.RuntimeException", "caused by:" });

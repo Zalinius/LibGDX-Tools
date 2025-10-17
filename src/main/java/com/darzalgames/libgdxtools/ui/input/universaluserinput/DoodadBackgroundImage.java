@@ -33,7 +33,7 @@ public class DoodadBackgroundImage extends Image {
 	 */
 	public static void addScalingClickListener(Actor toScale, UniversalDoodad listeningDoodad) {
 		listeningDoodad.addListener(new ClickListener() {
-			private final float SCALE_TIME = 0.1f;
+			private static final float SCALE_TIME = 0.1f;
 			private Action currentScaleAction;
 
 			@Override

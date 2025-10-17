@@ -11,7 +11,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 class CustomCursorImageTest {
 
 	@Test
-	void isVisible_duringMouseStrategy_returnsTrue() throws Exception {
+	void isVisible_duringMouseStrategy_returnsTrue()  {
 		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher();
 		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategySwitcher);
 
@@ -21,7 +21,7 @@ class CustomCursorImageTest {
 	}
 
 	@Test
-	void isVisible_duringKeyboardStrategy_returnsFalse() throws Exception {
+	void isVisible_duringKeyboardStrategy_returnsFalse()  {
 		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher();
 		CustomCursorImage customCursor = new CustomCursorImage(() -> true, null, inputStrategySwitcher);
 

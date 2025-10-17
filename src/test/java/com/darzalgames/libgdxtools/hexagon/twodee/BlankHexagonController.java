@@ -13,22 +13,22 @@ public class BlankHexagonController implements VisibleInputConsumer {
 	}
 
 	@Override
-	public void consumeKeyInput(Input input) {}
+	public void consumeKeyInput(Input input) { /* Not needed for testing */ }
 
 	@Override
-	public void setTouchable(Touchable isTouchable) {}
+	public void setTouchable(Touchable isTouchable) { /* Not needed for testing */ }
 
 	@Override
-	public void focusCurrent() {}
+	public void focusCurrent() { /* Not needed for testing */ }
 
 	@Override
-	public void clearSelected() {}
+	public void clearSelected() { /* Not needed for testing */ }
 
 	@Override
-	public void selectDefault() {}
+	public void selectDefault() { /* Not needed for testing */ }
 
 	@Override
-	public void resizeUI() {}
+	public void resizeUI() { /* Not needed for testing */ }
 
 	@Override
 	public boolean isDisabled() {
@@ -41,10 +41,10 @@ public class BlankHexagonController implements VisibleInputConsumer {
 	}
 
 	@Override
-	public void setAlignment(Alignment alignment) {}
+	public void setAlignment(Alignment alignment) { /* Not needed for testing */ }
 
 	@Override
-	public void setFocused(boolean focused) {}
+	public void setFocused(boolean focused) { /* Not needed for testing */ }
 
 	@Override
 	public float getMinHeight() {
@@ -52,7 +52,7 @@ public class BlankHexagonController implements VisibleInputConsumer {
 	}
 
 	@Override
-	public void setDisabled(boolean disabled) {}
+	public void setDisabled(boolean disabled) { /* Not needed for testing */ }
 
 	@Override
 	public boolean isOver() {

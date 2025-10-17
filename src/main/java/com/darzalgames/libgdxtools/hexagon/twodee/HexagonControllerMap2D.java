@@ -53,7 +53,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	 */
 	public List<HexagonController2D> getControllerNeighborsOf(Hexagon hexagon) {
 		Set<Hexagon> hexes = hexagonMap.getHexagonNeighborsOf(hexagon);
-		return hexes.stream().map(neighborHexagon -> getControllerOf(neighborHexagon)).toList();
+		return hexes.stream().map(this::getControllerOf).toList();
 	}
 
 	void centerSelf() {
@@ -96,7 +96,7 @@ public class HexagonControllerMap2D<E> extends Group {
 	}
 
 	private Stream<HexagonController2D> getAllControllers() {
-		return hexagonMap.keySet().stream().map(hex -> getControllerOf(hex));
+		return hexagonMap.keySet().stream().map(this::getControllerOf);
 	}
 
 	public void resizeUI() {

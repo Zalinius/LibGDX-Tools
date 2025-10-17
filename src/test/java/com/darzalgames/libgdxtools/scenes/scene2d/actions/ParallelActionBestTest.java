@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 class ParallelActionBestTest {
 
 	@Test
-	void act_onAParallelActionOfSix_finishesinASingleAct() throws Exception {
+	void act_onAParallelActionOfSix_finishesinASingleAct()  {
 		Actor actor = new Actor(); // Apparently parallel actions need an actor yet others don't?
 		AtomicBoolean spy1 = new AtomicBoolean(false);
 		AtomicBoolean spy2 = new AtomicBoolean(false);

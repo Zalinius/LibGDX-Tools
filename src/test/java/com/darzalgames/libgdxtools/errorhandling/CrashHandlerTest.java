@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class CrashHandlerTest {
 
 	@Test
-	void tryGetString_returnsNullAndSwallowsExceptionWhenExceptionThrown() throws Exception {
+	void tryGetString_returnsNullAndSwallowsExceptionWhenExceptionThrown()  {
 		Supplier<String> supplier = () -> {
 			throw new RuntimeException("lol");
 		};
@@ -19,14 +19,14 @@ class CrashHandlerTest {
 	}
 
 	@Test
-	void tryGetString_returnsStringSuppliedWhenNoException() throws Exception {
+	void tryGetString_returnsStringSuppliedWhenNoException()  {
 		Supplier<String> supplier = () -> "testString";
 
 		assertEquals("testString", CrashHandler.tryGetString(supplier));
 	}
 
 	@Test
-	void getMessageAndStackTraceArray_containsMessageInSlot0AndStacktraceFramesInRemainingSlots() throws Exception {
+	void getMessageAndStackTraceArray_containsMessageInSlot0AndStacktraceFramesInRemainingSlots()  {
 		RuntimeException exception = new RuntimeException("Test Exception");
 
 		String[] stackTraceArray = CrashHandler.getMessageAndStackTraceArray(exception);

@@ -22,7 +22,7 @@ class OptionalSequenceActionTest {
 	}
 
 	@Test
-	void act_withAllActionsEnabled_onlyRunsFirstActionAndActingNotDone() throws Exception {
+	void act_withAllActionsEnabled_onlyRunsFirstActionAndActingNotDone()  {
 		OptionalAction optionalAction0 = makeOptionalActionWithSpy(spies.get(0), true);
 		OptionalAction optionalAction1 = makeOptionalActionWithSpy(spies.get(1), true);
 		OptionalAction optionalAction2 = makeOptionalActionWithSpy(spies.get(2), true);
@@ -37,7 +37,7 @@ class OptionalSequenceActionTest {
 	}
 
 	@Test
-	void act_withAllActionsEnabledAndAllRun_onlyRunsAllActionsAndActingDoneAtEnd() throws Exception {
+	void act_withAllActionsEnabledAndAllRun_onlyRunsAllActionsAndActingDoneAtEnd()  {
 		OptionalAction optionalAction0 = makeOptionalActionWithSpy(spies.get(0), true);
 		OptionalAction optionalAction1 = makeOptionalActionWithSpy(spies.get(1), true);
 		OptionalAction optionalAction2 = makeOptionalActionWithSpy(spies.get(2), true);
@@ -56,7 +56,7 @@ class OptionalSequenceActionTest {
 	}
 
 	@Test
-	void act_withFirstActionDisabled_onlyRunsSecondActionAndActingNotDone() throws Exception {
+	void act_withFirstActionDisabled_onlyRunsSecondActionAndActingNotDone()  {
 		OptionalAction optionalAction0 = makeOptionalActionWithSpy(spies.get(0), false);
 		OptionalAction optionalAction1 = makeOptionalActionWithSpy(spies.get(1), true);
 		OptionalAction optionalAction2 = makeOptionalActionWithSpy(spies.get(2), true);
@@ -71,7 +71,7 @@ class OptionalSequenceActionTest {
 	}
 
 	@Test
-	void act_withLastActionsEnabled_runsLastActionAndActingDone() throws Exception {
+	void act_withLastActionsEnabled_runsLastActionAndActingDone()  {
 		OptionalAction optionalAction0 = makeOptionalActionWithSpy(spies.get(0), false);
 		OptionalAction optionalAction1 = makeOptionalActionWithSpy(spies.get(1), false);
 		OptionalAction optionalAction2 = makeOptionalActionWithSpy(spies.get(2), true);
@@ -86,7 +86,7 @@ class OptionalSequenceActionTest {
 	}
 
 	@Test
-	void act_withAllActionsDisabled_runsNoActionsAndActingDone() throws Exception {
+	void act_withAllActionsDisabled_runsNoActionsAndActingDone()  {
 		OptionalAction optionalAction0 = makeOptionalActionWithSpy(spies.get(0), false);
 		OptionalAction optionalAction1 = makeOptionalActionWithSpy(spies.get(1), false);
 		OptionalAction optionalAction2 = makeOptionalActionWithSpy(spies.get(2), false);

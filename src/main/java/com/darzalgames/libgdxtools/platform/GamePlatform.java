@@ -47,6 +47,8 @@ public interface GamePlatform {
 	 * @return True if a developer is playing, false if a player is playing
 	 */
 	boolean isDevMode();
+	
+	void platformSpecificOpenGlInitialization();
 
 	static Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandlerSupplier(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
 		return () -> new FallbackGamepadInputHandler(inputStrategySwitcher, inputReceiver) {

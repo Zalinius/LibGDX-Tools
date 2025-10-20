@@ -336,10 +336,27 @@ class InputPriorityStackTest {
 	}
 
 	@Test
+	void releasePriority_forConsumerNotOnAnExistingStage_doesNotThrow() {
+		InputPriorityStack stack = makeStack();
+
+		assertDoesNotThrow(() -> stack.releasePriority(new InputConsumerForTesting()));
+	}
+
+	@Test
 	void sendInputToTop_withoutAnythingClaimed_doesNotThrow() {
 		InputPriorityStack stack = makeStack();
 
 		assertDoesNotThrow(() -> stack.sendInputToTop(Input.ACCEPT));
+	}
+
+	@Test
+	void constructor_withNoRegisteredStages_throwsIllegalStateException() {
+		List<StageLikeRenderable> allStagesInOrderForInput = new ArrayList<>(); // register no stages
+		InputConsumer optionsMenu = new InputConsumerForTesting();
+		InputStrategySwitcher inputStrategySwitcher = new InputStrategySwitcher();
+		DarkScreenForTesting darkScreen = new DarkScreenForTesting();
+
+		assertThrows(IllegalStateException.class, () -> new InputPriorityStack(allStagesInOrderForInput, optionsMenu, inputStrategySwitcher, darkScreen));
 	}
 
 	@Test
@@ -680,6 +697,20 @@ class InputPriorityStackTest {
 		assertTrue(optionsMenuSpy.get());
 		assertTrue(bottomConsumerSpy.get());
 		assertTrue(topConsumerSpy.get());
+	}
+
+	@Test
+	void register_priorityObserver_isNotifiedWhenPriorityChanges() {
+		AtomicBoolean spy = new AtomicBoolean(false);
+		InputPriorityObserver observer = () -> {
+			spy.set(true);
+		};
+		InputPriorityStack stack = makeStack();
+
+		stack.register(observer);
+		stack.claimPriority(new InputConsumerForTesting(), MultipleStage.MAIN_STAGE_NAME);
+
+		assertTrue(spy.get());
 	}
 
 	private static InputPriorityStack makeStack() {

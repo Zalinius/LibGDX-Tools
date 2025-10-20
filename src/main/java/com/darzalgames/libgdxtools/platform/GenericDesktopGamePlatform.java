@@ -51,4 +51,8 @@ public abstract class GenericDesktopGamePlatform implements GamePlatform {
 	public boolean isDevMode() {
 		return !SteamConnection.isSteamConnected();
 	}
+	
+	@Override
+	public void platformSpecificOpenGlInitialization() { /* Do nothing by default */ }
+
 }

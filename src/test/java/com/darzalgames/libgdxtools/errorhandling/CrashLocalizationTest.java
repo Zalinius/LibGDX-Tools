@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class CrashLocalizationTest {
 
 	@Test
-	void getLocaleLanguage_supportedLanguage_returnsCorrectLanguage() throws Exception {
+	void getLocaleLanguage_supportedLanguage_returnsCorrectLanguage()  {
 		assertEquals(CrashLocalization.ENGLISH_CRASH_LOCALIZATION, CrashLocalization.getLocalizationFromCode("en"));
 		assertEquals(CrashLocalization.ENGLISH_CRASH_LOCALIZATION, CrashLocalization.getLocalizationFromCode("eng"));
 
@@ -17,7 +17,7 @@ class CrashLocalizationTest {
 	}
 
 	@Test
-	void getLocaleLanguage_missingLanguage_returnsEnglish() throws Exception {
+	void getLocaleLanguage_missingLanguage_returnsEnglish()  {
 		assertEquals(CrashLocalization.ENGLISH_CRASH_LOCALIZATION, CrashLocalization.getLocalizationFromCode(""));
 		assertEquals(CrashLocalization.ENGLISH_CRASH_LOCALIZATION, CrashLocalization.getLocalizationFromCode("ja"));
 		assertEquals(CrashLocalization.ENGLISH_CRASH_LOCALIZATION, CrashLocalization.getLocalizationFromCode("jpn"));

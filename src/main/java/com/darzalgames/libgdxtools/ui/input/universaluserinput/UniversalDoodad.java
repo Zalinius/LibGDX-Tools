@@ -23,7 +23,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	private boolean disabled;
 	private final ClickListener clickListener;
 	private final InputStrategySwitcher inputStrategySwitcher;
-	private final DoodadBackgroundImage background;
+	private final DoodadBackgroundImage backgroundImage;
 	private float focusScaleIncrease;
 
 	public static final float DEFAULT_FOCUS_SCALE_INCREASE = 0.05f;
@@ -40,9 +40,9 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		};
 		addListener(clickListener);
 
-		background = new DoodadBackgroundImage();
-		background.setFillParent(true);
-		DoodadBackgroundImage.addScalingClickListener(background, this);
+		backgroundImage = new DoodadBackgroundImage();
+		backgroundImage.setFillParent(true);
+		DoodadBackgroundImage.addScalingClickListener(backgroundImage, this);
 	}
 
 	@Override
@@ -179,13 +179,13 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		background.setDrawable(getBackgroundDrawable());
-		addActor(background);
+		backgroundImage.setDrawable(getBackgroundDrawable());
+		addActor(backgroundImage);
 
 		validate();
 
-		background.toBack();
-		CenterActor.centerActorOnParent(background);
+		backgroundImage.toBack();
+		CenterActor.centerActorOnParent(backgroundImage);
 
 		Color labelColor = getColorBasedOnFocus();
 		colorOtherComponentsBasedOnFocus(labelColor);

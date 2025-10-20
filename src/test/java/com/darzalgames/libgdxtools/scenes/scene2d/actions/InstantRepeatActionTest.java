@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 class InstantRepeatActionTest {
 
 	@Test
-	void act_onARepeatActionThatRepeatsTwice_finishesinASingleAct() throws Exception {
+	void act_onARepeatActionThatRepeatsTwice_finishesinASingleAct()  {
 		InstantRepeatAction repeatAction = new InstantRepeatAction();
 		repeatAction.setTotalCount(2);
 		repeatAction.setAction(new NullAction());
@@ -22,7 +22,7 @@ class InstantRepeatActionTest {
 	}
 
 	@Test
-	void act_onARepeatActionThatRepeatsTenTimes_finishesinASingleAct() throws Exception {
+	void act_onARepeatActionThatRepeatsTenTimes_finishesinASingleAct()  {
 		InstantRepeatAction repeatAction = new InstantRepeatAction();
 		repeatAction.setTotalCount(10);
 		repeatAction.setAction(new NullAction());
@@ -34,7 +34,7 @@ class InstantRepeatActionTest {
 	}
 
 	@Test
-	void getTotalCount_onARepeatActionThatRepeatsTwice_isTwo() throws Exception {
+	void getTotalCount_onARepeatActionThatRepeatsTwice_isTwo()  {
 		InstantRepeatAction repeatAction = new InstantRepeatAction();
 		repeatAction.setTotalCount(2);
 		repeatAction.setAction(new NullAction());
@@ -45,7 +45,7 @@ class InstantRepeatActionTest {
 	}
 
 	@Test
-	void getTotalCount_onARepeatActionThatHasFinishedRepeatsTwice_isStillTwo() throws Exception {
+	void getTotalCount_onARepeatActionThatHasFinishedRepeatsTwice_isStillTwo()  {
 		InstantRepeatAction repeatAction = new InstantRepeatAction();
 		repeatAction.setTotalCount(2);
 		repeatAction.setAction(new NullAction());
@@ -58,7 +58,7 @@ class InstantRepeatActionTest {
 	}
 
 	@Test
-	void getExecutedCount_onARepeatActionThatRepeatsTwice_isCorrect() throws Exception {
+	void getExecutedCount_onARepeatActionThatRepeatsTwice_isCorrect()  {
 		InstantRepeatAction repeatAction = new InstantRepeatAction();
 		repeatAction.setTotalCount(2);
 		repeatAction.setAction(new NullAction());
@@ -72,7 +72,7 @@ class InstantRepeatActionTest {
 	}
 
 	@Test
-	void getRemainingCount_onARepeatActionThatRepeatsTwice_isCorrect() throws Exception {
+	void getRemainingCount_onARepeatActionThatRepeatsTwice_isCorrect()  {
 		InstantRepeatAction repeatAction = new InstantRepeatAction();
 		repeatAction.setTotalCount(2);
 		repeatAction.setAction(getTwoFrameAction());

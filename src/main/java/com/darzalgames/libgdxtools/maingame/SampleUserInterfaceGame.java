@@ -49,7 +49,6 @@ public class SampleUserInterfaceGame extends MainGame {
 	public static final String POP_UP_STAGE_NAME = "PopUp Stage";
 
 	private UniversalButton regainFocusPopup;
-	private UniversalButton quitButton;
 
 	public static void main(String[] args) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -64,13 +63,13 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	@Override
-	protected void beginLoadingAssets() {}
+	protected void beginLoadingAssets() { /* This project is purposefully assetless */}
 
 	@Override
 	protected UserInterfaceFactory initializeGameAndUserInterfaceFactory() {
 		FallbackGamepadInputHandler fallbackRef = new FallbackGamepadInputHandler(inputStrategySwitcher, null) {
 			@Override
-			public void setActionSet(Supplier<String> newActionSetKeySupplier) {}
+			public void setActionSet(Supplier<String> newActionSetKeySupplier) { /* This project is not complex enough to need ActionSets */}
 
 			@Override
 			protected List<Input> getTrackedInputs() {
@@ -189,6 +188,7 @@ public class SampleUserInterfaceGame extends MainGame {
 	}
 
 	protected List<VisibleInputConsumer> getMenuEntries() {
+		UniversalButton quitButton;
 		List<VisibleInputConsumer> menuButtons = new ArrayList<>();
 
 		UniversalSlider basicSlider = GameInfo.getUserInterfaceFactory().getSlider(() -> "Slider with a label", newValue -> {});

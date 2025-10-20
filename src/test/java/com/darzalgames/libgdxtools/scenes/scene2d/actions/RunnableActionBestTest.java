@@ -9,7 +9,7 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 class RunnableActionBestTest {
 
 	@Test
-	void act_onANullAction_finishesinASingleAct() throws Exception {
+	void act_onANullAction_finishesinASingleAct()  {
 		Runnable testRunnable = Runnables.nullRunnable();
 
 		RunnableActionBest runnableActionBest = new RunnableActionBest(testRunnable);

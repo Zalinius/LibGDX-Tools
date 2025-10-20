@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class NullActionTest {
 
 	@Test
-	void act_onANullAction_finishesinASingleAct() throws Exception {
+	void act_onANullAction_finishesinASingleAct()  {
 		NullAction action = new NullAction();
 
 		boolean actionDoneAfter1 = action.act(0);

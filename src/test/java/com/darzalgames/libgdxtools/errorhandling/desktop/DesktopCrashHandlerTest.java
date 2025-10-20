@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 class DesktopCrashHandlerTest {
 
 	@Test
-	void isHttpCodeSuccess() throws Exception {
+	void isHttpCodeSuccess()  {
 		assertTrue(DesktopCrashHandler.isHttpCodeSuccess(200));
 		assertTrue(DesktopCrashHandler.isHttpCodeSuccess(204));
 

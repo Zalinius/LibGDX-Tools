@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 import java.util.List;
 
 import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
+import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class InputSetup {
@@ -12,7 +13,8 @@ public class InputSetup {
 	private final ScrollingManager scrollingManager;
 
 	public InputSetup(InputStrategySwitcher inputStrategySwitcher, Runnable toggleFullscreenRunnable, List<StageLikeRenderable> allStagesInOrderForInput, Pause pause) {
-		inputPriorityStack = new InputPriorityStack(allStagesInOrderForInput, pause.getOptionsMenu(), inputStrategySwitcher);
+		Runnable onClickDarkScreen = () -> getInputPriorityStack().sendInputToTop(Input.BACK);
+		inputPriorityStack = new InputPriorityStack(allStagesInOrderForInput, pause.getOptionsMenu(), inputStrategySwitcher, new DarkScreen(onClickDarkScreen));
 		inputReceiver = new InputReceiver(inputStrategySwitcher, inputPriorityStack, toggleFullscreenRunnable);
 		scrollingManager = new ScrollingManager(inputReceiver);
 

@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
-import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
@@ -19,16 +18,20 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class InputPriorityStack implements InputStrategyObserver, InputPrioritySubject {
 
 	private final LimitedAccessMultiStack multiStack;
-	private final OptionsMenu optionsMenu;
-	private final DarkScreen darkScreen;
+	private final InputConsumer optionsMenu;
+	private final DarkScreenBehindPopUp darkScreen;
 
 	private final List<InputPriorityObserver> inputPriorityObservers;
 	private final Map<String, StageLikeRenderable> stageLikeRenderables;
 
-	public InputPriorityStack(List<StageLikeRenderable> allStagesInOrderForInput, OptionsMenu optionsMenu, InputStrategySwitcher inputStrategySwitcher) {
+	public InputPriorityStack(List<StageLikeRenderable> allStagesInOrderForInput, InputConsumer optionsMenu, InputStrategySwitcher inputStrategySwitcher, DarkScreenBehindPopUp darkScreen) {
 		this.optionsMenu = optionsMenu;
+		this.darkScreen = darkScreen;
 
 		stageLikeRenderables = new HashMap<>();
+		if (allStagesInOrderForInput.isEmpty()) {
+			throw new IllegalStateException("Must provide at least one stage to register on the input stack!");
+		}
 		allStagesInOrderForInput.forEach(stage -> stageLikeRenderables.put(stage.getName(), stage));
 
 		inputPriorityObservers = new ArrayList<>();
@@ -36,28 +39,26 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		multiStack = new LimitedAccessMultiStack(allStagesInOrderForInput);
 		clearStackAndPushBlankConsumer();
 
-		darkScreen = new DarkScreen(() -> sendInputToTop(Input.BACK));
-
 		InputPriority.setInputPriorityStack(this);
 		inputStrategySwitcher.register(this);
 	}
 
-	void claimPriority(InputConsumer inputConsumer, String stageLikeRenderableName) {
-		boolean thisIsDifferentFromTheTop = !multiStack.isThisOnTop(inputConsumer, stageLikeRenderableName);
+	void claimPriority(InputConsumer inputConsumer, String nameOfStageLikeRenderable) {
+		if (!stageLikeRenderables.containsKey(nameOfStageLikeRenderable)) {
+			throw new IllegalArgumentException("No stage registered with name: " + nameOfStageLikeRenderable);
+		}
+		boolean thisIsDifferentFromTheTop = !multiStack.isThisOnTop(inputConsumer, nameOfStageLikeRenderable);
 		if (thisIsDifferentFromTheTop) {
 			boolean isAPopup = inputConsumer.isPopUp();
 			if (isAPopup) {
-				claimPriorityForPopup(inputConsumer, stageLikeRenderableName);
+				claimPriorityForPopup(inputConsumer, nameOfStageLikeRenderable);
 			} else {
-				claimPriorityOnStack(() -> multiStack.push(inputConsumer, stageLikeRenderableName));
+				claimPriorityOnStack(() -> multiStack.push(inputConsumer, nameOfStageLikeRenderable));
 			}
 		}
 	}
 
 	private void claimPriorityForPopup(InputConsumer inputConsumer, String nameOfStageLikeRenderable) {
-		if (!stageLikeRenderables.containsKey(nameOfStageLikeRenderable)) {
-			throw new IllegalArgumentException("No stage registered with name: " + nameOfStageLikeRenderable);
-		}
 		StageLikeRenderable stageLikeRenderable = stageLikeRenderables.get(nameOfStageLikeRenderable);
 		darkScreen.remove();
 		PopUp popup = inputConsumer.getPopUp();
@@ -158,7 +159,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 
 	private void showDarkScreenIfLandingOnPopup(StageLikeRenderable stageLikeRenderable) {
 		InputConsumer currentTop = multiStack.getTop();
-		if (currentTop != null && currentTop.isPopUp()) {
+		if (currentTop.isPopUp()) {
 			PopUp popUp = currentTop.getPopUp();
 			Actor actor = popUp.getAsActor();
 			darkScreen.fadeIn(actor, popUp.canDismiss(), stageLikeRenderable);
@@ -193,56 +194,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 
 	private void clearStackAndPushBlankConsumer() {
 		multiStack.clear();
-		multiStack.push(makeBlankConsumer(), MultipleStage.MAIN_STAGE_NAME);
-	}
-
-	private InputConsumer makeBlankConsumer() {
-		return new InputConsumer() {
-			@Override
-			public void consumeKeyInput(Input input) {/* not needed */}
-
-			@Override
-			public void setTouchable(Touchable isTouchable) {/* not needed */}
-
-			@Override
-			public void focusCurrent() {/* not needed */}
-
-			@Override
-			public void clearSelected() {/* not needed */}
-
-			@Override
-			public void selectDefault() {/* not needed */}
-
-			@Override
-			public void loseFocus() {/* not needed */}
-
-			@Override
-			public String toString() {
-				return "Blank base";
-			}
-
-			@Override
-			public void resizeUI() {/* not needed */}
-
-			@Override
-			public boolean isDisabled() {
-				return false;
-			}
-
-			@Override
-			public boolean isBlank() {
-				return true;
-			}
-
-			@Override
-			public void setAlignment(Alignment alignment) {/* not needed */}
-
-			@Override
-			public void setFocused(boolean focused) {/* not needed */}
-
-			@Override
-			public void setDisabled(boolean disabled) {/* not needed */}
-		};
+		multiStack.push(new BlankBaseInputConsumer(), MultipleStage.MAIN_STAGE_NAME);
 	}
 
 	private class LimitedAccessMultiStack {
@@ -297,7 +249,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 					return topStack;
 				}
 			}
-			return inputConsumerStacks.get(MultipleStage.MAIN_STAGE_NAME);
+			throw new IllegalStateException("Somehow, no stages are registered on the input stack!");
 		}
 
 		private InputConsumer getTop() {

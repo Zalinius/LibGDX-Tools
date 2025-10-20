@@ -20,7 +20,7 @@ class DelayActionWithLazyDurationTest {
 	@Test
 	void act_onADelayActionWithChangedSupplier_setsTheDurationToTheChangedValue() {
 		AtomicReference<Float> atomicFloat = new AtomicReference<>(5f);
-		DelayActionWithLazyDuration delayAction = new DelayActionWithLazyDuration(() -> atomicFloat.get());
+		DelayActionWithLazyDuration delayAction = new DelayActionWithLazyDuration(atomicFloat::get);
 
 		atomicFloat.set(3f);
 		delayAction.act(0);
@@ -31,7 +31,7 @@ class DelayActionWithLazyDurationTest {
 	@Test
 	void restartAndAct_onADelayActionWithChangedSupplier_setsTheDurationToTheChangedValue() {
 		AtomicReference<Float> atomicFloat = new AtomicReference<>(5f);
-		DelayActionWithLazyDuration delayAction = new DelayActionWithLazyDuration(() -> atomicFloat.get());
+		DelayActionWithLazyDuration delayAction = new DelayActionWithLazyDuration(atomicFloat::get);
 
 		delayAction.act(0);
 		delayAction.restart();

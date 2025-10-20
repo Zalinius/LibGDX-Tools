@@ -18,4 +18,6 @@ public class CenterActor {
 				(actorToCenterOn.getHeight() * actorToCenterOn.getScaleY()) / 2f - (actorToMove.getHeight() * actorToMove.getScaleY()) / 2f
 		);
 	}
+
+	private CenterActor() {}
 }

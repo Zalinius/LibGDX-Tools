@@ -40,7 +40,7 @@ public abstract class UserInterfaceFactory {
 	private static final String QUIT_GAME_KEY = "quit_game";
 	public static final String BACK_BUTTON_KEY = "back_message";
 
-	public UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractRunnable, FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference) {
+	protected UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractRunnable, FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference) {
 		this.skinManager = skinManager;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.soundInteractRunnable = soundInteractRunnable;
@@ -73,15 +73,6 @@ public abstract class UserInterfaceFactory {
 		return getLabel(textSupplier, skinManager.getLabelWithBackgroundStyle());
 	}
 
-	/**
-	 * Makes a label which changes its text based on the current input mode
-	 * @param textSupplier supplier for the desired localized and input-sensitive text
-	 * @return a UniversalLabel with a background, whose text changes when the input strategy changes
-	 */
-	public UniversalLabel getInputSensitiveLabelWithBackground(Supplier<String> textSupplier) {
-		return new UniversalInputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher);
-	}
-
 	protected UniversalLabel getLabel(final Supplier<String> textSupplier, LabelStyle labelStyle) {
 		return new UniversalLabel(textSupplier, labelStyle);
 	}
@@ -94,7 +85,7 @@ public abstract class UserInterfaceFactory {
 	public UniversalDoodad getSpacer() {
 		UniversalButton spacer = new UniversalButton(Runnables.nullRunnable(), inputStrategySwitcher, soundInteractRunnable, skinManager.getBlankButtonStyle()) {
 			@Override
-			public void setAlignment(Alignment alignment) {}
+			public void setAlignment(Alignment alignment) { /* not needed */ }
 
 			@Override
 			public boolean isBlank() {

@@ -35,32 +35,7 @@ public class UniversalCheckbox extends UniversalTextButton {
 		widthOverHeight = originalWidth / originalHeight;
 
 		// It doesn't matter which label we initialize with, as the button resizes every frame based on the contents
-		box = new Image() {
-			@Override
-			public void draw(Batch batch, float parentAlpha) {
-				Drawable checkbox = null;
-				if (isDisabled()) {
-					if (isChecked() && style.checkboxOnDisabled != null) {
-						checkbox = style.checkboxOnDisabled;
-					} else {
-						checkbox = style.checkboxOffDisabled;
-					}
-				}
-				if (checkbox == null) {
-					boolean over = isOver() && !isDisabled();
-					if (isChecked() && style.checkboxOn != null) {
-						checkbox = over && style.checkboxOnOver != null ? style.checkboxOnOver : style.checkboxOn;
-					} else if (over && style.checkboxOver != null) {
-						checkbox = style.checkboxOver;
-					} else {
-						checkbox = style.checkboxOff;
-					}
-				}
-				setDrawable(checkbox);
-
-				super.draw(batch, parentAlpha);
-			}
-		};
+		box = new CheckBoxImage(style);
 		box.setScaling(Scaling.fit);
 		clearChildren();
 		add(box);
@@ -116,4 +91,46 @@ public class UniversalCheckbox extends UniversalTextButton {
 	@Override
 	public void colorOtherComponentsBasedOnFocus(Color color) { /* DON'T recolor the label of a checkbox while pressing on it */ }
 
+	private class CheckBoxImage extends Image {
+
+		private final CheckBoxStyle style;
+
+		public CheckBoxImage(CheckBoxStyle style) {
+			super();
+			this.style = style;
+		}
+
+		@Override
+		public void draw(Batch batch, float parentAlpha) {
+			Drawable checkboxDrawable = null;
+			if (isDisabled()) {
+				checkboxDrawable = getDisabledDrawable();
+			}
+			if (checkboxDrawable == null) {
+				checkboxDrawable = getEnabledDrawable();
+			}
+			setDrawable(checkboxDrawable);
+
+			super.draw(batch, parentAlpha);
+		}
+
+		private Drawable getDisabledDrawable() {
+			if (isChecked() && style.checkboxOnDisabled != null) {
+				return style.checkboxOnDisabled;
+			} else {
+				return style.checkboxOffDisabled;
+			}
+		}
+
+		private Drawable getEnabledDrawable() {
+			boolean over = isOver() && !isDisabled();
+			if (isChecked() && style.checkboxOn != null) {
+				return over && style.checkboxOnOver != null ? style.checkboxOnOver : style.checkboxOn;
+			} else if (over && style.checkboxOver != null) {
+				return style.checkboxOver;
+			} else {
+				return style.checkboxOff;
+			}
+		}
+	}
 }

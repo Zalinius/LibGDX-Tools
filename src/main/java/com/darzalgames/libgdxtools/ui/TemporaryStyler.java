@@ -6,4 +6,6 @@ public class TemporaryStyler {
 		return "[(label)]" + string + "[ label]";
 	}
 
+	private TemporaryStyler() {}
+
 }

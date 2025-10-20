@@ -128,7 +128,7 @@ public class NavigableList implements VisibleInputConsumer {
 			Actor button = entry.getView();
 			table.add(button);
 			if (VisibleInputConsumer.isSpacer(entry)) {
-				menuOrientation.getSpacerExpansionPolicy().accept(table.getCell(button));
+				menuOrientation.applySpacerExpansionPolicy(table.getCell(button));
 			}
 		}
 	}

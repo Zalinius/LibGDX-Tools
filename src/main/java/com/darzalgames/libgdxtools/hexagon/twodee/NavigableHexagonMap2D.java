@@ -19,6 +19,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E>> implements InputConsumer, InputStrategyObserver {
 
 	private Hexagon currentHexagon;
+	private boolean isDisabled;
 
 	/**
 	 * Be sure to register this object with the {@link InputStrategySwitcher}
@@ -88,7 +89,7 @@ public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E
 	}
 
 	private boolean isInputAllowed() {
-		return StageBest.isInTouchableBranch(this);
+		return StageBest.isInTouchableBranch(this) && !isDisabled;
 	}
 
 	/**
@@ -105,32 +106,31 @@ public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E
 
 	@Override
 	public boolean isDisabled() {
-		// TODO Auto-generated method stub
-		return false;
+		return isDisabled;
 	}
 
 	@Override
 	public boolean isBlank() {
-		// TODO Auto-generated method stub
-		return false;
+		return !getActor().hasChildren();
 	}
 
 	@Override
 	public void setAlignment(Alignment alignment) {
-		// TODO Auto-generated method stub
-
+		// Not meaningful for this, as the hexagon map is self-positioning
 	}
 
 	@Override
 	public void setFocused(boolean focused) {
-		// TODO Auto-generated method stub
-
+		if (focused) {
+			focusCurrent();
+		} else {
+			clearSelected();
+		}
 	}
 
 	@Override
 	public void setDisabled(boolean disabled) {
-		// TODO Auto-generated method stub
-
+		isDisabled = disabled;
 	}
 
 }

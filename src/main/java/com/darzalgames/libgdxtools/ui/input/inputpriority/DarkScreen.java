@@ -14,7 +14,7 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 /**
  * The dark transparent screen which goes behind popups to "focus" them, and dismiss them when clicked
  */
-class DarkScreen extends Image {
+class DarkScreen extends Image implements DarkScreenBehindPopUp {
 
 	public DarkScreen(Runnable onClick) {
 		super(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), 1, 1));
@@ -35,7 +35,8 @@ class DarkScreen extends Image {
 		super.draw(batch, parentAlpha);
 	}
 
-	void fadeIn(Actor actorPopup, boolean isTouchable, StageLikeRenderable stage) {
+	@Override
+	public void fadeIn(Actor actorPopup, boolean isTouchable, StageLikeRenderable stage) {
 		clearActions();
 		stage.addActor(this);
 		UserInterfaceSizer.scaleToFillScreenAndMakeCentered(this); // Set full screen size immediately so tests can click it in the same frame
@@ -47,7 +48,8 @@ class DarkScreen extends Image {
 		addAction(Actions.fadeIn(0.25f, Interpolation.circle));
 	}
 
-	void fadeOutAndRemove() {
+	@Override
+	public void fadeOutAndRemove() {
 		clearActions();
 		addAction(
 				new InstantSequenceAction(

@@ -31,7 +31,7 @@ class NavigableHexagonControllerMapTest {
 	private HexagonControllerMap2D<String> hexagonControllerMap;
 
 	@BeforeEach
-	private void setup() {
+	void setup() {
 		GameInfo.setMainGame(new SharesGameInformation() {
 			@Override
 			public SaveManager getSaveManager() {

@@ -7,20 +7,17 @@ public class DarkScreenForTesting implements DarkScreenBehindPopUp {
 
 	@Override
 	public boolean remove() {
-		// TODO Auto-generated method stub
-		return true;
+		return false;
 	}
 
 	@Override
 	public void fadeIn(Actor actor, boolean canDismiss, StageLikeRenderable stageLikeRenderable) {
-		// TODO Auto-generated method stub
-
+		// Meaningless for testing
 	}
 
 	@Override
 	public void fadeOutAndRemove() {
-		// TODO Auto-generated method stub
-
+		// Meaningless for testing
 	}
 
 }

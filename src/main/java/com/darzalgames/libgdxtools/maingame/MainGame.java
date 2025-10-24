@@ -49,7 +49,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
-	protected LoadingState loadingState;
+	private LoadingState loadingState;
 
 	// The setup process, in order that they are called
 	protected abstract void beginLoadingAssets();

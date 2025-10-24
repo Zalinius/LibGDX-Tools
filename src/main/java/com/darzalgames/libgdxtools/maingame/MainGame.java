@@ -49,7 +49,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
-	private LoadingState loadingState;
+	protected LoadingState loadingState;
 
 	// The setup process, in order that they are called
 	protected abstract void beginLoadingAssets();
@@ -163,6 +163,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 				loadingScreen.startExitAnimation();
 			}
 		}
+	}
+
+	protected boolean isGameRunning() {
+		return loadingState == LoadingState.GAME_RUNNING;
 	}
 
 	private void resizeUI() {

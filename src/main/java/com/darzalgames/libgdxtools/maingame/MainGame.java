@@ -165,6 +165,10 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		}
 	}
 
+	protected boolean isGameRunning() {
+		return loadingState == LoadingState.GAME_RUNNING;
+	}
+
 	private void resizeUI() {
 		inputSetup.getInputPriorityStack().resizeStackUI();
 		Fader.resizeUI();

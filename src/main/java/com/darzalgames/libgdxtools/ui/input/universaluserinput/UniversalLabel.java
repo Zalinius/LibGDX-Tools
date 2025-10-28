@@ -44,12 +44,16 @@ public class UniversalLabel extends TypingLabel {
 
 	public void resizeUI() {
 		setFont(typingLabelStyle.font); // updates us to the resized font size
-		setText("[%" + bounceScaling * 100 + "]" + textSupplier.get(), true, false);
-
-		skipToTheEnd(); // Only Textra TypingLabel do the special effects, so we skip to the end right away
+		String currentText = getOriginalText().toString();
+		String newText = "[%" + bounceScaling * 100 + "]" + textSupplier.get();
+		if (!currentText.equals(newText)) {
+			// only update when there's a change: this allows us to use the fancy Textra animations
+			setSize(0, 0); // the documentation suggests doing this before calling restart()
+			restart(newText);
+		}
 
 		invalidateHierarchy();
-
+		skipToTheEnd(); // Only Textra TypingLabel do the special effects, so we skip to the end right away
 	}
 
 	public void setAlignment(Alignment alignment) {
@@ -63,11 +67,12 @@ public class UniversalLabel extends TypingLabel {
 			@Override
 			protected void update(float percent) {
 				bounceScaling = 1 + scaleBy * (1 - percent);
+				setText("[%" + bounceScaling * 100 + "]" + textSupplier.get(), true, false);
 			}
 
 			@Override
 			protected void end() {
-				bounceScaling = 1;
+				update(1);
 			}
 		};
 		addAction(currentBounceAction);

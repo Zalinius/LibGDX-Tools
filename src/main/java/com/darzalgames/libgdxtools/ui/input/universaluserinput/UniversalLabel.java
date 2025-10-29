@@ -39,6 +39,9 @@ public class UniversalLabel extends TypingLabel {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		resizeUI();
+		if (!wrap) {
+			pack();
+		}
 		super.draw(batch, parentAlpha);
 	}
 

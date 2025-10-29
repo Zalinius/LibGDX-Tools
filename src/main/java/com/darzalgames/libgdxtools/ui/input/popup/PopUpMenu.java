@@ -84,7 +84,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 		}
 	}
 
-	protected void setRunJustBeforeRemove(Runnable runJustBeforeRemove) {
+	public void setRunJustBeforeRemove(Runnable runJustBeforeRemove) {
 		this.runJustBeforeRemove = runJustBeforeRemove;
 	}
 

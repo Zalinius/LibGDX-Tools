@@ -161,7 +161,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 
 		UniversalLabel authors = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("authors_label"));
 		authors.setAlignment(Align.topLeft);
-		versionTable.add(authors).grow().top().left().padTop(getPadTop()).padLeft(getPadLeft());
+		versionTable.add(authors).expand().top().left().padTop(getPadTop()).padLeft(getPadLeft());
 		versionTable.row();
 
 		UniversalLabel versionLabel = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> getGameVersion() + platformName);

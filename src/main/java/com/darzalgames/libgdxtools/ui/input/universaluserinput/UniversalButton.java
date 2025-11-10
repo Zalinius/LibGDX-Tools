@@ -28,7 +28,6 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 		boolean isTouchable = getTouchable() != Touchable.disabled;
 		if (!isDisabled() && isTouchable) {
 			buttonRunnable.run();
-			setFocused(false);
 			requestInteractSound();
 		}
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
@@ -21,6 +22,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
  */
 public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 
+	public static final float SLIDE_DURATION = 0.25f;
 	private Runnable runJustBeforeRemove = Runnables.nullRunnable();
 
 	protected PopUpMenu(MenuOrientation menuOrientation) {
@@ -58,7 +60,7 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 			float startX = this.getX();
 			float startY = this.getY();
 			this.setY(UserInterfaceSizer.getCurrentHeight());
-			addAction(Actions.moveTo(startX, startY, 0.25f, Interpolation.circle));
+			addAction(Actions.moveTo(startX, startY, SLIDE_DURATION, Interpolation.circle));
 		}
 	}
 
@@ -73,11 +75,19 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 		if (slidesInAndOut()) {
 			addAction(
 					Actions.sequence(
-							Actions.moveTo(getX(), UserInterfaceSizer.getCurrentHeight(), 0.25f, Interpolation.circle),
+							Actions.moveTo(getX(), UserInterfaceSizer.getCurrentHeight(), SLIDE_DURATION, Interpolation.circle),
 							new RunnableActionBest(runJustBeforeRemove),
-							new RunnableActionBest(super::remove)
+							new RunnableActionBest(this::remove)
 					)
 			);
+
+			// continue to resize ui as the popup slides out
+			addAction(new TemporalAction(SLIDE_DURATION) {
+				@Override
+				protected void update(float percent) {
+					resizeUI();
+				}
+			});
 			toFront();
 		} else {
 			remove();

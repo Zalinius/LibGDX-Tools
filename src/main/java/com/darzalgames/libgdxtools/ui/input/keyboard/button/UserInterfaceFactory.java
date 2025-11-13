@@ -31,7 +31,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 /**
  * @author DarZal
- * The ONLY place where one should be making UI elements (buttons, labels, etc)
+ *         The ONLY place where one should be making UI elements (buttons, labels, etc)
  */
 public class UserInterfaceFactory {
 
@@ -69,8 +69,6 @@ public class UserInterfaceFactory {
 
 	/**
 	 * Makes a label which changes its text based on the current input mode
-	 * @param textSupplier
-	 * @return
 	 */
 	public static Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
 		Label label = new InputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategyManager);
@@ -86,8 +84,6 @@ public class UserInterfaceFactory {
 
 	/**
 	 * Makes a label which can be listed among other buttons, but isn't interactable
-	 * @param text
-	 * @return
 	 */
 	public static KeyboardButton getListableLabel(final String text) {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
@@ -101,7 +97,6 @@ public class UserInterfaceFactory {
 	/**
 	 * Makes a spacer which can be listed among other buttons, but isn't interactable and which will
 	 * expand out to fill any available space in the menu
-	 * @return
 	 */
 	public static KeyboardButton getSpacer() {
 		KeyboardButton spacer = getListableLabel("");
@@ -112,7 +107,6 @@ public class UserInterfaceFactory {
 	public static boolean isSpacer(KeyboardButton button) {
 		return button.getView().isDisabled() && button.isBlank();
 	}
-
 
 	public static KeyboardButton getButton(final String text, final Runnable runnable) {
 		return makeButton(text, null, runnable);
@@ -155,14 +149,16 @@ public class UserInterfaceFactory {
 	 * since it will be drawn in the parent's coordinate system.
 	 */
 	public static void makeActorCentered(final Actor actor) {
-		actor.setPosition(GameInfo.getWidth() / 2f - actor.getWidth() / 2f,
-				GameInfo.getHeight() / 2f - actor.getHeight() / 2f);
+		actor.setPosition(
+				GameInfo.getWidth() / 2f - actor.getWidth() / 2f,
+				GameInfo.getHeight() / 2f - actor.getHeight() / 2f
+		);
 	}
 
 	public static KeyboardSelectBox getSelectBox(String boxLabel, Collection<String> entries, Consumer<String> consumer) {
-		TextButton textButton = new TextButton(boxLabel + ":  ", skinManager.getTextButtonStyle()); 
+		TextButton textButton = new TextButton(boxLabel + ":  ", skinManager.getTextButtonStyle());
 		makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
-		KeyboardSelectBox keyboardSelectBox =  new KeyboardSelectBox(entries, textButton, inputStrategyManager, soundInteractListener);
+		KeyboardSelectBox keyboardSelectBox = new KeyboardSelectBox(entries, textButton, inputStrategyManager, soundInteractListener);
 		keyboardSelectBox.setAction(consumer);
 		return keyboardSelectBox;
 	}
@@ -182,14 +178,13 @@ public class UserInterfaceFactory {
 	}
 
 	public static KeyboardButton getInGamesSettingsButton(Runnable onclick) {
-		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle()); 
+		TextButton textButton = new TextButton("", skinManager.getSettingsButtonStyle());
 		return new MouseOnlyButton(textButton, onclick, inputStrategyManager, soundInteractListener);
 	}
 
 	private static final String QUIT_GAME_KEY = "quit_game";
 
 	/**
-	 * @param buttonText
 	 * @return A quit button, with a default English text label if not otherwise to find
 	 */
 	public static KeyboardButton getQuitGameButton(String buttonText) {
@@ -217,9 +212,11 @@ public class UserInterfaceFactory {
 	public static KeyboardButton getQuitGameButtonWithWarning(Runnable runnable) {
 		Runnable quitWithConfirmation = () -> {
 			runnable.run();
-			new ConfirmationMenu("menu_warning", 
-					QUIT_GAME_KEY, 
-					quitGameRunnable::run);
+			new ConfirmationMenu(
+					"menu_warning",
+					QUIT_GAME_KEY,
+					quitGameRunnable::run
+			);
 		};
 		return getButton(getQuitButtonString(), quitWithConfirmation);
 	}
@@ -233,10 +230,14 @@ public class UserInterfaceFactory {
 					button.setStyle(mainButtonStyle);
 					if (shouldButtonFlash(button)) {
 						button.clearActions();
-						button.addAction(new InstantForeverAction(new InstantSequenceAction(
-								getChangeButtonStyleAfterDelayAction(button, flashedButtonStyle),
-								getChangeButtonStyleAfterDelayAction(button, mainButtonStyle)
-								)));
+						button.addAction(
+								new InstantForeverAction(
+										new InstantSequenceAction(
+												getChangeButtonStyleAfterDelayAction(button, flashedButtonStyle),
+												getChangeButtonStyleAfterDelayAction(button, mainButtonStyle)
+										)
+								)
+						);
 
 					}
 				}
@@ -252,8 +253,9 @@ public class UserInterfaceFactory {
 			}
 		});
 	}
+
 	protected static void makeSliderFlashing(KeyboardSlider keyboardSlider, SliderStyle mainStyle, SliderStyle flashedStyle) {
-		Button button = keyboardSlider.getView(); 
+		Button button = keyboardSlider.getView();
 		button.addListener(new ClickListener() {
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -262,10 +264,14 @@ public class UserInterfaceFactory {
 					keyboardSlider.setSliderStyle(flashedStyle);
 					if (shouldButtonFlash(button)) {
 						button.clearActions();
-						button.addAction(new InstantForeverAction(new InstantSequenceAction(
-								getChangeSliderStyleAfterDelayAction(keyboardSlider, flashedStyle),
-								getChangeSliderStyleAfterDelayAction(keyboardSlider, mainStyle)
-								)));
+						button.addAction(
+								new InstantForeverAction(
+										new InstantSequenceAction(
+												getChangeSliderStyleAfterDelayAction(keyboardSlider, flashedStyle),
+												getChangeSliderStyleAfterDelayAction(keyboardSlider, mainStyle)
+										)
+								)
+						);
 
 					}
 				}
@@ -314,14 +320,14 @@ public class UserInterfaceFactory {
 
 	public static WindowResizerSelectBox getWindowModeTextSelectBox() {
 		Supplier<TextButton> supplier = () -> {
-			TextButton textButton = new TextButton(TextSupplier.getLine("window_mode_label") + ":  ", skinManager.getTextButtonStyle()); 
+			TextButton textButton = new TextButton(TextSupplier.getLine("window_mode_label") + ":  ", skinManager.getTextButtonStyle());
 			makeBackgroundFlashing(textButton, skinManager.getTextButtonStyle(), skinManager.getFlashedTextButtonStyle());
 			return textButton;
 		};
 		return new WindowResizerSelectBox(supplier, inputStrategyManager);
 	}
-	
+
 	private static float computeDelay() {
-		return 1f/flashesPerSecondSupplier.get();
+		return 1f / flashesPerSecondSupplier.get();
 	}
 }

@@ -9,22 +9,22 @@ import com.badlogic.gdx.utils.Pool;
 
 /**
  * A sequence of OptionalAction, which will instantly skip an action if it isn't supposed to be executed.
- * Effectively, in a single act call, OptionalActions are called until one is enable. 
+ * Effectively, in a single act call, OptionalActions are called until one is enable.
  */
-public class OptionalSequenceAction extends Action{
+public class OptionalSequenceAction extends Action {
 
-	private List<OptionalAction> optionalActions;
+	private final List<OptionalAction> optionalActions;
 	private int index;
 
-	public OptionalSequenceAction (OptionalAction... actions) {
-		this.optionalActions = new ArrayList<>();
+	public OptionalSequenceAction(OptionalAction... actions) {
+		optionalActions = new ArrayList<>();
 		for (int i = 0; i < actions.length; i++) {
 			addAction(actions[i]);
 		}
 	}
 
 	@Override
-	public boolean act (float delta) {
+	public boolean act(float delta) {
 		if (index >= optionalActions.size()) {
 			return true;
 		}
@@ -33,17 +33,15 @@ public class OptionalSequenceAction extends Action{
 		try {
 			while (index < optionalActions.size()) {
 				OptionalAction action = optionalActions.get(index);
-				if(action.shouldAct()) {
+				if (action.shouldAct()) {
 					boolean actionDone = action.act(delta);
-					if(!actionDone) {
+					if (!actionDone) {
 						return false;
-					}
-					else {
+					} else {
 						index++;
 						return index >= optionalActions.size();
 					}
-				}
-				else {
+				} else {
 					index++;
 					if (index >= optionalActions.size()) {
 						return true;
@@ -58,21 +56,20 @@ public class OptionalSequenceAction extends Action{
 	}
 
 	@Override
-	public void restart () {
+	public void restart() {
 		super.restart();
 		index = 0;
 	}
-	
-	public void addAction (OptionalAction optionalAction) {
+
+	public void addAction(OptionalAction optionalAction) {
 		optionalActions.add(optionalAction);
 		if (actor != null) {
 			optionalAction.setActor(actor);
 		}
 	}
-	
+
 	/**
 	 * Adds an action that is non optional
-	 * @param action
 	 */
 	public void addMandatoryAction(Action action) {
 		OptionalAction mandatoryAction = new OptionalAction(() -> true);
@@ -81,10 +78,9 @@ public class OptionalSequenceAction extends Action{
 	}
 
 	@Override
-	public void setActor (Actor actor) {
+	public void setActor(Actor actor) {
 		optionalActions.forEach(action -> action.setActor(actor));
 		super.setActor(actor);
 	}
-
 
 }

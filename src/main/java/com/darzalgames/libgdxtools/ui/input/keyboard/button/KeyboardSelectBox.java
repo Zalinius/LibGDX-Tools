@@ -17,7 +17,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 public class KeyboardSelectBox extends KeyboardButton {
 
 	private PopUpMenu options;
-	private Label displayLabel;
+	private final Label displayLabel;
 	private String defaultEntry;
 	private Consumer<String> action;
 
@@ -27,26 +27,29 @@ public class KeyboardSelectBox extends KeyboardButton {
 
 		// Make buttons out of all Strings in entries, and so pressing one of these buttons hides the navigable selectable portion of this select box,
 		// sets that as the text in our display label (e.g. English), and calls the Consumer (which responds to the new entry, e.g. changing the game language and refreshing the main menu)
-		List<KeyboardButton> entryButtons = entries.stream().map(entry -> UserInterfaceFactory.getButton(entry,
-				() -> {
-					options.hideThis();
-					setSelected(entry);
-					action.accept(entry);
-				}
-				)).collect(Collectors.toList());
-		
+		List<KeyboardButton> entryButtons = entries.stream().map(
+				entry -> UserInterfaceFactory.getButton(
+						entry,
+						() -> {
+							options.hideThis();
+							setSelected(entry);
+							action.accept(entry);
+						}
+				)
+		).collect(Collectors.toList());
+
 		// This is the keyboard navigable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
-		this.options = new PopUpMenu(true, entryButtons, "back_message") {
+		options = new PopUpMenu(true, entryButtons, "back_message") {
 			@Override
 			protected void setUpTable() {
 				menu.setAlignment(Alignment.LEFT, Alignment.LEFT);
-				NinePatchDrawable background = UserInterfaceFactory.getUIBorderedNine(); 
+				NinePatchDrawable background = UserInterfaceFactory.getUIBorderedNine();
 				this.setBackground(background);
 				add(menu.getView()).left();
-				
+
 				float longestWidth = 0;
 				for (Iterator<KeyboardButton> iterator = entryButtons.iterator(); iterator.hasNext();) {
-					TextButton button = iterator.next().getView(); 
+					TextButton button = iterator.next().getView();
 					if (button.getWidth() > longestWidth) {
 						longestWidth = button.getWidth();
 					}
@@ -55,7 +58,7 @@ public class KeyboardSelectBox extends KeyboardButton {
 					longestWidth = menu.getFinalButtonWidth();
 				}
 				options.setWidth(longestWidth + background.getPatch().getLeftWidth() + background.getPatch().getRightWidth());
-				options.setHeight(options.getPrefHeight() + background.getPatch().getBottomHeight() + background.getPatch().getTopHeight());				
+				options.setHeight(options.getPrefHeight() + background.getPatch().getBottomHeight() + background.getPatch().getTopHeight());
 				options.setPosition(textButton.getRight(), textButton.getTop());
 			}
 		};
@@ -63,22 +66,21 @@ public class KeyboardSelectBox extends KeyboardButton {
 		displayLabel = UserInterfaceFactory.getLabel("");
 		displayLabel.setWrap(false);
 		textButton.add(displayLabel);
-		this.setButtonRunnable(this::showInnerOptionsPopUpMenu);
-		this.setWrap(false);
-		
+		setButtonRunnable(this::showInnerOptionsPopUpMenu);
+		setWrap(false);
+
 		setSelected(entryButtons.get(0).getView().getText().toString());
 	}
 
 	/**
 	 * Select a button based on the string of the entry, generally used after a choice has been made
 	 * or when first setting up the select box to make sure that the currently used value is highlighted (e.g. current language/font/window setting)
-	 * @param entry
 	 */
 	public void setSelected(String entry) {
 		defaultEntry = entry;
 		displayLabel.setText(entry);
 		displayLabel.layout();
-		TextButton view = this.getView();
+		TextButton view = getView();
 		Label label = view.getLabel();
 		view.getLabelCell().padRight(3);
 		view.setWidth(view.getLabelCell().getPadRight() + label.getWidth() + displayLabel.getPrefWidth());
@@ -92,7 +94,5 @@ public class KeyboardSelectBox extends KeyboardButton {
 	public void setAction(Consumer<String> action) {
 		this.action = action;
 	}
-	
+
 }
-
-

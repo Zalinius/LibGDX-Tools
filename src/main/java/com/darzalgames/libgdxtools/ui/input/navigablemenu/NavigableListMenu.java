@@ -33,13 +33,13 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 
 	/**
 	 * Be SUPER SURE to call the following in your implementation:
-	 * 		add(menu.getView());
+	 * add(menu.getView());
 	 * with whatever modifiers you want (grow, colspan, etc...)
-	 * 
+	 *
 	 * Consider calling things like:
-	 * 		menu.setAlignment(Alignment.TOP_LEFT);
-	 * 		menu.replaceContents(menuButtons, backButton);
-	 * 
+	 * menu.setAlignment(Alignment.TOP_LEFT);
+	 * menu.replaceContents(menuButtons, backButton);
+	 *
 	 * No need to call clear() first or anything.
 	 */
 	protected abstract void setUpTable();
@@ -53,7 +53,6 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 
 	/**
 	 * Set the focus to a particular {@link KeyboardButton}
-	 * @param keyboardButton
 	 */
 	public void goTo(KeyboardButton keyboardButton) {
 		menu.goTo(keyboardButton);
@@ -61,7 +60,6 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 
 	/**
 	 * Set the focus to a particular button index (often first or last, but there can be more specialized applications)
-	 * @param index
 	 */
 	public void goTo(final int index) {
 		menu.goTo(index);
@@ -70,7 +68,6 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	/**
 	 * Sets whether or not to press a button immediately when an entry is changed.
 	 * This is generally false, but will be true for menu tabs navigated with the bumpers, for example.
-	 * @param pressButtonOnEntryChanged
 	 */
 	public void setPressButtonOnEntryChanged(boolean pressButtonOnEntryChanged) {
 		menu.setPressButtonOnEntryChanged(pressButtonOnEntryChanged);
@@ -110,23 +107,22 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	}
 
 	/**
-	 * This method will try to find the entry corresponding to the string provided, 
+	 * This method will try to find the entry corresponding to the string provided,
 	 * if it fails then we default to the first entry.
 	 * @param entry The string of the entry that you want to go to
 	 */
 	public void goTo(String entry) {
 		int nonInteractablesToIgnore = 0;
 		for (int i = 0; i < menu.allEntries.size(); i++) {
-			KeyboardButton thisEntry = menu.allEntries.get(i); 
+			KeyboardButton thisEntry = menu.allEntries.get(i);
 			if (thisEntry.doesTextMatch(entry)) {
 				menu.goTo(i - nonInteractablesToIgnore);
 				return;
-			}
-			else if (thisEntry.getView().isDisabled() || UserInterfaceFactory.isSpacer(thisEntry)) {
+			} else if (thisEntry.getView().isDisabled() || UserInterfaceFactory.isSpacer(thisEntry)) {
 				nonInteractablesToIgnore++;
 			}
 		}
 		menu.goTo(0);
 	}
-	
+
 }

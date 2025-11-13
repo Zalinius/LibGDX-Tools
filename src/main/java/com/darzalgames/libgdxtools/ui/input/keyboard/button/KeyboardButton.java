@@ -17,16 +17,16 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 /**
  * @author DarZal
- * Our very own custom button class that works with keyboard input!
- * This is also the base class for other keyboard *buttons* such as checkboxes and sliders,
- * which allows them all to be put in a navigable menu together and treated the same
+ *         Our very own custom button class that works with keyboard input!
+ *         This is also the base class for other keyboard *buttons* such as checkboxes and sliders,
+ *         which allows them all to be put in a navigable menu together and treated the same
  */
 public class KeyboardButton implements InputConsumerWrapper {
-	private TextButton button;
-	private Supplier<Label> labelSupplier;
-	private Supplier<Cell<Label>> cellSupplier;
+	private final TextButton button;
+	private final Supplier<Label> labelSupplier;
+	private final Supplier<Cell<Label>> cellSupplier;
 	private Runnable buttonRunnable;
-	private Image image;
+	private final Image image;
 	private Alignment alignment;
 	private boolean wrap;
 	private boolean doesSoundOnInteract = true;
@@ -36,20 +36,20 @@ public class KeyboardButton implements InputConsumerWrapper {
 	public KeyboardButton(TextButton button, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		this(button, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 	}
-	
-	public KeyboardButton(TextButton button, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) { 
+
+	public KeyboardButton(TextButton button, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		this(button, null, runnable, inputStrategyManager, soundInteractListener);
 	}
-	
+
 	public KeyboardButton(TextButton button, Image image, Runnable runnable, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		this.button = button;
-		this.labelSupplier = button::getLabel;
-		this.cellSupplier = button::getLabelCell;
-		this.buttonRunnable = runnable;
+		labelSupplier = button::getLabel;
+		cellSupplier = button::getLabelCell;
+		buttonRunnable = runnable;
 		this.inputStrategyManager = inputStrategyManager;
 		this.image = image;
-		this.wrap = true;
-		this.alignment = Alignment.CENTER;
+		wrap = true;
+		alignment = Alignment.CENTER;
 		this.soundInteractListener = soundInteractListener;
 
 		if (image != null) {
@@ -61,12 +61,11 @@ public class KeyboardButton implements InputConsumerWrapper {
 
 			button.add(image).padRight(sidePadding);
 			button.add(label);
-			
+
 			button.setWidth(startWidth + image.getWidth() + sidePadding);
 		}
-		
+
 		labelSupplier.get().setTouchable(Touchable.disabled);
-		
 
 		button.addListener(new ChangeListener() {
 			@Override
@@ -88,7 +87,7 @@ public class KeyboardButton implements InputConsumerWrapper {
 			soundInteractListener.run();
 		}
 	}
-	
+
 	public TextButton getView() {
 		labelSupplier.get().setWrap(wrap);
 		labelSupplier.get().setAlignment(alignment.getAlignment(), alignment.getAlignment());
@@ -114,20 +113,17 @@ public class KeyboardButton implements InputConsumerWrapper {
 
 	/**
 	 * Sets this button un/focused, generating a mimicked LibGDX mouse enter/exit event
-	 * @param isFocused
 	 */
 	public void setFocused(boolean isFocused) {
 		InputEvent event = Pools.obtain(InputEvent.class);
 		if (!isFocused) {
 			event.setType(InputEvent.Type.exit);
-		}
-		else if (isFocused && inputStrategyManager.shouldFlashButtons()) {
+		} else if (isFocused && inputStrategyManager.shouldFlashButtons()) {
 			event.setType(InputEvent.Type.enter);
-		}
-		else {
+		} else {
 			event.setType(null); // Since the events are pooled I think they can come with a type?! (the type of the last event it was used for?)
 		}
-		
+
 		if (event.getType() != null) {
 			event.setStage(button.getStage());
 			event.setStageX(0);
@@ -141,7 +137,6 @@ public class KeyboardButton implements InputConsumerWrapper {
 
 	/**
 	 * Set whether or not this button can be interacted with
-	 * @param disabled
 	 */
 	public void setDisabled(boolean disabled) {
 		button.setDisabled(disabled);
@@ -154,7 +149,6 @@ public class KeyboardButton implements InputConsumerWrapper {
 
 	/**
 	 * Replace the text on the button
-	 * @param newText
 	 */
 	public void updateText(String newText) {
 		labelSupplier.get().setText(newText);
@@ -166,11 +160,10 @@ public class KeyboardButton implements InputConsumerWrapper {
 	public boolean isBlank() {
 		return StringUtils.isBlank(labelSupplier.get().getText().toString()) && image == null;
 	}
-	
+
 	/**
 	 * Useful for trying to navigate to a particular button in a menu based on its text
 	 * (e.g. defaulting to the current setting in a drop-down menu via string matching)
-	 * @param value
 	 * @return Whether or not this button has text that matches the supplied value
 	 */
 	public boolean doesTextMatch(String value) {
@@ -179,7 +172,6 @@ public class KeyboardButton implements InputConsumerWrapper {
 
 	/**
 	 * Set what to do when the button is pressed
-	 * @param buttonRunnable
 	 */
 	public void setButtonRunnable(Runnable buttonRunnable) {
 		this.buttonRunnable = buttonRunnable;
@@ -187,8 +179,8 @@ public class KeyboardButton implements InputConsumerWrapper {
 
 	/**
 	 * Set both alignments for the button's label. Quoting from the LibGDX documentation:
-	 * 		labelAlign Aligns all the text within the label (default left center).
-	 * 		lineAlign Aligns each line of text horizontally (default left).
+	 * labelAlign Aligns all the text within the label (default left center).
+	 * lineAlign Aligns each line of text horizontally (default left).
 	 * @param alignment The new alignment
 	 */
 	public void setAlignment(Alignment alignment) {
@@ -197,16 +189,13 @@ public class KeyboardButton implements InputConsumerWrapper {
 
 	/**
 	 * Set whether or not the text in the button's label should wrap
-	 * @param wrap
 	 */
 	public void setWrap(boolean wrap) {
 		this.wrap = wrap;
 	}
-	
+
 	/**
 	 * Update both the button's text and image in one go
-	 * @param newText
-	 * @param image
 	 */
 	public void updateLabels(final String newText, final Image image) {
 		updateText(newText);
@@ -215,7 +204,6 @@ public class KeyboardButton implements InputConsumerWrapper {
 
 	/**
 	 * Set whether or not this button should make a sound when interacted with
-	 * @param doesSoundOnInteract
 	 */
 	public void setDoesSoundOnInteract(boolean doesSoundOnInteract) {
 		this.doesSoundOnInteract = doesSoundOnInteract;

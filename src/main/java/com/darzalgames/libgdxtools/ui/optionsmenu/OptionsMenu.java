@@ -18,7 +18,6 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 
-
 /**
  * The base class for options menus (in-game versus when on the main menu)
  * @author DarZal
@@ -31,12 +30,16 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	private final String platformName;
 
 	/**
-	 * NOTE: Setting the position is important, otherwise the options menu will not open!<p>
-	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceFactory.makeActorCentered(this)} 
+	 * NOTE: Setting the position is important, otherwise the options menu will not open!
+	 * <p>
+	 * e.g. call {@link UserInterfaceFactory#makeActorCentered(Actor) UserInterfaceFactory.makeActorCentered(this)}
 	 */
 	protected abstract void setUpBackground();
+
 	protected abstract Alignment getEntryAlignment();
+
 	protected abstract Alignment getMenuAlignment();
+
 	protected abstract String getGameVersion();
 
 	/**
@@ -56,7 +59,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 	/**
 	 * @return An optional button that goes right above a quit button (e.g. in-game have a "return to main menu" button)
-	 * (return null if you don't want this)
+	 *         (return null if you don't want this)
 	 */
 	protected abstract KeyboardButton makeButtonAboveQuitButton();
 
@@ -64,7 +67,6 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	 * @return Make it however you like (return null if you don't want this)
 	 */
 	protected abstract KeyboardButton makeQuitButton();
-
 
 	/**
 	 * @return Make it however you like, a default will be provided otherwise
@@ -81,7 +83,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	protected OptionsMenu(Supplier<KeyboardButton> makeWindowModeSelectBox, int bottomPadding) {
 		super(true);
 		this.makeWindowModeSelectBox = makeWindowModeSelectBox;
-		this.platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
+		platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
 		setBounds(0, 0, GameInfo.getWidth(), GameInfo.getHeight());
 		defaults().padBottom(bottomPadding);
 	}
@@ -127,17 +129,17 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 		menuButtons.addAll(makeMiddleButtons());
 
-		KeyboardButton reportBugButton = makeReportBugButton();
-		if (reportBugButton != null) {
-			menuButtons.add(reportBugButton);					
-		}
-
-		KeyboardButton controlsButton = makeControlsButton();
-		menuButtons.add(controlsButton);					
-
-		// Window mode select box
-		KeyboardButton windowModeSelectBox = makeWindowModeSelectBox.get();
-		menuButtons.add(windowModeSelectBox);
+//		KeyboardButton reportBugButton = makeReportBugButton();
+//		if (reportBugButton != null) {
+//			menuButtons.add(reportBugButton);
+//		}
+//
+//		KeyboardButton controlsButton = makeControlsButton();
+//		menuButtons.add(controlsButton);
+//
+//		// Window mode select box
+//		KeyboardButton windowModeSelectBox = makeWindowModeSelectBox.get();
+//		menuButtons.add(windowModeSelectBox);
 
 		KeyboardButton optionalButtonAboveQuit = makeButtonAboveQuitButton();
 		menuButtons.add(optionalButtonAboveQuit);
@@ -148,7 +150,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 
 		// Back button
 		KeyboardButton backButton = makeBackButton();
-		
+
 		menuButtons.add(UserInterfaceFactory.getSpacer());
 
 		menuButtons.removeIf(Objects::isNull);
@@ -171,7 +173,7 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 	public void actWhilePaused(float delta) {
 		act(delta);
 	}
-	
+
 	@Override
 	public boolean isGamePausedWhileThisIsInFocus() {
 		return true;
@@ -217,4 +219,3 @@ public abstract class OptionsMenu extends PopUpMenu implements DoesNotPause {
 		}
 	}
 }
-

@@ -8,12 +8,10 @@ import com.darzalgames.libgdxtools.ui.input.keyboard.button.UserInterfaceFactory
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class StageWithBackground extends KeyboardStage {
-	private Image background;
+	private final Image background;
 
 	/**
 	 * Creates a stage that will ensure that the supplied background texture is always present
-	 * @param viewport
-	 * @param backgroundTex
 	 */
 	public StageWithBackground(final Viewport viewport, Texture backgroundTex, InputStrategyManager inputStrategyManager) {
 		super(viewport, inputStrategyManager);

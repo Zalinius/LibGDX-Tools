@@ -11,11 +11,11 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategyManager;
 
 public class KeyboardCheckbox extends KeyboardButton {
-	
+
 	private final CheckBox box;
 	private final String uncheckedLabel;
 	private final String checkedLabel;
-	
+
 	protected KeyboardCheckbox(TextButton textButton, String uncheckedLabel, String checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, InputStrategyManager inputStrategyManager, Runnable soundInteractListener) {
 		super(textButton, Runnables.nullRunnable(), inputStrategyManager, soundInteractListener);
 		this.uncheckedLabel = uncheckedLabel;
@@ -36,10 +36,9 @@ public class KeyboardCheckbox extends KeyboardButton {
 			}
 		});
 	}
-	
+
 	/**
 	 * To be used when setting up a menu: this sets the box as checked (or not) without firing an interaction event
-	 * @param shouldBeChecked
 	 */
 	public void initializeAsChecked(boolean shouldBeChecked) {
 		box.setProgrammaticChangeEvents(false);

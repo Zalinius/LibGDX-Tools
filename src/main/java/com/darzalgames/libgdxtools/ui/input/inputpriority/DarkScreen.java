@@ -10,6 +10,7 @@ import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
+import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 
 /**
  * The dark transparent screen which goes behind popups to "focus" them, and dismiss them when clicked
@@ -18,7 +19,6 @@ class DarkScreen extends Image implements DarkScreenBehindPopUp {
 
 	public DarkScreen(Runnable onClick) {
 		super(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), 1, 1));
-
 		addListener(new InputListener() {
 			@Override
 			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer, final int button) {
@@ -43,9 +43,12 @@ class DarkScreen extends Image implements DarkScreenBehindPopUp {
 		int actorIndex = actorPopup.getZIndex();
 		setZIndex(actorIndex);
 		actorPopup.setZIndex(actorIndex + 1);
-		// There used to be a 1 second delay here before setting the dark screen touchable, I'm not sure why.
-		setTouchable(isTouchable ? Touchable.enabled : Touchable.disabled);
 		addAction(Actions.fadeIn(0.25f, Interpolation.circle));
+
+		setTouchable(Touchable.disabled);
+		if (isTouchable) {
+			addAction(Actions.delay(PopUpMenu.SLIDE_DURATION, Actions.touchable(Touchable.enabled)));
+		}
 	}
 
 	@Override

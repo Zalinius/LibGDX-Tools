@@ -19,7 +19,6 @@ class DarkScreen extends Image implements DarkScreenBehindPopUp {
 
 	public DarkScreen(Runnable onClick) {
 		super(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), 1, 1));
-		setTouchable(Touchable.disabled);
 		addListener(new InputListener() {
 			@Override
 			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer, final int button) {
@@ -44,6 +43,7 @@ class DarkScreen extends Image implements DarkScreenBehindPopUp {
 		int actorIndex = actorPopup.getZIndex();
 		setZIndex(actorIndex);
 		actorPopup.setZIndex(actorIndex + 1);
+		setTouchable(Touchable.disabled);
 		addAction(
 				Actions.sequence(
 						Actions.parallel(
@@ -64,7 +64,6 @@ class DarkScreen extends Image implements DarkScreenBehindPopUp {
 						Actions.removeActor(this)
 				)
 		);
-		setTouchable(Touchable.disabled);
 	}
 
 	@Override

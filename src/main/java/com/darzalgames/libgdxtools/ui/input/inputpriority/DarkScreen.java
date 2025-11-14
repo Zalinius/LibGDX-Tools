@@ -43,16 +43,12 @@ class DarkScreen extends Image implements DarkScreenBehindPopUp {
 		int actorIndex = actorPopup.getZIndex();
 		setZIndex(actorIndex);
 		actorPopup.setZIndex(actorIndex + 1);
+		addAction(Actions.fadeIn(0.25f, Interpolation.circle));
+
 		setTouchable(Touchable.disabled);
-		addAction(
-				Actions.sequence(
-						Actions.parallel(
-								Actions.fadeIn(0.25f, Interpolation.circle),
-								Actions.delay(PopUpMenu.SLIDE_DURATION)
-						),
-						Actions.touchable(isTouchable ? Touchable.enabled : Touchable.disabled)
-				)
-		);
+		if (isTouchable) {
+			addAction(Actions.delay(PopUpMenu.SLIDE_DURATION, Actions.touchable(Touchable.enabled)));
+		}
 	}
 
 	@Override

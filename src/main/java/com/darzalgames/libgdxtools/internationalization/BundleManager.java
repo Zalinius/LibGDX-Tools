@@ -21,12 +21,12 @@ public class BundleManager {
 	private Consumer<String> missingKeyOutputReporter;
 
 	/**
-	 * @param bundleFileHandles   An ordered list of the bundles to be checked, first to last ("base" should be the final entry)
-	 * @param supportedLocales    The Locales which the game supports
-	 * @param usesLanguageFolders whether or not to look for each file within a language folder, e.g. "i18n/fr/base.properties"
+	 * @param bundleFileHandles An ordered list of the bundles to be checked, first to last ("base" should be the final entry)
+	 * @param supportedLocales  The Locales which the game supports
+	 * @param usesLocaleFolders whether or not to look for each file within a locale folder, e.g. "i18n/fr/base.properties"
 	 */
-	public BundleManager(List<FileHandle> bundleFileHandles, List<Locale> supportedLocales, boolean usesLanguageFolders) {
-		allLocaleBundles = makeBundles(bundleFileHandles, supportedLocales, usesLanguageFolders);
+	public BundleManager(List<FileHandle> bundleFileHandles, List<Locale> supportedLocales, boolean usesLocaleFolders) {
+		allLocaleBundles = makeBundles(bundleFileHandles, supportedLocales, usesLocaleFolders);
 		displayNames = findDisplayNames();
 
 		if (Gdx.app != null) {
@@ -38,14 +38,14 @@ public class BundleManager {
 		locale = Locale.ROOT;
 	}
 
-	private Map<Locale, List<I18NBundle>> makeBundles(List<FileHandle> bundleFileHandles, List<Locale> supportedLocales, boolean usesLanguageFolders) {
+	private Map<Locale, List<I18NBundle>> makeBundles(List<FileHandle> bundleFileHandles, List<Locale> supportedLocales, boolean usesLocaleFolders) {
 		Map<Locale, List<I18NBundle>> bundles = new HashMap<>();
 		for (Locale current : supportedLocales) {
 			List<I18NBundle> localeBundleList = new ArrayList<>();
 			for (FileHandle file : bundleFileHandles) {
 				FileHandle toLoad = file;
-				if (usesLanguageFolders) {
-					toLoad = getFileHandleInLanguageFolder(file, current);
+				if (usesLocaleFolders) {
+					toLoad = getFileHandleInLocaleFolder(file, current);
 				}
 				localeBundleList.add(I18NBundle.createBundle(toLoad, current));
 			}
@@ -54,7 +54,7 @@ public class BundleManager {
 		return bundles;
 	}
 
-	private FileHandle getFileHandleInLanguageFolder(FileHandle originalFileHandle, Locale currentLocale) {
+	private FileHandle getFileHandleInLocaleFolder(FileHandle originalFileHandle, Locale currentLocale) {
 		String localeFolder = TextSupplier.getFormattedLocaleForSave(currentLocale);
 		if (currentLocale.equals(Locale.ROOT)) {
 			localeFolder = "en";
@@ -67,7 +67,7 @@ public class BundleManager {
 	private BiMap<String, Locale> findDisplayNames() {
 		BiMap<String, Locale> map = new BiMap<>();
 		allLocaleBundles.forEach((loc, bundleList) -> {
-			String displayname = bundleList.getLast().format("language_display_name");
+			String displayname = bundleList.getLast().format("locale_display_name");
 			map.putPair(displayname, loc);
 		});
 		return map;

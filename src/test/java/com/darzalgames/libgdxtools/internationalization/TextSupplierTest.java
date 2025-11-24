@@ -27,7 +27,7 @@ class TextSupplierTest {
 	@Test
 	void getLine_withOnlyBaseBundle_returnsTheLocalizedKey() {
 		makeTextSupplier();
-		TextSupplier.useLanguage("");
+		TextSupplier.uselocale("");
 
 		String result = TextSupplier.getLine(key);
 
@@ -37,7 +37,7 @@ class TextSupplierTest {
 	@Test
 	void getLine_withMissingKey_returnsTheMissingKeyText() {
 		makeTextSupplier();
-		TextSupplier.useLanguage("");
+		TextSupplier.uselocale("");
 
 		String result = TextSupplier.getLine("non-existent key");
 
@@ -48,9 +48,9 @@ class TextSupplierTest {
 	void getLine_withBlankKey_inEnAndFr_returnsEmptyString() {
 		makeTextSupplier();
 
-		TextSupplier.useLanguage("");
+		TextSupplier.uselocale("");
 		String englishResult = TextSupplier.getLine("");
-		TextSupplier.useLanguage("fr");
+		TextSupplier.uselocale("fr");
 		String frenchResult = TextSupplier.getLine("");
 
 		assertEquals("", englishResult);
@@ -60,7 +60,7 @@ class TextSupplierTest {
 	@Test
 	void getLine_withMissingKey_inFrench_returnsTheMissingKeyText() {
 		makeTextSupplier();
-		TextSupplier.useLanguage("fr");
+		TextSupplier.uselocale("fr");
 
 		String result = TextSupplier.getLine("non-existent clé");
 
@@ -70,7 +70,7 @@ class TextSupplierTest {
 	@Test
 	void getLine_withTopAndBaseBundle_returnsTheLocalizedKey() {
 		makeTextSupplierWith2Layers();
-		TextSupplier.useLanguage("");
+		TextSupplier.uselocale("");
 
 		String result = TextSupplier.getLine(key);
 
@@ -80,16 +80,16 @@ class TextSupplierTest {
 	@Test
 	void getLine_withMissingKeyAndThrowsExceptionsOn_throwsException() {
 		makeTextSupplierWith2Layers();
-		TextSupplier.useLanguage("");
+		TextSupplier.uselocale("");
 		TextSupplier.setThrowExceptions(true);
 
 		assertThrows(MissingResourceException.class, () -> TextSupplier.getLine("non-existent key"));
 	}
 
 	@Test
-	void getAllDisplayNames_withFrAndEn_containsExpectedLanguageNameString() {
+	void getAllDisplayNames_withFrAndEn_containsExpectedlocaleNameString() {
 		makeTextSupplierWith2Layers();
-		TextSupplier.useLanguage("");
+		TextSupplier.uselocale("");
 
 		List<Supplier<String>> result = TextSupplier.getAllDisplayNames();
 		List<String> names = result.stream().map(Supplier::get).toList();
@@ -101,7 +101,7 @@ class TextSupplierTest {
 	@Test
 	void getLine_withFrenchBaseBundle_returnsTheLocalizedKey() {
 		makeTextSupplier();
-		TextSupplier.useLanguage("fr");
+		TextSupplier.uselocale("fr");
 
 		String result = TextSupplier.getLine(key);
 
@@ -111,7 +111,7 @@ class TextSupplierTest {
 	@Test
 	void getLine_withFrenchTopAndBaseBundle_returnsTheLocalizedKey() {
 		makeTextSupplierWith2Layers();
-		TextSupplier.useLanguage("fr");
+		TextSupplier.uselocale("fr");
 
 		String result = TextSupplier.getLine(key);
 

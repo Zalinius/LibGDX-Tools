@@ -45,6 +45,19 @@ class TextSupplierTest {
 	}
 
 	@Test
+	void getLine_withBlankKey_inEnAndFr_returnsEmptyString() {
+		makeTextSupplier();
+
+		TextSupplier.useLanguage("");
+		String englishResult = TextSupplier.getLine("");
+		TextSupplier.useLanguage("fr");
+		String frenchResult = TextSupplier.getLine("");
+
+		assertEquals("", englishResult);
+		assertEquals("", frenchResult);
+	}
+
+	@Test
 	void getLine_withMissingKey_inFrench_returnsTheMissingKeyText() {
 		makeTextSupplier();
 		TextSupplier.useLanguage("fr");

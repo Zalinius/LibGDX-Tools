@@ -61,6 +61,11 @@ public class BundleManager {
 			return key;
 		}
 
+		if (key.isBlank()) {
+			// Makes NullSupplier UI elements work
+			return "";
+		}
+
 		for (Iterator<I18NBundle> iterator = currentBundle.iterator(); iterator.hasNext();) {
 			I18NBundle bundle = iterator.next();
 			try {

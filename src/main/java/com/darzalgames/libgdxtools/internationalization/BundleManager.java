@@ -25,34 +25,60 @@ public class BundleManager {
 	 * @param supportedLocales     The Locales which the game supports
 	 */
 	public BundleManager(FileHandle baseBundleFileHandle, List<Locale> supportedLocales) {
-		this(List.of(baseBundleFileHandle), supportedLocales);
+		this(List.of(baseBundleFileHandle), supportedLocales, false);
 	}
 
 	/**
-	 * @param bundleFileHandles An ordered list of the bundles to be checked, first to last ("base" should be the final entry)
-	 * @param supportedLocales  The Locales which the game supports
+	 * @param bundleFileHandles   An ordered list of the bundles to be checked, first to last ("base" should be the final entry)
+	 * @param supportedLocales    The Locales which the game supports
+	 * @param usesLanguageFolders whether or not to look for each file within a language folder, e.g. "i18n/fr/base.properties"
 	 */
-	public BundleManager(List<FileHandle> bundleFileHandles, List<Locale> supportedLocales) {
-		displayNames = new BiMap<>();
-		allLocaleBundles = new HashMap<>();
-		for (Locale current : supportedLocales) {
-			I18NBundle tempBundle = I18NBundle.createBundle(bundleFileHandles.getLast(), current);
-			String displayname = tempBundle.format("language_display_name");
-			displayNames.putPair(displayname, current);
+	public BundleManager(List<FileHandle> bundleFileHandles, List<Locale> supportedLocales, boolean usesLanguageFolders) {
+		allLocaleBundles = makeBundles(bundleFileHandles, supportedLocales, usesLanguageFolders);
+		displayNames = findDisplayNames();
 
-			List<I18NBundle> localeBundleList = new ArrayList<>();
-			for (FileHandle file : bundleFileHandles) {
-				localeBundleList.add(I18NBundle.createBundle(file, current));
-			}
-			allLocaleBundles.put(current, localeBundleList);
-		}
-
-		missingKeyOutputReporter = Consumers.nullConsumer(); // otherwise tests crash...
 		if (Gdx.app != null) {
 			missingKeyOutputReporter = key -> Gdx.app.error("TextSupplier", "Key " + key + " really isn't found anywhere!");
+		} else {
+			missingKeyOutputReporter = Consumers.nullConsumer(); // otherwise tests crash...
 		}
 
 		locale = Locale.ROOT;
+	}
+
+	private Map<Locale, List<I18NBundle>> makeBundles(List<FileHandle> bundleFileHandles, List<Locale> supportedLocales, boolean usesLanguageFolders) {
+		Map<Locale, List<I18NBundle>> bundles = new HashMap<>();
+		for (Locale current : supportedLocales) {
+			List<I18NBundle> localeBundleList = new ArrayList<>();
+			for (FileHandle file : bundleFileHandles) {
+				FileHandle toLoad = file;
+				if (usesLanguageFolders) {
+					toLoad = getFileHandleInLanguageFolder(file, current);
+				}
+				localeBundleList.add(I18NBundle.createBundle(toLoad, current));
+			}
+			bundles.put(current, localeBundleList);
+		}
+		return bundles;
+	}
+
+	private FileHandle getFileHandleInLanguageFolder(FileHandle originalFileHandle, Locale currentLocale) {
+		String localeFolder = TextSupplier.getFormattedLocaleForSave(currentLocale);
+		if (currentLocale.equals(Locale.ROOT)) {
+			localeFolder = "en";
+		}
+		// Sonar warns against using the hardcoded "/" since "path literals are not always portable across operating systems", but I'm pretty sure Gdx.files.internal makes this fine
+		String folderFilePath = originalFileHandle.path().replace(originalFileHandle.name(), localeFolder + "/" + originalFileHandle.name());
+		return Gdx.files.internal(folderFilePath);
+	}
+
+	private BiMap<String, Locale> findDisplayNames() {
+		BiMap<String, Locale> map = new BiMap<>();
+		allLocaleBundles.forEach((loc, bundleList) -> {
+			String displayname = bundleList.getLast().format("language_display_name");
+			map.putPair(displayname, loc);
+		});
+		return map;
 	}
 
 	String getLine(String key, Object... args) {

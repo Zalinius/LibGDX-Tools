@@ -145,7 +145,8 @@ class TextSupplierTest {
 								new FileHandle("./src/test/resources/com/darzalgames/libgdxtools/internationalization/Top"),
 								new FileHandle("./src/test/resources/com/darzalgames/libgdxtools/internationalization/Base")
 						),
-						getSupportedLocales()
+						getSupportedLocales(),
+						false
 				)
 		);
 	}

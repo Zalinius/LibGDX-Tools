@@ -132,8 +132,8 @@ class TextSupplierTest {
 	private static void makeTextSupplier() {
 		TextSupplier.initialize(
 				new BundleManager(
-						new FileHandle("./src/test/resources/com/darzalgames/libgdxtools/internationalization/Base"),
-						getSupportedLocales()
+						List.of(new FileHandle("./src/test/resources/com/darzalgames/libgdxtools/internationalization/Base")),
+						getSupportedLocales(), false
 				)
 		);
 	}
@@ -145,8 +145,7 @@ class TextSupplierTest {
 								new FileHandle("./src/test/resources/com/darzalgames/libgdxtools/internationalization/Top"),
 								new FileHandle("./src/test/resources/com/darzalgames/libgdxtools/internationalization/Base")
 						),
-						getSupportedLocales(),
-						false
+						getSupportedLocales(), false
 				)
 		);
 	}

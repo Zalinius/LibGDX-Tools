@@ -21,14 +21,6 @@ public class BundleManager {
 	private Consumer<String> missingKeyOutputReporter;
 
 	/**
-	 * @param baseBundleFileHandle The ONLY bundle in the game, e.g. "base" or "GameName"
-	 * @param supportedLocales     The Locales which the game supports
-	 */
-	public BundleManager(FileHandle baseBundleFileHandle, List<Locale> supportedLocales) {
-		this(List.of(baseBundleFileHandle), supportedLocales, false);
-	}
-
-	/**
 	 * @param bundleFileHandles   An ordered list of the bundles to be checked, first to last ("base" should be the final entry)
 	 * @param supportedLocales    The Locales which the game supports
 	 * @param usesLanguageFolders whether or not to look for each file within a language folder, e.g. "i18n/fr/base.properties"

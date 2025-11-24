@@ -76,7 +76,7 @@ public class UniversalSelectBox extends UniversalTextButton {
 
 	/**
 	 * Select a button based on the string of the entry, generally used after a choice has been made
-	 * or when first setting up the select box to make sure that the currently used value is highlighted (e.g. current language/font/window setting)
+	 * or when first setting up the select box to make sure that the currently used value is highlighted (e.g. current locale/font/window setting)
 	 * @param entryText the selected button's text
 	 */
 	public void setSelected(String entryText) {

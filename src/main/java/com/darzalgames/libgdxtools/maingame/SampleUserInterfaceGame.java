@@ -95,7 +95,7 @@ public class SampleUserInterfaceGame extends MainGame {
 			@Override
 			protected void addGameSpecificHighlightListener(UniversalDoodad button) { /* do nothing */ }
 		};
-		TextSupplier.initialize(new BundleManager(null, new ArrayList<>()));
+		TextSupplier.initialize(new BundleManager(List.of(), new ArrayList<>(), false));
 		return factory;
 	}
 

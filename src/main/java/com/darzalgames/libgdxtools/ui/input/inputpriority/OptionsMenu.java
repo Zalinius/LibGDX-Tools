@@ -43,7 +43,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	protected abstract UniversalButton makeReportBugButton();
 
 	/**
-	 * @return A list of any game-specific options buttons (e.g. language, text speed, etc)
+	 * @return A list of any game-specific options buttons (e.g. locale, text speed, etc)
 	 */
 	protected abstract Collection<VisibleInputConsumer> makeMiddleButtons();
 
@@ -85,8 +85,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	}
 
 	/**
-	 * To be used by child classes to have buttons in the menu hide/show it. E.g. pressing a button to change the
-	 * language does toggleScreenVisibility(false), refreshes the menu, then does toggleScreenVisibility(true).
+	 * To be used by child classes to have buttons in the menu hide/show it.
 	 * @param show
 	 */
 	protected void toggleScreenVisibility(boolean show) {

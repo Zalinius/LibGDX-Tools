@@ -1,82 +1,89 @@
 package com.darzalgames.libgdxtools.internationalization;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.function.UnaryOperator;
+import java.util.*;
+import java.util.function.Consumer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.darzalgames.darzalcommon.data.BiMap;
+import com.darzalgames.darzalcommon.functional.Consumers;
 
 public class BundleManager {
 
-	private I18NBundle baseBundle;
-	protected I18NBundle topBundle;
+	private List<I18NBundle> currentBundle;
+	private final Map<Locale, List<I18NBundle>> allLocaleBundles;
 
 	protected boolean throwExceptions;
 	protected Locale locale;
 	protected final BiMap<String, Locale> displayNames;
 
-	private final FileHandle baseBundleFileHandle;
-	private final UnaryOperator<String> modifierStrategy;
+	private Consumer<String> missingKeyOutputReporter;
 
+	/**
+	 * @param baseBundleFileHandle The ONLY bundle in the game, e.g. "base" or "GameName"
+	 * @param supportedLocales     The Locales which the game supports
+	 */
 	public BundleManager(FileHandle baseBundleFileHandle, List<Locale> supportedLocales) {
-		this(baseBundleFileHandle, supportedLocales, String::toString);
-	}
-
-	public BundleManager(FileHandle baseBundleFileHandle, List<Locale> supportedLocales, UnaryOperator<String> modifierStrategy) {
-		this.baseBundleFileHandle = baseBundleFileHandle;
-		this.modifierStrategy = modifierStrategy;
-
-		displayNames = new BiMap<>();
-		for (Locale current : supportedLocales) {
-			I18NBundle tempBundle = I18NBundle.createBundle(baseBundleFileHandle, current);
-			String displayname = tempBundle.format("language_display_name");
-			displayNames.putPair(displayname, current);
-		}
+		this(List.of(baseBundleFileHandle), supportedLocales);
 	}
 
 	/**
-	 * This will first check the more transitive top bundle (e.g. a scenario in Quest Giver), then the base bundle (text used all the time in the game, such as menus).
-	 * If there is no bundle, the supplied key is returned unchanged.
-	 * @param key  The localization key, must be an exact match to a key in the bundle file
-	 * @param args Any optional arguments to supply to the localized sentence, e.g. character names, a number for pluralization, etc
-	 * @return The localized line of text
+	 * @param bundleFileHandles An ordered list of the bundles to be checked, first to last ("base" should be the final entry)
+	 * @param supportedLocales  The Locales which the game supports
 	 */
-	public String getLine(String key, Object... args) {
-		try {
-			if (topBundle != null) {
-				return modifierStrategy.apply(topBundle.format(key, args));
+	public BundleManager(List<FileHandle> bundleFileHandles, List<Locale> supportedLocales) {
+		displayNames = new BiMap<>();
+		allLocaleBundles = new HashMap<>();
+		for (Locale current : supportedLocales) {
+			I18NBundle tempBundle = I18NBundle.createBundle(bundleFileHandles.getLast(), current);
+			String displayname = tempBundle.format("language_display_name");
+			displayNames.putPair(displayname, current);
+
+			List<I18NBundle> localeBundleList = new ArrayList<>();
+			for (FileHandle file : bundleFileHandles) {
+				localeBundleList.add(I18NBundle.createBundle(file, current));
 			}
-		} catch (MissingResourceException e) {
-			// This will catch any keys that belong in the baseBundle, or any undefined keys
+			allLocaleBundles.put(current, localeBundleList);
 		}
 
-		try {
-			return modifierStrategy.apply(baseBundle.format(key, args));
-		} catch (NullPointerException e) {
+		missingKeyOutputReporter = Consumers.nullConsumer(); // otherwise tests crash...
+		if (Gdx.app != null) {
+			missingKeyOutputReporter = key -> Gdx.app.error("TextSupplier", "Key " + key + " really isn't found anywhere!");
+		}
+
+		locale = Locale.ROOT;
+	}
+
+	String getLine(String key, Object... args) {
+		if (currentBundle == null) {
 			// A game that doesn't (yet?) have any bundles just returns the key
-			if (throwExceptions) {
-				throw e;
-			} else {
-				return modifierStrategy.apply(key);
-			}
-		} catch (MissingResourceException e) {
-			Gdx.app.error("TextSupplier", "Key " + key + " really isn't found anywhere!");
-			if (throwExceptions) {
-				throw e;
-			} else {
-				return modifierStrategy.apply(baseBundle.format("missing_text", key));
+			return key;
+		}
+
+		for (Iterator<I18NBundle> iterator = currentBundle.iterator(); iterator.hasNext();) {
+			I18NBundle bundle = iterator.next();
+			try {
+				return bundle.format(key, args);
+			} catch (MissingResourceException e) {
+				// This will catch any keys that are in a later file, or any undefined keys
+				boolean isOnFinalBundle = !iterator.hasNext();
+				if (isOnFinalBundle) {
+					missingKeyOutputReporter.accept(key);
+					if (throwExceptions) {
+						throw e;
+					} else {
+						return bundle.format("missing_text", key);
+					}
+				}
 			}
 		}
+
+		// should never reach this point...
+		throw new IllegalStateException("Somehow " + key + " slipped through the i18n system...");
 	}
 
 	void useLocale() {
-		if (locale == null) {
-			locale = Locale.ROOT;
-		}
-		baseBundle = I18NBundle.createBundle(baseBundleFileHandle, locale);
+		currentBundle = allLocaleBundles.get(locale);
 	}
 }

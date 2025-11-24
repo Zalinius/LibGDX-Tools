@@ -4,8 +4,6 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.I18NBundle;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager;
@@ -21,7 +19,7 @@ public abstract class TextSupplier {
 	}
 
 	/**
-	 * This will first check the more transitive top bundle (e.g. a scenario in Quest Giver), then the base bundle (text used all the time in the game, such as menus).
+	 * This will check each bundle in the order they were provided, returning the localized line if the key is found in a bundle.
 	 * If there is no bundle, the supplied key is returned unchanged.
 	 * @param key  The localization key, must be an exact match to a key in the bundle file
 	 * @param args Any optional arguments to supply to the localized sentence, e.g. character names, a number for pluralization, etc
@@ -73,14 +71,6 @@ public abstract class TextSupplier {
 		}
 
 		bundleManager.useLocale();
-	}
-
-	/**
-	 * The "top bundle" to be used: this is a temporary bundle meant to be changed as you go to different parts of a game (e.g. different scenarios in Quest Giver)
-	 * @param fileHandle The file handle from Assets
-	 */
-	public static void useTopBundle(FileHandle fileHandle) {
-		bundleManager.topBundle = I18NBundle.createBundle(fileHandle, bundleManager.locale);
 	}
 
 	/**

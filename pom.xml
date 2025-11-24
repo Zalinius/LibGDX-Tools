@@ -5,7 +5,7 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.7.22</version>
+	<version>0.7.23</version>
 	<name>libGDX Tools</name>
 
 	<properties>

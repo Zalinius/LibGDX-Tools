@@ -18,14 +18,19 @@ public class UniversalTextButton extends UniversalButton {
 		super(buttonRunnable, inputStrategySwitcher, soundInteractListener, buttonStyle);
 		this.label = label;
 		label.setTouchable(Touchable.disabled);
-		add(label);
+		add(label).growX();
 	}
 
 	@Override
 	public void resizeUI() {
 		label.resizeUI();
 		getCell(label).pad(UserInterfaceSizer.getMinimumPercentage(0.0025f));
-		super.resizeUI();
+		invalidateHierarchy();
+		if (label.wrap) {
+			setHeight(label.getHeight());
+		} else {
+			super.resizeUI();
+		}
 	}
 
 	@Override

@@ -138,11 +138,12 @@ public abstract class UserInterfaceFactory {
 	}
 
 	public UniversalTextButton makeTextButton(Supplier<String> textSupplier, final Runnable runnable, Input inputForGlyph) {
-		return makeTextButtonWithStyle(textSupplier, runnable, skinManager.getDefaultButtonStyle(), skinManager.getDefaultLableStyle(), inputForGlyph);
+		return makeTextButtonWithStyle(textSupplier, runnable, skinManager.getDefaultButtonStyle(), skinManager.getDefaultLableStyle(), inputForGlyph, false);
 	}
 
-	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, ButtonStyle style, LabelStyle labelStyle, Input inputForGlyph) {
+	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, ButtonStyle style, LabelStyle labelStyle, Input inputForGlyph, boolean wrap) {
 		UniversalLabel label = new UniversalLabel(textSupplier, labelStyle);
+		label.setWrap(wrap);
 		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, soundInteractRunnable, style);
 		addGameSpecificHighlightListener(button);
 		if (inputForGlyph != Input.NONE) {
@@ -222,7 +223,7 @@ public abstract class UserInterfaceFactory {
 	}
 
 	public UniversalButton makeBackButton(Runnable runnable, Supplier<String> customMessage) {
-		return makeTextButtonWithStyle(customMessage, runnable, skinManager.getBackButtonStyle(), skinManager.getDefaultLableStyle(), Input.BACK);
+		return makeTextButtonWithStyle(customMessage, runnable, skinManager.getBackButtonStyle(), skinManager.getDefaultLableStyle(), Input.BACK, false);
 	}
 
 	/**

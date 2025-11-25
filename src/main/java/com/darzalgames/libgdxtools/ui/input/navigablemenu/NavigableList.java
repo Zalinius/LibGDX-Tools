@@ -26,6 +26,7 @@ public class NavigableList implements VisibleInputConsumer {
 
 	private final MenuOrientation menuOrientation;
 	private final Supplier<Float> spacing;
+	private boolean shouldGrowX;
 
 	private boolean pressButtonOnEntryChanged;
 	private Alignment entryAlignment;
@@ -44,6 +45,7 @@ public class NavigableList implements VisibleInputConsumer {
 		entryAlignment = Alignment.CENTER;
 		tableAlignment = Alignment.TOP_LEFT;
 		spacing = menuOrientation.getSpacingPolicy();
+		setShouldGrowX(false);
 		setMenuLoops(true);
 
 		setRefreshPageRunnable(this::defaultRefreshPage);
@@ -114,6 +116,9 @@ public class NavigableList implements VisibleInputConsumer {
 		table.clearChildren();
 		table.clear();
 		table.defaults().expandX().spaceTop(spacing.get()).spaceBottom(spacing.get()).align(entryAlignment.getAlignment());
+		if (shouldGrowX) {
+			table.defaults().growX();
+		}
 
 		if (!isVertical()) {
 			table.defaults().expandY();
@@ -269,6 +274,10 @@ public class NavigableList implements VisibleInputConsumer {
 	 */
 	public void setMenuLoops(boolean menuLoops) {
 		this.menuLoops = menuLoops;
+	}
+
+	public void setShouldGrowX(boolean shouldGrowX) {
+		this.shouldGrowX = shouldGrowX;
 	}
 
 	private boolean isVertical() {

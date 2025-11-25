@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.TemporaryStyler;
 import com.github.tommyettinger.textra.Styles.LabelStyle;
+import com.github.tommyettinger.textra.TypingConfig;
 import com.github.tommyettinger.textra.TypingLabel;
 
 public class UniversalLabel extends TypingLabel {
@@ -18,6 +19,7 @@ public class UniversalLabel extends TypingLabel {
 	protected Supplier<String> textSupplier;
 	private float bounceScaling;
 	private Action currentBounceAction;
+	private boolean shouldSkipToEnd;
 
 	public UniversalLabel(Supplier<String> textSupplier, LabelStyle typingLabelStyle) {
 		super(textSupplier.get(), typingLabelStyle);
@@ -25,6 +27,7 @@ public class UniversalLabel extends TypingLabel {
 		bounceScaling = 1;
 		setTextSupplier(textSupplier);
 		setWrap(false);
+		setShouldSkipToEnd(true);
 		setAlignment(Alignment.CENTER);
 	}
 
@@ -34,6 +37,10 @@ public class UniversalLabel extends TypingLabel {
 
 	public boolean isBlank() {
 		return storedText.isBlank();
+	}
+
+	public void setShouldSkipToEnd(boolean shouldSkipToEnd) {
+		this.shouldSkipToEnd = shouldSkipToEnd;
 	}
 
 	@Override
@@ -49,14 +56,19 @@ public class UniversalLabel extends TypingLabel {
 		setFont(typingLabelStyle.font); // updates us to the resized font size
 		String currentText = getOriginalText().toString();
 		String newText = "[%" + bounceScaling * 100 + "]" + textSupplier.get();
-		if (!currentText.equals(newText)) {
+		if (!currentText.equals(newText) && shouldSkipToEnd) {
 			// only update when there's a change: this allows us to use the fancy Textra animations
 			setSize(0, 0); // the documentation suggests doing this before calling restart()
 			restart(newText);
 		}
 
 		invalidateHierarchy();
-		skipToTheEnd(); // Only Textra TypingLabel do the special effects, so we skip to the end right away
+
+		if (shouldSkipToEnd) {
+			skipToTheEnd(); // Only Textra TypingLabel do the special effects, so we skip to the end right away
+		} else {
+			setTextSpeed(TypingConfig.DEFAULT_SPEED_PER_CHAR / 3f);
+		}
 	}
 
 	public void setAlignment(Alignment alignment) {

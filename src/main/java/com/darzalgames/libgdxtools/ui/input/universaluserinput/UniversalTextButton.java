@@ -18,7 +18,7 @@ public class UniversalTextButton extends UniversalButton {
 		super(buttonRunnable, inputStrategySwitcher, soundInteractListener, buttonStyle);
 		this.label = label;
 		label.setTouchable(Touchable.disabled);
-		add(label);
+		add(label).growX();
 	}
 
 	@Override

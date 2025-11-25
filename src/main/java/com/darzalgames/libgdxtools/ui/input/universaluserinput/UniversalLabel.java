@@ -60,6 +60,7 @@ public class UniversalLabel extends TypingLabel {
 		}
 
 		if (shouldSkipToEnd) {
+			invalidateHierarchy();
 			skipToTheEnd(); // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		} else {
 			setTextSpeed(TypingConfig.DEFAULT_SPEED_PER_CHAR / 3f);

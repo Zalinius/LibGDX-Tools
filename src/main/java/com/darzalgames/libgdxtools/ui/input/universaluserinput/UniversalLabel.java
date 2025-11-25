@@ -46,9 +46,6 @@ public class UniversalLabel extends TypingLabel {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		resizeUI();
-		if (!wrap) {
-			pack();
-		}
 		super.draw(batch, parentAlpha);
 	}
 
@@ -62,13 +59,19 @@ public class UniversalLabel extends TypingLabel {
 			restart(newText);
 		}
 
-		invalidateHierarchy();
-
 		if (shouldSkipToEnd) {
 			skipToTheEnd(); // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		} else {
 			setTextSpeed(TypingConfig.DEFAULT_SPEED_PER_CHAR / 3f);
 		}
+
+		if (!wrap) {
+			pack();
+		} else {
+			setHeight(getPrefHeight());
+		}
+
+		validate();
 	}
 
 	public void setAlignment(Alignment alignment) {

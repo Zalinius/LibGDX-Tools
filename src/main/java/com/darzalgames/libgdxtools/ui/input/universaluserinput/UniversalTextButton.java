@@ -25,7 +25,12 @@ public class UniversalTextButton extends UniversalButton {
 	public void resizeUI() {
 		label.resizeUI();
 		getCell(label).pad(UserInterfaceSizer.getMinimumPercentage(0.0025f));
-		super.resizeUI();
+		invalidateHierarchy();
+		if (label.wrap) {
+			setHeight(label.getHeight());
+		} else {
+			super.resizeUI();
+		}
 	}
 
 	@Override

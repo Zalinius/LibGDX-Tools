@@ -9,13 +9,13 @@ public class LabelEffectsProcessor {
 
 	private LabelEffectsProcessor() {}
 
-	private static final Pattern regexPattern = Pattern.compile("\\[-(.*?)\\]");
-	private static final Function<MatchResult, String> replacer = matchResult -> "{" + matchResult.group(1) + "}";
+	private static final Pattern REGEX_PATTERN = Pattern.compile("\\[-(.*?)\\]");
+	private static final Function<MatchResult, String> MATCH_REPLACER = matchResult -> "{" + matchResult.group(1) + "}";
 
 	public static String process(String original) {
-		Matcher regexMatcher = regexPattern.matcher(original);
+		Matcher regexMatcher = REGEX_PATTERN.matcher(original);
 
-		return regexMatcher.replaceAll(replacer);
+		return regexMatcher.replaceAll(MATCH_REPLACER);
 	}
 
 }

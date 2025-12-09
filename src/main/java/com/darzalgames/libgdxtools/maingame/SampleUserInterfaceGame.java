@@ -20,11 +20,14 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.assetloading.BlankLoadingScreen;
 import com.darzalgames.libgdxtools.assetloading.LoadingScreen;
+import com.darzalgames.libgdxtools.audio.LibgdxAudioConsumer;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
+import com.darzalgames.libgdxtools.graphics.WindowFocusListener;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.platform.*;
+import com.darzalgames.libgdxtools.preferences.SoundPreference;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
@@ -33,8 +36,7 @@ import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.*;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.ChoicePopUp;
@@ -43,8 +45,14 @@ import com.darzalgames.libgdxtools.ui.input.popup.SimplePopUp;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.*;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
+import com.darzalgames.zalaudiolibrary.amplitude.percussive.ArEnvelope;
+import com.darzalgames.zalaudiolibrary.composing.*;
+import com.darzalgames.zalaudiolibrary.composing.tracks.SequentialTrack;
+import com.darzalgames.zalaudiolibrary.pipeline.AudioActor;
+import com.darzalgames.zalaudiolibrary.pipeline.AudioPipeline;
+import com.darzalgames.zalaudiolibrary.synth.Synth;
 
-public class SampleUserInterfaceGame extends MainGame {
+public class SampleUserInterfaceGame extends MainGame implements WindowFocusListener {
 
 	public static final String POP_UP_STAGE_NAME = "PopUp Stage";
 
@@ -52,10 +60,11 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	public static void main(String[] args) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		SampleUserInterfaceGame sampleUserInterfaceGame = new SampleUserInterfaceGame(Arrays.asList(args));
 		config.setWindowedMode(1280, 720);
 		config.setTitle("Test LibGDXTools UI");
-		config.setWindowListener(makeWindowListener());
-		new Lwjgl3Application(new SampleUserInterfaceGame(Arrays.asList(args)), config);
+		config.setWindowListener(makeWindowListener(sampleUserInterfaceGame));
+		new Lwjgl3Application(sampleUserInterfaceGame, config);
 	}
 
 	public SampleUserInterfaceGame(List<String> args) {
@@ -110,6 +119,29 @@ public class SampleUserInterfaceGame extends MainGame {
 				return true;
 			}
 		};
+	}
+
+	@Override
+	protected AudioPipeline setUpAudio() {
+		AudioPipeline audioPipeline = new AudioPipeline(new LibgdxAudioConsumer(), 0.5f, 0.5f);
+
+		Song sampleSong = new Song("SampleSong", 2) {
+		};
+		SequentialTrack sequentialTrack = new SequentialTrack(sampleSong.getSongName(), "sample track", new Instrument(Synth.sine(), ArEnvelope.linear(0.01f, 0.49f)), 0.75f);
+		sampleSong.addTrack(sequentialTrack);
+		sequentialTrack.addNote(NoteDuration.QUARTER, Pitch.C5);
+		sequentialTrack.addNote(NoteDuration.QUARTER, Pitch.C4);
+		sequentialTrack.addNote(NoteDuration.QUARTER, Pitch.C4);
+		sequentialTrack.addNote(NoteDuration.QUARTER, Pitch.C4);
+		audioPipeline.changeSong(sampleSong);
+		audioPipeline.start();
+
+		return audioPipeline;
+	}
+
+	@Override
+	protected AudioActor makePauseListener(Pause pause) {
+		return (float alpha) -> {};
 	}
 
 	@Override
@@ -191,7 +223,7 @@ public class SampleUserInterfaceGame extends MainGame {
 		UniversalButton quitButton;
 		List<VisibleInputConsumer> menuButtons = new ArrayList<>();
 
-		UniversalSlider basicSlider = GameInfo.getUserInterfaceFactory().getSlider(() -> "Slider with a label", newValue -> {});
+		UniversalSlider basicSlider = GameInfo.getUserInterfaceFactory().getSlider(() -> "Slider with a label (audio)", newValue -> audioPipeline.getVolumeListener().setAllVolumes(newValue));
 		basicSlider.setSliderPosition(0.5f, false);
 		menuButtons.add(basicSlider);
 
@@ -419,17 +451,16 @@ public class SampleUserInterfaceGame extends MainGame {
 
 	}
 
-	private static Lwjgl3WindowListener makeWindowListener() {
+	private static Lwjgl3WindowListener makeWindowListener(SampleUserInterfaceGame mainGame) {
 		return new Lwjgl3WindowListener() {
 			@Override
 			public void focusLost() {
-				// TODO uncomment these once the audio stuff is in this library
-				// QuestGiverGame.music.temporarilyMute();
+				mainGame.focusLost();
 			}
 
 			@Override
 			public void focusGained() {
-				// QuestGiverGame.music.untemporarilyMute();
+				mainGame.focusGained();
 			}
 
 			@Override
@@ -504,6 +535,23 @@ public class SampleUserInterfaceGame extends MainGame {
 	@Override
 	protected LoadingScreen makeLoadingScreen() {
 		return new BlankLoadingScreen();
+	}
+
+	@Override
+	public void focusLost() {
+		audioPipeline.getVolumeListener().setAllVolumes(0f);
+		if (preferenceManager.pause().shouldPauseGameWhenOutOfFocus()) {
+			GamePauser.pause();
+		}
+	}
+
+	@Override
+	public void focusGained() {
+		if (isGameRunning()) {
+			SoundPreference soundPreference = preferenceManager.sound();
+			audioPipeline.getVolumeListener().setMusicVolume(soundPreference.getMusicVolume());
+			audioPipeline.getVolumeListener().setSoundEffectVolume(soundPreference.getSoundEffectVolume());
+		}
 	}
 
 }

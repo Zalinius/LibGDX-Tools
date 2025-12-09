@@ -29,6 +29,8 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.screen.Fader;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
+import com.darzalgames.zalaudiolibrary.pipeline.AudioActor;
+import com.darzalgames.zalaudiolibrary.pipeline.AudioPipeline;
 
 public abstract class MainGame extends ApplicationAdapter implements SharesGameInformation {
 
@@ -46,6 +48,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected WindowResizer windowResizer;
 	protected InputStrategySwitcher inputStrategySwitcher;
 	protected Pause pause;
+	protected AudioPipeline audioPipeline;
 
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
@@ -73,7 +76,11 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	protected abstract Runnable getDrawConsoleRunnable();
 
+	protected abstract AudioPipeline setUpAudio();
+
 	protected abstract OptionsMenu makeOptionsMenu();
+
+	protected abstract AudioActor makeAudioActorPauseListener(Pause pause);
 
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 
@@ -246,7 +253,9 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		UserInterfaceSizer.setStage(mainStage);
 		Fader.initialize(MultipleStage.CURSOR_STAGE_NAME);
 
+		audioPipeline = setUpAudio();
 		pause = new Pause(makeOptionsMenu());
+		audioPipeline.addAudioActor(makeAudioActorPauseListener(pause));
 		multipleStage = new MultipleStage(mainStage, makeGameSpecificStages(), optionsStage, cursorStage, inputHandlerStage, pause);
 	}
 

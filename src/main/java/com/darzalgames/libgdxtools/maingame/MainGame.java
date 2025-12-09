@@ -80,7 +80,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	protected abstract OptionsMenu makeOptionsMenu();
 
-	protected abstract AudioActor makePauseListener(Pause pause);
+	protected abstract AudioActor makeAudioActorPauseListener(Pause pause);
 
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 
@@ -255,7 +255,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 		audioPipeline = setUpAudio();
 		pause = new Pause(makeOptionsMenu());
-		audioPipeline.addAudioActor(makePauseListener(pause));
+		audioPipeline.addAudioActor(makeAudioActorPauseListener(pause));
 		multipleStage = new MultipleStage(mainStage, makeGameSpecificStages(), optionsStage, cursorStage, inputHandlerStage, pause);
 	}
 

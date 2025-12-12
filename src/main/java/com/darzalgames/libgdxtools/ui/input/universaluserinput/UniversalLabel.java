@@ -63,7 +63,7 @@ public class UniversalLabel extends TypingLabel {
 		if (shouldSkipToEnd) {
 			invalidateHierarchy();
 			skipToTheEnd(); // Only Textra TypingLabel do the special effects, so we skip to the end right away
-			act(Float.MIN_VALUE); // Need to call act to skip to the end (even with a miniscule value), otherwise the label flickers for a frame when the text supplier has been changed
+			// act(Float.MIN_VALUE); // Need to call act to skip to the end (even with a miniscule value), otherwise the label flickers for a frame when the text supplier has been changed
 		} else {
 			setTextSpeed(TypingConfig.DEFAULT_SPEED_PER_CHAR / 3f);
 		}

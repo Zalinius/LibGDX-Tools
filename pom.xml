@@ -5,7 +5,7 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.7.27</version>
+	<version>0.7.28</version>
 	<name>libGDX Tools</name>
 
 	<properties>
@@ -139,7 +139,7 @@
 		<dependency>
 		    <groupId>com.github.tommyettinger</groupId>
 		    <artifactId>textratypist</artifactId>
-		    <version>2.2.6</version>
+		    <version>2.2.8</version>
 		</dependency>
 		<!-- Controller Dependendies -->
 		<dependency>

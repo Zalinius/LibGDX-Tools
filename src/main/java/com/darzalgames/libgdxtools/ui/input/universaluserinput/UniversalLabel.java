@@ -2,7 +2,6 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
 import java.util.function.Supplier;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
@@ -34,6 +33,9 @@ public class UniversalLabel extends TypingLabel {
 
 	public void setTextSupplier(Supplier<String> textSupplier) {
 		this.textSupplier = () -> TemporaryStyler.make("[@" + typingLabelStyle.font.name + "]" + LabelEffectsProcessor.process(textSupplier.get()));
+		if (textSupplier.get().isBlank()) {
+			this.textSupplier = () -> ""; // doing this gives the labels the correct height for at least a single line, helping with layout later
+		}
 	}
 
 	public boolean isBlank() {
@@ -45,9 +47,10 @@ public class UniversalLabel extends TypingLabel {
 	}
 
 	@Override
-	public void draw(Batch batch, float parentAlpha) {
+	public void act(float delta) {
+		// resize in act() so that by the time we reach draw(), the parent has the correct layout information for this label
 		resizeUI();
-		super.draw(batch, parentAlpha);
+		super.act(delta);
 	}
 
 	public void resizeUI() {
@@ -61,9 +64,7 @@ public class UniversalLabel extends TypingLabel {
 		}
 
 		if (shouldSkipToEnd) {
-			invalidateHierarchy();
-			skipToTheEnd(); // Only Textra TypingLabel do the special effects, so we skip to the end right away
-			// act(Float.MIN_VALUE); // Need to call act to skip to the end (even with a miniscule value), otherwise the label flickers for a frame when the text supplier has been changed
+			skipToTheEnd(false); // Only Textra TypingLabel do the special effects, so we skip to the end right away
 		} else {
 			setTextSpeed(TypingConfig.DEFAULT_SPEED_PER_CHAR / 3f);
 		}
@@ -73,8 +74,6 @@ public class UniversalLabel extends TypingLabel {
 		} else {
 			setHeight(getPrefHeight());
 		}
-
-		validate();
 	}
 
 	public void setAlignment(Alignment alignment) {

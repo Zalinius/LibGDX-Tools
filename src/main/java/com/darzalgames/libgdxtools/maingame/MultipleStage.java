@@ -4,7 +4,6 @@ import java.util.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
@@ -105,8 +104,7 @@ public final class MultipleStage {
 	}
 
 	private boolean tryToPrintADebugHit(StageLikeRenderable stage) {
-		Vector2 cursor = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-		String hit = stage.nameOfThingAtCursorPosition(cursor.x, cursor.y, true);
+		String hit = stage.nameOfThingAtCursorPosition(Gdx.input.getX(), Gdx.input.getY());
 		boolean hitSomething = hit != null && !hit.isBlank();
 		if (hitSomething) {
 			Gdx.app.log("MultiStage", stage.getName() + ": " + hit);

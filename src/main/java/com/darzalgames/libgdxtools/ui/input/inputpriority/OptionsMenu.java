@@ -29,13 +29,15 @@ public abstract class OptionsMenu extends PopUpMenu {
 	protected UniversalButton optionsButton;
 	private final WindowResizerSelectBox windowModeSelectBox;
 
-	private final String platformName;
+	private final String gameDebugDisplayName;
 
 	protected abstract Alignment getEntryAlignment();
 
 	protected abstract Alignment getMenuAlignment();
 
-	protected abstract String getGameVersion();
+	public final String getGameDebugDisplayName() {
+		return gameDebugDisplayName;
+	}
 
 	/**
 	 * @return A button for players to report bugs (return null if you don't want this)
@@ -68,9 +70,9 @@ public abstract class OptionsMenu extends PopUpMenu {
 	 */
 	protected abstract PopUp makeControlsPopUp();
 
-	protected OptionsMenu(int bottomPadding, WindowResizer windowResizer) {
+	protected OptionsMenu(int bottomPadding, WindowResizer windowResizer, String gameDebugDisplayName) {
 		super(MenuOrientation.VERTICAL);
-		platformName = " (" + GameInfo.getGamePlatform().getPlatformName() + ")";
+		this.gameDebugDisplayName = gameDebugDisplayName;
 		windowModeSelectBox = GameInfo.getUserInterfaceFactory().getWindowModeTextSelectBox();
 		windowResizer.setWindowResizerButton(windowModeSelectBox);
 		defaults().padBottom(bottomPadding);
@@ -163,7 +165,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 		versionTable.add(authors).expand().top().left().padTop(getPadTop()).padLeft(getPadLeft());
 		versionTable.row();
 
-		UniversalLabel versionLabel = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> getGameVersion() + platformName);
+		UniversalLabel versionLabel = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> gameDebugDisplayName);
 		versionLabel.setAlignment(Alignment.BOTTOM_RIGHT.getAlignment());
 		versionTable.add(versionLabel).bottom().right().expand().padBottom(getPadBottom()).padRight(getPadRight());
 	}

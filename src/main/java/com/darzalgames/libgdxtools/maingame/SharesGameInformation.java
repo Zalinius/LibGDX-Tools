@@ -13,13 +13,13 @@ public interface SharesGameInformation {
 
 	String getGameVersion();
 
-	SaveManager getSaveManager();
-
-	PreferenceManager getPreferenceManager();
+	GameEdition getGameEdition();
 
 	GamePlatform getGamePlatform();
 
-	GameEdition getGameEdition();
+	SaveManager getSaveManager();
+
+	PreferenceManager getPreferenceManager();
 
 	SteamStrategy getSteamStrategy();
 

@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.maingame;
 import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -113,6 +114,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		makePreferenceManager();
 		windowResizer.setModeFromPreferences();
 		beginLoadingAssets();
+		Gdx.app.log("GAME", "Launching " + toString());
 		loadingScreen = makeLoadingScreen();
 	}
 
@@ -235,6 +237,17 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	@Override
 	public UserInterfaceFactory getUserInterfaceFactory() {
 		return userInterfaceFactory;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getGameName()).append(" - ");
+		sb.append(getGameVersion()).append(" - ");
+		sb.append(getGameEdition().getDisplayName()).append(" ");
+		sb.append("(").append(getGamePlatform().getPlatformName()).append(")");
+
+		return sb.toString();
 	}
 
 	private void makeInputStrategySwitcher() {

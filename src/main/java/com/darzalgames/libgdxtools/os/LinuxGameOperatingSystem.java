@@ -1,9 +1,9 @@
-package com.darzalgames.libgdxtools.platform;
+package com.darzalgames.libgdxtools.os;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
-public class LinuxGamePlatform extends GenericDesktopGamePlatform {
+public class LinuxGameOperatingSystem implements GameOperatingSystem {
 
 	@Override
 	public boolean supportsBorderlessFullscreen() {
@@ -16,7 +16,7 @@ public class LinuxGamePlatform extends GenericDesktopGamePlatform {
 	}
 
 	@Override
-	public String getPlatformName() {
-		return GamePlatform.LINUX;
+	public String getOperatingSystemName() {
+		return GameOperatingSystem.LINUX;
 	}
 }

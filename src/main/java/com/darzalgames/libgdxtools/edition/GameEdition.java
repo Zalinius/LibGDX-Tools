@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.platform;
+package com.darzalgames.libgdxtools.edition;
 
 /**
  * Enum for Demo and Full versions of a game

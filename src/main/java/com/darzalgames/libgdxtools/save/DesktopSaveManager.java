@@ -65,8 +65,8 @@ public interface DesktopSaveManager extends SaveManager {
 	}
 
 	private FileHandle getSaveFileByOperatingSystem(String saveFileName, String gameName) {
-		String fullGameAndSaveName = gameName + "/" + GameInfo.getSteamStrategy().getSteamID() + "/" + saveFileName;
-		return GameInfo.getGamePlatform().getSaveFileLocation(fullGameAndSaveName);
+		String fullGameAndSaveName = gameName + "/" + GameInfo.getPlatformStrategy().getPlayersSaveFolderName() + "/" + saveFileName;
+		return GameInfo.getOperatingSystem().getSaveFileLocation(fullGameAndSaveName);
 	}
 
 }

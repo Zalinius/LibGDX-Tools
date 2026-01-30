@@ -47,7 +47,7 @@ public abstract class WindowResizer {
 	public void toggleWindow() {
 		if (isWindowed()) {
 			ScreenMode bigMode = ScreenMode.BORDERLESS;
-			if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
+			if (!GameInfo.getOperatingSystem().supportsBorderlessFullscreen()) {
 				bigMode = ScreenMode.FULLSCREEN;
 			}
 			setMode(bigMode, true);

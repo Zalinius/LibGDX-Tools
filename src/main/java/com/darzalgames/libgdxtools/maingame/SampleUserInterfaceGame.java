@@ -398,8 +398,8 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 	private class TestOptionsMenu extends OptionsMenu {
 
-		protected TestOptionsMenu() {
-			super(0, windowResizer);
+		protected TestOptionsMenu(String displayName) {
+			super(0, windowResizer, displayName);
 			optionsButton = GameInfo.getUserInterfaceFactory().getOptionsButton(this::toggleScreenVisibility);
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 		}
@@ -412,11 +412,6 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 		@Override
 		protected Alignment getMenuAlignment() {
 			return Alignment.CENTER;
-		}
-
-		@Override
-		protected String getGameVersion() {
-			return "version goes here";
 		}
 
 		@Override
@@ -492,17 +487,17 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 	@Override
 	protected OptionsMenu makeOptionsMenu() {
-		return new TestOptionsMenu();
+		return new TestOptionsMenu(toString());
 	}
 
 	@Override
 	public String getGameName() {
-		return "Test LibGDXTools UI";
+		return "LibGDXTools UI Test";
 	}
 
 	@Override
 	public String getGameVersion() {
-		return "game version";
+		return "1.0.0";
 	}
 
 	@Override

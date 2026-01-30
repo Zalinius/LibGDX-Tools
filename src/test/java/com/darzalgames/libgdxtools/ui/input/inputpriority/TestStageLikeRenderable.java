@@ -1,6 +1,5 @@
 package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 
@@ -67,18 +66,12 @@ public class TestStageLikeRenderable implements StageLikeRenderable {
 	}
 
 	@Override
-	public Vector2 screenToStageCoordinates(Vector2 vector2) {
-		/* Not yet needed for testing */
-		return null;
-	}
-
-	@Override
 	public void resize(int width, int height) {
 		/* Not yet needed for testing */
 	}
 
 	@Override
-	public String nameOfThingAtCursorPosition(float x, float y, boolean b) {
+	public String nameOfActorUnderCursor() {
 		/* Not yet needed for testing */
 		return null;
 	}

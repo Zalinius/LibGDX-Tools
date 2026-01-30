@@ -1,5 +1,7 @@
 package com.darzalgames.libgdxtools.maingame;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -19,8 +21,11 @@ public class StageBest extends Stage implements StageLikeRenderable {
 	}
 
 	@Override
-	public String nameOfThingAtCursorPosition(float x, float y, boolean b) {
-		Actor hitActor = hit(x, y, true);
+	public String nameOfActorUnderCursor() {
+		float screenX = Gdx.input.getX();
+		float screenY = Gdx.input.getY();
+		Vector2 positionOnStage = screenToStageCoordinates(new Vector2(screenX, screenY));
+		Actor hitActor = hit(positionOnStage.x, positionOnStage.y, true);
 		if (hitActor != null) {
 			return hitActor.getName();
 		} else {
@@ -49,12 +54,12 @@ public class StageBest extends Stage implements StageLikeRenderable {
 	 * https://stackoverflow.com/questions/36336111/libgdx-listener-enter-and-exit-fires-multiple-times
 	 *
 	 * If you move the cursor over the button and click and then move away, you get two enter events and two exit events.
-	 * 
+	 *
 	 * Hover -> entered with pointer -1
 	 * Click down -> entered with pointer 0
 	 * Release click -> exited with pointer 0
 	 * Move cursor away -> exited with pointer -1
-	 * 
+	 *
 	 */
 	public static boolean isHoverEvent(int pointer) {
 		return pointer == -1;

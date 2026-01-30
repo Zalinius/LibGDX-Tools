@@ -3,29 +3,35 @@ package com.darzalgames.libgdxtools.preferences;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
-public class PreferenceManager {
+public class PreferenceManager implements CommonPreferences {
 
 	private final Preferences prefs;
+
+	private final SoundPreference soundPreference;
 
 	/**
 	 * @param preferencePrefix A name for the preferences file, which should be in a package format corresponding to the game, e.g. com.darzalgames.cultivar
 	 */
-	public PreferenceManager(final String preferencePrefix) {
-		this(Gdx.app.getPreferences(preferencePrefix));
+	public PreferenceManager(final String preferencePrefix, SoundPreference soundPreference) {
+		this(Gdx.app.getPreferences(preferencePrefix), soundPreference);
 	}
 
-	public PreferenceManager(final Preferences preferencesFile) {
+	public PreferenceManager(final Preferences preferencesFile, SoundPreference soundPreference) {
 		prefs = preferencesFile;
+		this.soundPreference = soundPreference;
 	}
 
+	@Override
 	public SoundPreference sound() {
-		return new SoundPreference(this);
+		return soundPreference;
 	}
 
+	@Override
 	public GraphicsPreference graphics() {
 		return new GraphicsPreference(this);
 	}
 
+	@Override
 	public PausePreference pause() {
 		return new PausePreference(this);
 	}

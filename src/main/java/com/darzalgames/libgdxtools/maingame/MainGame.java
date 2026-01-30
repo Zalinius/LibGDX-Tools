@@ -14,6 +14,8 @@ import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
+import com.darzalgames.libgdxtools.preferences.SoundPreference;
+import com.darzalgames.libgdxtools.save.FileLocationStrategy;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
@@ -39,6 +41,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected SaveManager saveManager;
 	protected PreferenceManager preferenceManager;
 	protected final GamePlatform gamePlatform;
+	protected FileLocationStrategy fileLocationStrategy;
 	protected SteamStrategy steamStrategy;
 	protected UserInterfaceFactory userInterfaceFactory;
 
@@ -56,6 +59,11 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private LoadingState loadingState;
 
 	// The setup process, in order that they are called
+
+	// Set up assets without loading the majority of assets
+	protected abstract void initializeAssets();
+
+	// Begin loading process for all assets
 	protected abstract void beginLoadingAssets();
 
 	protected abstract LoadingScreen makeLoadingScreen();
@@ -69,6 +77,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
 
 	protected abstract String getPreferenceManagerName();
+
+	protected abstract SoundPreference getSoundPreferenceManager();
 
 	/**
 	 * @return The fallback background to be used in the game area, visible when nothing else is covering it
@@ -111,8 +121,13 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	@Override
 	public final void create() {
+		initializeAssets();
+
+		saveManager = makeSaveManager();
+		saveManager.loadOptions();
 		makePreferenceManager();
 		windowResizer.setModeFromPreferences();
+
 		beginLoadingAssets();
 		Gdx.app.log("GAME", "Launching " + toString());
 		loadingScreen = makeLoadingScreen();
@@ -128,7 +143,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		setUpInput();
 
 		setUpBeforeLoadingSave();
-		saveManager = makeSaveManager();
 		boolean isNewSave = !saveManager.load();
 		launchGame(isNewSave);
 	}
@@ -255,7 +269,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	private void makePreferenceManager() {
-		preferenceManager = new PreferenceManager(getPreferenceManagerName());
+		preferenceManager = new PreferenceManager(getPreferenceManagerName(), getSoundPreferenceManager());
 	}
 
 	private void makeAllStages() {

@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.maingame;
 import com.darzalgames.libgdxtools.platform.GameEdition;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
+import com.darzalgames.libgdxtools.save.FileLocationStrategy;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
@@ -20,6 +21,8 @@ public interface SharesGameInformation {
 	SaveManager getSaveManager();
 
 	PreferenceManager getPreferenceManager();
+
+	FileLocationStrategy getFileLocationStrategy();
 
 	SteamStrategy getSteamStrategy();
 

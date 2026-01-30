@@ -23,11 +23,6 @@ public class DummySteamStrategy implements SteamStrategy {
 	public void dispose() { /* Dummy strategy does nothing */ }
 
 	@Override
-	public String getSteamID() {
-		return "dev";
-	}
-
-	@Override
 	public void setRichPresentsVariable(String key, String value) { /* Dummy strategy does nothing */ }
 
 	@Override

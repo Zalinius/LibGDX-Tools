@@ -1,9 +1,9 @@
-package com.darzalgames.libgdxtools.platform;
+package com.darzalgames.libgdxtools.os;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
-public class WindowsGamePlatform extends GenericDesktopGamePlatform {
+public class WindowsGameOperatingSystem implements GameOperatingSystem {
 
 	@Override
 	public boolean supportsBorderlessFullscreen() {
@@ -16,7 +16,7 @@ public class WindowsGamePlatform extends GenericDesktopGamePlatform {
 	}
 
 	@Override
-	public String getPlatformName() {
-		return GamePlatform.WINDOWS;
+	public String getOperatingSystemName() {
+		return GameOperatingSystem.WINDOWS;
 	}
 }

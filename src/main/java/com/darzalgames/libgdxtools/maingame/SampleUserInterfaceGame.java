@@ -16,17 +16,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.codedisaster.steamworks.SteamController;
+import com.codedisaster.steamworks.SteamControllerDigitalActionHandle;
+import com.darzalgames.darzalcommon.data.BiMap;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.assetloading.BlankLoadingScreen;
 import com.darzalgames.libgdxtools.assetloading.LoadingScreen;
 import com.darzalgames.libgdxtools.audio.LibgdxAudioConsumer;
+import com.darzalgames.libgdxtools.edition.GameEdition;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.WindowFocusListener;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
-import com.darzalgames.libgdxtools.platform.*;
+import com.darzalgames.libgdxtools.os.*;
 import com.darzalgames.libgdxtools.preferences.SoundPreference;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
@@ -36,12 +40,14 @@ import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
+import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.*;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.ChoicePopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 import com.darzalgames.libgdxtools.ui.input.popup.SimplePopUp;
+import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.*;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
@@ -68,7 +74,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	}
 
 	public SampleUserInterfaceGame(List<String> args) {
-		super(new WindowResizerDesktop(), LaunchArgumentHelper.getGamePlatform(args, WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new));
+		super(new WindowResizerDesktop(), LaunchArgumentHelper.getGameOperatingSystem(args, WindowsGameOperatingSystem::new, LinuxGameOperatingSystem::new, MacGameOperatingSystem::new));
 	}
 
 	@Override
@@ -208,6 +214,38 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 			protected Map<Input, AssetDescriptor<Texture>> makeButtonMappings() {
 				return Collections.emptyMap();
 			}
+		};
+	}
+
+	@Override
+	public FallbackGamepadInputHandler makeFallbackGamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
+		return GameOperatingSystem.makeFallbackGamepadInputHandlerSupplier(inputStrategySwitcher, inputReceiver).get();
+	}
+
+	@Override
+	public SteamGamepadInputHandler makeSteamGamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
+		return new SteamGamepadInputHandler(inputStrategySwitcher, inputReceiver, Suppliers.emptyString(), "") {
+			// Don't be using this default does-nothing SteamGamepadInputHandler, this is mainly here for the LibGDXTools TestGame which isn't on Steam
+			@Override
+			protected BiMap<SteamControllerDigitalActionHandle, Input> makeButtonMappings(SteamController steamController) {
+				return new BiMap<>();
+			}
+
+			@Override
+			protected List<Input> getTrackedInputs() {
+				return Collections.emptyList();
+			}
+
+			@Override
+			protected void sendAxisInput() {
+				// Do nothing
+			}
+
+			@Override
+			protected Texture getTextureFromDescriptor(AssetDescriptor<Texture> descriptor) {
+				return null;
+			}
+
 		};
 	}
 

@@ -40,7 +40,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 
 	private List<UniversalTextButton> getEntries() {
 		List<ScreenMode> allModes = new ArrayList<>(Arrays.asList(ScreenMode.values()));
-		if (!GameInfo.getGamePlatform().supportsBorderlessFullscreen()) {
+		if (!GameInfo.getOperatingSystem().supportsBorderlessFullscreen()) {
 			allModes.remove(ScreenMode.BORDERLESS);
 		}
 		Stream<UniversalTextButton> buttonStream = allModes.stream().map(

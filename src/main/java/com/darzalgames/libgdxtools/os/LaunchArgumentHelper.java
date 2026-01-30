@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.platform;
+package com.darzalgames.libgdxtools.os;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -30,20 +30,23 @@ public class LaunchArgumentHelper {
 	}
 
 	/**
-	 * Determines the correct platform based on launch arguments
+	 * Determines the correct OS based on launch arguments
 	 * @param argsList java main arguments
-	 * @return The corresponding platform
+	 * @return The corresponding OS
 	 */
-	public static GamePlatform getGamePlatform(List<String> argsList, Supplier<GamePlatform> makeWindowsPlatform, Supplier<GamePlatform> makeLinuxPlatform, Supplier<GamePlatform> makeMacPlatform) {
-
-		if (listContainsIgnoreCase(argsList, GamePlatform.WINDOWS)) {
-			return makeWindowsPlatform.get();
-		} else if (listContainsIgnoreCase(argsList, GamePlatform.LINUX)) {
-			return makeLinuxPlatform.get();
-		} else if (listContainsIgnoreCase(argsList, GamePlatform.MAC)) {
-			return makeMacPlatform.get();
+	public static GameOperatingSystem getGameOperatingSystem(
+			List<String> argsList,
+			Supplier<GameOperatingSystem> makeWindowsOS,
+			Supplier<GameOperatingSystem> makeLinuxOS,
+			Supplier<GameOperatingSystem> makeMacOS) {
+		if (listContainsIgnoreCase(argsList, GameOperatingSystem.WINDOWS)) {
+			return makeWindowsOS.get();
+		} else if (listContainsIgnoreCase(argsList, GameOperatingSystem.LINUX)) {
+			return makeLinuxOS.get();
+		} else if (listContainsIgnoreCase(argsList, GameOperatingSystem.MAC)) {
+			return makeMacOS.get();
 		} else {
-			throw new IllegalArgumentException("Args :" + argsList.toString() + " does not contain a valid Game Platform");
+			throw new IllegalArgumentException("Args :" + argsList.toString() + " does not contain a valid Game Operating System");
 		}
 	}
 

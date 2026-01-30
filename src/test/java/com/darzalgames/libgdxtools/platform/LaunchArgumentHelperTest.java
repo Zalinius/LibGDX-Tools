@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import com.darzalgames.libgdxtools.errorhandling.DummyCrashHandler;
 import com.darzalgames.libgdxtools.errorhandling.desktop.DesktopCrashHandler;
+import com.darzalgames.libgdxtools.os.*;
 
 class LaunchArgumentHelperTest {
 
@@ -24,35 +25,35 @@ class LaunchArgumentHelperTest {
 
 	@Test
 	void getGamePlatform_withWindowsInArguments_returnsWindows()  {
-		GamePlatform result = LaunchArgumentHelper.getGamePlatform(List.of("windows"), WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new);
+		GameOperatingSystem result = LaunchArgumentHelper.getGameOperatingSystem(List.of("windows"), WindowsGameOperatingSystem::new, LinuxGameOperatingSystem::new, MacGameOperatingSystem::new);
 
-		assertEquals(WindowsGamePlatform.class, result.getClass());
+		assertEquals(WindowsGameOperatingSystem.class, result.getClass());
 	}
 
 	@Test
 	void getGamePlatform_withWindowsAmongOtherArguments_returnsWindows()  {
-		GamePlatform result = LaunchArgumentHelper.getGamePlatform(List.of("skip-menu", "windows", "garbage"), WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new);
+		GameOperatingSystem result = LaunchArgumentHelper.getGameOperatingSystem(List.of("skip-menu", "windows", "garbage"), WindowsGameOperatingSystem::new, LinuxGameOperatingSystem::new, MacGameOperatingSystem::new);
 
-		assertEquals(WindowsGamePlatform.class, result.getClass());
+		assertEquals(WindowsGameOperatingSystem.class, result.getClass());
 	}
 
 	@Test
 	void getGamePlatform_withLinux_returnsLinux()  {
-		GamePlatform result = LaunchArgumentHelper.getGamePlatform(List.of("linux"), WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new);
+		GameOperatingSystem result = LaunchArgumentHelper.getGameOperatingSystem(List.of("linux"), WindowsGameOperatingSystem::new, LinuxGameOperatingSystem::new, MacGameOperatingSystem::new);
 
-		assertEquals(LinuxGamePlatform.class, result.getClass());
+		assertEquals(LinuxGameOperatingSystem.class, result.getClass());
 	}
 
 	@Test
 	void getGamePlatform_withMac_returnsMac()  {
-		GamePlatform result = LaunchArgumentHelper.getGamePlatform(List.of("mac"), WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new);
+		GameOperatingSystem result = LaunchArgumentHelper.getGameOperatingSystem(List.of("mac"), WindowsGameOperatingSystem::new, LinuxGameOperatingSystem::new, MacGameOperatingSystem::new);
 
-		assertEquals(MacGamePlatform.class, result.getClass());
+		assertEquals(MacGameOperatingSystem.class, result.getClass());
 	}
 
 	@Test
 	void getGamePlatform_withNoValidPlatform_throwsIllegalArgumentException()  {
-		assertThrows(IllegalArgumentException.class, () -> LaunchArgumentHelper.getGamePlatform(List.of("dos"), WindowsGamePlatform::new, LinuxGamePlatform::new, MacGamePlatform::new));
+		assertThrows(IllegalArgumentException.class, () -> LaunchArgumentHelper.getGameOperatingSystem(List.of("dos"), WindowsGameOperatingSystem::new, LinuxGameOperatingSystem::new, MacGameOperatingSystem::new));
 	}
 
 }

@@ -15,13 +15,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.darzalgames.darzalcommon.hexagon.Hexagon;
 import com.darzalgames.darzalcommon.hexagon.HexagonMap;
 import com.darzalgames.darzalcommon.hexagon.gridfactory.HexagonGridRectangular;
+import com.darzalgames.libgdxtools.edition.GameEdition;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.SharesGameInformation;
-import com.darzalgames.libgdxtools.platform.GameEdition;
-import com.darzalgames.libgdxtools.platform.GamePlatform;
+import com.darzalgames.libgdxtools.os.GameOperatingSystem;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
-import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
+import com.darzalgames.libgdxtools.steam.agnostic.PlatformStrategy;
 import com.darzalgames.libgdxtools.ui.input.InputOnHexagonGrid;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
 
@@ -44,12 +44,12 @@ class NavigableHexagonControllerMapTest {
 			}
 
 			@Override
-			public GamePlatform getGamePlatform() {
+			public GameOperatingSystem getOperatingSystem() {
 				return null;
 			}
 
 			@Override
-			public SteamStrategy getSteamStrategy() {
+			public PlatformStrategy getPlatformStrategy() {
 				return null;
 			}
 

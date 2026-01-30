@@ -71,7 +71,7 @@ public class TestStageLikeRenderable implements StageLikeRenderable {
 	}
 
 	@Override
-	public String nameOfThingAtCursorPosition(float x, float y) {
+	public String nameOfActorUnderCursor() {
 		/* Not yet needed for testing */
 		return null;
 	}

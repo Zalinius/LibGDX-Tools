@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.maingame;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,9 +21,11 @@ public class StageBest extends Stage implements StageLikeRenderable {
 	}
 
 	@Override
-	public String nameOfThingAtCursorPosition(float x, float y) {
-		Vector2 cursor = screenToStageCoordinates(new Vector2(x, y));
-		Actor hitActor = hit(cursor.x, cursor.y, true);
+	public String nameOfActorUnderCursor() {
+		float screenX = Gdx.input.getX();
+		float screenY = Gdx.input.getY();
+		Vector2 positionOnStage = screenToStageCoordinates(new Vector2(screenX, screenY));
+		Actor hitActor = hit(positionOnStage.x, positionOnStage.y, true);
 		if (hitActor != null) {
 			return hitActor.getName();
 		} else {

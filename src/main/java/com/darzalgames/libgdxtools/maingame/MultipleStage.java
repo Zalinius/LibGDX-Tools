@@ -104,7 +104,7 @@ public final class MultipleStage {
 	}
 
 	private boolean tryToPrintADebugHit(StageLikeRenderable stage) {
-		String hit = stage.nameOfThingAtCursorPosition(Gdx.input.getX(), Gdx.input.getY());
+		String hit = stage.nameOfActorUnderCursor();
 		boolean hitSomething = hit != null && !hit.isBlank();
 		if (hitSomething) {
 			Gdx.app.log("MultiStage", stage.getName() + ": " + hit);

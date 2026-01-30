@@ -7,7 +7,7 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 public class UniversalInputStage extends StageBest implements InputStrategyObserver {
 
-	private boolean mouseMode;
+	private boolean isMouseMode;
 
 	/**
 	 * Creates a stage which can filter mouse input depending on the current {@link InputStrategySwitcher} input mode
@@ -22,7 +22,7 @@ public class UniversalInputStage extends StageBest implements InputStrategyObser
 
 	@Override
 	public void act(final float delta) {
-		if (mouseMode) {
+		if (isMouseMode) {
 			// if playing mouse-driven, use a normal stage
 			super.act(delta);
 		} else {
@@ -34,7 +34,7 @@ public class UniversalInputStage extends StageBest implements InputStrategyObser
 
 	@Override
 	public void inputStrategyChanged(InputStrategySwitcher inputStrategySwitcher) {
-		mouseMode = inputStrategySwitcher.isMouseMode();
+		isMouseMode = inputStrategySwitcher.isMouseMode();
 	}
 
 	@Override

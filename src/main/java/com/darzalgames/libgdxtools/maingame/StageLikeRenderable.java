@@ -15,7 +15,7 @@ public interface StageLikeRenderable extends InputProcessor {
 
 	void resize(int width, int height);
 
-	String nameOfThingAtCursorPosition(float screenX, float screenY);
+	String nameOfActorUnderCursor();
 
 	String getName();
 

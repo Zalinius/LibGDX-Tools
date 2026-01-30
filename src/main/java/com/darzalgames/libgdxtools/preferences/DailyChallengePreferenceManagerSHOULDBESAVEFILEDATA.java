@@ -17,27 +17,33 @@ public class DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA extends Prefere
 	/**
 	 * @param preferencePrefix A name for the preferences file, which should be in a package format corresponding to the game, e.g. com.darzalgames.cultivar
 	 */
+	@Deprecated
 	protected DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA(final String preferencePrefix) {
-		super(preferencePrefix);
+		super(preferencePrefix, null);
 	}
 
+	@Deprecated
 	public DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA(final Preferences preferencesFile) {
-		super(preferencesFile);
+		super(preferencesFile, null);
 	}
 
+	@Deprecated
 	public int getTodaysDailyHighScore() {
 		return getDailyHighScore(today());
 	}
 
+	@Deprecated
 	public long hoursTillReset() {
 		Instant tomorrow = Instant.EPOCH.plus(today() + 1, ChronoUnit.DAYS);
 		return ChronoUnit.HOURS.between(Instant.now(), tomorrow);
 	}
 
+	@Deprecated
 	public boolean hasFinishedAGameToday() {
 		return hasFinishedAGameForDay(today());
 	}
 
+	@Deprecated
 	public boolean hasFinishedAGameForDay(final long referenceDay) {
 		boolean hasFinishedAGameForDay = false;
 
@@ -56,6 +62,7 @@ public class DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA extends Prefere
 		return ChronoUnit.DAYS.between(Instant.EPOCH, instant);
 	}
 
+	@Deprecated
 	public int getDailyHighScore(final long referenceDay) {
 		int highScore = Integer.MIN_VALUE;
 
@@ -66,6 +73,7 @@ public class DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA extends Prefere
 		return highScore;
 	}
 
+	@Deprecated
 	public void saveDailyHighScore(final long referenceDay, final int newScore) {
 		final int currentHighScore = getDailyHighScore(referenceDay);
 

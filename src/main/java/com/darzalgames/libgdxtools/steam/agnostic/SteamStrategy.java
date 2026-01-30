@@ -22,7 +22,7 @@ public interface SteamStrategy {
 	 * or for use as a seed when making interesting game features (e.g. generating a player portrait)
 	 * @return The ID, or the string "dev" if Steam is not running
 	 */
-	String getSteamID();
+	// String getSteamID();
 
 	/**
 	 * @return The game-specific input handler for Steam

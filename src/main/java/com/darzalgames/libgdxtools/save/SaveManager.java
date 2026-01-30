@@ -8,4 +8,6 @@ public interface SaveManager {
 	 * @return true if loading went fine, false if the save failed to load and/or a new save had to be created
 	 */
 	boolean load();
+
+	boolean loadOptions();
 }

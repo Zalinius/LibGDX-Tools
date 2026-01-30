@@ -1,6 +1,8 @@
 package com.darzalgames.libgdxtools.steam;
 
-import com.codedisaster.steamworks.*;
+import com.codedisaster.steamworks.SteamAPI;
+import com.codedisaster.steamworks.SteamController;
+import com.codedisaster.steamworks.SteamFriends;
 import com.darzalgames.libgdxtools.statistics.StatsController;
 import com.darzalgames.libgdxtools.statistics.StatsControllerFactory;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
@@ -10,7 +12,6 @@ public class ConnectedSteamStrategy implements SteamStrategy {
 	private final SteamGamepadInputHandler gamepadInputHandler;
 
 	private StatsController userStats;
-	private SteamUser steamUser;
 	private SteamFriends steamFriends;
 	private SteamController steamController;
 
@@ -23,7 +24,6 @@ public class ConnectedSteamStrategy implements SteamStrategy {
 	 */
 	public void initialize() {
 		userStats = StatsControllerFactory.buildSteam();
-		steamUser = new SteamUser(null);
 		steamFriends = new SteamFriends(new FriendsCallback());
 		steamController = new SteamController();
 		gamepadInputHandler.setSteamController(steamController);
@@ -45,11 +45,6 @@ public class ConnectedSteamStrategy implements SteamStrategy {
 	@Override
 	public SteamGamepadInputHandler getGamepadInputHandler() {
 		return gamepadInputHandler;
-	}
-
-	@Override
-	public String getSteamID() {
-		return String.valueOf(steamUser.getSteamID().getAccountID());
 	}
 
 	@Override

@@ -72,6 +72,9 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	}
 
 	@Override
+	protected void initializeAssets() {}
+
+	@Override
 	protected void beginLoadingAssets() { /* This project is purposefully assetless */}
 
 	@Override
@@ -116,6 +119,11 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 			@Override
 			public boolean load() {
+				return true;
+			}
+
+			@Override
+			public boolean loadOptions() {
 				return true;
 			}
 		};
@@ -217,6 +225,11 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	@Override
 	protected String getPreferenceManagerName() {
 		return "com.darzalgames.libgdxtools.preferences";
+	}
+
+	@Override
+	protected SoundPreference getSoundPreferenceManager() {
+		return null;
 	}
 
 	protected List<VisibleInputConsumer> getMenuEntries() {

@@ -4,6 +4,7 @@ import com.darzalgames.libgdxtools.platform.GameEdition;
 import com.darzalgames.libgdxtools.platform.GamePlatform;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
+import com.darzalgames.libgdxtools.save.FileLocationStrategy;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
@@ -54,6 +55,10 @@ public class GameInfo {
 
 	public static GamePlatform getGamePlatform() {
 		return game.getGamePlatform();
+	}
+
+	public static FileLocationStrategy getFileLocationStrategy() {
+		return game.getFileLocationStrategy();
 	}
 
 	public static SteamStrategy getSteamStrategy() {

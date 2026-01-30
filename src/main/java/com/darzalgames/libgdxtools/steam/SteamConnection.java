@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import com.badlogic.gdx.Gdx;
 import com.codedisaster.steamworks.SteamAPI;
 import com.codedisaster.steamworks.SteamException;
+import com.darzalgames.libgdxtools.save.FileLocationStrategy;
 import com.darzalgames.libgdxtools.steam.agnostic.DummySteamStrategy;
 import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
@@ -18,6 +19,10 @@ public class SteamConnection {
 	private static boolean steamInitialized;
 
 	private SteamConnection() {}
+
+	public static FileLocationStrategy initializeFileLocationStrategy() {
+
+	}
 
 	public static SteamStrategy initializeStrategy(
 			Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandler,

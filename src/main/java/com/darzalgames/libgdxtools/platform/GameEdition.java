@@ -4,19 +4,19 @@ package com.darzalgames.libgdxtools.platform;
  * Enum for Demo and Full versions of a game
  */
 public enum GameEdition {
-	DEMO("-demo"),
-	FULL("");
+	DEMO("Demo"),
+	FULL("Full");
 
-	private final String versionSuffix;
+	private final String displayName;
 
-	GameEdition(String versionSuffix) {
-		this.versionSuffix = versionSuffix;
+	GameEdition(String displayName) {
+		this.displayName = displayName;
 	}
 
 	/**
 	 * @return A string suffix to describe a version of a game, based on GameEdition
 	 */
-	public String getVersionSuffix() {
-		return versionSuffix;
+	public String getDisplayName() {
+		return displayName;
 	}
 }

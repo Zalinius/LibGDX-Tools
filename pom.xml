@@ -5,7 +5,7 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.3.14</version>
+	<version>0.3.15-six-sided-stories</version>
 	<name>libGDX Tools</name>
 
 	<properties>

@@ -10,14 +10,14 @@ public class ColorTools {
 
 	/**
 	 *
-	 * @param red The red color channel value, must be within the range [0, 255]
+	 * @param red   The red color channel value, must be within the range [0, 255]
 	 * @param green The green color channel value, must be within the range [0, 255]
-	 * @param blue The blue color channel value, must be within the range [0, 255]
+	 * @param blue  The blue color channel value, must be within the range [0, 255]
 	 * @return A color with the specified RGB values, which is completely opaque.
 	 */
 	public static Color makeColorFromIntComponents(final int red, final int green, final int blue) {
-		if(componentsInvalid(red, green, blue)) {
-			throw new IllegalArgumentException("Color channel values must be with range ["+MIN_COLOR_CHANNEL_VALUE+", "+MAX_COLOR_CHANNEL_VALUE+"]");
+		if (componentsInvalid(red, green, blue)) {
+			throw new IllegalArgumentException("Color channel values must be with range [" + MIN_COLOR_CHANNEL_VALUE + ", " + MAX_COLOR_CHANNEL_VALUE + "]");
 		}
 
 		int packedColorInt = componentsToRGBAIntegerBits(red, green, blue);
@@ -38,9 +38,6 @@ public class ColorTools {
 
 	/**
 	 * Get a square colored texture with width and height both being "size" long
-	 * @param color
-	 * @param size
-	 * @return
 	 */
 	public static Texture getColoredTexture(Color color, int size) {
 		return getColoredTexture(color, size, size);
@@ -48,10 +45,6 @@ public class ColorTools {
 
 	/**
 	 * Get a colored texture with the specified width and height
-	 * @param color
-	 * @param width
-	 * @param height
-	 * @return
 	 */
 	public static Texture getColoredTexture(Color color, int width, int height) {
 		Pixmap coloredMap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
@@ -61,7 +54,7 @@ public class ColorTools {
 		coloredMap.dispose();
 		return coloredTexture;
 	}
-	
+
 	/**
 	 * @return A texture for a black and white cursor
 	 */

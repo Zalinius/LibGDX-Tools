@@ -22,8 +22,6 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	/**
 	 * An Image which follows the (hidden) cursor around, allowing you to keep the visible cursor the same pixel resolution regardless of window size.
 	 * @param checkIsWindowed A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
-	 * @param cursorTexture
-	 * @param inputStrategyManager
 	 */
 	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, InputStrategyManager inputStrategyManager) {
 		this(checkIsWindowed, cursorTexture, cursorTexture, inputStrategyManager);
@@ -31,10 +29,8 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 
 	/**
 	 * An Image which follows the (hidden) cursor around, allowing you to keep the visible cursor the same pixel resolution regardless of window size.
-	 * @param checkIsWindowed A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
-	 * @param cursorTexture
+	 * @param checkIsWindowed      A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
 	 * @param clickedCursorTexture The texture shown while the left mouse button is held down
-	 * @param inputStrategyManager
 	 */
 	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, Texture clickedCursorTexture, InputStrategyManager inputStrategyManager) {
 		super();
@@ -43,13 +39,13 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 		if (cursorTexture != null) {
 			setCursorImage(cursorTexture);
 			pack();
-			Gdx.graphics.setSystemCursor(SystemCursor.None);		
+			Gdx.graphics.setSystemCursor(SystemCursor.None);
 		}
 		setTouchable(Touchable.disabled);
 		this.checkIsWindowed = checkIsWindowed;
 		inputStrategyManager.register(this);
 	}
-	
+
 	private void setCursorImage(Texture texture) {
 		setDrawable(new Image(texture).getDrawable());
 		pack();
@@ -74,7 +70,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 		}
 		Vector2 position = getStage().screenToStageCoordinates(new Vector2(x, y));
 		setPosition(position.x, position.y - getHeight());
-		
+
 		if (cursorTexture != null) {
 			setCursorImage(Gdx.input.isButtonPressed(Buttons.LEFT) ? clickedCursorTexture : cursorTexture);
 		}

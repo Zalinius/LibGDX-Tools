@@ -11,8 +11,13 @@ public class LinuxGamePlatform extends GenericDesktopGamePlatform {
 	}
 
 	@Override
-	public FileHandle getSaveFileLocation(String fullGameAndSaveName) {
+	public FileHandle getOldSaveFileLocation(String fullGameAndSaveName) {
 		return Gdx.files.external(".local/share/" + fullGameAndSaveName);
+	}
+
+	@Override
+	public FileHandle getNewSaveFileLocation(String fullGameAndSaveName) {
+		return getOldSaveFileLocation(fullGameAndSaveName);
 	}
 
 	@Override

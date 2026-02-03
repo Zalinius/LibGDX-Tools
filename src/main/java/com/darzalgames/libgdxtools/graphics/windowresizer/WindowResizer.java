@@ -21,8 +21,11 @@ public abstract class WindowResizer {
 	private ScreenMode previousScreenMode;
 
 	public abstract void setScreenSize(Coordinate size);
+
 	protected abstract void switchToWindowed();
+
 	protected abstract void switchToBorderless();
+
 	protected abstract void switchToFullScreen();
 
 	private InputStrategyManager inputStrategyManager;
@@ -32,8 +35,6 @@ public abstract class WindowResizer {
 	 * Initialize the WindowResizer, setting the window to the preferred mode based on the user's history
 	 * We do this in initialize() rather than a constructor because this object is created at the same time as the entire game,
 	 * and so LibGDX isn't ready to do any resizing yet
-	 * @param inputStrategyManager
-	 * @param windowResizerButton
 	 */
 	public void initialize(InputStrategyManager inputStrategyManager, WindowResizerButton windowResizerButton) {
 		this.inputStrategyManager = inputStrategyManager;
@@ -51,7 +52,7 @@ public abstract class WindowResizer {
 	public KeyboardButton getModeSelectBox() {
 		KeyboardButton button = windowResizerButton.getButton();
 		if (currentScreenMode != null) {
-			windowResizerButton.setSelected(currentScreenMode);			
+			windowResizerButton.setSelected(currentScreenMode);
 		}
 		return button;
 	}
@@ -71,7 +72,6 @@ public abstract class WindowResizer {
 		}
 	}
 
-
 	protected void setMode(ScreenMode screenMode, boolean offerToRevert) {
 		previousScreenMode = currentScreenMode;
 		currentScreenMode = screenMode;
@@ -79,17 +79,12 @@ public abstract class WindowResizer {
 
 		inputStrategyManager.saveCurrentStrategy();
 		switch (currentScreenMode) {
-		case BORDERLESS:
-			switchToBorderless();
-			break;
-		case FULLSCREEN:
-			switchToFullScreen();
-			break;
-		case WINDOWED:
-			switchToWindowed();
-			break;
+		case BORDERLESS -> switchToBorderless();
+		case FULLSCREEN -> switchToFullScreen();
+		case WINDOWED -> switchToWindowed();
 		}
-		offerToRevert = offerToRevert && previousScreenMode != currentScreenMode; 
+		;
+		offerToRevert = offerToRevert && previousScreenMode != currentScreenMode;
 		inputStrategyManager.revertToPreviousStrategy();
 		windowResizerButton.setSelected(currentScreenMode);
 		if (offerToRevert) {
@@ -101,12 +96,12 @@ public abstract class WindowResizer {
 	 * @return Whether or not the game is currently in windowed mode ("borderless windowed" returns false for this)
 	 */
 	public boolean isWindowed() {
-		return currentScreenMode.equals(ScreenMode.WINDOWED);
+		return ScreenMode.WINDOWED.equals(currentScreenMode);
 	}
 
 	public void revertMode() {
 		WindowResizer.this.setMode(previousScreenMode, false);
 		previousScreenMode = currentScreenMode;
 	}
-	
+
 }

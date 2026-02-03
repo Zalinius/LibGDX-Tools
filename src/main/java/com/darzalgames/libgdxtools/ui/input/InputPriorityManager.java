@@ -50,11 +50,11 @@ public class InputPriorityManager {
 
 	/**
 	 * It's essential to do this, there'll probably be a crash if you don't \_( ͡⟃ ͜ʖ ⟄)_/
-	 * @param mainStage The stage where the game is  
-	 * @param popUpStage The stage where pop ups are held, ensuring that they are in front of the rest of the game
+	 * @param mainStage                The stage where the game is
+	 * @param popUpStage               The stage where pop ups are held, ensuring that they are in front of the rest of the game
 	 * @param toggleFullscreenRunnable A runnable that toggles between full screen and windowed mode
-	 * @param gamepadInputHandler The gamepad input handler to use (fallback versus Steam)
-	 * @param keyboardInputHandler The keyboard input handler to use
+	 * @param gamepadInputHandler      The gamepad input handler to use (fallback versus Steam)
+	 * @param keyboardInputHandler     The keyboard input handler to use
 	 */
 	public static void initialize(Stage mainStage, Stage popUpStage, Runnable toggleFullscreenRunnable,
 			GamepadInputHandler gamepadInputHandler, KeyboardInputHandler keyboardInputHandler, InputStrategyManager inputStrategyManager) {
@@ -64,7 +64,7 @@ public class InputPriorityManager {
 		InputPriorityManager.keyboardInputHandler = keyboardInputHandler;
 		InputPriorityManager.inputStrategyManager = inputStrategyManager;
 
-		inputConsumerStack.add((InputConsumerWrapper) isTouchable -> {/*not needed*/});
+		inputConsumerStack.add((InputConsumerWrapper) isTouchable -> {/* not needed */});
 
 		// Set up the dark background screen that goes behind popups
 		darkScreen = new Image(ColorTools.getColoredTexture(new Color(0, 0, 0, 0.5f), GameInfo.getWidth(), GameInfo.getHeight()));
@@ -73,7 +73,7 @@ public class InputPriorityManager {
 			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer, final int button) {
 				hideDarkScreen();
 				if (!inputConsumerStack.isEmpty()) {
-					inputConsumerStack.peek().consumeKeyInput(Input.BACK); 
+					inputConsumerStack.peek().consumeKeyInput(Input.BACK);
 				}
 				return true;
 			}
@@ -93,7 +93,6 @@ public class InputPriorityManager {
 			}
 		}));
 
-
 		// Enter the default strategy (mouse) during this initialization
 		inputStrategyManager.setToMouseStrategy();
 		inputStrategyManager.register(new InputChangeObserver());
@@ -106,7 +105,7 @@ public class InputPriorityManager {
 	public static void clearChildren() {
 		group.clearChildren(false);
 		inputConsumerStack.clear();
-		inputConsumerStack.add((InputConsumerWrapper) isTouchable -> {/*not needed*/});
+		inputConsumerStack.add((InputConsumerWrapper) isTouchable -> {/* not needed */});
 		group.addActor(gamepadInputHandler);
 		group.addActor(keyboardInputHandler);
 		darkScreen.remove();
@@ -122,25 +121,22 @@ public class InputPriorityManager {
 		if (input == Input.TOGGLE_FULLSCREEN && toggleWithF11) {
 			toggleFullscreenRunnable.run();
 		} else if (input == Input.PAUSE) {
-			if (pauseButton != null && 
+			if (pauseButton != null &&
 					(!isPaused() // if we're not paused, then we're in game and should open the pause menu
 							|| !checkIfLandingOnPopup())) { // we're on the pause menu (and not in a nested pop up, like the quit warning)
 				pauseButton.consumeKeyInput(Input.ACCEPT);
 			} else if (!inputConsumerStack.isEmpty()) { // Don't try to enter keyboard mode when someone is just pressing escape
 				inputConsumerStack.peek().consumeKeyInput(input);
-			}	
+			}
 		} else if (specialButtons.containsKey(input)) {
 			specialButtons.get(input).consumeKeyInput(Input.ACCEPT);
-		}
-		else if (!inputConsumerStack.isEmpty() && !inputStrategyManager.setToKeyboardStrategy()) {
+		} else if (!inputConsumerStack.isEmpty() && !inputStrategyManager.setToKeyboardStrategy()) {
 			inputConsumerStack.peek().consumeKeyInput(input);
-		}		
+		}
 	}
 
 	/**
 	 * A pop up should request this when claiming input priority, since they're handled a bit differently
-	 * @param <A>
-	 * @param popup
 	 */
 	public static <A extends Actor & PopUp> void showPopup(A popup) {
 		darkScreen.remove();
@@ -151,8 +147,7 @@ public class InputPriorityManager {
 		}
 		ClickListener rightClickBack = new ClickListener(Buttons.RIGHT) {
 			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
+			public void clicked(InputEvent event, float x, float y) {
 				if (inputConsumerStack.peek().equals(popup)) {
 					popup.removeListener(this);
 					popup.consumeKeyInput(Input.BACK);
@@ -167,12 +162,13 @@ public class InputPriorityManager {
 
 	private static float timeSinceScroll = 0;
 	private static boolean hasFinishedScrolling = true;
+
 	/**
 	 * This can handle scrolling both from a mouse wheel or something more like a tablet or touchpad.
 	 * @param amount The amount of scrolling on the y-axis
 	 */
 	public static void receiveScrollInput(float amount) {
-		// It seems the mouse wheel returns either 1 or -1, and a tablet returns any value between these two. 
+		// It seems the mouse wheel returns either 1 or -1, and a tablet returns any value between these two.
 		// So, I'm using a threshold of 0.1f for the tablet/touchpad, and an input delay of 0.15f
 		if (!inputConsumerStack.isEmpty()) {
 			if (Math.abs(amount) < 0.1f || timeSinceScroll > 0.15f) {
@@ -205,7 +201,7 @@ public class InputPriorityManager {
 	public static void releasePriority(InputConsumer inputConsumer) {
 		if (!inputConsumerStack.isEmpty() && inputConsumer.equals(inputConsumerStack.peek())) {
 			hideDarkScreen();
-			boolean isClosingPauseMenu = inputConsumerStack.peek() == optionsMenu; 
+			boolean isClosingPauseMenu = inputConsumerStack.peek() == optionsMenu;
 			removeTop();
 			if (isClosingPauseMenu) {
 				inputConsumerStack.peek().setTouchable(Touchable.enabled);
@@ -219,7 +215,7 @@ public class InputPriorityManager {
 
 	/**
 	 * @param optionsMenu The menu to show when the pause button is pressed.
-	 * This might be different depending on if you're on the main menu or in the game.
+	 *                    This might be different depending on if you're on the main menu or in the game.
 	 */
 	public static void setPauseUI(OptionsMenu optionsMenu) {
 		clearPauseButtonUI();
@@ -234,7 +230,7 @@ public class InputPriorityManager {
 				if (!inputConsumerStack.isEmpty()) {
 					inputConsumerStack.peek().selectDefault();
 				}
-			}  else { // Mouse mode
+			} else { // Mouse mode
 				clearSelected();
 			}
 		}
@@ -260,18 +256,18 @@ public class InputPriorityManager {
 	public static void hideDarkScreenForVeryExceptionalCircumstances() {
 		darkScreen.remove();
 	}
-	
+
 	public static void addSpecialButton(Input input, KeyboardButton button) {
 		specialButtons.put(input, button);
 	}
 
-	//-----------------------------------------------------------
+	// -----------------------------------------------------------
 
 	private static void focusTop(boolean isFirstFocus) {
 		if (!inputConsumerStack.isEmpty()) {
 			inputConsumerStack.peek().setTouchable(Touchable.enabled);
 			if (isFirstFocus) {
-				inputConsumerStack.peek().gainFocus();				
+				inputConsumerStack.peek().gainFocus();
 			} else {
 				inputConsumerStack.peek().regainFocus();
 			}
@@ -290,7 +286,7 @@ public class InputPriorityManager {
 		if (!inputConsumerStack.isEmpty()) {
 			unFocusTop(inputConsumerStack.pop());
 			hideDarkScreen();
-			checkIfLandingOnPopup();	
+			checkIfLandingOnPopup();
 		}
 	}
 
@@ -304,11 +300,11 @@ public class InputPriorityManager {
 			for (int i = 0; i < inferiorArray.size; i++) {
 				popups.add(inferiorArray.get(i));
 			}
-			Optional<Actor> popupMatch = popups.stream().filter(a -> a.equals(inputConsumerStack.peek())).findFirst(); 
+			Optional<Actor> popupMatch = popups.stream().filter(a -> a.equals(inputConsumerStack.peek())).findFirst();
 			if (popupMatch.isPresent()) {
 				// We are landing back on to a popup
 				Actor actor = popupMatch.get();
-				PopUp popUp = (PopUp)actor;
+				PopUp popUp = (PopUp) actor;
 				showDarkScreen(actor.getZIndex(), popUp.canDismiss());
 				return true;
 			}
@@ -319,7 +315,7 @@ public class InputPriorityManager {
 	private static void showPauseMenu() {
 		if (optionsMenu != null) {
 			showPopup(optionsMenu);
-			claimPriority(optionsMenu);	
+			claimPriority(optionsMenu);
 		}
 	}
 
@@ -332,13 +328,14 @@ public class InputPriorityManager {
 		darkScreen.addAction(Actions.fadeIn(0.25f, Interpolation.circle));
 	}
 
-
 	private static void hideDarkScreen() {
 		darkScreen.clearActions();
-		darkScreen.addAction(new InstantSequenceAction(
-				Actions.fadeOut(0.25f, Interpolation.circle),
-				Actions.removeActor(darkScreen)
-				));
+		darkScreen.addAction(
+				new InstantSequenceAction(
+						Actions.fadeOut(0.25f, Interpolation.circle),
+						Actions.removeActor(darkScreen)
+				)
+		);
 	}
 
 	private static void focusCurrent() {
@@ -364,7 +361,6 @@ public class InputPriorityManager {
 	public static void setToggleWithF11(boolean toggleWithF11) {
 		InputPriorityManager.toggleWithF11 = toggleWithF11;
 	}
-
 
 	private static class InputChangeObserver implements InputObserver {
 

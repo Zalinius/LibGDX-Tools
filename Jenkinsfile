@@ -27,16 +27,14 @@ pipeline {
                 sh 'mvn --batch-mode clean verify'
             }
         }
-        stage('Deploy') {
+        stage('Deploy Six Sided Stories version') {
             when {
-                branch 'main'
+                branch 'main-six-sided-stories'
             }
             steps {
-                sh 'mvn sonar:sonar -Dsonar.host.url=$SONARQUBE_HOST -Dsonar.login=$SONAR_CREDS' //Send test coverage to Sonarqube, and let it know there is a new version of main to cover
                 sh 'mvn --batch-mode clean install'  //Install publishes to the local jenkins Maven repo
 	        }
-	    }
-    }
+	    }    }
     
     post {
 

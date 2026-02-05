@@ -24,7 +24,12 @@ public class WebGamePlatform implements GamePlatform {
 	}
 	
 	@Override
-	public FileHandle getSaveFileLocation(String fullGameAndSaveName) {
+	public FileHandle getOldSaveFileLocation(String fullGameAndSaveName) {
+		return null;
+	}
+	
+	@Override
+	public FileHandle getNewSaveFileLocation(String fullGameAndSaveName) {
 		return null;
 	}
 	

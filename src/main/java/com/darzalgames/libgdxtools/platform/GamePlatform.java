@@ -36,8 +36,15 @@ public interface GamePlatform {
 	 * @param fullGameAndSaveName The subpath and name of the desired save file
 	 * @return A libgdx file handle to the save file
 	 */
-	public FileHandle getSaveFileLocation(String fullGameAndSaveName);
+	FileHandle getOldSaveFileLocation(String fullGameAndSaveName);
 
+	/**
+	 * Return the correct directory for save files based on the platform
+	 * @param fullGameAndSaveName The subpath and name of the desired save file
+	 * @return A libgdx file handle to the save file
+	 */
+	FileHandle getNewSaveFileLocation(String fullGameAndSaveName);
+	
 	/**
 	 * @param inputStrategySwitcher The input strategy manager, so we can make the gamepad input handler
 	 * @return A SteamStrategy befitting the GamePlatform

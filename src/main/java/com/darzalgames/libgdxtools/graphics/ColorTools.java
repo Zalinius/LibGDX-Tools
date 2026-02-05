@@ -38,9 +38,6 @@ public class ColorTools {
 
 	/**
 	 * Get a square colored texture with width and height both being "size" long
-	 * @param color
-	 * @param size
-	 * @return
 	 */
 	public static Texture getColoredTexture(Color color, int size) {
 		return getColoredTexture(color, size, size);
@@ -48,10 +45,6 @@ public class ColorTools {
 
 	/**
 	 * Get a colored texture with the specified width and height
-	 * @param color
-	 * @param width
-	 * @param height
-	 * @return
 	 */
 	public static Texture getColoredTexture(Color color, int width, int height) {
 		Pixmap coloredMap = new Pixmap(width, height, Pixmap.Format.RGBA8888);

@@ -72,7 +72,6 @@ public class OptionalSequenceAction extends Action{
 	
 	/**
 	 * Adds an action that is non optional
-	 * @param action
 	 */
 	public void addMandatoryAction(Action action) {
 		OptionalAction mandatoryAction = new OptionalAction(() -> true);

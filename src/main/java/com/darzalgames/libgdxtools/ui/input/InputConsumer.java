@@ -12,13 +12,11 @@ import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
 public interface InputConsumer {
 	/**
 	 * Choose how to respond to various inputs
-	 * @param input
 	 */
 	public void consumeKeyInput(final Input input);
 
 	/**
 	 * NOTE: If the receiver of this function has a child that is also an InputConsumer on top of it, then instead of setting disabled it should set childrenOnly
-	 * @param isTouchable
 	 */
 	public void setTouchable(Touchable isTouchable);
 

@@ -13,9 +13,6 @@ public class UniversalInputStageWithBackground extends UniversalInputStage {
 
 		/**
 		 * Creates a stage that will ensure that the supplied background texture is always present
-		 * @param viewport
-		 * @param backgroundTex
-		 * @param inputStrategySwitcher
 		 */
 		public UniversalInputStageWithBackground(final Viewport viewport, Texture backgroundTex, InputStrategySwitcher inputStrategySwitcher) {
 			super(viewport, inputStrategySwitcher);

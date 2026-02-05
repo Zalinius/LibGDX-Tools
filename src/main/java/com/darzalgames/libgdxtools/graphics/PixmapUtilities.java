@@ -15,7 +15,6 @@ public class PixmapUtilities {
 	/**
 	 * @param hitX The x value provided in Actor's hit()
 	 * @param hitY The y value provided in Actor's hit()
-	 * @param map
 	 * @return The color on the specified position of the map, or CLEAR if out of bounds
 	 */
 	public static Color getPixelColorOnMap(float hitX, float hitY, Pixmap map) {

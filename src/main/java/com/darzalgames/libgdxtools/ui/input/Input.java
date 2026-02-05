@@ -52,8 +52,6 @@ public class Input {
 	/**
 	 * Go from a keyboard key to our custom {@link Input}.<p>
 	 * NOTE: If a game defines its own input class that extends this one to add other inputs, this still works great!
-	 * @param key
-	 * @return
 	 */
 	public static Input getInputFromKey(int key) {
 		for (int i = 0; i < values.size(); i++) {

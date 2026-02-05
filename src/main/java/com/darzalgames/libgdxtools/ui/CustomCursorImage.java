@@ -23,8 +23,6 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	/**
 	 * An Image which follows the (hidden) cursor around, allowing you to keep the visible cursor the same pixel resolution regardless of window size.
 	 * @param checkIsWindowed A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
-	 * @param cursorTexture
-	 * @param inputStrategySwitcher
 	 */
 	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, InputStrategySwitcher inputStrategySwitcher) {
 		this(checkIsWindowed, cursorTexture, cursorTexture, inputStrategySwitcher);
@@ -33,9 +31,7 @@ public class CustomCursorImage extends Image implements DoesNotPause, InputObser
 	/**
 	 * An Image which follows the (hidden) cursor around, allowing you to keep the visible cursor the same pixel resolution regardless of window size.
 	 * @param checkIsWindowed A supplier that can tell us whether or not we're in windowed mode ({@link WindowResizer#isWindowed()}, perhaps?)
-	 * @param cursorTexture
 	 * @param clickedCursorTexture The texture shown while the left mouse button is held down
-	 * @param inputStrategySwitcher
 	 */
 	public CustomCursorImage(Supplier<Boolean> checkIsWindowed, Texture cursorTexture, Texture clickedCursorTexture, InputStrategySwitcher inputStrategySwitcher) {
 		super();

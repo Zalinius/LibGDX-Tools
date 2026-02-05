@@ -23,7 +23,6 @@ public abstract class CrashHandler {
 	}
 	
 	/**
-	 * @param crashReport
 	 * @return The result of the crash reporting
 	 */
 	public abstract List<ReportStatus> reportCrash(CrashReport crashReport);

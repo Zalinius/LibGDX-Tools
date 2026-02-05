@@ -114,7 +114,6 @@ public class UniversalButton implements VisibleInputConsumer {
 
 	/**
 	 * Sets this button un/focused, generating a mimicked LibGDX mouse enter/exit event
-	 * @param isFocused
 	 */
 	public void setFocused(boolean isFocused) {
 		InputEvent event = Pools.obtain(InputEvent.class);
@@ -141,7 +140,6 @@ public class UniversalButton implements VisibleInputConsumer {
 
 	/**
 	 * Set whether or not this button can be interacted with
-	 * @param disabled
 	 */
 	public void setDisabled(boolean disabled) {
 		button.setDisabled(disabled);
@@ -154,7 +152,6 @@ public class UniversalButton implements VisibleInputConsumer {
 
 	/**
 	 * Replace the text on the button
-	 * @param newText
 	 */
 	public void updateText(String newText) {
 		labelSupplier.get().setText(newText);
@@ -170,7 +167,6 @@ public class UniversalButton implements VisibleInputConsumer {
 	/**
 	 * Useful for trying to navigate to a particular button in a menu based on its text
 	 * (e.g. defaulting to the current setting in a drop-down menu via string matching)
-	 * @param value
 	 * @return Whether or not this button has text that matches the supplied value
 	 */
 	public boolean doesTextMatch(String value) {
@@ -179,7 +175,6 @@ public class UniversalButton implements VisibleInputConsumer {
 
 	/**
 	 * Set what to do when the button is pressed
-	 * @param buttonRunnable
 	 */
 	public void setButtonRunnable(Runnable buttonRunnable) {
 		this.buttonRunnable = buttonRunnable;
@@ -197,7 +192,6 @@ public class UniversalButton implements VisibleInputConsumer {
 
 	/**
 	 * Set whether or not the text in the button's label should wrap
-	 * @param wrap
 	 */
 	public void setWrap(boolean wrap) {
 		this.wrap = wrap;
@@ -205,8 +199,6 @@ public class UniversalButton implements VisibleInputConsumer {
 	
 	/**
 	 * Update both the button's text and image in one go
-	 * @param newText
-	 * @param image
 	 */
 	public void updateLabels(final String newText, final Image image) {
 		updateText(newText);
@@ -215,7 +207,6 @@ public class UniversalButton implements VisibleInputConsumer {
 
 	/**
 	 * Set whether or not this button should make a sound when interacted with
-	 * @param doesSoundOnInteract
 	 */
 	public void setDoesSoundOnInteract(boolean doesSoundOnInteract) {
 		this.doesSoundOnInteract = doesSoundOnInteract;

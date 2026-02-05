@@ -78,7 +78,6 @@ public abstract class TextSupplier {
 
 	/** 
 	 * Only to be used when loading a save, otherwise use TextSupplier.getLanguageChoiceResponder()
-	 * @param languageCode
 	 */
 	public static void useLanguage(String languageCode) {
 		List<Locale> match = bundleManager.displayNames.getSecondKeyset().stream().filter(loc -> getFormattedLocaleForSave(loc).equalsIgnoreCase(languageCode)).collect(Collectors.toList());
@@ -101,7 +100,6 @@ public abstract class TextSupplier {
 
 	/**
 	 * Set whether or not to throw exceptions if a key is missing (generally yes during validation, and no during actual gameplay)
-	 * @param throwExceptions 
 	 */
 	public static void setThrowExceptions(boolean throwExceptions) {
 		bundleManager.throwExceptions = throwExceptions;
@@ -109,7 +107,6 @@ public abstract class TextSupplier {
 
 	/** 
 	 * Only to be used during validation, otherwise use TextSupplier.getLanguageChoiceResponder()
-	 * @param languageDisplayName
 	 */
 	public static void useLanguageFromDisplayName(String languageDisplayName) {
 		bundleManager.locale = bundleManager.displayNames.getSecondValue(languageDisplayName);

@@ -39,7 +39,6 @@ public class UniversalCheckbox extends UniversalButton {
 	
 	/**
 	 * To be used when setting up a menu: this sets the box as checked (or not) without firing an interaction event
-	 * @param shouldBeChecked
 	 */
 	public void initializeAsChecked(boolean shouldBeChecked) {
 		box.setProgrammaticChangeEvents(false);

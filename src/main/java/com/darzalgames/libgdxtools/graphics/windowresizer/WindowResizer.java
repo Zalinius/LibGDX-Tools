@@ -32,8 +32,6 @@ public abstract class WindowResizer {
 	 * Initialize the WindowResizer, setting the window to the preferred mode based on the user's history
 	 * We do this in initialize() rather than a constructor because this object is created at the same time as the entire game,
 	 * and so LibGDX isn't ready to do any resizing yet
-	 * @param inputStrategySwitcher
-	 * @param windowResizerButton
 	 */
 	public void initialize(InputStrategySwitcher inputStrategySwitcher, WindowResizerButton windowResizerButton) {
 		this.inputStrategySwitcher = inputStrategySwitcher;

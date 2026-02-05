@@ -71,8 +71,6 @@ public class UserInterfaceFactory {
 
 	/**
 	 * Makes a label which changes its text based on the current input mode
-	 * @param textSupplier
-	 * @return
 	 */
 	public static Label getInputSensitiveLabelWithBackground(final Supplier<String> textSupplier) {
 		Label label = new InputSensitiveLabel(textSupplier, skinManager.getLabelWithBackgroundStyle(), inputStrategySwitcher);
@@ -88,8 +86,6 @@ public class UserInterfaceFactory {
 
 	/**
 	 * Makes a label which can be listed among other buttons, but isn't interactable
-	 * @param text
-	 * @return
 	 */
 	public static UniversalButton getListableLabel(final String text) {
 		// a bit of hack so that a label-like button can be stored in a list of buttons but not be interactable
@@ -103,7 +99,6 @@ public class UserInterfaceFactory {
 	/**
 	 * Makes a spacer which can be listed among other buttons, but isn't interactable and which will
 	 * expand out to fill any available space in the menu
-	 * @return
 	 */
 	public static UniversalButton getSpacer() {
 		UniversalButton spacer = getListableLabel("");
@@ -194,7 +189,6 @@ public class UserInterfaceFactory {
 	private static final String QUIT_GAME_KEY = "quit_game";
 
 	/**
-	 * @param buttonText
 	 * @return A quit button, with a default English text label if not otherwise to find
 	 */
 	public static UniversalButton getQuitGameButton(String buttonText) {

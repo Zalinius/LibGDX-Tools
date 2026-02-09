@@ -6,6 +6,8 @@ public interface CommonPreferences {
 
 	GraphicsPreference graphics();
 
-	PausePreference pause();
+	boolean shouldPauseGameWhenOutOfFocus();
+
+	void setShouldPauseGameWhenOutOfFocus(boolean shouldPauseSoundWhenOutOfFocus);
 
 }

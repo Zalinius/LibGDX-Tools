@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Align;
 import com.codedisaster.steamworks.SteamController;
 import com.codedisaster.steamworks.SteamControllerDigitalActionHandle;
 import com.darzalgames.darzalcommon.data.BiMap;
+import com.darzalgames.darzalcommon.data.Coordinate;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.assetloading.BlankLoadingScreen;
@@ -27,10 +28,13 @@ import com.darzalgames.libgdxtools.audio.LibgdxAudioConsumer;
 import com.darzalgames.libgdxtools.edition.GameEdition;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.WindowFocusListener;
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.os.*;
+import com.darzalgames.libgdxtools.preferences.CommonPreferences;
+import com.darzalgames.libgdxtools.preferences.GraphicsPreference;
 import com.darzalgames.libgdxtools.preferences.SoundPreference;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
@@ -78,7 +82,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	}
 
 	@Override
-	protected void initializeAssets() {}
+	protected void preInitializeAssets() {}
 
 	@Override
 	protected void beginLoadingAssets() { /* This project is purposefully assetless */}
@@ -118,8 +122,8 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	}
 
 	@Override
-	protected DesktopSaveManager makeSaveManager() {
-		return new DesktopSaveManager() {
+	protected DesktopSaveManager makeSaveManager(String gameName, String developerName, GameOperatingSystem operatingSystem) {
+		return new DesktopSaveManager(gameName, developerName, operatingSystem) {
 			@Override
 			public void save() {/* notYetNeeded */}
 
@@ -131,6 +135,80 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 			@Override
 			public boolean loadOptions() {
 				return true;
+			}
+		};
+	}
+
+	@Override
+	public CommonPreferences getPreferenceManager() {
+		return new CommonPreferences() {
+
+			@Override
+			public SoundPreference sound() {
+				return new SoundPreference() {
+
+					@Override
+					public void setSoundEffectVolume(float volume) {}
+
+					@Override
+					public void setMusicVolume(float volume) {}
+
+					@Override
+					public boolean shouldMuteSoundWhenOutOfFocus() {
+						return false;
+					}
+
+					@Override
+					public void setShouldMuteSoundWhenOutOfFocus(boolean shouldMute) {}
+
+					@Override
+					public float getSoundEffectVolume() {
+						return 0.5f;
+					}
+
+					@Override
+					public float getMusicVolume() {
+						return 0.5f;
+					}
+				};
+			}
+
+			@Override
+			public boolean shouldPauseGameWhenOutOfFocus() {
+				return true;
+			}
+
+			@Override
+			public void setShouldPauseGameWhenOutOfFocus(boolean shouldPauseSoundWhenOutOfFocus) {}
+
+			@Override
+			public GraphicsPreference graphics() {
+				return new GraphicsPreference() {
+
+					@Override
+					public void setUserInterfaceScaling(float newScaling) {}
+
+					@Override
+					public void setPreferredWindowSize(Coordinate coordinate) {}
+
+					@Override
+					public void setPreferredScreenMode(ScreenMode preferredScreenMode) {}
+
+					@Override
+					public float getUserInterfaceScaling() {
+						return 1;
+					}
+
+					@Override
+					public Coordinate getPreferredWindowSize() {
+						return new Coordinate(800, 450);
+					}
+
+					@Override
+					public ScreenMode getPreferredScreenMode() {
+						return ScreenMode.WINDOWED;
+					}
+				};
 			}
 		};
 	}
@@ -263,11 +341,6 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	@Override
 	protected String getPreferenceManagerName() {
 		return "com.darzalgames.libgdxtools.preferences";
-	}
-
-	@Override
-	protected SoundPreference getSoundPreferenceManager() {
-		return null;
 	}
 
 	protected List<VisibleInputConsumer> getMenuEntries() {
@@ -547,6 +620,11 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	}
 
 	@Override
+	public String getDeveloperName() {
+		return "DarZal Games";
+	}
+
+	@Override
 	public String getGameVersion() {
 		return "1.0.0";
 	}
@@ -586,7 +664,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	@Override
 	public void focusLost() {
 		audioPipeline.getVolumeListener().setAllVolumes(0f);
-		if (preferenceManager.pause().shouldPauseGameWhenOutOfFocus()) {
+		if (preferenceManager.shouldPauseGameWhenOutOfFocus()) {
 			GamePauser.pause();
 		}
 	}

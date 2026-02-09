@@ -3,29 +3,14 @@ package com.darzalgames.libgdxtools.preferences;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import com.badlogic.gdx.Preferences;
-
 /**
  * @deprecated Next time we want to have a daily challenge, salvage this code to be used as safe file data, not as a preference!
  */
 @Deprecated(forRemoval = true)
-public class DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA extends PreferenceManager {
+public class DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA {
 
 	private static final String DAILY_DAY_KEY = "dailyChallengeDay";
 	private static final String DAILY_SCORE_KEY = "dailyChallengeScore";
-
-	/**
-	 * @param preferencePrefix A name for the preferences file, which should be in a package format corresponding to the game, e.g. com.darzalgames.cultivar
-	 */
-	@Deprecated
-	protected DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA(final String preferencePrefix) {
-		super(preferencePrefix, null);
-	}
-
-	@Deprecated
-	public DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA(final Preferences preferencesFile) {
-		super(preferencesFile, null);
-	}
 
 	@Deprecated
 	public int getTodaysDailyHighScore() {
@@ -45,16 +30,15 @@ public class DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA extends Prefere
 
 	@Deprecated
 	public boolean hasFinishedAGameForDay(final long referenceDay) {
-		boolean hasFinishedAGameForDay = false;
 
-		if (prefHasSavedKey(DAILY_DAY_KEY) && prefHasSavedKey(DAILY_SCORE_KEY)) {
-			long highScoreDay = getLongPrefValue(DAILY_DAY_KEY);
-			if (highScoreDay == referenceDay) {
-				hasFinishedAGameForDay = true;
-			}
-		}
+//		if (prefHasSavedKey(DAILY_DAY_KEY) && prefHasSavedKey(DAILY_SCORE_KEY)) {
+//			long highScoreDay = getLongPrefValue(DAILY_DAY_KEY);
+//			if (highScoreDay == referenceDay) {
+//				hasFinishedAGameForDay = true;
+//			}
+//		}
 
-		return hasFinishedAGameForDay;
+		return false;
 	}
 
 	private long today() {
@@ -67,7 +51,7 @@ public class DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA extends Prefere
 		int highScore = Integer.MIN_VALUE;
 
 		if (hasFinishedAGameForDay(referenceDay)) {
-			highScore = getIntegerPrefValue(DAILY_SCORE_KEY);
+//			highScore = getIntegerPrefValue(DAILY_SCORE_KEY);
 		}
 
 		return highScore;
@@ -78,8 +62,8 @@ public class DailyChallengePreferenceManagerSHOULDBESAVEFILEDATA extends Prefere
 		final int currentHighScore = getDailyHighScore(referenceDay);
 
 		if (newScore > currentHighScore) {
-			savePrefValue(DAILY_DAY_KEY, referenceDay);
-			savePrefValue(DAILY_SCORE_KEY, newScore);
+//			savePrefValue(DAILY_DAY_KEY, referenceDay);
+//			savePrefValue(DAILY_SCORE_KEY, newScore);
 		}
 	}
 }

@@ -37,11 +37,11 @@ public abstract class CrashHandler {
 		Properties gameProperties = tryGetGameProperties("data/game.properties");
 		String gameName = gameProperties.getProperty("gameName", "nameNotFound");
 		String gameVersion = gameProperties.getProperty("version", "versionNotFound");
-		String platform = tryGetString(() -> args.get(0));
+		String operatingSystem = tryGetString(() -> args.get(0));
 		Instant utcTime = Instant.now();
 		UUID id = UUID.randomUUID();
 		String[] stackTrace = getMessageAndStackTraceArray(exception);
-		return new CrashReport(gameName, gameVersion, platform, utcTime, id, stackTrace);
+		return new CrashReport(gameName, gameVersion, operatingSystem, utcTime, id, stackTrace);
 	}
 
 	public static Properties tryGetGameProperties(String propertiesFile) {

@@ -47,8 +47,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 				mode -> GameInfo.getUserInterfaceFactory().makeTextButton(
 						() -> translateWindowModeOption(mode),
 						() -> {
-							String previousModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
-							ScreenMode previousMode = ScreenMode.valueOf(previousModeString);
+							ScreenMode previousMode = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
 							if (!mode.equals(previousMode)) {
 								windowResizer.setMode(mode, true);
 							}

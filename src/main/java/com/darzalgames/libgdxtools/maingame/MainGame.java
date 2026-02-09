@@ -14,8 +14,7 @@ import com.darzalgames.libgdxtools.assetloading.LoadingScreen;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.os.GameOperatingSystem;
-import com.darzalgames.libgdxtools.preferences.PreferenceManager;
-import com.darzalgames.libgdxtools.preferences.SoundPreference;
+import com.darzalgames.libgdxtools.preferences.CommonPreferences;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.PlatformStrategyBuilder;
 import com.darzalgames.libgdxtools.steam.agnostic.PlatformStrategy;
@@ -36,8 +35,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	// Values which are statically shared to the rest of the game by {@link GameInfo}
 	protected SaveManager saveManager;
-	protected PreferenceManager preferenceManager;
-	protected final GameOperatingSystem gamePlatform;
+	protected CommonPreferences preferenceManager;
+	protected final GameOperatingSystem gameOperatingSystem;
 	protected PlatformStrategy platformStrategy;
 	protected UserInterfaceFactory userInterfaceFactory;
 
@@ -57,7 +56,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	// The setup process, in order that they are called
 
 	// Set up assets without loading the majority of assets
-	protected abstract void initializeAssets();
+	// for example, this would load gameProperties and splashscreen stuff
+	protected abstract void preInitializeAssets();
 
 	// Begin loading process for all assets
 	protected abstract void beginLoadingAssets();
@@ -74,8 +74,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	protected abstract String getPreferenceManagerName();
 
-	protected abstract SoundPreference getSoundPreferenceManager();
-
 	/**
 	 * @return The fallback background to be used in the game area, visible when nothing else is covering it
 	 */
@@ -91,7 +89,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 
-	protected abstract SaveManager makeSaveManager();
+	protected abstract SaveManager makeSaveManager(String gameName, String developerName, GameOperatingSystem operatingSystem);
 
 	protected abstract List<StageLikeRenderable> makeGameSpecificStages();
 
@@ -108,9 +106,9 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	 */
 	protected abstract void quitGame();
 
-	protected MainGame(WindowResizer windowResizer, GameOperatingSystem gamePlatform) {
+	protected MainGame(WindowResizer windowResizer, GameOperatingSystem gameOperatingSystem) {
 		this.windowResizer = windowResizer;
-		this.gamePlatform = gamePlatform;
+		this.gameOperatingSystem = gameOperatingSystem;
 		GameInfo.setMainGame(this);
 		loadingState = LoadingState.LOADING;
 	}
@@ -118,11 +116,11 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	@Override
 	public final void create() {
 		platformStrategy = PlatformStrategyBuilder.initializeGamePlatform(false);
-		initializeAssets();
+		preInitializeAssets();
 
-		saveManager = makeSaveManager();
+		saveManager = makeSaveManager(getGameName(), getDeveloperName(), getOperatingSystem());
 		saveManager.loadOptions();
-		makePreferenceManager();
+		preferenceManager = getPreferenceManager();
 		windowResizer.setModeFromPreferences();
 
 		beginLoadingAssets();
@@ -231,13 +229,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	@Override
-	public PreferenceManager getPreferenceManager() {
-		return preferenceManager;
-	}
-
-	@Override
 	public GameOperatingSystem getOperatingSystem() {
-		return gamePlatform;
+		return gameOperatingSystem;
 	}
 
 	@Override
@@ -263,10 +256,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void makeInputStrategySwitcher() {
 		inputStrategySwitcher = new InputStrategySwitcher();
-	}
-
-	private void makePreferenceManager() {
-		preferenceManager = new PreferenceManager(getPreferenceManagerName(), getSoundPreferenceManager());
 	}
 
 	private void makeAllStages() {

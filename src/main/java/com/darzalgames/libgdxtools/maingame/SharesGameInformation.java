@@ -2,7 +2,7 @@ package com.darzalgames.libgdxtools.maingame;
 
 import com.darzalgames.libgdxtools.edition.GameEdition;
 import com.darzalgames.libgdxtools.os.GameOperatingSystem;
-import com.darzalgames.libgdxtools.preferences.PreferenceManager;
+import com.darzalgames.libgdxtools.preferences.CommonPreferences;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.PlatformStrategy;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
@@ -10,6 +10,8 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFact
 public interface SharesGameInformation {
 
 	String getGameName();
+
+	String getDeveloperName();
 
 	String getGameVersion();
 
@@ -19,7 +21,7 @@ public interface SharesGameInformation {
 
 	SaveManager getSaveManager();
 
-	PreferenceManager getPreferenceManager();
+	CommonPreferences getPreferenceManager();
 
 	PlatformStrategy getPlatformStrategy();
 

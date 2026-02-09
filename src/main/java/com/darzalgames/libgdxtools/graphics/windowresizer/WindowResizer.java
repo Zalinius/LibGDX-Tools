@@ -59,20 +59,15 @@ public abstract class WindowResizer {
 	protected void setMode(ScreenMode screenMode, boolean offerToRevert) {
 		previousScreenMode = currentScreenMode;
 		currentScreenMode = screenMode;
-		GameInfo.getPreferenceManager().graphics().setPreferredScreenMode(currentScreenMode.name());
+		GameInfo.getPreferenceManager().graphics().setPreferredScreenMode(currentScreenMode);
 
 		inputStrategySwitcher.saveCurrentStrategy();
 		switch (currentScreenMode) {
-		case BORDERLESS:
-			switchToBorderless();
-			break;
-		case FULLSCREEN:
-			switchToFullScreen();
-			break;
-		case WINDOWED:
-			switchToWindowed();
-			break;
+		case BORDERLESS -> switchToBorderless();
+		case FULLSCREEN -> switchToFullScreen();
+		case WINDOWED -> switchToWindowed();
 		}
+
 		offerToRevert = offerToRevert && previousScreenMode != currentScreenMode;
 		inputStrategySwitcher.revertToPreviousStrategy();
 		windowResizerButton.setSelectedScreenMode(currentScreenMode);
@@ -94,18 +89,11 @@ public abstract class WindowResizer {
 	}
 
 	public void setModeFromPreferences() {
-		String preferredModeString = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
-		currentScreenMode = ScreenMode.valueOf(preferredModeString);
+		currentScreenMode = GameInfo.getPreferenceManager().graphics().getPreferredScreenMode();
 		switch (currentScreenMode) {
-		case BORDERLESS:
-			switchToBorderless();
-			break;
-		case FULLSCREEN:
-			switchToFullScreen();
-			break;
-		case WINDOWED:
-			switchToWindowed();
-			break;
+		case BORDERLESS -> switchToBorderless();
+		case FULLSCREEN -> switchToFullScreen();
+		case WINDOWED -> switchToWindowed();
 		}
 		previousScreenMode = currentScreenMode;
 	}

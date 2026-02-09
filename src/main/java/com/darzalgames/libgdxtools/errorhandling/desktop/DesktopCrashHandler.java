@@ -55,7 +55,7 @@ public class DesktopCrashHandler extends CrashHandler {
 	}
 
 	private boolean shouldHavePopup(CrashReport crashReport) {
-		return !GameOperatingSystem.MAC.equalsIgnoreCase(crashReport.getPlatformName());
+		return !GameOperatingSystem.MAC.equalsIgnoreCase(crashReport.getOperatingSystemName());
 	}
 
 	@Override

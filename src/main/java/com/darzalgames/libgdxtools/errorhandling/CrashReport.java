@@ -13,7 +13,7 @@ public class CrashReport implements Serializable {
 
 	private final String gameName;
 	private final String gameVersion;
-	private final String platformName;
+	private final String operatingSystemName;
 
 	private final String time;
 	private final String id;
@@ -22,10 +22,10 @@ public class CrashReport implements Serializable {
 
 	private final transient Instant timeInstant;
 
-	public CrashReport(String gameName, String gameVersion, String platformName, Instant utcTime, UUID id, String[] stackTrace) {
+	public CrashReport(String gameName, String gameVersion, String operatingSystemName, Instant utcTime, UUID id, String[] stackTrace) {
 		this.gameName = gameName;
 		this.gameVersion = gameVersion;
-		this.platformName = platformName;
+		this.operatingSystemName = operatingSystemName;
 		time = utcTime.toString();
 		this.id = id.toString();
 		this.stackTrace = stackTrace;
@@ -41,8 +41,8 @@ public class CrashReport implements Serializable {
 		return gameVersion;
 	}
 
-	public String getPlatformName() {
-		return platformName;
+	public String getOperatingSystemName() {
+		return operatingSystemName;
 	}
 
 	public String getTime() {
@@ -66,7 +66,7 @@ public class CrashReport implements Serializable {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Game    : ").append(gameName).append('\n');
 		sb.append("Version : ").append(gameVersion).append('\n');
-		sb.append("Platform: ").append(platformName).append('\n');
+		sb.append("OS      : ").append(operatingSystemName).append('\n');
 		sb.append("Time    : ").append(time).append('\n');
 		sb.append("ID      : ").append(id).append('\n');
 

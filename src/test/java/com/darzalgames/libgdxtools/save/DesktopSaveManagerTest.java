@@ -7,41 +7,41 @@ import org.junit.jupiter.api.Test;
 class DesktopSaveManagerTest {
 
 	@Test
-	void getSaveName_withoutBackup_createsCorrectFileName() {
+	void getSubsystemSaveFileName_withoutBackup_createsCorrectFileName() {
 		String gameName = "Quest Giver";
+		DesktopSaveManager desktopSaveManager = makeAbstractDesktopSaveManager(gameName);
 
-		String saveFileName = DesktopSaveManager.getSaveName(false, gameName);
+		String saveFileName = desktopSaveManager.getSubsystemSaveFileName("Graphics Options");
 
-		assertEquals("QuestGiverSave.json", saveFileName);
+		assertEquals("QuestGiverGraphicsOptions.json", saveFileName);
 	}
 
 	@Test
-	void getSaveName_withBackup_createsCorrectFileName() {
+	void getSubsystemBackupSaveFileName_withBackup_createsCorrectFileName() {
 		String gameName = "Quest Giver";
+		DesktopSaveManager desktopSaveManager = makeAbstractDesktopSaveManager(gameName);
 
-		String saveFileName = DesktopSaveManager.getSaveName(true, gameName);
+		String saveFileName = desktopSaveManager.getSubsystemBackupSaveFileName("Options");
 
-		assertEquals("QuestGiverSave-backup.json", saveFileName);
+		assertEquals("QuestGiverOptions-backup.json", saveFileName);
 	}
 
-	@Test
-	void getSubsystemSaveName_withoutBackup_createsCorrectFileName() {
-		String gameName = "Quest Giver";
-		String subsystem = "User Options";
+	private static DesktopSaveManager makeAbstractDesktopSaveManager(String gameName) {
+		return new DesktopSaveManager(gameName, "DarZal Games", null) {
 
-		String saveFileName = DesktopSaveManager.getSubsystemSaveName(false, gameName, subsystem);
+			@Override
+			public void save() {}
 
-		assertEquals("QuestGiverUserOptionsSave.json", saveFileName);
-	}
+			@Override
+			public boolean loadOptions() {
+				return false;
+			}
 
-	@Test
-	void getSubsystemSaveName_withBackup_createsCorrectFileName() {
-		String gameName = "Quest Giver";
-		String subsystem = "User Options";
-
-		String saveFileName = DesktopSaveManager.getSubsystemSaveName(true, gameName, subsystem);
-
-		assertEquals("QuestGiverUserOptionsSave-backup.json", saveFileName);
+			@Override
+			public boolean load() {
+				return false;
+			}
+		};
 	}
 
 }

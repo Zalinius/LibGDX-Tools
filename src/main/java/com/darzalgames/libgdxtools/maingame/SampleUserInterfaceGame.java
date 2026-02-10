@@ -33,8 +33,8 @@ import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerDesktop;
 import com.darzalgames.libgdxtools.internationalization.BundleManager;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.os.*;
-import com.darzalgames.libgdxtools.preferences.CommonPreferences;
 import com.darzalgames.libgdxtools.preferences.GraphicsPreference;
+import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.preferences.SoundPreference;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.ui.Alignment;
@@ -140,8 +140,8 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	}
 
 	@Override
-	public CommonPreferences getPreferenceManager() {
-		return new CommonPreferences() {
+	public PreferenceManager getPreferenceManager() {
+		return new PreferenceManager() {
 
 			@Override
 			public SoundPreference sound() {
@@ -336,11 +336,6 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 		Image grayImage = new Image(gray);
 		grayImage.setFillParent(true);
 		return grayImage;
-	}
-
-	@Override
-	protected String getPreferenceManagerName() {
-		return "com.darzalgames.libgdxtools.preferences";
 	}
 
 	protected List<VisibleInputConsumer> getMenuEntries() {

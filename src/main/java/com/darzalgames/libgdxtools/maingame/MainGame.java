@@ -14,7 +14,7 @@ import com.darzalgames.libgdxtools.assetloading.LoadingScreen;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.os.GameOperatingSystem;
-import com.darzalgames.libgdxtools.preferences.CommonPreferences;
+import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.PlatformStrategyBuilder;
 import com.darzalgames.libgdxtools.steam.agnostic.PlatformStrategy;
@@ -35,7 +35,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	// Values which are statically shared to the rest of the game by {@link GameInfo}
 	protected SaveManager saveManager;
-	protected CommonPreferences preferenceManager;
+	protected PreferenceManager preferenceManager;
 	protected final GameOperatingSystem gameOperatingSystem;
 	protected PlatformStrategy platformStrategy;
 	protected UserInterfaceFactory userInterfaceFactory;
@@ -59,6 +59,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	// for example, this would load gameProperties and splashscreen stuff
 	protected abstract void preInitializeAssets();
 
+	protected abstract SaveManager makeSaveManager(String gameName, String developerName, GameOperatingSystem operatingSystem);
+
 	// Begin loading process for all assets
 	protected abstract void beginLoadingAssets();
 
@@ -71,8 +73,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected void onLoadingFinished() {}
 
 	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
-
-	protected abstract String getPreferenceManagerName();
 
 	/**
 	 * @return The fallback background to be used in the game area, visible when nothing else is covering it
@@ -88,8 +88,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected abstract AudioActor makeAudioActorPauseListener(Pause pause);
 
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
-
-	protected abstract SaveManager makeSaveManager(String gameName, String developerName, GameOperatingSystem operatingSystem);
 
 	protected abstract List<StageLikeRenderable> makeGameSpecificStages();
 

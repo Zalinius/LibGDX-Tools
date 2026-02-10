@@ -2,7 +2,7 @@ package com.darzalgames.libgdxtools.maingame;
 
 import com.darzalgames.libgdxtools.edition.GameEdition;
 import com.darzalgames.libgdxtools.os.GameOperatingSystem;
-import com.darzalgames.libgdxtools.preferences.CommonPreferences;
+import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.DesktopSaveManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
 import com.darzalgames.libgdxtools.steam.agnostic.PlatformStrategy;
@@ -46,9 +46,9 @@ public class GameInfo {
 	}
 
 	/**
-	 * @return Gets the {@link CommonPreferences}, useful to access the more specific preference managers (such as sound, or more temporary "other" managers)
+	 * @return Gets the {@link PreferenceManager}, useful to access the more specific preference managers (such as sound, or more temporary "other" managers)
 	 */
-	public static CommonPreferences getPreferenceManager() {
+	public static PreferenceManager getPreferenceManager() {
 		return game.getPreferenceManager();
 	}
 

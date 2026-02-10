@@ -1,6 +1,6 @@
 package com.darzalgames.libgdxtools.preferences;
 
-public interface CommonPreferences {
+public interface PreferenceManager {
 
 	SoundPreference sound();
 

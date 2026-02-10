@@ -1,9 +1,24 @@
-package com.darzalgames.libgdxtools.steam.agnostic;
+package com.darzalgames.libgdxtools.platform;
 
-import com.darzalgames.libgdxtools.statistics.StatsController;
+import java.util.function.Supplier;
+
+import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
+import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
 
-public interface SteamStrategy {
+public interface PlatformStrategy {
+
+	/**
+	 * Initialization function, called very early in the game launch process
+	 */
+	void initialize();
+
+	/**
+	 * Initialization function, called once the input system is available
+	 */
+	void initializeInput(
+			Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandler,
+			Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler);
 
 	/**
 	 * Must be called every frame to check for Steam callbacks
@@ -15,14 +30,13 @@ public interface SteamStrategy {
 	 */
 	void dispose();
 
-	StatsController getStatsController();
-
 	/**
-	 * Get the ID unique to the current user, useful for differentiating save files
-	 * or for use as a seed when making interesting game features (e.g. generating a player portrait)
-	 * @return The ID, or the string "dev" if Steam is not running
+	 * Get an folder name for the current user, useful for differentiating save files
+	 * @return The folder name
 	 */
-	String getSteamID();
+	String getPlayersSaveFolderName();
+
+	StatsController getStatsController();
 
 	/**
 	 * @return The game-specific input handler for Steam

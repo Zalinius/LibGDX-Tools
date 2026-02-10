@@ -19,7 +19,7 @@ import javax.swing.JFrame;
 
 import com.darzalgames.darzalcommon.time.FileFriendlyTimeFormatter;
 import com.darzalgames.libgdxtools.errorhandling.*;
-import com.darzalgames.libgdxtools.platform.GamePlatform;
+import com.darzalgames.libgdxtools.os.GameOperatingSystem;
 
 public class DesktopCrashHandler extends CrashHandler {
 
@@ -55,7 +55,7 @@ public class DesktopCrashHandler extends CrashHandler {
 	}
 
 	private boolean shouldHavePopup(CrashReport crashReport) {
-		return !GamePlatform.MAC.equalsIgnoreCase(crashReport.getPlatformName());
+		return !GameOperatingSystem.MAC.equalsIgnoreCase(crashReport.getOperatingSystemName());
 	}
 
 	@Override

@@ -2,71 +2,70 @@ package com.darzalgames.libgdxtools.save;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.os.GameOperatingSystem;
 
-public interface DesktopSaveManager extends SaveManager {
+public abstract class DesktopSaveManager implements SaveManager {
 
-	/**
-	 * Creates a filehandle for game saves.<br>
-	 * This method is designed for games that use a single overarching file for saves.
-	 * @param gameName The name of the game, spaces are okay
-	 * @return The actively-used save game file, named and pathed using the gameName
-	 */
-	default FileHandle getSingleFileSaveFile(String gameName) {
-		return getSaveFileByOperatingSystem(getSaveName(false, gameName), gameName);
+	private final String gameName;
+	private final String developerName;
+	private final GameOperatingSystem operatingSystem;
+
+	protected DesktopSaveManager(String gameName, String developerName, GameOperatingSystem operatingSystem) {
+		this.gameName = gameName.replace(" ", "").trim();
+		this.developerName = developerName.replace(" ", "").trim();
+		this.operatingSystem = operatingSystem;
 	}
 
 	/**
 	 * Creates a filehandle for a specific subsystem game save, i.e. a file for current run progress, or for meta-progression.<br>
 	 * This method is designed for games that use multiple split files for saves.
-	 * @param gameName      The name of the game, spaces are okay
 	 * @param subsystemName The name of the subsystem of the game, spaces are okay.
 	 * @return The actively-used subsystem save game file, named and pathed using the gameName and subsystemName
 	 */
-	default FileHandle getSubsystemFileSaveFile(String gameName, String subsystemName) {
-		return getSaveFileByOperatingSystem(getSubsystemSaveName(false, gameName, subsystemName), gameName);
-	}
-
-	/**
-	 * Creates a filehandle for game save backups.<br>
-	 * This method is designed for games that use a single overarching file for saves.
-	 * @param gameName The name of the game, spaces are okay
-	 * @return The BACKUP save game file, named and pathed using the gameName
-	 */
-	default FileHandle getSingleFileBackupSaveFile(String gameName) {
-		return getSaveFileByOperatingSystem(getSaveName(true, gameName), gameName);
+	protected FileHandle getSubsystemFileSaveFile(String subsystemName) {
+		String fileName = getSubsystemSaveFileName(subsystemName);
+		return getSaveFileHandleByOperatingSystem(fileName);
 	}
 
 	/**
 	 * Creates a filehandle for a specific subsystem game save backup, i.e. a file for current run progress, or for meta-progression.<br>
 	 * This method is designed for games that use multiple split files for saves.
-	 * @param gameName      The name of the game, spaces are okay
 	 * @param subsystemName The name of the subsystem of the game, spaces are okay.
 	 * @return The BACKUP subsystem save game file, named and pathed using the gameName and subsystemName
 	 */
-	default FileHandle getSubsystemFileBackupSaveFile(String gameName, String subsystemName) {
-		return getSaveFileByOperatingSystem(getSubsystemSaveName(true, gameName, subsystemName), gameName);
+	protected FileHandle getSubsystemFileBackupSaveFile(String subsystemName) {
+		String fileName = getSubsystemBackupSaveFileName(subsystemName);
+		return getSaveFileHandleByOperatingSystem(fileName);
 	}
 
-	static String getSaveName(boolean isBackup, String gameName) {
-		String suffix = isBackup ? "-backup" : "";
-		return gameName.replace(" ", "").trim()
-				+ "Save"
-				+ suffix
+	/**
+	 * Gets the filename and extension for a specific subsystem
+	 * @param subsystemName The subsystem related to the file
+	 * @return A platform indepedent filename without directories
+	 */
+	String getSubsystemSaveFileName(String subsystemName) {
+		subsystemName = subsystemName.replace(" ", "").trim();
+		return gameName
+				+ subsystemName
 				+ ".json";
 	}
 
-	static String getSubsystemSaveName(boolean isBackup, String gameName, String subsystemName) {
-		String suffix = isBackup ? "-backup" : "";
-		return gameName.replace(" ", "").trim()
-				+ subsystemName.replace(" ", "").trim()
-				+ "Save"
-				+ suffix
+	/**
+	 * Gets the backup filename and extension for a specific subsystem
+	 * @param subsystemName The subsystem related to the file
+	 * @return A platform indepedent backup filename without directories
+	 */
+	String getSubsystemBackupSaveFileName(String subsystemName) {
+		subsystemName = subsystemName.replace(" ", "").trim();
+		return gameName
+				+ subsystemName
+				+ "-backup"
 				+ ".json";
 	}
 
-	private FileHandle getSaveFileByOperatingSystem(String saveFileName, String gameName) {
-		String fullGameAndSaveName = gameName + "/" + GameInfo.getSteamStrategy().getSteamID() + "/" + saveFileName;
-		return GameInfo.getGamePlatform().getSaveFileLocation(fullGameAndSaveName);
+	private FileHandle getSaveFileHandleByOperatingSystem(String saveFileName) {
+		String fullGameAndSaveName = gameName + "-" + developerName + "/" + GameInfo.getPlatformStrategy().getPlayersSaveFolderName() + "/" + saveFileName;
+		return operatingSystem.getSaveFileLocation(fullGameAndSaveName);
 	}
 
 }

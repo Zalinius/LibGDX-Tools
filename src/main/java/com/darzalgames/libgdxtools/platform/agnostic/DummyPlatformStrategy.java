@@ -1,19 +1,24 @@
-package com.darzalgames.libgdxtools.steam.agnostic;
+package com.darzalgames.libgdxtools.platform.agnostic;
 
-import com.darzalgames.libgdxtools.statistics.StatsController;
-import com.darzalgames.libgdxtools.statistics.StatsControllerFactory;
+import java.util.function.Supplier;
+
+import com.darzalgames.libgdxtools.platform.PlatformStrategy;
+import com.darzalgames.libgdxtools.platform.StatsController;
+import com.darzalgames.libgdxtools.platform.StatsControllerFactory;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
+import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
 
 /**
  * Used when Steam isn't connected (e.g. running a dev build or one off of itch.io)
  */
-public class DummySteamStrategy implements SteamStrategy {
+public abstract class DummyPlatformStrategy implements PlatformStrategy {
 
-	private final FallbackGamepadInputHandler gamepadInputHandler;
+	private FallbackGamepadInputHandler gamepadInputHandler;
 
-	public DummySteamStrategy(FallbackGamepadInputHandler gamepadInputHandler) {
-		this.gamepadInputHandler = gamepadInputHandler;
+	@Override
+	public void initializeInput(Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandler, Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler) {
+		gamepadInputHandler = makeFallbackGamepadInputHandler.get();
 	}
 
 	@Override
@@ -21,11 +26,6 @@ public class DummySteamStrategy implements SteamStrategy {
 
 	@Override
 	public void dispose() { /* Dummy strategy does nothing */ }
-
-	@Override
-	public String getSteamID() {
-		return "dev";
-	}
 
 	@Override
 	public void setRichPresentsVariable(String key, String value) { /* Dummy strategy does nothing */ }

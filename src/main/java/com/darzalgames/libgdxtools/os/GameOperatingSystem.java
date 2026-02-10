@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.platform;
+package com.darzalgames.libgdxtools.os;
 
 import java.util.*;
 import java.util.function.Function;
@@ -8,47 +8,35 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputReceiver;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
-public interface GamePlatform {
+public interface GameOperatingSystem {
 
 	String WINDOWS = "Windows";
 	String LINUX = "Linux";
 	String MAC = "Mac";
 
 	/**
-	 * @return The platform name
+	 * @return The OS name
 	 */
-	String getPlatformName();
+	String getOperatingSystemName();
 
 	/**
-	 * @return True if the active game platform supports borderless fullscreen
+	 * @return True if the active game OS supports borderless fullscreen
 	 */
 	boolean supportsBorderlessFullscreen();
 
 	/**
-	 * Return the correct directory for save files based on the platform
+	 * Return the correct directory for save files based on the OS
 	 * @param fullGameAndSaveName The sub-path and name of the desired save file
 	 * @return A LibGDX file handle to the save file
 	 */
 	FileHandle getSaveFileLocation(String fullGameAndSaveName);
 
-	/**
-	 * @param inputStrategySwitcher The input strategy manager, so we can make the gamepad input handler
-	 * @return A SteamStrategy befitting the GamePlatform
-	 */
-	SteamStrategy getSteamStrategy(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver);
-
-	/**
-	 * @return True if a developer is playing, false if a player is playing
-	 */
-	boolean isDevMode();
-	
-	void platformSpecificOpenGlInitialization();
+	default void operatingSystemSpecificOpenGlInitialization() { /* Do nothing by default */ }
 
 	static Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandlerSupplier(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver) {
 		return () -> new FallbackGamepadInputHandler(inputStrategySwitcher, inputReceiver) {

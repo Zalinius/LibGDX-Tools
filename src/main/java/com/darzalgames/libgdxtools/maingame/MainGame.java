@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.maingame;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -12,20 +13,17 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.darzalgames.libgdxtools.assetloading.LoadingScreen;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
-import com.darzalgames.libgdxtools.platform.GamePlatform;
+import com.darzalgames.libgdxtools.os.GameOperatingSystem;
+import com.darzalgames.libgdxtools.platform.PlatformStrategy;
+import com.darzalgames.libgdxtools.platform.PlatformStrategyBuilder;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
-import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStageWithBackground;
-import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
-import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
-import com.darzalgames.libgdxtools.ui.input.handler.MouseInputHandler;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.InputSetup;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.OptionsMenu;
-import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
+import com.darzalgames.libgdxtools.ui.input.handler.*;
+import com.darzalgames.libgdxtools.ui.input.inputpriority.*;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
 import com.darzalgames.libgdxtools.ui.screen.Fader;
@@ -38,8 +36,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	// Values which are statically shared to the rest of the game by {@link GameInfo}
 	protected SaveManager saveManager;
 	protected PreferenceManager preferenceManager;
-	protected final GamePlatform gamePlatform;
-	protected SteamStrategy steamStrategy;
+	protected final GameOperatingSystem gameOperatingSystem;
+	protected PlatformStrategy platformStrategy;
 	protected UserInterfaceFactory userInterfaceFactory;
 
 	// Objects created at initialization, but not widely shared
@@ -56,6 +54,14 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private LoadingState loadingState;
 
 	// The setup process, in order that they are called
+
+	// Set up assets without loading the majority of assets
+	// for example, this would load gameProperties and splashscreen stuff
+	protected abstract void preInitializeAssets();
+
+	protected abstract SaveManager makeSaveManager(String gameName, String developerName, GameOperatingSystem operatingSystem);
+
+	// Begin loading process for all assets
 	protected abstract void beginLoadingAssets();
 
 	protected abstract LoadingScreen makeLoadingScreen();
@@ -67,8 +73,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected void onLoadingFinished() {}
 
 	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
-
-	protected abstract String getPreferenceManagerName();
 
 	/**
 	 * @return The fallback background to be used in the game area, visible when nothing else is covering it
@@ -85,8 +89,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	protected abstract KeyboardInputHandler makeKeyboardInputHandler();
 
-	protected abstract SaveManager makeSaveManager();
-
 	protected abstract List<StageLikeRenderable> makeGameSpecificStages();
 
 	protected abstract void setUpBeforeLoadingSave();
@@ -102,17 +104,23 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	 */
 	protected abstract void quitGame();
 
-	protected MainGame(WindowResizer windowResizer, GamePlatform gamePlatform) {
+	protected MainGame(WindowResizer windowResizer, GameOperatingSystem gameOperatingSystem) {
 		this.windowResizer = windowResizer;
-		this.gamePlatform = gamePlatform;
+		this.gameOperatingSystem = gameOperatingSystem;
 		GameInfo.setMainGame(this);
 		loadingState = LoadingState.LOADING;
 	}
 
 	@Override
 	public final void create() {
-		makePreferenceManager();
+		platformStrategy = PlatformStrategyBuilder.initializeGamePlatform(false);
+		preInitializeAssets();
+
+		saveManager = makeSaveManager(getGameName(), getDeveloperName(), getOperatingSystem());
+		saveManager.loadOptions();
+		preferenceManager = getPreferenceManager();
 		windowResizer.setModeFromPreferences();
+
 		beginLoadingAssets();
 		Gdx.app.log("GAME", "Launching " + toString());
 		loadingScreen = makeLoadingScreen();
@@ -128,8 +136,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		setUpInput();
 
 		setUpBeforeLoadingSave();
-		saveManager = makeSaveManager();
-		boolean isNewSave = !saveManager.load();
+		boolean isNewSave = !saveManager.loadGame();
 		launchGame(isNewSave);
 	}
 
@@ -155,7 +162,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		if (loadingState == LoadingState.GAME_RUNNING) {
 			resizeUI();
 			multipleStage.update();
-			steamStrategy.update();
+			platformStrategy.update();
 		} else if (loadingState == LoadingState.LOADING_TO_LAUNCH_TRANSITION) {
 			loadingScreen.update(1); // lets the loading screen do a fade out or something
 			if (loadingScreen.hasFinishedAnimating()) {
@@ -193,9 +200,9 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 			saveManager.save();
 		}
 
-		if (steamStrategy != null) {
+		if (platformStrategy != null) {
 			// it's null during the loading screen
-			steamStrategy.dispose();
+			platformStrategy.dispose();
 		}
 
 		quitGame();
@@ -220,18 +227,13 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	@Override
-	public PreferenceManager getPreferenceManager() {
-		return preferenceManager;
+	public GameOperatingSystem getOperatingSystem() {
+		return gameOperatingSystem;
 	}
 
 	@Override
-	public GamePlatform getGamePlatform() {
-		return gamePlatform;
-	}
-
-	@Override
-	public SteamStrategy getSteamStrategy() {
-		return steamStrategy;
+	public PlatformStrategy getPlatformStrategy() {
+		return platformStrategy;
 	}
 
 	@Override
@@ -245,17 +247,13 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		sb.append(getGameName()).append(" - ");
 		sb.append(getGameVersion()).append(" - ");
 		sb.append(getGameEdition().getDisplayName()).append(" ");
-		sb.append("(").append(getGamePlatform().getPlatformName()).append(")");
+		sb.append("(").append(getOperatingSystem().getOperatingSystemName()).append(")");
 
 		return sb.toString();
 	}
 
 	private void makeInputStrategySwitcher() {
 		inputStrategySwitcher = new InputStrategySwitcher();
-	}
-
-	private void makePreferenceManager() {
-		preferenceManager = new PreferenceManager(getPreferenceManagerName());
 	}
 
 	private void makeAllStages() {
@@ -303,18 +301,20 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void setUpInput() {
 		// Set up input processing for all strategies
 		inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, multipleStage.getGameStagesInOrder(), pause);
-
-		makeSteamStrategy();
+		InputReceiver inputReceiver = inputSetup.getInputReceiver();
+		Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandler = () -> makeFallbackGamepadInputHandler(inputStrategySwitcher, inputReceiver);
+		Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler = () -> makeSteamGamepadInputHandler(inputStrategySwitcher, inputReceiver);
+		platformStrategy.initializeInput(makeFallbackGamepadInputHandler, makeSteamGamepadInputHandler);
 		makeKeyboardAndGamepadInputHandlers();
 	}
 
-	private void makeSteamStrategy() {
-		steamStrategy = gamePlatform.getSteamStrategy(inputStrategySwitcher, inputSetup.getInputReceiver());
-	}
+	public abstract FallbackGamepadInputHandler makeFallbackGamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver);
+
+	public abstract SteamGamepadInputHandler makeSteamGamepadInputHandler(InputStrategySwitcher inputStrategySwitcher, InputReceiver inputReceiver);
 
 	private void makeKeyboardAndGamepadInputHandlers() {
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
-		GamepadInputHandler gamepadInputHandler = steamStrategy.getGamepadInputHandler();
+		GamepadInputHandler gamepadInputHandler = platformStrategy.getGamepadInputHandler();
 		multipleStage.setUpInputHandlersOnStages(keyboardInputHandler, gamepadInputHandler, inputSetup.getScrollingManager());
 	}
 

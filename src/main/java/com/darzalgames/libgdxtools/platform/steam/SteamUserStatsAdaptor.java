@@ -1,8 +1,8 @@
-package com.darzalgames.libgdxtools.statistics.steam;
+package com.darzalgames.libgdxtools.platform.steam;
 
 import com.codedisaster.steamworks.SteamUserStats;
 import com.codedisaster.steamworks.SteamUserStatsCallback;
-import com.darzalgames.libgdxtools.statistics.StatsController;
+import com.darzalgames.libgdxtools.platform.StatsController;
 
 public class SteamUserStatsAdaptor extends SteamUserStats implements StatsController {
 

@@ -1,27 +1,29 @@
 package com.darzalgames.libgdxtools.maingame;
 
-import com.darzalgames.libgdxtools.platform.GameEdition;
-import com.darzalgames.libgdxtools.platform.GamePlatform;
+import com.darzalgames.libgdxtools.edition.GameEdition;
+import com.darzalgames.libgdxtools.os.GameOperatingSystem;
+import com.darzalgames.libgdxtools.platform.PlatformStrategy;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
-import com.darzalgames.libgdxtools.steam.agnostic.SteamStrategy;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
 
 public interface SharesGameInformation {
 
 	String getGameName();
 
+	String getDeveloperName();
+
 	String getGameVersion();
 
 	GameEdition getGameEdition();
 
-	GamePlatform getGamePlatform();
+	GameOperatingSystem getOperatingSystem();
 
 	SaveManager getSaveManager();
 
 	PreferenceManager getPreferenceManager();
 
-	SteamStrategy getSteamStrategy();
+	PlatformStrategy getPlatformStrategy();
 
 	UserInterfaceFactory getUserInterfaceFactory();
 

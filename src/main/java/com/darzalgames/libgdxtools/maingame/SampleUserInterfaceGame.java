@@ -82,7 +82,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	}
 
 	@Override
-	protected void preInitializeAssets() {}
+	protected void preInitializeAssets() {/* This project is purposefully assetless */}
 
 	@Override
 	protected void beginLoadingAssets() { /* This project is purposefully assetless */}

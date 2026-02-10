@@ -38,6 +38,11 @@ public abstract class DesktopSaveManager implements SaveManager {
 		return getSaveFileHandleByOperatingSystem(fileName);
 	}
 
+	/**
+	 * Gets the filename and extension for a specific subsystem
+	 * @param subsystemName The subsystem related to the file
+	 * @return A platform indepedent filename without directories
+	 */
 	String getSubsystemSaveFileName(String subsystemName) {
 		subsystemName = subsystemName.replace(" ", "").trim();
 		return gameName
@@ -45,6 +50,11 @@ public abstract class DesktopSaveManager implements SaveManager {
 				+ ".json";
 	}
 
+	/**
+	 * Gets the backup filename and extension for a specific subsystem
+	 * @param subsystemName The subsystem related to the file
+	 * @return A platform indepedent backup filename without directories
+	 */
 	String getSubsystemBackupSaveFileName(String subsystemName) {
 		subsystemName = subsystemName.replace(" ", "").trim();
 		return gameName

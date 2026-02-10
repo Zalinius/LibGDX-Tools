@@ -6,6 +6,9 @@ import com.darzalgames.libgdxtools.platform.steam.SteamPlatformStrategy;
 import com.darzalgames.libgdxtools.save.DeveloperGamePlatformStrategy;
 import com.darzalgames.libgdxtools.save.ItchGamePlatformStrategy;
 
+/**
+ * A factory that builds the correct Game Platform Strategy
+ */
 public class PlatformStrategyBuilder {
 
 	private PlatformStrategyBuilder() {}

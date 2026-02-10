@@ -8,8 +8,14 @@ import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;
 
 public interface PlatformStrategy {
 
+	/**
+	 * Initialization function, called very early in the game launch process
+	 */
 	void initialize();
 
+	/**
+	 * Initialization function, called once the input system is available
+	 */
 	void initializeInput(
 			Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandler,
 			Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler);

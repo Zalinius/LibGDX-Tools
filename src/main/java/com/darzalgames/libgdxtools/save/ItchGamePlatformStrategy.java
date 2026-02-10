@@ -3,6 +3,9 @@ package com.darzalgames.libgdxtools.save;
 import com.badlogic.gdx.Gdx;
 import com.darzalgames.libgdxtools.platform.agnostic.DummyPlatformStrategy;
 
+/**
+ * A simple PlatformStrategy for use on Itch
+ */
 public class ItchGamePlatformStrategy extends DummyPlatformStrategy {
 
 	@Override

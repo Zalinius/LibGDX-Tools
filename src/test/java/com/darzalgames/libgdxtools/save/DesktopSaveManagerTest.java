@@ -10,7 +10,6 @@ class DesktopSaveManagerTest {
 	void getSubsystemSaveFileName_withoutBackup_createsCorrectFileName() {
 		String gameName = "Quest Giver";
 		DesktopSaveManager desktopSaveManager = makeAbstractDesktopSaveManager(gameName);
-
 		String saveFileName = desktopSaveManager.getSubsystemSaveFileName("Graphics Options");
 
 		assertEquals("QuestGiverGraphicsOptions.json", saveFileName);

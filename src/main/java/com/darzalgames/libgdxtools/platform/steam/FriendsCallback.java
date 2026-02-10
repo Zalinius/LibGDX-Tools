@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.steam;
+package com.darzalgames.libgdxtools.platform.steam;
 
 import com.codedisaster.steamworks.SteamFriends.PersonaChange;
 import com.codedisaster.steamworks.SteamFriendsCallback;

@@ -14,10 +14,10 @@ import com.darzalgames.libgdxtools.assetloading.LoadingScreen;
 import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.os.GameOperatingSystem;
+import com.darzalgames.libgdxtools.platform.PlatformStrategy;
+import com.darzalgames.libgdxtools.platform.PlatformStrategyBuilder;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
-import com.darzalgames.libgdxtools.steam.PlatformStrategyBuilder;
-import com.darzalgames.libgdxtools.steam.agnostic.PlatformStrategy;
 import com.darzalgames.libgdxtools.ui.CustomCursorImage;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
@@ -136,7 +136,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		setUpInput();
 
 		setUpBeforeLoadingSave();
-		boolean isNewSave = !saveManager.load();
+		boolean isNewSave = !saveManager.loadGame();
 		launchGame(isNewSave);
 	}
 

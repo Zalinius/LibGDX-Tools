@@ -1,8 +1,7 @@
-package com.darzalgames.libgdxtools.steam.agnostic;
+package com.darzalgames.libgdxtools.platform;
 
 import java.util.function.Supplier;
 
-import com.darzalgames.libgdxtools.statistics.StatsController;
 import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.SteamGamepadInputHandler;

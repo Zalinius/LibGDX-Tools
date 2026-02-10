@@ -19,9 +19,9 @@ import com.darzalgames.libgdxtools.edition.GameEdition;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.SharesGameInformation;
 import com.darzalgames.libgdxtools.os.GameOperatingSystem;
+import com.darzalgames.libgdxtools.platform.PlatformStrategy;
 import com.darzalgames.libgdxtools.preferences.PreferenceManager;
 import com.darzalgames.libgdxtools.save.SaveManager;
-import com.darzalgames.libgdxtools.steam.agnostic.PlatformStrategy;
 import com.darzalgames.libgdxtools.ui.input.InputOnHexagonGrid;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
 

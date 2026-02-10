@@ -7,12 +7,12 @@ import com.darzalgames.libgdxtools.os.GameOperatingSystem;
 public abstract class DesktopSaveManager implements SaveManager {
 
 	private final String gameName;
-	private final String developperName;
+	private final String developerName;
 	private final GameOperatingSystem operatingSystem;
 
-	protected DesktopSaveManager(String gameName, String developperName, GameOperatingSystem operatingSystem) {
+	protected DesktopSaveManager(String gameName, String developerName, GameOperatingSystem operatingSystem) {
 		this.gameName = gameName.replace(" ", "").trim();
-		this.developperName = developperName.replace(" ", "").trim();
+		this.developerName = developerName.replace(" ", "").trim();
 		this.operatingSystem = operatingSystem;
 	}
 
@@ -54,7 +54,7 @@ public abstract class DesktopSaveManager implements SaveManager {
 	}
 
 	private FileHandle getSaveFileHandleByOperatingSystem(String saveFileName) {
-		String fullGameAndSaveName = gameName + "-" + developperName + "/" + GameInfo.getPlatformStrategy().getPlayersSaveFolderName() + "/" + saveFileName;
+		String fullGameAndSaveName = gameName + "-" + developerName + "/" + GameInfo.getPlatformStrategy().getPlayersSaveFolderName() + "/" + saveFileName;
 		return operatingSystem.getSaveFileLocation(fullGameAndSaveName);
 	}
 

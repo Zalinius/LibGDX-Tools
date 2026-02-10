@@ -38,7 +38,7 @@ class DesktopSaveManagerTest {
 			}
 
 			@Override
-			public boolean load() {
+			public boolean loadGame() {
 				return false;
 			}
 		};

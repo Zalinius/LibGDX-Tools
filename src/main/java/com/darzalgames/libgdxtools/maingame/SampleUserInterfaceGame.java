@@ -128,7 +128,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 			public void save() {/* notYetNeeded */}
 
 			@Override
-			public boolean load() {
+			public boolean loadGame() {
 				return true;
 			}
 

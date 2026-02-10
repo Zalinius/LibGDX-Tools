@@ -1,10 +1,10 @@
-package com.darzalgames.libgdxtools.steam;
+package com.darzalgames.libgdxtools.platform;
 
 import com.codedisaster.steamworks.SteamAPI;
 import com.codedisaster.steamworks.SteamException;
-import com.darzalgames.libgdxtools.save.DevelopperGamePlatformStrategy;
+import com.darzalgames.libgdxtools.platform.steam.SteamPlatformStrategy;
+import com.darzalgames.libgdxtools.save.DeveloperGamePlatformStrategy;
 import com.darzalgames.libgdxtools.save.ItchGamePlatformStrategy;
-import com.darzalgames.libgdxtools.steam.agnostic.PlatformStrategy;
 
 public class PlatformStrategyBuilder {
 
@@ -22,10 +22,10 @@ public class PlatformStrategyBuilder {
 				if (steamInitialized) {
 					platformStrategy = new SteamPlatformStrategy();
 				} else {
-					platformStrategy = new DevelopperGamePlatformStrategy();
+					platformStrategy = new DeveloperGamePlatformStrategy();
 				}
 			} catch (SteamException e) {
-				platformStrategy = new DevelopperGamePlatformStrategy();
+				platformStrategy = new DeveloperGamePlatformStrategy();
 			}
 		}
 		platformStrategy.initialize();

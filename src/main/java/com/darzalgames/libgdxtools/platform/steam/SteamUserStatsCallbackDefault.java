@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.statistics.steam;
+package com.darzalgames.libgdxtools.platform.steam;
 
 import com.badlogic.gdx.Gdx;
 import com.codedisaster.steamworks.*;

@@ -1,16 +1,18 @@
 package com.darzalgames.libgdxtools.maingame;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.darzalgames.libgdxtools.graphics.ShaderUtilities;
 
 public class StageBest extends Stage implements StageLikeRenderable {
 
 	public StageBest(String name, Viewport viewport) {
-		super(viewport);
+		super(viewport, ShaderUtilities.initializeWithDefaultShaderSettings(SpriteBatch::new));
 		getRoot().setName(name);
 	}
 
@@ -82,5 +84,5 @@ public class StageBest extends Stage implements StageLikeRenderable {
 		}
 		return true;
 	}
-
+	
 }

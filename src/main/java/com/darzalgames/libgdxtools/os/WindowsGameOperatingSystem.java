@@ -12,7 +12,7 @@ public class WindowsGameOperatingSystem implements GameOperatingSystem {
 
 	@Override
 	public FileHandle getSaveFileLocation(String fullGameAndSaveName) {
-		return Gdx.files.absolute(System.getenv("APPDATALOCAL") + "/" + fullGameAndSaveName);
+		return Gdx.files.absolute(System.getenv("LOCALAPPDATA") + "/" + fullGameAndSaveName);
 	}
 
 	@Override

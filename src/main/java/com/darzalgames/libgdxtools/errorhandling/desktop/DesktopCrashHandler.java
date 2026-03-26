@@ -12,13 +12,17 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Supplier;
+import java.util.function.Function;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
 import com.darzalgames.darzalcommon.time.FileFriendlyTimeFormatter;
-import com.darzalgames.libgdxtools.errorhandling.*;
+import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
+import com.darzalgames.libgdxtools.errorhandling.CrashLocalization;
+import com.darzalgames.libgdxtools.errorhandling.ReportStatus;
+import com.darzalgames.libgdxtools.errorhandling.data.CrashReport;
+import com.darzalgames.libgdxtools.errorhandling.data.UserReport;
 import com.darzalgames.libgdxtools.os.GameOperatingSystem;
 
 public class DesktopCrashHandler extends CrashHandler {
@@ -37,8 +41,8 @@ public class DesktopCrashHandler extends CrashHandler {
 		List<ReportStatus> reportingStatuses = new ArrayList<>();
 		reportingStatuses.add(reportCrashToFile(crashReportLocalFile, crashReportJson));
 
-		Supplier<ReportStatus> reportCrashOnline = () -> {
-			ReportStatus status = reportCrashToDarBot5000(crashReport.getGameName(), crashReportWebName, crashReportJson);
+		Function<UserReport, ReportStatus> reportCrashOnline = userReport -> {
+			ReportStatus status = reportCrashToDarBot5000(crashReport.getGameName(), crashReportWebName, crashReportJson + "\n" + userReport.toString());
 			reportingStatuses.add(status);
 			return status;
 		};
@@ -76,22 +80,23 @@ public class DesktopCrashHandler extends CrashHandler {
 		return new ReportStatus(true, "SUCCESS", "Wrote crash report to file: " + crashReportFile.getAbsolutePath());
 	}
 
-	public static ReportStatus reportCrashToDarBot5000(String gameName, String crashReportFileName, String crashReportJson) {
+	public static ReportStatus reportCrashToDarBot5000(String gameName, String crashReportFileName, String crashReportFullMessage) {
 		gameName = gameName.toLowerCase().replace(' ', '-');
 		String urlString = "https://api.darzalgames.com/crash/" + gameName + "/" + crashReportFileName;
 		HttpResponse<Void> response;
+
 		try (HttpClient httpClient = HttpClient.newHttpClient()) {
 			HttpRequest httpRequest = HttpRequest.newBuilder()
 					.uri(URI.create(urlString))
 					.header("Content-Type", "application/json")
-					.POST(HttpRequest.BodyPublishers.ofString(crashReportJson))
+					.POST(HttpRequest.BodyPublishers.ofString(crashReportFullMessage))
 					.timeout(Duration.ofSeconds(10))
 					.build();
 
 			response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.discarding());
 		} catch (IOException | InterruptedException e) {
 			logError("Couldn't send crash report to: " + urlString);
-			logError("Error json:\n" + crashReportJson);
+			logError("Error json:\n" + crashReportFullMessage);
 			e.printStackTrace();
 			return new ReportStatus(false, "ERR", "Did not send crash report to DarBot 5000: " + crashReportFileName);
 		}

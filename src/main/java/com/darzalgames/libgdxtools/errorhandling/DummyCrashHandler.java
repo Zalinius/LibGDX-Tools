@@ -2,6 +2,8 @@ package com.darzalgames.libgdxtools.errorhandling;
 
 import java.util.List;
 
+import com.darzalgames.libgdxtools.errorhandling.data.CrashReport;
+
 /**
  * A dummy implementation of the crash-handler
  * Suitable for injection in unit tests

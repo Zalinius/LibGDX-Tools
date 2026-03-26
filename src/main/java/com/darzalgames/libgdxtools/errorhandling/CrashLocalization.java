@@ -10,6 +10,9 @@ public class CrashLocalization {
 			"The following report was saved to: {file}",
 			"Crash Report:",
 
+			"Email (optional, if you want us to contact you):",
+			"Details (optional, if you want to add anything):",
+
 			"Send to DarZal Games",
 			"Sending . . .",
 			"SENT!  thanks c:",
@@ -26,6 +29,9 @@ public class CrashLocalization {
 			"Malheureusement, {game} a rencontré une erreur :(",
 			"Le rapport suivant a été sauvegardé à : {file}",
 			"Rapport d'erreur :",
+
+			"Courriel (facultatif, si tu veux qu'on te contacte):",
+			"Message (facultatif, si tu veux rajouter quoi que ça soit):",
 
 			"Envoyer à Jeux DarZal",
 			"En cours d'envoi . . .",
@@ -53,6 +59,9 @@ public class CrashLocalization {
 	private final String reportFileLabelString;
 	private final String reportHeaderLabelString;
 
+	private final String userEmailLabelString;
+	private final String userMessageLabelString;
+
 	private final String sendButtonString;
 	private final String sendingButtonString;
 	private final String sentSuccessButtonString;
@@ -65,6 +74,7 @@ public class CrashLocalization {
 
 	public CrashLocalization(
 			String titleSuffixString, String reportSituationLabelString, String reportFileLabelString, String reportHeaderLabelString,
+			String userEmailLabelString, String userMessageLabelString,
 			String sendButtonString, String sendingButtonString, String sentSuccessButtonString, String sentFailedButtonString,
 			String copyButtonString, String copiedButtonString, String exitButtonString) {
 		super();
@@ -72,6 +82,8 @@ public class CrashLocalization {
 		this.reportSituationLabelString = reportSituationLabelString;
 		this.reportFileLabelString = reportFileLabelString;
 		this.reportHeaderLabelString = reportHeaderLabelString;
+		this.userEmailLabelString = userEmailLabelString;
+		this.userMessageLabelString = userMessageLabelString;
 		this.sendButtonString = sendButtonString;
 		this.sendingButtonString = sendingButtonString;
 		this.sentSuccessButtonString = sentSuccessButtonString;
@@ -95,6 +107,14 @@ public class CrashLocalization {
 
 	public String getReportHeaderLabelString() {
 		return reportHeaderLabelString;
+	}
+
+	public String getUserEmailLabelString() {
+		return userEmailLabelString;
+	}
+
+	public String getUserMessageLabelString() {
+		return userMessageLabelString;
 	}
 
 	public String getSendButtonString() {

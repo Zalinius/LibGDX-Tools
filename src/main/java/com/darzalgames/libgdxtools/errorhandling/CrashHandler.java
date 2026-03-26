@@ -12,6 +12,8 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
+import com.darzalgames.libgdxtools.errorhandling.data.CrashReport;
+
 public abstract class CrashHandler {
 
 	public final void handleException(Exception exception, List<String> programArguments) throws Exception {

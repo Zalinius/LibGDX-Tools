@@ -9,12 +9,16 @@ import java.time.Instant;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 
-import com.darzalgames.libgdxtools.errorhandling.*;
+import com.darzalgames.libgdxtools.errorhandling.CrashHandler;
+import com.darzalgames.libgdxtools.errorhandling.CrashLocalization;
+import com.darzalgames.libgdxtools.errorhandling.ReportStatus;
+import com.darzalgames.libgdxtools.errorhandling.data.CrashReport;
+import com.darzalgames.libgdxtools.errorhandling.data.UserReport;
 
 @SuppressWarnings("serial") // Same-version serialization only
 public class DesktopCrashPopup extends JFrame {
@@ -23,7 +27,7 @@ public class DesktopCrashPopup extends JFrame {
 		JFrame.setDefaultLookAndFeelDecorated(false);
 		CrashReport crashReport = new CrashReport("Test Game", "1.0.1", "linux", Instant.now(), UUID.randomUUID(), CrashHandler.getMessageAndStackTraceArray(new RuntimeException("Test Exception lol")));
 		CrashLocalization crashLocalization = CrashLocalization.getLocalizationFromCode(Locale.getDefault().getLanguage());
-		DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, () -> DesktopCrashHandler.reportCrashToDarBot5000(crashReport.getGameName(), "file.err.json", crashReport.toJson()), "localfile.err.json", crashLocalization);
+		DesktopCrashPopup crashPopup = new DesktopCrashPopup(crashReport, userReport -> DesktopCrashHandler.reportCrashToDarBot5000(crashReport.getGameName(), "file.err.json", crashReport.toJson() + "\n" + userReport.toString()), "localfile.err.json", crashLocalization);
 		crashPopup.setVisible(true);
 		crashPopup.requestFocusOnSendButton();
 	}
@@ -34,7 +38,7 @@ public class DesktopCrashPopup extends JFrame {
 
 	private final JButton buttonSendReport;
 
-	public DesktopCrashPopup(CrashReport crashReport, Supplier<ReportStatus> sendErrorReport, String localCrashReportFile, CrashLocalization crashLocalization) {
+	public DesktopCrashPopup(CrashReport crashReport, Function<UserReport, ReportStatus> sendErrorReport, String localCrashReportFile, CrashLocalization crashLocalization) {
 		super(crashLocalization.getTitleSuffixString(crashReport.getGameName()));
 		int initialWindowHeight = getInitialWindowHeight();
 		setSize(initialWindowHeight, initialWindowHeight);
@@ -76,6 +80,35 @@ public class DesktopCrashPopup extends JFrame {
 
 		add(crashReportScrollPane, BorderLayout.CENTER);
 
+		JPanel inputAndButtonsPanel = new JPanel();
+		inputAndButtonsPanel.setLayout(new BorderLayout(getSmallPadding(), getSmallPadding()));
+
+		JPanel emailInputPanel = new JPanel();
+		emailInputPanel.setLayout(new BorderLayout(getSmallPadding(), getSmallPadding()));
+		emailInputPanel.setBorder(BorderFactory.createEmptyBorder(0, getLargePadding(), 0, getLargePadding()));
+		JTextField emailInputField = new JTextField();
+		emailInputPanel.add(makeLabel(crashLocalization.getUserEmailLabelString()), BorderLayout.WEST);
+		emailInputPanel.add(emailInputField, BorderLayout.CENTER);
+
+		inputAndButtonsPanel.add(emailInputPanel, BorderLayout.NORTH);
+
+		JPanel messageInputPanel = new JPanel();
+		messageInputPanel.setLayout(new BorderLayout(getSmallPadding(), getSmallPadding()));
+		messageInputPanel.setBorder(BorderFactory.createEmptyBorder(0, getLargePadding(), 0, 0));
+
+		JTextArea messageInputArea = new JTextArea(10, 0);
+		messageInputArea.setEditable(true);
+		messageInputArea.setLineWrap(true);
+		messageInputArea.setWrapStyleWord(true);
+
+		JScrollPane messageInputScrollPane = new JScrollPane(messageInputArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		messageInputScrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, getLargePadding()));
+
+		messageInputPanel.add(makeLabel(crashLocalization.getUserMessageLabelString()), BorderLayout.WEST);
+		messageInputPanel.add(messageInputScrollPane, BorderLayout.CENTER);
+
+		inputAndButtonsPanel.add(messageInputPanel, BorderLayout.CENTER);
+
 		JPanel buttonPanel = new JPanel();
 		Border buttonPadding = BorderFactory.createEmptyBorder(getSmallPadding(), getLargePadding(), getLargePadding(), getLargePadding());
 		buttonPanel.setBorder(buttonPadding);
@@ -87,7 +120,9 @@ public class DesktopCrashPopup extends JFrame {
 		Runnable sendcallbackRunnable = () -> {
 			buttonSendReport.setEnabled(false);
 			buttonSendReport.setText(crashLocalization.getSendingButtonString());
-			ReportStatus reportStatus = sendErrorReport.get();
+			String userEmail = emailInputField.getText();
+			String userMessage = messageInputArea.getText();
+			ReportStatus reportStatus = sendErrorReport.apply(new UserReport(userEmail, userMessage));
 			if (reportStatus.isSuccessful()) {
 				buttonSendReport.setText(crashLocalization.getSentSuccessButtonString());
 				buttonSendReport.setBackground(Color.GREEN);
@@ -113,8 +148,9 @@ public class DesktopCrashPopup extends JFrame {
 		buttonPanel.add(buttonCopy);
 		buttonPanel.add(buttonClose);
 
-		add(buttonPanel, BorderLayout.SOUTH);
+		inputAndButtonsPanel.add(buttonPanel, BorderLayout.SOUTH);
 
+		add(inputAndButtonsPanel, BorderLayout.SOUTH);
 	}
 
 	public void requestFocusOnSendButton() {

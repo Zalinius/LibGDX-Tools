@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.errorhandling;
+package com.darzalgames.libgdxtools.errorhandling.data;
 
 import java.io.Serializable;
 import java.time.Instant;

@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.darzalgames.libgdxtools.errorhandling.data.CrashReport;
+
 class CrashReportTest {
 
 	@Test

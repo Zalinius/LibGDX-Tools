@@ -35,7 +35,7 @@ class UserReportTest {
 	}
 
 	@Test
-	void toString_withNoButWithMessage_containsMessage() {
+	void toString_withNoEmailButWithMessage_containsMessage() {
 		UserReport userReport = new UserReport("", "Lorum Ipsum");
 
 		String report = userReport.toString();

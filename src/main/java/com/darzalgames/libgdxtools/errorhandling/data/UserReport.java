@@ -25,14 +25,16 @@ public class UserReport {
 		StringBuilder sb = new StringBuilder();
 		if (contactEmail.isPresent()) {
 			sb.append("Email: " + contactEmail.get());
+			sb.append("\n");
 		}
 		if (playerMessage.isPresent()) {
 			sb.append("Player Message:" + playerMessage.get());
+			sb.append("\n");
 		}
 
 		return sb.toString();
 	}
 
-//TODO json, using jackson? how do they deal with Optional values
+	// TODO json, using jackson? how do they deal with Optional values
 
 }

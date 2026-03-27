@@ -11,7 +11,7 @@ public class CrashLocalization {
 			"Crash Report:",
 
 			"Email (optional, if you want us to contact you):",
-			"Details (optional, if you want to add anything):",
+			"Details (optional, what were you doing before the crash?):",
 
 			"Send to DarZal Games",
 			"Sending . . .",
@@ -31,7 +31,7 @@ public class CrashLocalization {
 			"Rapport d'erreur :",
 
 			"Courriel (facultatif, si tu veux qu'on te contacte):",
-			"Message (facultatif, si tu veux rajouter quoi que ça soit):",
+			"Message (facultatif, que faisais-tu avant l'erreur?):",
 
 			"Envoyer à Jeux DarZal",
 			"En cours d'envoi . . .",

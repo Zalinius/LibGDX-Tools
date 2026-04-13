@@ -50,6 +50,12 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 		this.setY(getStage().getHeight());
 		this.addAction(Actions.moveTo(startX, startY, 0.25f, Interpolation.circle));
 	}
+
+	@Override
+	public void regainFocus() {
+		gainFocus();
+		addBackClickListenerIfCanDismiss(); // calling gainFocus() clears this listener, so put it back on
+	}
 	
 	@Override
 	public void hideThis() {

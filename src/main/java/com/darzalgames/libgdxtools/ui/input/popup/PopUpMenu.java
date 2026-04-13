@@ -53,8 +53,8 @@ public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
 
 	@Override
 	public void regainFocus() {
-		gainFocus();
-		addBackClickListenerIfCanDismiss(); // calling gainFocus() clears this listener, so put it back on
+		super.regainFocus();
+		addBackClickListenerIfCanDismiss(); // calling super.regainFocus() clears this listener, so put it back on
 	}
 	
 	@Override

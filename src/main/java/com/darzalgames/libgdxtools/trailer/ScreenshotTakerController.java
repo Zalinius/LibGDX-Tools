@@ -2,6 +2,9 @@ package com.darzalgames.libgdxtools.trailer;
 
 import com.badlogic.gdx.Gdx;
 
+/**
+ * A tidy system for flagging the current frame as one to screenshot, and later taking said screenshot after rendering
+ */
 public class ScreenshotTakerController {
 
 	private final String screenshotOutputPath;
@@ -9,11 +12,17 @@ public class ScreenshotTakerController {
 	private String thisFrameScreenshotName;
 
 	/**
-	 * A tidy system for flagging the current frame as one to screenshot, and later taking said screenshot after rendering
 	 * @param screenshotOutputPath where to output screenshots to
 	 */
 	public ScreenshotTakerController(String screenshotOutputPath) {
 		this.screenshotOutputPath = screenshotOutputPath;
+	}
+
+	/**
+	 * @param screenshotName Set the file name for the screenshot to be taken this frame
+	 */
+	public void setThisFrameScreenshotName(String screenshotName) {
+		thisFrameScreenshotName = screenshotName + ".png";
 	}
 
 	/**
@@ -26,13 +35,6 @@ public class ScreenshotTakerController {
 			ScreenshotTaker.takeScreenshot(screenshotOutputPath + thisFrameScreenshotName);
 			thisFrameScreenshotName = null;
 		}
-	}
-
-	/**
-	 * @param screenshotName Set the file name for the screenshot to be taken this frame
-	 */
-	public void setThisFrameScreenshotName(String screenshotName) {
-		thisFrameScreenshotName = screenshotName + ".png";
 	}
 
 }

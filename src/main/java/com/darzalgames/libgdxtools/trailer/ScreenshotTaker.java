@@ -8,12 +8,18 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 
+/**
+ * A utility for immediately taking a screenshot as a PNG
+ */
 public class ScreenshotTaker {
 
 	private ScreenshotTaker() {
 		// utility class
 	}
 
+	/**
+	 * @param outputPath where to output the new screenshot (path + name)
+	 */
 	public static void takeScreenshot(String outputPath) {
 		Pixmap pixmap = Pixmap.createFromFrameBuffer(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
 		ByteBuffer pixels = pixmap.getPixels();

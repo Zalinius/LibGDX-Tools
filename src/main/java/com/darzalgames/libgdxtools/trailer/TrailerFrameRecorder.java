@@ -5,6 +5,10 @@ import java.io.IOException;
 import com.badlogic.gdx.Gdx;
 import com.darzalgames.darzalcommon.filehandling.DirectoryClearer;
 
+/**
+ * A system which records every frame of the running application to the specified location.
+ * Frames are numbered sequentially.
+ */
 public class TrailerFrameRecorder {
 
 	private int frameCount = 0;
@@ -12,7 +16,6 @@ public class TrailerFrameRecorder {
 	private final String framesPath;
 
 	/**
-	 * A system which records every frame of your trailer to the specified location, numbered sequentially
 	 * @param externalFramesPath the external location to output the frames to, e.g. "Downloads/trailer/frames/"
 	 */
 	public TrailerFrameRecorder(String externalFramesPath) {
@@ -27,13 +30,16 @@ public class TrailerFrameRecorder {
 		}
 	}
 
-	private void clearPreviousRecording() throws IOException {
-		DirectoryClearer.clear(Gdx.files.external(framesPath).file());
-	}
-
+	/**
+	 * Records the current frame. This must be called AFTER everything in the scene has been drawn, aka at the end of render()
+	 */
 	public void recordFrame() {
 		ScreenshotTaker.takeScreenshot(framesPath + frameCount + ".png");
 		frameCount++;
+	}
+
+	private void clearPreviousRecording() throws IOException {
+		DirectoryClearer.clear(Gdx.files.external(framesPath).file());
 	}
 
 }

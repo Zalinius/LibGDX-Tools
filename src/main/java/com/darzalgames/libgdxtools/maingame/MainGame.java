@@ -72,6 +72,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	protected void onLoadingFinished() {}
 
+	protected abstract AudioPipelineAPI setUpAudio();
+
 	protected abstract UserInterfaceFactory initializeGameAndUserInterfaceFactory();
 
 	/**
@@ -80,8 +82,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected abstract Actor makeBackground();
 
 	protected abstract Runnable getDrawConsoleRunnable();
-
-	protected abstract AudioPipelineAPI setUpAudio();
 
 	protected abstract OptionsMenu makeOptionsMenu();
 
@@ -127,6 +127,8 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	}
 
 	private void afterLoadingComplete() {
+		audioPipeline = setUpAudio();
+
 		makeInputStrategySwitcher();
 		userInterfaceFactory = initializeGameAndUserInterfaceFactory();
 		initializeWindowResizer();
@@ -264,7 +266,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		UserInterfaceSizer.setStage(mainStage);
 		Fader.initialize(MultipleStage.CURSOR_STAGE_NAME);
 
-		audioPipeline = setUpAudio();
 		pause = new Pause(makeOptionsMenu());
 		audioPipeline.addAudioActor(makeAudioActorPauseListener(pause));
 		multipleStage = new MultipleStage(mainStage, makeGameSpecificStages(), optionsStage, cursorStage, inputHandlerStage, pause);

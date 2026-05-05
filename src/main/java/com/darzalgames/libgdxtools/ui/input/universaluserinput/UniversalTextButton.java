@@ -1,11 +1,14 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
 /**
  * A UniversalButton which you know for sure has a label
@@ -14,8 +17,8 @@ public class UniversalTextButton extends UniversalButton {
 
 	protected final UniversalLabel label;
 
-	public UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle buttonStyle) {
-		super(buttonRunnable, inputStrategySwitcher, soundInteractListener, buttonStyle);
+	public UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle, Consumer<SoundEffect> soundEffectConsumer) {
+		super(buttonRunnable, inputStrategySwitcher, buttonStyle, soundEffectConsumer);
 		this.label = label;
 		label.setTouchable(Touchable.disabled);
 		add(label).growX();

@@ -116,7 +116,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 				return new HashMap<>();
 			}
 		};
-		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, Runnables.nullRunnable(), fallbackRef) {
+		UserInterfaceFactory factory = new UserInterfaceFactory(new SkinManager(SkinManager.getDefaultSkin()), inputStrategySwitcher, audioPipeline::requestSoundEffect, fallbackRef) {
 			@Override
 			protected void addGameSpecificHighlightListener(UniversalDoodad button) { /* do nothing */ }
 		};
@@ -346,38 +346,34 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 		List<VisibleInputConsumer> menuButtons = new ArrayList<>();
 
 		UniversalSlider basicSlider = GameInfo.getUserInterfaceFactory().getSlider(() -> "Slider with a label (music volume)", newValue -> audioPipeline.setMusicVolume(newValue));
-		basicSlider.setSliderPosition(0.4f, false);
+		basicSlider.setSliderPosition(0.4f);
 		menuButtons.add(basicSlider);
 
 		UniversalSlider basicSlider2 = GameInfo.getUserInterfaceFactory().getSlider(() -> "Slider with a label (sound volume)", newValue -> audioPipeline.setSoundEffectVolume(newValue));
-		basicSlider2.setSliderPosition(0.6f, false);
+		basicSlider2.setSliderPosition(0.6f);
+		basicSlider2.setSoundEffect(sfx1());
 		menuButtons.add(basicSlider2);
 
 		UniversalCheckbox focusMute = GameInfo.getUserInterfaceFactory().getCheckbox(
 				() -> "I am NOT checked!",
 				() -> "I am checked!",
-				isChecked -> {
-					if (isChecked) {
-						audioPipeline.requestSoundEffect(sfx3());
-					} else {
-						audioPipeline.requestSoundEffect(sfx2());
-					}
-				}
+				isChecked -> {}
 		);
 		focusMute.initializeAsChecked(true);
+		focusMute.setCheckingSoundEffect(sfx2());
+		focusMute.setUncheckingSoundEffect(sfx3());
 		menuButtons.add(focusMute);
 
 		String sliderInfo = "The below slider is at ";
 		UniversalLabel sliderInfoLabel = GameInfo.getUserInterfaceFactory().getLabel(() -> sliderInfo + "0.5");
 		UniversalSlider funSlider = GameInfo.getUserInterfaceFactory().getSlider(Suppliers.emptyString(), newValue -> sliderInfoLabel.setTextSupplier(() -> sliderInfo + String.format("%.1f", newValue)));
-		funSlider.setSliderPosition(0.5f, false);
+		funSlider.setSliderPosition(0.5f);
 		menuButtons.add(funSlider);
 
 		String logOrigin = "LibGDXTools Test Game";
-		menuButtons.add(GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Text button! (with sfx)", () -> {
-			Gdx.app.log(logOrigin, "You pressed the text button");
-			audioPipeline.requestSoundEffect(sfx1());
-		}));
+		UniversalTextButton simpleTextButton = GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Text button! (with sfx)", () -> Gdx.app.log(logOrigin, "You pressed the text button"));
+		simpleTextButton.setSoundEffect(sfx1());
+		menuButtons.add(simpleTextButton);
 
 		menuButtons.add(GameInfo.getUserInterfaceFactory().getImageButton(new Image(ColorTools.getColoredTexture(Color.GOLD, 50, 12)), () -> Gdx.app.log(logOrigin, "You pressed the image button")));
 
@@ -705,7 +701,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 		float duration = 0.1f;
 		Envelope env = ArEnvelope.quadratic(0.01f, duration - 0.01f);
-		SimpleSound simpleSound = new SimpleSound(SynthFactory.square(), Pitch.E4, t -> 1f, 0.5f, env, 0.5f, "sfx2");
+		SimpleSound simpleSound = new SimpleSound(SynthFactory.square(), Pitch.G4, t -> 1f, 0.5f, env, 0.5f, "sfx2");
 		soundEffect.addSound(simpleSound);
 
 		return soundEffect;
@@ -714,9 +710,9 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	private static SoundEffect sfx3() {
 		SoundEffect soundEffect = new SoundEffect("sfx3");
 
-		float duration = 0.1f;
+		float duration = 0.05f;
 		Envelope env = ArEnvelope.quadratic(0.01f, duration - 0.01f);
-		SimpleSound simpleSound = new SimpleSound(SynthFactory.square(), Pitch.G4, t -> 1f, 0.5f, env, 0.5f, "sfx3");
+		SimpleSound simpleSound = new SimpleSound(SynthFactory.square(), Pitch.E4, t -> 1f, 0.5f, env, 0.5f, "sfx3");
 		soundEffect.addSound(simpleSound);
 
 		return soundEffect;

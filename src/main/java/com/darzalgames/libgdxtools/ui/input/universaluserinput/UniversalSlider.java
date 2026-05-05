@@ -15,14 +15,15 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
 public class UniversalSlider extends UniversalTextButton {
 
 	private final Slider slider;
 	private float previousValue;
 
-	public UniversalSlider(UniversalLabel label, SliderStyle sliderStyle, ButtonStyle buttonStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, float knobMinimumPercentage) {
-		super(label, Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
+	public UniversalSlider(UniversalLabel label, SliderStyle sliderStyle, ButtonStyle buttonStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, float knobMinimumPercentage, Consumer<SoundEffect> soundEffectConsumer) {
+		super(label, Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle, soundEffectConsumer);
 
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle) {
 			@Override
@@ -85,16 +86,13 @@ public class UniversalSlider extends UniversalTextButton {
 
 	/**
 	 * Set the position of the slider, optionally triggering the sound effect for doing so
-	 * @param newPosition     A value within the bar's min/max range, it's clamped regardless
-	 * @param withSoundEffect Whether or not to play the interaction sound
+	 * @param newPosition A value within the bar's min/max range, it's clamped regardless
 	 */
-	public void setSliderPosition(float newPosition, boolean withSoundEffect) {
+	public void setSliderPosition(float newPosition) {
 		previousValue = slider.getValue();
-		setDoesSoundOnInteract(withSoundEffect);
 		slider.setProgrammaticChangeEvents(false);
 		slider.setValue(newPosition);
 		slider.setProgrammaticChangeEvents(true);
-		setDoesSoundOnInteract(true);
 	}
 
 	@Override

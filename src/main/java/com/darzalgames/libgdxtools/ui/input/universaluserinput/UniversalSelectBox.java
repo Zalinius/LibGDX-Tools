@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.darzalgames.darzalcommon.data.GenericInheritanceConverter;
@@ -15,6 +16,7 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
 public class UniversalSelectBox extends UniversalTextButton {
 
@@ -22,8 +24,8 @@ public class UniversalSelectBox extends UniversalTextButton {
 	private UniversalTextButton defaultEntry;
 	protected List<UniversalTextButton> entryButtons;
 
-	public UniversalSelectBox(String mainLabelKey, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle buttonStyle) {
-		super(GameInfo.getUserInterfaceFactory().getLabel(() -> TextSupplier.getLine(mainLabelKey)), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
+	public UniversalSelectBox(String mainLabelKey, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle, Consumer<SoundEffect> soundEffectConsumer) {
+		super(GameInfo.getUserInterfaceFactory().getLabel(() -> TextSupplier.getLine(mainLabelKey)), Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle, soundEffectConsumer);
 
 		// This is the keyboard navigable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
 		options = new PopUpMenu(MenuOrientation.VERTICAL) {

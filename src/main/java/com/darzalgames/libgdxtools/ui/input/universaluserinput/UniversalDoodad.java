@@ -1,5 +1,7 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -16,6 +18,7 @@ import com.darzalgames.libgdxtools.ui.CenterActor;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
+import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
 public abstract class UniversalDoodad extends Table implements VisibleInputConsumer {
 
@@ -26,9 +29,12 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	private final DoodadBackgroundImage backgroundImage;
 	private float focusScaleIncrease;
 
+	private final Consumer<SoundEffect> soundEffectConsumer;
+	private SoundEffect soundEffect;
+
 	public static final float DEFAULT_FOCUS_SCALE_INCREASE = 0.05f;
 
-	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher) {
+	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		setFocusScaleIncrease(DEFAULT_FOCUS_SCALE_INCREASE);
 		setStyle(buttonStyle);
@@ -43,6 +49,9 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		backgroundImage = new DoodadBackgroundImage();
 		backgroundImage.setFillParent(true);
 		DoodadBackgroundImage.addScalingClickListener(backgroundImage, this);
+
+		this.soundEffectConsumer = soundEffectConsumer;
+		soundEffect = new SoundEffect("no sfx");
 	}
 
 	@Override
@@ -221,6 +230,14 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	}
 
 	public void colorOtherComponentsBasedOnFocus(Color color) {/* No special inner buttons or whatnot to color by default */}
+
+	public void setSoundEffect(SoundEffect soundEffect) {
+		this.soundEffect = soundEffect;
+	}
+
+	protected void requestInteractSound() {
+		soundEffectConsumer.accept(soundEffect);
+	}
 
 	private boolean isPressed() {
 		return clickListener.isVisualPressed();

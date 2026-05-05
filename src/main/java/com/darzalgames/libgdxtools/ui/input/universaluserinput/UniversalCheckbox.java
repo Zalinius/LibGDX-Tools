@@ -14,6 +14,7 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 import com.github.tommyettinger.textra.Styles.CheckBoxStyle;
 
 public class UniversalCheckbox extends UniversalTextButton {
@@ -24,8 +25,11 @@ public class UniversalCheckbox extends UniversalTextButton {
 	private boolean checked;
 	private final float widthOverHeight;
 
-	public UniversalCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener) {
-		super(GameInfo.getUserInterfaceFactory().getLabel(uncheckedLabel), Runnables.nullRunnable(), inputStrategySwitcher, soundInteractListener, buttonStyle);
+	private SoundEffect checkingSoundEffect;
+	private SoundEffect uncheckingSoundEffect;
+
+	public UniversalCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer) {
+		super(GameInfo.getUserInterfaceFactory().getLabel(uncheckedLabel), Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle, soundEffectConsumer);
 		this.uncheckedLabel = () -> " " + uncheckedLabel.get();
 		this.checkedLabel = () -> " " + checkedLabel.get();
 
@@ -48,6 +52,9 @@ public class UniversalCheckbox extends UniversalTextButton {
 		});
 
 		DoodadBackgroundImage.addScalingClickListener(box, this);
+
+		checkingSoundEffect = new SoundEffect("no sfx");
+		uncheckingSoundEffect = new SoundEffect("no sfx");
 	}
 
 	/**
@@ -133,4 +140,29 @@ public class UniversalCheckbox extends UniversalTextButton {
 			}
 		}
 	}
+
+	@Override
+	public void setSoundEffect(SoundEffect soundEffect) {
+		setCheckingSoundEffect(soundEffect);
+		setUncheckingSoundEffect(soundEffect);
+	}
+
+	public void setCheckingSoundEffect(SoundEffect checkingSoundEffect) {
+		this.checkingSoundEffect = checkingSoundEffect;
+	}
+
+	public void setUncheckingSoundEffect(SoundEffect uncheckingSoundEffect) {
+		this.uncheckingSoundEffect = uncheckingSoundEffect;
+	}
+
+	@Override
+	protected void requestInteractSound() {
+		if (checked) {
+			super.setSoundEffect(checkingSoundEffect);
+		} else {
+			super.setSoundEffect(uncheckingSoundEffect);
+		}
+		super.requestInteractSound();
+	}
+
 }

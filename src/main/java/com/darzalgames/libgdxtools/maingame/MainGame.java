@@ -29,7 +29,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFact
 import com.darzalgames.libgdxtools.ui.screen.Fader;
 import com.darzalgames.libgdxtools.ui.screen.GameScreen;
 import com.darzalgames.zalaudiolibrary.pipeline.AudioActor;
-import com.darzalgames.zalaudiolibrary.pipeline.AudioPipeline;
+import com.darzalgames.zalaudiolibrary.pipeline.AudioPipelineAPI;
 
 public abstract class MainGame extends ApplicationAdapter implements SharesGameInformation {
 
@@ -47,7 +47,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	protected WindowResizer windowResizer;
 	protected InputStrategySwitcher inputStrategySwitcher;
 	protected Pause pause;
-	protected AudioPipeline audioPipeline;
+	protected AudioPipelineAPI audioPipeline;
 
 	// Values which change during gameplay
 	protected GameScreen currentScreen;
@@ -81,7 +81,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	protected abstract Runnable getDrawConsoleRunnable();
 
-	protected abstract AudioPipeline setUpAudio();
+	protected abstract AudioPipelineAPI setUpAudio();
 
 	protected abstract OptionsMenu makeOptionsMenu();
 

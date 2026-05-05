@@ -55,12 +55,15 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.*;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.libgdxtools.ui.screen.MainMenuScreen;
+import com.darzalgames.zalaudiolibrary.amplitude.Envelope;
 import com.darzalgames.zalaudiolibrary.amplitude.percussive.ArEnvelope;
 import com.darzalgames.zalaudiolibrary.composing.*;
 import com.darzalgames.zalaudiolibrary.composing.tracks.SequentialTrack;
 import com.darzalgames.zalaudiolibrary.pipeline.AudioActor;
 import com.darzalgames.zalaudiolibrary.pipeline.AudioPipeline;
-import com.darzalgames.zalaudiolibrary.synth.Synth;
+import com.darzalgames.zalaudiolibrary.pipeline.sounds.SimpleSound;
+import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
+import com.darzalgames.zalaudiolibrary.synth.SynthFactory;
 
 public class SampleUserInterfaceGame extends MainGame implements WindowFocusListener {
 
@@ -219,13 +222,13 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 		Song sampleSong = new Song("SampleSong", 2) {
 		};
-		SequentialTrack sequentialTrack = new SequentialTrack(sampleSong.getSongName(), "sample track", new Instrument(Synth.sine(), ArEnvelope.linear(0.01f, 0.49f)), 0.75f);
+		SequentialTrack sequentialTrack = new SequentialTrack(sampleSong.getSongName(), "sample track", new Instrument(SynthFactory.sine(), ArEnvelope.linear(0.01f, 0.49f)), 0.75f);
 		sampleSong.addTrack(sequentialTrack);
 		sequentialTrack.addNote(NoteDuration.QUARTER, Pitch.C5);
 		sequentialTrack.addNote(NoteDuration.QUARTER, Pitch.C4);
 		sequentialTrack.addNote(NoteDuration.QUARTER, Pitch.C4);
 		sequentialTrack.addNote(NoteDuration.QUARTER, Pitch.C4);
-		audioPipeline.changeSong(sampleSong);
+		audioPipeline.requestChangeSong(sampleSong);
 		audioPipeline.start();
 
 		return audioPipeline;
@@ -342,14 +345,24 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 		UniversalButton quitButton;
 		List<VisibleInputConsumer> menuButtons = new ArrayList<>();
 
-		UniversalSlider basicSlider = GameInfo.getUserInterfaceFactory().getSlider(() -> "Slider with a label (audio)", newValue -> audioPipeline.getVolumeListener().setAllVolumes(newValue));
-		basicSlider.setSliderPosition(0.5f, false);
+		UniversalSlider basicSlider = GameInfo.getUserInterfaceFactory().getSlider(() -> "Slider with a label (music volume)", newValue -> audioPipeline.setMusicVolume(newValue));
+		basicSlider.setSliderPosition(0.4f, false);
 		menuButtons.add(basicSlider);
+
+		UniversalSlider basicSlider2 = GameInfo.getUserInterfaceFactory().getSlider(() -> "Slider with a label (sound volume)", newValue -> audioPipeline.setSoundEffectVolume(newValue));
+		basicSlider2.setSliderPosition(0.6f, false);
+		menuButtons.add(basicSlider2);
 
 		UniversalCheckbox focusMute = GameInfo.getUserInterfaceFactory().getCheckbox(
 				() -> "I am NOT checked!",
 				() -> "I am checked!",
-				isChecked -> {}
+				isChecked -> {
+					if (isChecked) {
+						audioPipeline.requestSoundEffect(sfx3());
+					} else {
+						audioPipeline.requestSoundEffect(sfx2());
+					}
+				}
 		);
 		focusMute.initializeAsChecked(true);
 		menuButtons.add(focusMute);
@@ -361,7 +374,10 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 		menuButtons.add(funSlider);
 
 		String logOrigin = "LibGDXTools Test Game";
-		menuButtons.add(GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Text button!", () -> Gdx.app.log(logOrigin, "You pressed the text button")));
+		menuButtons.add(GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Text button! (with sfx)", () -> {
+			Gdx.app.log(logOrigin, "You pressed the text button");
+			audioPipeline.requestSoundEffect(sfx1());
+		}));
 
 		menuButtons.add(GameInfo.getUserInterfaceFactory().getImageButton(new Image(ColorTools.getColoredTexture(Color.GOLD, 50, 12)), () -> Gdx.app.log(logOrigin, "You pressed the image button")));
 
@@ -658,7 +674,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 	@Override
 	public void focusLost() {
-		audioPipeline.getVolumeListener().setAllVolumes(0f);
+		audioPipeline.setAllVolumes(0f);
 		if (preferenceManager.shouldPauseGameWhenOutOfFocus()) {
 			GamePauser.pause();
 		}
@@ -668,9 +684,42 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	public void focusGained() {
 		if (isGameRunning()) {
 			SoundPreference soundPreference = preferenceManager.sound();
-			audioPipeline.getVolumeListener().setMusicVolume(soundPreference.getMusicVolume());
-			audioPipeline.getVolumeListener().setSoundEffectVolume(soundPreference.getSoundEffectVolume());
+			audioPipeline.setMusicVolume(soundPreference.getMusicVolume());
+			audioPipeline.setSoundEffectVolume(soundPreference.getSoundEffectVolume());
 		}
+	}
+
+	private static SoundEffect sfx1() {
+		SoundEffect soundEffect = new SoundEffect("sfx1");
+
+		float duration = 0.1f;
+		Envelope env = ArEnvelope.quadratic(0.01f, duration - 0.01f);
+		SimpleSound simpleSound = new SimpleSound(SynthFactory.pulse(0.2f), Pitch.C4, t -> 1f, 0.5f, env, 0.5f, "sfx1");
+		soundEffect.addSound(simpleSound);
+
+		return soundEffect;
+	}
+
+	private static SoundEffect sfx2() {
+		SoundEffect soundEffect = new SoundEffect("sfx2");
+
+		float duration = 0.1f;
+		Envelope env = ArEnvelope.quadratic(0.01f, duration - 0.01f);
+		SimpleSound simpleSound = new SimpleSound(SynthFactory.square(), Pitch.E4, t -> 1f, 0.5f, env, 0.5f, "sfx2");
+		soundEffect.addSound(simpleSound);
+
+		return soundEffect;
+	}
+
+	private static SoundEffect sfx3() {
+		SoundEffect soundEffect = new SoundEffect("sfx3");
+
+		float duration = 0.1f;
+		Envelope env = ArEnvelope.quadratic(0.01f, duration - 0.01f);
+		SimpleSound simpleSound = new SimpleSound(SynthFactory.square(), Pitch.G4, t -> 1f, 0.5f, env, 0.5f, "sfx3");
+		soundEffect.addSound(simpleSound);
+
+		return soundEffect;
 	}
 
 }

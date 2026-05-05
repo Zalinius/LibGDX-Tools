@@ -231,12 +231,19 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	public void colorOtherComponentsBasedOnFocus(Color color) {/* No special inner buttons or whatnot to color by default */}
 
-	public void setSoundEffect(SoundEffect soundEffect) {
-		this.soundEffect = soundEffect;
-	}
-
+	/**
+	 * This will play this UniversalDoodad's sound effect if it has one set (none by default)
+	 */
 	protected void requestInteractSound() {
 		soundEffectConsumer.accept(soundEffect);
+	}
+
+	/**
+	 * Sets the sound effect for this UniversalDoodad
+	 * @param soundEffect a sound effect that will be played whenever requestInteractSound() is called
+	 */
+	public void setSoundEffect(SoundEffect soundEffect) {
+		this.soundEffect = soundEffect;
 	}
 
 	private boolean isPressed() {

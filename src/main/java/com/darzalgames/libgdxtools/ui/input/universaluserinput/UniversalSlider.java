@@ -85,7 +85,7 @@ public class UniversalSlider extends UniversalTextButton {
 	}
 
 	/**
-	 * Set the position of the slider, optionally triggering the sound effect for doing so
+	 * Set the position of the slider
 	 * @param newPosition A value within the bar's min/max range, it's clamped regardless
 	 */
 	public void setSliderPosition(float newPosition) {

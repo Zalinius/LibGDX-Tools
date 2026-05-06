@@ -35,16 +35,21 @@ public abstract class UserInterfaceFactory {
 	private final SkinManager skinManager;
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private final Consumer<SoundEffect> soundEffectConsumer;
+	private final SoundEffect defaultSoundEffect;
+	private final SoundEffect defaultBackSoundEffect;
 
 	private final FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference;
 
 	private static final String QUIT_GAME_KEY = "quit_game";
 	public static final String BACK_BUTTON_KEY = "back_message";
 
-	protected UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer, FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference) {
+	protected UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer, SoundEffect defaultSoundEffect, SoundEffect defaultBackSoundEffect,
+			FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference) {
 		this.skinManager = skinManager;
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		this.soundEffectConsumer = soundEffectConsumer;
+		this.defaultSoundEffect = defaultSoundEffect;
+		this.defaultBackSoundEffect = defaultBackSoundEffect;
 
 		this.sampleGlyphSupplierForSizeReference = sampleGlyphSupplierForSizeReference;
 		/*
@@ -126,6 +131,7 @@ public abstract class UserInterfaceFactory {
 			}
 		};
 		button.add(image);
+		button.setSoundEffect(defaultSoundEffect);
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
@@ -146,6 +152,7 @@ public abstract class UserInterfaceFactory {
 		UniversalLabel label = new UniversalLabel(textSupplier, labelStyle);
 		label.setWrap(wrap);
 		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, style, soundEffectConsumer);
+		button.setSoundEffect(defaultSoundEffect);
 		addGameSpecificHighlightListener(button);
 		if (inputForGlyph != Input.NONE) {
 			ControlsGlyph glyph = getControlsGlyphForButton(inputForGlyph, button);
@@ -165,6 +172,7 @@ public abstract class UserInterfaceFactory {
 		})).toList();
 		selectBox.setEntryButtons(entriesButtons);
 		selectBox.setSelected(contentManager.getCurrentSelectedDisplayName().get());
+		selectBox.setSoundEffect(defaultSoundEffect);
 		addGameSpecificHighlightListener(selectBox);
 		return selectBox;
 	}
@@ -184,12 +192,14 @@ public abstract class UserInterfaceFactory {
 	public UniversalSlider getSlider(Supplier<String> textSupplier, Consumer<Float> consumer) {
 		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle());
 		UniversalSlider button = new UniversalSlider(label, skinManager.getSliderStyle(), skinManager.getBlankButtonStyle(), consumer, inputStrategySwitcher, 0.05f, soundEffectConsumer);
+		button.setSoundEffect(defaultSoundEffect);
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
 
 	public UniversalCheckbox getCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer) {
 		UniversalCheckbox button = new UniversalCheckbox(uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), skinManager.getBlankButtonStyle(), inputStrategySwitcher, soundEffectConsumer);
+		button.setSoundEffect(defaultSoundEffect);
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
@@ -213,6 +223,7 @@ public abstract class UserInterfaceFactory {
 			public void colorOtherComponentsBasedOnFocus(Color color) { /* not needed */ }
 		};
 		button.setSize(button.getStyle().up.getMinWidth(), button.getStyle().up.getMinHeight());
+		button.setSoundEffect(defaultSoundEffect);
 		ControlsGlyph glyph = getControlsGlyphForButton(Input.PAUSE, button);
 		glyph.setAlignment(Alignment.BOTTOM_RIGHT);
 		button.addActor(glyph);
@@ -224,7 +235,9 @@ public abstract class UserInterfaceFactory {
 	}
 
 	public UniversalButton makeBackButton(Runnable runnable, Supplier<String> customMessage) {
-		return makeTextButtonWithStyle(customMessage, runnable, skinManager.getBackButtonStyle(), skinManager.getDefaultLableStyle(), Input.BACK, false);
+		UniversalButton button = makeTextButtonWithStyle(customMessage, runnable, skinManager.getBackButtonStyle(), skinManager.getDefaultLableStyle(), Input.BACK, false);
+		button.setSoundEffect(defaultBackSoundEffect);
+		return button;
 	}
 
 	/**
@@ -234,6 +247,7 @@ public abstract class UserInterfaceFactory {
 	public UniversalTextButton getQuitGameButton(Supplier<String> buttonText) {
 		UniversalTextButton button = makeTextButton(buttonText, quitGameRunnable, Input.NONE);
 		button.setColor(Color.SALMON);
+		button.setSoundEffect(defaultBackSoundEffect);
 		return button;
 	}
 
@@ -259,12 +273,14 @@ public abstract class UserInterfaceFactory {
 		Runnable quitWithConfirmation = () -> new ConfirmationMenu("menu_warning", QUIT_GAME_KEY, quitGameRunnable::run, MultipleStage.OPTIONS_STAGE_NAME);
 		UniversalTextButton button = makeTextButton(getQuitButtonString(), quitWithConfirmation, Input.NONE);
 		button.setColor(Color.SALMON);
+		button.setSoundEffect(defaultSoundEffect);
 		return button;
 	}
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {
 		String textKey = "window_mode_label";
 		WindowResizerSelectBox button = new WindowResizerSelectBox(textKey, inputStrategySwitcher, skinManager.getDefaultButtonStyle(), soundEffectConsumer);
+		button.setSoundEffect(defaultSoundEffect);
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
@@ -284,6 +300,10 @@ public abstract class UserInterfaceFactory {
 
 	protected InputStrategySwitcher getInputStrategySwitcher() {
 		return inputStrategySwitcher;
+	}
+
+	public SoundEffect getDefaultSoundEffect() {
+		return defaultSoundEffect;
 	}
 
 }

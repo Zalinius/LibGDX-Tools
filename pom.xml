@@ -13,7 +13,7 @@
 		<maven.compiler.release>21</maven.compiler.release>
 
 		<darzalcommon.version>0.7.23</darzalcommon.version>
-		<zalaudiolibrary.version>0.8.1</zalaudiolibrary.version>
+		<zalaudiolibrary.version>0.8.2</zalaudiolibrary.version>
 
 		<libgdx.version>1.13.1</libgdx.version>
 		<libgdx.controllers.version>2.2.3</libgdx.controllers.version>

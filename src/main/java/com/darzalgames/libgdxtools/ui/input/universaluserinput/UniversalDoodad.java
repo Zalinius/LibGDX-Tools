@@ -232,7 +232,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	public void colorOtherComponentsBasedOnFocus(Color color) {/* No special inner buttons or whatnot to color by default */}
 
 	/**
-	 * This will play this UniversalDoodad's sound effect if it has one set (none by default)
+	 * This will play this UniversalDoodad's sound effect
 	 */
 	protected void requestInteractSound() {
 		soundEffectConsumer.accept(soundEffect);

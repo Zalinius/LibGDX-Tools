@@ -269,7 +269,7 @@ public abstract class UserInterfaceFactory {
 		Runnable quitWithConfirmation = () -> new ConfirmationMenu("menu_warning", QUIT_GAME_KEY, quitGameRunnable::run, MultipleStage.OPTIONS_STAGE_NAME);
 		UniversalTextButton button = makeTextButton(getQuitButtonString(), quitWithConfirmation, Input.NONE);
 		button.setColor(Color.SALMON);
-		button.setSoundEffect(defaultSoundEffect);
+		button.setSoundEffect(defaultBackSoundEffect);
 		return button;
 	}
 

@@ -11,11 +11,11 @@ public interface GraphicsPreference {
 
 	Coordinate getPreferredWindowSize();
 
-	void setUserInterfaceScaling(float newScaling);
+	void setUserInterfaceScaling(float userInterfaceScaling);
 
 	void setPreferredScreenMode(ScreenMode preferredScreenMode);
 
-	void setPreferredWindowSize(Coordinate coordinate);
+	void setPreferredWindowSize(Coordinate preferredWindowSize);
 
 	default void setPreferredWindowSize(int width, int height) {
 		setPreferredWindowSize(new Coordinate(width, height));

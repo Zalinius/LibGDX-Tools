@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
@@ -23,13 +24,14 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalSelectBox;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalTextButton;
+import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
 public class WindowResizerSelectBox extends UniversalSelectBox {
 
 	private WindowResizer windowResizer;
 
-	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle style) {
-		super(textKey, inputStrategySwitcher, soundInteractListener, style);
+	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, ButtonStyle style, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
+		super(textKey, inputStrategySwitcher, style, soundEffectConsumer, soundEffect);
 
 		setEntryButtons(getEntries());
 	}

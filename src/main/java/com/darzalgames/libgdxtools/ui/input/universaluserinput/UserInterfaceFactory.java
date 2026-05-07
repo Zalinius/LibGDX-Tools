@@ -23,6 +23,7 @@ import com.darzalgames.libgdxtools.ui.input.handler.FallbackGamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.SelectBoxContentManager.SelectBoxButtonInfo;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
+import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 import com.github.tommyettinger.textra.Styles.LabelStyle;
 
 /**
@@ -33,17 +34,24 @@ public abstract class UserInterfaceFactory {
 	private final Runnable quitGameRunnable;
 	private final SkinManager skinManager;
 	private final InputStrategySwitcher inputStrategySwitcher;
-	private final Runnable soundInteractRunnable;
+	private final Consumer<SoundEffect> soundEffectConsumer;
+	private final SoundEffect defaultSoundEffect;
+	private final SoundEffect defaultBackSoundEffect;
 
 	private final FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference;
 
 	private static final String QUIT_GAME_KEY = "quit_game";
 	public static final String BACK_BUTTON_KEY = "back_message";
 
-	protected UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractRunnable, FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference) {
+	private static final SoundEffect NO_SOUND = SoundEffect.blank();
+
+	protected UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer, SoundEffect defaultSoundEffect, SoundEffect defaultBackSoundEffect,
+			FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference) {
 		this.skinManager = skinManager;
 		this.inputStrategySwitcher = inputStrategySwitcher;
-		this.soundInteractRunnable = soundInteractRunnable;
+		this.soundEffectConsumer = soundEffectConsumer;
+		this.defaultSoundEffect = defaultSoundEffect;
+		this.defaultBackSoundEffect = defaultBackSoundEffect;
 
 		this.sampleGlyphSupplierForSizeReference = sampleGlyphSupplierForSizeReference;
 		/*
@@ -83,7 +91,7 @@ public abstract class UserInterfaceFactory {
 	 * @return a blank UniversalButton
 	 */
 	public UniversalDoodad getSpacer() {
-		UniversalButton spacer = new UniversalButton(Runnables.nullRunnable(), inputStrategySwitcher, soundInteractRunnable, skinManager.getBlankButtonStyle()) {
+		UniversalButton spacer = new UniversalButton(Runnables.nullRunnable(), inputStrategySwitcher, skinManager.getBlankButtonStyle(), soundEffectConsumer, NO_SOUND) {
 			@Override
 			public void setAlignment(Alignment alignment) { /* not needed */ }
 
@@ -108,7 +116,7 @@ public abstract class UserInterfaceFactory {
 	}
 
 	protected UniversalButton getImageButton(final Image image, final Runnable runnable, ButtonStyle style) {
-		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, soundInteractRunnable, style) {
+		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, style, soundEffectConsumer, defaultSoundEffect) {
 			@Override
 			public boolean isBlank() {
 				return image != null;
@@ -144,7 +152,7 @@ public abstract class UserInterfaceFactory {
 	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, ButtonStyle style, LabelStyle labelStyle, Input inputForGlyph, boolean wrap) {
 		UniversalLabel label = new UniversalLabel(textSupplier, labelStyle);
 		label.setWrap(wrap);
-		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, soundInteractRunnable, style);
+		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, style, soundEffectConsumer, defaultSoundEffect);
 		addGameSpecificHighlightListener(button);
 		if (inputForGlyph != Input.NONE) {
 			ControlsGlyph glyph = getControlsGlyphForButton(inputForGlyph, button);
@@ -156,7 +164,7 @@ public abstract class UserInterfaceFactory {
 	public UniversalSelectBox getSelectBox(SelectBoxContentManager contentManager) {
 		String boxLabel = contentManager.getBoxLabelKey();
 		List<SelectBoxButtonInfo> entries = contentManager.getOptionButtons();
-		UniversalSelectBox selectBox = new UniversalSelectBox(boxLabel, inputStrategySwitcher, soundInteractRunnable, skinManager.getDefaultButtonStyle());
+		UniversalSelectBox selectBox = new UniversalSelectBox(boxLabel, inputStrategySwitcher, skinManager.getDefaultButtonStyle(), soundEffectConsumer, defaultSoundEffect);
 		List<UniversalTextButton> entriesButtons = entries.stream().map(buttonInfo -> makeTextButton(buttonInfo.buttonTextSupplier(), () -> {
 			buttonInfo.buttonPressRunnable().run();
 			selectBox.setSelected(buttonInfo.buttonTextSupplier().get());
@@ -182,19 +190,19 @@ public abstract class UserInterfaceFactory {
 
 	public UniversalSlider getSlider(Supplier<String> textSupplier, Consumer<Float> consumer) {
 		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle());
-		UniversalSlider button = new UniversalSlider(label, skinManager.getSliderStyle(), skinManager.getBlankButtonStyle(), consumer, inputStrategySwitcher, soundInteractRunnable, 0.05f);
+		UniversalSlider button = new UniversalSlider(label, skinManager.getSliderStyle(), skinManager.getBlankButtonStyle(), consumer, inputStrategySwitcher, 0.05f, soundEffectConsumer, defaultSoundEffect);
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
 
 	public UniversalCheckbox getCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer) {
-		UniversalCheckbox button = new UniversalCheckbox(uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), skinManager.getBlankButtonStyle(), inputStrategySwitcher, soundInteractRunnable);
+		UniversalCheckbox button = new UniversalCheckbox(uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), skinManager.getBlankButtonStyle(), inputStrategySwitcher, soundEffectConsumer, defaultSoundEffect, defaultBackSoundEffect);
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
 
 	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility) {
-		UniversalButton button = new UniversalButton(() -> toggleOptionsScreenVisibility.accept(true), inputStrategySwitcher, soundInteractRunnable, skinManager.getSettingsButtonStyle()) {
+		UniversalButton button = new UniversalButton(() -> toggleOptionsScreenVisibility.accept(true), inputStrategySwitcher, skinManager.getSettingsButtonStyle(), soundEffectConsumer, defaultSoundEffect) {
 			@Override
 			public String toString() {
 				return "options button";
@@ -223,7 +231,9 @@ public abstract class UserInterfaceFactory {
 	}
 
 	public UniversalButton makeBackButton(Runnable runnable, Supplier<String> customMessage) {
-		return makeTextButtonWithStyle(customMessage, runnable, skinManager.getBackButtonStyle(), skinManager.getDefaultLableStyle(), Input.BACK, false);
+		UniversalButton button = makeTextButtonWithStyle(customMessage, runnable, skinManager.getBackButtonStyle(), skinManager.getDefaultLableStyle(), Input.BACK, false);
+		button.setSoundEffect(defaultBackSoundEffect);
+		return button;
 	}
 
 	/**
@@ -233,6 +243,7 @@ public abstract class UserInterfaceFactory {
 	public UniversalTextButton getQuitGameButton(Supplier<String> buttonText) {
 		UniversalTextButton button = makeTextButton(buttonText, quitGameRunnable, Input.NONE);
 		button.setColor(Color.SALMON);
+		button.setSoundEffect(defaultBackSoundEffect);
 		return button;
 	}
 
@@ -258,12 +269,13 @@ public abstract class UserInterfaceFactory {
 		Runnable quitWithConfirmation = () -> new ConfirmationMenu("menu_warning", QUIT_GAME_KEY, quitGameRunnable::run, MultipleStage.OPTIONS_STAGE_NAME);
 		UniversalTextButton button = makeTextButton(getQuitButtonString(), quitWithConfirmation, Input.NONE);
 		button.setColor(Color.SALMON);
+		button.setSoundEffect(defaultBackSoundEffect);
 		return button;
 	}
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {
 		String textKey = "window_mode_label";
-		WindowResizerSelectBox button = new WindowResizerSelectBox(textKey, inputStrategySwitcher, soundInteractRunnable, skinManager.getDefaultButtonStyle());
+		WindowResizerSelectBox button = new WindowResizerSelectBox(textKey, inputStrategySwitcher, skinManager.getDefaultButtonStyle(), soundEffectConsumer, defaultSoundEffect);
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
@@ -285,8 +297,12 @@ public abstract class UserInterfaceFactory {
 		return inputStrategySwitcher;
 	}
 
-	protected Runnable getSoundInteractListener() {
-		return soundInteractRunnable;
+	public SoundEffect getDefaultSoundEffect() {
+		return defaultSoundEffect;
+	}
+
+	public SoundEffect getDefaultBackSoundEffect() {
+		return defaultBackSoundEffect;
 	}
 
 }

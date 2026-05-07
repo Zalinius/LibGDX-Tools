@@ -1,10 +1,13 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
+import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
 /**
  * Our very own custom button class that works with keyboard input!
@@ -14,13 +17,10 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 public abstract class UniversalButton extends UniversalDoodad implements VisibleInputConsumer {
 
 	private Runnable buttonRunnable;
-	private boolean doesSoundOnInteract = true;
-	private final Runnable soundInteractListener;
 
-	protected UniversalButton(Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, Runnable soundInteractListener, ButtonStyle buttonStyle) {
-		super(buttonStyle, inputStrategySwitcher);
+	protected UniversalButton(Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
+		super(buttonStyle, inputStrategySwitcher, soundEffectConsumer, soundEffect);
 		this.buttonRunnable = buttonRunnable;
-		this.soundInteractListener = soundInteractListener;
 	}
 
 	@Override
@@ -29,15 +29,6 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 		if (!isDisabled() && isTouchable) {
 			buttonRunnable.run();
 			requestInteractSound();
-		}
-	}
-
-	/**
-	 * This will play the interaction sound immediately if this button has {@link UniversalButton#doesSoundOnInteract} set to true (generally the default)
-	 */
-	protected void requestInteractSound() {
-		if (doesSoundOnInteract) {
-			soundInteractListener.run();
 		}
 	}
 
@@ -54,14 +45,6 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 	 */
 	public void setButtonRunnable(Runnable buttonRunnable) {
 		this.buttonRunnable = buttonRunnable;
-	}
-
-	/**
-	 * Set whether or not this button should make a sound when interacted with
-	 * @param doesSoundOnInteract whether or not the button should make a sound when pressed
-	 */
-	public void setDoesSoundOnInteract(boolean doesSoundOnInteract) {
-		this.doesSoundOnInteract = doesSoundOnInteract;
 	}
 
 }

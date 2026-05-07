@@ -8,6 +8,6 @@ public interface PreferenceManager {
 
 	boolean shouldPauseGameWhenOutOfFocus();
 
-	void setShouldPauseGameWhenOutOfFocus(boolean shouldPauseSoundWhenOutOfFocus);
+	void setShouldPauseGameWhenOutOfFocus(boolean shouldPauseGameWhenOutOfFocus);
 
 }

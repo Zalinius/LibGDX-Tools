@@ -17,8 +17,8 @@ public class UniversalTextButton extends UniversalButton {
 
 	protected final UniversalLabel label;
 
-	public UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle, Consumer<SoundEffect> soundEffectConsumer) {
-		super(buttonRunnable, inputStrategySwitcher, buttonStyle, soundEffectConsumer);
+	public UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
+		super(buttonRunnable, inputStrategySwitcher, buttonStyle, soundEffectConsumer, soundEffect);
 		this.label = label;
 		label.setTouchable(Touchable.disabled);
 		add(label).growX();

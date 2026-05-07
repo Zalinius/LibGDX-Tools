@@ -28,8 +28,9 @@ public class UniversalCheckbox extends UniversalTextButton {
 	private SoundEffect checkingSoundEffect;
 	private SoundEffect uncheckingSoundEffect;
 
-	public UniversalCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer) {
-		super(GameInfo.getUserInterfaceFactory().getLabel(uncheckedLabel), Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle, soundEffectConsumer);
+	public UniversalCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer,
+			SoundEffect checkedSoundEffect, SoundEffect uncheckedSoundEffect) {
+		super(GameInfo.getUserInterfaceFactory().getLabel(uncheckedLabel), Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle, soundEffectConsumer, checkedSoundEffect);
 		this.uncheckedLabel = () -> " " + uncheckedLabel.get();
 		this.checkedLabel = () -> " " + checkedLabel.get();
 
@@ -53,8 +54,8 @@ public class UniversalCheckbox extends UniversalTextButton {
 
 		DoodadBackgroundImage.addScalingClickListener(box, this);
 
-		checkingSoundEffect = new SoundEffect("no sfx");
-		uncheckingSoundEffect = new SoundEffect("no sfx");
+		checkingSoundEffect = checkedSoundEffect;
+		uncheckingSoundEffect = uncheckedSoundEffect;
 	}
 
 	/**

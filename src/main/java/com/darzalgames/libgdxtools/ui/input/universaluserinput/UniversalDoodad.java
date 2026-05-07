@@ -34,7 +34,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	public static final float DEFAULT_FOCUS_SCALE_INCREASE = 0.05f;
 
-	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer) {
+	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		setFocusScaleIncrease(DEFAULT_FOCUS_SCALE_INCREASE);
 		setStyle(buttonStyle);
@@ -51,7 +51,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		DoodadBackgroundImage.addScalingClickListener(backgroundImage, this);
 
 		this.soundEffectConsumer = soundEffectConsumer;
-		soundEffect = new SoundEffect("no sfx");
+		this.soundEffect = soundEffect;
 	}
 
 	@Override

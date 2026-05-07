@@ -22,8 +22,8 @@ public class UniversalSlider extends UniversalTextButton {
 	private final Slider slider;
 	private float previousValue;
 
-	public UniversalSlider(UniversalLabel label, SliderStyle sliderStyle, ButtonStyle buttonStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, float knobMinimumPercentage, Consumer<SoundEffect> soundEffectConsumer) {
-		super(label, Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle, soundEffectConsumer);
+	public UniversalSlider(UniversalLabel label, SliderStyle sliderStyle, ButtonStyle buttonStyle, Consumer<Float> consumer, InputStrategySwitcher inputStrategySwitcher, float knobMinimumPercentage, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
+		super(label, Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle, soundEffectConsumer, soundEffect);
 
 		slider = new Slider(0, 1, 0.1f, false, sliderStyle) {
 			@Override

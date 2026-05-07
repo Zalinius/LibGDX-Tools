@@ -30,8 +30,8 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 
 	private WindowResizer windowResizer;
 
-	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, ButtonStyle style, Consumer<SoundEffect> soundEffectConsumer) {
-		super(textKey, inputStrategySwitcher, style, soundEffectConsumer);
+	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, ButtonStyle style, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
+		super(textKey, inputStrategySwitcher, style, soundEffectConsumer, soundEffect);
 
 		setEntryButtons(getEntries());
 	}

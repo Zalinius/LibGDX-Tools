@@ -281,7 +281,6 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 		UniversalSlider basicSlider2 = GameInfo.getUserInterfaceFactory().getSlider(() -> "Slider with a label (sound volume)", newValue -> audioPipeline.setSoundEffectVolume(newValue));
 		basicSlider2.setSliderPosition(preferenceManager.sound().getSoundEffectVolume());
-		basicSlider2.setSoundEffect(sfx1());
 		menuButtons.add(basicSlider2);
 
 		UniversalCheckbox focusMute = GameInfo.getUserInterfaceFactory().getCheckbox(
@@ -312,7 +311,6 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 		String logOrigin = "LibGDXTools Test Game";
 		UniversalTextButton simpleTextButton = GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Text button! (with sfx)", () -> Gdx.app.log(logOrigin, "You pressed the text button"));
-		simpleTextButton.setSoundEffect(sfx1());
 		menuButtons.add(simpleTextButton);
 
 		menuButtons.add(GameInfo.getUserInterfaceFactory().getImageButton(new Image(ColorTools.getColoredTexture(Color.GOLD, 50, 12)), () -> Gdx.app.log(logOrigin, "You pressed the image button")));

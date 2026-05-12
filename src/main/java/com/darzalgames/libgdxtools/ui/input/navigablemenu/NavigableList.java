@@ -166,7 +166,7 @@ public class NavigableList implements VisibleInputConsumer {
 	}
 
 	@Override
-	public void consumeKeyInput(final Input input) {
+	public void consumeKeyInput(Input input) {
 		if (input.equals(menuOrientation.getForwardCode())) {
 			if (currentEntryIndex < interactableEntries.size() - 1) {
 				currentEntryIndex++;
@@ -188,6 +188,27 @@ public class NavigableList implements VisibleInputConsumer {
 		} else if (currentButton != null) {
 			currentButton.consumeKeyInput(input);
 		}
+	}
+
+	// TODO test this, and honestly merge this class with the parent or actually move out the table stuff
+	// TODO initialize the Table immediately and use the new trick I've discovered in the tests
+	public boolean canUseInput(Input input) {
+		if (input.equals(menuOrientation.getForwardCode())) {
+			if (currentEntryIndex < interactableEntries.size() - 1) {
+				return true;
+			}
+			return menuLoops;
+		} else if (input.equals(menuOrientation.getBackCode())) {
+			if (currentEntryIndex > 0) {
+				return true;
+			}
+			return menuLoops;
+		} else if (input.equals(Input.BACK) && finalButton != null) {
+			return true;
+		} else if (currentButton != null) {
+			return true;
+		}
+		return false;
 	}
 
 	public void returnToFirst() {

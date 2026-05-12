@@ -28,6 +28,10 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 		menu.consumeKeyInput(input);
 	}
 
+	public boolean canUseInput(Input input) {
+		return menu.canUseInput(input);
+	}
+
 	/**
 	 * Be SUPER SURE to call the following in your implementation:
 	 * add(menu.getView());
@@ -123,6 +127,10 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	@Override
 	public void setDisabled(boolean disabled) {
 		menu.setDisabled(disabled);
+	}
+
+	public void setMenuLoops(boolean menuLoops) {
+		menu.setMenuLoops(menuLoops);
 	}
 
 }

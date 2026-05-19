@@ -70,6 +70,10 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 		menu.setPressButtonOnEntryChanged(pressButtonOnEntryChanged);
 	}
 
+	public VisibleInputConsumer getCurrentButton() {
+		return menu.getCurrentButton();
+	}
+
 	@Override
 	public void gainFocus() {
 		clear();

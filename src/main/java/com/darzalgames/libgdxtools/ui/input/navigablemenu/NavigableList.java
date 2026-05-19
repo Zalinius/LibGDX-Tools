@@ -345,4 +345,8 @@ public class NavigableList implements VisibleInputConsumer {
 		return table.getMinHeight();
 	}
 
+	public VisibleInputConsumer getCurrentButton() {
+		return currentButton;
+	}
+
 }

@@ -48,9 +48,10 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	/**
 	 * Set the focus to a particular {@link VisibleInputConsumer}
 	 * @param entry the input consumer to focus on
+	 * @return Whether or not this menu has that entry (and if so, then it was selected). Returns true even if that entry was already the current one.
 	 */
-	public void goTo(VisibleInputConsumer entry) {
-		menu.goTo(entry);
+	public boolean goTo(VisibleInputConsumer entry) {
+		return menu.goTo(entry);
 	}
 
 	/**

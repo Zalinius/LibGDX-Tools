@@ -228,6 +228,7 @@ public class NavigableList implements VisibleInputConsumer {
 		goTo(interactableEntries.size() - 1);
 	}
 
+	// TODO keep this public? Return boolean?
 	public void goTo(final int index) {
 		if (currentEntryIndex != index) {
 			currentEntryIndex = index;
@@ -239,13 +240,15 @@ public class NavigableList implements VisibleInputConsumer {
 		}
 	}
 
-	public void goTo(VisibleInputConsumer visibleInputConsumer) {
+	public boolean goTo(VisibleInputConsumer visibleInputConsumer) {
 		for (int i = 0; i < interactableEntries.size(); i++) {
 			VisibleInputConsumer entry = interactableEntries.get(i);
 			if (entry.equals(visibleInputConsumer)) {
 				goTo(i);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	@Override

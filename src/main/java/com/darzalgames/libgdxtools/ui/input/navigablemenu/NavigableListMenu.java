@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Predicate;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
@@ -136,6 +137,10 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 
 	public void setMenuLoops(boolean menuLoops) {
 		menu.setMenuLoops(menuLoops);
+	}
+
+	public void setInteractabilityFilter(Predicate<VisibleInputConsumer> interactabilityFilter) {
+		menu.setInteractabilityFilter(interactabilityFilter);
 	}
 
 }

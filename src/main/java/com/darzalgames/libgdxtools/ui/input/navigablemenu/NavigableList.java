@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Predicate;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
@@ -21,6 +22,7 @@ public class NavigableList implements VisibleInputConsumer {
 
 	protected final LinkedList<VisibleInputConsumer> allEntries;
 	protected List<VisibleInputConsumer> interactableEntries;
+	private Predicate<VisibleInputConsumer> interactabilityFilter;
 	private VisibleInputConsumer finalButton;
 	protected Table table;
 
@@ -39,6 +41,7 @@ public class NavigableList implements VisibleInputConsumer {
 
 	NavigableList(MenuOrientation menuOrientation, final List<VisibleInputConsumer> entries) {
 		allEntries = new LinkedList<>(entries);
+		interactabilityFilter = NavigableList::isInteractable;
 		filterInteractableEntities();
 		this.menuOrientation = menuOrientation;
 		pressButtonOnEntryChanged = false;
@@ -68,7 +71,12 @@ public class NavigableList implements VisibleInputConsumer {
 	}
 
 	private void filterInteractableEntities() {
-		interactableEntries = allEntries.stream().filter(NavigableList::isInteractable).toList();
+		interactableEntries = allEntries.stream().filter(interactabilityFilter::evaluate).toList();
+	}
+
+	protected void setInteractabilityFilter(Predicate<VisibleInputConsumer> interactabilityFilter) {
+		this.interactabilityFilter = interactabilityFilter;
+		filterInteractableEntities();
 	}
 
 	private static boolean isInteractable(VisibleInputConsumer entry) {

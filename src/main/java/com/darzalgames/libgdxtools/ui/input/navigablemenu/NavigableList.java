@@ -193,7 +193,7 @@ public class NavigableList implements VisibleInputConsumer {
 		}
 	}
 
-	public boolean canUseInput(Input input) {
+	protected boolean canUseInput(Input input) {
 		if (input.equals(menuOrientation.getForwardCode())) {
 			if (currentEntryIndex < interactableEntries.size() - 1) {
 				return true;
@@ -212,11 +212,11 @@ public class NavigableList implements VisibleInputConsumer {
 		return false;
 	}
 
-	public boolean returnToFirst() {
+	protected boolean returnToFirst() {
 		return goTo(0);
 	}
 
-	public boolean returnToSecondLast() {
+	protected boolean returnToSecondLast() {
 		int tryIndex = interactableEntries.size() - 2;
 		if (tryIndex >= 0) {
 			return goTo(tryIndex);
@@ -225,7 +225,7 @@ public class NavigableList implements VisibleInputConsumer {
 		}
 	}
 
-	public boolean returnToLast() {
+	protected boolean returnToLast() {
 		return goTo(interactableEntries.size() - 1);
 	}
 
@@ -244,7 +244,7 @@ public class NavigableList implements VisibleInputConsumer {
 		return changedEntry;
 	}
 
-	public boolean goTo(VisibleInputConsumer visibleInputConsumer) {
+	protected boolean goTo(VisibleInputConsumer visibleInputConsumer) {
 		for (int i = 0; i < interactableEntries.size(); i++) {
 			VisibleInputConsumer entry = interactableEntries.get(i);
 			if (entry.equals(visibleInputConsumer)) {
@@ -272,11 +272,7 @@ public class NavigableList implements VisibleInputConsumer {
 		interactableEntries.forEach(entry -> entry.setTouchable(isTouchable));
 	}
 
-	/**
-	 * False by default, useful if you want to make a tabbed menu
-	 * @param pressButtonOnEntryChanged Set whether or not navigating to an entry presses it automatically
-	 */
-	public void setPressButtonOnEntryChanged(boolean pressButtonOnEntryChanged) {
+	protected void setPressButtonOnEntryChanged(boolean pressButtonOnEntryChanged) {
 		this.pressButtonOnEntryChanged = pressButtonOnEntryChanged;
 	}
 
@@ -289,14 +285,11 @@ public class NavigableList implements VisibleInputConsumer {
 		}
 	}
 
-	public void setRefreshPageRunnable(Runnable refreshPageRunnable) {
+	protected void setRefreshPageRunnable(Runnable refreshPageRunnable) {
 		this.refreshPageRunnable = refreshPageRunnable;
 	}
 
-	/**
-	 * @param menuLoops Whether or not the menu loops around, true by default
-	 */
-	public void setMenuLoops(boolean menuLoops) {
+	protected void setMenuLoops(boolean menuLoops) {
 		this.menuLoops = menuLoops;
 	}
 
@@ -348,7 +341,7 @@ public class NavigableList implements VisibleInputConsumer {
 		return table.getMinHeight();
 	}
 
-	public VisibleInputConsumer getCurrentButton() {
+	protected VisibleInputConsumer getCurrentButton() {
 		return currentButton;
 	}
 

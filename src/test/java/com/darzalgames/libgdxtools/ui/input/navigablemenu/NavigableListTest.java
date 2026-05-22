@@ -368,6 +368,26 @@ class NavigableListTest {
 	}
 
 	@Test
+	void goTo_currentButton_maintainsFocusAndReturnsFalse() {
+		List<VisibleInputConsumer> entries = new ArrayList<>();
+		VisibleInputConsumer buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		VisibleInputConsumer buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		VisibleInputConsumer buttonThree = makeTestButton();
+		entries.add(buttonThree);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
+		navigableList.selectDefault();
+
+		boolean changed = navigableList.goTo(buttonOne);
+
+		assertFalse(changed);
+		assertTrue(buttonOne.isOver());
+		assertFalse(buttonTwo.isOver());
+		assertFalse(buttonThree.isOver());
+	}
+
+	@Test
 	void goTo_invalidButton_doesntMoveFocus() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		VisibleInputConsumer buttonOne = makeTestButton();

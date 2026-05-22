@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Predicate;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
@@ -21,8 +22,9 @@ public class NavigableList implements VisibleInputConsumer {
 
 	protected final LinkedList<VisibleInputConsumer> allEntries;
 	protected List<VisibleInputConsumer> interactableEntries;
+	private Predicate<VisibleInputConsumer> interactabilityFilter;
 	private VisibleInputConsumer finalButton;
-	protected Table table;
+	private final Table table;
 
 	private final MenuOrientation menuOrientation;
 	private final Supplier<Float> spacing;
@@ -39,8 +41,10 @@ public class NavigableList implements VisibleInputConsumer {
 
 	NavigableList(MenuOrientation menuOrientation, final List<VisibleInputConsumer> entries) {
 		allEntries = new LinkedList<>(entries);
+		interactabilityFilter = NavigableList::isInteractable;
 		filterInteractableEntities();
 		this.menuOrientation = menuOrientation;
+		table = new Table();
 		pressButtonOnEntryChanged = false;
 		entryAlignment = Alignment.CENTER;
 		tableAlignment = Alignment.TOP_LEFT;
@@ -68,7 +72,12 @@ public class NavigableList implements VisibleInputConsumer {
 	}
 
 	private void filterInteractableEntities() {
-		interactableEntries = allEntries.stream().filter(NavigableList::isInteractable).toList();
+		interactableEntries = allEntries.stream().filter(interactabilityFilter::evaluate).toList();
+	}
+
+	protected void setInteractabilityFilter(Predicate<VisibleInputConsumer> interactabilityFilter) {
+		this.interactabilityFilter = interactabilityFilter;
+		filterInteractableEntities();
 	}
 
 	private static boolean isInteractable(VisibleInputConsumer entry) {
@@ -85,9 +94,6 @@ public class NavigableList implements VisibleInputConsumer {
 
 	@Override
 	public Table getView() {
-		if (table == null) {
-			table = new Table();
-		}
 		return table;
 	}
 
@@ -110,9 +116,6 @@ public class NavigableList implements VisibleInputConsumer {
 	}
 
 	public void defaultRefreshPage() {
-		if (table == null) {
-			table = new Table();
-		}
 		table.clearChildren();
 		table.clear();
 		table.defaults().expandX().spaceTop(spacing.get()).spaceBottom(spacing.get()).align(entryAlignment.getAlignment());
@@ -153,20 +156,20 @@ public class NavigableList implements VisibleInputConsumer {
 	private void changedEntries() {
 		if (pressButtonOnEntryChanged) {
 			interactableEntries.get(currentEntryIndex).consumeKeyInput(Input.ACCEPT);
-		} else {
-			if (currentButton != null
-					&& (currentEntryIndex < interactableEntries.size() && currentButton != interactableEntries.get(currentEntryIndex))) {
-				currentButton.setFocused(false);
-			}
-			findCurrentButton();
-			if (currentButton != null) {
-				currentButton.setFocused(true);
-			}
+		}
+
+		if (currentButton != null
+				&& (currentEntryIndex < interactableEntries.size() && currentButton != interactableEntries.get(currentEntryIndex))) {
+			currentButton.setFocused(false);
+		}
+		findCurrentButton();
+		if (currentButton != null) {
+			currentButton.setFocused(true);
 		}
 	}
 
 	@Override
-	public void consumeKeyInput(final Input input) {
+	public void consumeKeyInput(Input input) {
 		if (input.equals(menuOrientation.getForwardCode())) {
 			if (currentEntryIndex < interactableEntries.size() - 1) {
 				currentEntryIndex++;
@@ -190,41 +193,65 @@ public class NavigableList implements VisibleInputConsumer {
 		}
 	}
 
-	public void returnToFirst() {
-		goTo(0);
+	protected boolean canUseInput(Input input) {
+		if (input.equals(menuOrientation.getForwardCode())) {
+			if (currentEntryIndex < interactableEntries.size() - 1) {
+				return true;
+			}
+			return menuLoops;
+		} else if (input.equals(menuOrientation.getBackCode())) {
+			if (currentEntryIndex > 0) {
+				return true;
+			}
+			return menuLoops;
+		} else if (input.equals(Input.BACK) && finalButton != null) {
+			return true;
+		} else if (input.equals(Input.ACCEPT) && currentButton != null) {
+			return true;
+		}
+		return false;
 	}
 
-	public void returnToSecondLast() {
+	protected boolean returnToFirst() {
+		return goTo(0);
+	}
+
+	protected boolean returnToSecondLast() {
 		int tryIndex = interactableEntries.size() - 2;
 		if (tryIndex >= 0) {
-			goTo(tryIndex);
+			return goTo(tryIndex);
 		} else {
-			returnToLast();
+			return returnToLast();
 		}
 	}
 
-	public void returnToLast() {
-		goTo(interactableEntries.size() - 1);
+	protected boolean returnToLast() {
+		return goTo(interactableEntries.size() - 1);
 	}
 
-	public void goTo(final int index) {
+	private boolean goTo(final int index) {
+		boolean changedEntry = false;
 		if (currentEntryIndex != index) {
 			currentEntryIndex = index;
 			changedEntries();
+
+			changedEntry = true;
 		}
 
 		if (!pressButtonOnEntryChanged) {
 			focusCurrent();
 		}
+		return changedEntry;
 	}
 
-	public void goTo(VisibleInputConsumer visibleInputConsumer) {
+	protected boolean goTo(VisibleInputConsumer visibleInputConsumer) {
 		for (int i = 0; i < interactableEntries.size(); i++) {
 			VisibleInputConsumer entry = interactableEntries.get(i);
 			if (entry.equals(visibleInputConsumer)) {
-				goTo(i);
+				return goTo(i);
 			}
 		}
+		return false;
 	}
 
 	@Override
@@ -241,18 +268,11 @@ public class NavigableList implements VisibleInputConsumer {
 
 	@Override
 	public void setTouchable(Touchable isTouchable) {
-		if (table == null) {
-			table = new Table();
-		}
 		table.setTouchable(isTouchable);
 		interactableEntries.forEach(entry -> entry.setTouchable(isTouchable));
 	}
 
-	/**
-	 * False by default, useful if you want to make a tabbed menu
-	 * @param pressButtonOnEntryChanged Set whether or not navigating to an entry presses it automatically
-	 */
-	public void setPressButtonOnEntryChanged(boolean pressButtonOnEntryChanged) {
+	protected void setPressButtonOnEntryChanged(boolean pressButtonOnEntryChanged) {
 		this.pressButtonOnEntryChanged = pressButtonOnEntryChanged;
 	}
 
@@ -265,14 +285,11 @@ public class NavigableList implements VisibleInputConsumer {
 		}
 	}
 
-	public void setRefreshPageRunnable(Runnable refreshPageRunnable) {
+	protected void setRefreshPageRunnable(Runnable refreshPageRunnable) {
 		this.refreshPageRunnable = refreshPageRunnable;
 	}
 
-	/**
-	 * @param menuLoops Whether or not the menu loops around, true by default
-	 */
-	public void setMenuLoops(boolean menuLoops) {
+	protected void setMenuLoops(boolean menuLoops) {
 		this.menuLoops = menuLoops;
 	}
 
@@ -322,6 +339,10 @@ public class NavigableList implements VisibleInputConsumer {
 	@Override
 	public float getMinHeight() {
 		return table.getMinHeight();
+	}
+
+	protected VisibleInputConsumer getCurrentButton() {
+		return currentButton;
 	}
 
 }

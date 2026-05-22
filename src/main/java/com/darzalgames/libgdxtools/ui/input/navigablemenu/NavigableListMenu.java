@@ -60,15 +60,6 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	}
 
 	/**
-	 * Set the focus to a particular button index (often first or last, but there can be more specialized applications)
-	 * @param index the index of the button to go to
-	 * @return Whether or not this menu has that entry (and if so, then it was selected). Returns false if that entry was already the current one.
-	 */
-	public boolean goTo(final int index) {
-		return menu.goTo(index);
-	}
-
-	/**
 	 * This is generally false, but will be true for menu tabs navigated with the bumpers, for example.
 	 * @param pressButtonOnEntryChanged Set whether or not navigating to an entry presses it automatically
 	 */
@@ -150,7 +141,7 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	}
 
 	/**
-	 * Set a custom interactability filter, for example if you want to allow disabled buttons to still be selectable so that players can see their tooltip.
+	 * Set a custom interactability filter, for example if you want to allow disabled buttons to still be selectable so that players can see their tooltips.
 	 * @param interactabilityFilter The new filter rule: an entry must get 'true' out of this predicate to be considered interactable
 	 */
 	public void setInteractabilityFilter(Predicate<VisibleInputConsumer> interactabilityFilter) {

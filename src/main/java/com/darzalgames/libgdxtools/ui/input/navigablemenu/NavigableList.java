@@ -229,7 +229,7 @@ public class NavigableList implements VisibleInputConsumer {
 		return goTo(interactableEntries.size() - 1);
 	}
 
-	protected boolean goTo(final int index) {
+	private boolean goTo(final int index) {
 		boolean changedEntry = false;
 		if (currentEntryIndex != index) {
 			currentEntryIndex = index;

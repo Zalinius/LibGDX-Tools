@@ -718,6 +718,26 @@ class NavigableListTest {
 	}
 
 	@Test
+	void consumeKeyInput_changingButtonsWithPressButtonOnEntryChangedSetFalse_doesNotPressIt() {
+		List<VisibleInputConsumer> entries = new ArrayList<>();
+		VisibleInputConsumer buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		AtomicBoolean buttonSpy = new AtomicBoolean(false);
+		TestButton testButton = new TestButton(() -> buttonSpy.set(true));
+		testButton.setBlank(false);
+		entries.add(testButton);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
+		navigableList.selectDefault();
+
+		navigableList.setPressButtonOnEntryChanged(false);
+		navigableList.consumeKeyInput(Input.DOWN);
+
+		assertFalse(buttonOne.isOver());
+		assertTrue(testButton.isOver());
+		assertFalse(buttonSpy.get());
+	}
+
+	@Test
 	void focusCurrent_focusesCurrentButton() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		VisibleInputConsumer buttonOne = makeTestButton();

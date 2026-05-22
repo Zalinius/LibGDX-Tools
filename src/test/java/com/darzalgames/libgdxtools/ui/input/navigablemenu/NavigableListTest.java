@@ -5,14 +5,24 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
 class NavigableListTest {
+
+	@BeforeAll
+	public static void setup() {
+		TestWithTable.setUpBeforeAll();
+	}
 
 	@Test
 	void selectDefault_onlyFirstButtonIsFocused() {
@@ -27,6 +37,34 @@ class NavigableListTest {
 
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
+	}
+
+	private static Stream<Arguments> canUseInputSource() {
+		return Stream.of(
+				Arguments.of(Input.UP, false),
+				Arguments.of(Input.LEFT, false),
+				Arguments.of(Input.RIGHT, false),
+				Arguments.of(Input.DOWN, true),
+				Arguments.of(Input.ACCEPT, true),
+				Arguments.of(Input.BACK, true)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource("canUseInputSource")
+	void canUseInput_severalInputs_returnsExpectedBooleans(Input input, boolean expected) {
+		List<VisibleInputConsumer> entries = new ArrayList<>();
+		VisibleInputConsumer buttonOne = makeTestButton();
+		entries.add(buttonOne);
+		VisibleInputConsumer buttonTwo = makeTestButton();
+		entries.add(buttonTwo);
+		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
+		navigableList.setFinalButton(makeTestButton());
+		navigableList.setMenuLoops(false);
+
+		navigableList.selectDefault();
+
+		assertEquals(expected, navigableList.canUseInput(input));
 	}
 
 	@Test
@@ -161,8 +199,9 @@ class NavigableListTest {
 		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
-		navigableList.goTo(buttonTwo);
+		boolean changed = navigableList.goTo(buttonTwo);
 
+		assertTrue(changed);
 		assertFalse(buttonOne.isOver());
 		assertTrue(buttonTwo.isOver());
 		assertFalse(buttonThree.isOver());
@@ -180,8 +219,9 @@ class NavigableListTest {
 		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
-		navigableList.goTo(makeTestButton());
+		boolean changed = navigableList.goTo(makeTestButton());
 
+		assertFalse(changed);
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
 		assertFalse(buttonThree.isOver());
@@ -201,8 +241,9 @@ class NavigableListTest {
 
 		navigableList.consumeKeyInput(Input.DOWN);
 		navigableList.consumeKeyInput(Input.DOWN);
-		navigableList.returnToFirst();
+		boolean changed = navigableList.returnToFirst();
 
+		assertTrue(changed);
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
 		assertFalse(buttonThree.isOver());
@@ -220,8 +261,9 @@ class NavigableListTest {
 		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
-		navigableList.returnToLast();
+		boolean changed = navigableList.returnToLast();
 
+		assertTrue(changed);
 		assertFalse(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
 		assertTrue(buttonThree.isOver());
@@ -242,8 +284,9 @@ class NavigableListTest {
 		finalButton.setBlank(false);
 		navigableList.setFinalButton(finalButton);
 
-		navigableList.returnToLast();
+		boolean changed = navigableList.returnToLast();
 
+		assertTrue(changed);
 		assertFalse(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
 		assertFalse(buttonThree.isOver());
@@ -265,8 +308,9 @@ class NavigableListTest {
 		finalButton.setBlank(false);
 		navigableList.setFinalButton(finalButton);
 
-		navigableList.returnToSecondLast();
+		boolean changed = navigableList.returnToSecondLast();
 
+		assertTrue(changed);
 		assertFalse(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
 		assertTrue(buttonThree.isOver());
@@ -281,8 +325,9 @@ class NavigableListTest {
 		NavigableList navigableList = new NavigableList(MenuOrientation.VERTICAL, entries);
 		navigableList.selectDefault();
 
-		navigableList.returnToSecondLast();
+		boolean changed = navigableList.returnToSecondLast();
 
+		assertFalse(changed);
 		assertTrue(buttonOne.isOver());
 	}
 

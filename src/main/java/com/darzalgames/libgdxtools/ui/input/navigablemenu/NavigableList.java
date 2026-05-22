@@ -156,15 +156,15 @@ public class NavigableList implements VisibleInputConsumer {
 	private void changedEntries() {
 		if (pressButtonOnEntryChanged) {
 			interactableEntries.get(currentEntryIndex).consumeKeyInput(Input.ACCEPT);
-		} else {
-			if (currentButton != null
-					&& (currentEntryIndex < interactableEntries.size() && currentButton != interactableEntries.get(currentEntryIndex))) {
-				currentButton.setFocused(false);
-			}
-			findCurrentButton();
-			if (currentButton != null) {
-				currentButton.setFocused(true);
-			}
+		}
+
+		if (currentButton != null
+				&& (currentEntryIndex < interactableEntries.size() && currentButton != interactableEntries.get(currentEntryIndex))) {
+			currentButton.setFocused(false);
+		}
+		findCurrentButton();
+		if (currentButton != null) {
+			currentButton.setFocused(true);
 		}
 	}
 

@@ -15,8 +15,12 @@ import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
  */
 public class TestButton implements VisibleInputConsumer {
 
+	private final Actor placeholderViewActor;
 	private final Runnable pressRunnable;
 	private boolean isBlank;
+	private boolean isOver = false;
+	private boolean isDisabled = false;
+	private final DelayedRemovalArray<EventListener> listeners = new DelayedRemovalArray<>(0);
 
 	protected TestButton() {
 		this(Runnables.nullRunnable());
@@ -25,15 +29,8 @@ public class TestButton implements VisibleInputConsumer {
 	protected TestButton(Runnable pressRunnable) {
 		this.pressRunnable = pressRunnable;
 		setBlank(true);
-	}
-
-	private boolean isOver = false;
-	private boolean isDisabled = false;
-	private Touchable touchable = Touchable.enabled;
-	private final DelayedRemovalArray<EventListener> listeners = new DelayedRemovalArray<>(0);
-
-	public boolean isTouchable() {
-		return Touchable.enabled.equals(touchable);
+		placeholderViewActor = new Actor();
+		placeholderViewActor.setName("placeholder name");
 	}
 
 	protected void setBlank(boolean isBlank) {
@@ -57,7 +54,7 @@ public class TestButton implements VisibleInputConsumer {
 
 	@Override
 	public void setTouchable(Touchable touchable) {
-		this.touchable = touchable;
+		placeholderViewActor.setTouchable(touchable);
 	}
 
 	public boolean fire(Event event) {
@@ -166,7 +163,7 @@ public class TestButton implements VisibleInputConsumer {
 
 	@Override
 	public Actor getView() {
-		return new Actor();
+		return placeholderViewActor;
 	}
 
 	public Stage getStage() {

@@ -5,7 +5,7 @@
 
 	<groupId>com.darzalgames</groupId>
 	<artifactId>libgdx-tools</artifactId>
-	<version>0.8.8</version>
+	<version>0.8.9</version>
 	<name>libGDX Tools</name>
 
 	<properties>
@@ -15,7 +15,7 @@
 		<darzalcommon.version>0.7.23</darzalcommon.version>
 		<zalaudiolibrary.version>0.8.2</zalaudiolibrary.version>
 
-		<libgdx.version>1.13.1</libgdx.version>
+		<libgdx.version>1.14.2</libgdx.version>
 		<libgdx.controllers.version>2.2.3</libgdx.controllers.version>
 
 		<mockito.version>5.15.2</mockito.version>
@@ -139,7 +139,7 @@
 		<dependency>
 		    <groupId>com.github.tommyettinger</groupId>
 		    <artifactId>textratypist</artifactId>
-		    <version>2.2.13</version>
+		    <version>2.4.0</version>
 		</dependency>
 		<!-- Controller Dependendies -->
 		<dependency>

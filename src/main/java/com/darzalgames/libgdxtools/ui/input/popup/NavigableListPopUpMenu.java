@@ -20,7 +20,7 @@ public abstract class NavigableListPopUpMenu extends NavigableListMenu implement
 
 	@Override
 	public void gainFocus() {
-		slideIn(super::gainFocus);
+		slideIn(super::gainFocus, this::focusCurrent);
 	}
 
 	@Override

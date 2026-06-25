@@ -3,11 +3,13 @@ package com.darzalgames.libgdxtools.ui.input.popup;
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
+import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
@@ -41,13 +43,19 @@ public interface PopUpMenu extends PopUp, VisibleInputConsumer {
 		return true;
 	}
 
-	default void slideIn(Runnable superGainFocus) {
+	default void slideIn(Runnable superGainFocus, Runnable menuFocusCurrent) {
 		superGainFocus.run();
 		if (slidesInAndOut()) {
 			float startX = getAsActor().getX();
 			float startY = getAsActor().getY();
 			getAsActor().setY(UserInterfaceSizer.getCurrentHeight());
-			getAsActor().addAction(Actions.moveTo(startX, startY, SLIDE_DURATION, Interpolation.circle));
+			getAsActor().addAction(
+					new InstantSequenceAction(
+							Actions.moveTo(startX, startY, SLIDE_DURATION, Interpolation.circle),
+							Actions.touchable(Touchable.enabled),
+							Actions.run(menuFocusCurrent)
+					)
+			);
 		}
 	}
 

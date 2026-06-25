@@ -84,7 +84,7 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 		}
 
 		@Override
-		protected boolean slidesInAndOut() {
+		public boolean slidesInAndOut() {
 			// Since the window is resized as this popup comes/goes, it's tricky to center its animation so we don't do it: it appears instantly instead of sliding in/out
 			return false;
 		}

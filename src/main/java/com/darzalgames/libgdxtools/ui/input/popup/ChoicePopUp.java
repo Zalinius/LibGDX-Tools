@@ -14,7 +14,7 @@ import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
  * A pop up that offers two choices, and can respond differently based on which choice is made.
  * This is versatile: it can be used for dialog choices, menus, warnings, etc.
  */
-public abstract class ChoicePopUp extends PopUpMenu {
+public abstract class ChoicePopUp extends NavigableListPopUpMenu {
 
 	protected final Runnable firstChoiceRunnable;
 	protected boolean addRowAfterMessage = true;

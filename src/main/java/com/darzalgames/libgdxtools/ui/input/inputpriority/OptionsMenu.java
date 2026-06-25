@@ -16,15 +16,15 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
+import com.darzalgames.libgdxtools.ui.input.popup.NavigableListPopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
-import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 
 /**
  * The base class for options menus (in-game versus when on the main menu)
  */
-public abstract class OptionsMenu extends PopUpMenu {
+public abstract class OptionsMenu extends NavigableListPopUpMenu {
 
 	protected UniversalButton optionsButton;
 	private final WindowResizerSelectBox windowModeSelectBox;
@@ -79,7 +79,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	}
 
 	@Override
-	protected void setUpDesiredSize() {
+	public void setUpDesiredSize() {
 		UserInterfaceSizer.sizeToPercentage(this, 0.75f, 0.85f);
 		if (getActions().isEmpty()) {
 			UserInterfaceSizer.makeActorCentered(this);
@@ -208,7 +208,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	/**
 	 * A sub-menu that opens up within this menu (e.g. a sub-menu for sound options)
 	 */
-	protected class NestedMenu extends PopUpMenu {
+	protected class NestedMenu extends NavigableListPopUpMenu {
 
 		private final String buttonKey;
 
@@ -218,7 +218,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 		}
 
 		@Override
-		protected void setUpDesiredSize() {
+		public void setUpDesiredSize() {
 			UserInterfaceSizer.sizeToPercentage(this, 0.5f);
 			if (getActions().isEmpty()) {
 				UserInterfaceSizer.makeActorCentered(this);

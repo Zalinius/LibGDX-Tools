@@ -374,7 +374,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 			}
 
 			@Override
-			protected void setUpDesiredSize() {
+			public void setUpDesiredSize() {
 				UserInterfaceSizer.sizeToPercentage(this, 0.25f);
 			}
 

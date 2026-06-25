@@ -1,9 +1,8 @@
 package com.darzalgames.libgdxtools.ui.input.popup;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.darzalgames.darzalcommon.functional.Runnables;
@@ -13,107 +12,80 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 
 /**
  * It's a navigable menu, and it's a pop up!
  */
-public abstract class PopUpMenu extends NavigableListMenu implements PopUp {
+public interface PopUpMenu extends PopUp, VisibleInputConsumer {
 
-	public static final float SLIDE_DURATION = 0.25f;
-	private Runnable runJustBeforeRemove = Runnables.nullRunnable();
+	// TODO just merge all this into PopUp interface
 
-	protected PopUpMenu(MenuOrientation menuOrientation) {
-		super(menuOrientation);
+	float SLIDE_DURATION = 0.25f;
+
+	default Runnable getJustBeforeRemoveRunnable() {
+		return Runnables.nullRunnable();
 	}
 
-	protected PopUpMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries) {
-		super(menuOrientation, entries);
-		menu.replaceContents(entries, makeDefaultBackButton()); // Because the final button calls this::hideThis, we make it after the call to super()
-	}
+	void setUpDesiredSize();
 
-	protected PopUpMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries, String finalButtonMessageKey) {
-		super(menuOrientation, entries);
-		menu.replaceContents(entries, makeCustomFinalButton(finalButtonMessageKey)); // Because the final button calls this::hideThis, we make it after the call to super()
-	}
-
-	protected abstract void setUpDesiredSize();
-
-	protected UniversalButton makeDefaultBackButton() {
+	default UniversalButton makeDefaultBackButton() {
 		return GameInfo.getUserInterfaceFactory().makeBackButton(this::hideThis);
 	}
 
-	protected UniversalButton makeCustomFinalButton(String finalButtonMessageKey) {
+	default UniversalButton makeCustomFinalButton(String finalButtonMessageKey) {
 		return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine(finalButtonMessageKey), this::hideThis, Input.BACK);
 	}
 
-	protected boolean slidesInAndOut() {
+	default boolean slidesInAndOut() {
 		return true;
 	}
 
-	@Override
-	public void gainFocus() {
-		super.gainFocus();
+	default void slideIn(Runnable superGainFocus) {
+		superGainFocus.run();
 		if (slidesInAndOut()) {
-			float startX = this.getX();
-			float startY = this.getY();
-			this.setY(UserInterfaceSizer.getCurrentHeight());
-			addAction(Actions.moveTo(startX, startY, SLIDE_DURATION, Interpolation.circle));
+			float startX = getAsActor().getX();
+			float startY = getAsActor().getY();
+			getAsActor().setY(UserInterfaceSizer.getCurrentHeight());
+			getAsActor().addAction(Actions.moveTo(startX, startY, SLIDE_DURATION, Interpolation.circle));
 		}
 	}
 
 	@Override
-	public void regainFocus() {
-		menu.regainFocus();
-	}
-
-	@Override
-	public void hideThis() {
+	default void hideThis() {
 		releasePriority();
 		if (slidesInAndOut()) {
-			addAction(
+			getAsActor().addAction(
 					Actions.sequence(
-							Actions.moveTo(getX(), UserInterfaceSizer.getCurrentHeight(), SLIDE_DURATION, Interpolation.circle),
-							new RunnableActionBest(runJustBeforeRemove),
-							new RunnableActionBest(this::remove)
+							Actions.moveTo(getAsActor().getX(), UserInterfaceSizer.getCurrentHeight(), SLIDE_DURATION, Interpolation.circle),
+							new RunnableActionBest(getJustBeforeRemoveRunnable()),
+							new RunnableActionBest(getAsActor()::remove)
 					)
 			);
 
 			// continue to resize ui as the popup slides out
-			addAction(new TemporalAction(SLIDE_DURATION) {
+			getAsActor().addAction(new TemporalAction(SLIDE_DURATION) {
 				@Override
 				protected void update(float percent) {
 					resizeUI();
 				}
 			});
-			toFront();
+			getAsActor().toFront();
 		} else {
-			remove();
+			getAsActor().remove();
 		}
 	}
 
-	public void setRunJustBeforeRemove(Runnable runJustBeforeRemove) {
-		this.runJustBeforeRemove = runJustBeforeRemove;
-	}
-
-	@Override
-	public void consumeKeyInput(Input input) {
+	default void possiblyDismiss(Input input, Consumer<Input> superConsumeKeyInput) {
 		if (canDismiss() && input == Input.PAUSE) {
 			input = Input.BACK;
 		}
-		super.consumeKeyInput(input);
+		superConsumeKeyInput.accept(input);
 	}
 
 	@Override
-	public Actor getAsActor() {
-		return this;
-	}
-
-	@Override
-	public void resizeUI() {
+	default void resizeUI() {
 		setUpDesiredSize();
-		menu.resizeUI();
+		resizeUI();
 	}
 }

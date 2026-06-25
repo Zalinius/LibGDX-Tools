@@ -27,7 +27,7 @@ public class ConfirmationMenu extends TextChoicePopUp {
 	}
 
 	@Override
-	protected void setUpDesiredSize() {
+	public void setUpDesiredSize() {
 		UserInterfaceSizer.sizeToPercentage(this, 0.4f, 0.3f);
 		if (getActions().isEmpty()) {
 			UserInterfaceSizer.makeActorCentered(this);

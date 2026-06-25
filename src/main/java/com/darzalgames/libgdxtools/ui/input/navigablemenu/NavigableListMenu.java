@@ -3,17 +3,16 @@ package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Predicate;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
 /**
  * The actor that holds a {@link NavigableList} and handles how it looks and is interacted with.
  */
-public abstract class NavigableListMenu extends Table implements InputConsumer {
+public abstract class NavigableListMenu extends NavigableLayout {
 	protected NavigableList menu;
 
 	protected NavigableListMenu(MenuOrientation menuOrientation) {
@@ -146,6 +145,16 @@ public abstract class NavigableListMenu extends Table implements InputConsumer {
 	 */
 	public void setInteractabilityFilter(Predicate<VisibleInputConsumer> interactabilityFilter) {
 		menu.setInteractabilityFilter(interactabilityFilter);
+	}
+
+	@Override
+	public boolean isOver() {
+		return menu.isOver();
+	}
+
+	@Override
+	public Actor getView() {
+		return this;
 	}
 
 }

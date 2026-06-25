@@ -1,26 +1,32 @@
-package com.darzalgames.libgdxtools.ui.input.popup;
+package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListMenu;
 
 public abstract class NavigableListPopUpMenu extends NavigableListMenu implements PopUpMenu {
 
 	protected NavigableListPopUpMenu(MenuOrientation menuOrientation) {
-		super(menuOrientation);
+		this(menuOrientation, new ArrayList<>());
 	}
 
 	protected NavigableListPopUpMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries) {
 		super(menuOrientation, entries);
+		menu.setFinalButton(makeDefaultBackButton());
+		menu.refreshPage();
 	}
 
 	@Override
 	public void gainFocus() {
 		slideIn(super::gainFocus, this::focusCurrent);
+	}
+
+	@Override
+	public void regainFocus() {
+		focusCurrent();
 	}
 
 	@Override

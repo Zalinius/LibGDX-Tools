@@ -16,8 +16,8 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
-import com.darzalgames.libgdxtools.ui.input.popup.NavigableListPopUpMenu;
-import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListPopUpMenu;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUp;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 

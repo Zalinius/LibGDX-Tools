@@ -2,7 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUp;
 
 public class InputConsumerPopUpForTesting extends InputConsumerForTesting implements PopUp {
 

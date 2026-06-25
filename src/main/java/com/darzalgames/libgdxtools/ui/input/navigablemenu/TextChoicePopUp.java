@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.popup;
+package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -9,7 +9,6 @@ import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 

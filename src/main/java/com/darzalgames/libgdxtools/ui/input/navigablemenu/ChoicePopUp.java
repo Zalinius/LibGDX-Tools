@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.popup;
+package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
@@ -7,7 +7,6 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 
 /**

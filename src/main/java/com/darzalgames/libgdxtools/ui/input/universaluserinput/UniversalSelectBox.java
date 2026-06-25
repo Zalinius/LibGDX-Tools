@@ -14,7 +14,7 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
-import com.darzalgames.libgdxtools.ui.input.popup.NavigableListPopUpMenu;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListPopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 

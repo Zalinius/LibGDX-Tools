@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.popup;
+package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;

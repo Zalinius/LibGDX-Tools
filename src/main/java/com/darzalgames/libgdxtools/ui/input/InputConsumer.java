@@ -3,7 +3,7 @@ package com.darzalgames.libgdxtools.ui.input;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
-import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUp;
 
 /**
  * Anything that can be interacted with via user input

@@ -9,7 +9,7 @@ import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
-import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUp;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**

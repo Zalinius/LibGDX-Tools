@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.popup;
+package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import java.util.function.Consumer;
 

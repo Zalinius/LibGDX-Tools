@@ -214,7 +214,7 @@ public abstract class OptionsMenu extends NavigableListPopUpMenu {
 		private final String buttonKey;
 
 		public NestedMenu(final List<VisibleInputConsumer> entries, String buttonKey) {
-			super(MenuOrientation.VERTICAL, entries);
+			super(MenuOrientation.VERTICAL, entries, true);
 			this.buttonKey = buttonKey;
 		}
 

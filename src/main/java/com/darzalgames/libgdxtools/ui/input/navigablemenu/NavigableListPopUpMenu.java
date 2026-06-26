@@ -10,17 +10,18 @@ import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 public abstract class NavigableListPopUpMenu extends NavigableListMenu implements PopUpMenu {
 
 	protected NavigableListPopUpMenu(MenuOrientation menuOrientation) {
-		this(menuOrientation, new ArrayList<>());
+		this(menuOrientation, new ArrayList<>(), false);
 	}
 
-	protected NavigableListPopUpMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries) {
+	protected NavigableListPopUpMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries, boolean addBackButton) {
 		super(menuOrientation, entries);
-		setFinalButton(makeDefaultBackButton());
+		if (addBackButton) {
+			setFinalButton(makeDefaultBackButton());
+		}
 	}
 
 	@Override
 	public void gainFocus() {
-		super.gainFocus();
 		slideIn(super::gainFocus, this::focusCurrent);
 	}
 

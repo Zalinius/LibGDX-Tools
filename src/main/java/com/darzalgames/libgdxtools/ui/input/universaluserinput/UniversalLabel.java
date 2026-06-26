@@ -59,12 +59,15 @@ public class UniversalLabel extends TypingLabel implements VisibleInputConsumer 
 
 	@Override
 	public void resizeUI() {
-		setFont(typingLabelStyle.font); // updates us to the resized font size
 		String currentText = getOriginalText().toString();
 		String newText = "[%" + bounceScaling * 100 + "]" + textSupplier.get();
-		if (!currentText.equals(newText) && shouldSkipToEnd) {
-			// only update when there's a change: this allows us to use the fancy Textra animations
-			setSize(0, 0); // the documentation suggests doing this before calling restart()
+		boolean textChanged = !currentText.equals(newText) && shouldSkipToEnd;
+		boolean fontChanged = getFont() != typingLabelStyle.font;
+
+		// only update when there's a change: this allows us to use the fancy Textra animations
+		if (fontChanged || textChanged) {
+			setFont(typingLabelStyle.font); // updates us to the resized font size
+			// the documentation suggests doing setSize(0, 0) before calling restart(), but it was giving me size 0 buttons...
 			restart(newText);
 		}
 

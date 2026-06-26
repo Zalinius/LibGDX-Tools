@@ -36,6 +36,12 @@ public abstract class NavigableListPopUpMenu extends NavigableListMenu implement
 	}
 
 	@Override
+	public void resizeUI() {
+		setUpDesiredSize();
+		super.resizeUI();
+	}
+
+	@Override
 	public Actor getAsActor() {
 		return this;
 	}

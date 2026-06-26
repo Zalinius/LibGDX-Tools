@@ -42,7 +42,6 @@ public class TestButton implements VisibleInputConsumer {
 		return isDisabled;
 	}
 
-	@Override
 	public boolean isOver() {
 		return isOver;
 	}

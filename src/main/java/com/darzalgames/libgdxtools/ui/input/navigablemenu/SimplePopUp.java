@@ -41,12 +41,6 @@ public abstract class SimplePopUp extends Table implements PopUpMenu {
 	public void focusCurrent() {}
 
 	@Override
-	public boolean isOver() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public Actor getAsActor() {
 		return this;
 	}

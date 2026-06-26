@@ -138,12 +138,6 @@ public class UniversalLabel extends TypingLabel implements VisibleInputConsumer 
 	}
 
 	@Override
-	public boolean isOver() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public Actor getView() {
 		return this;
 	}

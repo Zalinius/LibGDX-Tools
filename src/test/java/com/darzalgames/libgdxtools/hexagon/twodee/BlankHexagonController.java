@@ -54,8 +54,4 @@ public class BlankHexagonController implements VisibleInputConsumer {
 	@Override
 	public void setDisabled(boolean disabled) { /* Not needed for testing */ }
 
-	@Override
-	public boolean isOver() {
-		return false;
-	}
 }

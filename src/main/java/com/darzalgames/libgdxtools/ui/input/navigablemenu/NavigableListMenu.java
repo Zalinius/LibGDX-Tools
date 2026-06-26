@@ -358,11 +358,6 @@ public abstract class NavigableListMenu extends NavigableLayout {
 		filterInteractableEntities();
 	}
 
-	@Override
-	public boolean isOver() {
-		return interactableEntries.stream().anyMatch(VisibleInputConsumer::isOver);
-	}
-
 	/**
 	 * @return The entry that's currently in focus
 	 */

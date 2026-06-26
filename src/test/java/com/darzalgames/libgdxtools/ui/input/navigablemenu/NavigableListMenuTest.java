@@ -34,9 +34,9 @@ class NavigableListMenuTest {
 	@Test
 	void getView_onConstruction_exists() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
@@ -46,9 +46,9 @@ class NavigableListMenuTest {
 	@Test
 	void setTouchable_appliesToMainTableAndAllEntries() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
@@ -62,9 +62,9 @@ class NavigableListMenuTest {
 	@Test
 	void selectDefault_onlyFirstButtonIsFocused() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
@@ -77,10 +77,10 @@ class NavigableListMenuTest {
 	@Test
 	void constructor_withDefaultInteractabilityFilterOnSpacerAndDisabledButtons_filtersThem() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		buttonOne.setDisabled(true);
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		VisibleInputConsumer testSpacer = makeTestSpacer();
 		entries.add(testSpacer);
@@ -97,10 +97,10 @@ class NavigableListMenuTest {
 	@Test
 	void setInteractabilityFilter_refiltersInteractableEntriesAsExpected() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		buttonOne.setDisabled(true);
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		VisibleInputConsumer testSpacer = makeTestSpacer();
 		entries.add(testSpacer);
@@ -121,7 +121,7 @@ class NavigableListMenuTest {
 		entries.add(makeTestButton());
 		entries.add(makeTestButton());
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		VisibleInputConsumer finalButton = makeTestButton();
+		TestButton finalButton = makeTestButton();
 
 		NavigableListMenu.setFinalButton(finalButton);
 
@@ -134,7 +134,7 @@ class NavigableListMenuTest {
 		entries.add(makeTestButton());
 		entries.add(makeTestButton());
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		VisibleInputConsumer finalButton = makeTestSpacer();
+		TestButton finalButton = makeTestSpacer();
 
 		NavigableListMenu.setFinalButton(finalButton);
 
@@ -156,9 +156,9 @@ class NavigableListMenuTest {
 	@MethodSource("canUseInputSource")
 	void canUseInput_severalInputs_returnsExpectedBooleans(Input input, boolean expected) {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.setFinalButton(makeTestButton());
@@ -172,9 +172,9 @@ class NavigableListMenuTest {
 	@Test
 	void canUseInput_backwardWhenNotOnFirstEntry_returnsTrue() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
 		NavigableListMenu.setFinalButton(makeTestButton());
@@ -187,9 +187,9 @@ class NavigableListMenuTest {
 	@Test
 	void canUseInput_loopingBackwards_returnsTrue() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.setFinalButton(makeTestButton());
@@ -202,9 +202,9 @@ class NavigableListMenuTest {
 	@Test
 	void canUseInput_loopingForwards_returnsTrue() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
 		NavigableListMenu.goTo(buttonTwo);
@@ -215,7 +215,7 @@ class NavigableListMenuTest {
 	@Test
 	void canUseInput_acceptWithoutFocusedButton_returnsFalse() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
 		NavigableListMenu.clearSelected();
@@ -226,7 +226,7 @@ class NavigableListMenuTest {
 	@Test
 	void canUseInput_backWithoutFinalButton_returnsFalse() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
 
@@ -236,9 +236,9 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_downFromTop_focusesSecond() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -252,9 +252,9 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_downFromTopThenUpAgain_focusesFirst() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -269,9 +269,9 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_downFromTopTwice_loopsBackToFocusFirst() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -286,9 +286,9 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_downFromTopTwiceOnNonLoopingMenu_keepsFocusOnLastButton() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.setMenuLoops(false);
@@ -304,9 +304,9 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_horizontalListGoRight_focusesSecond() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
 		NavigableListMenu.selectDefault();
@@ -320,9 +320,9 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_horizontalListGoDown_doesntMoveFocus() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
 		NavigableListMenu.selectDefault();
@@ -336,11 +336,11 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_downTwiceFromTop_focusesThird() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		VisibleInputConsumer buttonThree = makeTestButton();
+		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -356,11 +356,11 @@ class NavigableListMenuTest {
 	@Test
 	void goTo_specificButton_focusesCorrect() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		VisibleInputConsumer buttonThree = makeTestButton();
+		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -376,11 +376,11 @@ class NavigableListMenuTest {
 	@Test
 	void goTo_currentButton_maintainsFocusAndReturnsFalse() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		VisibleInputConsumer buttonThree = makeTestButton();
+		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -396,11 +396,11 @@ class NavigableListMenuTest {
 	@Test
 	void goTo_invalidButton_doesntMoveFocus() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		VisibleInputConsumer buttonThree = makeTestButton();
+		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -416,11 +416,11 @@ class NavigableListMenuTest {
 	@Test
 	void returnToFirst_afterDownTwiceFromTop_focusesFirst() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		VisibleInputConsumer buttonThree = makeTestButton();
+		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -438,11 +438,11 @@ class NavigableListMenuTest {
 	@Test
 	void returnToLast_withNoInput_focusesLast() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		VisibleInputConsumer buttonThree = makeTestButton();
+		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -458,15 +458,15 @@ class NavigableListMenuTest {
 	@Test
 	void returnToLast_withFinalButton_focusesFinalButton() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		VisibleInputConsumer buttonThree = makeTestButton();
+		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
-		VisibleInputConsumer finalButton = makeTestButton();
+		TestButton finalButton = makeTestButton();
 		NavigableListMenu.setFinalButton(finalButton);
 
 		boolean changed = NavigableListMenu.returnToLast();
@@ -481,11 +481,11 @@ class NavigableListMenuTest {
 	@Test
 	void returnToSecondLast_withEnoughEntries_focusesSecondLast() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		VisibleInputConsumer buttonThree = makeTestButton();
+		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -505,7 +505,7 @@ class NavigableListMenuTest {
 	@Test
 	void returnToSecondLast_withOneEntry_focusesOnlyEntry() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -528,10 +528,10 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_upFromTop_loopsAround() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
 		entries.add(makeTestButton());
-		VisibleInputConsumer buttonThree = makeTestButton();
+		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -545,9 +545,9 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_upFromTopOnNonLoopingMenu_doesntMove() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -577,10 +577,10 @@ class NavigableListMenuTest {
 	@Test
 	void replaceContents_withSpacer_filtersTheSpacerInInteractableEntities() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
 		entries.add(makeTestSpacer());
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
@@ -591,10 +591,10 @@ class NavigableListMenuTest {
 	@Test
 	void consumeInput_downWithSpacer_skipsSpacer() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
 		entries.add(makeTestSpacer());
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -608,10 +608,10 @@ class NavigableListMenuTest {
 	@Test
 	void consumeInput_downPastSpacer_wrapsAround() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
 		entries.add(makeTestSpacer());
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -626,12 +626,12 @@ class NavigableListMenuTest {
 	@Test
 	void consumeInput_downWithDisabledButton_skipsDisabledButton() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		buttonTwo.setDisabled(true);
 		entries.add(buttonTwo);
-		VisibleInputConsumer buttonThree = makeTestButton();
+		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -686,11 +686,11 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_backWithoutFinalButton_pressesNothing() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		VisibleInputConsumer buttonThree = makeTestButton();
+		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -705,7 +705,7 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_changingButtonsWithPressButtonOnEntryChangedSetTrue_pressesIt() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
 		AtomicBoolean buttonSpy = new AtomicBoolean(false);
 		TestButton testButton = new TestButton(() -> buttonSpy.set(true));
@@ -725,7 +725,7 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_changingButtonsWithPressButtonOnEntryChangedSetFalse_doesNotPressIt() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
 		AtomicBoolean buttonSpy = new AtomicBoolean(false);
 		TestButton testButton = new TestButton(() -> buttonSpy.set(true));
@@ -745,9 +745,9 @@ class NavigableListMenuTest {
 	@Test
 	void focusCurrent_focusesCurrentButton() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -761,9 +761,9 @@ class NavigableListMenuTest {
 	@Test
 	void clearSelected_leavesNoButtonFocused() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		NavigableListMenu.selectDefault();
@@ -786,9 +786,9 @@ class NavigableListMenuTest {
 	@Test
 	void isBlank_withSomeEntries_returnsFalse() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		VisibleInputConsumer buttonOne = makeTestButton();
+		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		VisibleInputConsumer buttonTwo = makeTestButton();
+		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
 		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
@@ -810,8 +810,8 @@ class NavigableListMenuTest {
 		return testButton;
 	}
 
-	private static VisibleInputConsumer makeTestSpacer() {
-		VisibleInputConsumer spacer = new TestButton();
+	private static TestButton makeTestSpacer() {
+		TestButton spacer = new TestButton();
 		spacer.setDisabled(true);
 		assertTrue(VisibleInputConsumer.isSpacer(spacer));
 		return spacer;

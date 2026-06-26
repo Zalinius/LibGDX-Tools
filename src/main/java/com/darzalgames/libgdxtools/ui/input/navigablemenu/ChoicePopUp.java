@@ -30,7 +30,7 @@ public abstract class ChoicePopUp extends NavigableListPopUpMenu {
 	/**
 	 * @return Whether or not Input.BACK should press the second button
 	 */
-	protected abstract boolean doesBackInputPressSecondButton();
+	protected abstract boolean isSecondButtonBackButton();
 
 	/**
 	 * What to do when the second choice is chosen. Sometimes this will be the same as the firstChoiceRunnable,
@@ -43,12 +43,6 @@ public abstract class ChoicePopUp extends NavigableListPopUpMenu {
 	 * @return the message at the top of the choice pop up, set up by the child class in anyway they want (in a {@link Table})
 	 */
 	protected abstract Table getMessage();
-
-	/**
-	 * Lets the child class optionally respond depending on which key is chosen
-	 * @param chosenKey The key that was chosen
-	 */
-	protected void setChosenKey(String chosenKey) {}
 
 	protected BaseDrawable getBackgroundDrawable() {
 		return GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable();
@@ -67,15 +61,15 @@ public abstract class ChoicePopUp extends NavigableListPopUpMenu {
 
 		UniversalButton firstButton = getFirstChoiceButton();
 		UniversalButton secondButton = getSecondChoiceButton();
-		if (doesBackInputPressSecondButton()) {
-			menu.replaceContents(ListFactory.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
+		if (isSecondButtonBackButton()) {
+			replaceContents(ListFactory.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
 		} else {
-			menu.replaceContents(ListFactory.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button
+			replaceContents(ListFactory.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button
 		}
 
-		menu.setAlignment(Alignment.CENTER, Alignment.CENTER);
-		Table table = menu.getView();
-		add(table).center().grow();
+		setAlignment(Alignment.CENTER, Alignment.CENTER);
+		defaults().grow().center();
+		populateButtons();
 	}
 
 }

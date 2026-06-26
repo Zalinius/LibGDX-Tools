@@ -147,9 +147,10 @@ public abstract class OptionsMenu extends NavigableListPopUpMenu {
 
 		menuButtons.removeIf(Objects::isNull);
 
-		menu.setAlignment(getEntryAlignment(), getMenuAlignment());
-		menu.replaceContents(menuButtons, backButton);
-		add(menu.getView()).grow().top();
+		setAlignment(getEntryAlignment(), getMenuAlignment());
+		replaceContents(menuButtons, backButton);
+		defaults().grow().top();
+		populateButtons();
 
 		row();
 		add().growY();
@@ -234,8 +235,9 @@ public abstract class OptionsMenu extends NavigableListPopUpMenu {
 			setUpDesiredSize();
 			background(GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 
-			menu.setAlignment(Alignment.CENTER, Alignment.CENTER);
-			add(menu.getView()).growX().top();
+			setAlignment(Alignment.CENTER, Alignment.CENTER);
+			defaults().growX().top();
+			populateButtons();
 			UserInterfaceSizer.makeActorCentered(this);
 		}
 	}

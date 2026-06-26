@@ -15,12 +15,12 @@ public abstract class NavigableListPopUpMenu extends NavigableListMenu implement
 
 	protected NavigableListPopUpMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries) {
 		super(menuOrientation, entries);
-		menu.setFinalButton(makeDefaultBackButton());
-		menu.refreshPage();
+		setFinalButton(makeDefaultBackButton());
 	}
 
 	@Override
 	public void gainFocus() {
+		super.gainFocus();
 		slideIn(super::gainFocus, this::focusCurrent);
 	}
 
@@ -37,11 +37,6 @@ public abstract class NavigableListPopUpMenu extends NavigableListMenu implement
 	@Override
 	public Actor getAsActor() {
 		return this;
-	}
-
-	@Override
-	public Actor getView() {
-		return getAsActor();
 	}
 
 }

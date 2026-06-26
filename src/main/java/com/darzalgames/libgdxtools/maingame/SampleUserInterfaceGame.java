@@ -64,8 +64,6 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 	public static final String POP_UP_STAGE_NAME = "PopUp Stage";
 
-	private UniversalButton regainFocusPopup;
-
 	public static void main(String[] args) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		SampleUserInterfaceGame sampleUserInterfaceGame = new SampleUserInterfaceGame(Arrays.asList(args));
@@ -171,23 +169,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 	@Override
 	protected void launchGame(boolean isNewSave) {
 		pause.showOptionsButton(true);
-		changeScreen(new MainMenuScreen(new NavigableListMenu(MenuOrientation.VERTICAL, getMenuEntries()) {
-
-			@Override
-			protected void setUpTable() {
-				defaults().align(Align.bottom);
-				setBounds(0, 0, UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight() - 25f);
-
-				menu.setAlignment(Alignment.CENTER, Alignment.BOTTOM);
-				add(menu.getView()).grow().align(Align.center);
-			}
-
-			@Override
-			public void resizeUI() {
-				super.resizeUI();
-				setBounds(0, 0, UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight() - 25f);
-			}
-		}, inputSetup.getInputPriorityStack()));
+		changeScreen(new MainMenuScreen(new MainMenuListMenu(), inputSetup.getInputPriorityStack()));
 	}
 
 	@Override
@@ -301,6 +283,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 		String sliderInfo = "The below slider is at ";
 		UniversalLabel sliderInfoLabel = GameInfo.getUserInterfaceFactory().getLabel(() -> sliderInfo + "0.5");
+		menuButtons.add(sliderInfoLabel);
 		UniversalSlider funSlider = GameInfo.getUserInterfaceFactory().getSlider(Suppliers.emptyString(), newValue -> sliderInfoLabel.setTextSupplier(() -> sliderInfo + String.format("%.1f", newValue)));
 		funSlider.setSliderPosition(0.5f);
 		menuButtons.add(funSlider);
@@ -375,7 +358,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 			}
 
 			@Override
-			protected boolean doesBackInputPressSecondButton() {
+			protected boolean isSecondButtonBackButton() {
 				return true;
 			}
 		};
@@ -395,10 +378,12 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 		SimplePopUp innerPopup = new SimplePopUp() {
 			@Override
 			protected void setUpTable() {
-				UniversalButton popup = GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Goodbye!", this::hideThis);
-				popup.getView().setSize(180, 100);
-				UserInterfaceSizer.makeActorCentered(popup.getView());
-				addActor(popup.getView());
+				add(GameInfo.getUserInterfaceFactory().makeTextButton(() -> "Goodbye!", this::hideThis));
+			}
+
+			@Override
+			public void setUpDesiredSize() {
+				setSize(180, 100);
 			}
 
 			@Override
@@ -422,7 +407,9 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 			@Override
 			public void setDisabled(boolean disabled) { /* Not needed */ }
+
 		};
+		GetOnStage.addActorToStage(innerPopup, POP_UP_STAGE_NAME);
 		InputPriority.claimPriority(innerPopup, POP_UP_STAGE_NAME);
 	}
 
@@ -430,10 +417,12 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 		SimplePopUp innerPopup = new SimplePopUp() {
 			@Override
 			protected void setUpTable() {
-				regainFocusPopup = GameInfo.getUserInterfaceFactory().makeTextButton(() -> "You Made It!", this::hideThis);
-				regainFocusPopup.getView().setSize(200, 130);
-				UserInterfaceSizer.makeActorCentered(regainFocusPopup.getView());
-				addActor(regainFocusPopup.getView());
+				add(GameInfo.getUserInterfaceFactory().makeTextButton(() -> "You Made It!", this::hideThis));
+			}
+
+			@Override
+			public void setUpDesiredSize() {
+				setSize(200, 130);
 			}
 
 			@Override
@@ -458,6 +447,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 			@Override
 			public void setDisabled(boolean disabled) { /* Not needed */ }
 		};
+		GetOnStage.addActorToStage(innerPopup, POP_UP_STAGE_NAME);
 		InputPriority.claimPriority(innerPopup, POP_UP_STAGE_NAME);
 	}
 
@@ -491,7 +481,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 		@Override
 		protected PopUp makeControlsPopUp() {
-			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", Runnables.nullRunnable(), POP_UP_STAGE_NAME);
+			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", () -> Gdx.app.log("ControlsPopUp", "darn skippy"), MultipleStage.OPTIONS_STAGE_NAME);
 		}
 
 		@Override
@@ -663,6 +653,29 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 		soundEffect.addSound(simpleSound);
 
 		return soundEffect;
+	}
+
+	private class MainMenuListMenu extends NavigableListMenu {
+
+		protected MainMenuListMenu() {
+			super(MenuOrientation.VERTICAL, getMenuEntries());
+		}
+
+		@Override
+		protected void setUpTable() {
+			defaults().align(Align.bottom);
+			setBounds(0, 0, UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight() - 25f);
+
+			setAlignment(Alignment.CENTER, Alignment.BOTTOM);
+			defaults().grow().align(Align.center);
+			populateButtons();
+		}
+
+		@Override
+		public void resizeUI() {
+			super.resizeUI();
+			setBounds(0, 0, UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight() - 25f);
+		}
 	}
 
 }

@@ -1,11 +1,9 @@
 package com.darzalgames.libgdxtools.ui;
 
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
-import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.TextChoicePopUp;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
 
 /**
@@ -35,12 +33,7 @@ public class ConfirmationMenu extends TextChoicePopUp {
 	}
 
 	@Override
-	protected UniversalButton getSecondChoiceButton() {
-		return GameInfo.getUserInterfaceFactory().makeBackButton(getSecondChoiceRunnable(), () -> TextSupplier.getLine(secondChoiceKey));
-	}
-
-	@Override
-	protected boolean doesBackInputPressSecondButton() {
+	protected boolean isSecondButtonBackButton() {
 		return true;
 	}
 

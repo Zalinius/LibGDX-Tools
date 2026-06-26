@@ -71,8 +71,6 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 
 	private class WindowRevertCountdownConfirmationMenu extends ConfirmationMenu {
 
-		private UniversalLabel revertCountdown;
-
 		private WindowRevertCountdownConfirmationMenu() {
 			super(
 					"screen_mode_accept",
@@ -90,15 +88,10 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 		}
 
 		@Override
-		protected void setChosenKey(String chosenKey) {
-			revertCountdown.clearActions();
-		}
-
-		@Override
 		protected void setUpTable() {
 			super.setUpTable();
 			IntFunction<String> makeCountdownString = count -> TextSupplier.getLine("screen_mode_revert", count);
-			revertCountdown = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> makeCountdownString.apply(10));
+			UniversalLabel revertCountdown = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> makeCountdownString.apply(10));
 			revertCountdown.setAlignment(Alignment.CENTER);
 			row();
 			add(revertCountdown).growX();

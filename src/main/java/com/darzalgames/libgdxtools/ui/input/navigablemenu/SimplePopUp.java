@@ -1,20 +1,18 @@
 package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
+import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
-import com.darzalgames.libgdxtools.ui.input.InputConsumer;
 
-public abstract class SimplePopUp extends Table implements InputConsumer, PopUp {
+public abstract class SimplePopUp extends Table implements PopUpMenu {
 
 	protected abstract void setUpTable();
 
 	@Override
 	public void consumeKeyInput(Input input) {
-		if (input == Input.ACCEPT || input == Input.BACK || input == Input.PAUSE) {
+		if (input == Input.ACCEPT || input == Input.BACK) {
 			hideThis();
 		}
 	}
@@ -23,27 +21,14 @@ public abstract class SimplePopUp extends Table implements InputConsumer, PopUp 
 	public void gainFocus() {
 		clear();
 		setUpTable();
-		float startX = this.getX();
-		float startY = this.getY();
-		this.setPosition(-getWidth(), -getHeight());
-		this.addAction(Actions.moveTo(startX, startY, 0.25f, Interpolation.circle));
+		setUpDesiredSize();
+		UserInterfaceSizer.makeActorCentered(this);
+		slideIn(Runnables.nullRunnable(), Runnables.nullRunnable());
 	}
 
 	@Override
 	public void regainFocus() {
 		gainFocus();
-	}
-
-	@Override
-	public void hideThis() {
-		releasePriority();
-		this.toFront();
-		this.addAction(
-				Actions.sequence(
-						Actions.moveTo(-getWidth(), -getHeight(), 0.25f, Interpolation.circle),
-						new RunnableActionBest(super::remove)
-				)
-		);
 	}
 
 	@Override
@@ -56,7 +41,18 @@ public abstract class SimplePopUp extends Table implements InputConsumer, PopUp 
 	public void focusCurrent() {}
 
 	@Override
+	public boolean isOver() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public Actor getAsActor() {
+		return this;
+	}
+
+	@Override
+	public Actor getView() {
 		return this;
 	}
 

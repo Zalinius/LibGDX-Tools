@@ -45,6 +45,7 @@ public interface PopUpMenu extends PopUp, VisibleInputConsumer {
 
 	default void slideIn(Runnable superGainFocus, Runnable menuFocusCurrent) {
 		superGainFocus.run();
+		setTouchable(Touchable.disabled);
 		if (slidesInAndOut()) {
 			float startX = getAsActor().getX();
 			float startY = getAsActor().getY();
@@ -62,6 +63,7 @@ public interface PopUpMenu extends PopUp, VisibleInputConsumer {
 	@Override
 	default void hideThis() {
 		releasePriority();
+		setTouchable(Touchable.disabled);
 		if (slidesInAndOut()) {
 			getAsActor().addAction(
 					Actions.sequence(

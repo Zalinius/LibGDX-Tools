@@ -84,10 +84,7 @@ public class UniversalSelectBox extends UniversalTextButton {
 
 		@Override
 		public void setUpDesiredSize() {
-			if (getActions().isEmpty()) {
-				UserInterfaceSizer.makeActorCentered(options);
-				pack();
-			}
+			pack();
 		}
 
 		@Override

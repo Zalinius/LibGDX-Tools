@@ -72,7 +72,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 
 	@Override
 	public void regainFocus() {
-		gainFocus();
+		focusCurrent();
 	}
 
 	public void replaceContents(final List<VisibleInputConsumer> newEntries) {

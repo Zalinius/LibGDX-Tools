@@ -673,8 +673,8 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 		@Override
 		public void resizeUI() {
-			super.resizeUI();
 			setBounds(0, 0, UserInterfaceSizer.getCurrentWidth(), UserInterfaceSizer.getCurrentHeight() - 25f);
+			super.resizeUI();
 		}
 	}
 

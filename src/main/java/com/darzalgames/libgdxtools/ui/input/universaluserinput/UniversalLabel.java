@@ -67,7 +67,7 @@ public class UniversalLabel extends TypingLabel implements VisibleInputConsumer 
 		// only update when there's a change: this allows us to use the fancy Textra animations
 		if (fontChanged || textChanged) {
 			setFont(typingLabelStyle.font); // updates us to the resized font size
-			// the documentation suggests doing setSize(0, 0) before calling restart(), but it was giving me size 0 buttons...
+			setSize(0, 0); // the documentation suggests doing setSize(0, 0) before calling restart()
 			restart(newText);
 		}
 

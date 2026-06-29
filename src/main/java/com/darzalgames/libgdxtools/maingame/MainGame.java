@@ -131,7 +131,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 		makeInputStrategySwitcher();
 		userInterfaceFactory = initializeGameAndUserInterfaceFactory();
-		initializeWindowResizer();
 
 		makeAllStages();
 
@@ -301,7 +300,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 
 	private void setUpInput() {
 		// Set up input processing for all strategies
-		inputSetup = new InputSetup(inputStrategySwitcher, windowResizer::toggleWindow, multipleStage.getGameStagesInOrder(), pause);
+		inputSetup = new InputSetup(inputStrategySwitcher, windowResizer, multipleStage.getGameStagesInOrder(), pause);
 		InputReceiver inputReceiver = inputSetup.getInputReceiver();
 		Supplier<FallbackGamepadInputHandler> makeFallbackGamepadInputHandler = () -> makeFallbackGamepadInputHandler(inputStrategySwitcher, inputReceiver);
 		Supplier<SteamGamepadInputHandler> makeSteamGamepadInputHandler = () -> makeSteamGamepadInputHandler(inputStrategySwitcher, inputReceiver);
@@ -317,10 +316,6 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
 		GamepadInputHandler gamepadInputHandler = platformStrategy.getGamepadInputHandler();
 		multipleStage.setUpInputHandlersOnStages(keyboardInputHandler, gamepadInputHandler, inputSetup.getScrollingManager());
-	}
-
-	private void initializeWindowResizer() {
-		windowResizer.initialize(inputStrategySwitcher);
 	}
 
 	private enum LoadingState {

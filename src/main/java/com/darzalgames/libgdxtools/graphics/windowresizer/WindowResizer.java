@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.graphics.windowresizer;
 import com.darzalgames.darzalcommon.data.Coordinate;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
+import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableLayout;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
@@ -47,8 +48,7 @@ public abstract class WindowResizer {
 	 * Toggle between windowed mode and true full screen mode
 	 */
 	public void toggleWindow() {
-		boolean toggleInProgress = revertConfirmationMenu.getStage() != null;
-		if (!toggleInProgress) {
+		if (!isToggleConfirmationInProgress()) {
 			if (isWindowed()) {
 				ScreenMode bigMode = ScreenMode.BORDERLESS;
 				if (!GameInfo.getOperatingSystem().supportsBorderlessFullscreen()) {
@@ -104,4 +104,13 @@ public abstract class WindowResizer {
 		previousScreenMode = currentScreenMode;
 	}
 
+	public void cancelToggle() {
+		if (isToggleConfirmationInProgress()) {
+			revertConfirmationMenu.consumeKeyInput(Input.BACK);
+		}
+	}
+
+	public boolean isToggleConfirmationInProgress() {
+		return revertConfirmationMenu != null && revertConfirmationMenu.getStage() != null;
+	}
 }

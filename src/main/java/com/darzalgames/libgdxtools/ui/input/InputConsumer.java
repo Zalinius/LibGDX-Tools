@@ -3,12 +3,13 @@ package com.darzalgames.libgdxtools.ui.input;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUp;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUpMenu;
 
 /**
  * Anything that can be interacted with via user input
  */
 public interface InputConsumer {
+
 	/**
 	 * Choose how to respond to various inputs
 	 * @param input
@@ -76,7 +77,7 @@ public interface InputConsumer {
 		return false;
 	}
 
-	default PopUp getPopUp() {
+	default PopUpMenu getPopUp() {
 		throw new UnsupportedOperationException(toString() + ": A base InputConsumer isn't necessarily a popup! Override isPopUp() & getPopUp() if this truly is one.");
 	}
 

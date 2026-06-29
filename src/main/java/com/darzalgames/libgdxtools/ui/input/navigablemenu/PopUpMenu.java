@@ -2,10 +2,12 @@ package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import java.util.function.Consumer;
 
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
@@ -17,13 +19,53 @@ import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 
 /**
- * It's a navigable menu, and it's a pop up!
+ * It's everything a navigable menu needs to become a pop up!
  */
-public interface PopUpMenu extends PopUp, VisibleInputConsumer {
-
-	// TODO just merge all this into PopUp interface
+public interface PopUpMenu extends VisibleInputConsumer {
 
 	float SLIDE_DURATION = 0.25f;
+
+	default void addBackClickListenerIfCanDismiss() {
+		if (canDismiss()) {
+			ClickListener rightClickBack = new ClickListener(Buttons.RIGHT) {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					PopUpMenu.this.removeListener(this);
+					PopUpMenu.this.consumeKeyInput(Input.BACK);
+				}
+			};
+			addListener(rightClickBack);
+		}
+	}
+
+	// These are implemented by default in Actor, which all of our PopUp objects are.
+	boolean addListener(EventListener listener);
+
+	boolean removeListener(EventListener listener);
+
+	/**
+	 * @return Whether or not the popup can be dismissed by pressing "back", or if one of the options must be chosen
+	 */
+	default boolean canDismiss() {
+		return true;
+	}
+
+	@Override
+	default boolean isGamePausedWhileThisIsInFocus() {
+		return true;
+	}
+
+	@Override
+	default boolean isPopUp() {
+		return true;
+	}
+
+	@Override
+	default PopUpMenu getPopUp() {
+		return this;
+	}
+
+	Actor getAsActor();
 
 	default Runnable getJustBeforeRemoveRunnable() {
 		return Runnables.nullRunnable();
@@ -60,7 +102,9 @@ public interface PopUpMenu extends PopUp, VisibleInputConsumer {
 		}
 	}
 
-	@Override
+	/**
+	 * Handles hiding the pop up and unregistering it from the input system
+	 */
 	default void hideThis() {
 		releasePriority();
 		if (slidesInAndOut()) {

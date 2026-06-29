@@ -9,7 +9,7 @@ import com.darzalgames.libgdxtools.maingame.MultipleStage;
 import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.InputConsumer;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUp;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 
 /**
@@ -61,7 +61,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	private void claimPriorityForPopup(InputConsumer inputConsumer, String nameOfStageLikeRenderable) {
 		StageLikeRenderable stageLikeRenderable = stageLikeRenderables.get(nameOfStageLikeRenderable);
 		darkScreen.remove();
-		PopUp popup = inputConsumer.getPopUp();
+		PopUpMenu popup = inputConsumer.getPopUp();
 		Actor actor = popup.getAsActor();
 		stageLikeRenderable.addActor(actor);
 		actor.toFront();
@@ -160,7 +160,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	private void showDarkScreenIfLandingOnPopup(StageLikeRenderable stageLikeRenderable) {
 		InputConsumer currentTop = multiStack.getTop();
 		if (currentTop.isPopUp()) {
-			PopUp popUp = currentTop.getPopUp();
+			PopUpMenu popUp = currentTop.getPopUp();
 			Actor actor = popUp.getAsActor();
 			darkScreen.fadeIn(actor, popUp.canDismiss(), stageLikeRenderable);
 		}

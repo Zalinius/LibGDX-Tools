@@ -2,9 +2,15 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUp;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUpMenu;
 
-public class InputConsumerPopUpForTesting extends InputConsumerForTesting implements PopUp {
+public class InputConsumerPopUpForTesting extends InputConsumerForTesting implements PopUpMenu {
+
+	private final Actor innerActor;
+
+	public InputConsumerPopUpForTesting() {
+		innerActor = new Actor();
+	}
 
 	@Override
 	public boolean addListener(EventListener listener) {
@@ -18,7 +24,22 @@ public class InputConsumerPopUpForTesting extends InputConsumerForTesting implem
 
 	@Override
 	public Actor getAsActor() {
-		return new Actor();
+		return innerActor;
+	}
+
+	@Override
+	public Actor getView() {
+		return innerActor;
+	}
+
+	@Override
+	public float getMinHeight() {
+		return 0;
+	}
+
+	@Override
+	public void setUpDesiredSize() {
+		// not needed for testing
 	}
 
 }

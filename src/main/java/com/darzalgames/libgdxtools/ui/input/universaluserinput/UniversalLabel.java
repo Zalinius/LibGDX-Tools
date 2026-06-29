@@ -9,13 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.darzalgames.libgdxtools.internationalization.LabelEffectsProcessor;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.TemporaryStyler;
-import com.darzalgames.libgdxtools.ui.input.Input;
+import com.darzalgames.libgdxtools.ui.input.LogicalInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.github.tommyettinger.textra.Styles.LabelStyle;
 import com.github.tommyettinger.textra.TypingConfig;
 import com.github.tommyettinger.textra.TypingLabel;
 
-public class UniversalLabel extends TypingLabel implements VisibleInputConsumer {
+public class UniversalLabel extends TypingLabel implements VisibleInputConsumer, LogicalInputConsumer {
 
 	private final LabelStyle typingLabelStyle;
 
@@ -108,33 +108,8 @@ public class UniversalLabel extends TypingLabel implements VisibleInputConsumer 
 	}
 
 	@Override
-	public void consumeKeyInput(Input input) {
-		// this is a dummy VisibleInputConsumer which isn't actually interactable, we just need to do this to have labels within menus
-	}
-
-	@Override
-	public void focusCurrent() {
-		// this is a dummy VisibleInputConsumer which isn't actually interactable, we just need to do this to have labels within menus
-	}
-
-	@Override
-	public void clearSelected() {
-		// this is a dummy VisibleInputConsumer which isn't actually interactable, we just need to do this to have labels within menus
-	}
-
-	@Override
-	public void selectDefault() {
-		// this is a dummy VisibleInputConsumer which isn't actually interactable, we just need to do this to have labels within menus
-	}
-
-	@Override
 	public boolean isDisabled() {
 		return true;
-	}
-
-	@Override
-	public void setDisabled(boolean disabled) {
-		// this is a dummy VisibleInputConsumer which isn't actually interactable, we just need to do this to have labels within menus
 	}
 
 	@Override

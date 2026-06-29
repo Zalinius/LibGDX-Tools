@@ -480,7 +480,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 		}
 
 		@Override
-		protected PopUp makeControlsPopUp() {
+		protected PopUpMenu makeControlsPopUp() {
 			return new ConfirmationMenu("Did you really just press this?", "Sure did.", "My bad!", () -> Gdx.app.log("ControlsPopUp", "darn skippy"), MultipleStage.OPTIONS_STAGE_NAME);
 		}
 

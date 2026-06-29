@@ -17,7 +17,7 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListPopUpMenu;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUp;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 
@@ -66,9 +66,9 @@ public abstract class OptionsMenu extends NavigableListPopUpMenu {
 	protected abstract UniversalButton makeQuitButton();
 
 	/**
-	 * @return A PopUp that explains the control schemes
+	 * @return A {@link PopUpMenu} that explains the control schemes
 	 */
-	protected abstract PopUp makeControlsPopUp();
+	protected abstract PopUpMenu makeControlsPopUp();
 
 	protected OptionsMenu(int bottomPadding, WindowResizer windowResizer, String gameDebugDisplayName) {
 		super(MenuOrientation.VERTICAL);

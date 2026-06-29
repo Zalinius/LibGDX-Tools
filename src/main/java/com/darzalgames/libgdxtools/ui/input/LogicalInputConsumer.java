@@ -9,6 +9,7 @@ import com.darzalgames.libgdxtools.ui.Alignment;
  * proceeds to the next state whenever it regains focus (i.e. the previous state released focus)
  * but doesn't itself have any UI or interactions with the player. Another example is the
  * SteamAchievement states which grant an achievement and immediately release focus.
+ * Or my UniversalLabel, which wants to be in menus with other VisibleInputConsumers, but without being interactable.
  */
 public interface LogicalInputConsumer extends InputConsumer {
 

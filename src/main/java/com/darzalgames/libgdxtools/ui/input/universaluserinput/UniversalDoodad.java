@@ -78,6 +78,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		this.disabled = disabled;
 	}
 
+	@Override
 	public boolean isOver() {
 		return clickListener.isOver();
 	}

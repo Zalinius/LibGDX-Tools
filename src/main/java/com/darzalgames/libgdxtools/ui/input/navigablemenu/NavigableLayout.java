@@ -236,8 +236,4 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		return allPlusFinal;
 	}
 
-	public Map<VisibleInputConsumer, Cell<Actor>> getAllEntryCells() {
-		return allEntryCells;
-	}
-
 }

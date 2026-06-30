@@ -107,7 +107,6 @@ public abstract class OptionsMenu extends NavigableListPopUpMenu {
 
 	@Override
 	public void regainFocus() {
-		focusCurrent();
 		optionsButton.setTouchable(Touchable.enabled);
 		super.regainFocus();
 	}

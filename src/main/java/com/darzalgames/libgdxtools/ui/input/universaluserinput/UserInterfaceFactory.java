@@ -42,6 +42,7 @@ public abstract class UserInterfaceFactory {
 
 	private static final String QUIT_GAME_KEY = "quit_game";
 	public static final String BACK_BUTTON_KEY = "back_message";
+	public static final String SPACER_NAME = "spacer";
 
 	protected UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer, SoundEffect defaultSoundEffect, SoundEffect defaultBackSoundEffect,
 			FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference) {
@@ -95,7 +96,7 @@ public abstract class UserInterfaceFactory {
 				return 0;
 			}
 		};
-		spacer.setName("spacer");
+		spacer.setName(SPACER_NAME);
 		return spacer;
 	}
 

@@ -1,14 +1,11 @@
 package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Predicate;
-import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
@@ -18,130 +15,31 @@ import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 public abstract class NavigableListMenu extends NavigableLayout {
 
 	protected final LinkedList<VisibleInputConsumer> allEntries;
-	private final Map<VisibleInputConsumer, Cell<Actor>> allEntryCells;
-	protected List<VisibleInputConsumer> interactableEntries;
-	private Predicate<VisibleInputConsumer> interactabilityFilter;
-	private VisibleInputConsumer finalButton;
 
 	private final MenuOrientation menuOrientation;
-	private final Supplier<Float> spacing;
 	private boolean shouldGrowX;
 
 	private boolean pressButtonOnEntryChanged;
-	private Alignment entryAlignment;
-	private Alignment tableAlignment;
-
 	private boolean menuLoops;
+
 	private int currentEntryIndex;
-	private VisibleInputConsumer currentButton;
 
 	protected NavigableListMenu(MenuOrientation menuOrientation) {
 		this(menuOrientation, new LinkedList<>());
 	}
 
-	protected NavigableListMenu(MenuOrientation menuOrientation, final List<VisibleInputConsumer> entries) {
+	protected NavigableListMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries) {
 		allEntries = new LinkedList<>(entries);
-		allEntryCells = new HashMap<>();
-		interactabilityFilter = NavigableListMenu::isInteractable;
 		filterInteractableEntities();
+
 		this.menuOrientation = menuOrientation;
 		pressButtonOnEntryChanged = false;
-		entryAlignment = Alignment.CENTER;
-		tableAlignment = Alignment.TOP_LEFT;
-		spacing = menuOrientation.getSpacingPolicy();
 		setShouldGrowX(false);
 		setMenuLoops(true);
 	}
 
-	/**
-	 * Be SUPER SURE to call {@link populateButtons} in your implementation!
-	 * And set whatever {@link defaults} modifiers you want before doing so (grow, colspan, etc...).
-	 *
-	 * Consider also calling things like {@link setAlignment} or {@link replaceContents} BEFORE populating the buttons.
-	 *
-	 * No need to call {@link clear} first or anything.
-	 */
-	protected abstract void setUpTable();
-
 	@Override
-	public void gainFocus() {
-		clear();
-		setUpTable();
-		selectDefault();
-	}
-
-	@Override
-	public void regainFocus() {
-		focusCurrent();
-	}
-
-	public void replaceContents(final List<VisibleInputConsumer> newEntries) {
-		replaceContents(newEntries, null);
-	}
-
-	/**
-	 * @param newEntries  The new entries to be held in this list, excluding a special finalButton (see next line). This can include spacers, which will not be interactable
-	 * @param finalButton The button that will be pressed when the player presses *back*
-	 */
-	public void replaceContents(final List<VisibleInputConsumer> newEntries, VisibleInputConsumer finalButton) {
-		allEntries.clear();
-		allEntries.addAll(newEntries);
-		filterInteractableEntities();
-		setFinalButton(finalButton);
-	}
-
-	private void filterInteractableEntities() {
-		interactableEntries = allEntries.stream().filter(interactabilityFilter::evaluate).toList();
-	}
-
-	public void setInteractabilityFilter(Predicate<VisibleInputConsumer> interactabilityFilter) {
-		this.interactabilityFilter = interactabilityFilter;
-		filterInteractableEntities();
-	}
-
-	private static boolean isInteractable(VisibleInputConsumer entry) {
-		return !VisibleInputConsumer.isSpacer(entry) && !entry.isDisabled();
-	}
-
-	protected void setFinalButton(VisibleInputConsumer finalButton) {
-		this.finalButton = finalButton;
-		if (finalButton != null && !finalButton.isBlank()) {
-			allEntries.add(finalButton);
-			filterInteractableEntities();
-		}
-	}
-
-	@Override
-	public Table getView() {
-		return this;
-	}
-
-	@Override
-	public void resizeUI() {
-		allEntries.forEach(VisibleInputConsumer::resizeUI);
-		allEntries.forEach(entry -> {
-			Cell<Actor> cell = allEntryCells.get(entry);
-			cell.spaceTop(spacing.get());
-			cell.spaceBottom(spacing.get());
-		});
-		invalidate();
-		layout();
-	}
-
-	public void populateButtons() {
-		Table innerTable = new Table();
-		add(innerTable);
-		allEntryCells.clear();
-
-		innerTable.defaults().expandX().spaceTop(spacing.get()).spaceBottom(spacing.get()).align(entryAlignment.getAlignment());
-		if (shouldGrowX) {
-			innerTable.defaults().growX();
-		}
-		if (!isVertical()) {
-			innerTable.defaults().expandY();
-		}
-		innerTable.align(tableAlignment.getAlignment());
-
+	public void populateInnerTableWithButtons(Table innerTable) {
 		for (VisibleInputConsumer entry : allEntries) {
 			if (isVertical()) {
 				innerTable.row();
@@ -154,17 +52,44 @@ public abstract class NavigableListMenu extends NavigableLayout {
 				menuOrientation.applySpacerExpansionPolicy(cell);
 			}
 		}
+
+		if (finalButton != null) {
+			if (isVertical()) {
+				innerTable.row();
+			}
+			Cell<Actor> cell = innerTable.add(finalButton.getView());
+			allEntryCells.put(finalButton, cell);
+		}
 	}
 
-	private void findCurrentButton() {
-		if (!interactableEntries.isEmpty()) {
-			if (currentEntryIndex >= interactableEntries.size() || currentEntryIndex < 0) {
-				// this can happen between days in Quest Giver when contents are refreshed but this object itself isn't
-				currentEntryIndex = 0;
+	@Override
+	protected Consumer<Cell<Actor>> getSpacingPolicy() {
+		return cell -> {
+			cell.expandX();
+			menuOrientation.getSpacingPolicy().accept(cell);
+			if (shouldGrowX) {
+				cell.growX();
 			}
-			currentButton = interactableEntries.get(currentEntryIndex);
-		} else {
-			currentButton = null; // this list is empty, uhhh...? (though it may just contain unclickable buttons or a spacer)
+			if (!isVertical()) {
+				// TODO move into menuOrientation
+				cell.expandY();
+			}
+			// hmm this is terrible
+			if (VisibleInputConsumer.isSpacer((VisibleInputConsumer) cell.getActor())) {
+				menuOrientation.applySpacerExpansionPolicy(cell);
+			}
+		};
+	}
+
+	@Override
+	protected void findCurrentButton() {
+		if (!interactableEntries.isEmpty()) {
+			if (currentEntryIndex >= 0 && currentEntryIndex < interactableEntries.size()) {
+				currentButton = interactableEntries.get(currentEntryIndex);
+			} else {
+				// this menu may only contain unclickable buttons or spacers, or the index tracker went off the rails somehow
+				returnToFirst();
+			}
 		}
 	}
 
@@ -172,15 +97,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 		if (pressButtonOnEntryChanged) {
 			interactableEntries.get(currentEntryIndex).consumeKeyInput(Input.ACCEPT);
 		}
-
-		if (currentButton != null
-				&& (currentEntryIndex < interactableEntries.size() && currentButton != interactableEntries.get(currentEntryIndex))) {
-			currentButton.setFocused(false);
-		}
-		findCurrentButton();
-		if (currentButton != null) {
-			currentButton.setFocused(true);
-		}
+		focusCurrent();
 	}
 
 	@Override
@@ -231,6 +148,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 		return false;
 	}
 
+	@Override
 	protected boolean returnToFirst() {
 		return goTo(0);
 	}
@@ -268,6 +186,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 	 * @param visibleInputConsumer the input consumer to focus on
 	 * @return Whether or not this menu has that entry (and if so, then it was selected). Returns false if that entry was already the current one.
 	 */
+	@Override
 	public boolean goTo(VisibleInputConsumer visibleInputConsumer) {
 		for (int i = 0; i < interactableEntries.size(); i++) {
 			VisibleInputConsumer entry = interactableEntries.get(i);
@@ -279,25 +198,8 @@ public abstract class NavigableListMenu extends NavigableLayout {
 	}
 
 	@Override
-	public void selectDefault() {
-		clearSelected();
-		returnToFirst();
-	}
-
-	@Override
-	public void clearSelected() {
-		interactableEntries.stream().forEach(e -> e.setFocused(false));
+	protected void clearIndices() {
 		currentEntryIndex = -1;
-		currentButton = null;
-	}
-
-	@Override
-	public void setTouchable(Touchable isTouchable) {
-		super.setTouchable(isTouchable);
-		if (interactableEntries != null) {
-			// when this class is instantiated, creating itself as a Table calls setTouchable() before anything else is initialized
-			interactableEntries.forEach(entry -> entry.setTouchable(isTouchable));
-		}
 	}
 
 	/**
@@ -308,15 +210,6 @@ public abstract class NavigableListMenu extends NavigableLayout {
 		this.pressButtonOnEntryChanged = pressButtonOnEntryChanged;
 	}
 
-	@Override
-	public void focusCurrent() {
-		interactableEntries.stream().forEach(e -> e.setFocused(false));
-		findCurrentButton();
-		if (currentButton != null) {
-			currentButton.setFocused(true);
-		}
-	}
-
 	public void setMenuLoops(boolean menuLoops) {
 		this.menuLoops = menuLoops;
 	}
@@ -325,44 +218,17 @@ public abstract class NavigableListMenu extends NavigableLayout {
 		this.shouldGrowX = shouldGrowX;
 	}
 
+	@Override
+	protected Collection<VisibleInputConsumer> getAllEntries() {
+		// when this class is created, this can be called before anything else is initialized
+		if (allEntries != null) {
+			return allEntries;
+		}
+		return new ArrayList<>();
+	}
+
 	private boolean isVertical() {
 		return MenuOrientation.VERTICAL.equals(menuOrientation);
-	}
-
-	@Override
-	public boolean isBlank() {
-		return allEntries.isEmpty();
-	}
-
-	/**
-	 * Sets the alignment for all entries AND the table itself, use {@link #setAlignment(Alignment entryAlignment, Alignment tableAlignment)} to set them separately
-	 */
-	@Override
-	public void setAlignment(Alignment alignment) {
-		setAlignment(alignment, alignment);
-	}
-
-	public void setAlignment(Alignment entryAlignment, Alignment tableAlignment) {
-		this.entryAlignment = entryAlignment;
-		this.tableAlignment = tableAlignment;
-	}
-
-	@Override
-	public boolean isDisabled() {
-		return interactableEntries.stream().allMatch(VisibleInputConsumer::isDisabled);
-	}
-
-	@Override
-	public void setDisabled(boolean disabled) {
-		allEntries.forEach(entry -> entry.setDisabled(disabled));
-		filterInteractableEntities();
-	}
-
-	/**
-	 * @return The entry that's currently in focus
-	 */
-	public VisibleInputConsumer getCurrentButton() {
-		return currentButton;
 	}
 
 }

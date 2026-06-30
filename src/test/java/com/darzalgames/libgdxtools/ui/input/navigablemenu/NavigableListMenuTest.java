@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UserInterfaceFactory;
 
 class NavigableListMenuTest {
 
@@ -38,9 +39,9 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
-		assertNotNull(NavigableListMenu.getView());
+		assertNotNull(navigableListMenu.getView());
 	}
 
 	@Test
@@ -50,11 +51,11 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
-		NavigableListMenu.setTouchable(Touchable.disabled);
+		navigableListMenu.setTouchable(Touchable.disabled);
 
-		assertEquals(Touchable.disabled, NavigableListMenu.getView().getTouchable());
+		assertEquals(Touchable.disabled, navigableListMenu.getView().getTouchable());
 		assertEquals(Touchable.disabled, buttonOne.getView().getTouchable());
 		assertEquals(Touchable.disabled, buttonTwo.getView().getTouchable());
 	}
@@ -66,9 +67,9 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
-		NavigableListMenu.selectDefault();
+		navigableListMenu.selectDefault();
 
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
@@ -84,9 +85,9 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		VisibleInputConsumer testSpacer = makeTestSpacer();
 		entries.add(testSpacer);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
-		List<VisibleInputConsumer> interactableEntries = NavigableListMenu.interactableEntries;
+		List<VisibleInputConsumer> interactableEntries = navigableListMenu.interactableEntries;
 
 		assertEquals(1, interactableEntries.size());
 		assertFalse(interactableEntries.contains(buttonOne));
@@ -104,10 +105,10 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		VisibleInputConsumer testSpacer = makeTestSpacer();
 		entries.add(testSpacer);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
-		NavigableListMenu.setInteractabilityFilter(entry -> !entry.isBlank()); // test allowing disabled buttons, for example if they have tooltips
-		List<VisibleInputConsumer> interactableEntries = NavigableListMenu.interactableEntries;
+		navigableListMenu.setInteractabilityFilter(entry -> !entry.isBlank()); // test allowing disabled buttons, for example if they have tooltips
+		List<VisibleInputConsumer> interactableEntries = navigableListMenu.interactableEntries;
 
 		assertEquals(2, interactableEntries.size());
 		assertTrue(interactableEntries.contains(buttonOne));
@@ -120,12 +121,12 @@ class NavigableListMenuTest {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		entries.add(makeTestButton());
 		entries.add(makeTestButton());
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		TestButton finalButton = makeTestButton();
 
-		NavigableListMenu.setFinalButton(finalButton);
+		navigableListMenu.setFinalButton(finalButton);
 
-		assertTrue(NavigableListMenu.interactableEntries.contains(finalButton));
+		assertTrue(navigableListMenu.interactableEntries.contains(finalButton));
 	}
 
 	@Test
@@ -133,12 +134,12 @@ class NavigableListMenuTest {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		entries.add(makeTestButton());
 		entries.add(makeTestButton());
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 		TestButton finalButton = makeTestSpacer();
 
-		NavigableListMenu.setFinalButton(finalButton);
+		navigableListMenu.setFinalButton(finalButton);
 
-		assertFalse(NavigableListMenu.interactableEntries.contains(finalButton));
+		assertFalse(navigableListMenu.interactableEntries.contains(finalButton));
 	}
 
 	private static Stream<Arguments> canUseInputSource() {
@@ -160,13 +161,13 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.setFinalButton(makeTestButton());
-		NavigableListMenu.setMenuLoops(false);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.setFinalButton(makeTestButton());
+		navigableListMenu.setMenuLoops(false);
 
-		NavigableListMenu.selectDefault();
+		navigableListMenu.selectDefault();
 
-		assertEquals(expected, NavigableListMenu.canUseInput(input));
+		assertEquals(expected, navigableListMenu.canUseInput(input));
 	}
 
 	@Test
@@ -176,12 +177,12 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
-		NavigableListMenu.setFinalButton(makeTestButton());
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
+		navigableListMenu.setFinalButton(makeTestButton());
 
-		NavigableListMenu.goTo(buttonTwo);
+		navigableListMenu.goTo(buttonTwo);
 
-		assertTrue(NavigableListMenu.canUseInput(Input.LEFT));
+		assertTrue(navigableListMenu.canUseInput(Input.LEFT));
 	}
 
 	@Test
@@ -191,12 +192,12 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.setFinalButton(makeTestButton());
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.setFinalButton(makeTestButton());
 
-		NavigableListMenu.selectDefault();
+		navigableListMenu.selectDefault();
 
-		assertTrue(NavigableListMenu.canUseInput(Input.UP));
+		assertTrue(navigableListMenu.canUseInput(Input.UP));
 	}
 
 	@Test
@@ -206,10 +207,10 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
-		NavigableListMenu.goTo(buttonTwo);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
+		navigableListMenu.goTo(buttonTwo);
 
-		assertTrue(NavigableListMenu.canUseInput(Input.RIGHT));
+		assertTrue(navigableListMenu.canUseInput(Input.RIGHT));
 	}
 
 	@Test
@@ -217,10 +218,10 @@ class NavigableListMenuTest {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
-		NavigableListMenu.clearSelected();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
+		navigableListMenu.clearSelected();
 
-		assertFalse(NavigableListMenu.canUseInput(Input.ACCEPT));
+		assertFalse(navigableListMenu.canUseInput(Input.ACCEPT));
 	}
 
 	@Test
@@ -228,9 +229,9 @@ class NavigableListMenuTest {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
 
-		assertFalse(NavigableListMenu.canUseInput(Input.BACK));
+		assertFalse(navigableListMenu.canUseInput(Input.BACK));
 	}
 
 	@Test
@@ -240,10 +241,10 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
 
 		assertFalse(buttonOne.isOver());
 		assertTrue(buttonTwo.isOver());
@@ -256,11 +257,11 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
-		NavigableListMenu.consumeKeyInput(Input.UP);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.UP);
 
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
@@ -273,11 +274,11 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
 
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
@@ -290,12 +291,12 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.setMenuLoops(false);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.setMenuLoops(false);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
 
 		assertFalse(buttonOne.isOver());
 		assertTrue(buttonTwo.isOver());
@@ -308,10 +309,10 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.RIGHT);
+		navigableListMenu.consumeKeyInput(Input.RIGHT);
 
 		assertFalse(buttonOne.isOver());
 		assertTrue(buttonTwo.isOver());
@@ -324,10 +325,10 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.HORIZONTAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
 
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
@@ -342,11 +343,11 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
 
 		assertFalse(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
@@ -362,10 +363,10 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		boolean changed = NavigableListMenu.goTo(buttonTwo);
+		boolean changed = navigableListMenu.goTo(buttonTwo);
 
 		assertTrue(changed);
 		assertFalse(buttonOne.isOver());
@@ -382,10 +383,10 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		boolean changed = NavigableListMenu.goTo(buttonOne);
+		boolean changed = navigableListMenu.goTo(buttonOne);
 
 		assertFalse(changed);
 		assertTrue(buttonOne.isOver());
@@ -402,10 +403,10 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		boolean changed = NavigableListMenu.goTo(makeTestButton());
+		boolean changed = navigableListMenu.goTo(makeTestButton());
 
 		assertFalse(changed);
 		assertTrue(buttonOne.isOver());
@@ -422,12 +423,12 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
-		boolean changed = NavigableListMenu.returnToFirst();
+		navigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
+		boolean changed = navigableListMenu.returnToFirst();
 
 		assertTrue(changed);
 		assertTrue(buttonOne.isOver());
@@ -444,10 +445,10 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		boolean changed = NavigableListMenu.returnToLast();
+		boolean changed = navigableListMenu.returnToLast();
 
 		assertTrue(changed);
 		assertFalse(buttonOne.isOver());
@@ -464,12 +465,12 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 		TestButton finalButton = makeTestButton();
-		NavigableListMenu.setFinalButton(finalButton);
+		navigableListMenu.setFinalButton(finalButton);
 
-		boolean changed = NavigableListMenu.returnToLast();
+		boolean changed = navigableListMenu.returnToLast();
 
 		assertTrue(changed);
 		assertFalse(buttonOne.isOver());
@@ -487,13 +488,13 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 		TestButton finalButton = new TestButton();
 		finalButton.setBlank(false);
-		NavigableListMenu.setFinalButton(finalButton);
+		navigableListMenu.setFinalButton(finalButton);
 
-		boolean changed = NavigableListMenu.returnToSecondLast();
+		boolean changed = navigableListMenu.returnToSecondLast();
 
 		assertTrue(changed);
 		assertFalse(buttonOne.isOver());
@@ -507,10 +508,10 @@ class NavigableListMenuTest {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		TestButton buttonOne = makeTestButton();
 		entries.add(buttonOne);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		boolean changed = NavigableListMenu.returnToSecondLast();
+		boolean changed = navigableListMenu.returnToSecondLast();
 
 		assertFalse(changed);
 		assertTrue(buttonOne.isOver());
@@ -519,10 +520,10 @@ class NavigableListMenuTest {
 	@Test
 	void returnToSecondLast_withNoEntries_doesntCrash() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		assertDoesNotThrow(NavigableListMenu::returnToSecondLast);
+		assertDoesNotThrow(navigableListMenu::returnToSecondLast);
 	}
 
 	@Test
@@ -533,10 +534,10 @@ class NavigableListMenuTest {
 		entries.add(makeTestButton());
 		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.UP);
+		navigableListMenu.consumeKeyInput(Input.UP);
 
 		assertFalse(buttonOne.isOver());
 		assertTrue(buttonThree.isOver());
@@ -549,11 +550,11 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
-		NavigableListMenu.setMenuLoops(false);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
+		navigableListMenu.setMenuLoops(false);
 
-		NavigableListMenu.consumeKeyInput(Input.UP);
+		navigableListMenu.consumeKeyInput(Input.UP);
 
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
@@ -567,11 +568,11 @@ class NavigableListMenuTest {
 		replacementEntries.add(makeTestButton());
 		replacementEntries.add(makeTestButton());
 		replacementEntries.add(makeTestButton());
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
-		NavigableListMenu.replaceContents(replacementEntries);
+		navigableListMenu.replaceContents(replacementEntries);
 
-		assertEquals(3, NavigableListMenu.allEntries.size());
+		assertEquals(3, navigableListMenu.allEntries.size());
 	}
 
 	@Test
@@ -582,10 +583,10 @@ class NavigableListMenuTest {
 		entries.add(makeTestSpacer());
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
-		assertEquals(3, NavigableListMenu.allEntries.size());
-		assertEquals(2, NavigableListMenu.interactableEntries.size());
+		assertEquals(3, navigableListMenu.allEntries.size());
+		assertEquals(2, navigableListMenu.interactableEntries.size());
 	}
 
 	@Test
@@ -596,10 +597,10 @@ class NavigableListMenuTest {
 		entries.add(makeTestSpacer());
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
 
 		assertFalse(buttonOne.isOver());
 		assertTrue(buttonTwo.isOver());
@@ -613,11 +614,11 @@ class NavigableListMenuTest {
 		entries.add(makeTestSpacer());
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
 
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
@@ -633,10 +634,10 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
 
 		assertFalse(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
@@ -652,10 +653,10 @@ class NavigableListMenuTest {
 		entries.add(makeTestButton());
 		TestButton finalButton = new TestButton(() -> finalButtonPressed.set(true));
 		finalButton.setBlank(false);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.setFinalButton(finalButton);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.setFinalButton(finalButton);
 
-		NavigableListMenu.consumeKeyInput(Input.BACK);
+		navigableListMenu.consumeKeyInput(Input.BACK);
 
 		assertTrue(finalButtonPressed.get());
 	}
@@ -667,10 +668,10 @@ class NavigableListMenuTest {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		VisibleInputConsumer testButton = new TestButton(() -> testButtonPressed.set(true));
 		entries.add(testButton);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.ACCEPT);
+		navigableListMenu.consumeKeyInput(Input.ACCEPT);
 
 		assertTrue(testButtonPressed.get());
 	}
@@ -678,9 +679,9 @@ class NavigableListMenuTest {
 	@Test
 	void consumeKeyInput_inputWithoutCurrentButton_doesntCrash() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
-		assertDoesNotThrow(() -> NavigableListMenu.consumeKeyInput(Input.ACCEPT));
+		assertDoesNotThrow(() -> navigableListMenu.consumeKeyInput(Input.ACCEPT));
 	}
 
 	@Test
@@ -692,10 +693,10 @@ class NavigableListMenuTest {
 		entries.add(buttonTwo);
 		TestButton buttonThree = makeTestButton();
 		entries.add(buttonThree);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.consumeKeyInput(Input.BACK);
+		navigableListMenu.consumeKeyInput(Input.BACK);
 
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
@@ -711,11 +712,11 @@ class NavigableListMenuTest {
 		TestButton testButton = new TestButton(() -> buttonSpy.set(true));
 		testButton.setBlank(false);
 		entries.add(testButton);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.setPressButtonOnEntryChanged(true);
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.setPressButtonOnEntryChanged(true);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
 
 		assertFalse(buttonOne.isOver());
 		assertTrue(testButton.isOver());
@@ -731,11 +732,11 @@ class NavigableListMenuTest {
 		TestButton testButton = new TestButton(() -> buttonSpy.set(true));
 		testButton.setBlank(false);
 		entries.add(testButton);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.setPressButtonOnEntryChanged(false);
-		NavigableListMenu.consumeKeyInput(Input.DOWN);
+		navigableListMenu.setPressButtonOnEntryChanged(false);
+		navigableListMenu.consumeKeyInput(Input.DOWN);
 
 		assertFalse(buttonOne.isOver());
 		assertTrue(testButton.isOver());
@@ -749,10 +750,10 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.focusCurrent();
+		navigableListMenu.focusCurrent();
 
 		assertTrue(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
@@ -765,11 +766,11 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
-		NavigableListMenu.selectDefault();
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		navigableListMenu.selectDefault();
 
-		NavigableListMenu.focusCurrent();
-		NavigableListMenu.clearSelected();
+		navigableListMenu.focusCurrent();
+		navigableListMenu.clearSelected();
 
 		assertFalse(buttonOne.isOver());
 		assertFalse(buttonTwo.isOver());
@@ -778,9 +779,9 @@ class NavigableListMenuTest {
 	@Test
 	void isBlank_withNoEntries_returnsTrue() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
-		assertTrue(NavigableListMenu.isBlank());
+		assertTrue(navigableListMenu.isBlank());
 	}
 
 	@Test
@@ -790,18 +791,18 @@ class NavigableListMenuTest {
 		entries.add(buttonOne);
 		TestButton buttonTwo = makeTestButton();
 		entries.add(buttonTwo);
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
-		assertFalse(NavigableListMenu.isBlank());
+		assertFalse(navigableListMenu.isBlank());
 	}
 
 	@Test
-	void isBlank_withOnlyASpacer_returnsFalse() {
+	void isBlank_withOnlyASpacer_returnsTrue() {
 		List<VisibleInputConsumer> entries = new ArrayList<>();
 		entries.add(makeTestSpacer());
-		NavigableListMenu NavigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
+		NavigableListMenu navigableListMenu = makeTestMenu(MenuOrientation.VERTICAL, entries);
 
-		assertFalse(NavigableListMenu.isBlank());
+		assertTrue(navigableListMenu.isBlank());
 	}
 
 	private static TestButton makeTestButton() {
@@ -813,6 +814,7 @@ class NavigableListMenuTest {
 	private static TestButton makeTestSpacer() {
 		TestButton spacer = new TestButton();
 		spacer.setDisabled(true);
+		spacer.getView().setName(UserInterfaceFactory.SPACER_NAME);
 		assertTrue(VisibleInputConsumer.isSpacer(spacer));
 		return spacer;
 	}

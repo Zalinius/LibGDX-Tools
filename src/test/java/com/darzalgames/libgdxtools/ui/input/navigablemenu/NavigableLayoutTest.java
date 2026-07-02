@@ -201,14 +201,13 @@ class NavigableLayoutTest {
 		TestButton spacer = new TestButton();
 		spacer.setDisabled(true);
 		spacer.getView().setName(UserInterfaceFactory.SPACER_NAME);
+		spacer.setBlank(true);
 		assertTrue(VisibleInputConsumer.isSpacer(spacer));
 		return spacer;
 	}
 
 	public static TestButton makeTestButton() {
-		TestButton testButton = new TestButton();
-		testButton.setBlank(false);
-		return testButton;
+		return new TestButton();
 	}
 
 	private static NavigableLayout makeTestLayout() {

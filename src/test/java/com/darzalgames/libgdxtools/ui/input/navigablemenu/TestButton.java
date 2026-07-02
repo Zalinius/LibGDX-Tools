@@ -28,7 +28,6 @@ public class TestButton implements VisibleInputConsumer {
 
 	protected TestButton(Runnable pressRunnable) {
 		this.pressRunnable = pressRunnable;
-		setBlank(true);
 		placeholderViewActor = new Actor();
 		placeholderViewActor.setName("placeholder name");
 	}

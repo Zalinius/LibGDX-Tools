@@ -851,7 +851,7 @@ class NavigableListMenuTest {
 
 		menu.populateInnerTableWithButtons(innerTable);
 
-		// expected row count is n-1 because the row count only actually increases when you call row(), which a horizontal menu does not do
+		// expected row count is 0 because the row count only actually increases when you call row(), which a horizontal menu does not do
 		assertEquals(0, innerTable.getRows());
 		assertEquals(3, innerTable.getChildren().shrink().length);
 	}
@@ -864,7 +864,6 @@ class NavigableListMenuTest {
 
 		menu.populateInnerTableWithButtons(innerTable);
 
-		// expected row count is n-1 because the row count only actually increases when you call row(), which a horizontal menu does not do
 		assertEquals(2, innerTable.getRows());
 		assertEquals(3, innerTable.getChildren().shrink().length);
 	}

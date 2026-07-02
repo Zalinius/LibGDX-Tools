@@ -16,15 +16,15 @@ import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
-import com.darzalgames.libgdxtools.ui.input.popup.PopUp;
-import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListPopUpMenu;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 
 /**
  * The base class for options menus (in-game versus when on the main menu)
  */
-public abstract class OptionsMenu extends PopUpMenu {
+public abstract class OptionsMenu extends NavigableListPopUpMenu {
 
 	protected UniversalButton optionsButton;
 	private final WindowResizerSelectBox windowModeSelectBox;
@@ -66,9 +66,9 @@ public abstract class OptionsMenu extends PopUpMenu {
 	protected abstract UniversalButton makeQuitButton();
 
 	/**
-	 * @return A PopUp that explains the control schemes
+	 * @return A {@link PopUpMenu} that explains the control schemes
 	 */
-	protected abstract PopUp makeControlsPopUp();
+	protected abstract PopUpMenu makeControlsPopUp();
 
 	protected OptionsMenu(int bottomPadding, WindowResizer windowResizer, String gameDebugDisplayName) {
 		super(MenuOrientation.VERTICAL);
@@ -79,7 +79,7 @@ public abstract class OptionsMenu extends PopUpMenu {
 	}
 
 	@Override
-	protected void setUpDesiredSize() {
+	public void setUpDesiredSize() {
 		UserInterfaceSizer.sizeToPercentage(this, 0.75f, 0.85f);
 		if (getActions().isEmpty()) {
 			UserInterfaceSizer.makeActorCentered(this);
@@ -107,7 +107,6 @@ public abstract class OptionsMenu extends PopUpMenu {
 
 	@Override
 	public void regainFocus() {
-		focusCurrent();
 		optionsButton.setTouchable(Touchable.enabled);
 		super.regainFocus();
 	}
@@ -147,9 +146,10 @@ public abstract class OptionsMenu extends PopUpMenu {
 
 		menuButtons.removeIf(Objects::isNull);
 
-		menu.setAlignment(getEntryAlignment(), getMenuAlignment());
-		menu.replaceContents(menuButtons, backButton);
-		add(menu.getView()).grow().top();
+		setAlignment(getEntryAlignment(), getMenuAlignment());
+		replaceContents(menuButtons, backButton);
+		defaults().grow().top();
+		populateButtons();
 
 		row();
 		add().growY();
@@ -208,17 +208,17 @@ public abstract class OptionsMenu extends PopUpMenu {
 	/**
 	 * A sub-menu that opens up within this menu (e.g. a sub-menu for sound options)
 	 */
-	protected class NestedMenu extends PopUpMenu {
+	protected class NestedMenu extends NavigableListPopUpMenu {
 
 		private final String buttonKey;
 
 		public NestedMenu(final List<VisibleInputConsumer> entries, String buttonKey) {
-			super(MenuOrientation.VERTICAL, entries);
+			super(MenuOrientation.VERTICAL, entries, true);
 			this.buttonKey = buttonKey;
 		}
 
 		@Override
-		protected void setUpDesiredSize() {
+		public void setUpDesiredSize() {
 			UserInterfaceSizer.sizeToPercentage(this, 0.5f);
 			if (getActions().isEmpty()) {
 				UserInterfaceSizer.makeActorCentered(this);
@@ -234,8 +234,9 @@ public abstract class OptionsMenu extends PopUpMenu {
 			setUpDesiredSize();
 			background(GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable());
 
-			menu.setAlignment(Alignment.CENTER, Alignment.CENTER);
-			add(menu.getView()).growX().top();
+			setAlignment(Alignment.CENTER, Alignment.CENTER);
+			defaults().growX().top();
+			populateButtons();
 			UserInterfaceSizer.makeActorCentered(this);
 		}
 	}

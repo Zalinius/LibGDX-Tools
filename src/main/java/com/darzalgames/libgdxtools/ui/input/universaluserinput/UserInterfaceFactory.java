@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
-import com.darzalgames.darzalcommon.functional.Runnables;
+import com.darzalgames.darzalcommon.functional.Suppliers;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizerSelectBox;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.MultipleStage;
@@ -42,8 +42,7 @@ public abstract class UserInterfaceFactory {
 
 	private static final String QUIT_GAME_KEY = "quit_game";
 	public static final String BACK_BUTTON_KEY = "back_message";
-
-	private static final SoundEffect NO_SOUND = SoundEffect.blank();
+	public static final String SPACER_NAME = "spacer";
 
 	protected UserInterfaceFactory(SkinManager skinManager, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer, SoundEffect defaultSoundEffect, SoundEffect defaultBackSoundEffect,
 			FallbackGamepadInputHandler sampleGlyphSupplierForSizeReference) {
@@ -88,30 +87,16 @@ public abstract class UserInterfaceFactory {
 	/**
 	 * Makes a spacer which can be listed among other buttons, but isn't interactable and which will
 	 * expand out to fill any available space in the menu
-	 * @return a blank UniversalButton
+	 * @return a blank VisibleInputConsumer
 	 */
-	public UniversalDoodad getSpacer() {
-		UniversalButton spacer = new UniversalButton(Runnables.nullRunnable(), inputStrategySwitcher, skinManager.getBlankButtonStyle(), soundEffectConsumer, NO_SOUND) {
+	public UniversalLabel getSpacer() {
+		UniversalLabel spacer = new UniversalLabel(Suppliers.emptyString(), skinManager.getDefaultLableStyle()) {
 			@Override
-			public void setAlignment(Alignment alignment) { /* not needed */ }
-
-			@Override
-			public boolean isBlank() {
-				return true;
-			}
-
-			@Override
-			public void colorOtherComponentsBasedOnFocus(Color color) { /* not needed */ }
-
-			@Override
-			public void setDisabled(boolean disabled) { /* stay disabled */ }
-
-			@Override
-			public boolean isDisabled() {
-				return true;
+			public float getMinHeight() {
+				return 0;
 			}
 		};
-		spacer.setName("spacer");
+		spacer.setName(SPACER_NAME);
 		return spacer;
 	}
 

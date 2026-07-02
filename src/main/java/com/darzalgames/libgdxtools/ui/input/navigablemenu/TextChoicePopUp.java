@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.popup;
+package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -9,7 +9,6 @@ import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
 
@@ -34,21 +33,25 @@ public abstract class TextChoicePopUp extends ChoicePopUp {
 
 	@Override
 	protected UniversalButton getFirstChoiceButton() {
-		return getChoiceButton(firstChoiceKey, firstChoiceRunnable);
+		return getChoiceButton(firstChoiceKey, firstChoiceRunnable, false);
 	}
 
 	@Override
 	protected UniversalButton getSecondChoiceButton() {
-		return getChoiceButton(secondChoiceKey, () -> getSecondChoiceRunnable().run());
+		return getChoiceButton(secondChoiceKey, getSecondChoiceRunnable(), isSecondButtonBackButton());
 	}
 
-	private UniversalButton getChoiceButton(String key, Runnable toRun) {
+	private UniversalButton getChoiceButton(String key, Runnable toRun, boolean isBackButton) {
 		Runnable chooseAndHideRunnable = () -> {
-			setChosenKey(key);
-			hideThis();
 			toRun.run();
+			hideThis();
 		};
-		return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine(key), chooseAndHideRunnable);
+		if (isBackButton) {
+			return GameInfo.getUserInterfaceFactory().makeBackButton(chooseAndHideRunnable, () -> TextSupplier.getLine(key));
+
+		} else {
+			return GameInfo.getUserInterfaceFactory().makeTextButton(() -> TextSupplier.getLine(key), chooseAndHideRunnable);
+		}
 	}
 
 	@Override

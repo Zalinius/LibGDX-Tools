@@ -1,7 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -9,15 +8,15 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 
 public enum MenuOrientation {
-	VERTICAL(Input.UP, Input.DOWN, () -> UserInterfaceSizer.getHeightPercentage(0.0075f), Cell::expandY),
-	HORIZONTAL(Input.LEFT, Input.RIGHT, () -> UserInterfaceSizer.getWidthPercentage(0.0075f), Cell::expandX);
+	VERTICAL(Input.UP, Input.DOWN, verticalMenuSpacingPolicy(), Cell::expandY),
+	HORIZONTAL(Input.LEFT, Input.RIGHT, horizontalMenuSpacingPolicy(), Cell::expandX);
 
 	private final Input backCode;
 	private final Input forwardCode;
-	private final Supplier<Float> spacingPolicy;
+	private final Consumer<Cell<Actor>> spacingPolicy;
 	private final Consumer<Cell<Actor>> spacerExpansionPolicy;
 
-	MenuOrientation(Input backCode, Input forwardCode, Supplier<Float> spacingPolicy, Consumer<Cell<Actor>> spacerExpansionPolicy) {
+	MenuOrientation(Input backCode, Input forwardCode, Consumer<Cell<Actor>> spacingPolicy, Consumer<Cell<Actor>> spacerExpansionPolicy) {
 		this.backCode = backCode;
 		this.forwardCode = forwardCode;
 		this.spacingPolicy = spacingPolicy;
@@ -32,11 +31,28 @@ public enum MenuOrientation {
 		return forwardCode;
 	}
 
-	Supplier<Float> getSpacingPolicy() {
+	Consumer<Cell<Actor>> getSpacingPolicy() {
 		return spacingPolicy;
 	}
 
 	void applySpacerExpansionPolicy(Cell<Actor> cell) {
 		spacerExpansionPolicy.accept(cell);
+	}
+
+	private static Consumer<Cell<Actor>> horizontalMenuSpacingPolicy() {
+		return cell -> {
+			cell.expandY();
+			float widthPercentage = UserInterfaceSizer.getWidthPercentage(0.0075f);
+			cell.spaceLeft(widthPercentage);
+			cell.spaceRight(widthPercentage);
+		};
+	}
+
+	private static Consumer<Cell<Actor>> verticalMenuSpacingPolicy() {
+		return cell -> {
+			float heightPercentage = UserInterfaceSizer.getHeightPercentage(0.0075f);
+			cell.spaceTop(heightPercentage);
+			cell.spaceBottom(heightPercentage);
+		};
 	}
 }

@@ -3,6 +3,7 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
@@ -15,19 +16,14 @@ public class InputReceiver {
 	private final InputPriorityStack inputPriorityStack;
 	private final InputStrategySwitcher inputStrategySwitcher;
 	private Pause pause;
+	private final WindowResizer windowResizer;
 
 	private final Map<Input, UniversalButton> specialButtons = new HashMap<>();
 
-	private final Runnable toggleFullscreenRunnable;
-
-	/**
-	 * @param toggleFullscreenRunnable A runnable that toggles between full screen and windowed mode
-	 */
-	public InputReceiver(InputStrategySwitcher inputStrategySwitcher, InputPriorityStack inputPriorityStack, Runnable toggleFullscreenRunnable) {
-		this.toggleFullscreenRunnable = toggleFullscreenRunnable;
+	public InputReceiver(InputStrategySwitcher inputStrategySwitcher, InputPriorityStack inputPriorityStack, WindowResizer windowResizer) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
-
 		this.inputPriorityStack = inputPriorityStack;
+		this.windowResizer = windowResizer;
 	}
 
 	void setPause(Pause pause) {
@@ -42,10 +38,14 @@ public class InputReceiver {
 		boolean isScrolling = input == Input.SCROLL_UP || input == Input.SCROLL_DOWN;
 
 		if (shouldToggleFullScreen) {
-			toggleFullscreenRunnable.run();
+			windowResizer.toggleWindow();
 		} else if (input == Input.PAUSE) {
-			// Don't try to enter keyboard mode when someone is just pressing escape/pause, simply let the pause system consume the input
-			togglePause();
+			// Don't try to enter keyboard mode when someone is just pressing escape/pause, simply let the pause(or)resizer system consume the input
+			if (windowResizer.isToggleConfirmationInProgress()) {
+				windowResizer.cancelToggle();
+			} else {
+				togglePause();
+			}
 		} else if (isScrolling) {
 			inputStrategySwitcher.setToMouseStrategy();
 			inputPriorityStack.sendInputToTop(input);

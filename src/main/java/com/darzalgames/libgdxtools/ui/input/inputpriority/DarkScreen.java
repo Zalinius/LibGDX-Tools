@@ -10,7 +10,7 @@ import com.darzalgames.libgdxtools.graphics.ColorTools;
 import com.darzalgames.libgdxtools.maingame.StageLikeRenderable;
 import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantSequenceAction;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
-import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.PopUpMenu;
 
 /**
  * The dark transparent screen which goes behind popups to "focus" them, and dismiss them when clicked

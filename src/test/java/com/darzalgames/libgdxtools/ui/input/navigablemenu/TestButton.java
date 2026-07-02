@@ -28,7 +28,6 @@ public class TestButton implements VisibleInputConsumer {
 
 	protected TestButton(Runnable pressRunnable) {
 		this.pressRunnable = pressRunnable;
-		setBlank(true);
 		placeholderViewActor = new Actor();
 		placeholderViewActor.setName("placeholder name");
 	}
@@ -42,7 +41,6 @@ public class TestButton implements VisibleInputConsumer {
 		return isDisabled;
 	}
 
-	@Override
 	public boolean isOver() {
 		return isOver;
 	}

@@ -4,15 +4,18 @@ import java.util.function.Supplier;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.darzalgames.libgdxtools.internationalization.LabelEffectsProcessor;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.TemporaryStyler;
+import com.darzalgames.libgdxtools.ui.input.LogicalInputConsumer;
+import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.github.tommyettinger.textra.Styles.LabelStyle;
 import com.github.tommyettinger.textra.TypingConfig;
 import com.github.tommyettinger.textra.TypingLabel;
 
-public class UniversalLabel extends TypingLabel {
+public class UniversalLabel extends TypingLabel implements VisibleInputConsumer, LogicalInputConsumer {
 
 	private final LabelStyle typingLabelStyle;
 
@@ -38,6 +41,7 @@ public class UniversalLabel extends TypingLabel {
 		}
 	}
 
+	@Override
 	public boolean isBlank() {
 		return storedText.isBlank();
 	}
@@ -53,13 +57,17 @@ public class UniversalLabel extends TypingLabel {
 		super.act(delta);
 	}
 
+	@Override
 	public void resizeUI() {
-		setFont(typingLabelStyle.font); // updates us to the resized font size
 		String currentText = getOriginalText().toString();
 		String newText = "[%" + bounceScaling * 100 + "]" + textSupplier.get();
-		if (!currentText.equals(newText) && shouldSkipToEnd) {
-			// only update when there's a change: this allows us to use the fancy Textra animations
-			setSize(0, 0); // the documentation suggests doing this before calling restart()
+		boolean textChanged = !currentText.equals(newText) && shouldSkipToEnd;
+		boolean fontChanged = getFont() != typingLabelStyle.font;
+
+		// only update when there's a change: this allows us to use the fancy Textra animations
+		if (fontChanged || textChanged) {
+			setFont(typingLabelStyle.font); // updates us to the resized font size
+			setSize(0, 0); // the documentation suggests doing setSize(0, 0) before calling restart()
 			restart(newText);
 		}
 
@@ -76,6 +84,7 @@ public class UniversalLabel extends TypingLabel {
 		}
 	}
 
+	@Override
 	public void setAlignment(Alignment alignment) {
 		super.setAlignment(alignment.getAlignment());
 	}
@@ -96,6 +105,16 @@ public class UniversalLabel extends TypingLabel {
 			}
 		};
 		addAction(currentBounceAction);
+	}
+
+	@Override
+	public boolean isDisabled() {
+		return true;
+	}
+
+	@Override
+	public Actor getView() {
+		return this;
 	}
 
 }

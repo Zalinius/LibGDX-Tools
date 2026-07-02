@@ -14,51 +14,20 @@ import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
-import com.darzalgames.libgdxtools.ui.input.popup.PopUpMenu;
+import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListPopUpMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
 public class UniversalSelectBox extends UniversalTextButton {
 
-	private final PopUpMenu options;
+	private final NavigableListPopUpMenu options;
 	private UniversalTextButton defaultEntry;
 	protected List<UniversalTextButton> entryButtons;
 
 	public UniversalSelectBox(String mainLabelKey, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
 		super(GameInfo.getUserInterfaceFactory().getLabel(() -> TextSupplier.getLine(mainLabelKey)), Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle, soundEffectConsumer, soundEffect);
 
-		// This is the keyboard navigable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
-		options = new PopUpMenu(MenuOrientation.VERTICAL) {
-			@Override
-			protected void setUpTable() {
-				UniversalLabel currentlySelectedIndicator = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("select_box_current", defaultEntry.label.textSupplier.get()));
-				options.add(currentlySelectedIndicator).center();
-				options.row();
-				List<VisibleInputConsumer> buttonsAsVisibleInputConsumers = GenericInheritanceConverter.convertList(entryButtons);
-				menu.replaceContents(buttonsAsVisibleInputConsumers, makeDefaultBackButton());
-				menu.setAlignment(Alignment.CENTER, Alignment.CENTER);
-				options.setBackground(GameInfo.getUserInterfaceFactory().getCompactBackgroundDrawable());
-				entryButtons.forEach(UniversalTextButton::resizeUI);
-				options.add(menu.getView()).center();
-				options.pack();
-				UserInterfaceSizer.makeActorCentered(options);
-			}
-
-			@Override
-			protected void setUpDesiredSize() {
-				if (getActions().isEmpty()) {
-					UserInterfaceSizer.makeActorCentered(options);
-					options.pack();
-				}
-			}
-
-			@Override
-			public void gainFocus() {
-				super.gainFocus();
-				options.goTo(defaultEntry);
-			}
-
-		};
+		options = new OptionsPopUp();
 
 		setButtonRunnable(() -> InputPriority.claimPriority(options, getView().getStage().getRoot().getName()));
 		setAlignment(Alignment.LEFT);
@@ -85,6 +54,43 @@ public class UniversalSelectBox extends UniversalTextButton {
 		Optional<UniversalTextButton> desiredButton = entryButtons.stream().filter(button -> entryText.equalsIgnoreCase(button.getText())).findFirst();
 		if (desiredButton.isPresent()) {
 			setSelected(desiredButton.get());
+		}
+	}
+
+	/**
+	 * This is the keyboard navigable pop up which lists all of the options for the select box, and so handles things like claiming input priority, adding the cancel button, etc.
+	 */
+	private class OptionsPopUp extends NavigableListPopUpMenu {
+
+		protected OptionsPopUp() {
+			super(MenuOrientation.VERTICAL);
+		}
+
+		@Override
+		protected void setUpTable() {
+			UniversalLabel currentlySelectedIndicator = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("select_box_current", defaultEntry.label.textSupplier.get()));
+			add(currentlySelectedIndicator).center();
+			row();
+			List<VisibleInputConsumer> buttonsAsVisibleInputConsumers = GenericInheritanceConverter.convertList(entryButtons);
+			replaceContents(buttonsAsVisibleInputConsumers, makeDefaultBackButton());
+			setAlignment(Alignment.CENTER, Alignment.CENTER);
+			setBackground(GameInfo.getUserInterfaceFactory().getCompactBackgroundDrawable());
+			entryButtons.forEach(UniversalTextButton::resizeUI);
+			defaults().grow().center();
+			populateButtons();
+			pack();
+			UserInterfaceSizer.makeActorCentered(options);
+		}
+
+		@Override
+		public void setUpDesiredSize() {
+			pack();
+		}
+
+		@Override
+		public void gainFocus() {
+			super.gainFocus();
+			goTo(defaultEntry);
 		}
 	}
 

@@ -1,4 +1,4 @@
-package com.darzalgames.libgdxtools.ui.input.popup;
+package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
@@ -7,14 +7,13 @@ import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
-import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalButton;
 
 /**
  * A pop up that offers two choices, and can respond differently based on which choice is made.
  * This is versatile: it can be used for dialog choices, menus, warnings, etc.
  */
-public abstract class ChoicePopUp extends PopUpMenu {
+public abstract class ChoicePopUp extends NavigableListPopUpMenu {
 
 	protected final Runnable firstChoiceRunnable;
 	protected boolean addRowAfterMessage = true;
@@ -31,7 +30,7 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	/**
 	 * @return Whether or not Input.BACK should press the second button
 	 */
-	protected abstract boolean doesBackInputPressSecondButton();
+	protected abstract boolean isSecondButtonBackButton();
 
 	/**
 	 * What to do when the second choice is chosen. Sometimes this will be the same as the firstChoiceRunnable,
@@ -44,12 +43,6 @@ public abstract class ChoicePopUp extends PopUpMenu {
 	 * @return the message at the top of the choice pop up, set up by the child class in anyway they want (in a {@link Table})
 	 */
 	protected abstract Table getMessage();
-
-	/**
-	 * Lets the child class optionally respond depending on which key is chosen
-	 * @param chosenKey The key that was chosen
-	 */
-	protected void setChosenKey(String chosenKey) {}
 
 	protected BaseDrawable getBackgroundDrawable() {
 		return GameInfo.getUserInterfaceFactory().getDefaultBackgroundDrawable();
@@ -68,15 +61,15 @@ public abstract class ChoicePopUp extends PopUpMenu {
 
 		UniversalButton firstButton = getFirstChoiceButton();
 		UniversalButton secondButton = getSecondChoiceButton();
-		if (doesBackInputPressSecondButton()) {
-			menu.replaceContents(ListFactory.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
+		if (isSecondButtonBackButton()) {
+			replaceContents(ListFactory.of(firstButton), secondButton); // Pressing "back" on the controller or keyboard presses the second button
 		} else {
-			menu.replaceContents(ListFactory.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button
+			replaceContents(ListFactory.of(firstButton, secondButton)); // Pressing "back" on the controller or keyboard DOES NOT press the second button
 		}
 
-		menu.setAlignment(Alignment.CENTER, Alignment.CENTER);
-		Table table = menu.getView();
-		add(table).center().grow();
+		setAlignment(Alignment.CENTER, Alignment.CENTER);
+		defaults().grow().center();
+		populateButtons();
 	}
 
 }

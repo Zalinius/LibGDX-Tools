@@ -118,9 +118,4 @@ public class HexagonController2D extends Container<Actor> implements VisibleInpu
 		inputConsumer.setDisabled(disabled);
 	}
 
-	@Override
-	public boolean isOver() {
-		return inputConsumer.isOver();
-	}
-
 }

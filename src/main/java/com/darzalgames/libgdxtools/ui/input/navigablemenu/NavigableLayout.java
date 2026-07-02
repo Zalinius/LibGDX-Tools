@@ -16,7 +16,6 @@ import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
  */
 public abstract class NavigableLayout extends Table implements VisibleInputConsumer {
 
-	protected List<VisibleInputConsumer> interactableEntries;
 	private Predicate<VisibleInputConsumer> interactabilityFilter;
 	protected final Map<VisibleInputConsumer, Cell<Actor>> allEntryCells;
 
@@ -28,7 +27,6 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 
 	protected NavigableLayout() {
 		interactabilityFilter = NavigableLayout::isInteractable;
-		interactableEntries = new ArrayList<>();
 		allEntryCells = new HashMap<>();
 
 		currentButton = null;
@@ -69,11 +67,11 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 
 	protected void setInteractabilityFilter(Predicate<VisibleInputConsumer> interactabilityFilter) {
 		this.interactabilityFilter = interactabilityFilter;
-		filterInteractableEntities();
+		filterInteractableEntries();
 	}
 
-	protected void filterInteractableEntities() {
-		interactableEntries = getAllEntriesPlusFinalButton().stream().filter(interactabilityFilter::test).toList();
+	protected List<VisibleInputConsumer> filterInteractableEntries() {
+		return getAllEntriesPlusFinalButton().stream().filter(interactabilityFilter::test).toList();
 	}
 
 	private static boolean isInteractable(VisibleInputConsumer entry) {
@@ -147,22 +145,19 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		getAllEntries().clear();
 		getAllEntries().addAll(newEntries);
 		setFinalButton(finalButton);
+//		clearSelected();
+//		selectDefault();
 	}
 
 	public void setFinalButton(VisibleInputConsumer finalButton) {
-		this.finalButton = finalButton;
-		filterInteractableEntities();
+		if (finalButton != null && !finalButton.isBlank()) {
+			this.finalButton = finalButton;
+			filterInteractableEntries();
+		}
 	}
 
 	public boolean hasFinalButton() {
 		return finalButton != null;
-	}
-
-	public float getFinalButtonWidth() {
-		if (hasFinalButton()) {
-			return finalButton.getView().getWidth();
-		}
-		return -1;
 	}
 
 	@Override
@@ -202,7 +197,7 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 	@Override
 	public boolean isDisabled() {
 		return getAllEntries().stream().allMatch(VisibleInputConsumer::isDisabled)
-				&& finalButton != null && finalButton.isDisabled();
+				&& (finalButton == null || finalButton.isDisabled());
 	}
 
 	@Override
@@ -214,7 +209,7 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 	@Override
 	public void setDisabled(boolean disabled) {
 		getAllEntriesPlusFinalButton().stream().forEach(entry -> entry.setDisabled(disabled));
-		filterInteractableEntities();
+		filterInteractableEntries();
 	}
 
 	@Override

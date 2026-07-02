@@ -30,7 +30,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 
 	protected NavigableListMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries) {
 		allEntries = new LinkedList<>(entries);
-		filterInteractableEntities();
+		filterInteractableEntries();
 
 		this.menuOrientation = menuOrientation;
 		pressButtonOnEntryChanged = false;
@@ -70,22 +70,14 @@ public abstract class NavigableListMenu extends NavigableLayout {
 			if (shouldGrowX) {
 				cell.growX();
 			}
-			if (!isVertical()) {
-				// TODO move into menuOrientation
-				cell.expandY();
-			}
-			// hmm this is terrible
-			if (VisibleInputConsumer.isSpacer((VisibleInputConsumer) cell.getActor())) {
-				menuOrientation.applySpacerExpansionPolicy(cell);
-			}
 		};
 	}
 
 	@Override
 	protected void findCurrentButton() {
-		if (!interactableEntries.isEmpty()) {
-			if (currentEntryIndex >= 0 && currentEntryIndex < interactableEntries.size()) {
-				currentButton = interactableEntries.get(currentEntryIndex);
+		if (!filterInteractableEntries().isEmpty()) {
+			if (currentEntryIndex >= 0 && currentEntryIndex < filterInteractableEntries().size()) {
+				currentButton = filterInteractableEntries().get(currentEntryIndex);
 			} else {
 				// this menu may only contain unclickable buttons or spacers, or the index tracker went off the rails somehow
 				returnToFirst();
@@ -95,7 +87,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 
 	private void changedEntries() {
 		if (pressButtonOnEntryChanged) {
-			interactableEntries.get(currentEntryIndex).consumeKeyInput(Input.ACCEPT);
+			filterInteractableEntries().get(currentEntryIndex).consumeKeyInput(Input.ACCEPT);
 		}
 		focusCurrent();
 	}
@@ -103,7 +95,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 	@Override
 	public void consumeKeyInput(Input input) {
 		if (input.equals(menuOrientation.getForwardCode())) {
-			if (currentEntryIndex < interactableEntries.size() - 1) {
+			if (currentEntryIndex < filterInteractableEntries().size() - 1) {
 				currentEntryIndex++;
 				changedEntries();
 			} else if (menuLoops) {
@@ -115,7 +107,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 				currentEntryIndex--;
 				changedEntries();
 			} else if (menuLoops) {
-				currentEntryIndex = interactableEntries.size() - 1;
+				currentEntryIndex = filterInteractableEntries().size() - 1;
 				changedEntries();
 			}
 		} else if (input.equals(Input.BACK) && finalButton != null) {
@@ -131,7 +123,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 	 */
 	public boolean canUseInput(Input input) {
 		if (input.equals(menuOrientation.getForwardCode())) {
-			if (currentEntryIndex < interactableEntries.size() - 1) {
+			if (currentEntryIndex < filterInteractableEntries().size() - 1) {
 				return true;
 			}
 			return menuLoops;
@@ -154,7 +146,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 	}
 
 	protected boolean returnToSecondLast() {
-		int tryIndex = interactableEntries.size() - 2;
+		int tryIndex = filterInteractableEntries().size() - 2;
 		if (tryIndex >= 0) {
 			return goTo(tryIndex);
 		} else {
@@ -163,7 +155,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 	}
 
 	protected boolean returnToLast() {
-		return goTo(interactableEntries.size() - 1);
+		return goTo(filterInteractableEntries().size() - 1);
 	}
 
 	private boolean goTo(final int index) {
@@ -188,8 +180,8 @@ public abstract class NavigableListMenu extends NavigableLayout {
 	 */
 	@Override
 	public boolean goTo(VisibleInputConsumer visibleInputConsumer) {
-		for (int i = 0; i < interactableEntries.size(); i++) {
-			VisibleInputConsumer entry = interactableEntries.get(i);
+		for (int i = 0; i < filterInteractableEntries().size(); i++) {
+			VisibleInputConsumer entry = filterInteractableEntries().get(i);
 			if (entry.equals(visibleInputConsumer)) {
 				return goTo(i);
 			}

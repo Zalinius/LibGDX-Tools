@@ -41,6 +41,7 @@ public enum MenuOrientation {
 
 	private static Consumer<Cell<Actor>> horizontalMenuSpacingPolicy() {
 		return cell -> {
+			cell.expandY();
 			float widthPercentage = UserInterfaceSizer.getWidthPercentage(0.0075f);
 			cell.spaceLeft(widthPercentage);
 			cell.spaceRight(widthPercentage);

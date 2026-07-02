@@ -4,7 +4,9 @@ import java.util.function.Consumer;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -65,8 +67,6 @@ public interface PopUpMenu extends VisibleInputConsumer {
 		return this;
 	}
 
-	Actor getAsActor();
-
 	default Runnable getJustBeforeRemoveRunnable() {
 		return Runnables.nullRunnable();
 	}
@@ -89,10 +89,10 @@ public interface PopUpMenu extends VisibleInputConsumer {
 		superGainFocus.run();
 		if (slidesInAndOut()) {
 			setTouchable(Touchable.disabled);
-			float startX = getAsActor().getX();
-			float startY = getAsActor().getY();
-			getAsActor().setY(UserInterfaceSizer.getCurrentHeight());
-			getAsActor().addAction(
+			float startX = getView().getX();
+			float startY = getView().getY();
+			getView().setY(UserInterfaceSizer.getCurrentHeight());
+			getView().addAction(
 					new InstantSequenceAction(
 							Actions.moveTo(startX, startY, SLIDE_DURATION, Interpolation.circle),
 							Actions.touchable(Touchable.enabled),
@@ -109,24 +109,24 @@ public interface PopUpMenu extends VisibleInputConsumer {
 		releasePriority();
 		if (slidesInAndOut()) {
 			setTouchable(Touchable.disabled);
-			getAsActor().addAction(
+			getView().addAction(
 					Actions.sequence(
-							Actions.moveTo(getAsActor().getX(), UserInterfaceSizer.getCurrentHeight(), SLIDE_DURATION, Interpolation.circle),
+							Actions.moveTo(getView().getX(), UserInterfaceSizer.getCurrentHeight(), SLIDE_DURATION, Interpolation.circle),
 							new RunnableActionBest(getJustBeforeRemoveRunnable()),
-							new RunnableActionBest(getAsActor()::remove)
+							new RunnableActionBest(getView()::remove)
 					)
 			);
 
 			// continue to resize ui as the popup slides out
-			getAsActor().addAction(new TemporalAction(SLIDE_DURATION) {
+			getView().addAction(new TemporalAction(SLIDE_DURATION) {
 				@Override
 				protected void update(float percent) {
 					resizeUI();
 				}
 			});
-			getAsActor().toFront();
+			getView().toFront();
 		} else {
-			getAsActor().remove();
+			getView().remove();
 		}
 	}
 

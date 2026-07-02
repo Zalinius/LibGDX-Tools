@@ -62,7 +62,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		StageLikeRenderable stageLikeRenderable = stageLikeRenderables.get(nameOfStageLikeRenderable);
 		darkScreen.remove();
 		PopUpMenu popup = inputConsumer.getPopUp();
-		Actor actor = popup.getAsActor();
+		Actor actor = popup.getView();
 		stageLikeRenderable.addActor(actor);
 		actor.toFront();
 		darkScreen.fadeIn(actor, popup.canDismiss(), stageLikeRenderable);
@@ -161,7 +161,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		InputConsumer currentTop = multiStack.getTop();
 		if (currentTop.isPopUp()) {
 			PopUpMenu popUp = currentTop.getPopUp();
-			Actor actor = popUp.getAsActor();
+			Actor actor = popUp.getView();
 			darkScreen.fadeIn(actor, popUp.canDismiss(), stageLikeRenderable);
 		}
 	}

@@ -41,11 +41,6 @@ public abstract class SimplePopUp extends Table implements PopUpMenu {
 	public void focusCurrent() {}
 
 	@Override
-	public Actor getAsActor() {
-		return this;
-	}
-
-	@Override
 	public Actor getView() {
 		return this;
 	}

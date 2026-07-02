@@ -3,7 +3,6 @@ package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
@@ -39,11 +38,6 @@ public abstract class NavigableListPopUpMenu extends NavigableListMenu implement
 	public void resizeUI() {
 		setUpDesiredSize();
 		super.resizeUI();
-	}
-
-	@Override
-	public Actor getAsActor() {
-		return this;
 	}
 
 }

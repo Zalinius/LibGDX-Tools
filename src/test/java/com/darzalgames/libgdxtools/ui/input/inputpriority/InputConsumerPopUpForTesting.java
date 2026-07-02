@@ -23,11 +23,6 @@ public class InputConsumerPopUpForTesting extends InputConsumerForTesting implem
 	}
 
 	@Override
-	public Actor getAsActor() {
-		return innerActor;
-	}
-
-	@Override
 	public Actor getView() {
 		return innerActor;
 	}

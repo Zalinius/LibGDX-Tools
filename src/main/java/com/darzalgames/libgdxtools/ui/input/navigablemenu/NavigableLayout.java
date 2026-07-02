@@ -145,8 +145,6 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		getAllEntries().clear();
 		getAllEntries().addAll(newEntries);
 		setFinalButton(finalButton);
-//		clearSelected();
-//		selectDefault();
 	}
 
 	public void setFinalButton(VisibleInputConsumer finalButton) {

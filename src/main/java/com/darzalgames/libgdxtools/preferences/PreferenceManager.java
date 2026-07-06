@@ -15,6 +15,7 @@ public class PreferenceManager {
 	}	
 	public PreferenceManager(final Preferences preferencesFile) {
 		prefs = preferencesFile;
+		prefs.flush(); // try it just to check if we crash (unable to access the .prefs file) 
 	}
 	
 	public SoundPreference sound() {

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -20,13 +21,16 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
-public abstract class UniversalDoodad extends Table implements VisibleInputConsumer {
+public abstract class UniversalDoodad extends Group implements VisibleInputConsumer {
 
 	private ButtonStyle style;
 	private boolean disabled;
 	private final ClickListener clickListener;
 	private final InputStrategySwitcher inputStrategySwitcher;
-	private final DoodadBackgroundImage backgroundImage;
+
+	private final Actor sizer;
+	private final DoodadBackgroundImage scalingBackgroundImage;
+	protected final Table doodadContents;
 	private float focusScaleIncrease;
 
 	private final Consumer<SoundEffect> soundEffectConsumer;
@@ -37,7 +41,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		setFocusScaleIncrease(DEFAULT_FOCUS_SCALE_INCREASE);
-		setStyle(buttonStyle);
 		clickListener = new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -46,12 +49,36 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		};
 		addListener(clickListener);
 
-		backgroundImage = new DoodadBackgroundImage();
-		backgroundImage.setFillParent(true);
-		DoodadBackgroundImage.addScalingClickListener(backgroundImage, this);
+		sizer = new Actor();
+		addActor(sizer);
+
+		scalingBackgroundImage = new DoodadBackgroundImage();
+		addActor(scalingBackgroundImage);
+		DoodadBackgroundImage.addScalingClickListener(scalingBackgroundImage, this);
+
+		doodadContents = new Table();
+		setStyle(buttonStyle);
+		addActor(doodadContents);
 
 		this.soundEffectConsumer = soundEffectConsumer;
 		this.soundEffect = soundEffect;
+	}
+
+	public Cell<Actor> add(Actor actor) {
+		return doodadContents.add(actor);
+	}
+
+	public Cell row() {
+		return doodadContents.row();
+	}
+
+	public float getPrefHeight() {
+		return doodadContents.getPrefHeight() * (1 + focusScaleIncrease);
+	}
+
+	@Override
+	public float getMinHeight() {
+		return doodadContents.getMinHeight();
 	}
 
 	@Override
@@ -65,7 +92,8 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	public void setStyle(ButtonStyle buttonStyle) {
 		style = buttonStyle;
-		DoodadBackgroundImage.setStyleOnDoodadBackground(this, buttonStyle); // sizes the button, very important
+		DoodadBackgroundImage.setStyleOnDoodadBackground(doodadContents, buttonStyle); // sizes the button, very important
+		scalingBackgroundImage.setDrawable(getBackgroundDrawable());
 	}
 
 	@Override
@@ -91,7 +119,11 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		if (Touchable.childrenOnly.equals(touchable)) {
 			touchable = Touchable.enabled;
 		}
-		super.setTouchable(touchable);
+		if (doodadContents != null) {
+			doodadContents.setTouchable(touchable);
+			sizer.setTouchable(Touchable.disabled);
+			scalingBackgroundImage.setTouchable(Touchable.disabled);
+		}
 	}
 
 	@Override
@@ -127,9 +159,20 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	@Override
 	public void resizeUI() {
-		invalidate();
-		pack();
-		invalidateHierarchy();
+		doodadContents.invalidate();
+		doodadContents.pack();
+		doodadContents.invalidateHierarchy();
+
+		scalingBackgroundImage.setDrawable(getBackgroundDrawable());
+		scalingBackgroundImage.setSize(doodadContents.getWidth(), doodadContents.getHeight());
+
+		sizer.setSize(doodadContents.getWidth() * (focusScaleIncrease + 1), doodadContents.getHeight() * (focusScaleIncrease + 1));
+		setSize(doodadContents.getWidth() * (focusScaleIncrease + 1), doodadContents.getHeight() * (focusScaleIncrease + 1));
+
+		CenterActor.centerActorOnParent(doodadContents);
+		CenterActor.centerActorOnParent(scalingBackgroundImage);
+//		pack();
+//		invalidateHierarchy();
 	}
 
 	@Override
@@ -187,14 +230,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		backgroundImage.setDrawable(getBackgroundDrawable());
-		addActor(backgroundImage);
-
-		validate();
-
-		backgroundImage.toBack();
-		CenterActor.centerActorOnParent(backgroundImage);
-
 		Color labelColor = getColorBasedOnFocus();
 		colorOtherComponentsBasedOnFocus(labelColor);
 

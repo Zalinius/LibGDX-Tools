@@ -7,8 +7,10 @@ import java.util.function.Predicate;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
 /**
@@ -24,13 +26,24 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 
 	protected Alignment entryAlignment;
 	protected Alignment tableAlignment;
+	private final ScrollPane scrollPane;
 
 	protected NavigableLayout() {
+		this(true);
+	}
+
+	protected NavigableLayout(boolean withScrolling) {
 		interactabilityFilter = NavigableLayout::isInteractable;
 		allEntryCells = new HashMap<>();
 
 		currentButton = null;
 		setAlignment(Alignment.CENTER, Alignment.TOP_LEFT);
+
+		if (withScrolling) {
+			scrollPane = new ScrollPane(new Actor());
+		} else {
+			scrollPane = null;
+		}
 	}
 
 	/**
@@ -59,6 +72,8 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 	protected abstract Consumer<Cell<Actor>> getSpacingPolicy();
 
 	protected abstract void populateInnerTableWithButtons(Table innerTable);
+
+	protected abstract void consumeInput(Input input);
 
 	/**
 	 * When clearing the selected button, clear any indices used to track positioning
@@ -121,13 +136,33 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		allEntryCells.clear();
 
 		Table innerTable = new Table();
-		add(innerTable);
+		if (scrollPane != null) {
+			scrollPane.setActor(innerTable);
+			add(scrollPane);
+//			scrollPane.setFadeScrollBars(false);
+//			scrollPane.addAction(Actions.forever(Actions.run(() -> System.out.println(scrollPane.getHeight()))));
+
+			// scrollY must be set every frame to some fraction of the screen height (for resizing)
+//			play with overscroll distance?
+		} else {
+			add(innerTable);
+		}
 		innerTable.align(tableAlignment.getAlignment());
 		innerTable.defaults().align(entryAlignment.getAlignment());
 		getSpacingPolicy().accept(innerTable.defaults());
 
 		populateInnerTableWithButtons(innerTable);
 		resizeUI();
+	}
+
+	@Override
+	public final void consumeKeyInput(Input input) {
+		consumeInput(input);
+		if (scrollPane != null && currentButton != null) {
+			// currentButton can be null when exiting a menu
+			float scrollY = currentButton.getView().getTop();
+			scrollPane.scrollTo(scrollPane.getScrollX(), scrollY, scrollPane.getWidth(), scrollPane.getHeight());
+		}
 	}
 
 	/**

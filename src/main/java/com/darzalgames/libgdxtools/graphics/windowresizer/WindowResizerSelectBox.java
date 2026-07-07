@@ -21,17 +21,15 @@ import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalLabel;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalSelectBox;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalTextButton;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.*;
 import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
 public class WindowResizerSelectBox extends UniversalSelectBox {
 
 	private WindowResizer windowResizer;
 
-	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, ButtonStyle style, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
-		super(textKey, inputStrategySwitcher, style, soundEffectConsumer, soundEffect);
+	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, ButtonStyle style, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect, ControlsGlyph controlsGlyph) {
+		super(textKey, inputStrategySwitcher, style, soundEffectConsumer, soundEffect, controlsGlyph);
 
 		setEntryButtons(getEntries());
 	}

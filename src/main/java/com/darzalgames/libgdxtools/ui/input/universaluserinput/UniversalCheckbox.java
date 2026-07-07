@@ -29,8 +29,8 @@ public class UniversalCheckbox extends UniversalTextButton {
 	private SoundEffect uncheckingSoundEffect;
 
 	public UniversalCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer, CheckBoxStyle style, ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer,
-			SoundEffect checkedSoundEffect, SoundEffect uncheckedSoundEffect) {
-		super(GameInfo.getUserInterfaceFactory().getLabel(uncheckedLabel), Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle, soundEffectConsumer, checkedSoundEffect);
+			SoundEffect checkedSoundEffect, SoundEffect uncheckedSoundEffect, ControlsGlyph controlsGlyph) {
+		super(GameInfo.getUserInterfaceFactory().getLabel(uncheckedLabel), Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle, soundEffectConsumer, checkedSoundEffect, controlsGlyph);
 		this.uncheckedLabel = () -> " " + uncheckedLabel.get();
 		this.checkedLabel = () -> " " + checkedLabel.get();
 
@@ -42,7 +42,7 @@ public class UniversalCheckbox extends UniversalTextButton {
 		// It doesn't matter which label we initialize with, as the button resizes every frame based on the contents
 		box = new CheckBoxImage(style);
 		box.setScaling(Scaling.fit);
-		clearChildren();
+		doodadContents.clearChildren();
 		add(box);
 		add(label);
 
@@ -73,7 +73,7 @@ public class UniversalCheckbox extends UniversalTextButton {
 		super.resizeUI();
 		box.setHeight(label.getHeight() * 1.25f);
 		box.setWidth(widthOverHeight * box.getHeight());
-		getCell(box).width(box.getWidth()).height(box.getHeight());
+		doodadContents.getCell(box).width(box.getWidth()).height(box.getHeight());
 	}
 
 	@Override

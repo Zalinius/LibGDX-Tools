@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.darzalgames.libgdxtools.maingame.StageBest;
@@ -65,14 +66,14 @@ public class DoodadBackgroundImage extends Image {
 	 * This is a bit of a hack: setting the background of a doodad with an invisible copy of the 'up' style defines the doodad's size,
 	 * which we need to do in order to have a pulse animation on the doodad's visible background WITHOUT affecting the doodad's true size
 	 * (since this ruins menu layout, jiggling around all neighboring doodads)
-	 * @param doodad the doodad being given a new size
-	 * @param style  the doodad's new style
+	 * @param innerDoodadTable the inner table of the doodad being given a new size
+	 * @param style            the doodad's new style
 	 */
-	public static void setStyleOnDoodadBackground(UniversalDoodad doodad, ButtonStyle style) {
+	public static void setStyleOnDoodadBackground(Table innerDoodadTable, ButtonStyle style) {
 		if (style.up == null) {
 			throw new IllegalArgumentException("Can't style a doodad when the 'up' style is undefined!");
 		}
-		doodad.setBackground(new Drawable() {
+		innerDoodadTable.setBackground(new Drawable() {
 
 			@Override
 			public void draw(Batch batch, float x, float y, float width, float height) { /* DO NOT DRAW THIS */ }

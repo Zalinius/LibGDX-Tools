@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.darzalgames.libgdxtools.maingame.GetOnStage;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
@@ -17,10 +18,13 @@ import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 public abstract class UniversalButton extends UniversalDoodad implements VisibleInputConsumer {
 
 	private Runnable buttonRunnable;
+	private final ControlsGlyph controlsGlyph;
 
-	protected UniversalButton(Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
+	protected UniversalButton(Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle,
+			Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect, ControlsGlyph controlsGlyph) {
 		super(buttonStyle, inputStrategySwitcher, soundEffectConsumer, soundEffect);
 		this.buttonRunnable = buttonRunnable;
+		this.controlsGlyph = controlsGlyph;
 	}
 
 	@Override
@@ -45,6 +49,21 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 	 */
 	public void setButtonRunnable(Runnable buttonRunnable) {
 		this.buttonRunnable = buttonRunnable;
+	}
+
+	@Override
+	public void act(float delta) {
+		controlsGlyph.setParentButton(this);
+		if (getStage() != null) {
+			GetOnStage.addActorToStage(controlsGlyph, this);
+		}
+		super.act(delta);
+	}
+
+	@Override
+	public boolean remove() {
+		controlsGlyph.remove();
+		return super.remove();
 	}
 
 }

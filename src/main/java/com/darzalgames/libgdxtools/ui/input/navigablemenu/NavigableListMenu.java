@@ -29,6 +29,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 	}
 
 	protected NavigableListMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries) {
+		super(true);
 		allEntries = new LinkedList<>(entries);
 		filterInteractableEntries();
 
@@ -93,7 +94,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 	}
 
 	@Override
-	public void consumeKeyInput(Input input) {
+	public void consumeInput(Input input) {
 		if (input.equals(menuOrientation.getForwardCode())) {
 			if (currentEntryIndex < filterInteractableEntries().size() - 1) {
 				currentEntryIndex++;

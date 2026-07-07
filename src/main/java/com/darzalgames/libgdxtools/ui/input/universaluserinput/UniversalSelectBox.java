@@ -24,8 +24,11 @@ public class UniversalSelectBox extends UniversalTextButton {
 	private UniversalTextButton defaultEntry;
 	protected List<UniversalTextButton> entryButtons;
 
-	public UniversalSelectBox(String mainLabelKey, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
-		super(GameInfo.getUserInterfaceFactory().getLabel(() -> TextSupplier.getLine(mainLabelKey)), Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle, soundEffectConsumer, soundEffect);
+	public UniversalSelectBox(String mainLabelKey, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect, ControlsGlyph controlsGlyph) {
+		super(
+				GameInfo.getUserInterfaceFactory().getLabel(() -> TextSupplier.getLine(mainLabelKey)), Runnables.nullRunnable(), inputStrategySwitcher, buttonStyle,
+				soundEffectConsumer, soundEffect, controlsGlyph
+		);
 
 		options = new OptionsPopUp();
 

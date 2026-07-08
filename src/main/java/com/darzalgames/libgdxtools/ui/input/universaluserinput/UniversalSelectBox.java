@@ -11,7 +11,6 @@ import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
-import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.inputpriority.InputPriority;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.MenuOrientation;
 import com.darzalgames.libgdxtools.ui.input.navigablemenu.NavigableListPopUpMenu;
@@ -20,7 +19,7 @@ import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
 public class UniversalSelectBox extends UniversalTextButton {
 
-	private final NavigableListPopUpMenu options;
+	private NavigableListPopUpMenu options;
 	private UniversalTextButton defaultEntry;
 	protected List<UniversalTextButton> entryButtons;
 
@@ -30,10 +29,13 @@ public class UniversalSelectBox extends UniversalTextButton {
 				soundEffectConsumer, soundEffect, controlsGlyph
 		);
 
-		options = new OptionsPopUp();
-
-		setButtonRunnable(() -> InputPriority.claimPriority(options, getView().getStage().getRoot().getName()));
+		setButtonRunnable(this::showOptions);
 		setAlignment(Alignment.LEFT);
+	}
+
+	private void showOptions() {
+		options = new OptionsPopUp();
+		InputPriority.claimPriority(options, getView().getStage().getRoot().getName());
 	}
 
 	protected void setEntryButtons(List<UniversalTextButton> entryButtons) {
@@ -66,28 +68,21 @@ public class UniversalSelectBox extends UniversalTextButton {
 	private class OptionsPopUp extends NavigableListPopUpMenu {
 
 		protected OptionsPopUp() {
-			super(MenuOrientation.VERTICAL);
+			super(MenuOrientation.VERTICAL, GenericInheritanceConverter.convertList(entryButtons), true);
 		}
 
 		@Override
 		protected void setUpTable() {
-			UniversalLabel currentlySelectedIndicator = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> TextSupplier.getLine("select_box_current", defaultEntry.label.textSupplier.get()));
-			add(currentlySelectedIndicator).center();
-			row();
-			List<VisibleInputConsumer> buttonsAsVisibleInputConsumers = GenericInheritanceConverter.convertList(entryButtons);
-			replaceContents(buttonsAsVisibleInputConsumers, makeDefaultBackButton());
 			setAlignment(Alignment.CENTER, Alignment.CENTER);
 			setBackground(GameInfo.getUserInterfaceFactory().getCompactBackgroundDrawable());
-			entryButtons.forEach(UniversalTextButton::resizeUI);
-			defaults().grow().center();
+			defaults().center();
 			populateButtons();
-			pack();
 			UserInterfaceSizer.makeActorCentered(options);
 		}
 
 		@Override
 		public void setUpDesiredSize() {
-			pack();
+			setSize(UserInterfaceSizer.getWidthPercentage(0.25f), UserInterfaceSizer.getHeightPercentage(0.45f));
 		}
 
 		@Override

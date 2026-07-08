@@ -275,7 +275,9 @@ public abstract class UserInterfaceFactory {
 	public ControlsGlyph getControlsGlyph(Input input) {
 		Texture texture = sampleGlyphSupplierForSizeReference.getGlyphForInput(input);
 		if (texture == null) {
-			Gdx.app.error("GlyphFactory", "Missing glyph setup for: " + input);
+			if (input != Input.NONE) {
+				Gdx.app.error("GlyphFactory", "Missing glyph setup for: " + input);
+			}
 			texture = new Texture(30, 30, Format.RGBA8888);
 		}
 		return new ControlsGlyph(input, inputStrategySwitcher, texture);

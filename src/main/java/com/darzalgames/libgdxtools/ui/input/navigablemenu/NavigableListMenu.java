@@ -29,7 +29,6 @@ public abstract class NavigableListMenu extends NavigableLayout {
 	}
 
 	protected NavigableListMenu(MenuOrientation menuOrientation, List<VisibleInputConsumer> entries) {
-		super(true);
 		allEntries = new LinkedList<>(entries);
 		filterInteractableEntries();
 

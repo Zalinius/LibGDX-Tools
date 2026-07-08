@@ -29,21 +29,13 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 	private final ScrollPane scrollPane;
 
 	protected NavigableLayout() {
-		this(true);
-	}
-
-	protected NavigableLayout(boolean withScrolling) {
 		interactabilityFilter = NavigableLayout::isInteractable;
 		allEntryCells = new HashMap<>();
 
 		currentButton = null;
 		setAlignment(Alignment.CENTER, Alignment.TOP_LEFT);
 
-		if (withScrolling) {
-			scrollPane = new ScrollPane(new Actor());
-		} else {
-			scrollPane = null;
-		}
+		scrollPane = new ScrollPane(new Actor());
 	}
 
 	/**
@@ -136,17 +128,13 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		allEntryCells.clear();
 
 		Table innerTable = new Table();
-		if (scrollPane != null) {
-			scrollPane.setActor(innerTable);
-			add(scrollPane);
-//			scrollPane.setFadeScrollBars(false);
+		scrollPane.setActor(innerTable);
+		add(scrollPane);
 //			scrollPane.addAction(Actions.forever(Actions.run(() -> System.out.println(scrollPane.getHeight()))));
 
-			// scrollY must be set every frame to some fraction of the screen height (for resizing)
+		// scrollY must be set every frame to some fraction of the screen height (for resizing)
 //			play with overscroll distance?
-		} else {
-			add(innerTable);
-		}
+
 		innerTable.align(tableAlignment.getAlignment());
 		innerTable.defaults().align(entryAlignment.getAlignment());
 		getSpacingPolicy().accept(innerTable.defaults());
@@ -158,8 +146,7 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 	@Override
 	public final void consumeKeyInput(Input input) {
 		consumeInput(input);
-		if (scrollPane != null && currentButton != null) {
-			// currentButton can be null when exiting a menu
+		if (currentButton != null) { // can be null when exiting a menu
 			float scrollY = currentButton.getView().getTop();
 			scrollPane.scrollTo(scrollPane.getScrollX(), scrollY, scrollPane.getWidth(), scrollPane.getHeight());
 		}

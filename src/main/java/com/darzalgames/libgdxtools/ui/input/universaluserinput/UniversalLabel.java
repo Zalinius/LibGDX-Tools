@@ -79,8 +79,6 @@ public class UniversalLabel extends TypingLabel implements VisibleInputConsumer,
 
 		if (!wrap) {
 			pack();
-		} else {
-			setHeight(getPrefHeight());
 		}
 	}
 

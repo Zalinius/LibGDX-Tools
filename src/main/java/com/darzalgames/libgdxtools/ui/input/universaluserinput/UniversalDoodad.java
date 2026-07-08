@@ -21,16 +21,15 @@ import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
 import com.darzalgames.libgdxtools.ui.input.universaluserinput.skinmanager.SkinManager;
 import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
-public abstract class UniversalDoodad extends Group implements VisibleInputConsumer {
+public abstract class UniversalDoodad extends Table implements VisibleInputConsumer {
 
 	private ButtonStyle style;
 	private boolean disabled;
 	private final ClickListener clickListener;
 	private final InputStrategySwitcher inputStrategySwitcher;
 
-	private final Actor sizer;
 	private final DoodadBackgroundImage scalingBackgroundImage;
-	protected final Table doodadContents;
+	protected final DoodadContentsTable doodadContents;
 	private float focusScaleIncrease;
 
 	private final Consumer<SoundEffect> soundEffectConsumer;
@@ -39,6 +38,8 @@ public abstract class UniversalDoodad extends Group implements VisibleInputConsu
 	public static final float DEFAULT_FOCUS_SCALE_INCREASE = 0.05f;
 
 	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
+		doodadContents = new DoodadContentsTable();
+
 		this.inputStrategySwitcher = inputStrategySwitcher;
 		setFocusScaleIncrease(DEFAULT_FOCUS_SCALE_INCREASE);
 		clickListener = new ClickListener() {
@@ -49,41 +50,15 @@ public abstract class UniversalDoodad extends Group implements VisibleInputConsu
 		};
 		addListener(clickListener);
 
-		sizer = new Actor();
-		addActor(sizer);
+		super.add(doodadContents).grow();
 
 		scalingBackgroundImage = new DoodadBackgroundImage();
-		addActor(scalingBackgroundImage);
 		DoodadBackgroundImage.addScalingClickListener(scalingBackgroundImage, this);
 
-		doodadContents = new Table();
 		setStyle(buttonStyle);
-		addActor(doodadContents);
 
 		this.soundEffectConsumer = soundEffectConsumer;
 		this.soundEffect = soundEffect;
-	}
-
-	public Cell<Actor> add(Actor actor) {
-		return doodadContents.add(actor);
-	}
-
-	public Cell row() {
-		return doodadContents.row();
-	}
-
-	public float getPrefHeight() {
-		return doodadContents.getPrefHeight() * (1 + focusScaleIncrease);
-	}
-
-	@Override
-	public float getMinHeight() {
-		return doodadContents.getMinHeight();
-	}
-
-	@Override
-	public Actor getView() {
-		return this;
 	}
 
 	public ButtonStyle getStyle() {
@@ -117,11 +92,12 @@ public abstract class UniversalDoodad extends Group implements VisibleInputConsu
 	@Override
 	public void setTouchable(Touchable touchable) {
 		if (Touchable.childrenOnly.equals(touchable)) {
+			super.setTouchable(touchable);
 			touchable = Touchable.enabled;
 		}
 		if (doodadContents != null) {
+			// is null when called during construction
 			doodadContents.setTouchable(touchable);
-			sizer.setTouchable(Touchable.disabled);
 			scalingBackgroundImage.setTouchable(Touchable.disabled);
 		}
 	}
@@ -137,39 +113,21 @@ public abstract class UniversalDoodad extends Group implements VisibleInputConsu
 	 * @param forced    whether or not to force the focus event (they're not normally sent when in mouse mode)
 	 */
 	public void setFocused(boolean isFocused, boolean forced) {
-		InputEvent event = Pools.obtain(InputEvent.class);
-		if (!isFocused) {
-			event.setType(InputEvent.Type.exit);
-		} else if (!inputStrategySwitcher.isMouseMode() || forced) {
-			event.setType(InputEvent.Type.enter);
-		} else {
-			event.setType(null); // Since the events are pooled I think they can come with a type?! (the type of the last event it was used for?)
-		}
-
-		if (event.getType() != null) {
-			event.setStage(getStage());
-			Vector2 localToStageCoordinates = localToStageCoordinates(new Vector2(0, 0));
-			event.setStageX(localToStageCoordinates.x);
-			event.setStageY(localToStageCoordinates.y);
-			event.setPointer(-1);
-			fire(event);
-			Pools.free(event);
-		}
+		doodadContents.setFocused(isFocused, forced, inputStrategySwitcher);
 	}
 
 	@Override
 	public void resizeUI() {
-		doodadContents.invalidate();
-		doodadContents.pack();
-		doodadContents.invalidateHierarchy();
+		float horizontalPadding = getWidth() * focusScaleIncrease * 0.5f;
+		float verticalPadding = getHeight() * focusScaleIncrease * 0.5f;
+		padLeft(horizontalPadding).padRight(horizontalPadding).padTop(verticalPadding).padBottom(verticalPadding);
 
 		scalingBackgroundImage.setDrawable(getBackgroundDrawable());
 		scalingBackgroundImage.setSize(doodadContents.getWidth(), doodadContents.getHeight());
 
-		sizer.setSize(doodadContents.getWidth() * (focusScaleIncrease + 1), doodadContents.getHeight() * (focusScaleIncrease + 1));
-		setSize(doodadContents.getWidth() * (focusScaleIncrease + 1), doodadContents.getHeight() * (focusScaleIncrease + 1));
-
 		CenterActor.centerActorOnParent(doodadContents);
+		doodadContents.addActor(scalingBackgroundImage);
+		scalingBackgroundImage.toBack();
 		CenterActor.centerActorOnParent(scalingBackgroundImage);
 	}
 
@@ -204,6 +162,46 @@ public abstract class UniversalDoodad extends Group implements VisibleInputConsu
 
 	@Override
 	public void selectDefault() { /* A basic doodad doesn't have any nested components to select */ }
+
+	@Override
+	public Cell<Actor> add(Actor actor) {
+		return doodadContents.add(actor);
+	}
+
+	@Override
+	public Cell row() {
+		return doodadContents.row();
+	}
+
+	@Override
+	public boolean addListener(EventListener listener) {
+		return doodadContents.addListener(listener);
+	}
+
+	@Override
+	public boolean removeListener(EventListener listener) {
+		return doodadContents.removeListener(listener);
+	}
+
+	@Override
+	public float getPrefHeight() {
+		return doodadContents.getPrefHeight() * (1 + focusScaleIncrease);
+	}
+
+	@Override
+	public float getMinHeight() {
+		return doodadContents.getMinHeight();
+	}
+
+	@Override
+	public boolean isTouchable() {
+		return doodadContents.isTouchable();
+	}
+
+	@Override
+	public Actor getView() {
+		return this;
+	}
 
 	// ----------------- \/ VISUAL STYLING \/ ----------------- //
 	/** Returns appropriate background drawable from the style based on the current button state. */
@@ -294,6 +292,29 @@ public abstract class UniversalDoodad extends Group implements VisibleInputConsu
 
 	float getFocusScaleIncrease() {
 		return focusScaleIncrease;
+	}
+
+	protected class DoodadContentsTable extends Table {
+		private void setFocused(boolean isFocused, boolean forced, InputStrategySwitcher inputStrategySwitcher) {
+			InputEvent event = Pools.obtain(InputEvent.class);
+			if (!isFocused) {
+				event.setType(InputEvent.Type.exit);
+			} else if (!inputStrategySwitcher.isMouseMode() || forced) {
+				event.setType(InputEvent.Type.enter);
+			} else {
+				event.setType(null); // Since the events are pooled I think they can come with a type?! (the type of the last event it was used for?)
+			}
+
+			if (event.getType() != null) {
+				event.setStage(getStage());
+				Vector2 localToStageCoordinates = localToStageCoordinates(new Vector2(0, 0));
+				event.setStageX(localToStageCoordinates.x);
+				event.setStageY(localToStageCoordinates.y);
+				event.setPointer(-1);
+				fire(event);
+				Pools.free(event);
+			}
+		}
 	}
 
 }

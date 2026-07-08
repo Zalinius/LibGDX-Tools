@@ -22,7 +22,7 @@ public class UniversalTextButton extends UniversalButton {
 		super(buttonRunnable, inputStrategySwitcher, buttonStyle, soundEffectConsumer, soundEffect, controlsGlyph);
 		this.label = label;
 		label.setTouchable(Touchable.disabled);
-		doodadContents.add(label).growX();
+		add(label).growX();
 	}
 
 	@Override
@@ -30,11 +30,7 @@ public class UniversalTextButton extends UniversalButton {
 		label.resizeUI();
 		doodadContents.getCell(label).pad(UserInterfaceSizer.getMinimumPercentage(0.0015f));
 		doodadContents.invalidateHierarchy();
-		if (label.wrap) {
-			setHeight(label.getHeight());
-		} else {
-			super.resizeUI();
-		}
+		super.resizeUI();
 	}
 
 	@Override

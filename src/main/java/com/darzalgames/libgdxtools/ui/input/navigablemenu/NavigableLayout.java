@@ -116,9 +116,9 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 	@Override
 	public void resizeUI() {
 		getAllEntriesPlusFinalButton().forEach(entry -> {
-			entry.resizeUI();
 			Cell<Actor> cell = allEntryCells.get(entry);
 			getSpacingPolicy().accept(cell);
+			entry.resizeUI();
 		});
 		invalidate();
 		layout();

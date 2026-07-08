@@ -22,7 +22,7 @@ public class UniversalTextButton extends UniversalButton {
 		super(buttonRunnable, inputStrategySwitcher, buttonStyle, soundEffectConsumer, soundEffect, controlsGlyph);
 		this.label = label;
 		label.setTouchable(Touchable.disabled);
-		add(label).growX();
+		doodadContents.add(label).growX();
 	}
 
 	@Override

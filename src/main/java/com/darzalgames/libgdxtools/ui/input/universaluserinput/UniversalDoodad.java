@@ -171,8 +171,6 @@ public abstract class UniversalDoodad extends Group implements VisibleInputConsu
 
 		CenterActor.centerActorOnParent(doodadContents);
 		CenterActor.centerActorOnParent(scalingBackgroundImage);
-//		pack();
-//		invalidateHierarchy();
 	}
 
 	@Override

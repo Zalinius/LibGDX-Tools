@@ -211,6 +211,11 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	}
 
 	@Override
+	public Color getColor() {
+		return scalingBackgroundImage.getColor();
+	}
+
+	@Override
 	public Actor getView() {
 		return this;
 	}

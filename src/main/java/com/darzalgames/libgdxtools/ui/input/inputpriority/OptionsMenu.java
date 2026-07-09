@@ -190,8 +190,9 @@ public abstract class OptionsMenu extends NavigableListPopUpMenu {
 	}
 
 	private void positionOptionsButton() {
+		optionsButton.resizeUI();
 		float padding = UserInterfaceSizer.getHeightPercentage(0.01f);
-		optionsButton.getView().setPosition(padding, UserInterfaceSizer.getCurrentHeight() - optionsButton.getView().getHeight() - padding);
+		optionsButton.setPosition(padding, UserInterfaceSizer.getCurrentHeight() - optionsButton.getView().getHeight() - padding);
 		UserInterfaceSizer.scaleToMinimumPercentage(optionsButton, 0.06f);
 	}
 

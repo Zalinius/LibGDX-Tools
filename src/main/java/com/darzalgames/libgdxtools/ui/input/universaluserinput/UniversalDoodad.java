@@ -116,6 +116,13 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		doodadContents.setFocused(isFocused, forced, inputStrategySwitcher);
 	}
 
+	/**
+	 * Called every frame, objects should resize their UI in case the window/font have changed size<br>
+	 * <br>
+	 * If this doodad isn't being sized externally by a Table or some other Layout, then in order for the
+	 * doodad to know its own size, you must call {@link #pack} after this. (Useful if you're positioning othe
+	 * "floating" UI elements relative to this doodad, such as input glyphs or labels)
+	 */
 	@Override
 	public void resizeUI() {
 		float horizontalPadding = getWidth() * focusScaleIncrease * 0.5f;

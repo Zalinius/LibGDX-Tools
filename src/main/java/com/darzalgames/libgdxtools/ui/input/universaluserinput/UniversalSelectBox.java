@@ -77,12 +77,14 @@ public class UniversalSelectBox extends UniversalTextButton {
 			setBackground(GameInfo.getUserInterfaceFactory().getCompactBackgroundDrawable());
 			defaults().center();
 			populateButtons();
-			UserInterfaceSizer.makeActorCentered(options);
 		}
 
 		@Override
 		public void setUpDesiredSize() {
 			setSize(UserInterfaceSizer.getWidthPercentage(0.25f), UserInterfaceSizer.getHeightPercentage(0.45f));
+			if (getActions().isEmpty()) {
+				UserInterfaceSizer.makeActorCentered(options);
+			}
 		}
 
 		@Override

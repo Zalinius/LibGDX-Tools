@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,11 +22,16 @@ public class DoodadBackgroundImage extends Image {
 	public void draw(Batch batch, float parentAlpha) {
 		validate();
 
+		Color originalBatchColor = batch.getColor();
+		batch.setColor(getColor());
+
 		float x = getX();
 		float y = getY();
 		float scaleX = getScaleX();
 		float scaleY = getScaleY();
 		getDrawable().draw(batch, x + getImageX(), y + getImageY(), getImageWidth() * scaleX, getImageHeight() * scaleY);
+
+		batch.setColor(originalBatchColor);
 	}
 
 	/**

@@ -188,7 +188,7 @@ public abstract class UserInterfaceFactory {
 		return button;
 	}
 
-	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility) {
+	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility, Alignment glyphAlignment) {
 		ControlsGlyph glyph = getControlsGlyphForButton(Input.PAUSE);
 		UniversalButton button = new UniversalButton(
 				() -> toggleOptionsScreenVisibility.accept(true), inputStrategySwitcher, skinManager.getSettingsButtonStyle(), soundEffectConsumer, defaultSoundEffect, glyph
@@ -210,7 +210,7 @@ public abstract class UserInterfaceFactory {
 			public void colorOtherComponentsBasedOnFocus(Color color) { /* not needed */ }
 		};
 		button.setSize(button.getStyle().up.getMinWidth(), button.getStyle().up.getMinHeight());
-		glyph.setAlignment(Alignment.BOTTOM_RIGHT);
+		glyph.setAlignment(glyphAlignment);
 		return button;
 	}
 

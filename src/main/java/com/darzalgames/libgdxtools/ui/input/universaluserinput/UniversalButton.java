@@ -52,12 +52,12 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 	}
 
 	@Override
-	public void act(float delta) {
-		controlsGlyph.setParentButton(this);
+	public void resizeUI() {
+		super.resizeUI();
 		if (getStage() != null) {
 			GetOnStage.addActorToStage(controlsGlyph, this);
+			controlsGlyph.updatePosition(this);
 		}
-		super.act(delta);
 	}
 
 	@Override

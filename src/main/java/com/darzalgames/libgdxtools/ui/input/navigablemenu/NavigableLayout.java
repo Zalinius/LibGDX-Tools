@@ -36,6 +36,7 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		setAlignment(Alignment.CENTER, Alignment.TOP_LEFT);
 
 		scrollPane = new ScrollPane(new Actor());
+		scrollPane.setupOverscroll(0, 0, 0); // disable the overscroll for flick scrolling, it doesn't work great with my ever-resizing UI
 	}
 
 	/**
@@ -132,10 +133,6 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		Table innerTable = new Table();
 		scrollPane.setActor(innerTable);
 		add(scrollPane);
-//			scrollPane.addAction(Actions.forever(Actions.run(() -> System.out.println(scrollPane.getHeight()))));
-
-		// scrollY must be set every frame to some fraction of the screen height (for resizing)
-//			play with overscroll distance?
 
 		innerTable.align(tableAlignment.getAlignment());
 		innerTable.defaults().align(entryAlignment.getAlignment());

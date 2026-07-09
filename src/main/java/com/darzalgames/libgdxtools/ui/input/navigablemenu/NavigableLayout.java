@@ -122,6 +122,8 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		});
 		invalidate();
 		layout();
+
+		getStage().setScrollFocus(scrollPane);
 	}
 
 	public final void populateButtons() {

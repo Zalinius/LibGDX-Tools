@@ -11,14 +11,12 @@ public class InputSetup {
 
 	private final InputPriorityStack inputPriorityStack;
 	private final InputReceiver inputReceiver;
-	private final ScrollingManager scrollingManager;
 
 	public InputSetup(InputStrategySwitcher inputStrategySwitcher, WindowResizer windowResizer, List<StageLikeRenderable> allStagesInOrderForInput, Pause pause) {
 		windowResizer.initialize(inputStrategySwitcher);
 		Runnable onClickDarkScreen = () -> getInputPriorityStack().sendInputToTop(Input.BACK);
 		inputPriorityStack = new InputPriorityStack(allStagesInOrderForInput, pause.getOptionsMenu(), inputStrategySwitcher, new DarkScreen(onClickDarkScreen));
 		inputReceiver = new InputReceiver(inputStrategySwitcher, inputPriorityStack, windowResizer);
-		scrollingManager = new ScrollingManager(inputReceiver);
 
 		pause.setInformationalSuppliers(inputPriorityStack::doesTopPauseGame, inputPriorityStack::getNameOfPausingStage);
 		inputReceiver.setPause(pause);
@@ -26,10 +24,6 @@ public class InputSetup {
 
 	public InputPriorityStack getInputPriorityStack() {
 		return inputPriorityStack;
-	}
-
-	public ScrollingManager getScrollingManager() {
-		return scrollingManager;
 	}
 
 	public InputReceiver getInputReceiver() {

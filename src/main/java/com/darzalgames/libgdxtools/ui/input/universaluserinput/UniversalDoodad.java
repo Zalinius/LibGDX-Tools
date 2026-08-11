@@ -202,7 +202,7 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	@Override
 	public boolean isTouchable() {
-		return doodadContents.isTouchable();
+		return doodadContents.getTouchable() != Touchable.disabled;
 	}
 
 	@Override

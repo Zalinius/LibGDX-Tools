@@ -47,7 +47,7 @@ public class ControlsGlyph extends Image {
 		updatePosition(parentButton, parentButton::isDisabled);
 	}
 
-	public void updatePosition(Actor parentButton, BooleanSupplier isParentButtonDisabled) {
+	public void updatePosition(Actor parentButton, BooleanSupplier shouldHideGlyph) {
 		toFront();
 		Texture glyph = GlyphFactory.getGlyphForInput(input);
 		if (glyph != null) {
@@ -70,7 +70,7 @@ public class ControlsGlyph extends Image {
 			moveBy(xOffset, yOffset);
 		}
 
-		setVisible(!inputStrategySwitcher.isMouseMode() && !isParentButtonDisabled.getAsBoolean());
+		setVisible(!inputStrategySwitcher.isMouseMode() && !shouldHideGlyph.getAsBoolean());
 	}
 
 }

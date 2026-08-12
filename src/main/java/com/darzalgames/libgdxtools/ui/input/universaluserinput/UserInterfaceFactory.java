@@ -101,7 +101,7 @@ public abstract class UserInterfaceFactory {
 	}
 
 	protected UniversalButton getImageButton(final Image image, final Runnable runnable, ButtonStyle style) {
-		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, style, soundEffectConsumer, defaultSoundEffect, getControlsGlyphForButton(Input.NONE)) {
+		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, style, soundEffectConsumer, defaultSoundEffect, getControlsGlyph(Input.NONE)) {
 			@Override
 			public boolean isBlank() {
 				return image != null;
@@ -137,7 +137,7 @@ public abstract class UserInterfaceFactory {
 	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, ButtonStyle style, LabelStyle labelStyle, Input inputForGlyph, boolean wrap) {
 		UniversalLabel label = new UniversalLabel(textSupplier, labelStyle);
 		label.setWrap(wrap);
-		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, style, soundEffectConsumer, defaultSoundEffect, getControlsGlyphForButton(inputForGlyph));
+		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, style, soundEffectConsumer, defaultSoundEffect, getControlsGlyph(inputForGlyph));
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
@@ -189,7 +189,7 @@ public abstract class UserInterfaceFactory {
 	}
 
 	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility, Alignment glyphAlignment) {
-		ControlsGlyph glyph = getControlsGlyphForButton(Input.PAUSE);
+		ControlsGlyph glyph = getControlsGlyph(Input.PAUSE);
 		UniversalButton button = new UniversalButton(
 				() -> toggleOptionsScreenVisibility.accept(true), inputStrategySwitcher, skinManager.getSettingsButtonStyle(), soundEffectConsumer, defaultSoundEffect, glyph
 		) {
@@ -266,10 +266,6 @@ public abstract class UserInterfaceFactory {
 		WindowResizerSelectBox button = new WindowResizerSelectBox(textKey, inputStrategySwitcher, skinManager.getDefaultButtonStyle(), soundEffectConsumer, defaultSoundEffect, getControlsGlyph(Input.NONE));
 		addGameSpecificHighlightListener(button);
 		return button;
-	}
-
-	public ControlsGlyph getControlsGlyphForButton(Input input) {
-		return getControlsGlyph(input);
 	}
 
 	public ControlsGlyph getControlsGlyph(Input input) {

@@ -1,8 +1,11 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
+import java.util.function.BooleanSupplier;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -41,6 +44,10 @@ public class ControlsGlyph extends Image {
 	}
 
 	public void updatePosition(UniversalButton parentButton) {
+		updatePosition(parentButton, parentButton::isDisabled);
+	}
+
+	public void updatePosition(Actor parentButton, BooleanSupplier isParentButtonDisabled) {
 		toFront();
 		Texture glyph = GlyphFactory.getGlyphForInput(input);
 		if (glyph != null) {
@@ -61,9 +68,9 @@ public class ControlsGlyph extends Image {
 			default -> (parentButton.getHeight() - getHeight()) / 2f;
 			};
 			moveBy(xOffset, yOffset);
-
-			setVisible(!inputStrategySwitcher.isMouseMode() && !parentButton.isDisabled());
 		}
+
+		setVisible(!inputStrategySwitcher.isMouseMode() && !isParentButtonDisabled.getAsBoolean());
 	}
 
 }

@@ -70,7 +70,9 @@ public class ControlsGlyph extends Image {
 			moveBy(xOffset, yOffset);
 		}
 
-		setVisible(!inputStrategySwitcher.isMouseMode() && !shouldHideGlyph.getAsBoolean());
+		boolean isKeyboardMode = !inputStrategySwitcher.isMouseMode();
+		boolean parentSaysToShow = !shouldHideGlyph.getAsBoolean();
+		setVisible(isKeyboardMode && parentSaysToShow);
 	}
 
 }

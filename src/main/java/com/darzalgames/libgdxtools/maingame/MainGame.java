@@ -315,7 +315,7 @@ public abstract class MainGame extends ApplicationAdapter implements SharesGameI
 	private void makeKeyboardAndGamepadInputHandlers() {
 		KeyboardInputHandler keyboardInputHandler = makeKeyboardInputHandler();
 		GamepadInputHandler gamepadInputHandler = platformStrategy.getGamepadInputHandler();
-		multipleStage.setUpInputHandlersOnStages(keyboardInputHandler, gamepadInputHandler, inputSetup.getScrollingManager());
+		multipleStage.setUpInputHandlersOnStages(keyboardInputHandler, gamepadInputHandler);
 	}
 
 	private enum LoadingState {

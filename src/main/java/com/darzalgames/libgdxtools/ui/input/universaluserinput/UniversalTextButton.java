@@ -17,8 +17,9 @@ public class UniversalTextButton extends UniversalButton {
 
 	protected final UniversalLabel label;
 
-	public UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
-		super(buttonRunnable, inputStrategySwitcher, buttonStyle, soundEffectConsumer, soundEffect);
+	public UniversalTextButton(UniversalLabel label, Runnable buttonRunnable, InputStrategySwitcher inputStrategySwitcher, ButtonStyle buttonStyle,
+			Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect, ControlsGlyph controlsGlyph) {
+		super(buttonRunnable, inputStrategySwitcher, buttonStyle, soundEffectConsumer, soundEffect, controlsGlyph);
 		this.label = label;
 		label.setTouchable(Touchable.disabled);
 		add(label).growX();
@@ -27,13 +28,9 @@ public class UniversalTextButton extends UniversalButton {
 	@Override
 	public void resizeUI() {
 		label.resizeUI();
-		getCell(label).pad(UserInterfaceSizer.getMinimumPercentage(0.0025f));
-		invalidateHierarchy();
-		if (label.wrap) {
-			setHeight(label.getHeight());
-		} else {
-			super.resizeUI();
-		}
+		doodadContents.getCell(label).pad(UserInterfaceSizer.getMinimumPercentage(0.0015f));
+		doodadContents.invalidateHierarchy();
+		super.resizeUI();
 	}
 
 	@Override
@@ -44,8 +41,8 @@ public class UniversalTextButton extends UniversalButton {
 	@Override
 	public void setAlignment(Alignment alignment) {
 		label.setAlignment(alignment);
-		getCell(label).align(alignment.getAlignment());
-		align(alignment.getAlignment());
+		doodadContents.getCell(label).align(alignment.getAlignment());
+		doodadContents.align(alignment.getAlignment());
 	}
 
 	public String getText() {

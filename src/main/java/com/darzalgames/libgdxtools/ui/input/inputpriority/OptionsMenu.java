@@ -189,9 +189,10 @@ public abstract class OptionsMenu extends NavigableListPopUpMenu {
 		return true;
 	}
 
-	private void positionOptionsButton() {
+	protected void positionOptionsButton() {
+		optionsButton.resizeUI();
 		float padding = UserInterfaceSizer.getHeightPercentage(0.01f);
-		optionsButton.getView().setPosition(padding, UserInterfaceSizer.getCurrentHeight() - optionsButton.getView().getHeight() - padding);
+		optionsButton.setPosition(padding, UserInterfaceSizer.getCurrentHeight() - optionsButton.getView().getHeight() - padding);
 		UserInterfaceSizer.scaleToMinimumPercentage(optionsButton, 0.06f);
 	}
 
@@ -237,7 +238,7 @@ public abstract class OptionsMenu extends NavigableListPopUpMenu {
 			setAlignment(Alignment.CENTER, Alignment.CENTER);
 			defaults().growX().top();
 			populateButtons();
-			UserInterfaceSizer.makeActorCentered(this);
 		}
+
 	}
 }

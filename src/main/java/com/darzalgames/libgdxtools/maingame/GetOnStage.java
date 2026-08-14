@@ -18,4 +18,8 @@ public class GetOnStage {
 		addActorToStage.accept(actor, stageName);
 	}
 
+	public static void addActorToStage(Actor actor, Actor actorToJoinOnStage) {
+		addActorToStage.accept(actor, actorToJoinOnStage.getStage().getRoot().getName());
+	}
+
 }

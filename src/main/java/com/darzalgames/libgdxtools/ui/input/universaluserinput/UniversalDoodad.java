@@ -1,5 +1,6 @@
 package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.Gdx;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -25,8 +27,10 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	private ButtonStyle style;
 	private boolean disabled;
 	private final ClickListener clickListener;
-	private final InputStrategySwitcher inputStrategySwitcher;
-	private final DoodadBackgroundImage backgroundImage;
+	private final BooleanSupplier isKeyboardMode;
+
+	private final DoodadBackgroundImage scalingBackgroundImage;
+	protected final DoodadContentsTable doodadContents;
 	private float focusScaleIncrease;
 
 	private final Consumer<SoundEffect> soundEffectConsumer;
@@ -35,9 +39,13 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	public static final float DEFAULT_FOCUS_SCALE_INCREASE = 0.05f;
 
 	protected UniversalDoodad(ButtonStyle buttonStyle, InputStrategySwitcher inputStrategySwitcher, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect) {
-		this.inputStrategySwitcher = inputStrategySwitcher;
-		setFocusScaleIncrease(DEFAULT_FOCUS_SCALE_INCREASE);
-		setStyle(buttonStyle);
+		this.soundEffectConsumer = soundEffectConsumer;
+		this.soundEffect = soundEffect;
+		isKeyboardMode = () -> !inputStrategySwitcher.isMouseMode();
+
+		doodadContents = new DoodadContentsTable();
+		addDoodadContentsToThis();
+
 		clickListener = new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -46,17 +54,11 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		};
 		addListener(clickListener);
 
-		backgroundImage = new DoodadBackgroundImage();
-		backgroundImage.setFillParent(true);
-		DoodadBackgroundImage.addScalingClickListener(backgroundImage, this);
+		scalingBackgroundImage = new DoodadBackgroundImage();
+		setFocusScaleIncrease(DEFAULT_FOCUS_SCALE_INCREASE);
+		DoodadBackgroundImage.addScalingClickListener(scalingBackgroundImage, this);
 
-		this.soundEffectConsumer = soundEffectConsumer;
-		this.soundEffect = soundEffect;
-	}
-
-	@Override
-	public Actor getView() {
-		return this;
+		setStyle(buttonStyle);
 	}
 
 	public ButtonStyle getStyle() {
@@ -65,7 +67,8 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	public void setStyle(ButtonStyle buttonStyle) {
 		style = buttonStyle;
-		DoodadBackgroundImage.setStyleOnDoodadBackground(this, buttonStyle); // sizes the button, very important
+		DoodadBackgroundImage.setStyleOnDoodadBackground(doodadContents, buttonStyle); // sizes the button, very important
+		scalingBackgroundImage.setDrawable(getBackgroundDrawable());
 	}
 
 	@Override
@@ -89,9 +92,14 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	@Override
 	public void setTouchable(Touchable touchable) {
 		if (Touchable.childrenOnly.equals(touchable)) {
+			super.setTouchable(touchable);
 			touchable = Touchable.enabled;
 		}
-		super.setTouchable(touchable);
+		if (doodadContents != null) {
+			// doodadContents is null when called during construction
+			doodadContents.setTouchable(touchable);
+			scalingBackgroundImage.setTouchable(Touchable.disabled);
+		}
 	}
 
 	@Override
@@ -105,31 +113,29 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	 * @param forced    whether or not to force the focus event (they're not normally sent when in mouse mode)
 	 */
 	public void setFocused(boolean isFocused, boolean forced) {
-		InputEvent event = Pools.obtain(InputEvent.class);
-		if (!isFocused) {
-			event.setType(InputEvent.Type.exit);
-		} else if (!inputStrategySwitcher.isMouseMode() || forced) {
-			event.setType(InputEvent.Type.enter);
-		} else {
-			event.setType(null); // Since the events are pooled I think they can come with a type?! (the type of the last event it was used for?)
-		}
-
-		if (event.getType() != null) {
-			event.setStage(getStage());
-			Vector2 localToStageCoordinates = localToStageCoordinates(new Vector2(0, 0));
-			event.setStageX(localToStageCoordinates.x);
-			event.setStageY(localToStageCoordinates.y);
-			event.setPointer(-1);
-			fire(event);
-			Pools.free(event);
-		}
+		doodadContents.setFocused(isFocused, forced);
 	}
 
+	/**
+	 * Called every frame, objects should resize their UI in case the window/font have changed size<br>
+	 * <br>
+	 * If this doodad isn't being sized externally by a Table or some other Layout, then in order for the
+	 * doodad to know its own size, you must call {@link #pack} after this. (Useful if you're positioning othe
+	 * "floating" UI elements relative to this doodad, such as input glyphs or labels)
+	 */
 	@Override
 	public void resizeUI() {
-		invalidate();
-		pack();
-		invalidateHierarchy();
+		float horizontalPadding = getWidth() * focusScaleIncrease * 0.5f;
+		float verticalPadding = getHeight() * focusScaleIncrease * 0.5f;
+		padLeft(horizontalPadding).padRight(horizontalPadding).padTop(verticalPadding).padBottom(verticalPadding);
+
+		scalingBackgroundImage.setDrawable(getBackgroundDrawable());
+		scalingBackgroundImage.setSize(doodadContents.getWidth(), doodadContents.getHeight());
+
+		CenterActor.centerActorOnParent(doodadContents);
+		doodadContents.addActor(scalingBackgroundImage);
+		scalingBackgroundImage.toBack();
+		CenterActor.centerActorOnParent(scalingBackgroundImage);
 	}
 
 	@Override
@@ -150,19 +156,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 	public void setFocusScaleIncrease(float focusScaleIncrease) {
 		this.focusScaleIncrease = focusScaleIncrease;
 	}
-
-	@Override
-	public void focusCurrent() {
-		setFocused(true);
-	}
-
-	@Override
-	public void clearSelected() {
-		setFocused(false);
-	}
-
-	@Override
-	public void selectDefault() { /* A basic doodad doesn't have any nested components to select */ }
 
 	// ----------------- \/ VISUAL STYLING \/ ----------------- //
 	/** Returns appropriate background drawable from the style based on the current button state. */
@@ -187,14 +180,6 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		backgroundImage.setDrawable(getBackgroundDrawable());
-		addActor(backgroundImage);
-
-		validate();
-
-		backgroundImage.toBack();
-		CenterActor.centerActorOnParent(backgroundImage);
-
 		Color labelColor = getColorBasedOnFocus();
 		colorOtherComponentsBasedOnFocus(labelColor);
 
@@ -249,6 +234,12 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 		return clickListener.isVisualPressed();
 	}
 
+	private void addDoodadContentsToThis() {
+		// we call super.add() since this class overrides add() to put Actors into the inner doodadContents Table
+		// but the doodadContents have to get into this somehow!
+		super.add(doodadContents).grow();
+	}
+
 	private Color getColorBasedOnFocus() {
 		Color textColor = SkinManager.getDefaultColor();
 		if (isDisabled()) {
@@ -261,6 +252,93 @@ public abstract class UniversalDoodad extends Table implements VisibleInputConsu
 
 	float getFocusScaleIncrease() {
 		return focusScaleIncrease;
+	}
+
+	@Override
+	public void focusCurrent() {
+		setFocused(true);
+	}
+
+	@Override
+	public void clearSelected() {
+		setFocused(false);
+	}
+
+	@Override
+	public void selectDefault() { /* A basic doodad doesn't have any nested components to select */ }
+
+	@Override
+	public Cell<Actor> add(Actor actor) {
+		return doodadContents.add(actor);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Cell row() {
+		return doodadContents.row();
+	}
+
+	@Override
+	public boolean addListener(EventListener listener) {
+		return doodadContents.addListener(listener);
+	}
+
+	@Override
+	public boolean removeListener(EventListener listener) {
+		return doodadContents.removeListener(listener);
+	}
+
+	@Override
+	public float getPrefHeight() {
+		return doodadContents.getPrefHeight() * (1 + focusScaleIncrease);
+	}
+
+	@Override
+	public float getMinHeight() {
+		return doodadContents.getMinHeight();
+	}
+
+	@Override
+	public boolean isTouchable() {
+		return doodadContents.getTouchable() != Touchable.disabled;
+	}
+
+	@Override
+	public void setColor(Color color) {
+		scalingBackgroundImage.setColor(color);
+	}
+
+	@Override
+	public Color getColor() {
+		return scalingBackgroundImage.getColor();
+	}
+
+	@Override
+	public Actor getView() {
+		return this;
+	}
+
+	protected class DoodadContentsTable extends Table {
+		private void setFocused(boolean isFocused, boolean forced) {
+			InputEvent event = Pools.obtain(InputEvent.class);
+			if (!isFocused) {
+				event.setType(InputEvent.Type.exit);
+			} else if (isKeyboardMode.getAsBoolean() || forced) {
+				event.setType(InputEvent.Type.enter);
+			} else {
+				event.setType(null); // Since the events are pooled I think they can come with a type?! (the type of the last event it was used for?)
+			}
+
+			if (event.getType() != null) {
+				event.setStage(getStage());
+				Vector2 localToStageCoordinates = localToStageCoordinates(new Vector2(0, 0));
+				event.setStageX(localToStageCoordinates.x);
+				event.setStageY(localToStageCoordinates.y);
+				event.setPointer(-1);
+				fire(event);
+				Pools.free(event);
+			}
+		}
 	}
 
 }

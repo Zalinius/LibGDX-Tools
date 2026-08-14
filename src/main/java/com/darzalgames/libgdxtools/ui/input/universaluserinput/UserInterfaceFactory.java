@@ -101,7 +101,7 @@ public abstract class UserInterfaceFactory {
 	}
 
 	protected UniversalButton getImageButton(final Image image, final Runnable runnable, ButtonStyle style) {
-		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, style, soundEffectConsumer, defaultSoundEffect) {
+		UniversalButton button = new UniversalButton(runnable, inputStrategySwitcher, style, soundEffectConsumer, defaultSoundEffect, getControlsGlyph(Input.NONE)) {
 			@Override
 			public boolean isBlank() {
 				return image != null;
@@ -109,7 +109,7 @@ public abstract class UserInterfaceFactory {
 
 			@Override
 			public void setAlignment(Alignment alignment) {
-				getCell(image).align(alignment.getAlignment());
+				doodadContents.getCell(image).align(alignment.getAlignment());
 			}
 
 			@Override
@@ -137,19 +137,15 @@ public abstract class UserInterfaceFactory {
 	protected UniversalTextButton makeTextButtonWithStyle(Supplier<String> textSupplier, final Runnable runnable, ButtonStyle style, LabelStyle labelStyle, Input inputForGlyph, boolean wrap) {
 		UniversalLabel label = new UniversalLabel(textSupplier, labelStyle);
 		label.setWrap(wrap);
-		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, style, soundEffectConsumer, defaultSoundEffect);
+		UniversalTextButton button = new UniversalTextButton(label, runnable, inputStrategySwitcher, style, soundEffectConsumer, defaultSoundEffect, getControlsGlyph(inputForGlyph));
 		addGameSpecificHighlightListener(button);
-		if (inputForGlyph != Input.NONE) {
-			ControlsGlyph glyph = getControlsGlyphForButton(inputForGlyph, button);
-			button.addActor(glyph);
-		}
 		return button;
 	}
 
 	public UniversalSelectBox getSelectBox(SelectBoxContentManager contentManager) {
 		String boxLabel = contentManager.getBoxLabelKey();
 		List<SelectBoxButtonInfo> entries = contentManager.getOptionButtons();
-		UniversalSelectBox selectBox = new UniversalSelectBox(boxLabel, inputStrategySwitcher, skinManager.getDefaultButtonStyle(), soundEffectConsumer, defaultSoundEffect);
+		UniversalSelectBox selectBox = new UniversalSelectBox(boxLabel, inputStrategySwitcher, skinManager.getDefaultButtonStyle(), soundEffectConsumer, defaultSoundEffect, getControlsGlyph(Input.NONE));
 		List<UniversalTextButton> entriesButtons = entries.stream().map(buttonInfo -> makeTextButton(buttonInfo.buttonTextSupplier(), () -> {
 			buttonInfo.buttonPressRunnable().run();
 			selectBox.setSelected(buttonInfo.buttonTextSupplier().get());
@@ -175,19 +171,28 @@ public abstract class UserInterfaceFactory {
 
 	public UniversalSlider getSlider(Supplier<String> textSupplier, Consumer<Float> consumer) {
 		UniversalLabel label = new UniversalLabel(textSupplier, skinManager.getDefaultLableStyle());
-		UniversalSlider button = new UniversalSlider(label, skinManager.getSliderStyle(), skinManager.getBlankButtonStyle(), consumer, inputStrategySwitcher, 0.05f, soundEffectConsumer, defaultSoundEffect);
+		UniversalSlider button = new UniversalSlider(
+				label, skinManager.getSliderStyle(), skinManager.getBlankButtonStyle(), consumer, inputStrategySwitcher, 0.05f,
+				soundEffectConsumer, defaultSoundEffect, getControlsGlyph(Input.NONE)
+		);
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
 
 	public UniversalCheckbox getCheckbox(Supplier<String> uncheckedLabel, Supplier<String> checkedLabel, Consumer<Boolean> consumer) {
-		UniversalCheckbox button = new UniversalCheckbox(uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), skinManager.getBlankButtonStyle(), inputStrategySwitcher, soundEffectConsumer, defaultSoundEffect, defaultBackSoundEffect);
+		UniversalCheckbox button = new UniversalCheckbox(
+				uncheckedLabel, checkedLabel, consumer, skinManager.getCheckboxStyle(), skinManager.getBlankButtonStyle(), inputStrategySwitcher,
+				soundEffectConsumer, defaultSoundEffect, defaultBackSoundEffect, getControlsGlyph(Input.NONE)
+		);
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
 
-	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility) {
-		UniversalButton button = new UniversalButton(() -> toggleOptionsScreenVisibility.accept(true), inputStrategySwitcher, skinManager.getSettingsButtonStyle(), soundEffectConsumer, defaultSoundEffect) {
+	public UniversalButton getOptionsButton(Consumer<Boolean> toggleOptionsScreenVisibility, Alignment glyphAlignment) {
+		ControlsGlyph glyph = getControlsGlyph(Input.PAUSE);
+		UniversalButton button = new UniversalButton(
+				() -> toggleOptionsScreenVisibility.accept(true), inputStrategySwitcher, skinManager.getSettingsButtonStyle(), soundEffectConsumer, defaultSoundEffect, glyph
+		) {
 			@Override
 			public String toString() {
 				return "options button";
@@ -205,9 +210,7 @@ public abstract class UserInterfaceFactory {
 			public void colorOtherComponentsBasedOnFocus(Color color) { /* not needed */ }
 		};
 		button.setSize(button.getStyle().up.getMinWidth(), button.getStyle().up.getMinHeight());
-		ControlsGlyph glyph = getControlsGlyphForButton(Input.PAUSE, button);
-		glyph.setAlignment(Alignment.BOTTOM_RIGHT);
-		button.addActor(glyph);
+		glyph.setAlignment(glyphAlignment);
 		return button;
 	}
 
@@ -260,22 +263,20 @@ public abstract class UserInterfaceFactory {
 
 	public WindowResizerSelectBox getWindowModeTextSelectBox() {
 		String textKey = "window_mode_label";
-		WindowResizerSelectBox button = new WindowResizerSelectBox(textKey, inputStrategySwitcher, skinManager.getDefaultButtonStyle(), soundEffectConsumer, defaultSoundEffect);
+		WindowResizerSelectBox button = new WindowResizerSelectBox(textKey, inputStrategySwitcher, skinManager.getDefaultButtonStyle(), soundEffectConsumer, defaultSoundEffect, getControlsGlyph(Input.NONE));
 		addGameSpecificHighlightListener(button);
 		return button;
 	}
 
-	public ControlsGlyph getControlsGlyphForButton(Input input, UniversalButton button) {
-		return getControlsGlyph(input, () -> !button.isDisabled());
-	}
-
-	public ControlsGlyph getControlsGlyph(Input input, Supplier<Boolean> parentIsEnabled) {
+	public ControlsGlyph getControlsGlyph(Input input) {
 		Texture texture = sampleGlyphSupplierForSizeReference.getGlyphForInput(input);
 		if (texture == null) {
-			Gdx.app.error("GlyphFactory", "Missing glyph setup for: " + input);
+			if (input != Input.NONE) {
+				Gdx.app.error("GlyphFactory", "Missing glyph setup for: " + input);
+			}
 			texture = new Texture(30, 30, Format.RGBA8888);
 		}
-		return new ControlsGlyph(input, inputStrategySwitcher, texture, parentIsEnabled);
+		return new ControlsGlyph(input, inputStrategySwitcher, texture);
 	}
 
 	protected InputStrategySwitcher getInputStrategySwitcher() {

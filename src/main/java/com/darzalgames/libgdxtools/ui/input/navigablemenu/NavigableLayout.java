@@ -7,8 +7,10 @@ import java.util.function.Predicate;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.Alignment;
+import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
 /**
@@ -24,6 +26,7 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 
 	protected Alignment entryAlignment;
 	protected Alignment tableAlignment;
+	private final ScrollPane scrollPane;
 
 	protected NavigableLayout() {
 		interactabilityFilter = NavigableLayout::isInteractable;
@@ -31,6 +34,9 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 
 		currentButton = null;
 		setAlignment(Alignment.CENTER, Alignment.TOP_LEFT);
+
+		scrollPane = new ScrollPane(new Actor());
+		disableFlickScrollingOverscroll();
 	}
 
 	/**
@@ -59,6 +65,8 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 	protected abstract Consumer<Cell<Actor>> getSpacingPolicy();
 
 	protected abstract void populateInnerTableWithButtons(Table innerTable);
+
+	protected abstract void consumeInputInternal(Input input);
 
 	/**
 	 * When clearing the selected button, clear any indices used to track positioning
@@ -109,19 +117,26 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 	@Override
 	public void resizeUI() {
 		getAllEntriesPlusFinalButton().forEach(entry -> {
-			entry.resizeUI();
 			Cell<Actor> cell = allEntryCells.get(entry);
 			getSpacingPolicy().accept(cell);
+			entry.resizeUI();
 		});
 		invalidate();
 		layout();
+
+		if (getStage() != null) { // the stage is null during tests, that's okay
+			getStage().setScrollFocus(scrollPane);
+		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public final void populateButtons() {
 		allEntryCells.clear();
 
 		Table innerTable = new Table();
-		add(innerTable);
+		scrollPane.setActor(innerTable);
+		add(scrollPane);
+
 		innerTable.align(tableAlignment.getAlignment());
 		innerTable.defaults().align(entryAlignment.getAlignment());
 		getSpacingPolicy().accept(innerTable.defaults());
@@ -229,4 +244,21 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		return allPlusFinal;
 	}
 
+	private void disableFlickScrollingOverscroll() {
+		// the extra bit of overscroll sliding doesn't work great with my ever-resizing UI
+		scrollPane.setupOverscroll(0, 0, 0);
+	}
+
+	@Override
+	public final void consumeKeyInput(Input input) {
+		consumeInputInternal(input);
+		visuallyScrollToSelectedButton();
+	}
+
+	private void visuallyScrollToSelectedButton() {
+		if (currentButton != null) { // can be null when exiting a menu
+			float scrollY = currentButton.getView().getTop();
+			scrollPane.scrollTo(scrollPane.getScrollX(), scrollY, scrollPane.getWidth(), scrollPane.getHeight());
+		}
+	}
 }

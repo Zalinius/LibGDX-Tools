@@ -455,7 +455,7 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 		protected TestOptionsMenu(String displayName) {
 			super(0, windowResizer, displayName);
-			optionsButton = GameInfo.getUserInterfaceFactory().getOptionsButton(this::toggleScreenVisibility);
+			optionsButton = GameInfo.getUserInterfaceFactory().getOptionsButton(this::toggleScreenVisibility, Alignment.BOTTOM_RIGHT);
 			optionsButton.getView().setWidth(optionsButton.getView().getHeight());
 		}
 

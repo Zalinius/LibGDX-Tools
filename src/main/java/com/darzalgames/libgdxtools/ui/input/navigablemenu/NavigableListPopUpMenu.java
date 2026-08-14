@@ -30,8 +30,8 @@ public abstract class NavigableListPopUpMenu extends NavigableListMenu implement
 	}
 
 	@Override
-	public void consumeKeyInput(Input input) {
-		possiblyDismiss(input, super::consumeKeyInput);
+	public void consumeInputInternal(Input input) {
+		possiblyDismiss(input, super::consumeInputInternal);
 	}
 
 	@Override

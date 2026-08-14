@@ -3,11 +3,13 @@ package com.darzalgames.libgdxtools.ui.input.navigablemenu;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
@@ -17,6 +19,8 @@ import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
  * A {@link Table} and a {@link VisibleInputConsumer}, the ideal base for a menu
  */
 public abstract class NavigableLayout extends Table implements VisibleInputConsumer {
+
+	public static Supplier<ScrollPaneStyle> scrollPaneStyleSupplier = ScrollPaneStyle::new;
 
 	private Predicate<VisibleInputConsumer> interactabilityFilter;
 	protected final Map<VisibleInputConsumer, Cell<Actor>> allEntryCells;
@@ -35,7 +39,7 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		currentButton = null;
 		setAlignment(Alignment.CENTER, Alignment.TOP_LEFT);
 
-		scrollPane = new ScrollPane(new Actor());
+		scrollPane = new ScrollPane(new Actor(), scrollPaneStyleSupplier.get());
 		disableFlickScrollingOverscroll();
 	}
 
@@ -247,6 +251,9 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 	private void disableFlickScrollingOverscroll() {
 		// the extra bit of overscroll sliding doesn't work great with my ever-resizing UI
 		scrollPane.setupOverscroll(0, 0, 0);
+
+		// always show the scroll bar(s)
+		scrollPane.setFadeScrollBars(false);
 	}
 
 	@Override

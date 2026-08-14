@@ -93,7 +93,7 @@ public abstract class NavigableListMenu extends NavigableLayout {
 	}
 
 	@Override
-	public void consumeInput(Input input) {
+	public void consumeInputInternal(Input input) {
 		if (input.equals(menuOrientation.getForwardCode())) {
 			if (currentEntryIndex < filterInteractableEntries().size() - 1) {
 				currentEntryIndex++;

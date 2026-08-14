@@ -215,7 +215,7 @@ class NavigableLayoutTest {
 			List<VisibleInputConsumer> entries = new ArrayList<>();
 
 			@Override
-			public void consumeInput(Input input) {}
+			public void consumeInputInternal(Input input) {}
 
 			@Override
 			public boolean goTo(VisibleInputConsumer visibleInputConsumer) {

@@ -75,7 +75,7 @@ public class DoodadBackgroundImage extends Image {
 	 * @param innerDoodadTable the inner table of the doodad being given a new size
 	 * @param style            the doodad's new style
 	 */
-	public static void setStyleOnDoodadBackground(Table innerDoodadTable, ButtonStyle style) {
+	static void setStyleOnDoodadBackground(Table innerDoodadTable, ButtonStyle style) {
 		if (style.up == null) {
 			throw new IllegalArgumentException("Can't style a doodad when the 'up' style is undefined!");
 		}

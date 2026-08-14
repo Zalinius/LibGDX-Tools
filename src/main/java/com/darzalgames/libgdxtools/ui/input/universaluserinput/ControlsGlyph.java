@@ -43,29 +43,36 @@ public class ControlsGlyph extends Image {
 		this.alignment = alignment;
 	}
 
+	/**
+	 * @param parentButton the Button which gets pressed when this glyph's input is pressed
+	 */
 	public void updatePosition(UniversalButton parentButton) {
 		updatePosition(parentButton, parentButton::isDisabled);
 	}
 
-	public void updatePosition(Actor parentButton, BooleanSupplier shouldHideGlyph) {
+	/**
+	 * @param parentActor     the Actor which this glyph is paired to, it may be a Button or a more complex structure (e.g. this glyph represents an input which puts a menu into focus)
+	 * @param shouldHideGlyph policy for when the glyph should be hidden according to the parentActor, no need to account for mouse/keyboard mode in this check
+	 */
+	public void updatePosition(Actor parentActor, BooleanSupplier shouldHideGlyph) {
 		toFront();
 		Texture glyph = GlyphFactory.getGlyphForInput(input);
 		if (glyph != null) {
 			setGlyph(glyph);
 			UserInterfaceSizer.scaleToMinimumPercentage(this, 0.05f);
-			Vector2 localToStageCoordinates = parentButton.localToStageCoordinates(new Vector2());
+			Vector2 localToStageCoordinates = parentActor.localToStageCoordinates(new Vector2());
 			setPosition(localToStageCoordinates.x, localToStageCoordinates.y);
 
 			float xOffset = switch (alignment) {
 			case BOTTOM_LEFT, LEFT, TOP_LEFT -> -getWidth() * 0.55f;
-			case BOTTOM_RIGHT, RIGHT, TOP_RIGHT -> parentButton.getWidth() - getWidth() * 0.55f;
-			default -> (parentButton.getWidth() - getWidth()) / 2f;
+			case BOTTOM_RIGHT, RIGHT, TOP_RIGHT -> parentActor.getWidth() - getWidth() * 0.55f;
+			default -> (parentActor.getWidth() - getWidth()) / 2f;
 			};
 
 			float yOffset = switch (alignment) {
 			case BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT -> -getHeight() * 0.45f;
-			case TOP_LEFT, TOP, TOP_RIGHT -> parentButton.getHeight() - getHeight() * 0.15f;
-			default -> (parentButton.getHeight() - getHeight()) / 2f;
+			case TOP_LEFT, TOP, TOP_RIGHT -> parentActor.getHeight() - getHeight() * 0.15f;
+			default -> (parentActor.getHeight() - getHeight()) / 2f;
 			};
 			moveBy(xOffset, yOffset);
 		}

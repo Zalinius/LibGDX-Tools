@@ -3,12 +3,14 @@ package com.darzalgames.libgdxtools.ui.input.universaluserinput;
 import java.util.function.BooleanSupplier;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.darzalgames.libgdxtools.maingame.GetOnStage;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.UserInterfaceSizer;
 import com.darzalgames.libgdxtools.ui.input.Input;
@@ -20,6 +22,7 @@ public class ControlsGlyph extends Image {
 	private Input input;
 	private Alignment alignment;
 	private final InputStrategySwitcher inputStrategySwitcher;
+	private Actor parentActor;
 
 	public ControlsGlyph(Input input, InputStrategySwitcher inputStrategySwitcher, Texture referenceGlyphForSize) {
 		this.inputStrategySwitcher = inputStrategySwitcher;
@@ -55,7 +58,7 @@ public class ControlsGlyph extends Image {
 	 * @param shouldHideGlyph policy for when the glyph should be hidden according to the parentActor, no need to account for mouse/keyboard mode in this check
 	 */
 	public void updatePosition(Actor parentActor, BooleanSupplier shouldHideGlyph) {
-		toFront();
+		this.parentActor = parentActor;
 		Texture glyph = GlyphFactory.getGlyphForInput(input);
 		if (glyph != null) {
 			setGlyph(glyph);
@@ -80,6 +83,19 @@ public class ControlsGlyph extends Image {
 		boolean isKeyboardMode = !inputStrategySwitcher.isMouseMode();
 		boolean parentSaysToShow = !shouldHideGlyph.getAsBoolean();
 		setVisible(isKeyboardMode && parentSaysToShow);
+	}
+
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
+		if (parentActor != null) {
+			if (parentActor.getStage() == null) {
+				remove();
+			} else {
+				GetOnStage.addActorToStage(this, parentActor);
+				toFront();
+				super.draw(batch, parentAlpha);
+			}
+		}
 	}
 
 }

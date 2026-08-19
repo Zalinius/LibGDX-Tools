@@ -268,4 +268,10 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 			scrollPane.scrollTo(scrollPane.getScrollX(), scrollY, scrollPane.getWidth(), scrollPane.getHeight());
 		}
 	}
+
+	@Override
+	public boolean remove() {
+		getAllEntriesPlusFinalButton().forEach(child -> child.getView().remove()); // allows child buttons to remove their glyphs
+		return super.remove();
+	}
 }

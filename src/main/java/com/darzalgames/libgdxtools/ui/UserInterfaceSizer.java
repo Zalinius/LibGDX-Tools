@@ -14,7 +14,7 @@ public class UserInterfaceSizer {
 	private static Runnable updateFont;
 
 	/**
-	 * @param actor      The actor to size, typically a nine/ten patch
+	 * @param actor      The actor to size
 	 * @param proportion The percentage of the world/stage WIDTH and HEIGHT that this actor should occupy [0-1]
 	 */
 	public static void sizeToPercentage(Actor actor, float proportion) {
@@ -22,12 +22,24 @@ public class UserInterfaceSizer {
 	}
 
 	/**
-	 * @param actor  The actor to size, typically a nine/ten patch
+	 * @param actor  The actor to size
 	 * @param width  The percentage of the world/stage WIDTH that this actor should occupy [0-1]
 	 * @param height The percentage of the world/stage HEIGHT that this actor should occupy [0-1]
 	 */
 	public static void sizeToPercentage(Actor actor, float width, float height) {
 		actor.setSize(getWidthPercentage(width), getHeightPercentage(height));
+	}
+
+	/**
+	 * Size an actor relative to the screen size IGNORING UI scaling.
+	 * @param actor  The actor to size
+	 * @param width  The percentage of the world/stage WIDTH that this actor should occupy [0-1]
+	 * @param height The percentage of the world/stage HEIGHT that this actor should occupy [0-1]
+	 */
+	public static void sizeToPercentageWithoutUIScaling(Actor actor, float width, float height) {
+		float relativeWidth = getCurrentWidth() * width;
+		float relativeHeight = getCurrentHeight() * height;
+		actor.setSize(relativeWidth, relativeHeight);
 	}
 
 	/**

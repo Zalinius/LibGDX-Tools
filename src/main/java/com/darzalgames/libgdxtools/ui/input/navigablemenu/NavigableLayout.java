@@ -30,7 +30,7 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 
 	protected Alignment entryAlignment;
 	protected Alignment tableAlignment;
-	private final ScrollPane scrollPane;
+	protected final ScrollPane scrollPane;
 
 	protected NavigableLayout() {
 		interactabilityFilter = NavigableLayout::isInteractable;
@@ -262,7 +262,7 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		visuallyScrollToSelectedButton();
 	}
 
-	private void visuallyScrollToSelectedButton() {
+	protected void visuallyScrollToSelectedButton() {
 		if (currentButton != null) { // can be null when exiting a menu
 			float scrollY = currentButton.getView().getTop();
 			scrollPane.scrollTo(scrollPane.getScrollX(), scrollY, scrollPane.getWidth(), scrollPane.getHeight());

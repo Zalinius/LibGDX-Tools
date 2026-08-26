@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.darzalgames.libgdxtools.maingame.GetOnStage;
+import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
@@ -64,6 +65,10 @@ public abstract class UniversalButton extends UniversalDoodad implements Visible
 	public boolean remove() {
 		controlsGlyph.remove();
 		return super.remove();
+	}
+
+	public void setGlyphAlignment(Alignment alignment) {
+		controlsGlyph.setAlignment(alignment);
 	}
 
 }

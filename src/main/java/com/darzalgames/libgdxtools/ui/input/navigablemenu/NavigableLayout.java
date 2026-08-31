@@ -109,6 +109,7 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		if (currentButton != null) {
 			// an empty list doesn't find a button :(
 			currentButton.setFocused(true);
+			visuallyScrollToSelectedButton();
 		}
 	}
 

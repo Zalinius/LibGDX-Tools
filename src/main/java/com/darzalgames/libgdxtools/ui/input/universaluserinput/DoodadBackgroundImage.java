@@ -71,7 +71,7 @@ public class DoodadBackgroundImage extends Image {
 	/**
 	 * This is a bit of a hack: setting the background of a doodad with an invisible copy of the 'up' style defines the doodad's size,
 	 * which we need to do in order to have a pulse animation on the doodad's visible background WITHOUT affecting the doodad's true size
-	 * (since this ruins menu layout, jiggling around all neighboring doodads)
+	 * (since this ruins menu layout, jiggling around all neighbouring doodads)
 	 * @param innerDoodadTable the inner table of the doodad being given a new size
 	 * @param style            the doodad's new style
 	 */

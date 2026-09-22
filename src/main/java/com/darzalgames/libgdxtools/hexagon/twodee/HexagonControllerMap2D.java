@@ -47,12 +47,12 @@ public class HexagonControllerMap2D<E> extends Group {
 	}
 
 	/**
-	 * To be used to apply any visual effects to a hexagon's neighbors
-	 * @param hexagon The {@link Hexagon} whose visual neighbors you're looking for
-	 * @return A list of the neighboring {@link HexagonController2D} objects
+	 * To be used to apply any visual effects to a hexagon's neighbours
+	 * @param hexagon The {@link Hexagon} whose visual neighbours you're looking for
+	 * @return A list of the neighbouring {@link HexagonController2D} objects
 	 */
-	public List<HexagonController2D> getControllerNeighborsOf(Hexagon hexagon) {
-		Set<Hexagon> hexes = hexagonMap.getHexagonNeighborsOf(hexagon);
+	public List<HexagonController2D> getControllerNeighboursOf(Hexagon hexagon) {
+		Set<Hexagon> hexes = hexagonMap.getPresentHexagonNeighboursOf(hexagon);
 		return hexes.stream().map(this::getControllerOf).toList();
 	}
 

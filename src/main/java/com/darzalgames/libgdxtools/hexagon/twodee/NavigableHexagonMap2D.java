@@ -34,18 +34,18 @@ public class NavigableHexagonMap2D<E> extends Container<HexagonControllerMap2D<E
 		if (isInputAllowed()) {
 			HexagonDirection direction = InputOnHexagonGrid.getDirectionFromInput(input);
 			if (direction != null) {
-				navigateToNeighborInDirection(direction);
+				navigateToNeighbourInDirection(direction);
 			} else {
 				getCurrentHexagonController().consumeKeyInput(input);
 			}
 		}
 	}
 
-	private void navigateToNeighborInDirection(HexagonDirection direction) {
-		Hexagon neighborHexagon = direction.getNeighborHexagon(currentHexagon);
-		if (getActor().containsHexagon(neighborHexagon)) {
+	private void navigateToNeighbourInDirection(HexagonDirection direction) {
+		Hexagon neighbourHexagon = direction.getNeighbourHexagon(currentHexagon);
+		if (getActor().containsHexagon(neighbourHexagon)) {
 			clearSelected();
-			currentHexagon = neighborHexagon;
+			currentHexagon = neighbourHexagon;
 			focusCurrent();
 		}
 	}

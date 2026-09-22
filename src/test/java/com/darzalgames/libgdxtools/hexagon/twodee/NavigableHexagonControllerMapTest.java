@@ -107,14 +107,14 @@ class NavigableHexagonControllerMapTest {
 	}
 
 	@Test
-	void getControllerNeighbors_of0x0_returnsCorrectHexagons() {
-		List<Hexagon> expectedNeighbors = List.of(new Hexagon(-1, 0), new Hexagon(-1, 1), new Hexagon(0, -1), new Hexagon(0, 1), new Hexagon(1, -1), new Hexagon(1, 0));
+	void getControllerNeighbours_of0x0_returnsCorrectHexagons() {
+		List<Hexagon> expectedNeighbours = List.of(new Hexagon(-1, 0), new Hexagon(-1, 1), new Hexagon(0, -1), new Hexagon(0, 1), new Hexagon(1, -1), new Hexagon(1, 0));
 
-		List<HexagonController2D> neighborControllers = hexagonControllerMap.getControllerNeighborsOf(new Hexagon(0, 0));
-		List<Hexagon> neighborHexagons = neighborControllers.stream().map(controller -> controller.hexagon).toList();
+		List<HexagonController2D> neighbourControllers = hexagonControllerMap.getControllerNeighboursOf(new Hexagon(0, 0));
+		List<Hexagon> neighbourHexagons = neighbourControllers.stream().map(controller -> controller.hexagon).toList();
 
-		assertEquals(expectedNeighbors.size(), neighborHexagons.size());
-		assertTrue(neighborHexagons.containsAll(expectedNeighbors));
+		assertEquals(expectedNeighbours.size(), neighbourHexagons.size());
+		assertTrue(neighbourHexagons.containsAll(expectedNeighbours));
 	}
 
 	private static Stream<Arguments> directionToCoordinates() {

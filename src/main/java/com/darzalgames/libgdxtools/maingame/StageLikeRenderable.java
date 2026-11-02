@@ -9,6 +9,10 @@ public interface StageLikeRenderable extends InputProcessor {
 
 	void act(float delta);
 
+	void setShouldDraw(boolean shouldDraw);
+
+	boolean shouldDraw();
+
 	void draw();
 
 	void clear();

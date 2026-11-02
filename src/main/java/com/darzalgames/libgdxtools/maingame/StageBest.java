@@ -11,8 +11,11 @@ import com.darzalgames.libgdxtools.graphics.ShaderUtilities;
 
 public class StageBest extends Stage implements StageLikeRenderable {
 
+	private boolean shouldDraw;
+
 	public StageBest(String name, Viewport viewport) {
 		super(viewport, ShaderUtilities.initializeWithDefaultShaderSettings(SpriteBatch::new));
+		setShouldDraw(true);
 		getRoot().setName(name);
 	}
 
@@ -84,5 +87,22 @@ public class StageBest extends Stage implements StageLikeRenderable {
 		}
 		return true;
 	}
-	
+
+	@Override
+	public boolean shouldDraw() {
+		return shouldDraw;
+	}
+
+	@Override
+	public void setShouldDraw(boolean shouldDraw) {
+		this.shouldDraw = shouldDraw;
+	}
+
+	@Override
+	public void draw() {
+		if (shouldDraw) {
+			super.draw();
+		}
+	}
+
 }

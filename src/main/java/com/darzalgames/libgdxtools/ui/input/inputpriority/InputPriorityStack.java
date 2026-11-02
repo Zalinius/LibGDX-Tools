@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -173,8 +174,8 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		darkScreen.remove();
 	}
 
-	public void temporarilyHideStage(String stageName) {
-		multiStack.temporarilyHideStage(stageName);
+	public void temporarilyHideStage(String... stagesToHide) {
+		Stream.of(stagesToHide).forEach(multiStack::temporarilyHideStage);
 		focusTop(false);
 	}
 

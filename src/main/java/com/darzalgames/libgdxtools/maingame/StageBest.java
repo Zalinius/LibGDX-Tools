@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.maingame;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,6 +18,15 @@ public class StageBest extends Stage implements StageLikeRenderable {
 		super(viewport, ShaderUtilities.initializeWithDefaultShaderSettings(SpriteBatch::new));
 		setShouldDrawAndAct(true);
 		getRoot().setName(name);
+	}
+
+	/**
+	 * ONLY used for testing so we can use a headless viewport and batch
+	 * @param viewport A headless test viewport
+	 * @param batch    A headless test batch
+	 */
+	StageBest(Viewport viewport, Batch batch) {
+		super(viewport, batch);
 	}
 
 	@Override

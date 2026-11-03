@@ -1,16 +1,28 @@
-package com.darzalgames.libgdxtools.ui.input.keyboard.stage;
+package com.darzalgames.libgdxtools.maingame;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.headless.mock.graphics.MockGraphics;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.darzalgames.libgdxtools.maingame.StageBest;
 
-class KeyboardStageTest {
+class StageBestTest {
+
+	@Test
+	void setShouldDrawAndAct_setsIt() {
+		// TODO check both
+		Gdx.graphics = new MockGraphics();
+		StageBest stageBest = new StageBest(new TestViewport(), new TestBatch());
+
+		stageBest.setShouldDrawAndAct(false);
+
+		assertFalse(stageBest.shouldDrawAndAct());
+	}
 
 	@Test
 	void isInTouchableBranch_TouchableEnabledInParentGroup_returnsTrue() {

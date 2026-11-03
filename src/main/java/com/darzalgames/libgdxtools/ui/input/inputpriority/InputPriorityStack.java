@@ -180,6 +180,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	public void endTemporaryStageHiding() {
+		unFocusTop();
 		multiStack.endTemporaryStageHiding();
 		focusTop(false);
 		showDarkScreenIfLandingOnPopup();

@@ -82,12 +82,12 @@ public class TestStageLikeRenderable implements StageLikeRenderable {
 	}
 
 	@Override
-	public void setShouldDraw(boolean shouldDraw) {
+	public void setShouldDrawAndAct(boolean shouldDrawAndAct) {
 		/* Not yet needed for testing */
 	}
 
 	@Override
-	public boolean shouldDraw() {
+	public boolean shouldDrawAndAct() {
 		/* Not yet needed for testing */
 		return true;
 	}

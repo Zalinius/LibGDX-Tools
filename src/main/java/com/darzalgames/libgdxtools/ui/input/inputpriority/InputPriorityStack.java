@@ -222,11 +222,11 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		}
 
 		public void temporarilyHideStage(String stageName) {
-			allStagesInOrderForInput.stream().filter(stage -> stageName.equals(stage.getName())).forEach(stage -> stage.setShouldDraw(false));
+			allStagesInOrderForInput.stream().filter(stage -> stageName.equals(stage.getName())).forEach(stage -> stage.setShouldDrawAndAct(false));
 		}
 
 		public void endTemporaryStageHiding() {
-			allStagesInOrderForInput.iterator().forEachRemaining(stage -> stage.setShouldDraw(true));
+			allStagesInOrderForInput.iterator().forEachRemaining(stage -> stage.setShouldDrawAndAct(true));
 		}
 
 		public String getNameOfStageThisConsumerIsOn(InputConsumer inputConsumer) {
@@ -269,7 +269,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			while (allStacksIterator.hasNext()) {
 				StageLikeRenderable topStage = allStacksIterator.next();
 				ArrayDeque<InputConsumer> topStack = inputConsumerStacks.get(topStage.getName());
-				if (topStack.peek() != null && topStage.shouldDraw()) {
+				if (topStack.peek() != null && topStage.shouldDrawAndAct()) {
 					return topStack;
 				}
 			}

@@ -27,6 +27,9 @@ public class StageBest extends Stage implements StageLikeRenderable {
 	 */
 	StageBest(Viewport viewport, Batch batch) {
 		super(viewport, batch);
+		if (Gdx.gl != null) {
+			throw new IllegalStateException("This " + getClass().getSimpleName() + "constructor is only for use in testing!");
+		}
 	}
 
 	@Override

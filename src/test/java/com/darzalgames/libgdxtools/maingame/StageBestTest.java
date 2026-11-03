@@ -100,13 +100,26 @@ class StageBestTest {
 	@Test
 	void act_withShouldDrawAndActSetToTrue_callsSuperActAndThrowsInATestEnvironment() {
 		StageBest stageBest = makeTestStageBest(true);
+		stageBest.addActor(new Actor() {
+			@Override
+			public void act(float delta) {
+				throw new UnsupportedOperationException();
+			}
+		});
 
+		// I'm checking for a plain Exception here because Jenkins hits a different exception than when it's run locally
 		assertThrows(Exception.class, () -> stageBest.act());
 	}
 
 	@Test
 	void act_withShouldDrawAndActSetToFalse_doesNotCallSuperDrawAndSoDoesNotThrow() {
 		StageBest stageBest = makeTestStageBest(false);
+		stageBest.addActor(new Actor() {
+			@Override
+			public void act(float delta) {
+				throw new UnsupportedOperationException();
+			}
+		});
 
 		assertDoesNotThrow(() -> stageBest.act());
 	}

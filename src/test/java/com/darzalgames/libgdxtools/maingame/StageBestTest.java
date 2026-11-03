@@ -60,7 +60,7 @@ class StageBestTest {
 	@Test
 	void unfocusAll_clearsTouchFocus() {
 		StageBest stageBest = makeTestStageBest(true);
-		AtomicBoolean receivedTouchCancelled = new AtomicBoolean();
+		AtomicBoolean receivedTouchDragged = new AtomicBoolean();
 		Actor listeningActor = makeTestListeningActor();
 		listeningActor.addListener(new InputListener() {
 			@Override
@@ -69,8 +69,8 @@ class StageBestTest {
 			}
 
 			@Override
-			public void touchUp(final InputEvent event, float screenX, float screenY, int pointer, int button) {
-				receivedTouchCancelled.set(true);
+			public void touchDragged(InputEvent event, float x, float y, int pointer) {
+				receivedTouchDragged.set(true);
 			}
 		});
 		stageBest.addActor(listeningActor);
@@ -78,9 +78,9 @@ class StageBestTest {
 		stageBest.touchDown(0, 0, 1, 14); // this adds listeningActor as a touchFocus
 
 		stageBest.unfocusAll();
-		stageBest.touchCancelled(0, 0, 1, 14);
+		stageBest.touchDragged(0, 0, 1);
 
-		assertFalse(receivedTouchCancelled.get());
+		assertFalse(receivedTouchDragged.get());
 	}
 
 	@Test

@@ -15,6 +15,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.darzalgames.libgdxtools.maingame.DummyStageBestFactory;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
 
@@ -814,7 +815,7 @@ class NavigableListMenuTest {
 				setUpTableSpy.set(true);
 			}
 		};
-
+		DummyStageBestFactory.make().addActor(navigableListMenu);
 		navigableListMenu.gainFocus();
 
 		assertTrue(setUpTableSpy.get());
@@ -837,6 +838,7 @@ class NavigableListMenuTest {
 			}
 		};
 
+		DummyStageBestFactory.make().addActor(navigableListMenu);
 		navigableListMenu.regainFocus();
 
 		assertTrue(focusCurrentSpy.get());

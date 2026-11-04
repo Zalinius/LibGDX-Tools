@@ -37,7 +37,7 @@ class StageBestTest {
 
 	@Test
 	void unfocusAll_clearsScrollFocus() {
-		StageBest stageBest = makeTestStageBest(true);
+		StageBest stageBest = DummyStageBestFactory.make(true);
 		Actor listeningActor = new Actor();
 		stageBest.setScrollFocus(listeningActor);
 
@@ -48,7 +48,7 @@ class StageBestTest {
 
 	@Test
 	void unfocusAll_doesNotClearKeyboardFocus() {
-		StageBest stageBest = makeTestStageBest(true);
+		StageBest stageBest = DummyStageBestFactory.make(true);
 		Actor listeningActor = new Actor();
 		stageBest.setKeyboardFocus(listeningActor);
 
@@ -59,7 +59,7 @@ class StageBestTest {
 
 	@Test
 	void unfocusAll_clearsTouchFocus() {
-		StageBest stageBest = makeTestStageBest(true);
+		StageBest stageBest = DummyStageBestFactory.make(true);
 		AtomicBoolean receivedTouchDragged = new AtomicBoolean();
 		Actor listeningActor = makeTestListeningActor();
 		listeningActor.addListener(new InputListener() {
@@ -85,21 +85,21 @@ class StageBestTest {
 
 	@Test
 	void draw_withShouldDrawAndActSetToTrue_callsSuperDrawAndThrowsBecauseThisIsATestEnvironment() {
-		StageBest stageBest = makeTestStageBest(true);
+		StageBest stageBest = DummyStageBestFactory.make(true);
 
 		assertThrows(Exception.class, () -> stageBest.draw());
 	}
 
 	@Test
 	void draw_withShouldDrawAndActSetToFalse_doesNotCallSuperDrawAndSoDoesNotThrow() {
-		StageBest stageBest = makeTestStageBest(false);
+		StageBest stageBest = DummyStageBestFactory.make(false);
 
 		assertDoesNotThrow(() -> stageBest.draw());
 	}
 
 	@Test
 	void act_withShouldDrawAndActSetToTrue_callsSuperActAndThrowsInATestEnvironment() {
-		StageBest stageBest = makeTestStageBest(true);
+		StageBest stageBest = DummyStageBestFactory.make(true);
 		stageBest.addActor(new Actor() {
 			@Override
 			public void act(float delta) {
@@ -113,7 +113,7 @@ class StageBestTest {
 
 	@Test
 	void act_withShouldDrawAndActSetToFalse_doesNotCallSuperDrawAndSoDoesNotThrow() {
-		StageBest stageBest = makeTestStageBest(false);
+		StageBest stageBest = DummyStageBestFactory.make(false);
 		stageBest.addActor(new Actor() {
 			@Override
 			public void act(float delta) {
@@ -127,7 +127,7 @@ class StageBestTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { false, true })
 	void setShouldDrawAndAct_setsIt(boolean shouldActAndDraw) {
-		StageBest stageBest = makeTestStageBest(false);
+		StageBest stageBest = DummyStageBestFactory.make(false);
 
 		stageBest.setShouldDrawAndAct(shouldActAndDraw);
 
@@ -137,7 +137,7 @@ class StageBestTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { false, true })
 	void keyDown_whenShouldOrShouldNotDrawAndAct_returnsExpectedValue(boolean shouldActAndDraw) {
-		StageBest stageBest = makeTestStageBest(shouldActAndDraw);
+		StageBest stageBest = DummyStageBestFactory.make(shouldActAndDraw);
 		Actor listeningActor = new Actor();
 		listeningActor.addListener(new InputListener() {
 			@Override
@@ -153,7 +153,7 @@ class StageBestTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { false, true })
 	void keyUp_whenShouldOrShouldNotDrawAndAct_returnsExpectedValue(boolean shouldActAndDraw) {
-		StageBest stageBest = makeTestStageBest(shouldActAndDraw);
+		StageBest stageBest = DummyStageBestFactory.make(shouldActAndDraw);
 		Actor listeningActor = makeTestListeningActor();
 		listeningActor.addListener(new InputListener() {
 			@Override
@@ -169,7 +169,7 @@ class StageBestTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { false, true })
 	void keyTyped_whenShouldOrShouldNotDrawAndAct_returnsExpectedValue(boolean shouldActAndDraw) {
-		StageBest stageBest = makeTestStageBest(shouldActAndDraw);
+		StageBest stageBest = DummyStageBestFactory.make(shouldActAndDraw);
 		Actor listeningActor = makeTestListeningActor();
 		listeningActor.addListener(new InputListener() {
 			@Override
@@ -185,7 +185,7 @@ class StageBestTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { false, true })
 	void touchDown_whenShouldOrShouldNotDrawAndAct_returnsExpectedValue(boolean shouldActAndDraw) {
-		StageBest stageBest = makeTestStageBest(shouldActAndDraw);
+		StageBest stageBest = DummyStageBestFactory.make(shouldActAndDraw);
 		Actor listeningActor = makeTestListeningActor();
 		listeningActor.addListener(new InputListener() {
 			@Override
@@ -201,7 +201,7 @@ class StageBestTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { false, true })
 	void touchUp_whenShouldOrShouldNotDrawAndAct_returnsExpectedValue(boolean shouldActAndDraw) {
-		StageBest stageBest = makeTestStageBest(shouldActAndDraw);
+		StageBest stageBest = DummyStageBestFactory.make(shouldActAndDraw);
 		Actor listeningActor = makeTestListeningActor();
 		listeningActor.addListener(new InputListener() {
 			@Override
@@ -225,7 +225,7 @@ class StageBestTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { false, true })
 	void touchCancelled_whenShouldOrShouldNotDrawAndAct_doesOrDoesNotCancelTheTouchFocus(boolean shouldActAndDraw) {
-		StageBest stageBest = makeTestStageBest(shouldActAndDraw);
+		StageBest stageBest = DummyStageBestFactory.make(shouldActAndDraw);
 		AtomicBoolean receivedTouchCancelled = new AtomicBoolean();
 		Actor listeningActor = makeTestListeningActor();
 		listeningActor.addListener(new InputListener() {
@@ -252,7 +252,7 @@ class StageBestTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { false, true })
 	void touchDragged_whenShouldOrShouldNotDrawAndAct_doesOrDoesNotCancelTheTouchFocus(boolean shouldActAndDraw) {
-		StageBest stageBest = makeTestStageBest(shouldActAndDraw);
+		StageBest stageBest = DummyStageBestFactory.make(shouldActAndDraw);
 		AtomicBoolean receivedTouchDragged = new AtomicBoolean();
 		Actor listeningActor = makeTestListeningActor();
 		listeningActor.addListener(new InputListener() {
@@ -279,7 +279,7 @@ class StageBestTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { false, true })
 	void mouseMoved_whenShouldOrShouldNotDrawAndAct_returnsExpectedValue(boolean shouldActAndDraw) {
-		StageBest stageBest = makeTestStageBest(shouldActAndDraw);
+		StageBest stageBest = DummyStageBestFactory.make(shouldActAndDraw);
 		Actor listeningActor = makeTestListeningActor();
 		listeningActor.addListener(new InputListener() {
 			@Override
@@ -295,7 +295,7 @@ class StageBestTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { false, true })
 	void scrolled_whenShouldOrShouldNotDrawAndAct_returnsExpectedValue(boolean shouldActAndDraw) {
-		StageBest stageBest = makeTestStageBest(shouldActAndDraw);
+		StageBest stageBest = DummyStageBestFactory.make(shouldActAndDraw);
 		Actor listeningActor = makeTestListeningActor();
 		listeningActor.addListener(new InputListener() {
 			@Override
@@ -306,18 +306,6 @@ class StageBestTest {
 		stageBest.setScrollFocus(listeningActor);
 
 		assertEquals(shouldActAndDraw, stageBest.scrolled(1, 14));
-	}
-
-	private static StageBest makeTestStageBest(boolean shouldDrawAndAct) {
-		StageBest stage = new StageBest(new DummyViewport(), new DummyBatch()) {
-			@Override
-			protected boolean isInsideViewport(int screenX, int screenY) {
-				// needed for touchDown/Up/etc tests
-				return true;
-			}
-		};
-		stage.setShouldDrawAndAct(shouldDrawAndAct);
-		return stage;
 	}
 
 	private static Actor makeTestListeningActor() {

@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.darzalgames.darzalcommon.functional.Consumers;
+import com.darzalgames.libgdxtools.maingame.DummyStageBestFactory;
+import com.darzalgames.libgdxtools.maingame.StageBest;
 import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.input.Input;
 import com.darzalgames.libgdxtools.ui.input.VisibleInputConsumer;
@@ -197,6 +199,50 @@ class NavigableLayoutTest {
 		assertEquals(Alignment.CENTER, layout.tableAlignment);
 	}
 
+	@Test
+	void gainFocus_claimsScrollFocusForTheInnerScrollPane() {
+		NavigableLayout layout = makeTestLayout();
+		StageBest stage = DummyStageBestFactory.make();
+		stage.addActor(layout);
+
+		layout.gainFocus();
+
+		assertEquals(layout.scrollPane, stage.getScrollFocus());
+	}
+
+	@Test
+	void regainFocus_claimsScrollFocusForTheInnerScrollPane() {
+		NavigableLayout layout = makeTestLayout();
+		StageBest stage = DummyStageBestFactory.make();
+		stage.addActor(layout);
+
+		layout.regainFocus();
+
+		assertEquals(layout.scrollPane, stage.getScrollFocus());
+	}
+
+	@Test
+	void regainFocusFromOptionsMenu_claimsScrollFocusForTheInnerScrollPane() {
+		NavigableLayout layout = makeTestLayout();
+		StageBest stage = DummyStageBestFactory.make();
+		stage.addActor(layout);
+
+		layout.regainFocusFromOptionsMenu();
+
+		assertEquals(layout.scrollPane, stage.getScrollFocus());
+	}
+
+	@Test
+	void loseFocus_resetsScrollFocusToNull() {
+		NavigableLayout layout = makeTestLayout();
+		StageBest stage = DummyStageBestFactory.make();
+		stage.addActor(layout);
+
+		layout.loseFocus();
+
+		assertNull(stage.getScrollFocus());
+	}
+
 	public static TestButton makeTestSpacer() {
 		TestButton spacer = new TestButton();
 		spacer.setDisabled(true);
@@ -210,7 +256,7 @@ class NavigableLayoutTest {
 		return new TestButton();
 	}
 
-	private static NavigableLayout makeTestLayout() {
+	public static NavigableLayout makeTestLayout() {
 		return new NavigableLayout() {
 			List<VisibleInputConsumer> entries = new ArrayList<>();
 

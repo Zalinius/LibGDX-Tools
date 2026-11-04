@@ -4,38 +4,38 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.IntFunction;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.darzalgames.darzalcommon.functional.Runnables;
 import com.darzalgames.libgdxtools.graphics.windowresizer.WindowResizer.ScreenMode;
 import com.darzalgames.libgdxtools.internationalization.TextSupplier;
 import com.darzalgames.libgdxtools.maingame.GameInfo;
-import com.darzalgames.libgdxtools.maingame.MultipleStage;
-import com.darzalgames.libgdxtools.scenes.scene2d.actions.DelayRunnableAction;
-import com.darzalgames.libgdxtools.scenes.scene2d.actions.InstantRepeatAction;
-import com.darzalgames.libgdxtools.scenes.scene2d.actions.RunnableActionBest;
-import com.darzalgames.libgdxtools.ui.Alignment;
 import com.darzalgames.libgdxtools.ui.ConfirmationMenu;
 import com.darzalgames.libgdxtools.ui.input.strategy.InputStrategySwitcher;
-import com.darzalgames.libgdxtools.ui.input.universaluserinput.*;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.ControlsGlyph;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalSelectBox;
+import com.darzalgames.libgdxtools.ui.input.universaluserinput.UniversalTextButton;
 import com.darzalgames.zalaudiolibrary.sfx.SoundEffect;
 
 public class WindowResizerSelectBox extends UniversalSelectBox {
 
-	private WindowResizer windowResizer;
+	WindowResizer windowResizer;
+	private Supplier<ConfirmationMenu> confirmationMenuMaker;
 
 	public WindowResizerSelectBox(String textKey, InputStrategySwitcher inputStrategySwitcher, ButtonStyle style, Consumer<SoundEffect> soundEffectConsumer, SoundEffect soundEffect, ControlsGlyph controlsGlyph) {
 		super(textKey, inputStrategySwitcher, style, soundEffectConsumer, soundEffect, controlsGlyph);
 
+		setResizeConfirmationMenuMaker(() -> new WindowRevertCountdownConfirmationMenu(this));
 		setEntryButtons(getEntries());
 	}
 
 	public void setWindowResizer(WindowResizer windowResizer) {
 		this.windowResizer = windowResizer;
+	}
+
+	public void setResizeConfirmationMenuMaker(Supplier<ConfirmationMenu> confirmationMenuMaker) {
+		this.confirmationMenuMaker = confirmationMenuMaker;
 	}
 
 	private List<UniversalTextButton> getEntries() {
@@ -63,59 +63,8 @@ public class WindowResizerSelectBox extends UniversalSelectBox {
 		setSelected(translateWindowModeOption(screenMode));
 	}
 
-	public ConfirmationMenu getRevertMenu() {
-		return new WindowRevertCountdownConfirmationMenu();
-	}
-
-	private class WindowRevertCountdownConfirmationMenu extends ConfirmationMenu {
-
-		private WindowRevertCountdownConfirmationMenu() {
-			super(
-					"screen_mode_accept",
-					"accept_control",
-					"revert_message",
-					Runnables.nullRunnable(),
-					MultipleStage.OPTIONS_STAGE_NAME
-			);
-		}
-
-		@Override
-		public boolean slidesInAndOut() {
-			// Since the window is resized as this popup comes/goes, it's tricky to center its animation so we don't do it: it appears instantly instead of sliding in/out
-			return false;
-		}
-
-		@Override
-		protected void setUpTable() {
-			super.setUpTable();
-			IntFunction<String> makeCountdownString = count -> TextSupplier.getLine("screen_mode_revert", count);
-			UniversalLabel revertCountdown = GameInfo.getUserInterfaceFactory().getFlavorTextLabel(() -> makeCountdownString.apply(10));
-			revertCountdown.setAlignment(Alignment.CENTER);
-			row();
-			add(revertCountdown).growX();
-
-			InstantRepeatAction repeatAction = new InstantRepeatAction();
-			repeatAction.setTotalCount(11);
-			DelayAction delayThenCountDownAction = new DelayRunnableAction(1, () -> revertCountdown.setTextSupplier(() -> makeCountdownString.apply(Math.max(0, repeatAction.getRemainingCount() - 1))));
-			repeatAction.setAction(delayThenCountDownAction);
-
-			SequenceAction sequenceAction = new SequenceAction(repeatAction, new RunnableActionBest(getSecondChoiceRunnable()));
-
-			revertCountdown.addAction(sequenceAction);
-		}
-
-		@Override
-		protected Runnable getSecondChoiceRunnable() {
-			return () -> {
-				revertMode();
-				hideThis();
-			};
-		}
-
-		private void revertMode() {
-			windowResizer.revertMode();
-		}
-
+	public final ConfirmationMenu getRevertMenu() {
+		return confirmationMenuMaker.get();
 	}
 
 	private static String translateWindowModeOption(ScreenMode screenMode) {

@@ -2,6 +2,7 @@ package com.darzalgames.libgdxtools.ui.input.inputpriority;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -87,7 +88,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			darkScreen.fadeOutAndRemove();
 			releasePriorityForTop();
 			darkScreen.fadeOutAndRemove();
-			showDarkScreenIfLandingOnPopup(stageLikeRenderables.get(multiStack.getNameOfTopStage()));
+			showDarkScreenIfLandingOnPopup();
 		} else {
 			// A consumer somewhere below the current one, remove it without fanfare
 			multiStack.remove(inputConsumer, nameOfStageThisConsumerIsOn);
@@ -157,12 +158,12 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		}
 	}
 
-	private void showDarkScreenIfLandingOnPopup(StageLikeRenderable stageLikeRenderable) {
+	private void showDarkScreenIfLandingOnPopup() {
 		InputConsumer currentTop = multiStack.getTop();
 		if (currentTop.isPopUp()) {
 			PopUpMenu popUp = currentTop.getPopUp();
 			Actor actor = popUp.getView();
-			darkScreen.fadeIn(actor, popUp.canDismiss(), stageLikeRenderable);
+			darkScreen.fadeIn(actor, popUp.canDismiss(), stageLikeRenderables.get(multiStack.getNameOfTopStage()));
 		}
 	}
 
@@ -171,6 +172,18 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	 */
 	public void hideDarkScreenForVeryExceptionalCircumstances() {
 		darkScreen.remove();
+	}
+
+	public void temporarilyHideStage(String... stagesToHide) {
+		Stream.of(stagesToHide).forEach(multiStack::temporarilyHideStage);
+		focusTop(false);
+	}
+
+	public void endTemporaryStageHiding() {
+		unFocusTop();
+		multiStack.endTemporaryStageHiding();
+		focusTop(false);
+		showDarkScreenIfLandingOnPopup();
 	}
 
 	@Override
@@ -198,11 +211,22 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 	}
 
 	private class LimitedAccessMultiStack {
+
 		private final Map<String, ArrayDeque<InputConsumer>> inputConsumerStacks;
+		private final List<StageLikeRenderable> allStagesInOrderForInput;
 
 		public LimitedAccessMultiStack(List<StageLikeRenderable> allStagesInOrderForInput) {
+			this.allStagesInOrderForInput = allStagesInOrderForInput;
 			inputConsumerStacks = new LinkedHashMap<>();
 			allStagesInOrderForInput.forEach(stage -> inputConsumerStacks.put(stage.getName(), new ArrayDeque<>()));
+		}
+
+		public void temporarilyHideStage(String stageName) {
+			allStagesInOrderForInput.stream().filter(stage -> stageName.equals(stage.getName())).forEach(stage -> stage.setShouldDrawAndAct(false));
+		}
+
+		public void endTemporaryStageHiding() {
+			allStagesInOrderForInput.iterator().forEachRemaining(stage -> stage.setShouldDrawAndAct(true));
 		}
 
 		public String getNameOfStageThisConsumerIsOn(InputConsumer inputConsumer) {
@@ -241,11 +265,11 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 		}
 
 		private ArrayDeque<InputConsumer> getTopStack() {
-			List<ArrayDeque<InputConsumer>> allStacks = new ArrayList<>(inputConsumerStacks.values());
-			Iterator<ArrayDeque<InputConsumer>> allStacksIterator = allStacks.reversed().iterator();
+			Iterator<StageLikeRenderable> allStacksIterator = allStagesInOrderForInput.reversed().iterator();
 			while (allStacksIterator.hasNext()) {
-				ArrayDeque<InputConsumer> topStack = allStacksIterator.next();
-				if (topStack.peek() != null) {
+				StageLikeRenderable topStage = allStacksIterator.next();
+				ArrayDeque<InputConsumer> topStack = inputConsumerStacks.get(topStage.getName());
+				if (topStack.peek() != null && topStage.shouldDrawAndAct()) {
 					return topStack;
 				}
 			}

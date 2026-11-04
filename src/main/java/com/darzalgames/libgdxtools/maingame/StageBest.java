@@ -1,6 +1,7 @@
 package com.darzalgames.libgdxtools.maingame;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,9 +12,24 @@ import com.darzalgames.libgdxtools.graphics.ShaderUtilities;
 
 public class StageBest extends Stage implements StageLikeRenderable {
 
+	private boolean shouldDrawAndAct;
+
 	public StageBest(String name, Viewport viewport) {
 		super(viewport, ShaderUtilities.initializeWithDefaultShaderSettings(SpriteBatch::new));
+		setShouldDrawAndAct(true);
 		getRoot().setName(name);
+	}
+
+	/**
+	 * ONLY used for testing so we can use a headless viewport and batch
+	 * @param viewport A headless test viewport
+	 * @param batch    A headless test batch
+	 */
+	StageBest(Viewport viewport, Batch batch) {
+		super(viewport, batch);
+		if (Gdx.gl != null) {
+			throw new IllegalStateException("This " + getClass().getSimpleName() + "constructor is only for use in testing!");
+		}
 	}
 
 	@Override
@@ -84,5 +100,110 @@ public class StageBest extends Stage implements StageLikeRenderable {
 		}
 		return true;
 	}
-	
+
+	@Override
+	public boolean shouldDrawAndAct() {
+		return shouldDrawAndAct;
+	}
+
+	@Override
+	public void setShouldDrawAndAct(boolean shouldDrawAndAct) {
+		this.shouldDrawAndAct = shouldDrawAndAct;
+	}
+
+	@Override
+	public void draw() {
+		if (shouldDrawAndAct) {
+			super.draw();
+		}
+	}
+
+	@Override
+	public void act() {
+		if (shouldDrawAndAct) {
+			super.act();
+		}
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		if (shouldDrawAndAct) {
+			return super.keyDown(keycode);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		if (shouldDrawAndAct) {
+			return super.keyUp(keycode);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		if (shouldDrawAndAct) {
+			return super.keyTyped(character);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if (shouldDrawAndAct) {
+			return super.touchDown(screenX, screenY, pointer, button);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		if (shouldDrawAndAct) {
+			return super.touchUp(screenX, screenY, pointer, button);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+		if (shouldDrawAndAct) {
+			return super.touchCancelled(screenX, screenY, pointer, button);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		if (shouldDrawAndAct) {
+			return super.touchDragged(screenX, screenY, pointer);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		if (shouldDrawAndAct) {
+			return super.mouseMoved(screenX, screenY);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean scrolled(float amountX, float amountY) {
+		if (shouldDrawAndAct) {
+			return super.scrolled(amountX, amountY);
+		} else {
+			return false;
+		}
+	}
+
 }

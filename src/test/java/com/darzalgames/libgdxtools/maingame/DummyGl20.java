@@ -6,7 +6,11 @@ import java.nio.IntBuffer;
 
 import com.badlogic.gdx.graphics.GL20;
 
-public class TestGl20 implements GL20 {
+/**
+ * A dummy implementation of LibGDX's {@link GL20 GL20} interface with no functionality and which makes no OpenGL calls.
+ * Useful for general UI testing.
+ */
+public class DummyGl20 implements GL20 {
 
 	@Override
 	public void glActiveTexture(int texture) {

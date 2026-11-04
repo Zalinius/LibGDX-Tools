@@ -28,11 +28,11 @@ class StageBestTest {
 
 	@Test
 	void testConstructor_withInitializedGdxGl_throwsIllegalStateException() {
-		TestViewport testViewport = new TestViewport();
-		TestBatch testBatch = new TestBatch();
-		Gdx.gl = new TestGl20();
+		DummyViewport dummyViewport = new DummyViewport();
+		DummyBatch dummyBatch = new DummyBatch();
+		Gdx.gl = new DummyGl20();
 
-		assertThrows(IllegalStateException.class, () -> new StageBest(testViewport, testBatch));
+		assertThrows(IllegalStateException.class, () -> new StageBest(dummyViewport, dummyBatch));
 	}
 
 	@Test
@@ -309,7 +309,7 @@ class StageBestTest {
 	}
 
 	private static StageBest makeTestStageBest(boolean shouldDrawAndAct) {
-		StageBest stage = new StageBest(new TestViewport(), new TestBatch()) {
+		StageBest stage = new StageBest(new DummyViewport(), new DummyBatch()) {
 			@Override
 			protected boolean isInsideViewport(int screenX, int screenY) {
 				// needed for touchDown/Up/etc tests

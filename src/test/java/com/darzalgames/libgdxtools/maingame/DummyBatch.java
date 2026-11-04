@@ -8,7 +8,11 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
 
-public class TestBatch implements Batch {
+/**
+ * A dummy implementation of LibGDX's {@link Batch Batch} interface with no functionality and which makes no OpenGL calls.
+ * Useful to instantiate a Stage for testing.
+ */
+public class DummyBatch implements Batch {
 
 	@Override
 	public void dispose() {

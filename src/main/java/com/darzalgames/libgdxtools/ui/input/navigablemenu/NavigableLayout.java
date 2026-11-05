@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -95,11 +96,30 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		clear();
 		setUpTable();
 		selectDefault();
+		claimScrollFocus();
 	}
 
 	@Override
 	public void regainFocus() {
 		focusCurrent();
+		claimScrollFocus();
+	}
+
+	@Override
+	public void regainFocusFromOptionsMenu() {
+		claimScrollFocus();
+	}
+
+	private void claimScrollFocus() {
+		getStage().setScrollFocus(scrollPane);
+	}
+
+	@Override
+	public void loseFocus() {
+		Stage stage = getStage();
+		if (stage.getScrollFocus() == scrollPane) {
+			stage.setScrollFocus(null);
+		}
 	}
 
 	@Override
@@ -128,10 +148,6 @@ public abstract class NavigableLayout extends Table implements VisibleInputConsu
 		});
 		invalidate();
 		layout();
-
-		if (getStage() != null) { // the stage is null during tests, that's okay
-			getStage().setScrollFocus(scrollPane);
-		}
 	}
 
 	@SuppressWarnings("unchecked")

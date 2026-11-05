@@ -298,9 +298,10 @@ class InputPriorityStackTest {
 	}
 
 	@Test
-	void releasePriority_forOptionsMenu_callsFocusCurrentButNotRegainFocusForConsumerBelow() {
+	void releasePriority_forOptionsMenu_callsFocusCurrentAndRegainFocusFromOptionsMenuButNotRegainFocusForConsumerBelow() {
 		AtomicBoolean focusCurrentSpy = new AtomicBoolean(false);
 		AtomicBoolean regainFocusSpy = new AtomicBoolean(false);
+		AtomicBoolean regainFocusFromOptionsMenuSpy = new AtomicBoolean(false);
 		AtomicBoolean isTestReady = new AtomicBoolean(false);
 		List<StageLikeRenderable> allStagesInOrderForInput = new ArrayList<>();
 		allStagesInOrderForInput.add(new TestStageLikeRenderable(MultipleStage.MAIN_STAGE_NAME));
@@ -324,6 +325,14 @@ class InputPriorityStackTest {
 				}
 				super.regainFocus();
 			}
+
+			@Override
+			public void regainFocusFromOptionsMenu() {
+				if (isTestReady.get()) {
+					regainFocusFromOptionsMenuSpy.set(true);
+				}
+				super.regainFocus();
+			}
 		};
 		stack.claimPriority(consumer, MultipleStage.MAIN_STAGE_NAME);
 		stack.claimPriority(optionsMenu, MultipleStage.OPTIONS_STAGE_NAME);
@@ -333,6 +342,7 @@ class InputPriorityStackTest {
 
 		assertTrue(focusCurrentSpy.get());
 		assertFalse(regainFocusSpy.get());
+		assertTrue(regainFocusFromOptionsMenuSpy.get());
 	}
 
 	@Test

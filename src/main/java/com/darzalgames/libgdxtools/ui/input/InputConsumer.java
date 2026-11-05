@@ -33,6 +33,13 @@ public interface InputConsumer {
 	default void regainFocus() {}
 
 	/**
+	 * Called when this object gains focus back from the Options/Pause menu (and nothing else).
+	 * The InputConsumer will be set enabled/touchable/focused/etc, this is for when you need to do something extra.
+	 * NOTE: the regular {@link InputConsumer#regainFocus() regainFocus()} will not be called in this case!
+	 */
+	default void regainFocusFromOptionsMenu() {}
+
+	/**
 	 * Called when this object has temporarily lost focus (i.e. when something else claims priority above this)
 	 */
 	default void loseFocus() {}

@@ -153,6 +153,7 @@ public class InputPriorityStack implements InputStrategyObserver, InputPriorityS
 			multiStack.getTop().setDisabled(false);
 			multiStack.getTop().setTouchable(Touchable.enabled);
 			multiStack.getTop().focusCurrent();
+			multiStack.getTop().regainFocusFromOptionsMenu();
 		} else {
 			focusTop(false);
 		}

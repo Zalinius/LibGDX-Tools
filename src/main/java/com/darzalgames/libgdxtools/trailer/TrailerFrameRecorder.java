@@ -3,13 +3,14 @@ package com.darzalgames.libgdxtools.trailer;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.darzalgames.darzalcommon.filehandling.DirectoryClearer;
 
 /**
  * A system which records every frame of the running application to the specified location.
  * Frames are numbered sequentially.
  */
-public class TrailerFrameRecorder {
+public class TrailerFrameRecorder extends Actor {
 
 	private int frameCount = 0;
 
@@ -30,12 +31,22 @@ public class TrailerFrameRecorder {
 		}
 	}
 
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+		recordFrame();
+	}
+
 	/**
 	 * Records the current frame. This must be called AFTER everything in the scene has been drawn, aka at the end of render()
 	 */
 	public void recordFrame() {
 		ScreenshotTaker.takeScreenshot(framesPath + frameCount + ".png");
 		frameCount++;
+	}
+
+	public int getFrameCount() {
+		return frameCount;
 	}
 
 	private void clearPreviousRecording() throws IOException {

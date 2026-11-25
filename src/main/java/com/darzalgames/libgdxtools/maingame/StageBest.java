@@ -126,6 +126,13 @@ public class StageBest extends Stage implements StageLikeRenderable {
 	}
 
 	@Override
+	public void act(float delta) {
+		if (shouldDrawAndAct) {
+			super.act(delta);
+		}
+	}
+
+	@Override
 	public boolean keyDown(int keycode) {
 		if (shouldDrawAndAct) {
 			return super.keyDown(keycode);

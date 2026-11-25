@@ -14,10 +14,12 @@ public final class MultipleStage {
 
 	private static final boolean SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR = false;
 
+	private boolean forceFramerateForTrailerRecording;
+
 	public static final String MAIN_STAGE_NAME = "Main Stage";
 	public static final String OPTIONS_STAGE_NAME = "Options Stage";
-	static final String CURSOR_STAGE_NAME = "Cursor Stage";
-	static final String INPUT_HANDLER_STAGE_NAME = "Input Handler Stage";
+	public static final String CURSOR_STAGE_NAME = "Cursor Stage";
+	public static final String INPUT_HANDLER_STAGE_NAME = "Input Handler Stage";
 
 	private final UniversalInputStage mainStage;
 	private final UniversalInputStage optionsStage;
@@ -58,12 +60,20 @@ public final class MultipleStage {
 			doDebugPrinting();
 		}
 
+		float minimumFPS = Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f);
+		if (forceFramerateForTrailerRecording) {
+			minimumFPS = 1 / 60f;
+		}
+		float preferredFPS = minimumFPS;
+
 		List<StageLikeRenderable> allPausableStages = new ArrayList<>(gameSpecificStages);
 		allPausableStages.addFirst(mainStage);
 		if (!pause.isPaused()) {
-			allPausableStages.forEach(this::updateAndDrawStage);
+			allPausableStages.forEach(stage -> updateAndDrawStage(stage, preferredFPS));
 		} else {
-			resizeUIWhilePaused();
+			if (!forceFramerateForTrailerRecording) {
+				resizeUIWhilePaused();
+			}
 			boolean hitPausingStage = false;
 			for (StageLikeRenderable stageLike : allPausableStages) {
 				if (stageLike.getName().equals(pause.getNameOfPausingStage())) {
@@ -72,7 +82,7 @@ public final class MultipleStage {
 
 				if (hitPausingStage) {
 					// Once we find the stage which is pausing the game, update and draw it and all stages above it like normal
-					updateAndDrawStage(stageLike);
+					updateAndDrawStage(stageLike, preferredFPS);
 				} else {
 					// skip stage.act() while paused
 					stageLike.draw();
@@ -80,13 +90,13 @@ public final class MultipleStage {
 			}
 		}
 
-		updateAndDrawStage(optionsStage);
-		updateAndDrawStage(cursorStage);
-		updateAndDrawStage(inputHandlerStage);
+		updateAndDrawStage(optionsStage, preferredFPS);
+		updateAndDrawStage(cursorStage, preferredFPS);
+		updateAndDrawStage(inputHandlerStage, preferredFPS);
 	}
 
-	private void updateAndDrawStage(StageLikeRenderable stageToUpdate) {
-		stageToUpdate.act();
+	private void updateAndDrawStage(StageLikeRenderable stageToUpdate, float delta) {
+		stageToUpdate.act(delta);
 		stageToUpdate.draw();
 	}
 
@@ -145,6 +155,10 @@ public final class MultipleStage {
 
 	private void resizeUIWhilePaused() {
 		getGameStagesInOrder().forEach(stage -> stage.act(0));
+	}
+
+	public void forceFramerateForTrailerRecording() {
+		forceFramerateForTrailerRecording = true;
 	}
 
 }

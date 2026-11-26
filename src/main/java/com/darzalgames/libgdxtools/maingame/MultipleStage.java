@@ -5,6 +5,7 @@ import java.util.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.darzalgames.libgdxtools.trailer.TrailerFrameRecorder;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
@@ -13,6 +14,8 @@ import com.darzalgames.libgdxtools.ui.input.inputpriority.Pause;
 public final class MultipleStage {
 
 	private static final boolean SHOULD_DEBUG_PRINT_ACTOR_UNDER_CURSOR = false;
+
+	private boolean forceFramerateForTrailerRecording;
 
 	public static final String MAIN_STAGE_NAME = "Main Stage";
 	public static final String OPTIONS_STAGE_NAME = "Options Stage";
@@ -26,6 +29,8 @@ public final class MultipleStage {
 
 	private final Pause pause;
 	private final List<StageLikeRenderable> gameSpecificStages;
+
+	private TrailerFrameRecorder trailerFrameRecorder;
 
 	MultipleStage(UniversalInputStage mainStage, List<StageLikeRenderable> gameSpecificStages, UniversalInputStage optionsStage, StageBest cursorStage, StageBest inputHandlerStage, Pause pause) {
 		this.mainStage = mainStage;
@@ -58,10 +63,16 @@ public final class MultipleStage {
 			doDebugPrinting();
 		}
 
+		float minimumFrameDuration = Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f);
+		if (forceFramerateForTrailerRecording) {
+			minimumFrameDuration = 1 / 60f;
+		}
+		float preferredFrameDuration = minimumFrameDuration;
+
 		List<StageLikeRenderable> allPausableStages = new ArrayList<>(gameSpecificStages);
 		allPausableStages.addFirst(mainStage);
 		if (!pause.isPaused()) {
-			allPausableStages.forEach(this::updateAndDrawStage);
+			allPausableStages.forEach(stage -> updateAndDrawStage(stage, preferredFrameDuration));
 		} else {
 			resizeUIWhilePaused();
 			boolean hitPausingStage = false;
@@ -72,7 +83,7 @@ public final class MultipleStage {
 
 				if (hitPausingStage) {
 					// Once we find the stage which is pausing the game, update and draw it and all stages above it like normal
-					updateAndDrawStage(stageLike);
+					updateAndDrawStage(stageLike, preferredFrameDuration);
 				} else {
 					// skip stage.act() while paused
 					stageLike.draw();
@@ -80,13 +91,17 @@ public final class MultipleStage {
 			}
 		}
 
-		updateAndDrawStage(optionsStage);
-		updateAndDrawStage(cursorStage);
-		updateAndDrawStage(inputHandlerStage);
+		updateAndDrawStage(optionsStage, preferredFrameDuration);
+		updateAndDrawStage(cursorStage, preferredFrameDuration);
+		updateAndDrawStage(inputHandlerStage, preferredFrameDuration);
+
+		if (forceFramerateForTrailerRecording) {
+			trailerFrameRecorder.recordFrame();
+		}
 	}
 
-	private void updateAndDrawStage(StageLikeRenderable stageToUpdate) {
-		stageToUpdate.act();
+	private void updateAndDrawStage(StageLikeRenderable stageToUpdate, float delta) {
+		stageToUpdate.act(delta);
 		stageToUpdate.draw();
 	}
 
@@ -145,6 +160,11 @@ public final class MultipleStage {
 
 	private void resizeUIWhilePaused() {
 		getGameStagesInOrder().forEach(stage -> stage.act(0));
+	}
+
+	public void forceFramerateForTrailerRecording(TrailerFrameRecorder trailerFrameRecorder) {
+		this.trailerFrameRecorder = trailerFrameRecorder;
+		forceFramerateForTrailerRecording = true;
 	}
 
 }

@@ -160,7 +160,17 @@ public class SampleUserInterfaceGame extends MainGame implements WindowFocusList
 
 	@Override
 	protected AudioActor makeAudioActorPauseListener(Pause pause) {
-		return (float alpha) -> {};
+		return new AudioActor() {
+			@Override
+			public void updateBps(float newBps) {
+				// not needed
+			}
+
+			@Override
+			public void update(float delta) {
+				// not needed
+			}
+		};
 	}
 
 	@Override

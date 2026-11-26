@@ -120,8 +120,13 @@ public class StageBest extends Stage implements StageLikeRenderable {
 
 	@Override
 	public void act() {
+		throw new UnsupportedOperationException("Only call act() with an intentionally chosen delta!");
+	}
+
+	@Override
+	public void act(float delta) {
 		if (shouldDrawAndAct) {
-			super.act();
+			super.act(delta);
 		}
 	}
 

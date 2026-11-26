@@ -38,7 +38,11 @@ public class TrailerFrameRecorder {
 		frameCount++;
 	}
 
-	private void clearPreviousRecording() throws IOException {
+	public int getFrameCount() {
+		return frameCount;
+	}
+
+	protected void clearPreviousRecording() throws IOException {
 		DirectoryClearer.clear(Gdx.files.external(framesPath).file());
 	}
 

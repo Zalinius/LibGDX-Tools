@@ -121,7 +121,7 @@ class StageBestTest {
 			}
 		});
 
-		assertDoesNotThrow(() -> stageBest.act());
+		assertDoesNotThrow(() -> stageBest.act(1 / 60f));
 	}
 
 	@ParameterizedTest

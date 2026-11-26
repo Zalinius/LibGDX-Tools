@@ -5,6 +5,7 @@ import java.util.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.darzalgames.libgdxtools.trailer.TrailerFrameRecorder;
 import com.darzalgames.libgdxtools.ui.input.UniversalInputStage;
 import com.darzalgames.libgdxtools.ui.input.handler.GamepadInputHandler;
 import com.darzalgames.libgdxtools.ui.input.handler.KeyboardInputHandler;
@@ -28,6 +29,8 @@ public final class MultipleStage {
 
 	private final Pause pause;
 	private final List<StageLikeRenderable> gameSpecificStages;
+
+	private TrailerFrameRecorder trailerFrameRecorder;
 
 	MultipleStage(UniversalInputStage mainStage, List<StageLikeRenderable> gameSpecificStages, UniversalInputStage optionsStage, StageBest cursorStage, StageBest inputHandlerStage, Pause pause) {
 		this.mainStage = mainStage;
@@ -71,9 +74,7 @@ public final class MultipleStage {
 		if (!pause.isPaused()) {
 			allPausableStages.forEach(stage -> updateAndDrawStage(stage, preferredFPS));
 		} else {
-			if (!forceFramerateForTrailerRecording) {
-				resizeUIWhilePaused();
-			}
+			resizeUIWhilePaused();
 			boolean hitPausingStage = false;
 			for (StageLikeRenderable stageLike : allPausableStages) {
 				if (stageLike.getName().equals(pause.getNameOfPausingStage())) {
@@ -93,6 +94,10 @@ public final class MultipleStage {
 		updateAndDrawStage(optionsStage, preferredFPS);
 		updateAndDrawStage(cursorStage, preferredFPS);
 		updateAndDrawStage(inputHandlerStage, preferredFPS);
+
+		if (forceFramerateForTrailerRecording) {
+			trailerFrameRecorder.recordFrame();
+		}
 	}
 
 	private void updateAndDrawStage(StageLikeRenderable stageToUpdate, float delta) {
@@ -157,7 +162,8 @@ public final class MultipleStage {
 		getGameStagesInOrder().forEach(stage -> stage.act(0));
 	}
 
-	public void forceFramerateForTrailerRecording() {
+	public void forceFramerateForTrailerRecording(TrailerFrameRecorder trailerFrameRecorder) {
+		this.trailerFrameRecorder = trailerFrameRecorder;
 		forceFramerateForTrailerRecording = true;
 	}
 

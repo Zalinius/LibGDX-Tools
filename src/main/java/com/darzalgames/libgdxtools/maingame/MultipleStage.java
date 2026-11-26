@@ -19,8 +19,8 @@ public final class MultipleStage {
 
 	public static final String MAIN_STAGE_NAME = "Main Stage";
 	public static final String OPTIONS_STAGE_NAME = "Options Stage";
-	public static final String CURSOR_STAGE_NAME = "Cursor Stage";
-	public static final String INPUT_HANDLER_STAGE_NAME = "Input Handler Stage";
+	static final String CURSOR_STAGE_NAME = "Cursor Stage";
+	static final String INPUT_HANDLER_STAGE_NAME = "Input Handler Stage";
 
 	private final UniversalInputStage mainStage;
 	private final UniversalInputStage optionsStage;
@@ -63,16 +63,16 @@ public final class MultipleStage {
 			doDebugPrinting();
 		}
 
-		float minimumFPS = Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f);
+		float minimumFrameDuration = Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f);
 		if (forceFramerateForTrailerRecording) {
-			minimumFPS = 1 / 60f;
+			minimumFrameDuration = 1 / 60f;
 		}
-		float preferredFPS = minimumFPS;
+		float preferredFrameDuration = minimumFrameDuration;
 
 		List<StageLikeRenderable> allPausableStages = new ArrayList<>(gameSpecificStages);
 		allPausableStages.addFirst(mainStage);
 		if (!pause.isPaused()) {
-			allPausableStages.forEach(stage -> updateAndDrawStage(stage, preferredFPS));
+			allPausableStages.forEach(stage -> updateAndDrawStage(stage, preferredFrameDuration));
 		} else {
 			resizeUIWhilePaused();
 			boolean hitPausingStage = false;
@@ -83,7 +83,7 @@ public final class MultipleStage {
 
 				if (hitPausingStage) {
 					// Once we find the stage which is pausing the game, update and draw it and all stages above it like normal
-					updateAndDrawStage(stageLike, preferredFPS);
+					updateAndDrawStage(stageLike, preferredFrameDuration);
 				} else {
 					// skip stage.act() while paused
 					stageLike.draw();
@@ -91,9 +91,9 @@ public final class MultipleStage {
 			}
 		}
 
-		updateAndDrawStage(optionsStage, preferredFPS);
-		updateAndDrawStage(cursorStage, preferredFPS);
-		updateAndDrawStage(inputHandlerStage, preferredFPS);
+		updateAndDrawStage(optionsStage, preferredFrameDuration);
+		updateAndDrawStage(cursorStage, preferredFrameDuration);
+		updateAndDrawStage(inputHandlerStage, preferredFrameDuration);
 
 		if (forceFramerateForTrailerRecording) {
 			trailerFrameRecorder.recordFrame();
